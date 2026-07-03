@@ -22,7 +22,7 @@ specs/001-marketing-site-mvp/
 ## Backend Setup
 
 1. Create and activate a Python virtual environment in `backend/`.
-2. Install backend dependencies from `requirements.txt` or `pyproject.toml`.
+2. Install backend dependencies from `pyproject.toml`.
 3. Configure environment variables for local development:
 
 ```text
@@ -54,7 +54,9 @@ uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 curl http://127.0.0.1:8000/health
 ```
 
-Expected result: JSON with `status` set to `ok`.
+Expected result: JSON with `status` set to `ok`. This confirms backend
+application reachability only; it does not verify SMTP or email provider
+readiness in the MVP.
 
 ## Frontend Setup
 
@@ -96,6 +98,8 @@ Expected result: the site is available at `http://localhost:4200`.
   and confirm backend validation rejects it.
 - Stop or misconfigure email delivery and confirm the API returns a controlled
   failure instead of pretending success.
+- Confirm failed email delivery is logged by the backend without logging the
+  sensitive message body.
 
 ### API Contract
 
@@ -107,11 +111,24 @@ Expected result: the site is available at `http://localhost:4200`.
 
 ### Accessibility
 
+- Confirm the MVP targets WCAG 2.2 AA for primary user flows.
 - Navigate all primary links, CTAs, and form fields using keyboard only.
 - Confirm focus is visible and does not become trapped.
 - Confirm form fields have accessible labels and errors are associated with
   their controls.
+- Confirm color contrast, semantic HTML, form labels, and validation messages
+  satisfy the WCAG 2.2 AA target for MVP scope.
 - Confirm heading order is logical and page language is Polish.
+
+### Performance
+
+- Confirm the production build reaches Lighthouse Performance score >= 90 on
+  desktop.
+- Confirm the production build reaches Lighthouse Accessibility score >= 90 on
+  desktop.
+- Confirm initial JS/CSS/assets avoid unnecessary large dependencies.
+- Confirm local backend processing for `POST /api/contact` normally completes
+  under 1 second excluding external email provider latency.
 
 ### SEO
 
@@ -124,13 +141,20 @@ Expected result: the site is available at `http://localhost:4200`.
 
 Backend:
 
+Backend scripts in `backend/scripts/` must expose lint, format, and test
+commands. The validation gate should run:
+
 ```bash
+ruff check .
+ruff format --check .
 pytest
 ```
 
 Frontend:
 
 ```bash
+npm run lint
+npm run format
 npm test
 npm run build
 ```

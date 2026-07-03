@@ -44,6 +44,13 @@ information architecture.
 
 - Q: Exact MVP page scope? -> A: Single professional landing page with anchor
   sections: hero, services, process, technology, examples, about, contact.
+- Q: Contact delivery, health scope, performance, and accessibility targets? ->
+  A: Backend sends email notifications without a database; failed email
+  delivery returns a clear error and is logged; `GET /health` reports backend
+  application reachability only; MVP accessibility target is WCAG 2.2 AA;
+  production desktop Lighthouse Performance and Accessibility scores must be
+  at least 90; local contact API handling normally completes under 1 second
+  excluding external email provider latency.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -171,10 +178,12 @@ Polish messages.
 - The visitor leaves the optional company field blank.
 - The visitor selects a budget range but describes a project that may not match
   the selected range.
-- The submission service is temporarily unavailable.
+- The email delivery service is temporarily unavailable.
 - Placeholder case-study content could be mistaken for real client work if not
   clearly labeled.
 - A search engine or link preview reads the page without user interaction.
+- The health endpoint is available while the external email provider is
+  unavailable.
 
 ## Requirements *(mandatory)*
 
@@ -212,10 +221,11 @@ Polish messages.
 - **FR-012**: System MUST validate contact submissions on the backend and reject
   missing, malformed, abusive, or oversized input with non-sensitive error
   responses.
-- **FR-013**: System MUST provide an operational health check for the contact
-  backend.
-- **FR-014**: System MUST deliver accepted inquiries to the site owner through a
-  no-database notification path defined during planning.
+- **FR-013**: System MUST provide `GET /health` as a backend application
+  reachability check only; it MUST NOT verify email provider readiness in the
+  MVP.
+- **FR-014**: System MUST deliver accepted inquiries to the site owner by email
+  notification from the backend without using a database.
 - **FR-015**: System MUST NOT include authentication, admin panel, payment, blog,
   CMS, or database behavior in the MVP.
 - **FR-016**: System MUST be responsive across mobile, tablet, and desktop
@@ -228,23 +238,34 @@ Polish messages.
   services, process, and final contact areas.
 - **FR-020**: System MUST be structured so Google Cloud Platform deployment can
   be planned as a separate future feature without changing the MVP scope.
+- **FR-021**: System MUST return a clear non-sensitive error response and log a
+  backend delivery failure when email notification cannot be completed.
+- **FR-022**: System MUST target WCAG 2.2 AA for the MVP, including semantic
+  HTML, keyboard navigation, visible focus states, labels, contrast, and form
+  validation messages.
+- **FR-023**: System MUST avoid unnecessary large frontend dependencies and
+  large initial JS/CSS/assets in the production build.
 
 ### Constitution Constraints *(mandatory)*
 
 - **Complexity Justification**: None. The MVP explicitly excludes CMS,
   authentication, admin panel, payment, blog, and database functionality.
-- **API Contract Impact**: Adds contact submission behavior and an operational
-  health check. Planning must define the contract for accepted contact fields,
-  validation errors, success response, and health status.
+- **API Contract Impact**: Adds contact submission behavior and a backend
+  application reachability health check. The contract defines accepted contact
+  fields, validation errors, rate-limit errors, email delivery failure, and
+  health status.
 - **Security Impact**: Public input requires consent capture, server-side
   validation, non-sensitive errors, no secrets in the repository, restricted
-  cross-origin access outside local development, and a rate-limit-ready contact
-  boundary.
+  cross-origin access outside local development, logged email delivery failures,
+  and a rate-limit-ready contact boundary.
 - **Deployment Impact**: Both public website and contact backend behavior are in
   scope for the MVP, but GCP deployment itself is deferred to a separate feature.
-- **Accessibility & Performance Impact**: The website must be responsive,
-  keyboard accessible, screen-reader understandable, fast on common mobile and
-  desktop connections, and readable without layout shifts that block contact.
+- **Accessibility & Performance Impact**: The website must target WCAG 2.2 AA,
+  remain responsive, be keyboard accessible and screen-reader understandable,
+  provide visible focus states and sufficient contrast, achieve Lighthouse
+  Performance >= 90 and Lighthouse Accessibility >= 90 for the production build
+  on desktop, and keep the contact API's local backend processing normally
+  under 1 second excluding external email provider latency.
 
 ### Key Entities *(include if feature involves data)*
 
@@ -281,6 +302,13 @@ Polish messages.
   horizontal scrolling on common mobile, tablet, and desktop viewport widths.
 - **SC-008**: Search and link previews can identify the brand, service category,
   and Polish description from page metadata and headings.
+- **SC-009**: Production build desktop Lighthouse checks report Performance
+  score >= 90 and Accessibility score >= 90.
+- **SC-010**: Contact form API processing normally completes in under 1 second
+  locally, excluding external email provider latency.
+- **SC-011**: Accessibility review confirms WCAG 2.2 AA-targeted requirements
+  for semantic HTML, keyboard navigation, visible focus states, labels,
+  contrast, and form validation messages are represented in acceptance checks.
 
 ## Assumptions
 
@@ -290,8 +318,10 @@ Polish messages.
   English unless a later feature requires otherwise.
 - The company field is displayed but optional to avoid blocking founders or
   early-stage leads who do not yet operate under a formal company name.
-- Contact delivery to the owner does not require a database; planning may choose
-  an email or equivalent notification path configured outside the repository.
+- Contact delivery to the owner uses backend email notification configured by
+  environment variables and does not require a database.
+- The MVP health endpoint reports backend application reachability only; a
+  separate readiness endpoint for email provider checks can be added later.
 - Placeholder case studies are not presented as real client outcomes.
 - GCP deployment implementation is out of scope for this feature, but the MVP
   must avoid choices that would make independent future deployment difficult.

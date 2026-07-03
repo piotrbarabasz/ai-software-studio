@@ -14,24 +14,29 @@ responsive styling, SEO metadata, and environment-based API URL configuration.
 The backend will be a separate FastAPI application exposing `GET /health` and
 `POST /api/contact`, validating contact inquiries with Pydantic, applying CORS
 configuration, delivering accepted inquiries by email notification without a
-database, and including pytest coverage for validation and endpoints.
+database, logging email delivery failures, and including pytest coverage for
+validation and endpoints. `GET /health` reports backend application reachability
+only and does not verify email provider readiness in the MVP.
 
 ## Technical Context
 
 **Language/Version**: TypeScript for Angular frontend; Python 3.11+ for FastAPI backend
 
 **Primary Dependencies**: Angular, Angular Router, Angular Reactive Forms,
-TypeScript, SCSS or CSS, FastAPI, Pydantic, pytest, ASGI server for local
-development, provider-agnostic email delivery adapter configured by environment
-variables
+TypeScript, SCSS or CSS, frontend lint/format tooling through npm scripts,
+FastAPI, Pydantic, pytest, Ruff for backend linting and formatting, ASGI server
+for local development, provider-agnostic email delivery adapter configured by
+environment variables
 
 **Storage**: None for MVP. No CMS, authentication, admin panel, payment, blog,
 database, queue, or persistent lead storage.
 
 **Testing**: Angular unit/component tests for navigation, rendering, metadata,
-and reactive contact form behavior; pytest tests for FastAPI health endpoint,
-contact validation, contact delivery success/failure, CORS behavior, and
-OpenAPI availability
+and reactive contact form behavior; frontend `npm run lint`, `npm run format`,
+`npm test`, and `npm run build`; backend `ruff check`, `ruff format --check`,
+and `pytest` through documented lint/format/test commands; pytest tests for
+FastAPI health endpoint, contact validation, contact delivery success/failure,
+CORS behavior, and OpenAPI availability
 
 **Target Platform**: Local Angular dev server plus local FastAPI dev server for
 development. Future deployment must allow frontend and backend to ship
@@ -41,16 +46,19 @@ frontend should be buildable as static assets or containerized later.
 **Project Type**: Marketing website with separate Angular frontend and FastAPI
 backend.
 
-**Performance Goals**: Single-page website remains usable on mobile, tablet,
-and desktop without horizontal scrolling; primary content and contact CTA are
-available quickly on common mobile connections; production build should avoid
-unnecessary runtime dependencies and large nonessential assets.
+**Performance Goals**: Desktop Lighthouse Performance score >= 90 for the
+production build; Lighthouse Accessibility score >= 90; single-page website
+remains usable on mobile, tablet, and desktop without horizontal scrolling;
+initial JS/CSS/assets avoid unnecessary large dependencies; local backend
+processing for `POST /api/contact` normally completes under 1 second excluding
+external email provider latency.
 
 **Constraints**: Polish public copy; future English support through structured
-content and routing decisions; no secrets in repo; environment-based
-configuration; restricted CORS outside local development; explicit OpenAPI
-contract; contact endpoint validates public input and is rate-limit-ready; no
-full GCP deployment work in this feature.
+content and routing decisions; WCAG 2.2 AA target; no secrets in repo;
+environment-based configuration; restricted CORS outside local development;
+explicit OpenAPI contract; `GET /health` checks application reachability only;
+contact endpoint validates public input, logs email delivery failures, and is
+rate-limit-ready; no full GCP deployment work in this feature.
 
 **Scale/Scope**: Solo-service professional marketing site MVP focused on lead
 generation, trust building, and service explanation. One public landing page,
@@ -69,20 +77,24 @@ one contact API endpoint, one health endpoint, no persistence.
   `frontend/` and `backend/`, each independently buildable, testable,
   configurable, and deployable later.
 - **API contract**: PASS. FastAPI exposes OpenAPI for `GET /health` and
-  `POST /api/contact`; the contract is captured in
-  `contracts/openapi.yaml`.
+  `POST /api/contact`; the contract is captured in `contracts/openapi.yaml`.
+  Health is scoped to backend application reachability only.
 - **UX and localization**: PASS. The plan requires responsive, accessible,
-  Polish-first UI and structured content that can support English later.
+  WCAG 2.2 AA-targeted, Polish-first UI and structured content that can support
+  English later.
 - **Security**: PASS. Contact inputs are validated server-side, secrets are
-  environment-driven, CORS is restricted, delivery failure is not hidden, and
-  the contact endpoint is designed for future rate limiting.
+  environment-driven, CORS is restricted, email delivery failure is logged and
+  not hidden, and the contact endpoint is designed for future rate limiting.
 - **Developer readiness**: PASS. The plan includes clear folders, local dev
-  commands, tests, environment variables, and GCP-oriented deployment notes
-  without implementing deployment.
+  commands, frontend lint/format/test/build scripts, backend Ruff
+  lint/format/test commands configured through `pyproject.toml`, tests,
+  environment variables, and GCP-oriented deployment notes without implementing
+  deployment.
 
 **Post-design re-check**: PASS. Phase 1 artifacts preserve the same boundaries:
-no database, no authentication, explicit contracts, local validation guide, and
-independent frontend/backend structure.
+no database, no authentication, explicit contracts, backend health as
+application reachability only, local validation guide, and independent
+frontend/backend structure.
 
 ## Project Structure
 
@@ -121,7 +133,11 @@ frontend/
 `-- README.md or documented frontend commands
 
 backend/
-|-- requirements.txt or pyproject.toml
+|-- pyproject.toml
+|-- scripts/
+|   |-- lint.ps1
+|   |-- format.ps1
+|   `-- test.ps1
 |-- app/
 |   |-- main.py
 |   |-- api/

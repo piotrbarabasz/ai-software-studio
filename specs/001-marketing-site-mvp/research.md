@@ -69,11 +69,14 @@ the Angular frontend.
 
 **Decision**: Accepted contact inquiries are validated by the backend and
 delivered to the site owner through an email notification adapter configured by
-environment variables. No contact inquiries are persisted in a database.
+environment variables. No contact inquiries are persisted in a database. Failed
+email delivery returns a clear non-sensitive error response and is logged by the
+backend without logging sensitive message content.
 
 **Rationale**: This makes the form useful while preserving the no-database MVP
 constraint. If email delivery is not configured or fails, the backend must not
-pretend success; it should return a controlled service-unavailable response.
+pretend success; it should return a controlled service-unavailable response and
+record enough operational context to diagnose the failure.
 
 **Alternatives considered**:
 - Database storage: rejected by explicit MVP scope.
@@ -99,6 +102,59 @@ Run or edge-level throttling later.
   for the MVP.
 - No rate-limit consideration: rejected because public contact endpoints need an
   explicit abuse-control path.
+
+## Decision: Health endpoint reports application reachability only
+
+**Decision**: `GET /health` reports whether the backend application is reachable
+and able to respond. It does not verify SMTP/email provider readiness in the
+MVP.
+
+**Rationale**: Application health and external provider readiness are different
+operational signals. Keeping `/health` lightweight supports local development
+and future Cloud Run readiness without coupling basic health to a third-party
+email provider.
+
+**Alternatives considered**:
+- Check email provider readiness in `/health`: rejected for MVP because it
+  makes the basic health signal dependent on external configuration and network
+  availability.
+- Add a separate readiness endpoint now: deferred because current scope only
+  requires application reachability; a readiness endpoint can be added as a
+  later deployment/operations feature.
+
+## Decision: Measurable MVP performance and accessibility targets
+
+**Decision**: The MVP targets Lighthouse Performance >= 90 and Lighthouse
+Accessibility >= 90 for the production build on desktop, WCAG 2.2 AA-aligned
+requirements for core interactions, and local contact API processing under 1
+second excluding external email provider latency.
+
+**Rationale**: These thresholds make "fast" and "accessible" objectively
+reviewable while staying realistic for a single-page marketing MVP. They also
+align with the constitution's requirement that UX quality is a release
+criterion, not post-launch polish.
+
+**Alternatives considered**:
+- No numeric thresholds: rejected because the analyze report flagged the prior
+  wording as ambiguous.
+- Strict mobile Lighthouse thresholds in MVP: deferred because the MVP does not
+  yet define a production hosting environment or network profile.
+
+## Decision: Ruff for backend linting and formatting
+
+**Decision**: Configure backend linting and formatting through Ruff in
+`backend/pyproject.toml`, alongside pytest configuration and documented backend
+commands for lint, format, and test.
+
+**Rationale**: Ruff gives one fast tool for Python lint and formatting checks,
+which satisfies the constitution's production-ready requirement without adding
+multiple backend formatting tools.
+
+**Alternatives considered**:
+- Separate Black, isort, and flake8 stack: rejected for MVP because Ruff covers
+  the required lint/format surface with less configuration.
+- No backend formatting tool: rejected because the constitution explicitly
+  requires linting and formatting.
 
 ## Decision: Polish content now, English-ready structure later
 

@@ -10,12 +10,13 @@ paths:
   /health:
     get:
       operationId: getHealth
-      summary: Check backend health
+      summary: Check backend application reachability
+      description: Reports backend application reachability only. This endpoint does not verify SMTP or email provider readiness in the MVP.
       tags:
         - health
       responses:
         "200":
-          description: Backend is reachable
+          description: Backend application is reachable
           content:
             application/json:
               schema:
@@ -34,7 +35,7 @@ paths:
               $ref: "#/components/schemas/ContactInquiryRequest"
       responses:
         "202":
-          description: Inquiry accepted and notification queued or sent
+          description: Inquiry accepted and email notification sent
           content:
             application/json:
               schema:
@@ -52,7 +53,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
         "503":
-          description: Contact delivery is temporarily unavailable
+          description: Email notification delivery failed or is temporarily unavailable
           content:
             application/json:
               schema:
@@ -61,6 +62,7 @@ components:
   schemas:
     HealthResponse:
       type: object
+      description: Backend application reachability response. Does not represent email provider readiness.
       required:
         - status
         - service
