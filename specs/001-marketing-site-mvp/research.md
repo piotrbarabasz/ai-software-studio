@@ -122,6 +122,26 @@ email provider.
   requires application reachability; a readiness endpoint can be added as a
   later deployment/operations feature.
 
+## Decision: Privacy and non-sensitive observability boundaries
+
+**Decision**: Contact consent copy will state in Polish that inquiry data is
+sent by email to the site owner for response and is not persisted in a database
+in the MVP. Backend observability will record only non-sensitive outcome
+metadata for contact accepted, validation rejected, rate-limited, delivery
+failed, and health checked events. Logs must not include full message bodies,
+secrets, or sensitive contact payloads.
+
+**Rationale**: The public contact flow needs enough operational visibility to
+diagnose failures without turning logs into a shadow database or leaking private
+lead details. This keeps the no-database MVP boundary intact while preserving a
+basic production support trail.
+
+**Alternatives considered**:
+- Persist contact submissions for audit: rejected because the MVP explicitly
+  excludes a database.
+- Log full request bodies for debugging: rejected because it would expose
+  sensitive contact details and conflict with privacy/security requirements.
+
 ## Decision: Measurable MVP performance and accessibility targets
 
 **Decision**: The MVP targets Lighthouse Performance >= 90 and Lighthouse

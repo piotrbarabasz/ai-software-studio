@@ -1,0 +1,37 @@
+[project]
+name = "aisoftware-studio-backend"
+version = "0.1.0"
+description = "FastAPI backend for the AISoftware Studio marketing website MVP."
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.111,<1.0",
+  "uvicorn[standard]>=0.30,<1.0",
+  "pydantic[email]>=2.7,<3.0",
+  "pydantic-settings>=2.3,<3.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "httpx>=0.27,<1.0",
+  "pytest>=8.2,<9.0",
+  "ruff>=0.5,<1.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["app", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-q"
+

@@ -1,4 +1,4 @@
-# Tasks: Marketing Website MVP
+﻿# Tasks: Marketing Website MVP
 
 **Input**: Design documents from `/specs/001-marketing-site-mvp/`
 
@@ -18,14 +18,14 @@
 
 **Purpose**: Initialize the separated Angular/FastAPI repository structure and baseline developer tooling.
 
-- [ ] T001 Create repository directories and placeholder documentation files in `frontend/`, `backend/`, `infra/README.md`, `docs/local-development.md`, and `docs/deployment-notes.md`
-- [ ] T002 Initialize Angular project configuration with standalone component support in `frontend/package.json`, `frontend/angular.json`, `frontend/tsconfig.json`, and `frontend/src/main.ts`
-- [ ] T003 Initialize FastAPI backend dependency manifest in `backend/pyproject.toml` with FastAPI, Pydantic, uvicorn, pytest, httpx, email validation, Ruff, and CORS-related dependencies
-- [ ] T004 [P] Add frontend environment configuration placeholders in `frontend/src/environments/environment.ts` and `frontend/src/environments/environment.prod.ts`
-- [ ] T005 [P] Add backend package structure markers in `backend/app/__init__.py`, `backend/app/api/__init__.py`, `backend/app/core/__init__.py`, `backend/app/schemas/__init__.py`, and `backend/app/services/__init__.py`
-- [ ] T006 [P] Add concrete frontend npm scripts for `lint`, `format`, `test`, and `build` in `frontend/package.json`
-- [ ] T007 Add Ruff lint/format configuration and pytest configuration in `backend/pyproject.toml`, plus backend developer command scripts in `backend/scripts/lint.ps1`, `backend/scripts/format.ps1`, and `backend/scripts/test.ps1`
-- [ ] T008 [P] Add root README with frontend, backend, docs, infra, and specs overview in `README.md`
+- [X] T001 Create repository directories and placeholder documentation files in `frontend/`, `backend/`, `infra/README.md`, `docs/local-development.md`, and `docs/deployment-notes.md`
+- [X] T002 Initialize Angular project configuration with standalone component support in `frontend/package.json`, `frontend/angular.json`, `frontend/tsconfig.json`, and `frontend/src/main.ts`
+- [X] T003 Initialize FastAPI backend dependency manifest in `backend/pyproject.toml` with FastAPI, Pydantic, uvicorn, pytest, httpx, email validation, Ruff, and CORS-related dependencies
+- [X] T004 [P] Add frontend environment configuration placeholders in `frontend/src/environments/environment.ts` and `frontend/src/environments/environment.prod.ts`
+- [X] T005 [P] Add backend package structure markers in `backend/app/__init__.py`, `backend/app/api/__init__.py`, `backend/app/core/__init__.py`, `backend/app/schemas/__init__.py`, and `backend/app/services/__init__.py`
+- [X] T006 [P] Add concrete frontend npm scripts for `lint`, `format`, `test`, and `build` in `frontend/package.json`
+- [X] T007 Add Ruff lint/format configuration and pytest configuration in `backend/pyproject.toml`, plus backend developer command scripts in `backend/scripts/lint.ps1`, `backend/scripts/format.ps1`, and `backend/scripts/test.ps1`
+- [X] T008 [P] Add root README with frontend, backend, docs, infra, and specs overview in `README.md`
 
 ---
 
@@ -35,18 +35,18 @@
 
 **CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T009 Create FastAPI app factory and route registration shell in `backend/app/main.py`
-- [ ] T010 Create environment-driven backend settings in `backend/app/core/config.py`
-- [ ] T011 Create restricted CORS configuration helper in `backend/app/core/cors.py`
-- [ ] T012 [P] Add shared API router registry shell for later health and contact routers in `backend/app/api/router.py`
-- [ ] T013 [P] Add backend test client fixture in `backend/tests/conftest.py`
-- [ ] T014 [P] Add Angular route configuration with landing route and anchor-scroll support in `frontend/src/app/app.routes.ts`
-- [ ] T015 Create Angular app configuration wiring router, HTTP client, and environment API URL in `frontend/src/app/app.config.ts`
-- [ ] T016 [P] Create typed frontend API configuration model in `frontend/src/app/core/api-config.ts`
-- [ ] T017 [P] Create shared frontend content directory and Polish content entry point in `frontend/src/app/core/content/pl.ts`
-- [ ] T018 [P] Create global mobile-first styling baseline in `frontend/src/styles.scss`
-- [ ] T019 [P] Copy API contract reference into generated planning docs by verifying `specs/001-marketing-site-mvp/contracts/openapi.yaml`
-- [ ] T020 [P] Document no database, no auth, and no CMS MVP boundaries in `docs/local-development.md`
+- [X] T009 Create FastAPI app factory and route registration shell in `backend/app/main.py`
+- [X] T010 Create environment-driven backend settings in `backend/app/core/config.py`
+- [X] T011 Create restricted CORS configuration helper in `backend/app/core/cors.py`
+- [X] T012 [P] Add shared API router registry shell for later health and contact routers in `backend/app/api/router.py`
+- [X] T013 [P] Add backend test client fixture in `backend/tests/conftest.py`
+- [X] T014 [P] Add Angular route configuration with landing route and anchor-scroll support in `frontend/src/app/app.routes.ts`
+- [X] T015 Create Angular app configuration wiring router, HTTP client, and environment API URL in `frontend/src/app/app.config.ts`
+- [X] T016 [P] Create typed frontend API configuration model in `frontend/src/app/core/api-config.ts`
+- [X] T017 [P] Create shared frontend content directory and Polish content entry point in `frontend/src/app/core/content/pl.ts`
+- [X] T018 [P] Create global mobile-first styling baseline in `frontend/src/styles.scss`
+- [X] T019 [P] Copy API contract reference into generated planning docs by verifying `specs/001-marketing-site-mvp/contracts/openapi.yaml`
+- [X] T020 [P] Document no database, no auth, and no CMS MVP boundaries in `docs/local-development.md`
 
 **Checkpoint**: Foundation ready. User story implementation can now proceed in priority order or in parallel where noted.
 
@@ -60,20 +60,20 @@
 
 ### Tests for User Story 1
 
-- [ ] T021 [P] [US1] Add frontend unit tests for landing hero content and CTA anchor target in `frontend/src/app/features/landing/landing.component.spec.ts`
-- [ ] T022 [P] [US1] Add frontend unit tests for SEO metadata setup in `frontend/src/app/features/landing/landing-seo.spec.ts`
-- [ ] T023 [P] [US1] Add frontend WCAG 2.2 AA accessibility tests for skip link, semantic landmarks, heading order, keyboard CTA reachability, visible focus, and CTA accessible names in `frontend/src/app/features/landing/landing-a11y.spec.ts`
+- [X] T021 [P] [US1] Add frontend unit tests for landing hero content and CTA anchor target in `frontend/src/app/features/landing/landing.component.spec.ts`
+- [X] T022 [P] [US1] Add frontend unit tests for SEO metadata setup in `frontend/src/app/features/landing/landing-seo.spec.ts`
+- [X] T023 [P] [US1] Add frontend WCAG 2.2 AA accessibility tests for skip link, semantic landmarks, heading order, keyboard CTA reachability, visible focus, and CTA accessible names in `frontend/src/app/features/landing/landing-a11y.spec.ts`
 
 ### Implementation for User Story 1
 
-- [ ] T024 [P] [US1] Create landing page standalone component shell in `frontend/src/app/features/landing/landing.component.ts`
-- [ ] T025 [P] [US1] Create landing page template with hero, primary CTA, skip link, and section anchors in `frontend/src/app/features/landing/landing.component.html`
-- [ ] T026 [P] [US1] Create landing page mobile-first styles in `frontend/src/app/features/landing/landing.component.scss`
-- [ ] T027 [US1] Define Polish hero, value proposition, CTA, and trust-copy content in `frontend/src/app/core/content/pl.ts`
-- [ ] T028 [US1] Wire landing component into app routing in `frontend/src/app/app.routes.ts`
-- [ ] T029 [US1] Implement SEO title, description, canonical path, Open Graph title, and Open Graph description handling in `frontend/src/app/features/landing/landing.component.ts`
-- [ ] T030 [US1] Add header or top navigation anchor links to hero, services, process, technology, examples, about, and contact in `frontend/src/app/features/landing/landing.component.html`
-- [ ] T031 [US1] Ensure CTA targets the contact section anchor without requiring a separate page in `frontend/src/app/features/landing/landing.component.html`
+- [X] T024 [P] [US1] Create landing page standalone component shell in `frontend/src/app/features/landing/landing.component.ts`
+- [X] T025 [P] [US1] Create landing page template with hero, primary CTA, skip link, and section anchors in `frontend/src/app/features/landing/landing.component.html`
+- [X] T026 [P] [US1] Create landing page mobile-first styles in `frontend/src/app/features/landing/landing.component.scss`
+- [X] T027 [US1] Define Polish hero, value proposition, CTA, and trust-copy content in `frontend/src/app/core/content/pl.ts`
+- [X] T028 [US1] Wire landing component into app routing in `frontend/src/app/app.routes.ts`
+- [X] T029 [US1] Implement SEO title, description, canonical path, Open Graph title, and Open Graph description handling in `frontend/src/app/features/landing/landing.component.ts`
+- [X] T030 [US1] Add header or top navigation anchor links to hero, services, process, technology, examples, about, and contact in `frontend/src/app/features/landing/landing.component.html`
+- [X] T031 [US1] Ensure CTA targets the contact section anchor without requiring a separate page in `frontend/src/app/features/landing/landing.component.html`
 
 **Checkpoint**: User Story 1 is independently testable as a Polish landing hero with clear offer, trust copy, metadata, and contact CTA.
 
@@ -87,18 +87,18 @@
 
 ### Tests for User Story 2
 
-- [ ] T032 [P] [US2] Add frontend unit tests for required service offerings in `frontend/src/app/features/landing/services-section.spec.ts`
-- [ ] T033 [P] [US2] Add frontend unit tests for process step ordering and client outcomes in `frontend/src/app/features/landing/process-section.spec.ts`
-- [ ] T034 [P] [US2] Add content model tests for service offering and process step completeness in `frontend/src/app/core/content/services-process.content.spec.ts`
+- [X] T032 [P] [US2] Add frontend unit tests for required service offerings in `frontend/src/app/features/landing/services-section.spec.ts`
+- [X] T033 [P] [US2] Add frontend unit tests for process step ordering and client outcomes in `frontend/src/app/features/landing/process-section.spec.ts`
+- [X] T034 [P] [US2] Add content model tests for service offering and process step completeness in `frontend/src/app/core/content/services-process.content.spec.ts`
 
 ### Implementation for User Story 2
 
-- [ ] T035 [US2] Add Service Offering content objects with six required services in `frontend/src/app/core/content/pl.ts`
-- [ ] T036 [US2] Add Process Step content objects for discovery, scope, implementation, validation, and delivery in `frontend/src/app/core/content/pl.ts`
-- [ ] T037 [US2] Implement services section markup with service titles, outcomes, and use cases in `frontend/src/app/features/landing/landing.component.html`
-- [ ] T038 [US2] Implement process section markup with ordered cooperation stages and client outcomes in `frontend/src/app/features/landing/landing.component.html`
-- [ ] T039 [US2] Add responsive services and process layouts in `frontend/src/app/features/landing/landing.component.scss`
-- [ ] T040 [US2] Add service and process anchor targets to navigation labels in `frontend/src/app/features/landing/landing.component.html`
+- [X] T035 [US2] Add Service Offering content objects with six required services in `frontend/src/app/core/content/pl.ts`
+- [X] T036 [US2] Add Process Step content objects for discovery, scope, implementation, validation, and delivery in `frontend/src/app/core/content/pl.ts`
+- [X] T037 [US2] Implement services section markup with service titles, outcomes, and use cases in `frontend/src/app/features/landing/landing.component.html`
+- [X] T038 [US2] Implement process section markup with ordered cooperation stages and client outcomes in `frontend/src/app/features/landing/landing.component.html`
+- [X] T039 [US2] Add responsive services and process layouts in `frontend/src/app/features/landing/landing.component.scss`
+- [X] T040 [US2] Add service and process anchor targets to navigation labels in `frontend/src/app/features/landing/landing.component.html`
 
 **Checkpoint**: User Stories 1 and 2 are independently testable as a single page explaining the offer and cooperation model.
 
@@ -112,20 +112,20 @@
 
 ### Tests for User Story 3
 
-- [ ] T041 [P] [US3] Add frontend unit tests for required technology capability labels and business-use descriptions in `frontend/src/app/features/landing/technology-section.spec.ts`
-- [ ] T042 [P] [US3] Add frontend unit tests ensuring placeholder examples are clearly labeled in `frontend/src/app/features/landing/examples-section.spec.ts`
-- [ ] T043 [P] [US3] Add frontend unit tests for about section technical-partner positioning in `frontend/src/app/features/landing/about-section.spec.ts`
-- [ ] T044 [P] [US3] Add content model tests for technology capabilities and placeholder case studies in `frontend/src/app/core/content/trust.content.spec.ts`
+- [X] T041 [P] [US3] Add frontend unit tests for required technology capability labels and business-use descriptions in `frontend/src/app/features/landing/technology-section.spec.ts`
+- [X] T042 [P] [US3] Add frontend unit tests ensuring placeholder examples are clearly labeled in `frontend/src/app/features/landing/examples-section.spec.ts`
+- [X] T043 [P] [US3] Add frontend unit tests for about section technical-partner positioning, owner role, collaboration model, and trust claims in `frontend/src/app/features/landing/about-section.spec.ts`
+- [X] T044 [P] [US3] Add content model tests for technology capabilities and placeholder case studies in `frontend/src/app/core/content/trust.content.spec.ts`
 
 ### Implementation for User Story 3
 
-- [ ] T045 [US3] Add Technology Capability content objects for Angular, FastAPI, Python, cloud, GCP, APIs, databases, AI/RAG/LLM tools, integrations, and automation in `frontend/src/app/core/content/pl.ts`
-- [ ] T046 [US3] Add Placeholder Case Study content objects with labels, problem, approach, outcome, and service tags in `frontend/src/app/core/content/pl.ts`
-- [ ] T047 [US3] Add about section Polish copy positioning AISoftware Studio as a technical partner in `frontend/src/app/core/content/pl.ts`
-- [ ] T048 [US3] Implement technology section markup in `frontend/src/app/features/landing/landing.component.html`
-- [ ] T049 [US3] Implement clearly labeled placeholder examples section in `frontend/src/app/features/landing/landing.component.html`
-- [ ] T050 [US3] Implement about section markup in `frontend/src/app/features/landing/landing.component.html`
-- [ ] T051 [US3] Add responsive trust-section, example-card, and about-section styles in `frontend/src/app/features/landing/landing.component.scss`
+- [X] T045 [US3] Add Technology Capability content objects for Angular, FastAPI, Python, cloud, GCP, APIs, databases, AI/RAG/LLM tools, integrations, and automation in `frontend/src/app/core/content/pl.ts`
+- [X] T046 [US3] Add Placeholder Case Study content objects with labels, problem, approach, outcome, and service tags in `frontend/src/app/core/content/pl.ts`
+- [X] T047 [US3] Add about section Polish copy positioning AISoftware Studio as a technical partner with owner role, collaboration model, and concrete trust claims in `frontend/src/app/core/content/pl.ts`
+- [X] T048 [US3] Implement technology section markup in `frontend/src/app/features/landing/landing.component.html`
+- [X] T049 [US3] Implement clearly labeled placeholder examples section in `frontend/src/app/features/landing/landing.component.html`
+- [X] T050 [US3] Implement about section markup in `frontend/src/app/features/landing/landing.component.html`
+- [X] T051 [US3] Add responsive trust-section, example-card, and about-section styles in `frontend/src/app/features/landing/landing.component.scss`
 
 **Checkpoint**: User Stories 1, 2, and 3 are independently testable as a trust-building Polish marketing page.
 
@@ -139,31 +139,31 @@
 
 ### Tests for User Story 4
 
-- [ ] T052 [P] [US4] Add backend contract tests for reachability-only `GET /health` that does not verify email provider readiness in `backend/tests/contract/test_health_contract.py`
-- [ ] T053 [P] [US4] Add backend contract tests for `POST /api/contact` accepted, validation, rate-limit, and delivery-failure responses in `backend/tests/contract/test_contact_contract.py`
-- [ ] T054 [P] [US4] Add backend schema validation unit tests for Contact Inquiry field limits, enums, and consent in `backend/tests/unit/test_contact_schema.py`
-- [ ] T055 [P] [US4] Add backend integration tests for contact email delivery success, non-sensitive logged failure paths, and local contact processing under 1 second with external email provider mocked in `backend/tests/integration/test_contact_delivery.py`
-- [ ] T056 [P] [US4] Add backend CORS tests for local frontend origin and rejected unapproved origin in `backend/tests/integration/test_cors.py`
-- [ ] T057 [P] [US4] Add frontend reactive form validation tests for required fields, consent, accessible labels, and associated Polish error messages in `frontend/src/app/features/contact/contact-form.component.spec.ts`
-- [ ] T058 [P] [US4] Add frontend contact API service tests for success, validation error, rate-limit, and delivery-failure responses in `frontend/src/app/services/contact-api.service.spec.ts`
+- [X] T052 [P] [US4] Add backend contract tests for reachability-only `GET /health` expected response and non-sensitive observability/logging behavior, confirming logs do not include request body, secrets, user data, email addresses, contact form payloads, environment variables, or any sensitive information, in `backend/tests/contract/test_health_contract.py`
+- [X] T053 [P] [US4] Add backend contract tests for `POST /api/contact` accepted, validation, rate-limit, and delivery-failure responses in `backend/tests/contract/test_contact_contract.py`
+- [X] T054 [P] [US4] Add backend schema validation unit tests for Contact Inquiry field limits, enums, and consent in `backend/tests/unit/test_contact_schema.py`
+- [X] T055 [P] [US4] Add backend integration tests for contact email delivery success, non-sensitive logged contact outcomes, logged failure paths, and local contact processing under 1 second with external email provider mocked in `backend/tests/integration/test_contact_delivery.py`
+- [X] T056 [P] [US4] Add backend CORS tests for local frontend origin and rejected unapproved origin in `backend/tests/integration/test_cors.py`
+- [X] T057 [P] [US4] Add frontend reactive form validation tests for required fields, consent wording, accessible labels, and associated Polish error messages in `frontend/src/app/features/contact/contact-form.component.spec.ts`
+- [X] T058 [P] [US4] Add frontend contact API service tests for success, validation error, rate-limit, and delivery-failure responses in `frontend/src/app/services/contact-api.service.spec.ts`
 
 ### Implementation for User Story 4
 
-- [ ] T059 [P] [US4] Implement Contact Inquiry Pydantic schema with project type and budget range enums in `backend/app/schemas/contact.py`
-- [ ] T060 [P] [US4] Implement reachability-only health endpoint in `backend/app/api/health.py` without checking SMTP or email provider readiness
-- [ ] T061 [US4] Implement contact delivery email adapter with environment-driven SMTP configuration, no database persistence, clear failure responses, and non-sensitive backend logging in `backend/app/services/contact_delivery.py`
-- [ ] T062 [US4] Implement rate-limit-ready contact intake service boundary in `backend/app/services/contact_intake.py`
-- [ ] T063 [US4] Implement `POST /api/contact` route with validation, delivery, `202`, `422`, `429`, and `503` behavior in `backend/app/api/contact.py`
-- [ ] T064 [US4] Register health and contact routers through `backend/app/api/router.py` and `backend/app/main.py`
-- [ ] T065 [US4] Implement backend CORS origin loading from environment settings in `backend/app/core/cors.py`
-- [ ] T066 [P] [US4] Create typed frontend contact inquiry models matching OpenAPI fields in `frontend/src/app/services/contact-api.types.ts`
-- [ ] T067 [US4] Implement Angular contact API service using environment API URL in `frontend/src/app/services/contact-api.service.ts`
-- [ ] T068 [P] [US4] Create standalone reactive contact form component in `frontend/src/app/features/contact/contact-form.component.ts`
-- [ ] T069 [P] [US4] Create contact form template with name, email, company, project type, budget range, message, consent, accessible labels, and associated Polish validation messages in `frontend/src/app/features/contact/contact-form.component.html`
-- [ ] T070 [P] [US4] Create contact form styles with mobile-first layout, WCAG 2.2 AA contrast, and visible focus states in `frontend/src/app/features/contact/contact-form.component.scss`
-- [ ] T071 [US4] Embed contact form component in the landing contact section in `frontend/src/app/features/landing/landing.component.html`
-- [ ] T072 [US4] Add Polish success, validation, rate-limit, and clear non-sensitive delivery-failure copy to `frontend/src/app/core/content/pl.ts`
-- [ ] T073 [US4] Update OpenAPI contract if implementation refines schemas in `specs/001-marketing-site-mvp/contracts/openapi.yaml`
+- [X] T059 [P] [US4] Implement Contact Inquiry Pydantic schema with project type and budget range enums in `backend/app/schemas/contact.py`
+- [X] T060 [P] [US4] Implement reachability-only health endpoint in `backend/app/api/health.py` with non-sensitive structured operational logging or equivalent non-sensitive observability, without checking SMTP or email provider readiness and without logging request body, secrets, user data, email addresses, contact form payloads, environment variables, or any sensitive information
+- [X] T061 [US4] Implement contact delivery email adapter with environment-driven SMTP configuration, no database persistence, clear failure responses, and non-sensitive backend logging for notification outcomes in `backend/app/services/contact_delivery.py`
+- [X] T062 [US4] Implement rate-limit-ready contact intake service boundary in `backend/app/services/contact_intake.py`
+- [X] T063 [US4] Implement `POST /api/contact` route with validation, delivery, `202`, `422`, `429`, and `503` behavior plus non-sensitive logs for accepted, validation rejected, rate-limited, and delivery-failed outcomes in `backend/app/api/contact.py`
+- [X] T064 [US4] Register health and contact routers through `backend/app/api/router.py` and `backend/app/main.py`
+- [X] T065 [US4] Implement backend CORS origin loading from environment settings in `backend/app/core/cors.py`
+- [X] T066 [P] [US4] Create typed frontend contact inquiry models matching OpenAPI fields in `frontend/src/app/services/contact-api.types.ts`
+- [X] T067 [US4] Implement Angular contact API service using environment API URL in `frontend/src/app/services/contact-api.service.ts`
+- [X] T068 [P] [US4] Create standalone reactive contact form component in `frontend/src/app/features/contact/contact-form.component.ts`
+- [X] T069 [P] [US4] Create contact form template with name, email, company, project type, budget range, message, consent text explaining email delivery/no database persistence, accessible labels, and associated Polish validation messages in `frontend/src/app/features/contact/contact-form.component.html`
+- [X] T070 [P] [US4] Create contact form styles with mobile-first layout, WCAG 2.2 AA contrast, and visible focus states in `frontend/src/app/features/contact/contact-form.component.scss`
+- [X] T071 [US4] Embed contact form component in the landing contact section in `frontend/src/app/features/landing/landing.component.html`
+- [X] T072 [US4] Add Polish success, validation, rate-limit, and clear non-sensitive delivery-failure copy to `frontend/src/app/core/content/pl.ts`
+- [X] T073 [US4] Update OpenAPI contract if implementation refines schemas in `specs/001-marketing-site-mvp/contracts/openapi.yaml`
 
 **Checkpoint**: All user stories are independently functional and the qualified inquiry path is testable end to end.
 
@@ -173,20 +173,20 @@
 
 **Purpose**: Validate quality gates across the complete MVP and prepare developer handoff documentation.
 
-- [ ] T074 [P] Add frontend lint, format, test, build, and environment configuration instructions in `frontend/README.md`
-- [ ] T075 [P] Add backend run, Ruff lint, Ruff format, pytest, environment variable, email notification, and no-database instructions in `backend/README.md`
-- [ ] T076 Update root project instructions for running both apps locally in `README.md`
-- [ ] T077 Add local development guide with two-terminal workflow and CORS details in `docs/local-development.md`
-- [ ] T078 [P] Add future GCP deployment notes for static/container frontend and Cloud Run-ready backend in `docs/deployment-notes.md`
-- [ ] T079 [P] Add infra placeholder scope note stating no deployment implementation is included in `infra/README.md`
-- [ ] T080 Run quickstart validation and record any required documentation adjustments in `specs/001-marketing-site-mvp/quickstart.md`
-- [ ] T081 Run frontend WCAG 2.2 AA responsive and accessibility review notes for semantic HTML, keyboard navigation, labels, validation messages, contrast, and visible focus in `docs/local-development.md`
-- [ ] T082 Run API contract alignment review between backend implementation and `specs/001-marketing-site-mvp/contracts/openapi.yaml`
-- [ ] T083 Run security review for secrets, CORS, non-sensitive errors, logged email delivery failures, consent handling, and rate-limit readiness in `docs/local-development.md`
-- [ ] T084 Run Polish copy review and English-ready content structure review in `frontend/src/app/core/content/pl.ts`
-- [ ] T085 Confirm no database, auth, CMS, admin panel, payment, blog, queue, Cloud Build, Terraform, or production GCP resources were added in `docs/deployment-notes.md`
-- [ ] T086 Run or document desktop Lighthouse validation for the frontend production build with Performance >= 90 and Accessibility >= 90, directly covering SC-009 in `docs/local-development.md`
-- [ ] T087 Review frontend production build initial JS/CSS/assets and unnecessary dependency weight, documenting any required reductions and directly covering FR-023 in `docs/local-development.md`
+- [X] T074 [P] Add frontend lint, format, test, build, and environment configuration instructions in `frontend/README.md`
+- [X] T075 [P] Add backend run, Ruff lint, Ruff format, pytest, environment variable, email notification, and no-database instructions in `backend/README.md`
+- [X] T076 Update root project instructions for running both apps locally in `README.md`
+- [X] T077 Add local development guide with two-terminal workflow and CORS details in `docs/local-development.md`
+- [X] T078 [P] Add future GCP deployment notes for static/container frontend and Cloud Run-ready backend in `docs/deployment-notes.md`
+- [X] T079 [P] Add infra placeholder scope note stating no deployment implementation is included in `infra/README.md`
+- [X] T080 Run quickstart validation and record any required documentation adjustments in `specs/001-marketing-site-mvp/quickstart.md`
+- [X] T081 Run frontend WCAG 2.2 AA responsive and accessibility review notes for semantic HTML, keyboard navigation, labels, validation messages, contrast, and visible focus in `docs/local-development.md`
+- [X] T082 Run API contract alignment review between backend implementation and `specs/001-marketing-site-mvp/contracts/openapi.yaml`
+- [X] T083 Run security and privacy review for secrets, CORS, non-sensitive errors, non-sensitive contact/health logging, consent wording, no-database contact handling, and rate-limit readiness in `docs/local-development.md`
+- [X] T084 Run Polish copy review and English-ready content structure review in `frontend/src/app/core/content/pl.ts`
+- [X] T085 Confirm no database, auth, CMS, admin panel, payment, blog, queue, Cloud Build, Terraform, or production GCP resources were added in `docs/deployment-notes.md`
+- [X] T086 Run or document desktop Lighthouse validation for the frontend production build with Performance >= 90 and Accessibility >= 90, directly covering SC-009 in `docs/local-development.md`
+- [X] T087 Review frontend production build initial JS/CSS/assets and unnecessary dependency weight, documenting any required reductions and directly covering FR-023 in `docs/local-development.md`
 
 ---
 
@@ -233,7 +233,7 @@
 ## Parallel Example: User Story 4
 
 ```bash
-Task: "T052 [P] [US4] Add backend contract tests for reachability-only GET /health that does not verify email provider readiness in backend/tests/contract/test_health_contract.py"
+Task: "T052 [P] [US4] Add backend contract tests for reachability-only GET /health expected response and non-sensitive observability/logging behavior in backend/tests/contract/test_health_contract.py"
 Task: "T053 [P] [US4] Add backend contract tests for POST /api/contact accepted, validation, rate-limit, and delivery-failure responses in backend/tests/contract/test_contact_contract.py"
 Task: "T057 [P] [US4] Add frontend reactive form validation tests in frontend/src/app/features/contact/contact-form.component.spec.ts"
 Task: "T058 [P] [US4] Add frontend contact API service tests for success, validation error, rate-limit, and delivery-failure responses in frontend/src/app/services/contact-api.service.spec.ts"
@@ -279,3 +279,4 @@ After Foundation:
 - `[US#]` labels map tasks to user stories from `spec.md`.
 - This task list intentionally excludes database, authentication, admin panel, payment, blog, CMS, queue, and full GCP deployment tasks.
 - Full implementation should keep frontend and backend independently runnable and deployable later.
+

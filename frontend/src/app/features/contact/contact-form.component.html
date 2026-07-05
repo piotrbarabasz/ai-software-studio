@@ -1,0 +1,121 @@
+<form class="contact-form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+  <div class="field">
+    <label for="name">Imię i nazwisko</label>
+    <input
+      id="name"
+      type="text"
+      autocomplete="name"
+      formControlName="name"
+      [attr.aria-invalid]="isInvalid('name')"
+      [attr.aria-describedby]="isInvalid('name') ? 'name-error' : null"
+    />
+    <p *ngIf="isInvalid('name')" id="name-error" class="field-error">{{ errorFor('name') }}</p>
+  </div>
+
+  <div class="field">
+    <label for="email">E-mail</label>
+    <input
+      id="email"
+      type="email"
+      autocomplete="email"
+      formControlName="email"
+      [attr.aria-invalid]="isInvalid('email')"
+      [attr.aria-describedby]="isInvalid('email') ? 'email-error' : null"
+    />
+    <p *ngIf="isInvalid('email')" id="email-error" class="field-error">{{ errorFor('email') }}</p>
+  </div>
+
+  <div class="field">
+    <label for="company">Firma</label>
+    <input
+      id="company"
+      type="text"
+      autocomplete="organization"
+      formControlName="company"
+      [attr.aria-invalid]="isInvalid('company')"
+      [attr.aria-describedby]="isInvalid('company') ? 'company-error' : null"
+    />
+    <p *ngIf="isInvalid('company')" id="company-error" class="field-error">
+      {{ errorFor('company') }}
+    </p>
+  </div>
+
+  <div class="field">
+    <label for="projectType">Typ projektu</label>
+    <select
+      id="projectType"
+      formControlName="projectType"
+      [attr.aria-invalid]="isInvalid('projectType')"
+      [attr.aria-describedby]="isInvalid('projectType') ? 'project-type-error' : null"
+    >
+      <option value="">Wybierz typ projektu</option>
+      <option *ngFor="let option of content.projectTypes" [value]="option.value">
+        {{ option.label }}
+      </option>
+    </select>
+    <p *ngIf="isInvalid('projectType')" id="project-type-error" class="field-error">
+      {{ errorFor('projectType') }}
+    </p>
+  </div>
+
+  <div class="field">
+    <label for="budgetRange">Budżet</label>
+    <select
+      id="budgetRange"
+      formControlName="budgetRange"
+      [attr.aria-invalid]="isInvalid('budgetRange')"
+      [attr.aria-describedby]="isInvalid('budgetRange') ? 'budget-range-error' : null"
+    >
+      <option value="">Wybierz zakres</option>
+      <option *ngFor="let option of content.budgetRanges" [value]="option.value">
+        {{ option.label }}
+      </option>
+    </select>
+    <p *ngIf="isInvalid('budgetRange')" id="budget-range-error" class="field-error">
+      {{ errorFor('budgetRange') }}
+    </p>
+  </div>
+
+  <div class="field field-full">
+    <label for="message">Wiadomość</label>
+    <textarea
+      id="message"
+      rows="6"
+      maxlength="4000"
+      formControlName="message"
+      [attr.aria-invalid]="isInvalid('message')"
+      [attr.aria-describedby]="isInvalid('message') ? 'message-error' : null"
+    ></textarea>
+    <p *ngIf="isInvalid('message')" id="message-error" class="field-error">
+      {{ errorFor('message') }}
+    </p>
+  </div>
+
+  <div class="consent field-full">
+    <input
+      id="consent"
+      type="checkbox"
+      formControlName="consent"
+      [attr.aria-invalid]="isInvalid('consent')"
+      [attr.aria-describedby]="isInvalid('consent') ? 'consent-error' : null"
+    />
+    <label for="consent">{{ content.consent }}</label>
+    <p *ngIf="isInvalid('consent')" id="consent-error" class="field-error">
+      {{ errorFor('consent') }}
+    </p>
+  </div>
+
+  <div
+    *ngIf="statusMessage"
+    class="form-status"
+    [class.success]="status === 'success'"
+    [class.error]="status === 'error'"
+    [attr.role]="status === 'error' ? 'alert' : 'status'"
+  >
+    {{ statusMessage }}
+  </div>
+
+  <button class="submit-button" type="submit" [disabled]="isSubmitting">
+    {{ isSubmitting ? content.submitting : content.submit }}
+  </button>
+</form>

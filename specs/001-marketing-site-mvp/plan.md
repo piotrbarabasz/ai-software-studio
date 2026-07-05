@@ -15,8 +15,10 @@ The backend will be a separate FastAPI application exposing `GET /health` and
 `POST /api/contact`, validating contact inquiries with Pydantic, applying CORS
 configuration, delivering accepted inquiries by email notification without a
 database, logging email delivery failures, and including pytest coverage for
-validation and endpoints. `GET /health` reports backend application reachability
-only and does not verify email provider readiness in the MVP.
+validation and endpoints. Consent copy will explain that inquiry data is emailed
+to the owner for response and not stored in a database in the MVP. `GET /health`
+reports backend application reachability only and does not verify email provider
+readiness in the MVP.
 
 ## Technical Context
 
@@ -36,7 +38,8 @@ and reactive contact form behavior; frontend `npm run lint`, `npm run format`,
 `npm test`, and `npm run build`; backend `ruff check`, `ruff format --check`,
 and `pytest` through documented lint/format/test commands; pytest tests for
 FastAPI health endpoint, contact validation, contact delivery success/failure,
-CORS behavior, and OpenAPI availability
+CORS behavior, non-sensitive contact and health observability, and OpenAPI
+availability
 
 **Target Platform**: Local Angular dev server plus local FastAPI dev server for
 development. Future deployment must allow frontend and backend to ship
@@ -57,8 +60,9 @@ external email provider latency.
 content and routing decisions; WCAG 2.2 AA target; no secrets in repo;
 environment-based configuration; restricted CORS outside local development;
 explicit OpenAPI contract; `GET /health` checks application reachability only;
-contact endpoint validates public input, logs email delivery failures, and is
-rate-limit-ready; no full GCP deployment work in this feature.
+contact endpoint validates public input, logs contact and health outcomes
+without full message bodies or sensitive payloads, and is rate-limit-ready; no
+full GCP deployment work in this feature.
 
 **Scale/Scope**: Solo-service professional marketing site MVP focused on lead
 generation, trust building, and service explanation. One public landing page,
@@ -84,7 +88,8 @@ one contact API endpoint, one health endpoint, no persistence.
   English later.
 - **Security**: PASS. Contact inputs are validated server-side, secrets are
   environment-driven, CORS is restricted, email delivery failure is logged and
-  not hidden, and the contact endpoint is designed for future rate limiting.
+  not hidden, contact consent and no-database privacy boundaries are explicit,
+  and the contact endpoint is designed for future rate limiting.
 - **Developer readiness**: PASS. The plan includes clear folders, local dev
   commands, frontend lint/format/test/build scripts, backend Ruff
   lint/format/test commands configured through `pyproject.toml`, tests,

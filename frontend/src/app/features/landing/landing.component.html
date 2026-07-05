@@ -1,0 +1,153 @@
+<a class="skip-link" href="#main-content">Przejdź do treści</a>
+
+<header class="site-header" aria-label="Główna nawigacja">
+  <a class="brand" href="#hero" aria-label="AISoftware Studio - strona główna">
+    <span class="brand-mark" aria-hidden="true">AI</span>
+    <span>AISoftware Studio</span>
+  </a>
+
+  <nav class="nav" aria-label="Sekcje strony">
+    <a *ngFor="let item of content.navigation" [href]="'#' + item.anchor">{{ item.label }}</a>
+  </nav>
+</header>
+
+<main id="main-content">
+  <section id="hero" class="hero" aria-labelledby="hero-title">
+    <div class="hero-content">
+      <p class="eyebrow">{{ content.hero.eyebrow }}</p>
+      <h1 id="hero-title">{{ content.hero.title }}</h1>
+      <p class="hero-subtitle">{{ content.hero.subtitle }}</p>
+
+      <div class="hero-actions" aria-label="Główne akcje">
+        <a class="button primary" href="#contact">{{ content.hero.primaryCta }}</a>
+        <a class="button secondary" href="#services">{{ content.hero.secondaryCta }}</a>
+      </div>
+
+      <ul class="trust-list" aria-label="Sygnały zaufania">
+        <li *ngFor="let item of content.hero.trustItems">{{ item }}</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="services" class="section" aria-labelledby="services-title">
+    <div class="section-inner">
+      <p class="section-kicker">Usługi</p>
+      <h2 id="services-title">Co mogę zbudować dla Twojej firmy</h2>
+      <p class="section-lead">
+        Zakres obejmuje zarówno pierwsze MVP, jak i konkretne usprawnienia procesów, integracje oraz
+        systemy wewnętrzne.
+      </p>
+
+      <div class="card-grid service-grid">
+        <article
+          *ngFor="let service of content.services"
+          class="service-card"
+          [attr.id]="service.anchorId"
+        >
+          <h3>{{ service.title }}</h3>
+          <p>{{ service.summary }}</p>
+          <ul>
+            <li *ngFor="let outcome of service.outcomes">{{ outcome }}</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="process" class="section section-muted" aria-labelledby="process-title">
+    <div class="section-inner">
+      <p class="section-kicker">Proces</p>
+      <h2 id="process-title">Jak wygląda współpraca</h2>
+      <p class="section-lead">
+        Najpierw porządkujemy cel i zakres, potem dostarczamy rozwiązanie w etapach, które da się
+        sprawdzać po drodze.
+      </p>
+
+      <ol class="process-list">
+        <li *ngFor="let step of content.process">
+          <span class="step-number">{{ step.order }}</span>
+          <div>
+            <h3>{{ step.title }}</h3>
+            <p>{{ step.description }}</p>
+            <strong>{{ step.clientOutcome }}</strong>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="technology" class="section" aria-labelledby="technology-title">
+    <div class="section-inner">
+      <p class="section-kicker">Technologie</p>
+      <h2 id="technology-title">Narzędzia dobrane do utrzymywalnego wdrożenia</h2>
+      <p class="section-lead">
+        Technologia jest środkiem do celu: ma wspierać stabilny rozwój, integracje, automatyzację i
+        czytelne API.
+      </p>
+
+      <div class="technology-grid">
+        <article *ngFor="let tech of content.technologies" class="technology-item">
+          <span>{{ tech.category }}</span>
+          <h3>{{ tech.name }}</h3>
+          <p>{{ tech.businessUse }}</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="examples" class="section section-muted" aria-labelledby="examples-title">
+    <div class="section-inner">
+      <p class="section-kicker">Przykłady</p>
+      <h2 id="examples-title">Kierunki projektów, które pasują do AISoftware Studio</h2>
+      <p class="section-lead">
+        To przykłady koncepcyjne, nie opisy realnych wdrożeń. Można je później zastąpić prawdziwymi
+        case studies.
+      </p>
+
+      <div class="card-grid">
+        <article *ngFor="let example of content.examples" class="example-card">
+          <p class="placeholder-label">{{ example.label }}</p>
+          <h3>Problem</h3>
+          <p>{{ example.problem }}</p>
+          <h3>Podejście</h3>
+          <p>{{ example.approach }}</p>
+          <h3>Efekt</h3>
+          <p>{{ example.outcome }}</p>
+          <ul class="tag-list" aria-label="Powiązane usługi">
+            <li *ngFor="let tag of example.serviceTags">{{ tag }}</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="section" aria-labelledby="about-title">
+    <div class="section-inner about-layout">
+      <div>
+        <p class="section-kicker">O mnie</p>
+        <h2 id="about-title">{{ content.about.title }}</h2>
+        <p class="section-lead">{{ content.about.body }}</p>
+      </div>
+      <ul class="trust-panel" aria-label="Obietnice współpracy">
+        <li *ngFor="let claim of content.about.trustClaims">{{ claim }}</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="contact" class="section contact-section" aria-labelledby="contact-title">
+    <div class="section-inner contact-layout">
+      <div>
+        <p class="section-kicker">Kontakt</p>
+        <h2 id="contact-title">{{ content.contact.title }}</h2>
+        <p class="section-lead">{{ content.contact.lead }}</p>
+      </div>
+
+      <app-contact-form />
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>AISoftware Studio - aplikacje webowe, API i automatyzacje AI.</p>
+  <a href="#contact">Kontakt</a>
+</footer>

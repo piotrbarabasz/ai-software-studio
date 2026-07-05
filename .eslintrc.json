@@ -1,0 +1,21 @@
+{
+  "root": true,
+  "ignorePatterns": ["dist/**", "node_modules/**", "coverage/**", ".angular/**"],
+  "overrides": [
+    {
+      "files": ["frontend/src/**/*.ts"],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "project": ["frontend/tsconfig.json"],
+        "createDefaultProgram": true
+      },
+      "plugins": ["@typescript-eslint"],
+      "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+      "rules": {
+        "@typescript-eslint/consistent-type-imports": "error",
+        "@typescript-eslint/no-explicit-any": "warn"
+      }
+    }
+  ]
+}
+

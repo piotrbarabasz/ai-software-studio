@@ -93,6 +93,8 @@ Expected result: the site is available at `http://localhost:4200`.
 - Confirm the frontend shows a Polish success message only after backend
   acceptance.
 - Submit without consent and confirm submission is blocked.
+- Confirm the Polish consent text explains that inquiry data is emailed to the
+  site owner for response and is not persisted in a database in the MVP.
 - Submit with an invalid email and confirm Polish validation feedback.
 - Submit a message shorter than 20 characters and longer than 4000 characters
   and confirm backend validation rejects it.
@@ -100,6 +102,9 @@ Expected result: the site is available at `http://localhost:4200`.
   failure instead of pretending success.
 - Confirm failed email delivery is logged by the backend without logging the
   sensitive message body.
+- Confirm backend logs cover non-sensitive contact outcomes, validation
+  rejections, rate-limit rejections, delivery failures, and health checks
+  without logging full message bodies, secrets, or sensitive contact payloads.
 
 ### API Contract
 
@@ -169,3 +174,17 @@ still keep:
 - environment variables documented for each app
 - CORS origins configurable per environment
 - no secrets committed to the repository
+
+## Implementation Validation Notes
+
+Validated on 2026-07-04:
+
+- Backend Ruff lint passed.
+- Backend Ruff format check passed.
+- Backend pytest passed with 18 tests.
+- Frontend Prettier format completed.
+- Frontend ESLint passed.
+- Frontend Angular tests passed with 17 specs in Chrome Headless.
+- Frontend production build completed with initial raw JS/CSS total of 319.71 kB and estimated transfer total of 85.20 kB.
+
+Lighthouse CLI was not added as a dependency. The release gate remains documented in `docs/local-development.md`: desktop Lighthouse Performance >= 90 and Accessibility >= 90 for the production build.

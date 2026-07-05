@@ -4,6 +4,10 @@
 
 Represents a project inquiry submitted from the public contact form. It is
 validated and delivered by notification email, but not persisted in a database.
+The notification email may include the submitted name, email, optional company,
+project type, budget range, message, consent confirmation, and server timestamp
+so the owner can respond. Backend logs must not include the full message body,
+secrets, or sensitive contact payloads.
 
 ### Fields
 
@@ -17,6 +21,15 @@ validated and delivered by notification email, but not persisted in a database.
 | `message` | string | Yes | Trimmed, 20-4000 characters |
 | `consent` | boolean | Yes | Must be `true` |
 | `submittedAt` | datetime | Server-set | ISO timestamp for notification/receipt context |
+
+### Consent and Privacy Boundary
+
+The public consent checkbox copy must be in Polish and explain that the inquiry
+data is sent by email to the site owner for the purpose of responding to the
+message. The MVP does not persist contact inquiries in a database. Operational
+logs may record non-sensitive outcome metadata such as accepted, rejected,
+rate-limited, delivery failed, and health checked, but must not contain the full
+message body.
 
 ### Project Type Values
 

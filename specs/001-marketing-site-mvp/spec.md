@@ -207,7 +207,9 @@ Polish messages.
   examples that are explicitly labeled as examples or placeholders until
   replaced by real projects.
 - **FR-007**: System MUST include an about section presenting AISoftware Studio
-  as a technical partner focused on business outcomes, quality delivery, and AI
+  as a technical partner, not only a freelancer, with Polish copy that states
+  the owner's role, collaboration model, and concrete trust claims about
+  business-outcome focus, maintainable delivery, backend/API capability, and AI
   automation expertise.
 - **FR-008**: System MUST include a contact section with a form that displays
   fields for name, email, company, project type, budget range, message, and a
@@ -245,6 +247,13 @@ Polish messages.
   validation messages.
 - **FR-023**: System MUST avoid unnecessary large frontend dependencies and
   large initial JS/CSS/assets in the production build.
+- **FR-024**: System MUST present Polish consent text explaining that contact
+  form data is sent by email to the site owner for inquiry response and is not
+  persisted in a database in the MVP.
+- **FR-025**: System MUST define non-sensitive backend observability for contact
+  intake outcomes, validation rejections, rate-limit rejections, email delivery
+  failures, and health checks without logging full message bodies, secrets, or
+  sensitive contact payloads.
 
 ### Constitution Constraints *(mandatory)*
 
@@ -257,7 +266,8 @@ Polish messages.
 - **Security Impact**: Public input requires consent capture, server-side
   validation, non-sensitive errors, no secrets in the repository, restricted
   cross-origin access outside local development, logged email delivery failures,
-  and a rate-limit-ready contact boundary.
+  non-sensitive operational logging for contact and health outcomes, and a
+  rate-limit-ready contact boundary.
 - **Deployment Impact**: Both public website and contact backend behavior are in
   scope for the MVP, but GCP deployment itself is deferred to a separate feature.
 - **Accessibility & Performance Impact**: The website must target WCAG 2.2 AA,
@@ -271,7 +281,9 @@ Polish messages.
 
 - **Contact Inquiry**: A submitted lead containing name, email, optional company,
   project type, budget range, message, consent confirmation, and submission
-  timestamp or equivalent receipt metadata.
+  timestamp or equivalent receipt metadata. The data is transmitted by email to
+  the site owner for response, is not persisted in a database for the MVP, and
+  full message content must not be written to backend logs.
 - **Service Offering**: A public description of a service category, its business
   outcome, and representative use cases.
 - **Process Step**: A stage in cooperation from discovery to delivery, including
@@ -320,6 +332,8 @@ Polish messages.
   early-stage leads who do not yet operate under a formal company name.
 - Contact delivery to the owner uses backend email notification configured by
   environment variables and does not require a database.
+- Contact consent copy explains email delivery to the site owner, the response
+  purpose, and the MVP's no-database storage boundary.
 - The MVP health endpoint reports backend application reachability only; a
   separate readiness endpoint for email provider checks can be added later.
 - Placeholder case studies are not presented as real client outcomes.
