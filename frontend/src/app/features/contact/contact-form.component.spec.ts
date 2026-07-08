@@ -53,6 +53,41 @@ describe('ContactFormComponent', () => {
     );
   });
 
+  it('renders productized project type options from the shared contact content', () => {
+    const options = Array.from(
+      fixture.nativeElement.querySelectorAll('#projectType option'),
+    ) as HTMLOptionElement[];
+    const optionValues = options.map((option) => option.value);
+
+    expect(optionValues).toContain('rag_chatbot_demo');
+    expect(optionValues).toContain('website_seo');
+    expect(fixture.nativeElement.textContent).toContain('Panel zarządzania agentami');
+  });
+
+  it('submits a productized project type using the existing payload shape', () => {
+    fixture.componentInstance.form.setValue({
+      name: 'Anna Nowak',
+      email: 'anna@example.com',
+      company: 'Firma AI',
+      projectType: 'rag_chatbot_demo',
+      budgetRange: '10k_25k_pln',
+      message: 'Chcemy sprawdzić demo chatbota RAG dla materiałów sprzedażowych.',
+      consent: true,
+    });
+
+    fixture.componentInstance.submit();
+
+    expect(api.submit).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        name: 'Anna Nowak',
+        company: 'Firma AI',
+        projectType: 'rag_chatbot_demo',
+        budgetRange: '10k_25k_pln',
+        consent: true,
+      }),
+    );
+  });
+
   it('renders consent wording with email and no-database boundary', () => {
     const text = fixture.nativeElement.textContent as string;
 

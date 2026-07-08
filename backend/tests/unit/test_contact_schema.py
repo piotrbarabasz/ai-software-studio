@@ -13,6 +13,16 @@ def test_contact_schema_trims_optional_company(valid_contact_payload: dict[str, 
     assert inquiry.budget_range.value == "25k_50k_pln"
 
 
+def test_contact_schema_accepts_productized_project_type(
+    valid_contact_payload: dict[str, object],
+) -> None:
+    payload = {**valid_contact_payload, "projectType": "rag_chatbot_demo"}
+
+    inquiry = ContactInquiry.model_validate(payload)
+
+    assert inquiry.project_type.value == "rag_chatbot_demo"
+
+
 @pytest.mark.parametrize(
     ("field", "value"),
     [

@@ -1,0 +1,31 @@
+<section id="demo-ai-7-dni" class="section demo-promise" aria-labelledby="demo-promise-title">
+  <div class="section-shell demo-grid" appRevealOnScroll>
+    <div>
+      <p class="section-kicker">Demo AI w 7 dni</p>
+      <h2 id="demo-promise-title">{{ content.title }}</h2>
+      <p class="section-lead">{{ content.lead }}</p>
+      <a class="button primary" href="#contact">{{ content.ctaLabel }}</a>
+    </div>
+
+    <div class="promise-columns">
+      <article>
+        <h3>Start sprintu</h3>
+        <ul>
+          <li *ngFor="let item of content.startsAfter">{{ item }}</li>
+        </ul>
+      </article>
+      <article>
+        <h3>W zakresie demo</h3>
+        <ul>
+          <li *ngFor="let item of content.includes">{{ item }}</li>
+        </ul>
+      </article>
+      <article class="boundary">
+        <h3>Nie obejmuje</h3>
+        <ul>
+          <li *ngFor="let item of content.notIncluded">{{ item }}</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>

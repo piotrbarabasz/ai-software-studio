@@ -1,0 +1,32 @@
+<section id="pricing" class="section pricing-section" aria-labelledby="pricing-title">
+  <div class="section-shell" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="section-kicker">Pakiety startowe</p>
+      <h2 id="pricing-title">Zakres dobierany do decyzji, którą ma ułatwić demo</h2>
+      <p class="section-lead">
+        Pakiety są punktem startowym rozmowy. Finalny zakres potwierdzamy przed sprintem, po
+        sprawdzeniu materiałów i jednego głównego scenariusza.
+      </p>
+    </div>
+
+    <div class="package-grid">
+      <article *ngFor="let item of packages" class="package-card" [attr.id]="item.id">
+        <p class="package-label">{{ item.name }}</p>
+        <h3>{{ item.priceLabel }}</h3>
+        <p>{{ item.bestFor }}</p>
+
+        <h4>W pakiecie</h4>
+        <ul>
+          <li *ngFor="let include of item.includes">{{ include }}</li>
+        </ul>
+
+        <h4>Założenia</h4>
+        <ul>
+          <li *ngFor="let assumption of item.assumptions">{{ assumption }}</li>
+        </ul>
+
+        <a href="#contact">{{ item.ctaLabel }}</a>
+      </article>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,25 @@
+<section id="hero" class="premium-hero" aria-labelledby="hero-title">
+  <div class="hero-grid section-shell" appRevealOnScroll>
+    <div class="hero-copy">
+      <p class="eyebrow">{{ content.eyebrow }}</p>
+      <h1 id="hero-title">{{ content.title }}</h1>
+      <p class="hero-subtitle">{{ content.subtitle }}</p>
+
+      <div class="hero-actions" aria-label="Główne akcje">
+        <a class="button primary" href="#contact">{{ content.primaryCta }}</a>
+        <a class="button secondary" href="#demo-ai-7-dni">{{ content.secondaryCta }}</a>
+      </div>
+
+      <ul class="trust-list" aria-label="Sygnały zaufania">
+        <li *ngFor="let item of content.trustItems">{{ item }}</li>
+      </ul>
+    </div>
+
+    <aside class="hero-proof" [attr.aria-label]="content.proofLabel">
+      <p>{{ content.proofLabel }}</p>
+      <ul>
+        <li *ngFor="let item of content.proofItems">{{ item }}</li>
+      </ul>
+    </aside>
+  </div>
+</section>

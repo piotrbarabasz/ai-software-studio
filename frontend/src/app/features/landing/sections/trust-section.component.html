@@ -1,0 +1,18 @@
+<section id="trust" class="section trust-section" aria-labelledby="trust-title">
+  <div class="section-shell trust-grid" appRevealOnScroll>
+    <div>
+      <p class="section-kicker">{{ content.eyebrow }}</p>
+      <h2 id="trust-title">{{ content.title }}</h2>
+      <p class="section-lead">{{ content.lead }}</p>
+    </div>
+
+    <div class="trust-panel">
+      <ul aria-label="Zasady pracy">
+        <li *ngFor="let principle of content.principles">{{ principle }}</li>
+      </ul>
+      <div class="stack-list" aria-label="Technologie">
+        <span *ngFor="let item of content.stack">{{ item }}</span>
+      </div>
+    </div>
+  </div>
+</section>

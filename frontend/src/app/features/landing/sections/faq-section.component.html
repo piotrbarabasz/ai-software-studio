@@ -1,0 +1,29 @@
+<section id="faq" class="section faq-section" aria-labelledby="faq-title">
+  <div class="section-shell faq-layout" appRevealOnScroll>
+    <div>
+      <p class="section-kicker">FAQ</p>
+      <h2 id="faq-title">Najczęstsze pytania przed sprintem demo</h2>
+      <p class="section-lead">
+        Odpowiedzi oddzielają prezentacyjne demo od produkcyjnego wdrożenia, żeby zakres był jasny
+        przed kontaktem.
+      </p>
+    </div>
+
+    <div class="faq-list">
+      <article *ngFor="let item of items" class="faq-item">
+        <h3>
+          <button
+            type="button"
+            [attr.aria-expanded]="isOpen(item)"
+            [attr.aria-controls]="item.id + '-answer'"
+            (click)="toggle(item)"
+          >
+            <span>{{ item.question }}</span>
+            <span aria-hidden="true">{{ isOpen(item) ? '-' : '+' }}</span>
+          </button>
+        </h3>
+        <p *ngIf="isOpen(item)" [attr.id]="item.id + '-answer'">{{ item.answer }}</p>
+      </article>
+    </div>
+  </div>
+</section>
