@@ -1,6 +1,12 @@
 # Infrastructure
 
-No infrastructure implementation is included in the MVP.
+The MVP keeps infrastructure implementation out of the main product scope.
 
-This directory is reserved for a future GCP deployment feature. The current scope is documentation-only and must not contain Cloud Run services, Cloud Build pipelines, Terraform, production secrets, or active deployment resources.
+Current deployment assets live under [`infra/gcp/`](gcp/).
 
+Boundaries:
+
+- No Terraform or Pulumi
+- No production secrets committed to the repository
+- No database, authentication, CMS, admin panel, payment flow, queue, or persistent storage
+- No hidden deployment resources outside documented GCP files

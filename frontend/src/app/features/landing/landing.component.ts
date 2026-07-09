@@ -4,12 +4,35 @@ import { Component, inject } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 
 import { plContent } from '../../core/content/pl';
-import { ContactFormComponent } from '../contact/contact-form.component';
+import { RevealOnScrollDirective } from '../../shared/reveal/reveal-on-scroll.directive';
+import { ContactCtaSectionComponent } from './sections/contact-cta-section.component';
+import { DemoPromiseSectionComponent } from './sections/demo-promise-section.component';
+import { DemoSprintSectionComponent } from './sections/demo-sprint-section.component';
+import { FaqSectionComponent } from './sections/faq-section.component';
+import { HeroSectionComponent } from './sections/hero-section.component';
+import { PricingSectionComponent } from './sections/pricing-section.component';
+import { ProductOffersSectionComponent } from './sections/product-offers-section.component';
+import { ShowcaseSectionComponent } from './sections/showcase-section.component';
+import { TrustSectionComponent } from './sections/trust-section.component';
+import { WebsitesSeoSectionComponent } from './sections/websites-seo-section/websites-seo-section.component';
 
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [CommonModule, ContactFormComponent],
+  imports: [
+    CommonModule,
+    ContactCtaSectionComponent,
+    DemoPromiseSectionComponent,
+    DemoSprintSectionComponent,
+    FaqSectionComponent,
+    HeroSectionComponent,
+    PricingSectionComponent,
+    ProductOffersSectionComponent,
+    RevealOnScrollDirective,
+    ShowcaseSectionComponent,
+    TrustSectionComponent,
+    WebsitesSeoSectionComponent,
+  ],
   templateUrl: './landing.component.html',
   styleUrl: './landing.component.scss',
 })
@@ -19,6 +42,15 @@ export class LandingComponent implements OnInit {
   private readonly document = inject(DOCUMENT);
 
   readonly content = plContent;
+  readonly showcaseSections = this.content.showcases.filter(
+    (showcase) => showcase.visualKind !== 'websiteSeo',
+  );
+  readonly websitesSeoShowcase = this.content.showcases.find(
+    (showcase) => showcase.visualKind === 'websiteSeo',
+  )!;
+  readonly websitesSeoOffer = this.content.offers.find(
+    (offer) => offer.visualKind === 'websiteSeo',
+  )!;
 
   ngOnInit(): void {
     const seo = this.content.seo;

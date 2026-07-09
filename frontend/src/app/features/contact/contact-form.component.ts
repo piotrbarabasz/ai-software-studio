@@ -5,6 +5,7 @@ import type { FormControl } from '@angular/forms';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { finalize } from 'rxjs';
 
+import { budgetRangeOptions, projectTypeOptions } from '../../core/content/contact-options.pl';
 import { plContent } from '../../core/content/pl';
 import { ContactApiService } from '../../services/contact-api.service';
 import type {
@@ -34,7 +35,11 @@ export class ContactFormComponent {
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly api = inject(ContactApiService);
 
-  readonly content = plContent.contact;
+  readonly content = {
+    ...plContent.contact,
+    projectTypes: projectTypeOptions,
+    budgetRanges: budgetRangeOptions,
+  };
   readonly form = this.fb.group<ContactFormControls>({
     name: this.fb.control('', [
       Validators.required,

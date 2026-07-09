@@ -1,4 +1,10 @@
 export type ProjectType =
+  | 'rag_chatbot_demo'
+  | 'website_seo'
+  | 'voice_agent_demo'
+  | 'whatsapp_agent_management'
+  | 'email_automation'
+  | 'agent_management_panel'
   | 'custom_web_app'
   | 'ai_automation'
   | 'backend_api'

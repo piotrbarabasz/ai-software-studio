@@ -1,4 +1,4 @@
-<a class="skip-link" href="#main-content">Przejdź do treści</a>
+﻿<a class="skip-link" href="#main-content">Przejdź do treści</a>
 
 <header class="site-header" aria-label="Główna nawigacja">
   <a class="brand" href="#hero" aria-label="AISoftware Studio - strona główna">
@@ -12,25 +12,18 @@
 </header>
 
 <main id="main-content">
-  <section id="hero" class="hero" aria-labelledby="hero-title">
-    <div class="hero-content">
-      <p class="eyebrow">{{ content.hero.eyebrow }}</p>
-      <h1 id="hero-title">{{ content.hero.title }}</h1>
-      <p class="hero-subtitle">{{ content.hero.subtitle }}</p>
-
-      <div class="hero-actions" aria-label="Główne akcje">
-        <a class="button primary" href="#contact">{{ content.hero.primaryCta }}</a>
-        <a class="button secondary" href="#services">{{ content.hero.secondaryCta }}</a>
-      </div>
-
-      <ul class="trust-list" aria-label="Sygnały zaufania">
-        <li *ngFor="let item of content.hero.trustItems">{{ item }}</li>
-      </ul>
-    </div>
-  </section>
+  <app-hero-section [content]="content.hero" />
+  <app-demo-promise-section [content]="content.demoPromise" />
+  <app-product-offers-section [offers]="content.offers" />
+  <app-showcase-section *ngFor="let showcase of showcaseSections" [showcase]="showcase" />
+  <app-websites-seo-section [offer]="websitesSeoOffer" [showcase]="websitesSeoShowcase" />
+  <app-demo-sprint-section [steps]="content.demoSprint" />
+  <app-trust-section [content]="content.trust" />
+  <app-pricing-section [packages]="content.packages" />
+  <app-faq-section [items]="content.faq" />
 
   <section id="services" class="section" aria-labelledby="services-title">
-    <div class="section-inner">
+    <div class="section-inner" appRevealOnScroll>
       <p class="section-kicker">Usługi</p>
       <h2 id="services-title">Co mogę zbudować dla Twojej firmy</h2>
       <p class="section-lead">
@@ -55,7 +48,7 @@
   </section>
 
   <section id="process" class="section section-muted" aria-labelledby="process-title">
-    <div class="section-inner">
+    <div class="section-inner" appRevealOnScroll>
       <p class="section-kicker">Proces</p>
       <h2 id="process-title">Jak wygląda współpraca</h2>
       <p class="section-lead">
@@ -77,7 +70,7 @@
   </section>
 
   <section id="technology" class="section" aria-labelledby="technology-title">
-    <div class="section-inner">
+    <div class="section-inner" appRevealOnScroll>
       <p class="section-kicker">Technologie</p>
       <h2 id="technology-title">Narzędzia dobrane do utrzymywalnego wdrożenia</h2>
       <p class="section-lead">
@@ -96,7 +89,7 @@
   </section>
 
   <section id="examples" class="section section-muted" aria-labelledby="examples-title">
-    <div class="section-inner">
+    <div class="section-inner" appRevealOnScroll>
       <p class="section-kicker">Przykłady</p>
       <h2 id="examples-title">Kierunki projektów, które pasują do AISoftware Studio</h2>
       <p class="section-lead">
@@ -122,7 +115,7 @@
   </section>
 
   <section id="about" class="section" aria-labelledby="about-title">
-    <div class="section-inner about-layout">
+    <div class="section-inner about-layout" appRevealOnScroll>
       <div>
         <p class="section-kicker">O mnie</p>
         <h2 id="about-title">{{ content.about.title }}</h2>
@@ -134,17 +127,7 @@
     </div>
   </section>
 
-  <section id="contact" class="section contact-section" aria-labelledby="contact-title">
-    <div class="section-inner contact-layout">
-      <div>
-        <p class="section-kicker">Kontakt</p>
-        <h2 id="contact-title">{{ content.contact.title }}</h2>
-        <p class="section-lead">{{ content.contact.lead }}</p>
-      </div>
-
-      <app-contact-form />
-    </div>
-  </section>
+  <app-contact-cta-section [content]="content.contact" />
 </main>
 
 <footer class="site-footer">

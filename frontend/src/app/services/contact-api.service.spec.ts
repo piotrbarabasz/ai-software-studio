@@ -46,6 +46,32 @@ describe('ContactApiService', () => {
     request.flush({ status: 'accepted', message: 'ok' }, { status: 202, statusText: 'Accepted' });
   });
 
+  it('posts productized project type values without changing the payload contract', () => {
+    const productizedPayload: ContactInquiryRequest = {
+      ...payload,
+      projectType: 'voice_agent_demo',
+      message: 'Chcemy sprawdzić demo voice agenta dla kwalifikacji leadów.',
+    };
+
+    service.submit(productizedPayload).subscribe((response) => {
+      expect(response.status).toBe('accepted');
+    });
+
+    const request = http.expectOne('http://api.test/api/contact');
+    expect(request.request.method).toBe('POST');
+    expect(request.request.body).toEqual(productizedPayload);
+    expect(Object.keys(request.request.body)).toEqual([
+      'name',
+      'email',
+      'company',
+      'projectType',
+      'budgetRange',
+      'message',
+      'consent',
+    ]);
+    request.flush({ status: 'accepted', message: 'ok' }, { status: 202, statusText: 'Accepted' });
+  });
+
   it('propagates validation, rate-limit, and delivery-failure responses', () => {
     service.submit(payload).subscribe({
       error: (error) => {

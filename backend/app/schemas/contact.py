@@ -6,6 +6,12 @@ from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
 
 class ProjectType(StrEnum):
+    rag_chatbot_demo = "rag_chatbot_demo"
+    website_seo = "website_seo"
+    voice_agent_demo = "voice_agent_demo"
+    whatsapp_agent_management = "whatsapp_agent_management"
+    email_automation = "email_automation"
+    agent_management_panel = "agent_management_panel"
     custom_web_app = "custom_web_app"
     ai_automation = "ai_automation"
     backend_api = "backend_api"

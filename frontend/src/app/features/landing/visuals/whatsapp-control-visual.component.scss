@@ -1,0 +1,40 @@
+:host {
+  display: block;
+}
+
+.visual {
+  border: 1px solid #cfe5dc;
+  border-radius: 8px;
+  background: #eef8f3;
+  padding: 1rem;
+}
+
+.visual-label {
+  margin: 0 0 1rem;
+  color: var(--color-primary-strong);
+  font-weight: 800;
+}
+
+.chat {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.bubble {
+  max-width: 82%;
+  margin: 0;
+  border-radius: 8px;
+  padding: 0.7rem;
+}
+
+.owner {
+  justify-self: end;
+  background: var(--color-primary);
+  color: #ffffff;
+}
+
+.agent {
+  justify-self: start;
+  background: #ffffff;
+  color: var(--color-ink);
+}

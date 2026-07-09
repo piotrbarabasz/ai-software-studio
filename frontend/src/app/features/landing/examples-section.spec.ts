@@ -1,4 +1,4 @@
-import { provideHttpClient } from '@angular/common/http';
+﻿import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
 import { API_CONFIG } from '../../core/api-config';
@@ -20,7 +20,7 @@ describe('Examples section', () => {
     fixture.detectChanges();
     const text = fixture.nativeElement.textContent as string;
 
-    expect(text).toContain('Przykład koncepcyjny');
-    expect(text).toContain('nie opisy realnych wdrożeń');
+    expect(text).toContain('case study');
+    expect(text).toContain('realnym case study');
   });
 });

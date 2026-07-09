@@ -1,0 +1,37 @@
+:host {
+  display: block;
+}
+
+.visual {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  background: #17201b;
+  color: #ffffff;
+  padding: 1rem;
+}
+
+.visual-label {
+  margin: 0 0 1rem;
+  color: #f4dfc4;
+  font-weight: 800;
+}
+
+.panel-row,
+.metric {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 6px;
+  padding: 0.75rem;
+}
+
+.panel-row + .panel-row,
+.metric {
+  margin-top: 0.65rem;
+}
+
+.panel-row span,
+.metric {
+  color: #f4dfc4;
+}
