@@ -57,6 +57,7 @@ No database, authentication, CMS, admin panel, payments, blog, queue, or product
 
 Production deployment to Google Cloud Platform is documented separately:
 
+- [docs/gcp-cicd.md](docs/gcp-cicd.md)
 - [docs/gcp-deployment.md](docs/gcp-deployment.md)
 - [docs/gcp-runbook.md](docs/gcp-runbook.md)
 - [infra/gcp/README.md](infra/gcp/README.md)

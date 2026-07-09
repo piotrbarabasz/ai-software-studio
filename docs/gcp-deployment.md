@@ -7,7 +7,7 @@ This guide covers first-time production deployment of the existing AISoftware St
 - Frontend: `aisoftware-studio-web` as a production static container on Cloud Run
 - Backend: `aisoftware-studio-api` as a FastAPI Cloud Run service
 - Registry: Artifact Registry for container images
-- CI/CD: Cloud Build YAML files and optional Cloud Build triggers later
+- CI/CD: Cloud Build YAML files plus GitHub-connected Cloud Build triggers documented in `docs/gcp-cicd.md`
 - Secrets: Secret Manager for `SMTP_PASSWORD`
 
 ## Prerequisites
@@ -99,8 +99,8 @@ Production CORS must not use wildcard origins.
 
 ## Cloud Build Triggers
 
-Cloud Build YAML files can be used directly with `gcloud builds submit` for the first deployment.
-Triggers can be added later for repeatable CI/CD, but they are not required for the first release.
+See `docs/gcp-cicd.md` for the GitHub-connected production trigger, PR validation trigger, and temporary test trigger.
+The production pipeline uses `infra/gcp/cloudbuild.deploy.yaml`.
 
 ## Custom Domain Notes
 
@@ -122,3 +122,9 @@ Run the local preflight script first:
 ```
 
 Then confirm the backend and frontend container smoke tests described in `docs/gcp-runbook.md`.
+
+## Manual Image Tags
+
+Manual `gcloud builds submit` runs do not rely on `SHORT_SHA`.
+The manual Cloud Build files default `_IMAGE_TAG` to `manual-local`, so they remain usable even when no trigger metadata is present.
+If you want a reproducible manual tag, pass `_IMAGE_TAG` explicitly when invoking the build.

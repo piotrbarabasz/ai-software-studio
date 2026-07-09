@@ -4,6 +4,7 @@ substitutions:
   _ARTIFACT_REPO: "aisoftware-studio"
   _SERVICE_NAME: "aisoftware-studio-api"
   _IMAGE_NAME: "aisoftware-studio-api"
+  _IMAGE_TAG: "manual-local"
   _MIN_INSTANCES: "0"
   _APP_ENV: "production"
   _CORS_ALLOWED_ORIGINS: "https://<FRONTEND_CLOUD_RUN_URL>"
@@ -14,7 +15,7 @@ substitutions:
   _SMTP_PORT: "587"
   _SMTP_USERNAME: "smtp-user@example.com"
   _SMTP_USE_TLS: "true"
-  _CONTACT_RATE_LIMIT_PER_MINUTE: "5"
+  _CONTACT_RATE_LIMIT_PER_MINUTE: "30"
   _SMTP_PASSWORD_SECRET: "aisoftware-studio-smtp-password"
 
 steps:
@@ -25,7 +26,7 @@ steps:
         "-f",
         "backend/Dockerfile",
         "-t",
-        "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_IMAGE_NAME:$SHORT_SHA",
+        "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_IMAGE_NAME:$_IMAGE_TAG",
         "backend",
       ]
 
@@ -33,7 +34,7 @@ steps:
     args:
       [
         "push",
-        "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_IMAGE_NAME:$SHORT_SHA",
+        "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_IMAGE_NAME:$_IMAGE_TAG",
       ]
 
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
@@ -46,7 +47,7 @@ steps:
         "--project=$_PROJECT_ID",
         "--region=$_REGION",
         "--platform=managed",
-        "--image=$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_IMAGE_NAME:$SHORT_SHA",
+        "--image=$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_IMAGE_NAME:$_IMAGE_TAG",
         "--allow-unauthenticated",
         "--min-instances=$_MIN_INSTANCES",
         "--set-env-vars=APP_ENV=$_APP_ENV,CORS_ALLOWED_ORIGINS=$_CORS_ALLOWED_ORIGINS,CONTACT_DELIVERY_MODE=$_CONTACT_DELIVERY_MODE,CONTACT_RECIPIENT_EMAIL=$_CONTACT_RECIPIENT_EMAIL,CONTACT_FROM_EMAIL=$_CONTACT_FROM_EMAIL,SMTP_HOST=$_SMTP_HOST,SMTP_PORT=$_SMTP_PORT,SMTP_USERNAME=$_SMTP_USERNAME,SMTP_USE_TLS=$_SMTP_USE_TLS,CONTACT_RATE_LIMIT_PER_MINUTE=$_CONTACT_RATE_LIMIT_PER_MINUTE",
@@ -54,4 +55,4 @@ steps:
       ]
 
 images:
-  - "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_IMAGE_NAME:$SHORT_SHA"
+  - "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_IMAGE_NAME:$_IMAGE_TAG"
