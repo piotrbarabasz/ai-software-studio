@@ -19,32 +19,36 @@
         [attr.id]="offer.id"
         [attr.data-visual-kind]="offer.visualKind"
       >
-        <div class="offer-card__top">
-          <span class="offer-card__label">{{ offer.shortLabel }}</span>
-          <span class="offer-card__visual" aria-hidden="true">{{ offer.visualKind }}</span>
-        </div>
-        <h3>{{ offer.title }}</h3>
-        <p>{{ offer.summary }}</p>
+        <div class="offer-card__content">
+          <div class="offer-card__top">
+            <span class="offer-card__label">{{ offer.shortLabel }}</span>
+            <span class="offer-card__visual" aria-hidden="true">{{ offer.visualKind }}</span>
+          </div>
+          <h3>{{ offer.title }}</h3>
+          <p>{{ offer.summary }}</p>
 
-        <div class="offer-card__outcome">
-          <span>Efekt biznesowy</span>
-          <strong>{{ offer.businessOutcome }}</strong>
+          <div class="offer-card__outcome">
+            <span>Efekt biznesowy</span>
+            <strong>{{ offer.businessOutcome }}</strong>
+          </div>
+
+          <div>
+            <h4>Przykłady użycia</h4>
+            <ul>
+              <li *ngFor="let useCase of offer.useCases">{{ useCase }}</li>
+            </ul>
+          </div>
+
+          <div class="offer-card__demo">
+            <h4>Artefakt demo</h4>
+            <p>{{ offer.demoArtifact }}</p>
+          </div>
         </div>
 
-        <div>
-          <h4>Przykłady użycia</h4>
-          <ul>
-            <li *ngFor="let useCase of offer.useCases">{{ useCase }}</li>
-          </ul>
+        <div class="offer-card__footer">
+          <p class="offer-card__boundary">{{ offer.scopeBoundary }}</p>
+          <a class="offer-card__cta" href="#contact">{{ offer.ctaLabel }}</a>
         </div>
-
-        <div class="offer-card__demo">
-          <h4>Artefakt demo</h4>
-          <p>{{ offer.demoArtifact }}</p>
-        </div>
-
-        <p class="offer-card__boundary">{{ offer.scopeBoundary }}</p>
-        <a class="offer-card__cta" href="#contact">{{ offer.ctaLabel }}</a>
       </article>
     </div>
   </div>

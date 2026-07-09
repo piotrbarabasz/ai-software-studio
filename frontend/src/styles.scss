@@ -79,6 +79,20 @@ textarea {
   padding-inline: clamp(1rem, 6vw, 5rem);
 }
 
+.section {
+  padding-block: clamp(5rem, 9vw, 8rem);
+}
+
+.section-heading {
+  display: grid;
+  gap: clamp(0.85rem, 2vw, 1.2rem);
+}
+
+.section-heading .eyebrow,
+.section-heading .section-kicker {
+  margin: 0;
+}
+
 .eyebrow,
 .section-kicker {
   margin: 0 0 0.75rem;
@@ -93,6 +107,7 @@ textarea {
   color: var(--color-muted);
   font-size: clamp(1rem, 1.4vw, 1.2rem);
   max-width: 68ch;
+  margin: 0;
 }
 
 .reveal {

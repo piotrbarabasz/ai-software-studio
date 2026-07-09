@@ -5,6 +5,7 @@
 .premium-hero {
   position: relative;
   overflow: hidden;
+  padding-block: 0;
   background:
     radial-gradient(circle at 88% 18%, rgba(197, 106, 20, 0.18), transparent 30rem),
     linear-gradient(135deg, #f7f8f4 0%, #eef3f0 68%, #17201b 68%, #17201b 100%);
