@@ -53,3 +53,16 @@ cd backend
 
 No database, authentication, CMS, admin panel, payments, blog, queue, or production GCP resources are part of this MVP.
 
+## Production Deployment
+
+Production deployment to Google Cloud Platform is documented separately:
+
+- [docs/gcp-deployment.md](docs/gcp-deployment.md)
+- [docs/gcp-runbook.md](docs/gcp-runbook.md)
+- [infra/gcp/README.md](infra/gcp/README.md)
+
+Run the local deployment preflight first:
+
+```powershell
+.\scripts\gcp\preflight.ps1
+```

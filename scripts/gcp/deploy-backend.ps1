@@ -1,0 +1,69 @@
+param(
+  [Parameter(Mandatory = $true)]
+  [string]$ProjectId,
+
+  [string]$Region = 'europe-central2',
+
+  [Parameter(Mandatory = $true)]
+  [string]$ArtifactRepo,
+
+  [string]$ServiceName = 'aisoftware-studio-api',
+
+  [Parameter(Mandatory = $true)]
+  [string]$FrontendUrl,
+
+  [string]$AppEnv = 'production',
+
+  [string]$ContactDeliveryMode = 'email',
+
+  [string]$ContactRecipientEmail = 'owner@example.com',
+
+  [string]$ContactFromEmail = 'noreply@example.com',
+
+  [string]$SmtpHost = 'smtp.example.com',
+
+  [string]$SmtpPort = '587',
+
+  [string]$SmtpUsername = 'smtp-user@example.com',
+
+  [string]$SmtpUseTls = 'true',
+
+  [string]$ContactRateLimitPerMinute = '5',
+
+  [Parameter(Mandatory = $true)]
+  [string]$SmtpPasswordSecret = 'aisoftware-studio-smtp-password'
+)
+
+$ErrorActionPreference = 'Stop'
+Set-StrictMode -Version Latest
+
+$repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..\')).Path
+$configPath = Join-Path $repoRoot 'infra/gcp/cloudbuild.backend.yaml'
+
+$substitutions = @(
+  "_PROJECT_ID=$ProjectId",
+  "_REGION=$Region",
+  "_ARTIFACT_REPO=$ArtifactRepo",
+  "_SERVICE_NAME=$ServiceName",
+  "_IMAGE_NAME=aisoftware-studio-api",
+  "_MIN_INSTANCES=0",
+  "_APP_ENV=$AppEnv",
+  "_CORS_ALLOWED_ORIGINS=$FrontendUrl",
+  "_CONTACT_DELIVERY_MODE=$ContactDeliveryMode",
+  "_CONTACT_RECIPIENT_EMAIL=$ContactRecipientEmail",
+  "_CONTACT_FROM_EMAIL=$ContactFromEmail",
+  "_SMTP_HOST=$SmtpHost",
+  "_SMTP_PORT=$SmtpPort",
+  "_SMTP_USERNAME=$SmtpUsername",
+  "_SMTP_USE_TLS=$SmtpUseTls",
+  "_CONTACT_RATE_LIMIT_PER_MINUTE=$ContactRateLimitPerMinute",
+  "_SMTP_PASSWORD_SECRET=$SmtpPasswordSecret"
+) -join ','
+
+Write-Host "Submitting backend deployment for $ServiceName in $Region."
+& gcloud builds submit $repoRoot --project $ProjectId --config $configPath --substitutions $substitutions
+if ($LASTEXITCODE -ne 0) {
+  throw 'Backend deployment submission failed.'
+}
+
+Write-Host 'Backend deployment submitted.'
