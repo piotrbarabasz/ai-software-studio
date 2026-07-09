@@ -6,7 +6,9 @@ This directory contains the production deployment artifacts for AISoftware Studi
 
 - `cloudbuild.backend.yaml`: build, push, and deploy the FastAPI backend service
 - `cloudbuild.frontend.yaml`: build, push, and deploy the Angular frontend service
+- `cloudbuild.deploy.yaml`: combined sequential production deployment pipeline
 - `cloudbuild.pr-checks.yaml`: non-deploying quality gates for backend and frontend
+- `triggers.md`: exact trigger settings and operator notes
 - `env.example`: placeholder-only production configuration values
 
 ## Notes

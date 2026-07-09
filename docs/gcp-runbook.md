@@ -10,6 +10,8 @@ Use this runbook after the first production deployment of AISoftware Studio.
 - Confirm Cloud Build configs use placeholders and substitutions.
 - Confirm Cloud Run min instances remain `0`.
 - Confirm the deployed backend URL is available for CORS.
+- Confirm the production trigger used `infra/gcp/cloudbuild.deploy.yaml`.
+- Confirm the PR validation trigger used `infra/gcp/cloudbuild.pr-checks.yaml` and did not deploy.
 
 ## Smoke Tests
 
@@ -24,12 +26,21 @@ Use this runbook after the first production deployment of AISoftware Studio.
 - Roll back by deploying the previous known-good Cloud Run revision or previous image tag.
 - Prefer reverting to the last successful Artifact Registry image.
 - Confirm the backend health endpoint and frontend URL after rollback.
+- Disable the offending trigger before investigating repeated bad deployments.
 
 ## Cloud Run Logs
 
 - Check backend logs for startup failures, CORS issues, secret binding failures, and contact delivery failures.
 - Check frontend logs for Nginx startup issues or missing assets.
 - Do not expect sensitive payloads to appear in logs.
+
+## Trigger Troubleshooting
+
+- Open the Cloud Build logs and confirm the trigger fired on the intended branch.
+- Confirm the production branch is `main`.
+- Confirm the temporary test branch `002-gcp-deployment` is disabled or deleted after testing.
+- Confirm the PR validation trigger points to `infra/gcp/cloudbuild.pr-checks.yaml` and does not deploy.
+- If a trigger misfires repeatedly, disable it in Cloud Console before changing the build config.
 
 ## Common Failures
 
@@ -57,6 +68,11 @@ Use this runbook after the first production deployment of AISoftware Studio.
 - Confirm the backend deployment has valid SMTP environment variables and secret binding.
 - Confirm the frontend API URL points to the deployed backend.
 - Confirm no regression changed the existing contact API contract.
+
+## Cloud Run URL Verification
+
+After any deployment, verify the live service URLs documented in `docs/gcp-cicd.md`.
+Use the backend URL for health checks and the frontend URL for browser validation.
 
 ## Local Recovery Checks
 

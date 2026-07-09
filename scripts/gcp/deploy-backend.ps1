@@ -28,10 +28,12 @@ param(
 
   [string]$SmtpUseTls = 'true',
 
-  [string]$ContactRateLimitPerMinute = '5',
+  [string]$ContactRateLimitPerMinute = '30',
 
   [Parameter(Mandatory = $true)]
-  [string]$SmtpPasswordSecret = 'aisoftware-studio-smtp-password'
+  [string]$SmtpPasswordSecret = 'aisoftware-studio-smtp-password',
+
+  [string]$ImageTag = ''
 )
 
 $ErrorActionPreference = 'Stop'
@@ -39,6 +41,23 @@ Set-StrictMode -Version Latest
 
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..\')).Path
 $configPath = Join-Path $repoRoot 'infra/gcp/cloudbuild.backend.yaml'
+
+if ([string]::IsNullOrWhiteSpace($ImageTag)) {
+  if (Get-Command git -ErrorAction SilentlyContinue) {
+    try {
+      $resolvedTag = (& git -C $repoRoot rev-parse --short HEAD 2>$null).Trim()
+      if (-not [string]::IsNullOrWhiteSpace($resolvedTag)) {
+        $ImageTag = $resolvedTag
+      }
+    } catch {
+      $ImageTag = ''
+    }
+  }
+
+  if ([string]::IsNullOrWhiteSpace($ImageTag)) {
+    $ImageTag = 'manual-local'
+  }
+}
 
 $substitutions = @(
   "_PROJECT_ID=$ProjectId",
@@ -57,7 +76,8 @@ $substitutions = @(
   "_SMTP_USERNAME=$SmtpUsername",
   "_SMTP_USE_TLS=$SmtpUseTls",
   "_CONTACT_RATE_LIMIT_PER_MINUTE=$ContactRateLimitPerMinute",
-  "_SMTP_PASSWORD_SECRET=$SmtpPasswordSecret"
+  "_SMTP_PASSWORD_SECRET=$SmtpPasswordSecret",
+  "_IMAGE_TAG=$ImageTag"
 ) -join ','
 
 Write-Host "Submitting backend deployment for $ServiceName in $Region."
