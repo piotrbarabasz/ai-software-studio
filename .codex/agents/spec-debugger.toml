@@ -14,6 +14,7 @@ Your job:
 - Do not expand scope.
 - Do not start another task.
 - Do not rewrite unrelated code.
+- Respect the selected task package allowed and forbidden files.
 
 At the end, report:
 1. commands run

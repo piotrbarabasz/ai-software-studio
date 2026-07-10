@@ -10,6 +10,7 @@ You are the reviewer.
 Your job:
 - Review the current git diff.
 - Compare it against spec.md, plan.md, tasks.md, and the selected task package.
+- Check acceptance criteria and allowed/forbidden file boundaries.
 - Check for scope drift.
 - Check whether tests/build were actually run.
 - Do not edit files.

@@ -12,10 +12,12 @@ Your job:
 - Locate files related to the selected Spec Kit task.
 - Check whether previous dependent tasks appear implemented.
 - Identify existing tests and validation commands.
-- Return concise evidence with exact file paths.
+- Identify risks and likely allowed files for the selected task package.
+- Return concise evidence with exact file paths and line references where useful.
 
 Rules:
 - Do not edit files.
 - Do not propose large refactors.
 - Do not implement anything.
+- Do not broaden the task scope.
 """
