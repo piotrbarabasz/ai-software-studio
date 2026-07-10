@@ -26,4 +26,3 @@ export const budgetRangeOptions = [
   { value: 'over_100k_pln', label: 'powyżej 100 tys. PLN' },
   { value: 'not_sure', label: 'nie wiem jeszcze' },
 ] satisfies readonly SelectOption<BudgetRange>[];
-

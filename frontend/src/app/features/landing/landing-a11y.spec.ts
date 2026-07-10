@@ -21,22 +21,20 @@ describe('Landing accessibility structure', () => {
     fixture.detectChanges();
   });
 
-  it('provides skip link, semantic landmarks, and one h1', () => {
+  it('provides a single content landmark and one h1', () => {
     const element: HTMLElement = fixture.nativeElement;
 
-    expect(element.querySelector('.skip-link')?.getAttribute('href')).toBe('#main-content');
-    expect(element.querySelector('header')).not.toBeNull();
     expect(element.querySelector('main#main-content')).not.toBeNull();
-    expect(element.querySelector('footer')).not.toBeNull();
     expect(element.querySelectorAll('h1').length).toBe(1);
+    expect(element.querySelector('header')).toBeNull();
+    expect(element.querySelector('footer')).toBeNull();
   });
 
-  it('keeps CTA and navigation links keyboard reachable with accessible names', () => {
+  it('keeps the primary CTA keyboard reachable with an accessible name', () => {
     const links = Array.from(fixture.nativeElement.querySelectorAll('a')) as HTMLAnchorElement[];
     const contactLink = links.find((link) => link.getAttribute('href') === '#contact');
 
     expect(contactLink).toBeDefined();
     expect(contactLink?.textContent?.trim().length).toBeGreaterThan(0);
-    expect(fixture.nativeElement.querySelector('nav[aria-label="Sekcje strony"]')).not.toBeNull();
   });
 });

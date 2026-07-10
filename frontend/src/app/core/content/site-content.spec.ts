@@ -38,16 +38,16 @@ describe('Site content model', () => {
       email_automation: '/produkty/automatyzacja-email',
       agent_management_panel: '/produkty/panel-agentow',
     });
-    expect(
-      Object.fromEntries(productRoutes.map((route) => [route.productId, route.path])),
-    ).toEqual({
-      rag_chatbot_demo: '/produkty/asystent-wiedzy-rag',
-      website_seo: '/produkty/strony-seo',
-      voice_agent_demo: '/produkty/voice-agent',
-      whatsapp_agent_management: '/produkty/whatsapp-ai',
-      email_automation: '/produkty/automatyzacja-email',
-      agent_management_panel: '/produkty/panel-agentow',
-    });
+    expect(Object.fromEntries(productRoutes.map((route) => [route.productId, route.path]))).toEqual(
+      {
+        rag_chatbot_demo: '/produkty/asystent-wiedzy-rag',
+        website_seo: '/produkty/strony-seo',
+        voice_agent_demo: '/produkty/voice-agent',
+        whatsapp_agent_management: '/produkty/whatsapp-ai',
+        email_automation: '/produkty/automatyzacja-email',
+        agent_management_panel: '/produkty/panel-agentow',
+      },
+    );
     expect(productRoutes.every((route) => route.contactContext !== undefined)).toBeTrue();
     expect(
       productRoutes.every(

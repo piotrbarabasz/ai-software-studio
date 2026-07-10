@@ -279,8 +279,7 @@ export const siteContent = {
     path: '/demo-w-7-dni',
     eyebrow: 'Demo w 7 dni',
     title: 'Jedna iteracja, jeden scenariusz, jedna decyzja',
-    lead:
-      'Etap demo porządkuje zakres, treść i ograniczenia. Pokazuje to, co użytkownik zobaczy, bez udawania gotowej produkcji.',
+    lead: 'Etap demo porządkuje zakres, treść i ograniczenia. Pokazuje to, co użytkownik zobaczy, bez udawania gotowej produkcji.',
     includes: [
       'klikany przepływ lub czytelny prototyp',
       'opis założeń i ryzyk',
@@ -302,18 +301,13 @@ export const siteContent = {
     path: '/studio',
     eyebrow: 'Studio',
     title: 'Techniczne studio, które rozdziela walidację od produkcji',
-    lead:
-      'Projekt zaczyna się od decyzji biznesowej i dopiero potem przechodzi do architektury, integracji oraz utrzymania.',
+    lead: 'Projekt zaczyna się od decyzji biznesowej i dopiero potem przechodzi do architektury, integracji oraz utrzymania.',
     principles: [
       'jasne granice między demo i produkcją',
       'semantyczny frontend i czytelne kontrakty',
       'praca na małym, konkretnym zakresie',
     ],
-    capabilities: [
-      'frontendy i panele',
-      'backendy i API',
-      'AI, RAG i automatyzacje',
-    ],
+    capabilities: ['frontendy i panele', 'backendy i API', 'AI, RAG i automatyzacje'],
     engagementModel: [
       'jeden scenariusz, jeden efekt',
       'krótkie iteracje i decyzje po każdym etapie',
@@ -325,8 +319,7 @@ export const siteContent = {
     path: '/kontakt',
     eyebrow: 'Kontakt',
     title: 'Opisz proces, który chcesz zweryfikować',
-    lead:
-      'Wystarczy krótki opis problemu, oczekiwanego efektu i materiałów, które masz pod ręką.',
+    lead: 'Wystarczy krótki opis problemu, oczekiwanego efektu i materiałów, które masz pod ręką.',
     contextNotes: [
       'formularz służy do rozpoczęcia rozmowy, nie do zbierania danych produkcyjnych',
       'najlepiej sprawdza się jeden proces lub jeden scenariusz do walidacji',

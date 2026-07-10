@@ -58,10 +58,11 @@ describe('LandingComponent', () => {
     const element: HTMLElement = fixture.nativeElement;
 
     expect(element.querySelector('#product-offers')).not.toBeNull();
-    expect(element.querySelector('a[href="#product-offers"]')?.textContent).toContain('Oferta');
     expect(element.textContent).toContain('Asystent wiedzy / chatbot RAG');
     expect(element.textContent).toContain('Automatyzacje komunikacji');
-    expect(element.textContent).toContain('Demo produktu AI / landing / panel do walidacji procesu');
+    expect(element.textContent).toContain(
+      'Demo produktu AI / landing / panel do walidacji procesu',
+    );
     expect(element.querySelector('#demo-example')).not.toBeNull();
     expect(element.textContent).toContain('Przykład demo po 7 dniach');
   });

@@ -1,16 +1,3 @@
-﻿<a class="skip-link" href="#main-content">Przejdź do treści</a>
-
-<header class="site-header" aria-label="Główna nawigacja">
-  <a class="brand" href="#hero" aria-label="AISoftware Studio - strona główna">
-    <span class="brand-mark" aria-hidden="true">AI</span>
-    <span>AISoftware Studio</span>
-  </a>
-
-  <nav class="nav" aria-label="Sekcje strony">
-    <a *ngFor="let item of content.navigation" [href]="'#' + item.anchor">{{ item.label }}</a>
-  </nav>
-</header>
-
 <main id="main-content">
   <app-hero-section [content]="content.hero" />
   <app-demo-promise-section [content]="content.demoPromise" />
@@ -139,8 +126,3 @@
 
   <app-contact-cta-section [content]="content.contact" />
 </main>
-
-<footer class="site-footer">
-  <p>AISoftware Studio - aplikacje webowe, API i automatyzacje AI.</p>
-  <a href="#contact">Kontakt</a>
-</footer>

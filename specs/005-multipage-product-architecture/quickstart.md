@@ -31,3 +31,10 @@
 - The selector is route-backed and keyboard accessible.
 - The contact form still behaves as before.
 - No horizontal scrolling appears in the main navigation or product hub.
+
+## Final validation notes
+
+- Verified the route shell with `/`, `/produkty`, `/produkty/...`, `/demo-w-7-dni`, `/studio`, and `/kontakt`.
+- Verified direct product links preserve the selected product after refresh and keep the product CTA context in the existing contact `projectType` field.
+- Verified mobile navigation, active route states, metadata, accessibility, reduced motion fallback, and contact compatibility through the frontend test suite.
+- Validation commands used: `npm run format:check`, `npm run lint`, `npm test -- --watch=false`, and `npm run build`.

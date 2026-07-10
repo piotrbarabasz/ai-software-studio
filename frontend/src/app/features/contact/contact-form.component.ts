@@ -1,8 +1,11 @@
 import { CommonModule } from '@angular/common';
 import type { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
+import type { OnInit } from '@angular/core';
 import type { FormControl } from '@angular/forms';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute } from '@angular/router';
 import { finalize } from 'rxjs';
 
 import { budgetRangeOptions, projectTypeOptions } from '../../core/content/contact-options.pl';
@@ -31,9 +34,11 @@ type ContactFormControls = {
   templateUrl: './contact-form.component.html',
   styleUrl: './contact-form.component.scss',
 })
-export class ContactFormComponent {
+export class ContactFormComponent implements OnInit {
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly api = inject(ContactApiService);
+  private readonly route = inject(ActivatedRoute, { optional: true });
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly content = {
     ...plContent.contact,
@@ -61,6 +66,19 @@ export class ContactFormComponent {
   isSubmitting = false;
   status: 'idle' | 'success' | 'error' = 'idle';
   statusMessage = '';
+
+  ngOnInit(): void {
+    if (!this.route) {
+      return;
+    }
+
+    this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+      const requestedProjectType = params.get('projectType');
+      this.form.controls.projectType.setValue(
+        this.isProjectType(requestedProjectType) ? requestedProjectType : '',
+      );
+    });
+  }
 
   submit(): void {
     if (this.form.invalid) {
@@ -112,12 +130,16 @@ export class ContactFormComponent {
       return 'Podaj poprawny adres e-mail.';
     }
     if (control.hasError('minlength')) {
-      return 'Wpisz więcej szczegółów.';
+      return 'Wpisz wiÄ™cej szczegĂłĹ‚Ăłw.';
     }
     if (control.hasError('maxlength')) {
-      return 'Wpis jest zbyt długi.';
+      return 'Wpis jest zbyt dĹ‚ugi.';
     }
-    return 'Sprawdź wartość pola.';
+    return 'SprawdĹş wartoĹ›Ä‡ pola.';
+  }
+
+  private isProjectType(value: string | null): value is ProjectType {
+    return value !== null && projectTypeOptions.some((option) => option.value === value);
   }
 
   private toPayload(): ContactInquiryRequest {

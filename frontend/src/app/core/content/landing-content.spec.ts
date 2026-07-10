@@ -35,14 +35,8 @@ describe('Premium landing content', () => {
       'communication_automation',
       'ai_product_validation',
     ]);
-    expect(plContent.offers.map((offer) => offer.visualKind)).toEqual([
-      'rag',
-      'whatsapp',
-      'panel',
-    ]);
-    expect(plContent.offers.map((offer) => offer.title)).toContain(
-      'Asystent wiedzy / chatbot RAG',
-    );
+    expect(plContent.offers.map((offer) => offer.visualKind)).toEqual(['rag', 'whatsapp', 'panel']);
+    expect(plContent.offers.map((offer) => offer.title)).toContain('Asystent wiedzy / chatbot RAG');
     expect(plContent.offers[1].summary).toContain('kanały');
     expect(
       plContent.offers.every(

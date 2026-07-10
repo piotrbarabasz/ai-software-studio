@@ -1,0 +1,85 @@
+<main id="main-content" class="products-page">
+  <section class="hero section-shell" appRevealOnScroll>
+    <div class="hero-copy">
+      <p class="eyebrow">{{ isCatalogView ? 'Katalog produktów' : selectedProduct.routeLabel }}</p>
+      <h1>{{ pageTitle }}</h1>
+      <p class="page-lead">{{ pageDescription }}</p>
+    </div>
+
+    <a
+      class="primary-action"
+      routerLink="/kontakt"
+      [queryParams]="{ projectType: selectedProduct.id }"
+    >
+      {{ selectedProduct.ctaLabel }}
+    </a>
+  </section>
+
+  <section class="catalog section-shell" aria-label="Katalog i wybór produktu" appRevealOnScroll>
+    <nav class="selector-rail" aria-label="Produkty">
+      <a
+        *ngFor="let product of products"
+        [routerLink]="product.path"
+        [class.is-active]="selectedProduct.id === product.id"
+        [attr.aria-current]="selectedProduct.id === product.id ? 'page' : null"
+      >
+        <span>{{ product.routeLabel }}</span>
+        <small>{{ product.title }}</small>
+      </a>
+    </nav>
+
+    <article class="product-panel">
+      <p class="product-label">{{ selectedProduct.routeLabel }}</p>
+      <h2>{{ selectedProduct.title }}</h2>
+      <p class="page-lead">{{ selectedProduct.valueProposition }}</p>
+
+      <div class="product-visual" [ngSwitch]="selectedProduct.visualKind">
+        <app-rag-workflow-visual *ngSwitchCase="'rag'" />
+        <app-website-seo-visual *ngSwitchCase="'websiteSeo'" />
+        <app-voice-waveform-visual *ngSwitchCase="'voice'" />
+        <app-whatsapp-control-visual *ngSwitchCase="'whatsapp'" />
+        <app-email-pipeline-visual *ngSwitchCase="'email'" />
+        <app-agent-panel-preview *ngSwitchCase="'panel'" />
+      </div>
+
+      <div class="detail-grid">
+        <section>
+          <h3>Problem, który rozwiązuje</h3>
+          <p>{{ selectedProduct.problem }}</p>
+        </section>
+
+        <section>
+          <h3>Dla kogo</h3>
+          <p>{{ selectedProduct.audience }}</p>
+        </section>
+
+        <section>
+          <h3>Przykłady użycia</h3>
+          <ul>
+            <li *ngFor="let item of selectedApplications">{{ item }}</li>
+          </ul>
+        </section>
+
+        <section>
+          <h3>Co pokazuje demo</h3>
+          <p>{{ selectedProduct.demoScope }}</p>
+        </section>
+
+        <section>
+          <h3>Poza zakresem</h3>
+          <ul>
+            <li *ngFor="let item of selectedProduct.outOfScope">{{ item }}</li>
+          </ul>
+        </section>
+      </div>
+
+      <a
+        class="secondary-action"
+        routerLink="/kontakt"
+        [queryParams]="{ projectType: selectedProduct.id }"
+      >
+        {{ selectedProduct.ctaLabel }}
+      </a>
+    </article>
+  </section>
+</main>

@@ -20,7 +20,8 @@ export type ProductId = keyof typeof productRoutePaths;
 
 export type ProductRoutePath = (typeof productRoutePaths)[ProductId];
 
-export type ProductRoutePathFor<TProductId extends ProductId> = (typeof productRoutePaths)[TProductId];
+export type ProductRoutePathFor<TProductId extends ProductId> =
+  (typeof productRoutePaths)[TProductId];
 
 export type StaticRoutePath = '/' | '/produkty' | '/demo-w-7-dni' | '/studio' | '/kontakt';
 
@@ -48,7 +49,9 @@ export interface ProductsIndexRouteMetadata extends RouteMetadataBase {
   readonly contactContext?: never;
 }
 
-export interface ProductRouteMetadata<TProductId extends ProductId = ProductId> extends RouteMetadataBase {
+export interface ProductRouteMetadata<
+  TProductId extends ProductId = ProductId,
+> extends RouteMetadataBase {
   readonly kind: 'product';
   readonly path: ProductRoutePathFor<TProductId>;
   readonly productId: TProductId;
@@ -88,8 +91,7 @@ export interface NavigationItem {
 }
 
 export type ProductApplications =
-  | readonly [string, string, string]
-  | readonly [string, string, string, string];
+  readonly [string, string, string] | readonly [string, string, string, string];
 
 export interface ProductCatalogEntry<TProductId extends ProductId = ProductId> {
   readonly id: TProductId;

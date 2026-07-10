@@ -22,7 +22,7 @@
 
 **CRITICAL**: No user story work should start until this phase is complete.
 
-- [ ] T002 [P] Replace anchor-only navigation with a route-based app shell in `frontend/src/app/app.routes.ts`, `frontend/src/app/app.component.ts`, and new shared shell files under `frontend/src/app/features/shell/` or `frontend/src/app/layout/`, including active-route state, mobile navigation, and route titles/canonical handling. Acceptance: the site uses Angular routes for top-level navigation, direct URLs work after refresh, and keyboard access remains visible and usable.
+- [X] T002 [P] Replace anchor-only navigation with a route-based app shell in `frontend/src/app/app.routes.ts`, `frontend/src/app/app.component.ts`, and new shared shell files under `frontend/src/app/features/shell/` or `frontend/src/app/layout/`, including active-route state, mobile navigation, and route titles/canonical handling. Acceptance: the site uses Angular routes for top-level navigation, direct URLs work after refresh, and keyboard access remains visible and usable.
 
 **Checkpoint**: Route shell ready - user story implementation can now begin.
 
@@ -34,7 +34,7 @@
 
 **Independent Test**: Open the site, use the header and mobile navigation to move between pages, and scan the homepage to confirm it is concise, route-aware, and conversion-oriented.
 
-- [ ] T003 [US1] Rebuild the homepage in `frontend/src/app/features/home/` or the current landing-page feature files under `frontend/src/app/features/landing/` so it contains the concise hero, compact product overview, short demo explanation, one featured product or visual, a studio teaser, and the final contact CTA. Acceptance: the homepage is materially shorter than the old single-page layout and clearly routes visitors to products, demo, studio, or contact.
+- [X] T003 [US1] Rebuild the homepage in `frontend/src/app/features/home/` or the current landing-page feature files under `frontend/src/app/features/landing/` so it contains the concise hero, compact product overview, short demo explanation, one featured product or visual, a studio teaser, and the final contact CTA. Acceptance: the homepage is materially shorter than the old single-page layout and clearly routes visitors to products, demo, studio, or contact.
 
 **Checkpoint**: User Story 1 should be independently testable and the site should still route correctly.
 
@@ -46,7 +46,7 @@
 
 **Independent Test**: Open `/produkty`, change the selected product, refresh, navigate with back/forward, and open a shared product URL to confirm the same product remains selected.
 
-- [ ] T004 [US2] Build the route-backed product hub and six product detail pages in `frontend/src/app/features/products/`, reusing existing visual components from `frontend/src/app/features/landing/visuals/` where appropriate. Acceptance: the desktop view shows a vertical selector with one large panel, the mobile view stays compact without clipped labels or page overflow, and each product route exposes the required product details and CTA.
+- [X] T004 [US2] Build the route-backed product hub and six product detail pages in `frontend/src/app/features/products/`, reusing existing visual components from `frontend/src/app/features/landing/visuals/` where appropriate. Acceptance: the desktop view shows a vertical selector with one large panel, the mobile view stays compact without clipped labels or page overflow, and each product route exposes the required product details and CTA.
 
 **Checkpoint**: User Story 2 should be independently testable and all product URLs should be shareable.
 
@@ -58,7 +58,7 @@
 
 **Independent Test**: Open the demo and studio pages and verify that each page contains its required long-form subjects without repeating the same scope disclaimers across the whole site.
 
-- [ ] T005 [US3] Create or adapt the `/demo-w-7-dni` and `/studio` pages in `frontend/src/app/features/demo/` and `frontend/src/app/features/studio/`, moving the long-form demo-versus-production explanation, seven-day sprint, package framing, FAQ, studio description, working principles, process, technologies, engineering approach, trust, and scope boundaries into their dedicated routes. Acceptance: the long-form explanation is consolidated on the dedicated pages instead of being repeated on the homepage.
+- [X] T005 [US3] Create or adapt the `/demo-w-7-dni` and `/studio` pages in `frontend/src/app/features/demo/` and `frontend/src/app/features/studio/`, moving the long-form demo-versus-production explanation, seven-day sprint, package framing, FAQ, studio description, working principles, process, technologies, engineering approach, trust, and scope boundaries into their dedicated routes. Acceptance: the long-form explanation is consolidated on the dedicated pages instead of being repeated on the homepage.
 
 **Checkpoint**: User Story 3 should be independently testable and the homepage should no longer carry the long-form explanation burden.
 
@@ -70,7 +70,7 @@
 
 **Independent Test**: Open `/kontakt`, submit a valid inquiry, and confirm the existing validation, consent, and delivery behavior still works.
 
-- [ ] T006 [US4] Preserve the existing contact form behavior in `frontend/src/app/features/contact/contact-form.component.ts`, `frontend/src/app/features/contact/contact-form.component.html`, `frontend/src/app/features/contact/contact-form.component.spec.ts`, and any route/query handling needed to accept optional product context from product CTAs without changing the backend contract. Acceptance: the contact page still submits through the current API flow and the optional product context does not require a new backend endpoint.
+- [X] T006 [US4] Preserve the existing contact form behavior in `frontend/src/app/features/contact/contact-form.component.ts`, `frontend/src/app/features/contact/contact-form.component.html`, `frontend/src/app/features/contact/contact-form.component.spec.ts`, and any route/query handling needed to accept optional product context from product CTAs without changing the backend contract. Acceptance: the contact page still submits through the current API flow and the optional product context does not require a new backend endpoint.
 
 **Checkpoint**: User Story 4 should be independently testable and the existing contact flow should remain intact.
 
@@ -80,7 +80,7 @@
 
 **Purpose**: Accessibility, SEO, responsive tuning, test coverage, and release validation across the new multi-page site.
 
-- [ ] T007 [P] Add or update tests for route navigation, product selector behavior, direct-link refresh, metadata, accessibility, reduced motion, and contact compatibility in `frontend/src/app/**/*.spec.ts`, and update `specs/005-multipage-product-architecture/quickstart.md` with the final validation notes. Acceptance: tests cover the main route journeys and fail if navigation, metadata, accessibility, or contact behavior regresses.
+- [X] T007 [P] Add or update tests for route navigation, product selector behavior, direct-link refresh, metadata, accessibility, reduced motion, and contact compatibility in `frontend/src/app/**/*.spec.ts`, and update `specs/005-multipage-product-architecture/quickstart.md` with the final validation notes. Acceptance: tests cover the main route journeys and fail if navigation, metadata, accessibility, or contact behavior regresses.
 
 ---
 
