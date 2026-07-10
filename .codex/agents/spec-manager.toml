@@ -1,6 +1,6 @@
 name = "spec_manager"
 description = "Spec Kit manager. Selects one task, prepares task packages, coordinates subagents, and gates implementation."
-model = "gpt-5.6"
+model = "gpt-5.5"
 model_reasoning_effort = "high"
 sandbox_mode = "read-only"
 

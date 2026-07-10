@@ -1,5 +1,5 @@
 ﻿import type { BudgetRange, ProjectType } from '../../services/contact-api.types';
-import type { SelectOption } from './landing-content.types';
+import type { SelectOption } from './site-content.types';
 
 export const projectTypeOptions = [
   { value: 'rag_chatbot_demo', label: 'Chatbot / asystent wiedzy' },
