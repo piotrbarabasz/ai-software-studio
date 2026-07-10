@@ -1,4 +1,4 @@
-# Agent workflow
+# Agent Workflow
 
 This repository uses Spec Kit as the source of truth.
 
@@ -17,18 +17,21 @@ This repository uses Spec Kit as the source of truth.
 - One task should result in one focused diff.
 - Do not use force push, destructive git commands, production deployment, or secrets changes.
 
-## Standard validation
+## Standard Validation
 
 Frontend:
-- npm run build
-- npm test, if relevant
+
+- `npm run build`
+- `npm test`, if relevant
 
 Backend:
-- cd backend
-- python -m pytest
-- python -m ruff check ., if available
+
+- `cd backend`
+- `python -m pytest`
+- `python -m ruff check .`, if available
 
 Before commit:
-- git status
-- git diff --stat
-- git diff
+
+- `git status`
+- `git diff --stat`
+- `git diff`
