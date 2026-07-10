@@ -32,10 +32,25 @@ export interface HeroContent {
 export interface DemoPromise {
   readonly title: string;
   readonly lead: string;
-  readonly startsAfter: readonly string[];
-  readonly includes: readonly string[];
-  readonly notIncluded: readonly string[];
+  readonly demoStageTitle: string;
+  readonly demoStagePoints: readonly string[];
+  readonly productionStageTitle: string;
+  readonly productionStagePoints: readonly string[];
+  readonly closingNote: string;
   readonly ctaLabel: string;
+}
+
+export interface DemoExample {
+  readonly title: string;
+  readonly lead: string;
+  readonly problemLabel: string;
+  readonly problem: string;
+  readonly demoLabel: string;
+  readonly demoShows: readonly string[];
+  readonly deliverableLabel: string;
+  readonly deliverables: readonly string[];
+  readonly decisionLabel: string;
+  readonly decision: string;
 }
 
 export type ProductVisualKind = 'rag' | 'websiteSeo' | 'voice' | 'whatsapp' | 'email' | 'panel';
@@ -148,6 +163,7 @@ export interface LandingContent {
   readonly hero: HeroContent;
   readonly demoPromise: DemoPromise;
   readonly offers: readonly ProductizedOffer[];
+  readonly demoExample: DemoExample;
   readonly showcases: readonly ProductShowcase[];
   readonly demoSprint: readonly DemoSprintStep[];
   readonly trust: TrustContent;

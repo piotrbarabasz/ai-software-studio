@@ -2,10 +2,13 @@ import { plContent } from './landing.pl';
 
 describe('Premium landing content', () => {
   it('defines base landing content needed by the MVP increment', () => {
-    expect(plContent.hero.title).toBe('AISoftware Studio');
+    expect(plContent.hero.title).toContain('Demo AI w 7 dni');
     expect(plContent.hero.primaryCta.length).toBeGreaterThan(0);
-    expect(plContent.demoPromise.startsAfter.length).toBeGreaterThanOrEqual(2);
-    expect(plContent.demoPromise.notIncluded.length).toBeGreaterThanOrEqual(3);
+    expect(plContent.demoPromise.demoStagePoints.length).toBeGreaterThanOrEqual(2);
+    expect(plContent.demoPromise.productionStagePoints.length).toBeGreaterThanOrEqual(2);
+    expect(plContent.demoPromise.closingNote.length).toBeGreaterThan(0);
+    expect(plContent.demoExample.problem.length).toBeGreaterThan(0);
+    expect(plContent.demoExample.demoShows.length).toBeGreaterThanOrEqual(3);
   });
 
   it('keeps legacy sections available while the landing page is upgraded incrementally', () => {
@@ -18,29 +21,29 @@ describe('Premium landing content', () => {
   it('keeps contact options compatible with the existing contact flow', () => {
     expect(plContent.contact.projectTypes.map((option) => option.value)).toContain('ai_automation');
     expect(plContent.contact.budgetRanges.map((option) => option.value)).toContain('25k_50k_pln');
+    expect(plContent.contact.projectTypes.map((option) => option.label)).toContain(
+      'Chatbot / asystent wiedzy',
+    );
+    expect(plContent.contact.projectTypes.map((option) => option.label)).toContain(
+      'Inny proces do automatyzacji',
+    );
   });
 
   it('defines all required productized AI offers with complete marketing fields', () => {
     expect(plContent.offers.map((offer) => offer.id)).toEqual([
       'rag_chatbot_demo',
-      'website_seo',
-      'voice_agent_demo',
-      'whatsapp_agent_management',
-      'email_automation',
-      'agent_management_panel',
+      'communication_automation',
+      'ai_product_validation',
     ]);
     expect(plContent.offers.map((offer) => offer.visualKind)).toEqual([
       'rag',
-      'websiteSeo',
-      'voice',
       'whatsapp',
-      'email',
       'panel',
     ]);
     expect(plContent.offers.map((offer) => offer.title)).toContain(
-      'Panel zarządzania chatbotami i voice agentami',
+      'Asystent wiedzy / chatbot RAG',
     );
-    expect(plContent.offers[0].summary).toContain('źródeł wiedzy');
+    expect(plContent.offers[1].summary).toContain('kanały');
     expect(
       plContent.offers.every(
         (offer) =>
@@ -118,7 +121,9 @@ describe('Premium landing content', () => {
       'production',
       'contact',
     ]);
-    expect(plContent.faq.some((item) => /nie obejmuje|nie jest/i.test(item.answer))).toBeTrue();
+    expect(
+      plContent.faq.some((item) => /etap produkcyjny|produkcję/i.test(item.answer)),
+    ).toBeTrue();
     expect(
       plContent.faq.every((item) => item.question.endsWith('?') && item.answer.length > 40),
     ).toBeTrue();

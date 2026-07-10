@@ -24,11 +24,11 @@
 
   <section id="services" class="section" aria-labelledby="services-title">
     <div class="section-inner" appRevealOnScroll>
-      <p class="section-kicker">Usługi</p>
-      <h2 id="services-title">Co mogę zbudować dla Twojej firmy</h2>
+      <p class="section-kicker">Wsparcie wdrożenia</p>
+      <h2 id="services-title">Co wchodzi po walidacji demo AI</h2>
       <p class="section-lead">
-        Zakres obejmuje zarówno pierwsze MVP, jak i konkretne usprawnienia procesów, integracje oraz
-        systemy wewnętrzne.
+        To zaplecze realizacyjne dla firm, które najpierw chcą potwierdzić sens demo, a dopiero
+        potem planować pełne wdrożenie produkcyjne.
       </p>
 
       <div class="card-grid service-grid">
@@ -50,10 +50,10 @@
   <section id="process" class="section section-muted" aria-labelledby="process-title">
     <div class="section-inner" appRevealOnScroll>
       <p class="section-kicker">Proces</p>
-      <h2 id="process-title">Jak wygląda współpraca</h2>
+      <h2 id="process-title">Jak przechodzimy od demo do wdrożenia</h2>
       <p class="section-lead">
-        Najpierw porządkujemy cel i zakres, potem dostarczamy rozwiązanie w etapach, które da się
-        sprawdzać po drodze.
+        Najpierw porządkujemy cel, zakres i ryzyka demo AI, a potem dostarczamy rozwiązanie w
+        etapach, które można sprawdzać po drodze.
       </p>
 
       <ol class="process-list">
@@ -72,10 +72,10 @@
   <section id="technology" class="section" aria-labelledby="technology-title">
     <div class="section-inner" appRevealOnScroll>
       <p class="section-kicker">Technologie</p>
-      <h2 id="technology-title">Narzędzia dobrane do utrzymywalnego wdrożenia</h2>
+      <h2 id="technology-title">Narzędzia dobrane do walidacji i późniejszego wdrożenia</h2>
       <p class="section-lead">
-        Technologia jest środkiem do celu: ma wspierać stabilny rozwój, integracje, automatyzację i
-        czytelne API.
+        Technologia jest środkiem do celu: najpierw wspiera czytelny demo flow, a później stabilny
+        rozwój, integracje, automatyzację i czytelne API.
       </p>
 
       <div class="technology-grid">
@@ -88,27 +88,37 @@
     </div>
   </section>
 
-  <section id="examples" class="section section-muted" aria-labelledby="examples-title">
+  <section id="demo-example" class="section section-muted" aria-labelledby="demo-example-title">
     <div class="section-inner" appRevealOnScroll>
-      <p class="section-kicker">Przykłady</p>
-      <h2 id="examples-title">Kierunki projektów, które pasują do AISoftware Studio</h2>
-      <p class="section-lead">
-        To przykłady koncepcyjne, nie opisy realnych wdrożeń. Można je później zastąpić prawdziwymi
-        case studies.
-      </p>
+      <p class="section-kicker">Przykład demo po 7 dniach</p>
+      <h2 id="demo-example-title">{{ content.demoExample.title }}</h2>
+      <p class="section-lead">{{ content.demoExample.lead }}</p>
 
-      <div class="card-grid">
-        <article *ngFor="let example of content.examples" class="example-card">
-          <p class="placeholder-label">{{ example.label }}</p>
-          <h3>Problem</h3>
-          <p>{{ example.problem }}</p>
-          <h3>Podejście</h3>
-          <p>{{ example.approach }}</p>
-          <h3>Efekt</h3>
-          <p>{{ example.outcome }}</p>
-          <ul class="tag-list" aria-label="Powiązane usługi">
-            <li *ngFor="let tag of example.serviceTags">{{ tag }}</li>
-          </ul>
+      <div class="card-grid demo-example-grid">
+        <article class="example-card demo-example-card">
+          <div>
+            <p class="placeholder-label">{{ content.demoExample.problemLabel }}</p>
+            <p>{{ content.demoExample.problem }}</p>
+          </div>
+
+          <div>
+            <p class="placeholder-label">{{ content.demoExample.demoLabel }}</p>
+            <ul>
+              <li *ngFor="let item of content.demoExample.demoShows">{{ item }}</li>
+            </ul>
+          </div>
+
+          <div>
+            <p class="placeholder-label">{{ content.demoExample.deliverableLabel }}</p>
+            <ul>
+              <li *ngFor="let item of content.demoExample.deliverables">{{ item }}</li>
+            </ul>
+          </div>
+
+          <div>
+            <p class="placeholder-label">{{ content.demoExample.decisionLabel }}</p>
+            <p>{{ content.demoExample.decision }}</p>
+          </div>
         </article>
       </div>
     </div>

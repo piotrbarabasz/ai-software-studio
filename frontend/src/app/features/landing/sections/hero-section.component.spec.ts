@@ -22,10 +22,10 @@ describe('HeroSectionComponent', () => {
     const text = fixture.nativeElement.textContent as string;
 
     expect(fixture.debugElement.query(By.css('h1')).nativeElement.textContent).toContain(
-      'AISoftware Studio',
+      'Demo AI w 7 dni',
     );
-    expect(text).toContain('demo AI w 7 dni');
-    expect(text).toContain('Buduje praktyczne demo AI');
+    expect(text).toContain('Demo AI w 7 dni');
+    expect(text).toContain('AISoftware Studio pomaga zweryfikowa');
   });
 
   it('links primary and secondary CTAs to the landing flow', () => {

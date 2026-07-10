@@ -1,48 +1,48 @@
-﻿# Implementation Plan: Premium Marketing Website Upgrade
+# Implementation Plan: Demo AI w 7 dni - Landing Page Upgrade
 
-**Branch**: `002-upgrade-marketing-site` | **Date**: 2026-07-08 | **Spec**: [spec.md](./spec.md)
+**Branch**: `002-upgrade-marketing-site` | **Date**: 2026-07-10 | **Spec**: [spec.md](./spec.md)
 
 **Input**: Feature specification from `/specs/002-upgrade-marketing-site/spec.md`
 
 ## Summary
 
-Upgrade the existing single-page AISoftware Studio marketing site into a premium, Polish-first AI productized-services landing page while preserving the current Angular 17 frontend, FastAPI backend, frontend/backend separation, and contact intake flow. The implementation will refactor the large landing content model into maintainable productized content structures, split the landing page into focused standalone section/presentation components where useful, add CSS/SVG/Angular-template product visuals, use small IntersectionObserver-based scroll reveal helpers, update SEO metadata and contact project-type options, and keep backend changes limited to contact enum/contract compatibility.
+Rework the existing Angular 17 marketing landing page so it leads with the business promise "Demo AI w 7 dni - zanim inwestujesz w pelne wdrozenie", simplifies navigation, groups the offer into three clear business categories, and removes repeated defensive disclaimers. The implementation should reuse existing landing sections and content files where possible, keep the FastAPI backend unchanged unless contact copy or select labels force a tiny compatibility update, and preserve the current Cloud Run deployment assumptions.
 
-No real RAG service, chatbot runtime, voice runtime, WhatsApp API integration, cost tracking backend, billing, authentication, database, CMS, payment, or admin backend will be introduced.
+The page must stay Polish-first, accessible, responsive, and credible. It should explain the demo-vs-production boundary in one place, add one concrete 7-day demo example, keep the demo sprint and trust sections in scope, treat Websites + SEO as a supporting service area for AI landing pages and product validation pages, recast pricing as value and risk reduction, shorten the FAQ, and keep the contact path understandable for non-technical business buyers.
 
 ## Technical Context
 
-**Language/Version**: TypeScript with Angular 17 for the frontend; Python 3.12+ with FastAPI for the existing backend.
+**Language/Version**: TypeScript with Angular 17 on the frontend; Python 3.12+ with FastAPI on the backend.
 
-**Primary Dependencies**: Existing Angular packages, Angular Reactive Forms, RxJS, SCSS/CSS, existing FastAPI/Pydantic/pytest/Ruff stack. No GSAP, Three.js, Lottie, WebGL, animation framework, CMS, database driver, auth package, billing SDK, WhatsApp SDK, voice SDK, or AI/RAG runtime dependency is planned.
+**Primary Dependencies**: Existing Angular standalone components, reactive forms, SCSS, typed content modules, FastAPI/Pydantic/pytest. No new UI or animation libraries are required.
 
-**Storage**: None. Content remains static frontend content. Contact submissions continue through the existing no-database contact intake flow.
+**Storage**: None. This is a marketing/content upgrade and should remain static apart from the existing contact flow.
 
-**Testing**: Angular unit/component tests for content rendering, section composition, SEO metadata, reveal behavior, reduced-motion behavior, and contact form options; existing frontend lint/format/test/build scripts; backend pytest contract/unit tests only for contact enum compatibility if project types change.
+**Testing**: Angular unit/component tests for content, navigation, a11y, responsive behavior, and SEO; backend tests only if contact contract values change unexpectedly.
 
-**Target Platform**: Existing independently deployable Angular frontend and FastAPI backend on Google Cloud Platform-compatible targets. Local validation continues through the Angular dev server and FastAPI dev server.
+**Target Platform**: Existing independently deployable frontend and backend on Google Cloud Run-compatible infrastructure.
 
 **Project Type**: Marketing website with separate Angular frontend and FastAPI backend.
 
-**Performance Goals**: Preserve or improve MVP targets: production desktop Lighthouse Performance >= 90 and Accessibility >= 90, no horizontal scrolling on common mobile/tablet/desktop viewports, no heavy animation dependencies, first screen message and contact CTA understandable within 30 seconds, and visual previews implemented with static markup/SVG/CSS rather than runtime-heavy graphics.
+**Performance Goals**: Fast first-screen comprehension, no horizontal scrolling on common widths, reduced-motion support, lightweight visuals, and no degradation of current build/test performance.
 
-**Constraints**: Polish-first content, English-ready content organization, semantic HTML, keyboard navigation, visible focus states, reduced-motion fallback, SEO metadata, existing contact API compatibility, no new persistent infrastructure, no live product integrations, and presentation-only labels for mock dashboards/workflows where confusion is possible.
+**Constraints**: Polish-first copy, no fake clients or metrics, no unnecessary libraries, preserve accessibility and responsive behavior, and avoid introducing real demo runtimes or backend systems that are not already part of the MVP.
 
-**Scale/Scope**: One upgraded public landing page, static productized content and visuals, optional small frontend helper for scroll reveal, compatible contact form project-type updates, and no new backend capability beyond accepted enum values if required.
+**Scale/Scope**: One landing page, a small set of reusable section components, and typed content updates centralized under `frontend/src/app/core/content/`.
 
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-- **Business value**: PASS. The feature supports lead generation, trust building, and service explanation for the new 7-day AI demo positioning with measurable comprehension and contact outcomes.
-- **MVP simplicity**: PASS. The plan excludes CMS, authentication, database, queues, payment, billing, live AI integrations, real WhatsApp/voice/RAG systems, and admin backend functionality.
-- **Architecture separation**: PASS. The Angular frontend and FastAPI backend remain independently buildable, testable, configurable, and deployable.
-- **API contract**: PASS. No new endpoint is planned. If contact project-type enum values change, the existing `POST /api/contact` OpenAPI contract and backend/frontend types will be updated together and covered by tests.
-- **UX and localization**: PASS. The upgrade remains Polish-first, responsive, accessible, reduced-motion friendly, SEO-oriented, and content-structured for future English support.
-- **Security**: PASS. Public input remains limited to the existing contact form. Presentation mockups do not collect data, authenticate users, or call external services.
-- **Developer readiness**: PASS. The plan names files to change/add, validation commands, content model changes, component structure, and risk controls.
+- **Business value**: PASS. The feature improves lead generation, trust, and service clarity for the new 7-day demo positioning.
+- **MVP simplicity**: PASS. No CMS, auth, database, billing, payment flow, or real AI runtime is introduced.
+- **Architecture separation**: PASS. The Angular frontend and FastAPI backend stay independently buildable and deployable.
+- **API contract**: PASS. The backend should remain unchanged unless a contact-select label requires a small compatibility tweak, and the current enums already cover the needed values.
+- **UX and localization**: PASS. The plan keeps Polish-first copy, responsive layout, semantic structure, keyboard access, and reduced-motion support.
+- **Security**: PASS. Public input remains limited to the existing contact flow; mockups and previews stay presentation-only.
+- **Developer readiness**: PASS. The plan names the likely files, tests, and validation commands, and keeps the work in the existing repo structure.
 
-**Post-design re-check**: PASS. Phase 1 artifacts preserve the same boundaries: frontend presentation-first implementation, no new runtime integrations, no storage, compatible contact contract updates only, and focused validation through existing scripts and targeted tests.
+**Post-design re-check**: PASS. The design artifacts keep the same boundaries: frontend content and presentation changes, no new backend capability, and verification through existing tests plus targeted landing-page coverage.
 
 ## Project Structure
 
@@ -64,142 +64,193 @@ specs/002-upgrade-marketing-site/
 
 ```text
 frontend/
-|-- package.json
-|-- src/
-|   |-- app/
-|   |   |-- core/
-|   |   |   `-- content/
-|   |   |       |-- pl.ts
-|   |   |       |-- landing-content.types.ts
-|   |   |       |-- landing.pl.ts
-|   |   |       `-- contact-options.pl.ts
-|   |   |-- features/
-|   |   |   |-- landing/
-|   |   |   |   |-- landing.component.*
-|   |   |   |   |-- sections/
-|   |   |   |   `-- visuals/
-|   |   |   `-- contact/
-|   |   |       `-- contact-form.component.*
-|   |   `-- services/
-|   |       |-- contact-api.service.*
-|   |       `-- contact-api.types.ts
-|   `-- assets/
+|-- src/app/core/content/
+|   |-- pl.ts
+|   |-- landing-content.types.ts
+|   |-- landing.pl.ts
+|   `-- contact-options.pl.ts
+|-- src/app/features/landing/
+|   |-- landing.component.ts
+|   |-- landing.component.html
+|   |-- landing.component.scss
+|   |-- sections/
+|   |   |-- hero-section.component.*
+|   |   |-- demo-promise-section.component.*
+|   |   |-- product-offers-section.component.*
+|   |   |-- showcase-section.component.*
+|   |   |-- websites-seo-section/
+|   |   |   `-- websites-seo-section.component.*
+|   |   |-- demo-sprint-section.component.*
+|   |   |-- trust-section.component.*
+|   |   |-- pricing-section.component.*
+|   |   |-- faq-section.component.*
+|   |   `-- contact-cta-section.component.*
+|   `-- visuals/
+|       |-- rag-workflow-visual.component.*
+|       |-- voice-waveform-visual.component.*
+|       |-- whatsapp-control-visual.component.*
+|       |-- email-pipeline-visual.component.*
+|       `-- agent-panel-preview.component.*
+|-- src/app/features/contact/
+|   `-- contact-form.component.*
+|-- src/app/shared/reveal/
+|   `-- reveal-on-scroll.directive.*
+`-- src/app/services/
+    `-- contact-api.types.ts
 
 backend/
-|-- app/
-|   |-- schemas/
-|   |   `-- contact.py
-|   `-- api/
-|       `-- contact.py
-`-- tests/
-    |-- contract/
-    `-- unit/
+`-- src/app/schemas/contact.py   # only if contact values need explicit backend sync
 ```
 
-**Structure Decision**: Keep the existing separated `frontend/` and `backend/` applications. The landing page should be decomposed inside `frontend/src/app/features/landing/` only when it reduces template/SCSS complexity. Static content should move out of hardcoded HTML and into typed content models under `frontend/src/app/core/content/`. Backend work is limited to preserving the contact contract if marketing-specific project type values are introduced.
+**Structure Decision**: Keep the existing separated frontend and backend applications. Most work belongs in the typed content layer and the landing page sections under `frontend/src/app/features/landing/`. Reuse existing section components when possible; split only where a section has distinct content, visuals, or accessibility behavior that benefits from its own component. Backend changes are not expected because the current contact enums already include the needed project types.
 
 ## Files To Change
 
-- `frontend/src/app/core/content/pl.ts`: Convert to an aggregate export or keep as the public Polish content entry point while moving large content blocks into smaller typed files.
-- `frontend/src/app/core/content/landing-content.types.ts`: Add shared content interfaces for navigation, hero, productized offers, showcases, visual labels, sprint steps, packages, FAQ, trust content, SEO metadata, and contact options.
-- `frontend/src/app/core/content/landing.pl.ts`: Add the upgraded Polish content for the premium AI products landing page.
-- `frontend/src/app/core/content/contact-options.pl.ts`: Add or split contact select options when doing so keeps contact copy reusable.
-- `frontend/src/app/features/landing/landing.component.html`: Replace the monolithic template with section component composition or smaller semantic blocks.
-- `frontend/src/app/features/landing/landing.component.scss`: Move global page layout tokens and shared section styles here or into local section SCSS as appropriate; add reduced-motion rules.
-- `frontend/src/app/features/landing/landing.component.ts`: Keep SEO metadata setup, import new standalone section/visual components, and wire the reveal directive/helper if used.
-- `frontend/src/app/features/contact/contact-form.component.ts`: Continue using the existing form shape; update content source and tests for new project type labels.
-- `frontend/src/app/features/contact/contact-form.component.html`: No payload shape change planned; minor label/help copy may be added if it improves clarity without changing backend compatibility.
-- `frontend/src/app/services/contact-api.types.ts`: Add marketing-specific `ProjectType` enum values if the form exposes them.
-- `backend/app/schemas/contact.py`: Add matching `ProjectType` enum values only if the frontend sends new values.
-- `specs/002-upgrade-marketing-site/contracts/contact-intake.md`: Document the compatible contact contract and allowed project-type values.
-
-## Files To Add
-
+- `frontend/src/app/core/content/pl.ts`
+- `frontend/src/app/core/content/landing-content.types.ts`
+- `frontend/src/app/core/content/landing.pl.ts`
+- `frontend/src/app/core/content/contact-options.pl.ts`
+- `frontend/src/app/features/landing/landing.component.ts`
+- `frontend/src/app/features/landing/landing.component.html`
+- `frontend/src/app/features/landing/landing.component.scss`
 - `frontend/src/app/features/landing/sections/hero-section.component.*`
-- `frontend/src/app/features/landing/sections/demo-sprint-section.component.*`
+- `frontend/src/app/features/landing/sections/demo-promise-section.component.*`
 - `frontend/src/app/features/landing/sections/product-offers-section.component.*`
 - `frontend/src/app/features/landing/sections/showcase-section.component.*`
+- `frontend/src/app/features/landing/sections/websites-seo-section/websites-seo-section.component.*`
+- `frontend/src/app/features/landing/sections/demo-sprint-section.component.*`
+- `frontend/src/app/features/landing/sections/trust-section.component.*`
 - `frontend/src/app/features/landing/sections/pricing-section.component.*`
 - `frontend/src/app/features/landing/sections/faq-section.component.*`
 - `frontend/src/app/features/landing/sections/contact-cta-section.component.*`
-- `frontend/src/app/features/landing/visuals/rag-workflow-visual.component.*`
-- `frontend/src/app/features/landing/visuals/voice-waveform-visual.component.*`
-- `frontend/src/app/features/landing/visuals/whatsapp-control-visual.component.*`
-- `frontend/src/app/features/landing/visuals/email-pipeline-visual.component.*`
-- `frontend/src/app/features/landing/visuals/agent-panel-preview.component.*`
-- `frontend/src/app/shared/reveal/reveal-on-scroll.directive.ts` if a reusable IntersectionObserver helper is preferable to local component code.
-- Targeted `.spec.ts` files for new section components, visuals, and reveal behavior where logic or accessibility state is non-trivial.
+- `frontend/src/app/features/landing/visuals/*.component.*`
+- `frontend/src/app/features/contact/contact-form.component.ts`
+- `frontend/src/app/features/contact/contact-form.component.html`
+- `frontend/src/app/features/contact/contact-form.component.spec.ts`
+- `frontend/src/app/features/landing/*.spec.ts`
+- `frontend/src/app/core/content/*.spec.ts`
 
-Exact component count may be reduced during implementation if a section is static and clearer as part of `landing.component.html`. The maintainability threshold is: split when a section has repeated content, a distinct visual, or more than one testable behavior.
+Optional backend-only files if a contact compatibility change becomes necessary:
 
-## Data/Content Model Changes
+- `backend/src/app/schemas/contact.py`
+- `backend/tests/**`
 
-- Replace the generic `ServiceOffering` model with a richer `ProductizedOffer` model containing `id`, `title`, `shortLabel`, `summary`, `businessOutcome`, `useCases`, `demoArtifact`, `scopeBoundary`, `visualKind`, and `ctaLabel`.
-- Add `ProductShowcase` content for RAG, voice, WhatsApp management, email automation, Websites + SEO, and management panel storytelling.
-- Add `DemoSprintStep` content for inquiry, scope confirmation, materials, build, review, and next-step recommendation.
-- Add `StartingPackage` content for pricing/package framing with included outcomes, assumptions, starting point/range copy, and CTA.
-- Add `FaqItem` content with accessible question/answer text covering demo scope, materials, timeline, exclusions, integrations, production readiness, handoff, and contact.
-- Add `PresentationVisualCopy` labels so mock dashboards/workflows can be explicitly described as presentation-only.
-- Update SEO metadata to the new positioning: practical AI demos in 7 days, productized AI services, Websites + SEO, and contact intent.
-- Update contact project type options to include productized service values: `rag_chatbot_demo`, `website_seo`, `voice_agent_demo`, `whatsapp_agent_management`, `email_automation`, and `agent_management_panel`, while keeping broad existing values if useful for backward compatibility.
+## Implementation Phases
 
-## Component Structure
+### Phase 1: Content Architecture and Copy System
 
-- `LandingComponent`: page shell, SEO metadata, top navigation, section composition, and contact form placement. Avoid detailed product markup here once sections are split.
-- `HeroSectionComponent`: premium first viewport with hero copy, CTA links, trust chips, and a lightweight product/workflow preview.
-- `DemoSprintSectionComponent`: explains the 7-day promise, start conditions, material handoff, and exclusions.
-- `ProductOffersSectionComponent`: renders the six productized offers from content data with anchor links and CTA prompts.
-- `ShowcaseSectionComponent`: reusable section for a showcase plus a projected or selected visual component.
-- Visual components: static SVG/CSS/HTML previews for RAG workflow, voice waveform, WhatsApp conversation/control, email pipeline, and agent panel. They must expose accessible names/descriptions and must not contain form fields that look submit-capable unless clearly disabled/presentation-only.
-- `PricingSectionComponent`: renders starting packages or ranges from content.
-- `FaqSectionComponent`: uses native `details`/`summary` or accessible buttons with state; native `details` is preferred for low JavaScript and keyboard support.
-- `ContactCtaSectionComponent`: final conversion section that embeds or links to the existing `app-contact-form`.
+Goal: make the landing-page copy maintainable and business-first before changing layout.
 
-## Animation Approach
+Tasks:
+- Update `landing-content.types.ts` so the page model explicitly covers hero, simplified nav, three offer families, one demo-vs-production explanation, one example demo, package framing, shorter FAQ, and contact copy.
+- Rewrite `landing.pl.ts` to express the new positioning and remove repeated defensive framing.
+- Adjust `pl.ts` if it currently acts as the aggregate content entry point.
+- Refresh `contact-options.pl.ts` so labels read like business choices rather than technical taxonomy.
 
-- Use CSS transitions/transforms/opacity and small Angular-friendly state classes for reveal effects.
-- Use a reusable `RevealOnScrollDirective` backed by `IntersectionObserver` for progressive reveal. It should add a class when an element enters the viewport, unobserve after first reveal by default, and no-op gracefully when `IntersectionObserver` is unavailable.
-- Respect `prefers-reduced-motion: reduce` in CSS and directive logic. Reduced motion should render content visible immediately with no transform animation.
-- Use CSS-only loops sparingly for non-essential visuals such as waveform bars or pipeline pulses. They must pause/disable under reduced motion.
-- Do not add GSAP, Three.js, Lottie, WebGL, canvas animation libraries, or runtime-heavy visual dependencies for the first implementation.
-- Keep animations non-blocking: content must be readable before animation completes, CTAs must remain interactive, and focus states must not depend on animation.
+Deliverable:
+- A typed, centralized copy source that matches the new spec and can be consumed by sections without hardcoded strings.
 
-## Testing Strategy
+### Phase 2: Page Composition and Navigation Simplification
 
-- Frontend unit/component tests:
-  - `LandingComponent` sets the updated SEO title, description, Open Graph metadata, and canonical link.
-  - Navigation renders anchors for the required sections.
-  - Required sections render from the typed content model.
-  - Productized offers include all six categories.
-  - Presentation visuals expose accessible labels and presentation-only copy.
-  - FAQ controls are keyboard-accessible and render expected answers.
-  - Contact form renders updated project type options and still submits the existing payload shape.
-  - Reveal directive makes content visible and handles reduced-motion or missing observer fallback.
-- Backend tests:
-  - Existing contact contract tests continue to pass.
-  - If new project-type enum values are accepted, add unit/contract coverage for one new value and one invalid value.
-- Manual/accessibility validation:
-  - Keyboard-only pass through nav, CTAs, FAQ, visual controls if any, and contact form.
-  - Reduced-motion browser setting confirms no motion-dependent content.
-  - Mobile and desktop viewport checks confirm no horizontal overflow and no overlapping text.
-  - Lighthouse desktop Performance and Accessibility remain >= 90.
-- Commands:
-  - Frontend: `npm run lint`, `npm run format:check`, `npm test`, `npm run build` from `frontend/`.
-  - Backend, only if touched: run the existing backend lint/format/test scripts or `ruff check .`, `ruff format --check .`, and `pytest` from `backend/`.
+Goal: reduce the landing page to a sharper sales narrative with a simple navigation model.
+
+Tasks:
+- Update `landing.component.ts` to wire the new content shape, page metadata, and section composition.
+- Rewrite `landing.component.html` to use a 5-6 item navigation and remove legacy section clutter that no longer supports the new story.
+- Preserve the skip link, semantic landmarks, and anchor behavior.
+- Keep the main conversion path visible from the hero and repeated in later sections.
+
+Deliverable:
+- A cleaner landing shell with a focused information architecture and simple anchor navigation.
+
+### Phase 3: Section Copy, Visuals, and Storytelling
+
+Goal: turn the page into a premium business pitch without claiming fake production capabilities.
+
+Tasks:
+- Rewrite the hero, demo promise, product offers, showcase, websites/SEO, demo sprint, trust, pricing, FAQ, and contact CTA sections.
+- Ensure the three offer groups read as business categories: knowledge assistant, communication automation, and AI validation demo, while Websites + SEO remains a supporting area for AI landing pages, demo pages, and product validation pages.
+- Make the demo sprint section explain the 7-day validation flow and the trust section explain transparent scope, risk reduction, technical realism, and the demo-vs-production boundary.
+- Add the consolidated "Etap demo vs etap produkcyjny" explanation in one place, not repeated across the page.
+- Add one concrete "Przyklad demo po 7 dniach" narrative that shows the visible demo result and the business decision it supports.
+- Reframe pricing as starting packages or ranges that reduce risk and clarify scope.
+- Update visual components so any mock dashboard, workflow, or panel is clearly marked as presentation-only.
+
+Deliverable:
+- A landing page that feels focused, premium, and honest, with fewer defensive disclaimers and clearer commercial framing.
+
+### Phase 4: Contact Copy and Content Polish
+
+Goal: make the contact path understandable to non-technical buyers and remove language issues.
+
+Tasks:
+- Review `contact-form.component.*` and related content to make project-type wording business-friendly.
+- Keep the existing contact payload shape unless an unavoidable compatibility issue appears.
+- Correct Polish wording, diacritics, and tone across the landing content.
+- Make sure no fake clients, testimonials, integrations, or metrics are introduced while polishing the copy.
+
+Deliverable:
+- A contact experience and page copy that feel credible to a Polish business audience.
+
+### Phase 5: Verification and Release Readiness
+
+Goal: prove the landing page still works and matches the spec.
+
+Tasks:
+- Add or update targeted Angular tests for hero copy, navigation count, section presence, FAQ behavior, visual labeling, accessibility, and SEO metadata.
+- Run responsive checks for mobile, tablet, laptop, and desktop widths.
+- Validate reduced-motion behavior and keyboard accessibility.
+- Run the frontend build/test commands and backend checks only if contact compatibility files changed.
+
+Deliverable:
+- A verified landing page change set ready for review and implementation merge.
 
 ## Risks And Mitigations
 
-- **Risk**: Premium visuals inflate template/SCSS complexity. **Mitigation**: Split only high-complexity sections into standalone components and keep shared content in typed data files.
-- **Risk**: Mockups could be mistaken for real running products. **Mitigation**: Add explicit presentation/demo labels in visual copy and acceptance tests for those labels.
-- **Risk**: Animation hurts accessibility or performance. **Mitigation**: Use CSS/IntersectionObserver only, support reduced motion, avoid heavy dependencies, and validate Lighthouse/accessibility.
-- **Risk**: Contact project type updates drift between frontend and backend. **Mitigation**: Update frontend union type, backend enum, contract artifact, and tests together.
-- **Risk**: Productized copy becomes hardcoded across templates. **Mitigation**: Keep repeated business content in typed content models and render through section components.
-- **Risk**: Large hero/media assets slow first impression. **Mitigation**: Prefer CSS/SVG/HTML visuals and optimize any bitmap assets before adding them.
+- **Risk**: The page still reads like a mockup catalog instead of a business offer. **Mitigation**: Keep the hero, offers, pricing, and FAQ anchored in business outcomes, risk reduction, and the 7-day demo promise.
+- **Risk**: Navigation and section count remain too dense. **Mitigation**: Cap nav items at 5-6 and remove legacy sections that do not support the new narrative.
+- **Risk**: Mock visuals are mistaken for real integrations. **Mitigation**: Label visuals as presentation-only and test the copy that surrounds them.
+- **Risk**: Polish copy quality slips under deadline pressure. **Mitigation**: Treat diacritics and tone cleanup as a phase-gate item before verification.
+- **Risk**: Accessibility regresses when sections are split or restyled. **Mitigation**: Preserve semantic headings, keyboard targets, focus states, and reduced-motion fallbacks in the section tests.
+- **Risk**: Backend contract work is introduced unnecessarily. **Mitigation**: Keep contact project types aligned with existing enums and avoid touching FastAPI unless a real mismatch appears.
 
-## Complexity Tracking
+## Verification Checklist
 
-No constitution violations. The plan intentionally avoids database, CMS, authentication, billing, payment, live AI integrations, live voice/WhatsApp integrations, real cost tracking, and admin backend behavior.
+- Hero leads with the business promise and makes the 7-day demo offer obvious in the first screen.
+- Navigation is reduced to 5-6 understandable items.
+- The page presents three main offer categories and does not feel like "we do everything".
+- One consolidated "Etap demo vs etap produkcyjny" section replaces repeated negative disclaimers.
+- One concrete "Przyklad demo po 7 dniach" section is present.
+- Pricing/packages explain business value and risk reduction.
+- FAQ is shorter, sharper, and less defensive.
+- Contact options are understandable for non-technical business visitors.
+- Polish copy is corrected for diacritics, typos, and premium tone.
+- No fake clients, testimonials, integrations, production capabilities, or metrics are added.
+- Responsive and accessible behavior is preserved.
+- Existing build and test commands pass.
 
-| Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
-| None | N/A | N/A |
+## Commands To Run After Implementation
+
+Frontend:
+
+```bash
+cd frontend
+npm run lint
+npm run format:check
+npm test
+npm run build
+```
+
+Backend, only if contact compatibility files change:
+
+```bash
+cd backend
+ruff check .
+ruff format --check .
+pytest
+```
+
+## Notes
+
+- The backend is expected to remain unchanged for this feature because the current contact enums already cover the proposed productized project types.
+- The plan assumes the current landing-page sections can be reused and restyled rather than replaced wholesale.

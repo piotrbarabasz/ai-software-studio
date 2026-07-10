@@ -1,65 +1,55 @@
-﻿# Research: Premium Marketing Website Upgrade
+# Research: Demo AI w 7 dni Landing Page Upgrade
 
-## Decision: Keep the upgrade frontend-first with contact compatibility only
+## Decision: Keep the implementation frontend-first and preserve the backend
 
-**Rationale**: The feature is a marketing and presentation upgrade. The existing FastAPI backend already provides contact intake, validation, rate-limit-ready behavior, and email delivery. New AI service previews can be represented as static frontend content and visuals without backend behavior.
-
-**Alternatives considered**:
-
-- Add demo endpoints for RAG, voice, WhatsApp, or cost tracking: rejected because the spec explicitly excludes real runtime integrations.
-- Add CMS or database-backed content: rejected because static typed content is enough for a productized landing page and avoids constitution complexity.
-
-## Decision: Split content into typed feature content models
-
-**Rationale**: `frontend/src/app/core/content/pl.ts` currently combines SEO, navigation, services, process, technologies, examples, about, contact copy, and select options in one large file. The upgrade adds productized offers, showcases, packages, FAQ, visual labels, and sprint steps, so typed content interfaces and smaller content files will keep repeated business content out of hardcoded HTML.
+**Rationale**: The spec centers on landing-page positioning, business copy, navigation, and presentation-only visuals. The current FastAPI contact backend already supports the needed project types, so the safest and fastest path is to keep backend behavior unchanged unless a future copy decision creates a real contract mismatch.
 
 **Alternatives considered**:
 
-- Keep all copy in one file: rejected because the file will become difficult to review and test.
-- Hardcode section copy in component templates: rejected because it weakens future localization and repeats business content.
+- Add new backend endpoints for demo visuals or AI previews: rejected because the feature is explicitly presentation-only.
+- Expand backend storage or CMS support: rejected because the landing page content can remain centralized in typed frontend content files.
 
-## Decision: Use standalone Angular section and visual components selectively
+## Decision: Reuse the existing landing-page section architecture
 
-**Rationale**: The current landing component is already a monolithic page. The upgrade has many distinct sections and five product visuals. Standalone section components align with the existing Angular standalone style while keeping each section independently testable.
-
-**Alternatives considered**:
-
-- One large template: rejected for maintainability once product visuals and FAQ are added.
-- Over-splitting every small text band: rejected because static simple sections can stay in the page shell if they remain readable.
-
-## Decision: Use CSS/SVG/HTML visuals, not heavy visual dependencies
-
-**Rationale**: The desired visuals are product storytelling previews: RAG workflow, waveform, WhatsApp control conversation, email pipeline, and agent panel. These can be built with semantic HTML, inline SVG, CSS grid, and simple animations. The spec prefers lightweight Angular-friendly animation and forbids real integrations.
+**Rationale**: The repository already breaks the page into hero, demo promise, offer, showcase, pricing, FAQ, and contact sections. Reusing those sections minimizes risk and keeps the work easy to test, while still allowing the navigation and copy structure to be simplified.
 
 **Alternatives considered**:
 
-- Three.js/WebGL/canvas: rejected because 3D/rendering is unnecessary and would increase validation and performance risk.
-- Lottie/GSAP: rejected because static CSS/SVG animation covers the required storytelling without extra dependencies.
+- Rewrite the page as one large template: rejected because it would make the new copy harder to maintain.
+- Create many new sections for every small text band: rejected because it would add unnecessary complexity.
 
-## Decision: Implement scroll reveal with IntersectionObserver and CSS classes
+## Decision: Centralize the new copy in `frontend/src/app/core/content/`
 
-**Rationale**: IntersectionObserver is available in modern browsers, small, and fits progressive reveal. A directive can mark sections as visible when they enter the viewport while allowing CSS to disable transitions for reduced motion.
-
-**Alternatives considered**:
-
-- Angular animation package: not needed for simple reveal effects.
-- Scroll event listeners: rejected because they are more error-prone and easier to make expensive.
-- No animation: acceptable fallback, but the visual direction asks for polished reveal and transitions.
-
-## Decision: Use native HTML where it improves accessibility
-
-**Rationale**: Native anchors, buttons, lists, landmarks, and `details/summary` for FAQ reduce JavaScript and preserve keyboard behavior. Visual previews should carry accessible labels/descriptions and avoid fake active inputs unless clearly disabled or presentation-only.
+**Rationale**: The feature is mostly content and narrative work. A typed content model keeps the copy testable, makes Polish language changes easier to review, and avoids spreading business text across templates.
 
 **Alternatives considered**:
 
-- Custom FAQ disclosure widgets everywhere: rejected unless design needs exceed native behavior.
-- Clickable mock controls without function: rejected because they can confuse users and assistive technology.
+- Hardcode copy directly in templates: rejected because it reduces maintainability and makes copy review harder.
+- Move content to a CMS: rejected because the spec does not justify persistent infrastructure.
 
-## Decision: Update contact project type enums only if new form options are sent
+## Decision: Keep visuals lightweight and presentation-only
 
-**Rationale**: The existing contact payload is stable and should remain stable. However, if the visible project type select includes productized service values, the frontend union type, backend Pydantic enum, OpenAPI contract, and tests must accept those values.
+**Rationale**: The new positioning needs polished product storytelling, but the page must not imply real integrations or production systems. Static HTML, CSS, SVG, and simple component markup are enough to show the idea without adding runtime-heavy dependencies.
 
 **Alternatives considered**:
 
-- Map new labels to existing broad enum values: acceptable if implementation wants zero backend changes, but it loses lead qualification detail.
-- Add a new contact endpoint or field: rejected because compatibility and scope favor the existing flow.
+- Add animation or chart libraries: rejected because they are unnecessary for the required storytelling.
+- Build real demo integrations: rejected because the spec explicitly forbids fake production capabilities.
+
+## Decision: Use existing contact enums and avoid backend edits unless necessary
+
+**Rationale**: The current contact form types already include the productized project types named in the new offer. That means contact-copy updates can stay frontend-only, and the FastAPI backend can remain untouched.
+
+**Alternatives considered**:
+
+- Introduce a new contact schema for the marketing page: rejected because it would duplicate a working flow.
+- Rename contact values on both frontend and backend: only needed if the project later chooses to change the current enum values.
+
+## Decision: Validate with targeted Angular tests plus the existing build/test scripts
+
+**Rationale**: This feature changes content, navigation, and accessibility behavior more than raw business logic. Angular unit and component tests are the right tool for verifying section presence, anchor count, reduced-motion handling, and SEO metadata, while the standard build/test scripts confirm the page still ships cleanly.
+
+**Alternatives considered**:
+
+- Rely only on manual QA: rejected because the content and accessibility requirements are too important for that.
+- Add end-to-end browser automation immediately: not required for the current scope because the existing component tests already cover the critical landing-page behavior.

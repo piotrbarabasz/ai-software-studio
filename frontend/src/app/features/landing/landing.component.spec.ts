@@ -1,4 +1,4 @@
-import { provideHttpClient } from '@angular/common/http';
+﻿import { provideHttpClient } from '@angular/common/http';
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 
@@ -24,9 +24,9 @@ describe('LandingComponent', () => {
   it('renders the hero brand and value proposition', () => {
     const element: HTMLElement = fixture.nativeElement;
 
-    expect(element.querySelector('h1')?.textContent).toContain('AISoftware Studio');
-    expect(element.textContent).toContain('Aplikacje webowe, API i automatyzacje AI');
-    expect(element.textContent).toContain('automatyzacje');
+    expect(element.querySelector('h1')?.textContent).toContain('Demo AI w 7 dni');
+    expect(element.textContent).toContain('AISoftware Studio pomaga zweryfikować');
+    expect(element.textContent).toContain('Umów zakres demo');
   });
 
   it('links the primary CTA to the contact section anchor', () => {
@@ -36,16 +36,14 @@ describe('LandingComponent', () => {
     expect(fixture.nativeElement.querySelector('#contact')).not.toBeNull();
   });
 
-  it('renders critical static Polish copy without mojibake', () => {
+  it('renders the updated supporting sections without legacy broad-service framing', () => {
     const element: HTMLElement = fixture.nativeElement;
     const text = element.textContent ?? '';
 
-    expect(text).toContain('Przejdź do treści');
-    expect(text).toContain('Usługi');
-    expect(text).toContain('Co mogę zbudować dla Twojej firmy');
-    expect(text).not.toContain('PrzejdĹ');
-    expect(text).not.toContain('UsĹ');
-    expect(text).not.toContain('mogÄ');
+    expect(text).toContain('Wsparcie wdrożenia');
+    expect(text).toContain('Co wchodzi po walidacji demo AI');
+    expect(text).toContain('Narzędzia dobrane do walidacji i późniejszego wdrożenia');
+    expect(text).toContain('Partner od demo AI i późniejszego wdrożenia');
   });
 
   it('renders the 7-day demo promise before legacy MVP sections', () => {
@@ -56,12 +54,15 @@ describe('LandingComponent', () => {
     expect(element.textContent).toContain('potwierdzeniu zakresu');
   });
 
-  it('renders productized offers and navigation anchor for US2', () => {
+  it('renders productized offers and the 7-day example section', () => {
     const element: HTMLElement = fixture.nativeElement;
 
     expect(element.querySelector('#product-offers')).not.toBeNull();
-    expect(element.querySelector('a[href="#product-offers"]')?.textContent).toContain('Oferta AI');
-    expect(element.textContent).toContain('Chatbot RAG');
-    expect(element.textContent).toContain('Panel zarządzania chatbotami');
+    expect(element.querySelector('a[href="#product-offers"]')?.textContent).toContain('Oferta');
+    expect(element.textContent).toContain('Asystent wiedzy / chatbot RAG');
+    expect(element.textContent).toContain('Automatyzacje komunikacji');
+    expect(element.textContent).toContain('Demo produktu AI / landing / panel do walidacji procesu');
+    expect(element.querySelector('#demo-example')).not.toBeNull();
+    expect(element.textContent).toContain('Przykład demo po 7 dniach');
   });
 });

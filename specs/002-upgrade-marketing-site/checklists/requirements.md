@@ -1,7 +1,7 @@
-# Specification Quality Checklist: Premium Marketing Website Upgrade
+# Specification Quality Checklist: Demo AI w 7 dni - Premium Marketing Landing Page
 
 **Purpose**: Validate specification completeness and quality before proceeding to planning
-**Created**: 2026-07-08
+**Created**: 2026-07-10
 **Feature**: [spec.md](../spec.md)
 
 ## Content Quality
@@ -31,4 +31,4 @@
 
 ## Notes
 
-- Validation passed on initial review. The spec intentionally keeps implementation choices for the planning phase and limits backend scope to preserving the existing contact flow.
+- Validation passed after updating the landing-page positioning to emphasize the 7-day demo value proposition, simplified navigation, a single demo-versus-production explanation, and business-first pricing and contact framing.
