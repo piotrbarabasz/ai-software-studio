@@ -1,0 +1,23 @@
+<main id="main-content" class="demo-page">
+  <section class="hero section-shell" appRevealOnScroll>
+    <div class="hero-copy">
+      <p class="eyebrow">{{ routeContent.eyebrow }}</p>
+      <h1>{{ routeContent.title }}</h1>
+      <p class="page-lead">{{ routeContent.lead }}</p>
+    </div>
+
+    <div class="hero-aside">
+      <p class="panel-kicker">Po co jest ten etap</p>
+      <ul>
+        <li *ngFor="let item of routeContent.includes">{{ item }}</li>
+      </ul>
+      <a class="primary-action" routerLink="/kontakt">{{ routeContent.ctaLabel }}</a>
+    </div>
+  </section>
+
+  <app-demo-promise-section [content]="content.demoPromise" />
+  <app-demo-sprint-section [steps]="content.demoSprint" />
+  <app-pricing-section [packages]="content.packages" />
+  <app-faq-section [items]="content.faq" />
+  <app-contact-cta-section [content]="content.contact" />
+</main>

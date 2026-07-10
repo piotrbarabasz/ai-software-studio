@@ -1,0 +1,52 @@
+<a class="skip-link" href="#main-content">Przejdź do treści</a>
+
+<header class="site-header">
+  <a class="brand" routerLink="/" (click)="closeNavigation()" aria-label="AISoftware Studio">
+    <span class="brand-mark" aria-hidden="true">AI</span>
+    <span>AISoftware Studio</span>
+  </a>
+
+  <button
+    type="button"
+    class="menu-toggle"
+    aria-controls="primary-navigation"
+    [attr.aria-expanded]="isMobileNavigationOpen"
+    (click)="toggleNavigation()"
+  >
+    <span aria-hidden="true">{{ isMobileNavigationOpen ? '×' : '☰' }}</span>
+    <span>{{ isMobileNavigationOpen ? 'Zamknij menu' : 'Menu' }}</span>
+  </button>
+
+  <nav
+    id="primary-navigation"
+    class="primary-nav"
+    [class.is-open]="isMobileNavigationOpen"
+    aria-label="Główna nawigacja"
+  >
+    <div class="nav-links">
+      <a
+        *ngFor="let item of navigation"
+        [routerLink]="item.path"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: item.path === '/' ? true : item.path !== '/produkty' }"
+        ariaCurrentWhenActive="page"
+        (click)="closeNavigation()"
+      >
+        {{ item.label }}
+      </a>
+    </div>
+
+    <a class="primary-cta" [routerLink]="contactPath" (click)="closeNavigation()">
+      {{ primaryCtaLabel }}
+    </a>
+  </nav>
+</header>
+
+<div id="main-content" class="site-main">
+  <router-outlet />
+</div>
+
+<footer class="site-footer">
+  <p>AISoftware Studio - aplikacje webowe, API i automatyzacje AI.</p>
+  <a [routerLink]="contactPath" (click)="closeNavigation()">Kontakt</a>
+</footer>

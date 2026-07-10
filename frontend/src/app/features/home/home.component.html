@@ -1,0 +1,106 @@
+<main class="home-page">
+  <section class="hero section-shell" appRevealOnScroll>
+    <div class="hero-copy">
+      <p class="eyebrow">{{ content.home.eyebrow }}</p>
+      <h1>{{ content.home.title }}</h1>
+      <p class="hero-lead">{{ content.home.subtitle }}</p>
+
+      <ul class="hero-highlights" aria-label="Najważniejsze informacje">
+        <li *ngFor="let highlight of content.home.highlights">{{ highlight }}</li>
+      </ul>
+
+      <div class="hero-actions">
+        <a class="primary-action" routerLink="/kontakt">{{ content.home.primaryCta }}</a>
+        <a class="secondary-action" routerLink="/produkty">{{ content.home.secondaryCta }}</a>
+      </div>
+    </div>
+
+    <aside class="hero-panel">
+      <p class="panel-kicker">Wybrany kierunek</p>
+      <h2>{{ featuredProduct.title }}</h2>
+      <p>{{ featuredProduct.valueProposition }}</p>
+      <a class="panel-link" [routerLink]="featuredProduct.path">Otwórz produkt</a>
+      <app-rag-workflow-visual />
+    </aside>
+  </section>
+
+  <section class="overview section-shell" aria-labelledby="overview-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">Produkty</p>
+      <h2 id="overview-title">
+        Katalog podzielony według scenariusza, nie według szumu marketingowego
+      </h2>
+      <p class="section-copy">
+        Każdy kierunek prowadzi do własnego route-backed produktu, dzięki czemu łatwiej go porównać,
+        udostępnić i wrócić do niego po odświeżeniu.
+      </p>
+    </div>
+
+    <div class="product-grid">
+      <article *ngFor="let product of overviewProducts" class="product-card">
+        <p class="product-label">{{ product.routeLabel }}</p>
+        <h3>{{ product.title }}</h3>
+        <p>{{ product.valueProposition }}</p>
+        <a [routerLink]="product.path">Zobacz route</a>
+      </article>
+    </div>
+  </section>
+
+  <section class="demo section-shell" aria-labelledby="demo-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">{{ content.demo.eyebrow }}</p>
+      <h2 id="demo-title">{{ content.demo.title }}</h2>
+      <p class="section-copy">{{ content.demo.lead }}</p>
+    </div>
+
+    <div class="demo-layout">
+      <ol class="demo-steps" aria-label="Etapy demo">
+        <li *ngFor="let step of content.demo.flowSteps">
+          <span></span>
+          <p>{{ step }}</p>
+        </li>
+      </ol>
+
+      <div class="demo-boundary">
+        <p class="panel-kicker">Granica etapu</p>
+        <ul>
+          <li *ngFor="let item of content.demo.outOfScope">{{ item }}</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="featured section-shell" aria-labelledby="featured-title" appRevealOnScroll>
+    <div class="featured-copy">
+      <p class="eyebrow">Przykładowy produkt</p>
+      <h2 id="featured-title">{{ featuredProduct.title }}</h2>
+      <p class="section-copy">{{ featuredProduct.problem }} {{ featuredProduct.audience }}</p>
+      <a class="secondary-action" [routerLink]="featuredProduct.path">Zobacz szczegóły</a>
+    </div>
+
+    <div class="featured-visual">
+      <app-rag-workflow-visual />
+    </div>
+  </section>
+
+  <section class="studio section-shell" aria-labelledby="studio-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">{{ content.studio.eyebrow }}</p>
+      <h2 id="studio-title">{{ content.studio.title }}</h2>
+      <p class="section-copy">{{ content.studio.lead }}</p>
+    </div>
+
+    <ul class="studio-points">
+      <li *ngFor="let principle of content.studio.principles">{{ principle }}</li>
+    </ul>
+  </section>
+
+  <section class="contact section-shell" aria-labelledby="contact-title" appRevealOnScroll>
+    <div class="contact-card">
+      <p class="eyebrow">{{ content.contact.eyebrow }}</p>
+      <h2 id="contact-title">{{ content.contact.title }}</h2>
+      <p class="section-copy">{{ content.contact.lead }}</p>
+      <a class="primary-action" routerLink="/kontakt">{{ content.home.primaryCta }}</a>
+    </div>
+  </section>
+</main>

@@ -120,8 +120,7 @@ export const plContent = {
   ],
   demoExample: {
     title: 'Przykład demo po 7 dniach',
-    lead:
-      'To realistyczny scenariusz koncepcyjny dla firmy usługowej, nie opis realnego klienta ani case study.',
+    lead: 'To realistyczny scenariusz koncepcyjny dla firmy usługowej, nie opis realnego klienta ani case study.',
     problemLabel: 'Problem klienta',
     problem:
       'Firma usługowa dostaje codziennie te same pytania o ofertę, zakres usług i dokumenty, a zespół traci czas na ręczne odpowiadanie.',
@@ -303,7 +302,8 @@ export const plContent = {
       id: 'demo-start',
       name: 'Demo Start',
       priceLabel: 'od 3 500 PLN netto',
-      bestFor: 'Czy jeden proces lub jedna interakcja ma realny sens biznesowy przed większą inwestycją?',
+      bestFor:
+        'Czy jeden proces lub jedna interakcja ma realny sens biznesowy przed większą inwestycją?',
       includes: [
         'jeden klikalny przepływ lub ekran demo',
         'copy nastawione na decyzję biznesową',
@@ -320,7 +320,8 @@ export const plContent = {
       id: 'demo-product',
       name: 'Demo Produktowe',
       priceLabel: 'od 6 500 PLN netto',
-      bestFor: 'Czy pełniejszy user journey jest zrozumiały i gotowy do rozmowy z klientem lub zarządem?',
+      bestFor:
+        'Czy pełniejszy user journey jest zrozumiały i gotowy do rozmowy z klientem lub zarządem?',
       includes: [
         'kilka połączonych ekranów lub sekcji',
         'prezentacyjny workflow z kluczowymi stanami',
@@ -370,15 +371,13 @@ export const plContent = {
       id: 'faq-timeline',
       category: 'timeline',
       question: 'Od kiedy liczy się 7 dni?',
-      answer:
-        'Od momentu zamknięcia zakresu i przekazania materiałów startowych.',
+      answer: 'Od momentu zamknięcia zakresu i przekazania materiałów startowych.',
     },
     {
       id: 'faq-integrations',
       category: 'integrations',
       question: 'Czy demo łączy się z WhatsApp, e-mail, voice albo RAG?',
-      answer:
-        'Nie. Demo pokazuje przepływ i decyzje. Integracje zostają na etap produkcyjny.',
+      answer: 'Nie. Demo pokazuje przepływ i decyzje. Integracje zostają na etap produkcyjny.',
     },
     {
       id: 'faq-production',
@@ -391,8 +390,7 @@ export const plContent = {
       id: 'faq-contact',
       category: 'contact',
       question: 'Jak najlepiej rozpocząć rozmowę?',
-      answer:
-        'Opisz jeden proces i wskaż, co chcesz sprawdzić. To wystarczy do pierwszej rozmowy.',
+      answer: 'Opisz jeden proces i wskaż, co chcesz sprawdzić. To wystarczy do pierwszej rozmowy.',
     },
   ],
   services: [
@@ -583,5 +581,3 @@ export const plContent = {
     budgetRanges: budgetRangeOptions,
   },
 } satisfies LandingContent;
-
-

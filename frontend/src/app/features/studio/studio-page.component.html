@@ -1,0 +1,94 @@
+<main id="main-content" class="studio-page">
+  <section class="hero section-shell" appRevealOnScroll>
+    <div class="hero-copy">
+      <p class="eyebrow">{{ routeContent.eyebrow }}</p>
+      <h1>{{ routeContent.title }}</h1>
+      <p class="page-lead">{{ routeContent.lead }}</p>
+    </div>
+
+    <div class="hero-panel">
+      <p class="panel-kicker">Zasady współpracy</p>
+      <ul>
+        <li *ngFor="let item of routeContent.principles">{{ item }}</li>
+      </ul>
+      <a class="primary-action" routerLink="/kontakt">{{ routeContent.ctaLabel }}</a>
+    </div>
+  </section>
+
+  <section class="section-shell" aria-labelledby="services-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">Zakres pracy</p>
+      <h2 id="services-title">Najpierw walidacja i przepływ, potem stabilne wdrożenie</h2>
+    </div>
+
+    <div class="card-grid">
+      <article *ngFor="let service of content.services" class="info-card">
+        <h3>{{ service.title }}</h3>
+        <p>{{ service.summary }}</p>
+        <ul>
+          <li *ngFor="let outcome of service.outcomes">{{ outcome }}</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="section-shell section-muted" aria-labelledby="process-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">Proces</p>
+      <h2 id="process-title">Od diagnozy przez demo do decyzji o dalszym kroku</h2>
+    </div>
+
+    <ol class="process-list">
+      <li *ngFor="let step of content.process">
+        <span class="step-number">{{ step.order }}</span>
+        <div>
+          <h3>{{ step.title }}</h3>
+          <p>{{ step.description }}</p>
+          <strong>{{ step.clientOutcome }}</strong>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <section class="section-shell" aria-labelledby="technology-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">Technologie</p>
+      <h2 id="technology-title">Dobór stosu pod czytelny demo flow i dalsze utrzymanie</h2>
+    </div>
+
+    <div class="tech-grid">
+      <article *ngFor="let tech of content.technologies" class="tech-card">
+        <span>{{ tech.category }}</span>
+        <h3>{{ tech.name }}</h3>
+        <p>{{ tech.businessUse }}</p>
+      </article>
+    </div>
+  </section>
+
+  <app-trust-section [content]="content.trust" />
+
+  <section class="section-shell" aria-labelledby="approach-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">Sposób pracy</p>
+      <h2 id="approach-title">
+        Przejrzysty zakres, małe iteracje i jasna granica odpowiedzialności
+      </h2>
+      <p class="page-lead">{{ routeContent.lead }}</p>
+    </div>
+
+    <div class="approach-grid">
+      <article>
+        <h3>Jak zaczynamy</h3>
+        <ul>
+          <li *ngFor="let item of routeContent.engagementModel">{{ item }}</li>
+        </ul>
+      </article>
+      <article>
+        <h3>Kim jesteśmy po wdrożeniu</h3>
+        <p>{{ content.about.body }}</p>
+      </article>
+    </div>
+  </section>
+
+  <app-contact-cta-section [content]="content.contact" />
+</main>
