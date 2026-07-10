@@ -17,19 +17,13 @@ describe('DemoPromiseSectionComponent', () => {
     fixture.detectChanges();
   });
 
-  it('explains when the 7-day demo sprint starts', () => {
+  it('compares the demo and production stages clearly', () => {
     const text = fixture.nativeElement.textContent as string;
 
-    expect(text).toContain('Demo AI w 7 dni');
-    expect(text).toContain('potwierdzimy jeden konkretny scenariusz demo');
-    expect(text).toContain('otrzymam materiały');
-  });
-
-  it('states what the demo does not include', () => {
-    const text = fixture.nativeElement.textContent as string;
-
-    expect(text).toContain('Nie obejmuje');
-    expect(text).toContain('produkcyjny chatbot');
-    expect(text).toContain('billing');
+    expect(text).toContain('Etap demo vs etap produkcyjny');
+    expect(text).toContain('Etap demo');
+    expect(text).toContain('Etap produkcyjny');
+    expect(text).toContain('realny backend');
+    expect(text).toContain('Najpierw potwierdzamy');
   });
 });

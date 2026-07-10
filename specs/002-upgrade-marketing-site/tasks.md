@@ -1,248 +1,124 @@
-﻿# Tasks: Premium Marketing Website Upgrade
+﻿# Tasks: Demo AI w 7 dni - Landing Page UX/Copy Improvement
 
 **Input**: Design documents from `/specs/002-upgrade-marketing-site/`
 
 **Prerequisites**: [plan.md](./plan.md), [spec.md](./spec.md), [research.md](./research.md), [data-model.md](./data-model.md), [contracts/contact-intake.md](./contracts/contact-intake.md), [quickstart.md](./quickstart.md)
 
-**Tests**: Include frontend unit/component tests for content completeness, section rendering, SEO metadata, presentation-only labels, reduced-motion behavior, and contact compatibility. Include backend tests only where contact enum compatibility changes.
+**Tests**: Include frontend tests for content completeness, hero/nav behavior, section rendering, presentation-only labels, reduced-motion behavior, accessibility, SEO metadata, and contact compatibility. No backend production integrations are planned.
 
-**Organization**: Tasks are grouped by user story so each story can be implemented and tested independently while keeping the existing MVP functional after each major phase.
+**Organization**: Tasks are grouped by user story so each story can be implemented and tested independently while keeping the existing MVP functional after each phase.
 
-## Phase 1: Setup (Shared Infrastructure)
+## Phase 1: Setup (Shared Content Foundation)
 
-**Purpose**: Prepare the feature branch structure and remove known planning noise without changing runtime behavior.
+**Purpose**: Prepare the typed content layer and reusable copy sources before changing the landing layout.
 
-- [X] T001 Repository cleanup/meta only: confirm `.specify/feature.json` points to `specs/002-upgrade-marketing-site` and document any mismatch in `specs/002-upgrade-marketing-site/tasks.md`; this task must not block user-story implementation
-- [X] T002 Repository cleanup/meta only: deletion skipped/not applicable because filesystem permissions deny removing obsolete planning artifact `specs/002-upgrade-marketing-site/plan-template-original.md`; this task remains non-blocking for user-story implementation
-- [X] T003 [P] Review existing frontend scripts in `frontend/package.json` and confirm no new runtime dependency is needed for this feature
-- [X] T004 [P] Review existing backend contact contract files `backend/app/schemas/contact.py` and `frontend/src/app/services/contact-api.types.ts` before changing project type values
-
----
-
-## Phase 2: Foundational (Blocking Prerequisites)
-
-**Purpose**: Establish shared content types, test seams, and animation primitives used by all user stories.
-
-**CRITICAL**: No user story implementation should begin until this phase is complete.
-
-### Tests for Foundation
-
-- [X] T005 [P] Add content model completeness tests for base landing content in `frontend/src/app/core/content/landing-content.spec.ts`
-- [X] T006 [P] Add reveal directive tests covering visible fallback and observer behavior in `frontend/src/app/shared/reveal/reveal-on-scroll.directive.spec.ts`
-
-### Implementation for Foundation
-
-- [X] T007 Create shared landing content interfaces in `frontend/src/app/core/content/landing-content.types.ts`
-- [X] T008 Create initial upgraded Polish landing content shell in `frontend/src/app/core/content/landing.pl.ts`
-- [X] T009 Refactor `frontend/src/app/core/content/pl.ts` to export the new landing content while preserving existing `plContent` imports
-- [X] T010 Create contact option content module in `frontend/src/app/core/content/contact-options.pl.ts`
-- [X] T011 Implement lightweight IntersectionObserver reveal directive in `frontend/src/app/shared/reveal/reveal-on-scroll.directive.ts`
-- [X] T012 Add shared reduced-motion and reveal styles in `frontend/src/styles.scss`
-- [X] T013 Update `frontend/src/app/features/landing/landing.component.ts` imports to support the new content entry point without changing rendered sections yet
-
-**Checkpoint**: Existing MVP should still render and the existing contact form should still work.
+- [X] T001 [P] Update `frontend/src/app/core/content/landing-content.types.ts` to support simplified navigation, hero copy, one demo promise section, three main offer groups, one consolidated demo-vs-production explanation, one 7-day example, pricing packages, shorter FAQ entries, and contact copy. Acceptance: the content model exposes fields for every section named in the spec without leftover placeholder structures.
+- [X] T002 [P] Rewrite `frontend/src/app/core/content/landing.pl.ts` to use the new premium Polish copy, business-first hero promise, three offer families, one demo example, pricing/value framing, and shorter FAQ. Acceptance: the file contains the updated positioning and does not repeat defensive disclaimers across multiple sections.
+- [X] T003 [P] Refresh `frontend/src/app/core/content/contact-options.pl.ts` so the contact project labels read like business choices and still map to the existing `ProjectType` values in `frontend/src/app/services/contact-api.types.ts`. Acceptance: the contact form options are understandable to non-technical buyers and do not require backend payload changes.
+- [X] T004 [P] Keep `frontend/src/app/core/content/pl.ts` as the stable Polish content export while pointing it at the updated landing content structure. Acceptance: existing imports of `plContent` continue to compile.
+- [X] T005 [P] Add or update content validation tests in `frontend/src/app/core/content/landing-content.spec.ts` to cover hero/nav fields, the three offer groups, the demo-vs-production explanation, the 7-day example, pricing packages, and FAQ coverage. Acceptance: tests fail if any required content block is missing or duplicated in the wrong place.
 
 ---
 
-## Phase 3: User Story 1 - Understand the 7-Day AI Demo Offer (Priority: P1) MVP
+## Phase 2: Foundational (Page Shell and Layout)
 
-**Goal**: A visitor understands the 7-day AI demo offer, start conditions, and primary contact path within 30 seconds.
+**Purpose**: Wire the landing page shell to the new content structure before story-specific sections are refined.
 
-**Independent Test**: Open the page, inspect the first screen and "Demo AI w 7 dni" section, and confirm the brand, practical AI demo promise, start conditions, and contact CTA are visible without relying on later sections.
+**CRITICAL**: No user story work should start until this phase is complete.
 
-### Tests for User Story 1
+- [X] T006 [P] Update `frontend/src/app/features/landing/landing.component.ts` to consume the revised content model, keep SEO metadata in sync with the new positioning, and preserve the existing contact flow entry points. Acceptance: page metadata reflects the new offer and the component still renders the contact CTA path.
+- [X] T007 [P] Rewrite `frontend/src/app/features/landing/landing.component.html` to compose the landing page with the simplified section order and anchor structure, removing legacy clutter that does not support the new story. Acceptance: the page shell contains the required story sections and the navigation only points to the kept sections.
+- [X] T008 [P] Update `frontend/src/app/features/landing/landing.component.scss` and the shared reveal base behavior in `frontend/src/app/shared/reveal/reveal-on-scroll.directive.ts` if needed to support the new section density, reduced-motion fallback, and cleaner spacing. Acceptance: the shell layout remains readable on common widths and reveal behavior does not block content visibility.
+- [X] T009 [P] Add shell-level tests in `frontend/src/app/features/landing/landing.component.spec.ts`, `frontend/src/app/features/landing/landing-seo.spec.ts`, and `frontend/src/app/features/landing/landing-a11y.spec.ts` for the revised page structure, metadata, and top-level anchor count. Acceptance: tests fail if the shell loses SEO metadata, the section anchors, or the simplified navigation.
 
-- [X] T014 [P] [US1] Add hero and demo-promise rendering tests in `frontend/src/app/features/landing/sections/hero-section.component.spec.ts`
-- [X] T015 [P] [US1] Add 7-day demo disclaimer tests in `frontend/src/app/features/landing/sections/demo-promise-section.component.spec.ts`
-- [X] T016 [P] [US1] Update SEO metadata tests in `frontend/src/app/features/landing/landing.component.spec.ts`
-
-### Implementation for User Story 1
-
-- [X] T017 [US1] Add Polish hero copy, trust chips, CTA labels, and SEO metadata in `frontend/src/app/core/content/landing.pl.ts`
-- [X] T018 [US1] Add `DemoPromise` content with scope-confirmation and materials-start conditions in `frontend/src/app/core/content/landing.pl.ts`
-- [X] T019 [US1] Create premium hero section component template in `frontend/src/app/features/landing/sections/hero-section.component.html`
-- [X] T020 [US1] Create premium hero section component logic in `frontend/src/app/features/landing/sections/hero-section.component.ts`
-- [X] T021 [US1] Create premium hero section styles in `frontend/src/app/features/landing/sections/hero-section.component.scss`
-- [X] T022 [US1] Create demo promise section template in `frontend/src/app/features/landing/sections/demo-promise-section.component.html`
-- [X] T023 [US1] Create demo promise section logic in `frontend/src/app/features/landing/sections/demo-promise-section.component.ts`
-- [X] T024 [US1] Create demo promise section styles in `frontend/src/app/features/landing/sections/demo-promise-section.component.scss`
-- [X] T025 [US1] Compose hero and demo promise sections in `frontend/src/app/features/landing/landing.component.html`
-- [X] T026 [US1] Update landing shell styles for the new first-screen layout in `frontend/src/app/features/landing/landing.component.scss`
-- [X] T027 [US1] Update landing metadata setup for upgraded SEO and Open Graph copy in `frontend/src/app/features/landing/landing.component.ts`
-
-**Checkpoint**: US1 is independently testable and the page still includes the existing contact form path.
+**Checkpoint**: The landing page should still render, with the new content model and shell structure in place.
 
 ---
 
-## Phase 4: User Story 2 - Compare Productized AI Offers (Priority: P2)
+## Phase 3: User Story 1 - Hero and Primary CTA (Priority: P1)
 
-**Goal**: A visitor can identify all six productized services and understand the business outcome, use case, demo artifact, CTA, and demo boundary for each.
+**Goal**: A cold visitor immediately understands the offer, timing promise, and next action.
 
-**Independent Test**: Scan the offers section and confirm all six categories are present with title, summary, business outcome, use cases, CTA, and visual type.
+**Independent Test**: Open the first screen and confirm the business promise, primary CTA, and simplified navigation are visible within 10 seconds.
 
-### Tests for User Story 2
+- [X] T010 [US1] Rewrite `frontend/src/app/features/landing/sections/hero-section.component.*` so the hero leads with `Demo AI w 7 dni`, includes the premium business promise, and keeps the primary CTA clear for non-technical visitors. Acceptance: the hero copy makes the 7-day demo offer obvious before the brand name takes focus.
+- [X] T011 [US1] Simplify the landing navigation labels and anchors in `frontend/src/app/core/content/landing.pl.ts` and `frontend/src/app/features/landing/landing.component.html` so the menu stays within 5-6 understandable items. Acceptance: the nav is shorter, business-friendly, and still reaches every required section.
+- [X] T012 [P] [US1] Add hero and first-screen tests in `frontend/src/app/features/landing/sections/hero-section.component.spec.ts` and `frontend/src/app/features/landing/landing.component.spec.ts`. Acceptance: tests fail if the hero promise, CTA, or simplified navigation is removed or renamed into something defensive.
 
-- [X] T028 [P] [US2] Add productized offer completeness tests in `frontend/src/app/core/content/landing-content.spec.ts`
-- [X] T029 [P] [US2] Add product offers section rendering tests in `frontend/src/app/features/landing/sections/product-offers-section.component.spec.ts`
-
-### Implementation for User Story 2
-
-- [X] T030 [US2] Add all six `ProductizedOffer` entries in `frontend/src/app/core/content/landing.pl.ts`
-- [X] T031 [US2] Create product offers section template in `frontend/src/app/features/landing/sections/product-offers-section.component.html`
-- [X] T032 [US2] Create product offers section logic in `frontend/src/app/features/landing/sections/product-offers-section.component.ts`
-- [X] T033 [US2] Create product offers section styles in `frontend/src/app/features/landing/sections/product-offers-section.component.scss`
-- [X] T034 [US2] Add product offers section to landing composition in `frontend/src/app/features/landing/landing.component.html`
-- [X] T035 [US2] Update navigation anchors for product offers in `frontend/src/app/core/content/landing.pl.ts`
-
-**Checkpoint**: US1 and US2 should work together; existing MVP contact flow remains reachable.
+**Checkpoint**: US1 is independently testable and the page still routes visitors to the existing contact path.
 
 ---
 
-## Phase 5: User Story 3 - Evaluate AI Product Showcases (Priority: P3)
+## Phase 4: User Story 2 - Offer Positioning Cleanup (Priority: P2)
 
-**Goal**: A visitor can inspect presentation-only product visuals for RAG, voice agents, WhatsApp management, email automation, Websites + SEO, and the management panel.
+**Goal**: A visitor can understand the three business offer families without feeling the studio does everything.
 
-**Independent Test**: Review each showcase and confirm the mockup demonstrates a business workflow while clearly stating it is not a live integration or backend system.
+**Independent Test**: Scan the offers section and confirm the three main categories, business outcomes, and scope boundaries are clear.
 
-### Tests for User Story 3
+- [X] T013 [US2] Rework the three main offer families in `frontend/src/app/core/content/landing.pl.ts` and `frontend/src/app/features/landing/sections/product-offers-section.component.*` so they read as knowledge assistant, communication automation, and AI validation demo. Acceptance: the page presents three focused offer families rather than a generic service list.
+- [X] T014 [US2] Update the supporting storytelling in `frontend/src/app/features/landing/sections/showcase-section.component.*` and `frontend/src/app/features/landing/sections/websites-seo-section/websites-seo-section.component.*` so each showcase reinforces the business offer instead of drifting into extra services, and so Websites + SEO stays framed as a supporting service area for AI landing pages and validation pages. Acceptance: showcase copy supports the three-category story, keeps the scope honest, and avoids making Websites + SEO look like a separate broad agency offer.
+- [X] T015 [P] [US2] Add offer-grouping tests in `frontend/src/app/core/content/landing-content.spec.ts` and `frontend/src/app/features/landing/sections/product-offers-section.component.spec.ts`. Acceptance: tests fail if the content stops exposing the three main categories, business outcomes, or scope boundaries.
 
-- [X] T036 [P] [US3] Add showcase content completeness tests in `frontend/src/app/core/content/landing-content.spec.ts`
-- [X] T037 [P] [US3] Add presentation-only visual label tests in `frontend/src/app/features/landing/sections/showcase-section.component.spec.ts`
-- [X] T038 [P] [US3] Add RAG visual accessibility tests in `frontend/src/app/features/landing/visuals/rag-workflow-visual.component.spec.ts`
-- [X] T039 [P] [US3] Add agent panel preview accessibility tests in `frontend/src/app/features/landing/visuals/agent-panel-preview.component.spec.ts`
-- [X] T110 [P] [US3] Add voice waveform visual accessibility and presentation-only label tests in `frontend/src/app/features/landing/visuals/voice-waveform-visual.component.spec.ts`
-- [X] T111 [P] [US3] Add WhatsApp control mockup accessibility and presentation-only label tests in `frontend/src/app/features/landing/visuals/whatsapp-control-visual.component.spec.ts`
-- [X] T112 [P] [US3] Add email pipeline visual accessibility and presentation-only label tests in `frontend/src/app/features/landing/visuals/email-pipeline-visual.component.spec.ts`
-- [X] T113 [P] [US3] Add `websiteSeo` visual type rendering test so it cannot become an unhandled visual type in `frontend/src/app/features/landing/sections/showcase-section.component.spec.ts`
-
-### Implementation for User Story 3
-
-- [X] T040 [US3] Add `ProductShowcase` content for RAG, voice, WhatsApp, email, Websites + SEO, and panel previews in `frontend/src/app/core/content/landing.pl.ts`
-- [X] T041 [US3] Create reusable showcase section template in `frontend/src/app/features/landing/sections/showcase-section.component.html`
-- [X] T042 [US3] Create reusable showcase section logic in `frontend/src/app/features/landing/sections/showcase-section.component.ts`
-- [X] T043 [US3] Create reusable showcase section styles in `frontend/src/app/features/landing/sections/showcase-section.component.scss`
-- [X] T044 [P] [US3] Create RAG workflow visual component in `frontend/src/app/features/landing/visuals/rag-workflow-visual.component.ts`
-- [X] T045 [P] [US3] Create RAG workflow visual template in `frontend/src/app/features/landing/visuals/rag-workflow-visual.component.html`
-- [X] T046 [P] [US3] Create RAG workflow visual styles in `frontend/src/app/features/landing/visuals/rag-workflow-visual.component.scss`
-- [X] T047 [P] [US3] Create voice waveform visual component in `frontend/src/app/features/landing/visuals/voice-waveform-visual.component.ts`
-- [X] T048 [P] [US3] Create voice waveform visual template in `frontend/src/app/features/landing/visuals/voice-waveform-visual.component.html`
-- [X] T049 [P] [US3] Create voice waveform visual styles in `frontend/src/app/features/landing/visuals/voice-waveform-visual.component.scss`
-- [X] T050 [P] [US3] Create WhatsApp control mockup component in `frontend/src/app/features/landing/visuals/whatsapp-control-visual.component.ts`
-- [X] T051 [P] [US3] Create WhatsApp control mockup template in `frontend/src/app/features/landing/visuals/whatsapp-control-visual.component.html`
-- [X] T052 [P] [US3] Create WhatsApp control mockup styles in `frontend/src/app/features/landing/visuals/whatsapp-control-visual.component.scss`
-- [X] T053 [P] [US3] Create email automation pipeline component in `frontend/src/app/features/landing/visuals/email-pipeline-visual.component.ts`
-- [X] T054 [P] [US3] Create email automation pipeline template in `frontend/src/app/features/landing/visuals/email-pipeline-visual.component.html`
-- [X] T055 [P] [US3] Create email automation pipeline styles in `frontend/src/app/features/landing/visuals/email-pipeline-visual.component.scss`
-- [X] T056 [P] [US3] Create agent panel preview component in `frontend/src/app/features/landing/visuals/agent-panel-preview.component.ts`
-- [X] T057 [P] [US3] Create agent panel preview template in `frontend/src/app/features/landing/visuals/agent-panel-preview.component.html`
-- [X] T058 [P] [US3] Create agent panel preview styles in `frontend/src/app/features/landing/visuals/agent-panel-preview.component.scss`
-- [X] T114 [P] [US3] Create Websites + SEO standalone section component in `frontend/src/app/features/landing/sections/websites-seo-section/websites-seo-section.component.ts`
-- [X] T115 [P] [US3] Create Websites + SEO standalone section template in `frontend/src/app/features/landing/sections/websites-seo-section/websites-seo-section.component.html`
-- [X] T116 [P] [US3] Create Websites + SEO standalone section styles in `frontend/src/app/features/landing/sections/websites-seo-section/websites-seo-section.component.scss`
-- [X] T117 [P] [US3] Create `websiteSeo` visual component in `frontend/src/app/features/landing/visuals/website-seo-visual.component.ts`
-- [X] T118 [P] [US3] Create `websiteSeo` visual template in `frontend/src/app/features/landing/visuals/website-seo-visual.component.html`
-- [X] T119 [P] [US3] Create `websiteSeo` visual styles in `frontend/src/app/features/landing/visuals/website-seo-visual.component.scss`
-- [X] T059 [US3] Wire showcase sections and visual components into `frontend/src/app/features/landing/landing.component.ts`
-- [X] T060 [US3] Add showcase sections and the standalone Websites + SEO section to landing composition in `frontend/src/app/features/landing/landing.component.html`
-
-**Checkpoint**: US1-US3 should remain independently testable; all product mockups are presentation-only and no backend integration has been added.
+**Checkpoint**: US2 remains independent and keeps the page focused on the three business offers.
 
 ---
 
-## Phase 6: User Story 4 - Build Trust Through Premium Storytelling (Priority: P4)
+## Phase 5: User Story 3 - Demo-Stage vs Production-Stage Explanation (Priority: P3)
 
-**Goal**: A visitor can assess credibility through premium styling, process clarity, technology/trust content, packages, FAQ, and reduced-motion-friendly scroll experience.
+**Goal**: A visitor sees one clear explanation of what belongs in the demo phase and what is reserved for later production work.
 
-**Independent Test**: Read the page through the trust, sprint, pricing, and FAQ sections and confirm the delivery process, package framing, exclusions, and reduced-motion behavior are clear.
+**Independent Test**: Read the scope section and confirm that the demo boundary is explained once, clearly, and without repeated disclaimers.
 
-### Tests for User Story 4
+- [X] T016 [US3] Add the consolidated `Etap demo vs etap produkcyjny` explanation in `frontend/src/app/core/content/landing.pl.ts` and wire it through `frontend/src/app/features/landing/sections/demo-promise-section.component.*`. Acceptance: one section explains the boundary and the rest of the page does not repeat defensive disclaimers.
+- [X] T017 [P] [US3] Add scope-boundary tests in `frontend/src/app/features/landing/sections/demo-promise-section.component.spec.ts` and `frontend/src/app/core/content/landing-content.spec.ts`. Acceptance: tests fail if the demo-versus-production explanation is missing, duplicated, or softened into vague wording.
 
-- [X] T061 [P] [US4] Add demo sprint content tests in `frontend/src/app/core/content/landing-content.spec.ts`
-- [X] T062 [P] [US4] Add pricing package content tests in `frontend/src/app/core/content/landing-content.spec.ts`
-- [X] T063 [P] [US4] Add FAQ topic coverage tests in `frontend/src/app/core/content/landing-content.spec.ts`
-- [X] T064 [P] [US4] Add FAQ keyboard rendering tests in `frontend/src/app/features/landing/sections/faq-section.component.spec.ts`
-- [X] T065 [P] [US4] Add reduced-motion style guard test or documented check in `frontend/src/app/shared/reveal/reveal-on-scroll.directive.spec.ts`
-
-### Implementation for User Story 4
-
-- [X] T066 [US4] Add `DemoSprintStep`, `StartingPackage`, `FaqItem`, and trust content in `frontend/src/app/core/content/landing.pl.ts`
-- [X] T067 [US4] Create demo sprint section component in `frontend/src/app/features/landing/sections/demo-sprint-section.component.ts`
-- [X] T068 [US4] Create demo sprint section template in `frontend/src/app/features/landing/sections/demo-sprint-section.component.html`
-- [X] T069 [US4] Create demo sprint section styles in `frontend/src/app/features/landing/sections/demo-sprint-section.component.scss`
-- [X] T070 [US4] Create pricing section component in `frontend/src/app/features/landing/sections/pricing-section.component.ts`
-- [X] T071 [US4] Create pricing section template in `frontend/src/app/features/landing/sections/pricing-section.component.html`
-- [X] T072 [US4] Create pricing section styles in `frontend/src/app/features/landing/sections/pricing-section.component.scss`
-- [X] T073 [US4] Create FAQ section component in `frontend/src/app/features/landing/sections/faq-section.component.ts`
-- [X] T074 [US4] Create FAQ section template using accessible disclosure controls in `frontend/src/app/features/landing/sections/faq-section.component.html`
-- [X] T075 [US4] Create FAQ section styles in `frontend/src/app/features/landing/sections/faq-section.component.scss`
-- [X] T076 [US4] Create technology/trust section component in `frontend/src/app/features/landing/sections/trust-section.component.ts`
-- [X] T077 [US4] Create technology/trust section template in `frontend/src/app/features/landing/sections/trust-section.component.html`
-- [X] T078 [US4] Create technology/trust section styles in `frontend/src/app/features/landing/sections/trust-section.component.scss`
-- [X] T079 [US4] Add Radian-inspired section transitions, hover states, and responsive page styling in `frontend/src/app/features/landing/landing.component.scss`
-- [X] T080 [US4] Apply reveal directive to non-critical landing sections in `frontend/src/app/features/landing/landing.component.html`
-- [X] T081 [US4] Add demo sprint, trust, pricing, and FAQ sections to landing composition in `frontend/src/app/features/landing/landing.component.html`
-
-**Checkpoint**: US1-US4 should render as a coherent premium landing page with reduced-motion support.
+**Checkpoint**: US3 is independently testable and keeps the scope honest without overexposing limitations.
 
 ---
 
-## Phase 7: User Story 5 - Submit a Qualified Inquiry Through Existing Contact Flow (Priority: P5)
+## Phase 6: User Story 4 - Example 7-Day Demo Scenario and Pricing/Value Copy (Priority: P4)
 
-**Goal**: A visitor can contact AISoftware Studio through the existing contact flow after selecting a productized service category.
+**Goal**: A visitor sees one concrete 7-day example and understands pricing/package framing as risk reduction.
 
-**Independent Test**: Use CTAs from major sections to reach the contact form, select a new productized project type, submit valid data, and confirm the existing accepted/error behavior is preserved.
+**Independent Test**: Find one concrete demo example and one pricing/package section, then explain the visible result and why the package reduces risk.
 
-### Tests for User Story 5
+- [X] T018 [US4] Add one concrete `Przyklad demo po 7 dniach` scenario in `frontend/src/app/core/content/landing.pl.ts` and `frontend/src/app/features/landing/sections/showcase-section.component.*` so the visitor can see the problem, the visible result, and the decision it supports. Acceptance: the example reads like a business validation story, not a fake case study or production claim.
+- [X] T019 [US4] Reframe package and pricing copy in `frontend/src/app/core/content/landing.pl.ts` and `frontend/src/app/features/landing/sections/pricing-section.component.*` so it explains value, risk reduction, and scope clarity. Acceptance: the package section reads as a starting point for a scoped conversation rather than a mockup-only offer.
+- [X] T020 [US4] Add the demo-sprint section copy and layout in `frontend/src/app/core/content/landing.pl.ts` and `frontend/src/app/features/landing/sections/demo-sprint-section.component.*` so the 7-day validation process is explicit and decision-ready. Acceptance: the section clearly explains the 7-day process, start conditions, client inputs, and deliverables without sounding like a production promise.
+- [X] T021 [US4] Add the trust section copy and layout in `frontend/src/app/core/content/landing.pl.ts` and `frontend/src/app/features/landing/sections/trust-section.component.*` so it focuses on transparent scope, risk reduction, technical realism, and the demo-vs-production boundary. Acceptance: the section contains no fake clients, testimonials, logos, metrics, or production claims.
+- [X] T022 [P] [US4] Add example, pricing, demo-sprint, and trust tests in `frontend/src/app/features/landing/sections/showcase-section.component.spec.ts`, `frontend/src/app/features/landing/sections/pricing-section.component.spec.ts`, `frontend/src/app/features/landing/sections/demo-sprint-section.component.spec.ts`, `frontend/src/app/features/landing/sections/trust-section.component.spec.ts`, and `frontend/src/app/core/content/landing-content.spec.ts`. Acceptance: tests fail if the example demo section, value-based package framing, demo sprint explanation, or trust section disappears or becomes fake or overly defensive.
 
-- [X] T082 [P] [US5] Update contact form option rendering tests in `frontend/src/app/features/contact/contact-form.component.spec.ts`
-- [X] T083 [P] [US5] Update contact API payload type tests in `frontend/src/app/services/contact-api.service.spec.ts`
-- [X] T084 [P] [US5] Add backend schema test for a new productized project type in `backend/tests/unit/test_contact_schema.py`
-- [X] T085 [P] [US5] Add backend contract test for new project type acceptance in `backend/tests/contract/test_contact_contract.py`
-- [X] T120 [P] [US5] Add frontend/backend project type drift validation that fails when values in `frontend/src/app/core/content/contact-options.pl.ts`, `frontend/src/app/services/contact-api.types.ts`, and `backend/app/schemas/contact.py` diverge, using `frontend/src/app/features/contact/contact-form.component.spec.ts` or `backend/tests/contract/test_contact_contract.py`
-- [X] T121 [P] [US5] Add OpenAPI contract validation for `POST /api/contact` project type enum values in `backend/tests/contract/test_contact_contract.py`
-
-### Implementation for User Story 5
-
-- [X] T086 [US5] Add productized project type options in `frontend/src/app/core/content/contact-options.pl.ts`
-- [X] T087 [US5] Update `ProjectType` union with productized values in `frontend/src/app/services/contact-api.types.ts`
-- [X] T088 [US5] Update contact form content import to use split options in `frontend/src/app/features/contact/contact-form.component.ts`
-- [X] T089 [US5] Add matching `ProjectType` enum values in `backend/app/schemas/contact.py`
-- [X] T090 [US5] Update contact intake contract notes if final enum values differ in `specs/002-upgrade-marketing-site/contracts/contact-intake.md`
-- [X] T122 [US5] Add or update feature OpenAPI contract artifact for contact enum values in `specs/002-upgrade-marketing-site/contracts/openapi-contact.yaml`
-- [X] T123 [US5] Verify backend `ProjectType` values match frontend contact form project type values and document the result in `specs/002-upgrade-marketing-site/contracts/contact-intake.md`
-- [X] T124 [US5] Verify generated FastAPI OpenAPI schema for `POST /api/contact` includes the new project type enum values in `specs/002-upgrade-marketing-site/contracts/openapi-contact.yaml`; if backend accepts free text instead of an enum, document that decision and verify no enum drift exists in `specs/002-upgrade-marketing-site/contracts/contact-intake.md`
-- [X] T091 [US5] Create final contact CTA section component in `frontend/src/app/features/landing/sections/contact-cta-section.component.ts`
-- [X] T092 [US5] Create final contact CTA section template using existing `app-contact-form` in `frontend/src/app/features/landing/sections/contact-cta-section.component.html`
-- [X] T093 [US5] Create final contact CTA section styles in `frontend/src/app/features/landing/sections/contact-cta-section.component.scss`
-- [X] T094 [US5] Replace direct contact section markup with contact CTA section in `frontend/src/app/features/landing/landing.component.html`
-- [X] T095 [US5] Update CTA anchors across landing content in `frontend/src/app/core/content/landing.pl.ts`
-
-**Checkpoint**: All user stories are functional; backend behavior is still limited to compatible contact intake.
+**Checkpoint**: US4 remains independently testable and makes the offer feel commercially concrete.
 
 ---
 
-## Phase 8: Polish & Cross-Cutting Validation
+## Phase 7: User Story 5 - FAQ Cleanup and Contact Form Copy/Options (Priority: P5)
 
-**Purpose**: Validate the full feature against accessibility, performance, formatting, and scope boundaries.
+**Goal**: A business visitor can finish the page, understand the key FAQ answers, and contact the studio without technical friction.
 
-- [X] T096 [P] Run frontend lint using `frontend/package.json` script `npm run lint`
-- [X] T097 [P] Run frontend format check using `frontend/package.json` script `npm run format:check`
-- [X] T098 Run frontend unit tests using `frontend/package.json` script `npm test`
-- [X] T099 Run frontend production build using `frontend/package.json` script `npm run build`
-- [X] T100 Run backend tests with `pytest` from `backend/` if `backend/app/schemas/contact.py` changed
-- [X] T101 Run backend lint with `ruff check .` from `backend/` if `backend/app/schemas/contact.py` changed
-- [X] T102 Run backend format check with `ruff format --check .` from `backend/` if `backend/app/schemas/contact.py` changed
-- [X] T103 [P] Verify all required sections from `specs/002-upgrade-marketing-site/spec.md` are rendered in `frontend/src/app/features/landing/landing.component.html`
-- [X] T104 [P] Verify no excluded integrations or dependencies were added by reviewing `frontend/package.json`, `backend/pyproject.toml`, and `backend/app/`
-- [X] T105 [P] Perform keyboard navigation validation documented in `specs/002-upgrade-marketing-site/quickstart.md`
-- [X] T106 [P] Perform reduced-motion validation documented in `specs/002-upgrade-marketing-site/quickstart.md`
-- [X] T107 [P] Perform responsive viewport validation at 390px, 768px, 1024px, and 1440px using `specs/002-upgrade-marketing-site/quickstart.md`
-- [X] T108 [P] Verify Polish-first content and future English-ready structure in `frontend/src/app/core/content/landing.pl.ts` and `frontend/src/app/core/content/landing-content.types.ts`
-- [X] T109 [P] Verify contact contract compatibility against `specs/002-upgrade-marketing-site/contracts/contact-intake.md`
-- [X] T125 [P] BLOCKED/MANUAL: Lighthouse desktop Performance validation could not run in the restricted environment because Lighthouse is not installed or cached; exact manual command and required score >= 90 are documented in `specs/002-upgrade-marketing-site/quickstart.md`
-- [X] T126 [P] BLOCKED/MANUAL: Lighthouse desktop Accessibility validation could not run in the restricted environment because Lighthouse is not installed or cached; exact manual command and required score >= 90 are documented in `specs/002-upgrade-marketing-site/quickstart.md`
-- [X] T127 [P] Document any inability to run Lighthouse automatically plus the exact local manual command in `specs/002-upgrade-marketing-site/quickstart.md`
-- [X] T128 [P] Complete premium design acceptance checklist in `specs/002-upgrade-marketing-site/quickstart.md`
+**Independent Test**: Read the FAQ and contact section, then submit a valid inquiry using the existing contact flow and confirm the labels are understandable.
+
+- [X] T023 [US5] Shorten the FAQ in `frontend/src/app/core/content/landing.pl.ts` and `frontend/src/app/features/landing/sections/faq-section.component.*` so it answers the key buyer concerns directly and keeps disclosure controls accessible. Acceptance: the FAQ is shorter, clearer, and still keyboard friendly.
+- [X] T024 [US5] Review contact form copy and project options in `frontend/src/app/features/contact/contact-form.component.ts`, `frontend/src/app/features/contact/contact-form.component.html`, `frontend/src/app/core/content/contact-options.pl.ts`, and `frontend/src/app/features/landing/sections/contact-cta-section.component.*` so the contact path is understandable to non-technical buyers. Acceptance: the form still uses the existing payload shape and the labels read like business choices.
+- [X] T025 [P] [US5] Add FAQ and contact tests in `frontend/src/app/features/landing/sections/faq-section.component.spec.ts`, `frontend/src/app/features/contact/contact-form.component.spec.ts`, and `frontend/src/app/services/contact-api.service.spec.ts`. Acceptance: tests fail if the FAQ regresses, the contact labels become unclear, or the existing submission shape changes unexpectedly.
+
+**Checkpoint**: US5 is independently testable and the existing contact flow still works.
+
+---
+
+## Phase 8: Polish & Cross-Cutting Concerns
+
+**Purpose**: Final content polish, responsive/accessibility tuning, and release verification across the page.
+
+- [X] T026 Polish the landing copy for correct Polish, diacritics, and premium tone in `frontend/src/app/core/content/landing.pl.ts`. Acceptance: no awkward English-heavy phrasing, typos, or missing diacritics remain in the main landing copy.
+- [X] T027 Polish the contact options and contact CTA wording for premium Polish business tone in `frontend/src/app/core/content/contact-options.pl.ts` and `frontend/src/app/features/landing/sections/contact-cta-section.component.*`. Acceptance: contact choices remain understandable for non-technical buyers and do not sound technical or defensive.
+- [X] T028 Update `frontend/src/app/features/landing/landing.component.scss` and `frontend/src/app/shared/reveal/reveal-on-scroll.directive.ts` so the page shell stays readable, premium, and usable with reduced motion enabled. Acceptance: the shell spacing, typography rhythm, and reveal fallback preserve content access without relying on animation.
+- [X] T029 [P] Add reduced-motion behavior tests in `frontend/src/app/shared/reveal/reveal-on-scroll.directive.spec.ts` and the relevant section specs that use reveal styling. Acceptance: tests cover visible fallback behavior and ensure motion-dependent content is not required to read the page.
+- [X] T030 [P] Add accessibility verification tests in `frontend/src/app/features/landing/landing-a11y.spec.ts` and `frontend/src/app/features/landing/landing-seo.spec.ts` to cover heading order, labels, and landmark structure. Acceptance: tests cover the top-level accessibility and SEO expectations on the landing page.
+- [ ] T031 [P] Add manual browser walkthrough task for desktop, tablet, and mobile widths using `specs/002-upgrade-marketing-site/quickstart.md` as the checklist. Acceptance: the page is reviewed at common viewport sizes and the result is usable without horizontal scrolling.
+- [ ] T032 [P] Add manual keyboard and reduced-motion walkthrough task covering keyboard navigation, CTA visibility, and 10-second comprehension using `specs/002-upgrade-marketing-site/quickstart.md`. Acceptance: the page can be understood quickly and all primary controls remain reachable with visible focus.
+- [X] T033 [P] Record the manual QA outcome in `specs/002-upgrade-marketing-site/quickstart.md` or the projectâ€™s QA notes section if one is used. Acceptance: the documented result matches the executed walkthrough and notes any remaining follow-up.
+- [X] T034 Run the final frontend verification commands from `frontend/` and capture the result in `specs/002-upgrade-marketing-site/quickstart.md` if any manual validation notes changed. Acceptance: lint, format check, test, and build all pass; backend checks remain unnecessary unless contact compatibility files changed unexpectedly.
 
 ---
 
@@ -252,82 +128,43 @@
 
 - **Phase 1 Setup**: No dependencies.
 - **Phase 2 Foundational**: Depends on Phase 1 and blocks all user stories.
-- **Phase 3 US1**: Depends on Phase 2 and is the suggested MVP increment.
-- **Phase 4 US2**: Depends on Phase 2; can run after or alongside US1 once shared content types exist.
-- **Phase 5 US3**: Depends on Phase 2 and benefits from US2 content IDs, but visual components can be built independently.
-- **Phase 6 US4**: Depends on Phase 2; integrates best after US1-US3 for a coherent full page.
-- **Phase 7 US5**: Depends on Phase 2; backend enum work should be coordinated with frontend contact option updates.
+- **Phase 3 US1**: Depends on Phase 2.
+- **Phase 4 US2**: Depends on Phase 2 and the shared content model from Phase 1.
+- **Phase 5 US3**: Depends on Phase 2 and the demo promise content from Phase 1.
+- **Phase 6 US4**: Depends on Phase 2 and benefits from the showcase content established in Phase 4.
+- **Phase 7 US5**: Depends on Phase 2 and the contact option content from Phase 1.
 - **Phase 8 Polish**: Depends on all selected story phases.
 
 ### User Story Dependencies
 
-- **US1 (P1)**: No dependency on other stories after foundation. Delivers the MVP upgrade message.
-- **US2 (P2)**: Uses foundational content types; independent of US3 visuals.
-- **US3 (P3)**: Uses showcase content and visual types; no backend dependency.
-- **US4 (P4)**: Uses shared content and reveal directive; can be tested independently through sprint/pricing/FAQ sections.
-- **US5 (P5)**: Uses existing contact flow; backend changes only if new project type values are submitted.
+- **US1 (P1)**: No dependency on other stories after the foundational shell is complete.
+- **US2 (P2)**: Independent of US3-US5, but uses the shared content model.
+- **US3 (P3)**: Independent of US2 implementation details once the content model exists.
+- **US4 (P4)**: Independent of US5 and can be validated on its own through the example and pricing sections.
+- **US5 (P5)**: Uses the existing contact flow and should not require backend changes because the current enum values already cover the productized options.
 
-### Keep MVP Functional Checkpoints
+### Suggested MVP Scope
 
-- After Phase 2: existing MVP content and contact form still render.
-- After Phase 3: new hero and 7-day promise render, contact path still works.
-- After Phase 4: six offers render, contact path still works.
-- After Phase 5: visuals are presentation-only and no live integrations exist.
-- After Phase 6: full marketing story is present with reduced-motion support.
-- After Phase 7: contact form accepts productized project types without adding database, CRM, auth, or billing.
+- Complete Phase 1, Phase 2, and Phase 3 first to ship the new hero, promise, and navigation.
+- If time is limited, stop after US1 and validate that a cold visitor understands the offer in 10 seconds.
 
----
+### Parallel Opportunities
 
-## Parallel Execution Examples
+- T001-T005 can be split across different files and worked in parallel once the feature direction is agreed.
+- T006-T009 can run in parallel where file ownership does not overlap.
+- T012, T015, T017, T020, T023, and T026 are good parallel test tasks because they live in separate spec files.
 
-### User Story 2
+## Final Verification Commands
 
-```text
-Task: T028 Add productized offer completeness tests in frontend/src/app/core/content/landing-content.spec.ts
-Task: T029 Add product offers section rendering tests in frontend/src/app/features/landing/sections/product-offers-section.component.spec.ts
+Frontend:
+
+```bash
+cd frontend
+npm run lint
+npm run format:check
+npm test
+npm run build
 ```
 
-### User Story 3
-
-```text
-Task: T044 Create RAG workflow visual component in frontend/src/app/features/landing/visuals/rag-workflow-visual.component.ts
-Task: T047 Create voice waveform visual component in frontend/src/app/features/landing/visuals/voice-waveform-visual.component.ts
-Task: T050 Create WhatsApp control mockup component in frontend/src/app/features/landing/visuals/whatsapp-control-visual.component.ts
-Task: T053 Create email automation pipeline component in frontend/src/app/features/landing/visuals/email-pipeline-visual.component.ts
-Task: T056 Create agent panel preview component in frontend/src/app/features/landing/visuals/agent-panel-preview.component.ts
-```
-
-### User Story 5
-
-```text
-Task: T082 Update contact form option rendering tests in frontend/src/app/features/contact/contact-form.component.spec.ts
-Task: T084 Add backend schema test for a new productized project type in backend/tests/unit/test_contact_schema.py
-```
-
----
-
-## Implementation Strategy
-
-### MVP First (US1 Only)
-
-1. Complete Phase 1 and Phase 2.
-2. Complete Phase 3 for the premium hero and "Demo AI w 7 dni" promise.
-3. Run the US1 tests and confirm the existing contact CTA path still reaches `app-contact-form`.
-4. Stop and review before adding the broader product catalog.
-
-### Incremental Delivery
-
-1. Add foundation and content model.
-2. Add US1 hero and 7-day demo promise.
-3. Add US2 product offers.
-4. Add US3 showcase visuals.
-5. Add US4 sprint, pricing, FAQ, trust, and animation polish.
-6. Add US5 contact option compatibility.
-7. Run Phase 8 validation.
-
-### Scope Guardrails
-
-- Do not add real RAG, chatbot, voice, WhatsApp, billing, auth, database, CMS, CRM, payment, or admin backend behavior in any task.
-- Product visuals must remain static frontend presentation components.
-- Backend changes are limited to contact enum compatibility and tests.
+Backend checks are not expected for this feature because `backend/app/schemas/contact.py` should remain unchanged. If a contact contract mismatch is discovered during implementation, run the existing backend validation commands separately.
 

@@ -18,17 +18,14 @@ describe('ProductOffersSectionComponent', () => {
     fixture.detectChanges();
   });
 
-  it('renders all six productized AI offer cards', () => {
+  it('renders all three grouped offer cards', () => {
     const cards = fixture.debugElement.queryAll(By.css('.offer-card'));
 
-    expect(cards.length).toBe(6);
+    expect(cards.length).toBe(3);
     expect(cards.map((card) => card.attributes['id'])).toEqual([
       'rag_chatbot_demo',
-      'website_seo',
-      'voice_agent_demo',
-      'whatsapp_agent_management',
-      'email_automation',
-      'agent_management_panel',
+      'communication_automation',
+      'ai_product_validation',
     ]);
   });
 

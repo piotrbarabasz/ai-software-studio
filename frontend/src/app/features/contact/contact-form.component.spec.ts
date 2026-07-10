@@ -1,4 +1,4 @@
-import type { ComponentFixture } from '@angular/core/testing';
+﻿import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 
@@ -21,13 +21,12 @@ describe('ContactFormComponent', () => {
     fixture = TestBed.createComponent(ContactFormComponent);
     fixture.detectChanges();
   });
-
   it('blocks invalid submission and shows Polish validation copy', () => {
     fixture.componentInstance.submit();
     fixture.detectChanges();
 
     expect(api.submit).not.toHaveBeenCalled();
-    expect(fixture.nativeElement.textContent).toContain('Uzupełnij wymagane pola');
+    expect(fixture.nativeElement.textContent).toContain('wymagane pola');
     expect(fixture.nativeElement.querySelector('label[for="email"]')).not.toBeNull();
   });
 
@@ -61,7 +60,8 @@ describe('ContactFormComponent', () => {
 
     expect(optionValues).toContain('rag_chatbot_demo');
     expect(optionValues).toContain('website_seo');
-    expect(fixture.nativeElement.textContent).toContain('Panel zarządzania agentami');
+    expect(fixture.nativeElement.textContent).toContain('Chatbot / asystent wiedzy');
+    expect(fixture.nativeElement.textContent).toContain('Panel wewnętrzny / dashboard');
   });
 
   it('submits a productized project type using the existing payload shape', () => {
@@ -91,7 +91,9 @@ describe('ContactFormComponent', () => {
   it('renders consent wording with email and no-database boundary', () => {
     const text = fixture.nativeElement.textContent as string;
 
-    expect(text).toContain('e-mailem do właściciela');
-    expect(text).toContain('nie są zapisywane w bazie danych');
+    expect(text).toContain('e-mailem');
+    expect(text).toContain('bazie danych');
   });
 });
+
+

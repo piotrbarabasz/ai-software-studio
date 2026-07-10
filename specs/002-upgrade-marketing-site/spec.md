@@ -1,4 +1,4 @@
-# Feature Specification: Premium Marketing Website Upgrade
+# Feature Specification: Demo AI w 7 dni - Premium Marketing Landing Page
 
 **Feature Branch**: `002-upgrade-marketing-site`
 
@@ -6,189 +6,177 @@
 
 **Status**: Draft
 
-**Input**: User description: "Create a new feature specification for upgrading the existing AISoftware Studio marketing website. The existing project contains a frontend marketing website, backend contact intake API, docs, infra, and specs/001-marketing-site-mvp as the completed MVP baseline. Upgrade the existing Polish-first marketing landing page into a premium AI productized-services landing page inspired by Radian-style product storytelling. AISoftware Studio delivers practical AI demos for companies in 7 days after scope confirmation and after the client provides required materials. The website must advertise RAG chatbot with external knowledge source and cost monitoring, Websites + SEO, Voice agents, WhatsApp-based agent management, Email automation, and Management panel for chatbots and voice agents. This is a marketing and presentation upgrade only; do not implement real RAG backend, chatbot runtime, voice runtime, WhatsApp integration, cost tracking backend, billing, authentication, database, CMS, admin panel backend, production AI integrations, or payment flow. The site may show product mockups, animated diagrams, visual dashboards, fake UI previews, and marketing descriptions, but these must be clearly frontend presentation elements. Keep the existing frontend/backend separation, existing contact form backend compatibility, Polish-first content, SEO, accessibility, and performance focus. Required sections include premium hero, Demo AI w 7 dni value proposition, productized AI offers, RAG chatbot showcase, voice agents showcase, WhatsApp agent management showcase, email automation showcase, Websites + SEO section, agent management panel preview, 7-day demo sprint process, technology/trust, pricing or starting packages, FAQ, and contact CTA using the existing contact flow. Visual direction should feel modern, responsive, animated, premium, and conversion-focused with lightweight animations that support prefers-reduced-motion. Acceptance: within 30 seconds visitors understand the offer, 7-day demo promise, six product categories, what demo in 7 days does and does not mean, and how to contact the studio. The feature should be implemented incrementally and safely on top of the existing MVP."
+**Input**: User description: "Update the AISoftware Studio landing page specification. The page should reposition the offer around 'Demo AI w 7 dni - zanim inwestujesz w pełne wdrożenie.' The landing page must help companies validate AI ideas through a clickable, decision-ready demo before committing budget to full production implementation. The main business offer is: 1) RAG chatbot / asystent wiedzy, 2) automatyzacje komunikacji: e-mail, WhatsApp, voice, and 3) AI product demo / landing / panel for process validation. Websites + SEO is a supporting service area for AI landing pages, demo pages, and product validation pages. The page should lead with the business promise, simplify navigation to 5-6 items, consolidate repeated limitations into one 'Etap demo vs etap produkcyjny' explanation, keep scope transparency with positive framing, include one concrete 'Przykład demo po 7 dniach' section, explain pricing and packages through business value and risk reduction, shorten the FAQ, keep contact options understandable for non-technical business clients, correct Polish copy, and avoid inventing fake clients, testimonials, integrations, production capabilities, or metrics. Preserve responsiveness, accessibility, and the existing build/test baseline. Do not implement code yet."
 
 ## Business Context *(mandatory)*
 
-**Primary Business Outcome**: Lead generation, trust building, and clearer service explanation for productized AI demo services.
+**Primary Business Outcome**: Lead generation, trust building, and clearer service explanation.
 
-**Target Visitor**: Polish-speaking company owner, founder, operations leader, marketing leader, sales leader, or innovation decision maker evaluating practical AI automation demos for their organization.
+**Target Visitor**: Polish-speaking company owner, founder, operations leader, marketing leader, sales leader, or innovation decision maker evaluating whether an AI idea is worth a production investment.
 
-**Conversion or Trust Signal**: A qualified contact request from a visitor who understands the six productized service categories, the 7-day demo sprint promise, required client inputs, and the presentation-only nature of on-page product previews.
+**Conversion or Trust Signal**: A qualified contact request from a visitor who understands the 7-day demo promise, the three main offer areas, the demo-versus-production boundary, and the next step toward a scoped conversation.
 
-**Localization Scope**: Public website content remains Polish-first. Content structure and section naming should remain organized so future English content can be added without redesigning the information architecture.
+**Localization Scope**: Public content remains Polish-first with premium business tone and correct diacritics; information architecture must remain ready for future English content without redesign.
 
 ## User Scenarios & Testing *(mandatory)*
 
-### User Story 1 - Understand the 7-Day AI Demo Offer (Priority: P1)
+### User Story 1 - Understand the offer immediately (Priority: P1)
 
-A first-time visitor lands on the upgraded site and quickly understands that AISoftware Studio builds practical AI demos for companies in 7 days after scope confirmation and receipt of required materials.
+A first-time visitor lands on the page and quickly understands that AISoftware Studio delivers clickable AI demos in 7 days to validate business ideas before a full build.
 
-**Why this priority**: The new positioning is the core business message. If visitors do not understand the offer quickly, the premium visuals and supporting sections cannot convert effectively.
+**Why this priority**: The page must answer "what do you do?" and "why should I care?" within the first few seconds or the rest of the content will not convert.
 
-**Independent Test**: A Polish-speaking business visitor can scan the first screen and value proposition section, then state the offer, delivery timing condition, and primary contact path within 30 seconds.
+**Independent Test**: A cold visitor can scan the hero and primary navigation, then explain the offer, timing promise, and next action within 10 seconds.
 
 **Acceptance Scenarios**:
 
-1. **Given** a first-time visitor opens the website, **When** the first screen loads, **Then** the visitor sees the AISoftware Studio brand, a premium Polish headline about practical AI demos, the 7-day timing promise, and a primary contact CTA.
-2. **Given** a visitor reads the "Demo AI w 7 dni" value proposition, **When** they review the timing details, **Then** they understand that the 7 days start after scope confirmation and after the client provides required materials.
-3. **Given** a visitor wants to take action immediately, **When** they activate the primary CTA, **Then** they are taken to the existing contact flow without losing page context.
+1. **Given** a first-time visitor opens the page, **When** the hero loads, **Then** the visitor sees the business promise, the 7-day demo framing, and a clear contact CTA.
+2. **Given** a visitor reads the main hero copy, **When** they compare the wording with the brand name, **Then** the promise leads the section and the brand supports it instead of replacing it.
+3. **Given** a visitor wants to act immediately, **When** they choose the primary CTA, **Then** they are guided to the existing contact path without needing to understand technical implementation details.
 
 ---
 
-### User Story 2 - Compare Productized AI Offers (Priority: P2)
+### User Story 2 - Compare the main offers (Priority: P2)
 
-A visitor evaluates the productized service categories and identifies which offer fits their business problem.
+A visitor scans the offer section and understands the three business-facing ways AISoftware Studio helps: knowledge assistants, communication automation, and AI product validation demos.
 
-**Why this priority**: The upgraded site must shift from a general services landing page to a productized AI services page that makes specific offer categories easy to compare.
+**Why this priority**: The landing page must feel focused and credible, not like a long list of unrelated capabilities.
 
-**Independent Test**: A visitor can identify all six service categories, understand the business outcome for each, and choose at least one relevant category for a potential inquiry.
+**Independent Test**: A visitor can identify the three primary offer families, plus the supporting Websites + SEO area, and match each one to a business use case.
 
 **Acceptance Scenarios**:
 
-1. **Given** a visitor scans the productized offers section, **When** they review the available offers, **Then** they see RAG chatbot, Websites + SEO, Voice agents, WhatsApp-based agent management, Email automation, and Management panel for chatbots and voice agents.
-2. **Given** a visitor is comparing offers, **When** they read an offer card or section, **Then** each offer includes a concise business outcome, representative use case, and CTA or contact prompt.
-3. **Given** a visitor is unsure whether the offer is a finished production system or a demo, **When** they read productized service copy, **Then** the page makes clear that the advertised 7-day result is a practical demo unless a later production scope is agreed separately.
+1. **Given** a visitor opens the offers section, **When** they review the content, **Then** they see the three main offer areas: RAG chatbot / asystent wiedzy, automatyzacje komunikacji e-mail/WhatsApp/voice, and AI product demo / landing / panel for validation.
+2. **Given** a visitor compares the offers, **When** they read the individual descriptions, **Then** each offer explains the business problem it solves and the expected demo outcome.
+3. **Given** a visitor notices Websites + SEO, **When** they read that supporting area, **Then** they understand it is positioned for AI landing pages, demo pages, and product validation pages rather than as a standalone broad web agency offer.
+4. **Given** a visitor is unsure whether the studio "does everything", **When** they read the offer section, **Then** the page feels focused on validation demos and related business workflows rather than an open-ended services catalog.
 
 ---
 
-### User Story 3 - Evaluate AI Product Showcases (Priority: P3)
+### User Story 3 - Understand demo scope versus production scope (Priority: P3)
 
-A visitor reviews the RAG chatbot, voice agent, WhatsApp management, email automation, and management panel showcases to understand how the demos could work in a real business process.
+A visitor reads one clear explanation of what belongs to the demo phase and what is reserved for the production phase after a separate scope decision.
 
-**Why this priority**: Product storytelling and visual previews build trust by making abstract AI services concrete while staying within the presentation-only scope.
+**Why this priority**: The offer needs honesty and scope transparency, but repeated defensive disclaimers reduce confidence.
 
-**Independent Test**: A visitor can review each showcase and explain what the mockup demonstrates, what business workflow it supports, and that the preview is not a live integration.
+**Independent Test**: A visitor can finish the page and explain the demo boundary without feeling that the offer is hiding behind disclaimers.
 
 **Acceptance Scenarios**:
 
-1. **Given** a visitor views the RAG chatbot showcase, **When** they inspect the visual preview, **Then** they see external knowledge sources and cost monitoring represented as clearly labeled presentation elements.
-2. **Given** a visitor views the voice agents showcase, **When** they read the section and inspect the visual, **Then** they understand example use cases such as qualification, appointment handling, or customer support triage.
-3. **Given** a visitor views the WhatsApp-based management showcase, **When** they review the workflow, **Then** they understand that it presents an agent management concept and not a live WhatsApp integration.
-4. **Given** a visitor views the email automation showcase, **When** they review the workflow, **Then** they understand how demo automation could classify, draft, route, or summarize incoming messages.
-5. **Given** a visitor views the management panel preview, **When** they inspect the dashboard-like visual, **Then** they understand it is a frontend preview for managing chatbot and voice-agent concepts, not a real admin backend.
+1. **Given** a visitor reaches the scope explanation section, **When** they read it, **Then** they see one consolidated "Etap demo vs etap produkcyjny" explanation.
+2. **Given** a visitor looks for exclusions, **When** they compare the page sections, **Then** they find scope transparency in one place instead of repeated negative statements across the whole page.
+3. **Given** a visitor assumes the 7-day result is production-ready, **When** they read the scope explanation, **Then** they understand that the offer is a decision-ready demo used to validate whether a full production investment makes sense.
 
 ---
 
-### User Story 4 - Build Trust Through Premium Storytelling (Priority: P4)
+### User Story 4 - See a concrete example and package framing (Priority: P4)
 
-A visitor assesses the studio's credibility through polished visual storytelling, technology/trust content, process clarity, pricing or starting packages, and FAQ answers.
+A visitor reviews one specific example of what the demo could look like after 7 days and sees starting packages explained in terms of business value and risk reduction.
 
-**Why this priority**: Premium productized services require confidence. The page must feel modern and credible while setting accurate expectations about scope and next steps.
+**Why this priority**: Concrete examples and package framing make the offer feel real, useful, and commercially disciplined.
 
-**Independent Test**: A visitor can complete the page and explain the sprint process, starting-package framing, trust signals, and common exclusions without external clarification.
+**Independent Test**: A visitor can name one example demo outcome, describe the value of the starting package framing, and explain why the trust section reinforces realism instead of hype.
 
 **Acceptance Scenarios**:
 
-1. **Given** a visitor scrolls through the page, **When** sections enter view, **Then** the experience feels polished, responsive, and premium without blocking content access for visitors who prefer reduced motion.
-2. **Given** a visitor reads the 7-day sprint process, **When** they review the steps, **Then** they understand the sequence from inquiry through scope confirmation, material handoff, demo build, review, and next-step proposal.
-3. **Given** a visitor reviews pricing or starting packages, **When** they compare options, **Then** they understand starting engagement levels, what is included at a high level, and that final scope is confirmed before the sprint starts.
-4. **Given** a visitor reads the FAQ, **When** they check common concerns, **Then** they find answers about demo scope, required client materials, exclusions, production readiness, integrations, timeline, and contact.
+1. **Given** a visitor scrolls to the example section, **When** they review it, **Then** they can see one concrete "Przykład demo po 7 dniach" that describes the problem, the visible result, and the business decision it supports.
+2. **Given** a visitor reviews pricing or package information, **When** they compare options, **Then** they understand why a starting package reduces risk and clarifies scope before any larger investment.
+3. **Given** a visitor evaluates the page for credibility, **When** they read the trust and package sections, **Then** they see clear business framing, technical realism, and risk reduction rather than language that makes the offer sound like a throwaway mockup.
 
 ---
 
-### User Story 5 - Submit a Qualified Inquiry Through Existing Contact Flow (Priority: P5)
+### User Story 5 - Contact through business-friendly options (Priority: P5)
 
-A visitor who understands the offer contacts AISoftware Studio using the existing contact intake flow.
+A visitor who understands the offer can contact AISoftware Studio through simple, non-technical communication options.
 
-**Why this priority**: The upgraded presentation must preserve the completed MVP lead-capture path and avoid unnecessary backend scope changes.
+**Why this priority**: The conversion path must be easy for business clients who are not evaluating technical architecture.
 
-**Independent Test**: A visitor can reach the contact CTA from the hero, product offers, process, pricing, FAQ, and final CTA areas, then submit a valid inquiry through the existing contact flow.
+**Independent Test**: A visitor can find and use a contact path from the hero, offer section, example section, packages, FAQ, and final CTA.
 
 **Acceptance Scenarios**:
 
-1. **Given** a visitor is ready to inquire, **When** they use a CTA from any major conversion section, **Then** the site takes them to the existing contact flow.
-2. **Given** a visitor submits valid contact details, **When** the contact flow accepts the inquiry, **Then** the visitor receives the existing Polish confirmation behavior.
-3. **Given** a visitor submits invalid or incomplete contact details, **When** validation runs, **Then** the visitor receives the existing clear Polish validation behavior.
+1. **Given** a visitor is ready to talk, **When** they reach a CTA, **Then** the contact option is understandable without technical knowledge.
+2. **Given** a visitor prefers to know the contact method before committing, **When** they read the contact area, **Then** they understand how to start a conversation in plain business language.
+3. **Given** a visitor submits a valid inquiry, **When** the existing contact flow processes it, **Then** the visitor receives the current confirmation behavior.
 
 ### Edge Cases
 
-- The visitor opens the site on a narrow mobile viewport and all premium visual sections must remain readable without horizontal scrolling.
-- The visitor has reduced-motion preferences enabled and must receive an equivalent content experience without motion-dependent comprehension.
-- The visitor navigates with a keyboard and must be able to reach all CTAs, FAQ controls, contact fields, and interactive previews.
-- The visitor uses a screen reader and must receive meaningful labels for visual previews, diagrams, offer cards, package comparisons, and contact controls.
-- The visitor interprets a mock dashboard, chatbot preview, cost panel, WhatsApp workflow, or voice-agent visual as a real running product.
-- The visitor has slow network conditions and must still see primary content and contact options quickly.
-- A search engine or link preview reads the page without user interaction.
-- The existing contact backend is unavailable and the contact flow must communicate failure without losing the visitor's entered information where practical.
-- A visitor expects a production-ready AI system in 7 days and needs clear copy explaining the demo boundary and next-step production scope.
-- A visitor has not yet prepared source materials, brand assets, access examples, or process descriptions needed to start the 7-day demo sprint.
+- The visitor opens the page on a narrow mobile viewport and the page remains readable without horizontal scrolling.
+- The visitor prefers reduced motion and still receives the full message without depending on animations.
+- The visitor uses a keyboard or screen reader and can reach navigation, CTAs, accordions, and contact controls with understandable labels.
+- The visitor reads the page quickly and must still understand the offer without scrolling through repeated exclusions.
+- The visitor interprets a product preview, dashboard, or workflow illustration as a live system.
+- The visitor loads the site on a slow connection and must still reach the primary message and contact option quickly.
+- The visitor expects the 7-day promise to mean full production delivery and needs the page to clarify the demo boundary.
+- The page is shared in a search preview or link preview and must still communicate the premium business offer.
+- The visitor needs to understand that Websites + SEO is a supporting service area for AI landing pages and product validation pages, not a separate broad agency offer.
 
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
 
-- **FR-001**: System MUST upgrade the existing AISoftware Studio marketing website rather than create a separate new application or unrelated landing page.
-- **FR-002**: System MUST present a premium hero section with the AISoftware Studio brand, practical AI demo positioning, 7-day demo promise, and primary contact CTA.
-- **FR-003**: System MUST include a "Demo AI w 7 dni" value proposition that explains the timing starts after scope confirmation and after the client provides required materials.
-- **FR-004**: System MUST present all six productized service categories: RAG chatbot with external knowledge source and cost monitoring, Websites + SEO, Voice agents, WhatsApp-based agent management, Email automation, and Management panel for chatbots and voice agents.
-- **FR-005**: System MUST describe each service category with a business outcome, representative use case, expected demo artifact, and contact prompt.
-- **FR-006**: System MUST include a RAG chatbot showcase that presents external knowledge sources and cost monitoring as clearly labeled visual or narrative demo concepts.
-- **FR-007**: System MUST include a voice agents showcase that explains practical business uses and demo expectations without implying a live production voice runtime.
-- **FR-008**: System MUST include a WhatsApp agent management showcase that presents the management workflow as a demo concept without implying a live messaging platform integration.
-- **FR-009**: System MUST include an email automation showcase that explains example routing, drafting, classification, or summarization workflows as demo concepts.
-- **FR-010**: System MUST include a Websites + SEO section explaining how website delivery and search visibility fit the productized services offer.
-- **FR-011**: System MUST include an agent management panel preview for chatbot and voice-agent concepts, clearly presented as a frontend visual preview rather than a real administrative system.
-- **FR-012**: System MUST include a 7-day demo sprint process showing inquiry, scope confirmation, required material handoff, demo build, review, and next-step recommendation.
-- **FR-013**: System MUST include a technology/trust section that builds confidence in delivery capability without overclaiming live integrations or production infrastructure.
-- **FR-014**: System MUST include a pricing or starting packages section that helps visitors understand entry-level engagement options and that final scope is confirmed before work starts.
-- **FR-015**: System MUST include an FAQ section covering demo scope, required client materials, timeline start conditions, production exclusions, integrations, ownership or handoff expectations, and contact next steps.
-- **FR-016**: System MUST include a final contact CTA section that uses the existing contact flow and preserves existing contact intake compatibility.
-- **FR-017**: System MUST make contact CTAs available from the hero, offer comparison, major showcases, sprint process, pricing or package area, FAQ, and final CTA.
-- **FR-018**: System MUST keep all public-facing content Polish-first while preserving a content structure that can support English later.
-- **FR-019**: System MUST support SEO-friendly discovery with meaningful page title, description, headings, structured content hierarchy, and crawlable primary copy.
-- **FR-020**: System MUST target accessible navigation and content comprehension, including semantic structure, visible focus states, sufficient contrast, keyboard operation, and understandable labels for visual previews and controls.
-- **FR-021**: System MUST remain fully responsive across common mobile, tablet, laptop, and desktop viewport widths.
-- **FR-022**: System MUST use motion and reveal effects only as progressive enhancement, and the same meaning MUST remain available when reduced-motion preferences are enabled.
-- **FR-023**: System MUST keep animations lightweight enough that they do not block primary content, contact access, or page usability on common business devices.
-- **FR-024**: System MUST clearly label product mockups, animated diagrams, visual dashboards, cost views, chatbot previews, voice-agent previews, WhatsApp workflow previews, email automation previews, and management panel previews as presentation elements or demo concepts where confusion is reasonably possible.
-- **FR-025**: System MUST NOT implement real RAG backend behavior, live chatbot runtime, live voice-agent runtime, live WhatsApp integration, real cost tracking backend, billing, authentication, database, CMS, admin panel backend, production AI integrations, or payment flow as part of this feature.
-- **FR-026**: System MUST preserve the existing frontend/backend separation and must not introduce new public backend behavior unless required to preserve the existing contact flow.
-- **FR-027**: System MUST preserve existing contact validation, confirmation, error, and delivery expectations from the completed MVP unless a later plan explicitly documents a compatible enhancement.
-- **FR-028**: System MUST support incremental implementation so individual sections can be added, reviewed, and tested without replacing the completed MVP all at once.
+- **FR-001**: System MUST present the hero with the business promise first, including the 7-day demo positioning, before the brand name becomes the main message.
+- **FR-002**: System MUST keep the primary navigation simple with no more than 6 items and must use labels that a non-technical business visitor can understand.
+- **FR-003**: System MUST include the three main offer areas: RAG chatbot / asystent wiedzy, automatyzacje komunikacji e-mail/WhatsApp/voice, and AI product demo / landing / panel for validation.
+- **FR-004**: System MUST include one consolidated "Etap demo vs etap produkcyjny" explanation that covers scope transparency without repeating defensive disclaimers throughout the page.
+- **FR-005**: System MUST include one concrete "Przykład demo po 7 dniach" section that shows the visible demo outcome, the business problem it addresses, and the decision it helps the client make.
+- **FR-006**: System MUST present pricing or starting package information in terms of business value, risk reduction, and scope clarity rather than as a mockup-only or demo-only offer.
+- **FR-007**: System MUST shorten the FAQ so it answers the most important buyer concerns directly and confidently.
+- **FR-008**: System MUST present contact options in plain business language that is understandable to non-technical visitors.
+- **FR-009**: System MUST keep Polish copy premium, corrected for diacritics and typos, and aligned with a business website tone.
+- **FR-010**: System MUST NOT invent fake clients, fake testimonials, fake integrations, fake production capabilities, or fake metrics.
+- **FR-011**: System MUST preserve existing responsiveness, accessibility, and keyboard usability across common viewport sizes and assistive-technology use.
+- **FR-012**: System MUST preserve the existing contact flow and its compatibility while allowing the landing page copy and structure to change.
+- **FR-013**: System MUST support SEO-friendly page structure and discoverability through clear headings, meaningful section order, and readable public copy.
+- **FR-014**: System MUST use motion only as progressive enhancement, and the same meaning MUST remain available when reduced-motion preferences are enabled.
+- **FR-015**: System MUST keep the page focused on validation demos and related business workflows rather than presenting an unfocused list of unrelated services.
+- **FR-016**: System MUST include a dedicated 7-day demo sprint section that explains the validation process, start conditions, and decision-ready deliverables.
+- **FR-017**: System MUST include a trust section focused on transparent scope, risk reduction, technical realism, the demo-vs-production boundary, and decision-ready deliverables without fake clients, testimonials, logos, metrics, or production claims.
+- **FR-018**: System MUST include Websites + SEO as a supporting service area for AI landing pages, demo pages, and product validation pages rather than as one of the three primary offer families.
 
 ### Constitution Constraints *(mandatory)*
 
-- **Complexity Justification**: None. This is a presentation and marketing upgrade. CMS, authentication, database, billing, payment, live AI integrations, real cost tracking, production chatbot or voice runtimes, and admin backend functionality are excluded.
-- **API Contract Impact**: No new API capability is required. The existing contact intake flow must remain compatible and usable from the upgraded contact CTAs.
-- **Security Impact**: Public input handling remains limited to the existing contact flow. The upgraded site must avoid collecting new sensitive data through mockups, previews, or presentation-only controls.
-- **Deployment Impact**: The upgrade affects the public website presentation and must preserve independent frontend and backend deployability. No new persistent infrastructure is introduced.
-- **Accessibility & Performance Impact**: The upgraded experience must remain responsive, keyboard accessible, screen-reader understandable, readable with sufficient contrast, usable with reduced motion, SEO-friendly, and fast enough that premium visuals do not delay core message comprehension or contact access.
+- **Complexity Justification**: None. This is a presentation and marketing update focused on positioning, clarity, and conversion.
+- **API Contract Impact**: None beyond preserving compatibility with the existing contact flow.
+- **Security Impact**: Public interaction remains limited to the existing contact path; the page must not introduce new sensitive-data collection through previews or mockups.
+- **Deployment Impact**: The frontend presentation changes must remain independently deployable and must not require new production backend capabilities.
+- **Accessibility & Performance Impact**: The page must remain responsive, keyboard accessible, readable with sufficient contrast, usable with reduced motion, and fast enough that the core offer is understandable quickly.
 
 ### Key Entities *(include if feature involves data)*
 
-- **Productized Service Offer**: A public offer category with name, business outcome, representative use case, expected demo artifact, scope boundary, and CTA.
-- **Demo Sprint**: A seven-day delivery process that starts only after scope confirmation and receipt of required client materials, ending with a practical demo and next-step recommendation.
-- **Presentation Mockup**: A non-functional visual element such as a dashboard, chatbot preview, cost view, workflow diagram, panel preview, or automation preview used to explain a service concept.
-- **Starting Package**: A public pricing or package entry that frames an initial engagement level, broad included outcomes, assumptions, and contact path for final scope confirmation.
-- **FAQ Item**: A question and answer that resolves common buyer objections or scope misunderstandings about demos, materials, exclusions, integrations, production readiness, and contact.
-- **Contact Inquiry**: The existing lead-capture submission used by visitors who want to discuss a productized demo or website engagement.
+- **Demo Offer**: A public-facing service area with a business problem, visible outcome, scope boundary, and contact path.
+- **Demo vs Production Explanation**: A single page section that explains what belongs in the validation phase and what belongs in a later production phase.
+- **Example Demo**: One concrete seven-day scenario showing the kind of decision-ready result a client can expect.
+- **Starting Package**: An entry-level commercial framing for a scoped conversation, presented as value and risk reduction rather than a fake final price.
+- **FAQ Item**: A short question-and-answer pair that removes buyer hesitation without sounding defensive.
+- **Contact Inquiry**: The existing lead-capture path used by a visitor who wants to continue the conversation.
 
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
 
-- **SC-001**: At least 90% of test visitors can state within 30 seconds that AISoftware Studio builds practical AI demos for companies in 7 days after scope confirmation and receipt of required materials.
-- **SC-002**: At least 90% of test visitors can identify all six productized service categories after scanning the offer section.
-- **SC-003**: At least 90% of test visitors can explain what "demo in 7 days" means and name at least two excluded production capabilities after reading the value proposition, process, or FAQ.
-- **SC-004**: At least 90% of test visitors can find a contact CTA from the first screen and from the final CTA section without external instructions.
-- **SC-005**: 100% of required page sections are present: premium hero, "Demo AI w 7 dni", productized AI offers, RAG chatbot showcase, voice agents showcase, WhatsApp agent management showcase, email automation showcase, Websites + SEO, agent management panel preview, 7-day sprint process, technology/trust, pricing or starting packages, FAQ, and contact CTA.
-- **SC-006**: 100% of presentation mockups that could be mistaken for live software are labeled or described as demo concepts, frontend previews, or presentation elements.
-- **SC-007**: 100% of primary CTAs, FAQ controls, contact fields, and interactive preview controls are keyboard reachable and have understandable labels.
-- **SC-008**: The page remains readable and usable without horizontal scrolling on common mobile, tablet, laptop, and desktop viewport widths.
-- **SC-009**: Visitors with reduced-motion preferences can access the same information and conversion paths without motion-dependent content.
-- **SC-010**: Search and link previews can identify the brand, productized AI demo positioning, Polish service description, and contact intent from page metadata and headings.
-- **SC-011**: The upgraded page keeps the existing valid contact inquiry path working for all required contact fields and preserves clear Polish success and validation feedback.
-- **SC-012**: Primary content and first contact CTA are visible or reachable quickly enough that a test visitor can begin contact within 30 seconds on a typical business mobile connection.
+- **SC-001**: At least 90% of test visitors can state within 10 seconds that AISoftware Studio helps companies validate AI ideas with a clickable demo in 7 days before a larger production commitment.
+- **SC-002**: At least 90% of test visitors can identify the three main offer areas after scanning the hero and offer section.
+- **SC-003**: At least 90% of test visitors can explain the difference between the demo phase and the production phase after reading the consolidated scope explanation.
+- **SC-004**: At least 90% of test visitors can point to one concrete "Przykład demo po 7 dniach" and describe the business decision it supports.
+- **SC-005**: At least 90% of test visitors can describe the package framing as a risk-reduction step rather than a vague mockup-only offer.
+- **SC-006**: 100% of required public sections are present: hero, navigation, main offers, demo-versus-production explanation, example demo, packages, FAQ, and contact CTA.
+- **SC-007**: 100% of primary CTAs, navigation links, FAQ controls, and contact controls are keyboard reachable and have understandable labels.
+- **SC-008**: The page remains readable and usable across common mobile, tablet, laptop, and desktop viewport widths without horizontal scrolling.
+- **SC-009**: Visitors with reduced-motion preferences can access the same content and conversion path without relying on motion to understand the offer.
+- **SC-010**: Search and link previews can identify the brand, the premium AI demo positioning, the Polish-language business offer, and the contact intent from page metadata and visible headings.
+- **SC-011**: The existing valid contact inquiry path continues to work after the landing page content update.
+- **SC-012**: Test visitors can find a clear contact CTA from the hero and at least one later conversion section without external instructions.
+- **SC-013**: Test visitors can identify the 7-day demo sprint section and summarize the validation process after reading it.
+- **SC-014**: Test visitors can identify the trust section and explain that it reinforces scope transparency, risk reduction, and technical realism without fake proof points.
+- **SC-015**: Test visitors can explain that Websites + SEO is a supporting service area for AI landing pages, demo pages, and product validation pages.
 
 ## Assumptions
 
-- The completed MVP is the baseline and remains the foundation for this upgrade.
-- The upgraded experience remains a single cohesive marketing landing page with section navigation unless a later plan proves that multiple pages are necessary.
-- "Radian-style" means premium product storytelling quality, contrast, polished typography, product-like visuals, section transitions, and conversion-focused narrative rather than copying proprietary content or branding.
-- Product previews, diagrams, dashboards, and workflow visuals are presentation-only assets used to explain concepts and are not connected to live AI systems.
-- The 7-day sprint promise applies to a practical demo after scope confirmation and required material handoff, not to full production deployment.
-- Required client materials may include documents, website or brand content, process examples, sample messages, knowledge sources, integration context, business rules, or access details needed for a scoped demo.
-- Pricing or starting packages can be framed as starting points, ranges, or package tiers as long as final scope confirmation remains clear.
-- Existing contact form fields and backend behavior are sufficient for this feature; any contact-form copy adjustments must stay compatible with existing intake expectations.
-- SEO, accessibility, and performance are release criteria for the upgraded marketing presentation, not optional polish.
+- The completed MVP remains the baseline and the existing contact path continues to be the primary conversion mechanism.
+- The page is a single cohesive landing page with simplified section navigation rather than a multi-page marketing site.
+- "Demo AI w 7 dni" means a clickable, decision-ready validation demo, not a full production deployment.
+- The page may use product visuals, dashboard previews, and workflow illustrations as presentation elements, but only when they are clearly framed as demo concepts.
+- Any package or pricing framing can be presented as a starting point, range, or engagement entry, provided it does not pretend to be a final production quote.
+- Real clients, testimonials, integrations, metrics, and production capabilities must not be invented if they are not already verified and available for publication.
+- Polish wording quality is part of the release standard, not a later polish task.

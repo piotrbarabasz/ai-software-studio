@@ -159,6 +159,11 @@ main > * + * {
   margin-top: 2.2rem;
 }
 
+.demo-example-grid {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 860px;
+}
+
 .service-card,
 .example-card,
 .technology-item {
@@ -175,6 +180,23 @@ main > * + * {
 .service-card,
 .example-card {
   padding: 1.4rem;
+}
+
+.demo-example-card {
+  display: grid;
+  gap: 1rem;
+}
+
+.demo-example-card > div {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.demo-example-card ul {
+  display: grid;
+  gap: 0.45rem;
+  padding-left: 1.1rem;
+  margin: 0.1rem 0 0;
 }
 
 .service-card:hover,

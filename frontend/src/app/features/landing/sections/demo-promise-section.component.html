@@ -9,23 +9,18 @@
 
     <div class="promise-columns">
       <article>
-        <h3>Start sprintu</h3>
+        <h3>{{ content.demoStageTitle }}</h3>
         <ul>
-          <li *ngFor="let item of content.startsAfter">{{ item }}</li>
+          <li *ngFor="let item of content.demoStagePoints">{{ item }}</li>
         </ul>
       </article>
       <article>
-        <h3>W zakresie demo</h3>
+        <h3>{{ content.productionStageTitle }}</h3>
         <ul>
-          <li *ngFor="let item of content.includes">{{ item }}</li>
-        </ul>
-      </article>
-      <article class="boundary">
-        <h3>Nie obejmuje</h3>
-        <ul>
-          <li *ngFor="let item of content.notIncluded">{{ item }}</li>
+          <li *ngFor="let item of content.productionStagePoints">{{ item }}</li>
         </ul>
       </article>
     </div>
+    <p class="scope-note">{{ content.closingNote }}</p>
   </div>
 </section>
