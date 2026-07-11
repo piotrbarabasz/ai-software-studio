@@ -25,7 +25,7 @@ export class SiteShellComponent implements OnInit {
 
   readonly navigation = siteContent.navigation;
   readonly contactPath = '/kontakt';
-  readonly primaryCtaLabel = 'Umów zakres demo';
+  readonly primaryCtaLabel = 'Omów projekt';
 
   isMobileNavigationOpen = false;
 

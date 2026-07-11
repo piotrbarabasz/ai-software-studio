@@ -93,6 +93,47 @@ export interface NavigationItem {
 export type ProductApplications =
   readonly [string, string, string] | readonly [string, string, string, string];
 
+export interface HomeWorkTrack {
+  readonly title: string;
+  readonly lead: string;
+  readonly bullets: readonly string[];
+  readonly ctaLabel: string;
+  readonly ctaPath: PublicRoutePath;
+}
+
+export interface HomeSolutionGroup {
+  readonly title: string;
+  readonly lead: string;
+  readonly bullets: readonly string[];
+}
+
+export interface HomeJourneyStep {
+  readonly title: string;
+  readonly lead: string;
+}
+
+export interface HomeTeaser {
+  readonly eyebrow: string;
+  readonly title: string;
+  readonly lead: string;
+  readonly bullets: readonly string[];
+  readonly ctaLabel: string;
+  readonly ctaPath: PublicRoutePath;
+}
+
+export interface HomeResearchTeaser {
+  readonly eyebrow: string;
+  readonly title: string;
+  readonly lead: string;
+  readonly items: readonly string[];
+}
+
+export interface HomeClosingCta {
+  readonly label: string;
+  readonly lead: string;
+  readonly queryParams?: Readonly<Record<string, string>>;
+}
+
 export interface ProductCatalogEntry<TProductId extends ProductId = ProductId> {
   readonly id: TProductId;
   readonly path: ProductRoutePathFor<TProductId>;
@@ -116,6 +157,18 @@ export interface HomePageContent {
   readonly primaryCta: string;
   readonly secondaryCta: string;
   readonly highlights: readonly string[];
+  readonly workTracks: readonly [HomeWorkTrack, HomeWorkTrack];
+  readonly solutionGroups: readonly HomeSolutionGroup[];
+  readonly journeySteps: readonly [
+    HomeJourneyStep,
+    HomeJourneyStep,
+    HomeJourneyStep,
+    HomeJourneyStep,
+    HomeJourneyStep,
+  ];
+  readonly studioTeaser: HomeTeaser;
+  readonly researchTeaser: HomeResearchTeaser;
+  readonly closingCtas: readonly [HomeClosingCta, HomeClosingCta];
   readonly featuredProducts: readonly ProductRoutePath[];
 }
 

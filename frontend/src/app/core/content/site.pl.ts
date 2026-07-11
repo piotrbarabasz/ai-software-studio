@@ -266,12 +266,122 @@ export const siteContent = {
     title: 'Sprawdzaj AI przez klikalne demo, zanim zbudujesz produkcję.',
     subtitle:
       'Najpierw walidujemy przepływ, wartość i zakres. Dopiero potem projektujemy backend, integracje i dalsze wdrożenie.',
-    primaryCta: 'Umów zakres demo',
-    secondaryCta: 'Zobacz produkty',
+    primaryCta: 'Zacznij od demo',
+    secondaryCta: 'Omów rozwój aplikacji',
     highlights: [
-      'publiczne strony prowadzące do jednego kontaktu',
-      'produkty podzielone według scenariusza i ryzyka',
-      'jasna granica między demo a produkcją',
+      'szybka walidacja pomysłu przez demo lub PoC',
+      'odrębna ścieżka do budowy pełnej aplikacji produkcyjnej',
+      'R&D jako zaplecze kompetencji, a nie osobny pakiet sprzedażowy',
+    ],
+    workTracks: [
+      {
+        title: 'Zweryfikuj pomysł',
+        lead: 'Demo lub PoC w maksymalnie siedem dni dla jednego, ograniczonego scenariusza. To dobry format dla presales, zarządu, inwestora albo wniosku grantowego.',
+        bullets: [
+          'jasny rezultat i granice zakresu',
+          'materiał do podjęcia decyzji biznesowej',
+          'bez obietnicy produkcyjnego MVP w 7 dni',
+        ],
+        ctaLabel: 'Zacznij od demo',
+        ctaPath: '/demo-w-7-dni',
+      },
+      {
+        title: 'Zbuduj produkt',
+        lead: 'Po udanej walidacji można zaprojektować i rozwijać pełną aplikację: od UX i architektury, przez frontend i backend, po AI, integracje, testy i utrzymanie.',
+        bullets: [
+          'indywidualny zakres i plan rozwoju',
+          'produkcyjna jakość, monitoring i bezpieczeństwo',
+          'iteracje dopasowane do etapu projektu',
+        ],
+        ctaLabel: 'Omów rozwój aplikacji',
+        ctaPath: '/kontakt',
+      },
+    ],
+    solutionGroups: [
+      {
+        title: 'Obsługa klienta i sprzedaż',
+        lead: 'Asystenci wiedzy, chatboty, voice agents i kwalifikacja leadów pomagają szybciej odpowiadać i lepiej domykać rozmowy.',
+        bullets: [
+          'asystenci wiedzy i RAG',
+          'chatboty i kwalifikacja leadów',
+          'voice agents wspierające rozmowę',
+        ],
+      },
+      {
+        title: 'Automatyzacja operacji',
+        lead: 'AI może odciążyć zespół z powtarzalnych zadań i połączyć komunikację z procesami wewnętrznymi.',
+        bullets: [
+          'automatyzacja e-maili',
+          'sterowanie procesami przez WhatsApp',
+          'agenci wykonujący zadania i integracje między systemami',
+        ],
+      },
+      {
+        title: 'Aplikacje i kontrola',
+        lead: 'Dedykowane aplikacje webowe, dashboardy i backendy porządkują przepływ pracy po stronie operacyjnej.',
+        bullets: [
+          'dedykowane aplikacje webowe',
+          'panele zarządzania agentami i dashboardy',
+          'backendy, API oraz narzędzia administracyjne',
+        ],
+      },
+    ],
+    journeySteps: [
+      {
+        title: 'Pomysł',
+        lead: 'Wybieramy jeden proces, jedną hipotezę i jeden oczekiwany efekt biznesowy.',
+      },
+      {
+        title: 'Demo / PoC',
+        lead: 'Sprawdzamy flow, wartość i granice zakresu bez udawania pełnej produkcji.',
+      },
+      {
+        title: 'MVP',
+        lead: 'Po walidacji projektujemy pierwszy indywidualny etap rozwoju produktu.',
+      },
+      {
+        title: 'Produkcja',
+        lead: 'Dostarczamy aplikację, backend, integracje, testy, monitoring i bezpieczeństwo.',
+      },
+      {
+        title: 'Dalszy rozwój i R&D',
+        lead: 'Eksperymenty z agentami, ewaluacją i automatyzacją wracają do projektów klientów.',
+      },
+    ],
+    studioTeaser: {
+      eyebrow: 'Studio',
+      title: 'Partner techniczny, który rozdziela demo od produkcji',
+      lead: 'Za projekt odpowiada jedno studio, a nie fikcyjna agencja. Współpraca jest prowadzona w krótkich iteracjach, z jasnym zakresem, kontrolą kosztów i czytelną granicą odpowiedzialności.',
+      bullets: [
+        'ustalony zakres, krótkie iteracje i decyzja po każdym etapie',
+        'semantyczny frontend, jawne kontrakty i dokumentacja',
+        'bezpieczne rozdzielenie prototypu, produkcji i utrzymania',
+      ],
+      ctaLabel: 'Poznaj sposób pracy',
+      ctaPath: '/studio',
+    },
+    researchTeaser: {
+      eyebrow: 'R&D',
+      title: 'Zaplecze eksperymentów dla projektów klientów',
+      lead: 'Studio testuje rozwiązania, które mogą później obniżać koszt i podnosić jakość wdrożeń.',
+      items: [
+        'automatyzacja pracy agentów programistycznych',
+        'kontrola kosztów i jakości systemów RAG',
+        'zarządzanie agentami przez komunikatory',
+        'automatyczna ewaluacja odpowiedzi i nowe wzorce orkiestracji',
+      ],
+    },
+    closingCtas: [
+      {
+        label: 'Mam pomysł do szybkiego zweryfikowania',
+        lead: 'Przekieruje do kontaktu z kontekstem demo / PoC.',
+        queryParams: { projectType: 'mvp_prototype' },
+      },
+      {
+        label: 'Szukam partnera do rozwoju aplikacji',
+        lead: 'Przekieruje do kontaktu z kontekstem rozwoju produktu.',
+        queryParams: { projectType: 'custom_web_app' },
+      },
     ],
     featuredProducts: products.map((product) => product.path),
   },

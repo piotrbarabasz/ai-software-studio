@@ -101,6 +101,12 @@ describe('Site content model', () => {
     expect(siteContent.home.path).toBe('/');
     expect(siteContent.home.featuredProducts.length).toBe(6);
     expect(siteContent.home.highlights.length).toBeGreaterThanOrEqual(3);
+    expect(siteContent.home.workTracks.length).toBe(2);
+    expect(siteContent.home.solutionGroups.length).toBe(3);
+    expect(siteContent.home.journeySteps.length).toBe(5);
+    expect(siteContent.home.studioTeaser.bullets.length).toBeGreaterThanOrEqual(3);
+    expect(siteContent.home.researchTeaser.items.length).toBeGreaterThanOrEqual(4);
+    expect(siteContent.home.closingCtas.length).toBe(2);
 
     expect(siteContent.demo.path).toBe('/demo-w-7-dni');
     expect(siteContent.demo.includes.length).toBeGreaterThanOrEqual(3);
