@@ -46,13 +46,18 @@
       id="projectType"
       formControlName="projectType"
       [attr.aria-invalid]="isInvalid('projectType')"
-      [attr.aria-describedby]="isInvalid('projectType') ? 'project-type-error' : null"
+      [attr.aria-describedby]="
+        isInvalid('projectType') ? 'project-type-hint project-type-error' : 'project-type-hint'
+      "
     >
       <option value="">Wybierz typ projektu</option>
       <option *ngFor="let option of content.projectTypes" [value]="option.value">
         {{ option.label }}
       </option>
     </select>
+    <p id="project-type-hint" class="field-hint">
+      Wybór typu projektu zachowuje kontekst formularza, ale nie zmienia wysyłanego payloadu.
+    </p>
     <p *ngIf="isInvalid('projectType')" id="project-type-error" class="field-error">
       {{ errorFor('projectType') }}
     </p>

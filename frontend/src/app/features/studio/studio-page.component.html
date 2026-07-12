@@ -67,6 +67,33 @@
 
   <app-trust-section [content]="content.trust" />
 
+  <section class="section-shell section-muted" aria-labelledby="research-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">R&D</p>
+      <h2 id="research-title">Zaplecze eksperymentów dla projektów klientów</h2>
+      <p class="page-lead">
+        Studio testuje rozwiązania, które mogą później obniżać koszt i podnosić jakość wdrożeń.
+      </p>
+    </div>
+
+    <div class="approach-grid">
+      <article>
+        <h3>Obszary eksperymentów</h3>
+        <ul>
+          <li>automatyzacja pracy agentów programistycznych</li>
+          <li>kontrola kosztów i jakości systemów RAG</li>
+          <li>zarządzanie agentami przez komunikatory</li>
+          <li>automatyczna ewaluacja odpowiedzi i nowe wzorce orkiestracji</li>
+        </ul>
+      </article>
+      <article>
+        <h3>Jak wraca do projektów klientów</h3>
+        <p>{{ routeContent.engagementModel[3] }}</p>
+        <p>{{ content.about.body }}</p>
+      </article>
+    </div>
+  </section>
+
   <section class="section-shell" aria-labelledby="approach-title" appRevealOnScroll>
     <div class="section-heading">
       <p class="eyebrow">Sposób pracy</p>
@@ -90,5 +117,27 @@
     </div>
   </section>
 
-  <app-contact-cta-section [content]="content.contact" />
+  <section class="section-shell section-muted" aria-labelledby="contact-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">Kontakt</p>
+      <h2 id="contact-title">{{ content.contact.title }}</h2>
+      <p class="page-lead">{{ content.contact.lead }}</p>
+    </div>
+
+    <div class="approach-grid">
+      <article>
+        <h3>Co przygotować</h3>
+        <ul>
+          <li>opis procesu lub problemu do sprawdzenia</li>
+          <li>przykładowe materiały i oczekiwany rezultat</li>
+          <li>jedną osobę decyzyjną do kontaktu</li>
+        </ul>
+      </article>
+      <article>
+        <h3>Start rozmowy</h3>
+        <p>{{ content.contact.consent }}</p>
+        <a class="primary-action" routerLink="/kontakt">{{ content.contact.submit }}</a>
+      </article>
+    </div>
+  </section>
 </main>

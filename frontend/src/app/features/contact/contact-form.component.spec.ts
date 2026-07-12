@@ -3,6 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { BehaviorSubject, of } from 'rxjs';
 
+import { contactIntentOptions, projectTypeOptions } from '../../core/content/contact-options.pl';
 import { ContactApiService } from '../../services/contact-api.service';
 import { ContactFormComponent } from './contact-form.component';
 
@@ -10,6 +11,10 @@ describe('ContactFormComponent', () => {
   const projectTypeParams$ = new BehaviorSubject(
     convertToParamMap({ projectType: 'rag_chatbot_demo' }),
   );
+
+  afterEach(() => {
+    projectTypeParams$.next(convertToParamMap({ projectType: 'rag_chatbot_demo' }));
+  });
 
   beforeEach(async () => {
     const api = jasmine.createSpyObj<ContactApiService>('ContactApiService', ['submit']);
@@ -49,6 +54,24 @@ describe('ContactFormComponent', () => {
     fixture.detectChanges();
 
     expect(fixture.componentInstance.form.controls.projectType.value).toBe('rag_chatbot_demo');
+  });
+
+  it('preselects the quick-validation intent from an allowlisted query param', () => {
+    projectTypeParams$.next(convertToParamMap({ projectType: 'mvp_prototype' }));
+
+    const fixture = TestBed.createComponent(ContactFormComponent);
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.form.controls.projectType.value).toBe('mvp_prototype');
+  });
+
+  it('falls back to the default state for an invalid contact query param', () => {
+    projectTypeParams$.next(convertToParamMap({ projectType: 'unknown' }));
+
+    const fixture = TestBed.createComponent(ContactFormComponent);
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.form.controls.projectType.value).toBe('');
   });
 
   it('submits valid data with consent and optional company', () => {
@@ -128,5 +151,35 @@ describe('ContactFormComponent', () => {
 
     expect(text).toContain('e-mailem');
     expect(text).toContain('bazie danych');
+  });
+
+  it('keeps the required contact intents mapped to backend-compatible project types', () => {
+    const backendProjectTypeValues: readonly string[] = projectTypeOptions.map(
+      (option) => option.value,
+    );
+
+    expect(contactIntentOptions.map((option) => option.id)).toEqual([
+      'quick-validation',
+      'mvp',
+      'full-development',
+      'ai-automation',
+      'technology-consultation',
+    ]);
+    expect(contactIntentOptions.every((option) => backendProjectTypeValues.includes(option.projectType))).toBeTrue();
+    expect(
+      contactIntentOptions.every((option) =>
+        option.allowedQueryValues.every((value) => backendProjectTypeValues.includes(value)),
+      ),
+    ).toBeTrue();
+  });
+
+  it('keeps the required contact intent labels aligned with the shared contact intent model', () => {
+    expect(contactIntentOptions.map((option) => option.label)).toEqual([
+      'Demo / szybka walidacja',
+      'Zbuduj MVP',
+      'Pełne wdrożenie',
+      'AI / automatyzacja',
+      'Konsultacja techniczna',
+    ]);
   });
 });

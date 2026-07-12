@@ -55,4 +55,21 @@ describe('SiteShellComponent', () => {
 
     expect(fixture.nativeElement.querySelector('.primary-nav')?.classList).not.toContain('is-open');
   });
+
+  it('applies route metadata for repositioned public pages', async () => {
+    const fixture = TestBed.createComponent(SiteShellComponent);
+    const router = TestBed.inject(Router);
+
+    await fixture.ngZone!.run(() => router.navigateByUrl('/demo-w-7-dni'));
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(document.title).toContain('Demo, PoC i walidacja pomysłu');
+    expect(document.querySelector('meta[name="description"]')?.getAttribute('content')).toContain(
+      'Ograniczone demo',
+    );
+    expect(document.querySelector('link[rel="canonical"]')?.getAttribute('href')).toContain(
+      '/demo-w-7-dni',
+    );
+  });
 });

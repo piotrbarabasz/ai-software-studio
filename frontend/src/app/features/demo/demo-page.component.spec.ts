@@ -17,17 +17,23 @@ describe('DemoPageComponent', () => {
     }).compileComponents();
   });
 
-  it('renders the demo route, sprint, package framing, FAQ, and contact CTA', () => {
+  it('renders the demo route with demo, PoC, MVP, production, exclusions, inputs, and next-step guidance', () => {
     const fixture = TestBed.createComponent(DemoPageComponent);
     fixture.detectChanges();
 
     const element: HTMLElement = fixture.nativeElement;
 
     expect(element.querySelector('h1')?.textContent).toContain('Jedna iteracja, jeden scenariusz');
+    expect(element.textContent).toContain('demo');
+    expect(element.textContent).toContain('PoC');
+    expect(element.textContent).toContain('MVP');
+    expect(element.textContent).toContain('produkc');
     expect(element.textContent).toContain('Etap demo vs etap produkcyjny');
-    expect(element.textContent).toContain('Jak wygląda 7 dni pracy nad demo');
-    expect(element.textContent).toContain('Pakiet dobierany do pytania biznesowego');
-    expect(element.textContent).toContain('Najczęstsze pytania przed sprintem demo');
-    expect(element.querySelector('a[href="/kontakt"]')).not.toBeNull();
+    expect(element.textContent).toContain('Wykluczenia');
+    expect(element.textContent).toContain('Materiały od klienta');
+    expect(element.textContent).toContain('Wynik sprintu');
+    expect(element.textContent).toContain('Decyzja o kolejnym etapie');
+    expect(element.textContent).toContain('Przejście do pełnego rozwoju');
+    expect(element.querySelector('a[href^="/kontakt?projectType=mvp_prototype"]')).not.toBeNull();
   });
 });

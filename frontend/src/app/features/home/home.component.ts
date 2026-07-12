@@ -15,6 +15,6 @@ import { RagWorkflowVisualComponent } from '../landing/visuals/rag-workflow-visu
 })
 export class HomeComponent {
   readonly content = siteContent;
+  readonly home = siteContent.home;
   readonly featuredProduct = this.content.products.find((product) => product.visualKind === 'rag')!;
-  readonly overviewProducts = this.content.products;
 }

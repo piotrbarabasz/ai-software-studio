@@ -1,17 +1,23 @@
 <main class="home-page">
   <section class="hero section-shell" appRevealOnScroll>
     <div class="hero-copy">
-      <p class="eyebrow">{{ content.home.eyebrow }}</p>
-      <h1>{{ content.home.title }}</h1>
-      <p class="hero-lead">{{ content.home.subtitle }}</p>
+      <p class="eyebrow">{{ home.eyebrow }}</p>
+      <h1>{{ home.title }}</h1>
+      <p class="hero-lead">{{ home.subtitle }}</p>
 
       <ul class="hero-highlights" aria-label="Najważniejsze informacje">
-        <li *ngFor="let highlight of content.home.highlights">{{ highlight }}</li>
+        <li *ngFor="let highlight of home.highlights">{{ highlight }}</li>
       </ul>
 
       <div class="hero-actions">
-        <a class="primary-action" routerLink="/kontakt">{{ content.home.primaryCta }}</a>
-        <a class="secondary-action" routerLink="/produkty">{{ content.home.secondaryCta }}</a>
+        <a class="primary-action" routerLink="/demo-w-7-dni">{{ home.primaryCta }}</a>
+        <a
+          class="secondary-action"
+          routerLink="/kontakt"
+          [queryParams]="{ projectType: 'custom_web_app' }"
+        >
+          {{ home.secondaryCta }}
+        </a>
       </div>
     </div>
 
@@ -24,83 +30,118 @@
     </aside>
   </section>
 
-  <section class="overview section-shell" aria-labelledby="overview-title" appRevealOnScroll>
+  <section class="tracks section-shell" aria-labelledby="tracks-title" appRevealOnScroll>
     <div class="section-heading">
-      <p class="eyebrow">Produkty</p>
-      <h2 id="overview-title">
-        Katalog podzielony według scenariusza, nie według szumu marketingowego
-      </h2>
+      <p class="eyebrow">Dwa modele współpracy</p>
+      <h2 id="tracks-title">Dwa wyraźne tory rozpoczęcia współpracy</h2>
       <p class="section-copy">
-        Każdy kierunek prowadzi do własnego route-backed produktu, dzięki czemu łatwiej go porównać,
-        udostępnić i wrócić do niego po odświeżeniu.
+        Najpierw można sprawdzić pojedynczy scenariusz, a dopiero potem wejść w pełny rozwój
+        produktu. Każdy tor ma inny cel, zakres i moment decyzji.
       </p>
     </div>
 
-    <div class="product-grid">
-      <article *ngFor="let product of overviewProducts" class="product-card">
-        <p class="product-label">{{ product.routeLabel }}</p>
-        <h3>{{ product.title }}</h3>
-        <p>{{ product.valueProposition }}</p>
-        <a [routerLink]="product.path">Zobacz route</a>
+    <div class="track-grid">
+      <article *ngFor="let track of home.workTracks" class="track-card">
+        <p class="card-kicker">{{ track.title }}</p>
+        <p class="card-lead">{{ track.lead }}</p>
+        <ul class="card-list">
+          <li *ngFor="let bullet of track.bullets">{{ bullet }}</li>
+        </ul>
+        <a [routerLink]="track.ctaPath" class="track-link">{{ track.ctaLabel }}</a>
       </article>
     </div>
   </section>
 
-  <section class="demo section-shell" aria-labelledby="demo-title" appRevealOnScroll>
+  <section class="solutions section-shell" aria-labelledby="solutions-title" appRevealOnScroll>
     <div class="section-heading">
-      <p class="eyebrow">{{ content.demo.eyebrow }}</p>
-      <h2 id="demo-title">{{ content.demo.title }}</h2>
-      <p class="section-copy">{{ content.demo.lead }}</p>
+      <p class="eyebrow">Wybrane rozwiązania</p>
+      <h2 id="solutions-title">Katalog uporządkowany według problemów biznesowych</h2>
+      <p class="section-copy">
+        Krótki przegląd kategorii prowadzi do pełnego katalogu na route&apos;cie
+        <code>/produkty</code>.
+      </p>
     </div>
 
-    <div class="demo-layout">
-      <ol class="demo-steps" aria-label="Etapy demo">
-        <li *ngFor="let step of content.demo.flowSteps">
-          <span></span>
-          <p>{{ step }}</p>
-        </li>
-      </ol>
-
-      <div class="demo-boundary">
-        <p class="panel-kicker">Granica etapu</p>
+    <div class="solution-grid">
+      <article *ngFor="let group of home.solutionGroups" class="solution-card">
+        <h3>{{ group.title }}</h3>
+        <p>{{ group.lead }}</p>
         <ul>
-          <li *ngFor="let item of content.demo.outOfScope">{{ item }}</li>
+          <li *ngFor="let item of group.bullets">{{ item }}</li>
         </ul>
-      </div>
+      </article>
     </div>
+
+    <a class="secondary-action" routerLink="/produkty">Przejdź do katalogu produktów</a>
   </section>
 
-  <section class="featured section-shell" aria-labelledby="featured-title" appRevealOnScroll>
-    <div class="featured-copy">
-      <p class="eyebrow">Przykładowy produkt</p>
-      <h2 id="featured-title">{{ featuredProduct.title }}</h2>
-      <p class="section-copy">{{ featuredProduct.problem }} {{ featuredProduct.audience }}</p>
-      <a class="secondary-action" [routerLink]="featuredProduct.path">Zobacz szczegóły</a>
+  <section class="journey section-shell" aria-labelledby="journey-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">Droga od pomysłu do systemu</p>
+      <h2 id="journey-title">Pomysł → Demo / PoC → MVP → Produkcja → Dalszy rozwój i R&amp;D</h2>
+      <p class="section-copy">
+        Ta sekwencja łączy walidację, budowę produktu i rozwój zaplecza technologicznego w jeden
+        model współpracy.
+      </p>
     </div>
 
-    <div class="featured-visual">
+    <ol class="journey-list">
+      <li *ngFor="let step of home.journeySteps">
+        <p class="journey-step">{{ step.title }}</p>
+        <p>{{ step.lead }}</p>
+      </li>
+    </ol>
+  </section>
+
+  <section class="studio section-shell" aria-labelledby="studio-title" appRevealOnScroll>
+    <div class="studio-copy">
+      <p class="eyebrow">{{ home.studioTeaser.eyebrow }}</p>
+      <h2 id="studio-title">{{ home.studioTeaser.title }}</h2>
+      <p class="section-copy">{{ home.studioTeaser.lead }}</p>
+
+      <ul class="studio-points">
+        <li *ngFor="let bullet of home.studioTeaser.bullets">{{ bullet }}</li>
+      </ul>
+
+      <a class="secondary-action" [routerLink]="home.studioTeaser.ctaPath">
+        {{ home.studioTeaser.ctaLabel }}
+      </a>
+    </div>
+
+    <div class="studio-visual">
       <app-rag-workflow-visual />
     </div>
   </section>
 
-  <section class="studio section-shell" aria-labelledby="studio-title" appRevealOnScroll>
+  <section class="research section-shell" aria-labelledby="research-title" appRevealOnScroll>
     <div class="section-heading">
-      <p class="eyebrow">{{ content.studio.eyebrow }}</p>
-      <h2 id="studio-title">{{ content.studio.title }}</h2>
-      <p class="section-copy">{{ content.studio.lead }}</p>
+      <p class="eyebrow">{{ home.researchTeaser.eyebrow }}</p>
+      <h2 id="research-title">{{ home.researchTeaser.title }}</h2>
+      <p class="section-copy">{{ home.researchTeaser.lead }}</p>
     </div>
 
-    <ul class="studio-points">
-      <li *ngFor="let principle of content.studio.principles">{{ principle }}</li>
+    <ul class="research-list">
+      <li *ngFor="let item of home.researchTeaser.items">{{ item }}</li>
     </ul>
   </section>
 
   <section class="contact section-shell" aria-labelledby="contact-title" appRevealOnScroll>
     <div class="contact-card">
-      <p class="eyebrow">{{ content.contact.eyebrow }}</p>
-      <h2 id="contact-title">{{ content.contact.title }}</h2>
-      <p class="section-copy">{{ content.contact.lead }}</p>
-      <a class="primary-action" routerLink="/kontakt">{{ content.home.primaryCta }}</a>
+      <p class="eyebrow">Kontakt</p>
+      <h2 id="contact-title">Wybierz intencję i przejdź do rozmowy</h2>
+      <p class="section-copy">
+        Oba warianty prowadzą do tego samego formularza, ale z innym kontekstem wejścia.
+      </p>
+
+      <div class="closing-grid">
+        <article *ngFor="let cta of home.closingCtas" class="closing-card">
+          <h3>{{ cta.label }}</h3>
+          <p>{{ cta.lead }}</p>
+          <a class="primary-action" routerLink="/kontakt" [queryParams]="cta.queryParams">
+            Otwórz kontakt
+          </a>
+        </article>
+      </div>
     </div>
   </section>
 </main>

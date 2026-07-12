@@ -5,7 +5,7 @@ import { Router, RouterLink, NavigationEnd, ActivatedRoute } from '@angular/rout
 import { filter } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-import { siteContent } from '../../core/content/site.pl';
+import { siteContent, solutionCategories } from '../../core/content/site.pl';
 import type { ProductCatalogEntry, ProductId } from '../../core/content/site-content.types';
 import { EmailPipelineVisualComponent } from '../landing/visuals/email-pipeline-visual.component';
 import { RagWorkflowVisualComponent } from '../landing/visuals/rag-workflow-visual.component';
@@ -36,6 +36,7 @@ export class ProductsPageComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
   readonly products = siteContent.products;
+  readonly categories = solutionCategories;
   readonly catalogRoute = siteContent.routes.find((route) => route.path === '/produkty')!;
 
   pageTitle = this.catalogRoute.title;

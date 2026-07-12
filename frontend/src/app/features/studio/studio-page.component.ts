@@ -5,7 +5,6 @@ import { RouterLink } from '@angular/router';
 import { plContent } from '../../core/content/pl';
 import { siteContent } from '../../core/content/site.pl';
 import { RevealOnScrollDirective } from '../../shared/reveal/reveal-on-scroll.directive';
-import { ContactCtaSectionComponent } from '../landing/sections/contact-cta-section.component';
 import { TrustSectionComponent } from '../landing/sections/trust-section.component';
 
 @Component({
@@ -13,7 +12,6 @@ import { TrustSectionComponent } from '../landing/sections/trust-section.compone
   standalone: true,
   imports: [
     CommonModule,
-    ContactCtaSectionComponent,
     RevealOnScrollDirective,
     RouterLink,
     TrustSectionComponent,
