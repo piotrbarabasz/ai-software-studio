@@ -9,7 +9,7 @@ Represents one ordered Cloud Build execution.
 **Fields**
 
 - `name`: Pipeline name, such as `deploy-prod` for production.
-- `branch`: Branch filter or target branch, such as `main`.
+- `branch`: Branch filter or target branch, such as `master`.
 - `mode`: `push`, `pull_request`, or `manual`.
 - `config_file`: Cloud Build YAML file path.
 - `steps`: Ordered release steps for backend then frontend.
@@ -39,9 +39,9 @@ Represents a repository-connected automation rule.
 
 **Validation Rules**
 
-- `deploy-prod` must use `^main$`.
+- `deploy-prod` must use `^master$`.
 - Temporary test trigger may use `^002-gcp-deployment$` but must be clearly temporary.
-- PR validation must target `^main$` and must not deploy.
+- PR validation must target `^master$` and must not deploy.
 
 ## Trigger Substitution
 

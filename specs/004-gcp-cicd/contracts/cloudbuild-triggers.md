@@ -23,7 +23,7 @@ This contract defines the build-time values and trigger behaviors required by th
 ## Production Trigger: `deploy-prod`
 
 **Event**: push  
-**Branch regex**: `^main$`  
+**Branch regex**: `^master$`
 **Config file**: `infra/gcp/cloudbuild.deploy.yaml`
 
 **Expected behavior**
@@ -48,7 +48,7 @@ This contract defines the build-time values and trigger behaviors required by th
 ## Pull Request Validation Trigger
 
 **Event**: pull request  
-**Base branch regex**: `^main$`  
+**Base branch regex**: `^master$`
 **Config file**: `infra/gcp/cloudbuild.pr-checks.yaml`
 
 **Expected behavior**

@@ -11,7 +11,7 @@ The repository connection is a one-time interactive setup.
 
 - Name: `deploy-prod`
 - Event: push
-- Branch regex: `^main$`
+- Branch regex: `^master$`
 - Config file: `infra/gcp/cloudbuild.deploy.yaml`
 - Purpose: production deployment to Cloud Run
 
@@ -51,9 +51,9 @@ Delete or disable this trigger after testing.
 
 ## PR Validation Trigger
 
-- Name: `pr-checks-main`
+- Name: `pr-checks-master`
 - Event: pull request
-- Base branch regex: `^main$`
+- Base branch regex: `^master$`
 - Config file: `infra/gcp/cloudbuild.pr-checks.yaml`
 - Purpose: validation only
 

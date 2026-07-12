@@ -9,7 +9,7 @@ param(
 
   [string]$RepoOwner = '',
 
-  [string]$Branch = 'main',
+  [string]$Branch = 'master',
 
   [string]$BackendUrl = 'https://aisoftware-studio-api-k6wldgptjq-lm.a.run.app',
 
@@ -172,4 +172,4 @@ New-Trigger -Name 'deploy-prod' -BranchPattern $prodBranchPattern -Substitutions
 Write-Host 'Creating temporary test trigger deploy-test-002-gcp-deployment for branch ^002-gcp-deployment$'
 New-Trigger -Name 'deploy-test-002-gcp-deployment' -BranchPattern '^002-gcp-deployment$' -Substitutions $substitutions
 
-Write-Host 'Create the PR validation trigger in Cloud Console: event pull request, base branch ^main$, config infra/gcp/cloudbuild.pr-checks.yaml, no deploy.'
+Write-Host 'Create the PR validation trigger in Cloud Console: event pull request, base branch ^master$, config infra/gcp/cloudbuild.pr-checks.yaml, no deploy.'

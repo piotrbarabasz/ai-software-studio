@@ -6,7 +6,7 @@
 
 ## Summary
 
-Add GitHub-to-GCP CI/CD automation for the existing Cloud Run deployment. The plan introduces one combined production Cloud Build pipeline for sequential backend-then-frontend deployment on pushes to `main`, a no-deploy pull request validation trigger targeting `main`, trigger documentation for Google Cloud Console and optional post-connection scripts, and a safe manual build tag strategy so source-triggered `SHORT_SHA` builds and manual builds both work.
+Add GitHub-to-GCP CI/CD automation for the existing Cloud Run deployment. The plan introduces one combined production Cloud Build pipeline for sequential backend-then-frontend deployment on pushes to `master`, a no-deploy pull request validation trigger targeting `master`, trigger documentation for Google Cloud Console and optional post-connection scripts, and a safe manual build tag strategy so source-triggered `SHORT_SHA` builds and manual builds both work.
 
 The implementation keeps existing manual deployment configs valid, keeps secrets in Secret Manager, uses Cloud Build substitutions for all project-specific values, defaults Cloud Run min instances to `0`, and does not introduce GitHub Actions, Terraform, Pulumi, databases, authentication, CMS, admin panels, queues, or payment flows.
 
@@ -26,7 +26,7 @@ The implementation keeps existing manual deployment configs valid, keeps secrets
 
 **Performance Goals**: Production deploys must remain sequential and deterministic, Cloud Run min instances stay at `0` by default, and the validation path must avoid production deployment entirely.
 
-**Constraints**: `main` is the production branch, `002-gcp-deployment` is only a temporary trigger test branch, no GitHub Actions, no real secrets in repo, no hard-coded production URLs in source, `SHORT_SHA` must not break manual builds, and manual deployment configs must remain valid.
+**Constraints**: `master` is the production branch, `002-gcp-deployment` is only a temporary trigger test branch, no GitHub Actions, no real secrets in repo, no hard-coded production URLs in source, `SHORT_SHA` must not break manual builds, and manual deployment configs must remain valid.
 
 **Scale/Scope**: One combined production deployment pipeline, one PR validation pipeline, one temporary test trigger, two optional trigger-creation scripts, and documentation updates for release and rollback operations.
 
@@ -116,7 +116,7 @@ README.md
 ## Summary of Design Decisions
 
 - Use Cloud Build triggers connected to the GitHub repository, not GitHub Actions.
-- Make `main` the production deployment branch and treat `002-gcp-deployment` only as a temporary trigger test branch.
+- Make `master` the production deployment branch and treat `002-gcp-deployment` only as a temporary trigger test branch.
 - Use one combined production pipeline file so backend deployment completes before frontend deployment begins.
 - Keep the PR validation path on `infra/gcp/cloudbuild.pr-checks.yaml` and ensure it never deploys.
 - Use substitutions for all project, service, region, runtime, secret-name, and URL values.

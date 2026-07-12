@@ -12,7 +12,7 @@ Required:
 Optional:
   --region                    Cloud Build region (default: europe-central2)
   --repo-owner                GitHub repository owner; derived from git remote when possible
-  --branch                    Production branch name or regex (default: main)
+  --branch                    Production branch name or regex (default: master)
   --backend-url               Backend Cloud Run URL
   --frontend-url              Frontend Cloud Run URL
   --contact-recipient-email   Production contact recipient placeholder
@@ -26,7 +26,7 @@ Optional:
   --help                      Show this message
 
 This helper creates the push triggers only after the GitHub repository is already connected in Cloud Build.
-Create the PR validation trigger in the Cloud Console using infra/gcp/cloudbuild.pr-checks.yaml.
+Create the PR validation trigger in the Cloud Console using infra/gcp/cloudbuild.pr-checks.yaml and a base branch regex of ^master$.
 EOF
 }
 
@@ -39,7 +39,7 @@ PROJECT_ID=""
 REGION="europe-central2"
 REPO_OWNER=""
 REPO_NAME=""
-BRANCH="main"
+BRANCH="master"
 BACKEND_URL="https://aisoftware-studio-api-k6wldgptjq-lm.a.run.app"
 FRONTEND_URL="https://aisoftware-studio-web-k6wldgptjq-lm.a.run.app"
 CONTACT_RECIPIENT_EMAIL="owner@example.com"
@@ -144,7 +144,7 @@ Trigger creation complete.
 
 Create the PR validation trigger in Cloud Console:
 - Event: pull request
-- Base branch regex: ^main$
+- Base branch regex: ^master$
 - Config file: infra/gcp/cloudbuild.pr-checks.yaml
 - Deploy: disabled
 EOF

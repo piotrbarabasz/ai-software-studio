@@ -28,9 +28,9 @@ Expected result: the file defines backend build, backend deploy, frontend build,
 
 Use the documented settings in `infra/gcp/triggers.md` or `docs/gcp-cicd.md` to confirm:
 
-- `deploy-prod` uses push events on `^main$`.
+- `deploy-prod` uses push events on `^master$`.
 - The temporary test trigger uses `^002-gcp-deployment$`.
-- The PR validation trigger uses pull request events and targets `^main$`.
+- The PR validation trigger uses pull request events and targets `^master$`.
 
 Expected result: production deploy and validation triggers are distinct and use the correct config files.
 
@@ -42,7 +42,7 @@ Expected result: manual builds do not fail when `SHORT_SHA` is unavailable and d
 
 ## 5. Verify Triggered Deployment Evidence
 
-After a test push to the temporary trigger branch or `main` in a non-production window:
+After a test push to the temporary trigger branch or `master` in a non-production window:
 
 - Check Cloud Build logs for backend then frontend execution order.
 - Confirm backend and frontend Cloud Run URLs are updated.
@@ -53,7 +53,7 @@ Expected result: one sequential production deployment path is visible in the bui
 
 ## 6. Verify PR Validation
 
-Open a pull request targeting `main` and confirm the PR validation trigger runs checks only.
+Open a pull request targeting `master` and confirm the PR validation trigger runs checks only.
 
 Expected result: backend and frontend are validated, and no Cloud Run deployment occurs.
 
