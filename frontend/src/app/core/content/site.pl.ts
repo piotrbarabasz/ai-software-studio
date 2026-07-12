@@ -1,11 +1,16 @@
 import { budgetRangeOptions, projectTypeOptions } from './contact-options.pl';
 import type {
+  CollaborationTrack,
   ContactContext,
-  PublicRouteMetadata,
   ProductCatalogEntry,
   ProductId,
   ProductRouteMetadata,
+  PublicRouteMetadata,
+  ProjectJourneyStep,
+  ResearchDirection,
+  ServiceModel,
   SiteContent,
+  SolutionCategory,
 } from './site-content.types';
 import { productRoutePaths } from './site-content.types';
 
@@ -33,6 +38,173 @@ function createProductRouteMetadata<TProductId extends ProductId>(
   };
 }
 
+export const serviceModels = [
+  {
+    id: 'validate',
+    label: 'Zweryfikuj pomysł',
+    role: 'collaboration-track',
+    summary:
+      'Krótki format demo lub PoC, który pokazuje sens scenariusza przed większą inwestycją.',
+    claimBoundary: 'Nie obiecuje produkcyjnego MVP ani pełnego wdrożenia w siedem dni.',
+  },
+  {
+    id: 'build',
+    label: 'Zbuduj produkt',
+    role: 'collaboration-track',
+    summary:
+      'Indywidualnie planowana współpraca nad aplikacją, backendem, integracjami i utrzymaniem.',
+  },
+  {
+    id: 'research',
+    label: 'R&D',
+    role: 'credibility-layer',
+    summary:
+      'Eksperymenty techniczne, które wzmacniają jakość i szybkość realizacji projektów klienta.',
+    claimBoundary: 'Nie jest to gwarancja wyniku klienta ani zamiennik gotowego projektu.',
+  },
+] satisfies readonly ServiceModel[];
+
+export const collaborationTracks = [
+  {
+    id: 'validate',
+    title: 'Zweryfikuj pomysł',
+    customerValue:
+      'Szybko sprawdzasz sens scenariusza zanim zainwestujesz w produkcyjny build.',
+    useCases: ['presales', 'demo dla zarządu', 'materiał dla inwestora'],
+    scope: [
+      'jeden ograniczony scenariusz',
+      'czytelny flow i granice zakresu',
+      'demo lub PoC bez obietnicy produkcji',
+    ],
+    result: 'Otrzymujesz klikalny demo-flow i jasną decyzję o dalszym kroku.',
+    limitations: [
+      'maksymalnie siedem dni dla jednego scenariusza',
+      'bez produkcyjnego backendu i pełnych integracji',
+    ],
+    timing: 'Maksymalnie siedem dni przy ograniczonym zakresie.',
+    ctaLabel: 'Zacznij od demo',
+    targetRoute: '/demo-w-7-dni',
+    contactIntent: 'mvp_prototype',
+  },
+  {
+    id: 'build',
+    title: 'Zbuduj produkt',
+    customerValue:
+      'Planujesz pełne wdrożenie i chcesz przejść od walidacji do produkcyjnej aplikacji.',
+    useCases: ['nowy produkt AI', 'automatyzacja procesów', 'aplikacja z backendem'],
+    scope: [
+      'analiza i projekt UX',
+      'frontend, backend i API',
+      'AI, integracje, testy i monitoring',
+    ],
+    result: 'Otrzymujesz zakres współpracy i plan budowy rozwiązania dopasowany do projektu.',
+    limitations: ['zakres planowany indywidualnie', 'bez obietnicy siedmiodniowego delivery'],
+    timing: 'Zakres planowany indywidualnie po doprecyzowaniu potrzeb.',
+    ctaLabel: 'Omów rozwój aplikacji',
+    targetRoute: '/kontakt',
+    contactIntent: 'custom_web_app',
+  },
+] satisfies readonly CollaborationTrack[];
+
+export const researchDirections = [
+  {
+    id: 'agent-cost-control',
+    area: 'Kontrola kosztów agentów',
+    problem: 'Agenci i automatyzacje mogą szybko stać się zbyt drogie lub zbyt niestabilne.',
+    goal: 'Sprawdzić, jak monitorować koszt, jakość i zachowanie modeli w praktyce.',
+    potentialBusinessUse: 'Tańsze i bardziej przewidywalne wdrożenia dla klientów.',
+    status: 'experiment',
+    claimBoundary: 'Nie oznacza gotowej produkcji dla każdego modelu lub każdego klienta.',
+  },
+  {
+    id: 'rag-evaluation',
+    area: 'Ewaluacja RAG',
+    problem: 'Sama generacja odpowiedzi nie wystarcza bez kontroli jakości źródeł i trafności.',
+    goal: 'Wypracować wzorce oceny odpowiedzi oraz jakości indeksów wiedzy.',
+    potentialBusinessUse: 'Lepsze asystenty wiedzy i mniejsze ryzyko błędnych odpowiedzi.',
+    status: 'prototype',
+    claimBoundary: 'Nie jest to dowód jakości dla dowolnej bazy wiedzy bez dodatkowych testów.',
+  },
+  {
+    id: 'messenger-orchestration',
+    area: 'Orkiestracja przez komunikatory',
+    problem: 'Zespół potrzebuje lekkiego sposobu przekazywania statusów i decyzji.',
+    goal: 'Sprawdzić, jak zarządzać zadaniami i zatwierdzeniami przez komunikatory.',
+    potentialBusinessUse: 'Szybsze decyzje operacyjne i prostsza współpraca zespołowa.',
+    status: 'validated-internally',
+    claimBoundary: 'Nie jest to obietnica pełnej automatyzacji bez udziału człowieka.',
+  },
+  {
+    id: 'response-evaluation',
+    area: 'Automatyczna ocena odpowiedzi',
+    problem: 'Ręczne sprawdzanie jakości odpowiedzi i promptów jest zbyt wolne.',
+    goal: 'Uprościć walidację odpowiedzi i proponować lepsze wzorce orkiestracji.',
+    potentialBusinessUse: 'Szybsze iteracje i niższy koszt eksperymentów klienta.',
+    status: 'experiment',
+    claimBoundary: 'Nie zastępuje pełnej weryfikacji biznesowej ani testów produkcyjnych.',
+  },
+] satisfies readonly ResearchDirection[];
+
+export const solutionCategories = [
+  {
+    id: 'customer-sales',
+    title: 'Obsługa klienta i sprzedaż',
+    lead:
+      'Asystenci wiedzy, chatboty i voice agents pomagają szybciej odpowiadać i lepiej domykać rozmowy.',
+    examples: ['asystent wiedzy / RAG', 'chatbot leadowy', 'voice agent do kwalifikacji'],
+    productIds: ['rag_chatbot_demo', 'voice_agent_demo', 'website_seo'],
+    homepageSummary: 'Asystenci, lead generation i szybka walidacja komunikatu.',
+  },
+  {
+    id: 'operations-automation',
+    title: 'Automatyzacja operacji',
+    lead: 'AI może odciążyć zespół z powtarzalnych zadań i połączyć komunikację z procesami.',
+    examples: ['e-mail automation', 'WhatsApp statusy', 'agent orchestration'],
+    productIds: ['email_automation', 'whatsapp_agent_management'],
+    homepageSummary: 'Procesy, komunikatory i automatyzacje back-office.',
+  },
+  {
+    id: 'applications-control',
+    title: 'Aplikacje i kontrola',
+    lead: 'Dedykowane aplikacje webowe i dashboardy porządkują przepływ pracy oraz nadzór.',
+    examples: ['panel agentów', 'dashboard operacyjny', 'back-office app'],
+    productIds: ['agent_management_panel'],
+    homepageSummary: 'Panele, backendy i wewnętrzne narzędzia kontroli.',
+  },
+] satisfies readonly SolutionCategory[];
+
+export const projectJourneySteps = [
+  {
+    id: 'idea',
+    title: 'Pomysł',
+    description: 'Wybieramy jeden proces, jedną hipotezę i jeden oczekiwany efekt biznesowy.',
+  },
+  {
+    id: 'demo-poc',
+    title: 'Demo / PoC',
+    description: 'Sprawdzamy flow, wartość i granice zakresu bez udawania pełnej produkcji.',
+    clientDecision: 'Czy warto przejść dalej?',
+  },
+  {
+    id: 'mvp',
+    title: 'MVP',
+    description: 'Po walidacji projektujemy pierwszy indywidualny etap rozwoju produktu.',
+    clientDecision: 'Co ma wejść do pierwszej wersji?',
+  },
+  {
+    id: 'production',
+    title: 'Produkcja',
+    description: 'Dostarczamy aplikację, backend, integracje, testy, monitoring i bezpieczeństwo.',
+    clientDecision: 'Czy zakres jest gotowy do wdrożenia?',
+  },
+  {
+    id: 'further-development',
+    title: 'Dalszy rozwój i R&D',
+    description: 'Eksperymenty z agentami, ewaluacją i automatyzacją wracają do projektów klienta.',
+    researchInfluence: 'R&D poprawia jakość i koszt kolejnych iteracji.',
+  },
+] satisfies readonly ProjectJourneyStep[];
+
 const products = [
   createProductCatalogEntry({
     id: 'rag_chatbot_demo',
@@ -59,6 +231,26 @@ const products = [
     ],
     visualKind: 'rag',
     ctaLabel: 'Zapytaj o demo RAG',
+    categoryId: 'customer-sales',
+    businessProblem: 'Wiedza jest rozproszona w dokumentach i wątkach.',
+    value: 'Szybko sprawdza, czy materiały firmy da się bezpiecznie wykorzystać do trafnych odpowiedzi.',
+    exampleUseCases: [
+      'FAQ klientów i wsparcie sprzedaży',
+      'wyszukiwanie odpowiedzi w dokumentach',
+      'handoff do człowieka przy pytaniach poza zakresem',
+    ],
+    demoBoundaries: [
+      'brak produkcyjnego indeksu wiedzy',
+      'brak bezpieczeństwa i monitoringu runtime',
+      'brak wdrożenia backendu do obsługi dużego ruchu',
+    ],
+    productionScope: [
+      'produkcyjny indeks wiedzy',
+      'bezpieczne odpowiedzi i monitoring',
+      'skalowalny backend pod większy ruch',
+    ],
+    developmentPath: 'Po walidacji można przejść do produkcyjnego RAG z monitoringiem i bezpieczeństwem.',
+    contactIntent: 'ai_automation',
   }),
   createProductCatalogEntry({
     id: 'website_seo',
@@ -85,6 +277,27 @@ const products = [
     ],
     visualKind: 'websiteSeo',
     ctaLabel: 'Zapytaj o stronę SEO',
+    categoryId: 'customer-sales',
+    businessProblem:
+      'Oferta jest dobra, ale strona nie porządkuje informacji i nie zamienia intencji w rozmowę.',
+    value: 'Pokazuje, czy treść i struktura strony prowadzą użytkownika do kontaktu oraz wspierają SEO.',
+    exampleUseCases: [
+      'strona ofertowa lub landing',
+      'walidacja komunikatu sprzedażowego',
+      'sekcje z CTA i dowodami zaufania',
+    ],
+    demoBoundaries: [
+      'brak CMS i panelu publikacji',
+      'brak analityki i automatycznego content pipeline',
+      'brak produkcyjnego workflow edycji',
+    ],
+    productionScope: [
+      'CMS i panel publikacji',
+      'analityka i content pipeline',
+      'workflow edycji i iteracji SEO',
+    ],
+    developmentPath: 'Po walidacji można rozwinąć stronę w pełny landing z CMS i analityką.',
+    contactIntent: 'custom_web_app',
   }),
   createProductCatalogEntry({
     id: 'voice_agent_demo',
@@ -111,6 +324,27 @@ const products = [
     ],
     visualKind: 'voice',
     ctaLabel: 'Zapytaj o voice demo',
+    categoryId: 'customer-sales',
+    businessProblem:
+      'Wiele rozmów da się ustrukturyzować, ale potrzebna jest szybka ocena sensu takiej automatyzacji.',
+    value: 'Pozwala zweryfikować scenariusz rozmowy głosowej przed inwestycją w telefoniczny runtime.',
+    exampleUseCases: [
+      'scenariusz kwalifikacji rozmowy',
+      'callback lub przypomnienie głosowe',
+      'przekazanie wyniku do operatora',
+    ],
+    demoBoundaries: [
+      'brak integracji z telefonią',
+      'brak nagrywania i transkrypcji produkcyjnej',
+      'brak obsługi rzeczywistych połączeń',
+    ],
+    productionScope: [
+      'integracja z telefonią',
+      'nagrywanie i transkrypcja produkcyjna',
+      'obsługa rzeczywistych połączeń',
+    ],
+    developmentPath: 'Po walidacji można dołożyć telefonię, transkrypcję i monitoring rozmów.',
+    contactIntent: 'ai_automation',
   }),
   createProductCatalogEntry({
     id: 'whatsapp_agent_management',
@@ -118,18 +352,18 @@ const products = [
     title: 'WhatsApp / obsługa rozmów',
     routeLabel: 'WhatsApp',
     valueProposition:
-      'Sprawdza, jak mogą wyglądać komendy, statusy i zatwierdzenia w komunikacji zespołowej przed wdrożeniem API.',
+      'Pokazuje, jak można zarządzać procesem przez komunikator, zanim powstanie pełna integracja z WhatsApp API.',
     problem:
       'Zespół potrzebuje szybkiej komunikacji o statusach, ale nie chce budować integracji w ciemno.',
     audience:
-      'Dla operacji i obsługi, które chcą ocenić sens automatyzacji rozmów i statusów w WhatsApp.',
+      'Dla zespołów, które chcą uporządkować procesy i statusy przez komunikator.',
     applications: [
       'statusy zadań i decyzji',
       'komendy dla agenta lub zespołu',
       'zatwierdzanie kolejnego kroku',
     ],
     demoScope:
-      'Demo pokazuje przebieg komunikacji, statusy i decyzję człowieka bez łączenia z WhatsApp API.',
+      'Demo pokazuje komendy, statusy i decyzje w komunikatorze bez realnej wysyłki wiadomości.',
     outOfScope: [
       'brak integracji z WhatsApp API',
       'brak wysyłki prawdziwych wiadomości',
@@ -137,25 +371,46 @@ const products = [
     ],
     visualKind: 'whatsapp',
     ctaLabel: 'Zapytaj o WhatsApp demo',
+    categoryId: 'operations-automation',
+    businessProblem:
+      'Zespół potrzebuje szybkiej komunikacji o statusach, ale nie chce budować integracji w ciemno.',
+    value: 'Sprawdza, jak mogą wyglądać komendy, statusy i zatwierdzenia przed wdrożeniem API.',
+    exampleUseCases: [
+      'statusy zadań i decyzji',
+      'komendy dla agenta lub zespołu',
+      'zatwierdzanie kolejnego kroku',
+    ],
+    demoBoundaries: [
+      'brak integracji z WhatsApp API',
+      'brak wysyłki prawdziwych wiadomości',
+      'brak produkcyjnego audytu wiadomości',
+    ],
+    productionScope: [
+      'integracja z WhatsApp API',
+      'realna wysyłka wiadomości',
+      'audyt i kontrola statusów',
+    ],
+    developmentPath: 'Po walidacji można dołożyć API WhatsApp i produkcyjne workflow komunikacji.',
+    contactIntent: 'business_process_automation',
   }),
   createProductCatalogEntry({
     id: 'email_automation',
     path: productRoutePaths.email_automation,
     title: 'Automatyzacja e-mail',
-    routeLabel: 'E-mail',
+    routeLabel: 'E-mail automation',
     valueProposition:
-      'Pokazuje, jak odciążyć zespół od klasyfikacji wiadomości i szkiców odpowiedzi, zachowując kontrolę człowieka.',
+      'Porządkuje przepływ wiadomości i pozwala sprawdzić, jak automatyzacja może odciążyć zespół bez pełnego wdrożenia pocztowego.',
     problem:
       'Skrzynka rośnie szybciej niż zespół, a odpowiedzi i kwalifikacja zajmują zbyt dużo czasu.',
     audience:
-      'Dla firm, które chcą ocenić automatyzację poczty jako kolejny krok po walidacji procesu.',
+      'Dla firm, które chcą usprawnić obsługę przychodzących maili i szkiców odpowiedzi.',
     applications: [
       'klasyfikacja przychodzących maili',
       'szkice odpowiedzi',
       'routing do właściwej osoby lub kolejki',
     ],
     demoScope:
-      'Prezentacja pokazuje kolejkę wiadomości, propozycję odpowiedzi i decyzję człowieka przed wysyłką.',
+      'Demo pokazuje klasyfikację, szkice odpowiedzi i routing bez łączenia z prawdziwą skrzynką.',
     outOfScope: [
       'brak połączenia z prawdziwą skrzynką',
       'brak produkcyjnego workflow dostarczania',
@@ -163,6 +418,27 @@ const products = [
     ],
     visualKind: 'email',
     ctaLabel: 'Zapytaj o e-mail automation',
+    categoryId: 'operations-automation',
+    businessProblem:
+      'Skrzynka rośnie szybciej niż zespół, a odpowiedzi i kwalifikacja zajmują zbyt dużo czasu.',
+    value: 'Pokazuje, jak odciążyć zespół od klasyfikacji wiadomości i szkiców odpowiedzi.',
+    exampleUseCases: [
+      'klasyfikacja przychodzących maili',
+      'szkice odpowiedzi',
+      'routing do właściwej osoby lub kolejki',
+    ],
+    demoBoundaries: [
+      'brak połączenia z prawdziwą skrzynką',
+      'brak produkcyjnego workflow dostarczania',
+      'brak automatycznej wysyłki bez akceptacji',
+    ],
+    productionScope: [
+      'połączenie z prawdziwą skrzynką',
+      'workflow dostarczania',
+      'akceptacja i audyt automatycznych odpowiedzi',
+    ],
+    developmentPath: 'Po walidacji można połączyć skrzynkę i zbudować kontrolowany workflow odpowiedzi.',
+    contactIntent: 'business_process_automation',
   }),
   createProductCatalogEntry({
     id: 'agent_management_panel',
@@ -170,18 +446,18 @@ const products = [
     title: 'Panel lub dashboard',
     routeLabel: 'Panel agentów',
     valueProposition:
-      'Porządkuje statusy, scenariusze i metryki prezentacyjne, zanim powstanie właściwy panel administracyjny.',
+      'Pomaga uporządkować statusy agentów, scenariusze i metryki prezentacyjne zanim powstanie pełny panel operacyjny.',
     problem:
       'Brakuje jednego miejsca do kontroli agentów, a decyzje są rozproszone po kilku narzędziach.',
     audience:
-      'Dla zespołów operacyjnych, które chcą ocenić zakres panelu przed wdrożeniem logowania i danych.',
+      'Dla zespołów potrzebujących panelu do nadzoru nad agentami, automatyzacjami lub procesami.',
     applications: [
       'lista agentów i scenariuszy',
       'statusy demo i ostatnia aktywność',
       'rekomendacja kolejnego kroku',
     ],
     demoScope:
-      'Makieta pokazuje układ panelu, statusy i przykładowe metryki bez backendu i bazy danych.',
+      'Demo pokazuje statusy, scenariusze i metryki prezentacyjne bez logowania i bazy danych.',
     outOfScope: [
       'brak logowania i ról użytkowników',
       'brak bazy danych',
@@ -189,6 +465,27 @@ const products = [
     ],
     visualKind: 'panel',
     ctaLabel: 'Zapytaj o panel agentów',
+    categoryId: 'applications-control',
+    businessProblem:
+      'Brakuje jednego miejsca do kontroli agentów, a decyzje są rozproszone po kilku narzędziach.',
+    value: 'Porządkuje statusy, scenariusze i metryki prezentacyjne przed zbudowaniem właściwego panelu.',
+    exampleUseCases: [
+      'lista agentów i scenariuszy',
+      'statusy demo i ostatnia aktywność',
+      'rekomendacja kolejnego kroku',
+    ],
+    demoBoundaries: [
+      'brak logowania i ról użytkowników',
+      'brak bazy danych',
+      'brak produkcyjnych metryk i monitoringu',
+    ],
+    productionScope: [
+      'logowanie i role użytkowników',
+      'baza danych',
+      'produkcyjne metryki i monitoring',
+    ],
+    developmentPath: 'Po walidacji można zaprojektować pełny dashboard operacyjny z logowaniem i danymi.',
+    contactIntent: 'dashboard_internal_tool',
   }),
 ] as const satisfies readonly ProductCatalogEntry[];
 
@@ -205,17 +502,17 @@ const routeMetadata = [
   {
     path: '/',
     label: 'Start',
-    title: 'AISoftware Studio - praktyczne demo AI w 7 dni',
+    title: 'AISoftware Studio - Validate i Build dla AI',
     description:
-      'Praktyczne dema AI dla firm, które chcą sprawdzić sens rozwiązania przed pełnym wdrożeniem.',
+      'Najpierw szybka walidacja pomysłu, a potem produkcyjna aplikacja AI, automatyzacja lub narzędzie wewnętrzne.',
     kind: 'home',
   },
   {
     path: '/produkty',
     label: 'Produkty',
-    title: 'Produkty AI i walidacja',
+    title: 'Rozwiązania AI według problemu biznesowego',
     description:
-      'Katalog produktów i demo, które pomagają ocenić sens rozwiązania przed inwestycją w produkcję.',
+      'Katalog produktów i rozwiązań uporządkowany od walidacji po produkcję według problemu biznesowego.',
     kind: 'products-index',
   },
   createProductRouteMetadata(ragChatbotDemoProduct),
@@ -227,25 +524,25 @@ const routeMetadata = [
   {
     path: '/demo-w-7-dni',
     label: 'Demo w 7 dni',
-    title: 'Demo AI w 7 dni',
+    title: 'Demo, PoC i walidacja pomysłu',
     description:
-      'Walidacja jednego scenariusza, przepływu i zakresu zanim powstanie pełne wdrożenie.',
+      'Ograniczone demo lub PoC dla jednego scenariusza z jasnymi granicami i możliwością przejścia do Build.',
     kind: 'demo',
   },
   {
     path: '/studio',
     label: 'Studio',
-    title: 'Studio i sposób pracy',
+    title: 'Studio, proces i R&D',
     description:
-      'Jak wygląda współpraca, jakie są zasady techniczne i na czym kończy się etap demo.',
+      'Jak wygląda współpraca, jakie są zasady techniczne i jak R&D wspiera projekty bez fikcyjnych dowodów.',
     kind: 'studio',
   },
   {
     path: '/kontakt',
     label: 'Kontakt',
-    title: 'Kontakt i zapytanie',
+    title: 'Kontakt i następny krok',
     description:
-      'Krótki formularz do rozpoczęcia rozmowy o procesie, demo albo produkcyjnym kroku.',
+      'Krótki formularz do rozmowy o demo, MVP, pełnym wdrożeniu, automatyzacji lub konsultacji technologicznej.',
     kind: 'contact',
   },
 ] satisfies readonly PublicRouteMetadata[];
@@ -276,7 +573,8 @@ export const siteContent = {
     workTracks: [
       {
         title: 'Zweryfikuj pomysł',
-        lead: 'Demo lub PoC w maksymalnie siedem dni dla jednego, ograniczonego scenariusza. To dobry format dla presales, zarządu, inwestora albo wniosku grantowego.',
+        lead:
+          'Demo lub PoC w maksymalnie siedem dni dla jednego, ograniczonego scenariusza. To dobry format dla presales, zarządu, inwestora albo wniosku grantowego.',
         bullets: [
           'jasny rezultat i granice zakresu',
           'materiał do podjęcia decyzji biznesowej',
@@ -287,7 +585,8 @@ export const siteContent = {
       },
       {
         title: 'Zbuduj produkt',
-        lead: 'Po udanej walidacji można zaprojektować i rozwijać pełną aplikację: od UX i architektury, przez frontend i backend, po AI, integracje, testy i utrzymanie.',
+        lead:
+          'Po udanej walidacji można zaprojektować i rozwijać pełną aplikację: od UX i architektury, przez frontend i backend, po AI, integracje, testy i utrzymanie.',
         bullets: [
           'indywidualny zakres i plan rozwoju',
           'produkcyjna jakość, monitoring i bezpieczeństwo',
@@ -300,7 +599,8 @@ export const siteContent = {
     solutionGroups: [
       {
         title: 'Obsługa klienta i sprzedaż',
-        lead: 'Asystenci wiedzy, chatboty, voice agents i kwalifikacja leadów pomagają szybciej odpowiadać i lepiej domykać rozmowy.',
+        lead:
+          'Asystenci wiedzy, chatboty, voice agents i kwalifikacja leadów pomagają szybciej odpowiadać i lepiej domykać rozmowy.',
         bullets: [
           'asystenci wiedzy i RAG',
           'chatboty i kwalifikacja leadów',
@@ -309,7 +609,8 @@ export const siteContent = {
       },
       {
         title: 'Automatyzacja operacji',
-        lead: 'AI może odciążyć zespół z powtarzalnych zadań i połączyć komunikację z procesami wewnętrznymi.',
+        lead:
+          'AI może odciążyć zespół z powtarzalnych zadań i połączyć komunikację z procesami wewnętrznymi.',
         bullets: [
           'automatyzacja e-maili',
           'sterowanie procesami przez WhatsApp',
@@ -345,13 +646,14 @@ export const siteContent = {
       },
       {
         title: 'Dalszy rozwój i R&D',
-        lead: 'Eksperymenty z agentami, ewaluacją i automatyzacją wracają do projektów klientów.',
+        lead: 'Eksperymenty z agentami, ewaluacją i automatyzacją wracają do projektów klienta.',
       },
     ],
     studioTeaser: {
       eyebrow: 'Studio',
       title: 'Partner techniczny, który rozdziela demo od produkcji',
-      lead: 'Za projekt odpowiada jedno studio, a nie fikcyjna agencja. Współpraca jest prowadzona w krótkich iteracjach, z jasnym zakresem, kontrolą kosztów i czytelną granicą odpowiedzialności.',
+      lead:
+        'Za projekt odpowiada jedno studio, a nie fikcyjna agencja. Współpraca jest prowadzona w krótkich iteracjach, z jasnym zakresem, kontrolą kosztów i czytelną granicą odpowiedzialności.',
       bullets: [
         'ustalony zakres, krótkie iteracje i decyzja po każdym etapie',
         'semantyczny frontend, jawne kontrakty i dokumentacja',
@@ -387,12 +689,13 @@ export const siteContent = {
   },
   demo: {
     path: '/demo-w-7-dni',
-    eyebrow: 'Demo w 7 dni',
+    eyebrow: 'Demo, PoC i walidacja',
     title: 'Jedna iteracja, jeden scenariusz, jedna decyzja',
-    lead: 'Etap demo porządkuje zakres, treść i ograniczenia. Pokazuje to, co użytkownik zobaczy, bez udawania gotowej produkcji.',
+    lead:
+      'Demo i PoC służą do szybkiej walidacji jednego scenariusza. Pokazują wartość, przepływ i granice zakresu, zanim powstanie MVP lub produkcja.',
     includes: [
-      'klikany przepływ lub czytelny prototyp',
-      'opis założeń i ryzyk',
+      'klikalny przepływ lub czytelny prototyp',
+      'opis założeń, ograniczeń i ryzyk',
       'wstępna decyzja o kolejnym kroku',
     ],
     outOfScope: [
@@ -400,37 +703,70 @@ export const siteContent = {
       'brak długiego backend builda',
       'brak obietnicy pełnego wdrożenia w 7 dni',
     ],
-    flowSteps: [
-      'zamknięcie zakresu i materiałów',
-      'budowa i dopracowanie demo',
-      'przegląd, wnioski i decyzja',
+    flowSteps: ['zamknięcie zakresu i materiałów', 'budowa i dopracowanie demo', 'przegląd, wnioski i decyzja'],
+    demoExplanationTitle: 'Czym jest demo?',
+    demoExplanation:
+      'Demo to klikalny, ograniczony scenariusz, który pokazuje przepływ i wartość biznesową bez udawania gotowej produkcji.',
+    pocExplanationTitle: 'Czym jest PoC?',
+    pocExplanation:
+      'PoC sprawdza, czy hipoteza ma sens technicznie lub biznesowo w kontrolowanym zakresie i przy minimalnym ryzyku.',
+    sevenDayTitle: 'Co może powstać w 7 dni',
+    sevenDayPoints: [
+      'jeden scenariusz o jasno zamkniętym zakresie',
+      'klikalny przepływ lub prototyp prezentacyjny',
+      'krótka decyzja o dalszym kroku',
     ],
-    ctaLabel: 'Sprawdź zakres demo',
+    exclusionsTitle: 'Wykluczenia',
+    exclusions: [
+      'produkcyjny backend i pełne integracje',
+      'skomplikowany system z wieloma kanałami',
+      'obietnica kompletnego MVP w 7 dni',
+    ],
+    clientInputTitle: 'Materiały od klienta',
+    clientInputs: [
+      'opis procesu lub problemu do zweryfikowania',
+      'przykładowe treści, dokumenty lub pytania',
+      'osoba decyzyjna i kryterium sukcesu',
+    ],
+    resultTitle: 'Wynik sprintu',
+    result:
+      'Powstaje czytelne demo z zakresem, ryzykami i rekomendacją dalszego kroku.',
+    decisionTitle: 'Decyzja o kolejnym etapie',
+    decision:
+      'Po przeglądzie decydujemy, czy warto wejść w MVP, pełne wdrożenie, czy wrócić do doprecyzowania zakresu.',
+    transitionTitle: 'Przejście do pełnego rozwoju',
+    transition: 'Demo może przejść w Build bez kupowania kolejnego prezentacyjnego etapu.',
+    ctaLabel: 'Przejdź do kontaktu',
   },
   studio: {
     path: '/studio',
     eyebrow: 'Studio',
     title: 'Techniczne studio, które rozdziela walidację od produkcji',
-    lead: 'Projekt zaczyna się od decyzji biznesowej i dopiero potem przechodzi do architektury, integracji oraz utrzymania.',
+    lead:
+      'Projekt zaczyna się od decyzji biznesowej i dopiero potem przechodzi do architektury, integracji oraz utrzymania. Jedno studio odpowiada za cały proces, a priorytetem są testy, dokumentacja, bezpieczeństwo, kontrola kosztów AI, świadomy dobór dostawców i automatyzacje, które realnie odciążają zespół.',
     principles: [
       'jasne granice między demo i produkcją',
       'semantyczny frontend i czytelne kontrakty',
       'praca na małym, konkretnym zakresie',
+      'testy, dokumentacja i bezpieczeństwo są częścią standardu pracy',
     ],
-    capabilities: ['frontendy i panele', 'backendy i API', 'AI, RAG i automatyzacje'],
+    capabilities: ['frontendy i panele', 'backendy i API', 'AI, RAG i automatyzacje', 'Angular, FastAPI i GCP'],
     engagementModel: [
       'jeden scenariusz, jeden efekt',
       'krótkie iteracje i decyzje po każdym etapie',
       'wycena po zamknięciu zakresu',
+      'R&D wraca do klienta jako praktyczne usprawnienia kolejnych iteracji',
     ],
     ctaLabel: 'Opisz proces do zweryfikowania',
   },
   contact: {
     path: '/kontakt',
     eyebrow: 'Kontakt',
-    title: 'Opisz proces, który chcesz zweryfikować',
-    lead: 'Wystarczy krótki opis problemu, oczekiwanego efektu i materiałów, które masz pod ręką.',
+    title: 'Wybierz intent i opisz proces, który chcesz zweryfikować',
+    lead:
+      'Wybierz typ projektu, opisz krótko problem i efekt, a formularz zachowa ten sam payload bez dodatkowych pól.',
     contextNotes: [
+      'wybrany intent trafia do tego samego pola projectType',
       'formularz służy do rozpoczęcia rozmowy, nie do zbierania danych produkcyjnych',
       'najlepiej sprawdza się jeden proces lub jeden scenariusz do walidacji',
       'odpowiedź ma wskazać kolejny krok, a nie od razu pełne wdrożenie',

@@ -15,6 +15,27 @@
     </a>
   </section>
 
+  <section class="section-shell" aria-labelledby="categories-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">Kategorie według problemu</p>
+      <h2 id="categories-title">Najpierw wybierz problem biznesowy, potem produkt</h2>
+      <p class="page-lead">
+        Rozwiązania są ułożone tak, aby od razu zobaczyć, czy chodzi o sprzedaż, operacje czy
+        kontrolę nad aplikacjami.
+      </p>
+    </div>
+
+    <div class="detail-grid">
+      <section *ngFor="let category of categories">
+        <h3>{{ category.title }}</h3>
+        <p>{{ category.lead }}</p>
+        <ul>
+          <li *ngFor="let example of category.examples">{{ example }}</li>
+        </ul>
+      </section>
+    </div>
+  </section>
+
   <section class="catalog section-shell" aria-label="Katalog i wybór produktu" appRevealOnScroll>
     <nav class="selector-rail" aria-label="Produkty">
       <a
@@ -54,15 +75,43 @@
         </section>
 
         <section>
+          <h3>Wartość</h3>
+          <p>{{ selectedProduct.value || selectedProduct.valueProposition }}</p>
+        </section>
+
+        <section>
           <h3>Przykłady użycia</h3>
           <ul>
-            <li *ngFor="let item of selectedApplications">{{ item }}</li>
+            <li *ngFor="let item of selectedProduct.exampleUseCases || selectedApplications">
+              {{ item }}
+            </li>
           </ul>
         </section>
 
         <section>
-          <h3>Co pokazuje demo</h3>
+          <h3>Zakres demo</h3>
           <p>{{ selectedProduct.demoScope }}</p>
+        </section>
+
+        <section>
+          <h3>Limity demo</h3>
+          <ul>
+            <li *ngFor="let item of selectedProduct.demoBoundaries || selectedProduct.outOfScope">
+              {{ item }}
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h3>Zakres produkcyjny</h3>
+          <ul>
+            <li *ngFor="let item of selectedProduct.productionScope || []">{{ item }}</li>
+          </ul>
+        </section>
+
+        <section>
+          <h3>Rozwój po walidacji</h3>
+          <p>{{ selectedProduct.developmentPath }}</p>
         </section>
 
         <section>

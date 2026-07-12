@@ -15,6 +15,13 @@
   gap: 0.35rem;
 }
 
+.field-hint {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
 .field-full,
 .form-status,
 .submit-button {
@@ -37,6 +44,15 @@ textarea {
   padding: 0.75rem 0.85rem;
 }
 
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+.submit-button:focus-visible {
+  outline: 3px solid rgba(197, 106, 20, 0.32);
+  outline-offset: 2px;
+  border-color: var(--color-primary);
+}
+
 textarea {
   resize: vertical;
 }
@@ -50,6 +66,7 @@ textarea {
   color: #9d1c15;
   font-size: 0.9rem;
   font-weight: 700;
+  line-height: 1.4;
 }
 
 .consent {
@@ -75,6 +92,7 @@ textarea {
   border-radius: 6px;
   padding: 0.85rem 1rem;
   font-weight: 750;
+  line-height: 1.45;
 }
 
 .form-status.success {

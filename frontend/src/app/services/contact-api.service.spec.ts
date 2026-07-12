@@ -72,6 +72,40 @@ describe('ContactApiService', () => {
     request.flush({ status: 'accepted', message: 'ok' }, { status: 202, statusText: 'Accepted' });
   });
 
+  it('posts selected intent values without changing the payload contract', () => {
+    const selectedProjectTypes: ContactInquiryRequest['projectType'][] = [
+      'mvp_prototype',
+      'custom_web_app',
+      'ai_automation',
+    ];
+
+    selectedProjectTypes.forEach((projectType, index) => {
+      const intentPayload: ContactInquiryRequest = {
+        ...payload,
+        projectType,
+        message: `Test payload ${index + 1} dla ${projectType}.`,
+      };
+
+      service.submit(intentPayload).subscribe((response) => {
+        expect(response.status).toBe('accepted');
+      });
+
+      const request = http.expectOne('http://api.test/api/contact');
+      expect(request.request.method).toBe('POST');
+      expect(request.request.body).toEqual(intentPayload);
+      expect(Object.keys(request.request.body)).toEqual([
+        'name',
+        'email',
+        'company',
+        'projectType',
+        'budgetRange',
+        'message',
+        'consent',
+      ]);
+      request.flush({ status: 'accepted', message: 'ok' }, { status: 202, statusText: 'Accepted' });
+    });
+  });
+
   it('propagates validation, rate-limit, and delivery-failure responses', () => {
     service.submit(payload).subscribe({
       error: (error) => {

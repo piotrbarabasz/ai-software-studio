@@ -12,11 +12,13 @@
 
 **Purpose**: Verify the active feature context and establish the exact implementation baseline before editing application code.
 
-- [ ] T001 Confirm `.specify/feature.json` points to `specs/006-service-model-ux-repositioning` and record the active feature path in `specs/006-service-model-ux-repositioning/tasks.md`
-- [ ] T002 [P] Review current route and shell behavior in `frontend/src/app/app.routes.ts` and `frontend/src/app/features/shell/site-shell.component.ts`
-- [ ] T003 [P] Review current typed content and contact option baseline in `frontend/src/app/core/content/site-content.types.ts`, `frontend/src/app/core/content/site.pl.ts`, and `frontend/src/app/core/content/contact-options.pl.ts`
-- [ ] T004 [P] Review current page component baselines in `frontend/src/app/features/home/home.component.html`, `frontend/src/app/features/products/products-page.component.html`, `frontend/src/app/features/demo/demo-page.component.html`, `frontend/src/app/features/studio/studio-page.component.html`, and `frontend/src/app/features/contact/contact-form.component.ts`
-- [ ] T005 [P] Review existing style token and breakpoint patterns in `frontend/src/styles.scss`, `frontend/src/app/features/home/home.component.scss`, `frontend/src/app/features/products/products-page.component.scss`, `frontend/src/app/features/demo/demo-page.component.scss`, `frontend/src/app/features/studio/studio-page.component.scss`, and `frontend/src/app/features/contact/contact-form.component.scss`
+**Active feature path**: `specs/006-service-model-ux-repositioning`
+
+- [X] T001 Confirm `.specify/feature.json` points to `specs/006-service-model-ux-repositioning` and record the active feature path in `specs/006-service-model-ux-repositioning/tasks.md`
+- [X] T002 [P] Review current route and shell behavior in `frontend/src/app/app.routes.ts` and `frontend/src/app/features/shell/site-shell.component.ts`
+- [X] T003 [P] Review current typed content and contact option baseline in `frontend/src/app/core/content/site-content.types.ts`, `frontend/src/app/core/content/site.pl.ts`, and `frontend/src/app/core/content/contact-options.pl.ts`
+- [X] T004 [P] Review current page component baselines in `frontend/src/app/features/home/home.component.html`, `frontend/src/app/features/products/products-page.component.html`, `frontend/src/app/features/demo/demo-page.component.html`, `frontend/src/app/features/studio/studio-page.component.html`, and `frontend/src/app/features/contact/contact-form.component.ts`
+- [X] T005 [P] Review existing style token and breakpoint patterns in `frontend/src/styles.scss`, `frontend/src/app/features/home/home.component.scss`, `frontend/src/app/features/products/products-page.component.scss`, `frontend/src/app/features/demo/demo-page.component.scss`, `frontend/src/app/features/studio/studio-page.component.scss`, and `frontend/src/app/features/contact/contact-form.component.scss`
 
 ---
 
@@ -26,15 +28,15 @@
 
 **CRITICAL**: No user story implementation should begin until this phase is complete.
 
-- [ ] T006 Add `ServiceModel`, `CollaborationTrack`, `ResearchDirection`, `SolutionCategory`, `ProjectJourneyStep`, and `ContactIntentOption` types in `frontend/src/app/core/content/site-content.types.ts`
-- [ ] T007 Extend `ProductCatalogEntry` with category, value, example use cases, demo boundaries, production scope, development path, and contact intent fields in `frontend/src/app/core/content/site-content.types.ts`
-- [ ] T008 Add backend-compatible contact intent options for demo/quick validation, MVP, full development, AI automation/solution, and technology consultation in `frontend/src/app/core/content/contact-options.pl.ts`
-- [ ] T009 Update `ProjectType` only if needed for already-supported backend-compatible values in `frontend/src/app/services/contact-api.types.ts`
-- [ ] T010 Populate Validate, Build, R&D directions, solution categories, journey steps, route metadata, and extended product details in `frontend/src/app/core/content/site.pl.ts`
-- [ ] T011 [P] Add typed content completeness tests for service models, solution categories, journey steps, R&D claim boundaries, and no `/lab` route in `frontend/src/app/core/content/site-content.spec.ts`
-- [ ] T012 [P] Add content integrity assertions for no fictional-client proof, no unverified metrics, and no production-MVP-in-seven-days claim in `frontend/src/app/core/content/site-content.spec.ts`
-- [ ] T013 [P] Add contact option allowlist tests for required visitor intents and backend payload compatibility in `frontend/src/app/features/contact/contact-form.component.spec.ts`
-- [ ] T014 Run the frontend content and contact test subset for the foundational model in `frontend/package.json`
+- [X] T006 Add `ServiceModel`, `CollaborationTrack`, `ResearchDirection`, `SolutionCategory`, `ProjectJourneyStep`, and `ContactIntentOption` types in `frontend/src/app/core/content/site-content.types.ts`
+- [X] T007 Extend `ProductCatalogEntry` with category, value, example use cases, demo boundaries, production scope, development path, and contact intent fields in `frontend/src/app/core/content/site-content.types.ts`
+- [X] T008 Add backend-compatible contact intent options for demo/quick validation, MVP, full development, AI automation/solution, and technology consultation in `frontend/src/app/core/content/contact-options.pl.ts`
+- [X] T009 Update `ProjectType` only if needed for already-supported backend-compatible values in `frontend/src/app/services/contact-api.types.ts`
+- [X] T010 Populate Validate, Build, R&D directions, solution categories, journey steps, route metadata, and extended product details in `frontend/src/app/core/content/site.pl.ts`
+- [X] T011 [P] Add typed content completeness tests for service models, solution categories, journey steps, R&D claim boundaries, and no `/lab` route in `frontend/src/app/core/content/site-content.spec.ts`
+- [X] T012 [P] Add content integrity assertions for no fictional-client proof, no unverified metrics, and no production-MVP-in-seven-days claim in `frontend/src/app/core/content/site-content.spec.ts`
+- [X] T013 [P] Add contact option allowlist tests for required visitor intents and backend payload compatibility in `frontend/src/app/features/contact/contact-form.component.spec.ts`
+- [X] T014 Run the frontend content and contact test subset for the foundational model in `frontend/package.json`
 
 **Checkpoint**: Shared content model, route metadata, and contact intent foundation are ready for independent user-story implementation.
 
@@ -48,19 +50,19 @@
 
 ### Tests for User Story 1
 
-- [ ] T015 [P] [US1] Add homepage validation-path tests for hero copy, exactly two primary CTAs, Validate wording, seven-day boundary, and contact query mapping in `frontend/src/app/features/home/home.component.spec.ts`
-- [ ] T016 [P] [US1] Add demo page tests for demo, PoC, MVP, production, exclusions, client inputs, sprint result, next-stage decision, and full-development transition in `frontend/src/app/features/demo/demo-page.component.spec.ts`
-- [ ] T017 [P] [US1] Add contact form tests for quick-validation query preselection and invalid query fallback in `frontend/src/app/features/contact/contact-form.component.spec.ts`
+- [X] T015 [P] [US1] Add homepage validation-path tests for hero copy, exactly two primary CTAs, Validate wording, seven-day boundary, and contact query mapping in `frontend/src/app/features/home/home.component.spec.ts`
+- [X] T016 [P] [US1] Add demo page tests for demo, PoC, MVP, production, exclusions, client inputs, sprint result, next-stage decision, and full-development transition in `frontend/src/app/features/demo/demo-page.component.spec.ts`
+- [X] T017 [P] [US1] Add contact form tests for quick-validation query preselection and invalid query fallback in `frontend/src/app/features/contact/contact-form.component.spec.ts`
 
 ### Implementation for User Story 1
 
-- [ ] T018 [US1] Update homepage hero and Validate track rendering from typed content in `frontend/src/app/features/home/home.component.html`
-- [ ] T019 [US1] Style the homepage hero and Validate/Build decision area for mobile and desktop hierarchy in `frontend/src/app/features/home/home.component.scss`
-- [ ] T020 [US1] Update validation-path content, CTA labels, and allowed contact intent query params in `frontend/src/app/core/content/site.pl.ts`
-- [ ] T021 [US1] Replace or reframe demo page content so it clearly separates demo, PoC, MVP, and production in `frontend/src/app/features/demo/demo-page.component.html`
-- [ ] T022 [US1] Style demo page boundary/process sections with responsive, readable layouts in `frontend/src/app/features/demo/demo-page.component.scss`
-- [ ] T023 [US1] Update demo page typed content for exclusions, client inputs, sprint result, and transition to Build in `frontend/src/app/core/content/site.pl.ts`
-- [ ] T024 [US1] Ensure demo and validation CTAs route to `/kontakt` with an allowlisted quick-validation value in `frontend/src/app/features/home/home.component.html` and `frontend/src/app/features/demo/demo-page.component.html`
+- [X] T018 [US1] Update homepage hero and Validate track rendering from typed content in `frontend/src/app/features/home/home.component.html`
+- [X] T019 [US1] Style the homepage hero and Validate/Build decision area for mobile and desktop hierarchy in `frontend/src/app/features/home/home.component.scss`
+- [X] T020 [US1] Update validation-path content, CTA labels, and allowed contact intent query params in `frontend/src/app/core/content/site.pl.ts`
+- [X] T021 [US1] Replace or reframe demo page content so it clearly separates demo, PoC, MVP, and production in `frontend/src/app/features/demo/demo-page.component.html`
+- [X] T022 [US1] Style demo page boundary/process sections with responsive, readable layouts in `frontend/src/app/features/demo/demo-page.component.scss`
+- [X] T023 [US1] Update demo page typed content for exclusions, client inputs, sprint result, and transition to Build in `frontend/src/app/core/content/site.pl.ts`
+- [X] T024 [US1] Ensure demo and validation CTAs route to `/kontakt` with an allowlisted quick-validation value in `frontend/src/app/features/home/home.component.html` and `frontend/src/app/features/demo/demo-page.component.html`
 
 **Checkpoint**: User Story 1 is independently functional and testable as the MVP.
 
@@ -74,9 +76,9 @@
 
 ### Tests for User Story 2
 
-- [ ] T025 [P] [US2] Add homepage Build-path tests for independent Build positioning, full development scope, no demo-first requirement, and Build contact query mapping in `frontend/src/app/features/home/home.component.spec.ts`
-- [ ] T026 [P] [US2] Add route metadata tests for repositioned homepage, products, demo, Studio, contact, and product titles/descriptions in `frontend/src/app/core/content/site-content.spec.ts`
-- [ ] T027 [P] [US2] Add shell metadata and navigation CTA tests for the repositioned public routes in `frontend/src/app/features/shell/site-shell.component.spec.ts`
+- [X] T025 [P] [US2] Add homepage Build-path tests for independent Build positioning, full development scope, no demo-first requirement, and Build contact query mapping in `frontend/src/app/features/home/home.component.spec.ts`
+- [X] T026 [P] [US2] Add route metadata tests for repositioned homepage, products, demo, Studio, contact, and product titles/descriptions in `frontend/src/app/core/content/site-content.spec.ts`
+- [X] T027 [P] [US2] Add shell metadata and navigation CTA tests for the repositioned public routes in `frontend/src/app/features/shell/site-shell.component.spec.ts`
 
 ### Implementation for User Story 2
 
@@ -99,17 +101,17 @@
 
 ### Tests for User Story 3
 
-- [ ] T034 [P] [US3] Add Studio page tests for owner/responsibility, cooperation model, prototype-production split, engineering principles, quality, testing, documentation, security, AI cost, provider choice, and R&D transfer in `frontend/src/app/features/studio/studio-page.component.spec.ts`
-- [ ] T035 [P] [US3] Add R&D direction content tests for bounded status, claim boundaries, and no client-result framing in `frontend/src/app/core/content/site-content.spec.ts`
+- [X] T034 [P] [US3] Add Studio page tests for owner/responsibility, cooperation model, prototype-production split, engineering principles, quality, testing, documentation, security, AI cost, provider choice, and R&D transfer in `frontend/src/app/features/studio/studio-page.component.spec.ts`
+- [X] T035 [P] [US3] Add R&D direction content tests for bounded status, claim boundaries, and no client-result framing in `frontend/src/app/core/content/site-content.spec.ts`
 
 ### Implementation for User Story 3
 
-- [ ] T036 [US3] Expand Studio typed content for motivation, responsibility, process, engineering principles, quality, testing, documentation, security, cost control, provider choice, automation use, and R&D in `frontend/src/app/core/content/site.pl.ts`
-- [ ] T037 [US3] Rebuild Studio page sections around transparent trust and R&D content in `frontend/src/app/features/studio/studio-page.component.html`
-- [ ] T038 [US3] Style Studio page trust, process, quality, and R&D sections using existing tokens and responsive layouts in `frontend/src/app/features/studio/studio-page.component.scss`
-- [ ] T039 [US3] Audit reused landing sections and remove any misleading agency-size, pricing-first, or demo-only framing from Studio imports in `frontend/src/app/features/studio/studio-page.component.ts`
-- [ ] T040 [US3] Update homepage Studio trust teaser and R&D teaser to match the Studio page boundaries in `frontend/src/app/core/content/site.pl.ts`
-- [ ] T041 [US3] Render the updated Studio and R&D teasers on the homepage without implying client deployments in `frontend/src/app/features/home/home.component.html`
+- [X] T036 [US3] Expand Studio typed content for motivation, responsibility, process, engineering principles, quality, testing, documentation, security, cost control, provider choice, automation use, and R&D in `frontend/src/app/core/content/site.pl.ts`
+- [X] T037 [US3] Rebuild Studio page sections around transparent trust and R&D content in `frontend/src/app/features/studio/studio-page.component.html`
+- [X] T038 [US3] Style Studio page trust, process, quality, and R&D sections using existing tokens and responsive layouts in `frontend/src/app/features/studio/studio-page.component.scss`
+- [X] T039 [US3] Audit reused landing sections and remove any misleading agency-size, pricing-first, or demo-only framing from Studio imports in `frontend/src/app/features/studio/studio-page.component.ts`
+- [X] T040 [US3] Update homepage Studio trust teaser and R&D teaser to match the Studio page boundaries in `frontend/src/app/core/content/site.pl.ts`
+- [X] T041 [US3] Render the updated Studio and R&D teasers on the homepage without implying client deployments in `frontend/src/app/features/home/home.component.html`
 
 **Checkpoint**: User Story 3 is independently functional as a trust-building Studio experience.
 
@@ -123,19 +125,19 @@
 
 ### Tests for User Story 4
 
-- [ ] T042 [P] [US4] Add product category and product detail completeness tests for problem, audience, value, examples, demo scope, demo limits, production scope, development path, and CTA in `frontend/src/app/features/products/products-page.component.spec.ts`
-- [ ] T043 [P] [US4] Add direct product route, route-backed selector, active state, and browser back/forward tests in `frontend/src/app/features/products/products-page.component.spec.ts`
-- [ ] T044 [P] [US4] Add content model tests that every product has one category and every category references existing product IDs in `frontend/src/app/core/content/site-content.spec.ts`
+- [X] T042 [P] [US4] Add product category and product detail completeness tests for problem, audience, value, examples, demo scope, demo limits, production scope, development path, and CTA in `frontend/src/app/features/products/products-page.component.spec.ts`
+- [X] T043 [P] [US4] Add direct product route, route-backed selector, active state, and browser back/forward tests in `frontend/src/app/features/products/products-page.component.spec.ts`
+- [X] T044 [P] [US4] Add content model tests that every product has one category and every category references existing product IDs in `frontend/src/app/core/content/site-content.spec.ts`
 
 ### Implementation for User Story 4
 
-- [ ] T045 [US4] Populate product category assignments and richer solution fields for all existing products in `frontend/src/app/core/content/site.pl.ts`
+- [X] T045 [US4] Populate product category assignments and richer solution fields for all existing products in `frontend/src/app/core/content/site.pl.ts`
 - [ ] T046 [US4] Update products page category overview and route-backed selector markup in `frontend/src/app/features/products/products-page.component.html`
-- [ ] T047 [US4] Update products page component state derivation for categories while keeping product selection derived from Angular Router in `frontend/src/app/features/products/products-page.component.ts`
-- [ ] T048 [US4] Render demo scope, demo limits, production scope, and development path separately in `frontend/src/app/features/products/products-page.component.html`
-- [ ] T049 [US4] Style category navigation, selector rail, and detail sections for touch, keyboard focus, and responsive layouts in `frontend/src/app/features/products/products-page.component.scss`
-- [ ] T050 [US4] Map product CTAs to safe allowed contact intent values without adding backend payload fields in `frontend/src/app/core/content/site.pl.ts`
-- [ ] T051 [US4] Preserve all existing `productRoutePaths` values and route metadata entries in `frontend/src/app/core/content/site-content.types.ts` and `frontend/src/app/core/content/site.pl.ts`
+- [X] T047 [US4] Update products page component state derivation for categories while keeping product selection derived from Angular Router in `frontend/src/app/features/products/products-page.component.ts`
+- [X] T048 [US4] Render demo scope, demo limits, production scope, and development path separately in `frontend/src/app/features/products/products-page.component.html`
+- [X] T049 [US4] Style category navigation, selector rail, and detail sections for touch, keyboard focus, and responsive layouts in `frontend/src/app/features/products/products-page.component.scss`
+- [X] T050 [US4] Map product CTAs to safe allowed contact intent values without adding backend payload fields in `frontend/src/app/core/content/site.pl.ts`
+- [X] T051 [US4] Preserve all existing `productRoutePaths` values and route metadata entries in `frontend/src/app/core/content/site-content.types.ts` and `frontend/src/app/core/content/site.pl.ts`
 
 **Checkpoint**: User Story 4 is independently functional with route-stable solution discovery.
 
@@ -149,18 +151,18 @@
 
 ### Tests for User Story 5
 
-- [ ] T052 [P] [US5] Add contact form tests for all required intent labels and allowlisted preselection values in `frontend/src/app/features/contact/contact-form.component.spec.ts`
-- [ ] T053 [P] [US5] Add contact API payload-shape regression tests for selected intent values in `frontend/src/app/services/contact-api.service.spec.ts`
-- [ ] T054 [P] [US5] Add cross-page CTA href/query tests for homepage, products, demo, and Studio entry paths in `frontend/src/app/features/home/home.component.spec.ts`, `frontend/src/app/features/products/products-page.component.spec.ts`, `frontend/src/app/features/demo/demo-page.component.spec.ts`, and `frontend/src/app/features/studio/studio-page.component.spec.ts`
+- [X] T052 [P] [US5] Add contact form tests for all required intent labels and allowlisted preselection values in `frontend/src/app/features/contact/contact-form.component.spec.ts`
+- [X] T053 [P] [US5] Add contact API payload-shape regression tests for selected intent values in `frontend/src/app/services/contact-api.service.spec.ts`
+- [X] T054 [P] [US5] Add cross-page CTA href/query tests for homepage, products, demo, and Studio entry paths in `frontend/src/app/features/home/home.component.spec.ts`, `frontend/src/app/features/products/products-page.component.spec.ts`, `frontend/src/app/features/demo/demo-page.component.spec.ts`, and `frontend/src/app/features/studio/studio-page.component.spec.ts`
 
 ### Implementation for User Story 5
 
-- [ ] T055 [US5] Update contact form visible labels and helper copy for demo/quick validation, MVP, full development, AI automation/solution, and technology consultation in `frontend/src/app/core/content/contact-options.pl.ts`
-- [ ] T056 [US5] Keep query-param validation allowlisted and default invalid values to an empty selection in `frontend/src/app/features/contact/contact-form.component.ts`
-- [ ] T057 [US5] Update contact page copy to explain intent selection without changing payload shape in `frontend/src/app/core/content/site.pl.ts`
-- [ ] T058 [US5] Update contact form template if needed to display clearer intent labels, help text, validation, and status messages in `frontend/src/app/features/contact/contact-form.component.html`
-- [ ] T059 [US5] Style contact intent controls and validation messages for mobile, keyboard focus, and readable error states in `frontend/src/app/features/contact/contact-form.component.scss`
-- [ ] T060 [US5] Verify no new payload fields are added to `frontend/src/app/services/contact-api.types.ts` or `frontend/src/app/services/contact-api.service.ts`
+- [X] T055 [US5] Update contact form visible labels and helper copy for demo/quick validation, MVP, full development, AI automation/solution, and technology consultation in `frontend/src/app/core/content/contact-options.pl.ts`
+- [X] T056 [US5] Keep query-param validation allowlisted and default invalid values to an empty selection in `frontend/src/app/features/contact/contact-form.component.ts`
+- [X] T057 [US5] Update contact page copy to explain intent selection without changing payload shape in `frontend/src/app/core/content/site.pl.ts`
+- [X] T058 [US5] Update contact form template if needed to display clearer intent labels, help text, validation, and status messages in `frontend/src/app/features/contact/contact-form.component.html`
+- [X] T059 [US5] Style contact intent controls and validation messages for mobile, keyboard focus, and readable error states in `frontend/src/app/features/contact/contact-form.component.scss`
+- [X] T060 [US5] Verify no new payload fields are added to `frontend/src/app/services/contact-api.types.ts` or `frontend/src/app/services/contact-api.service.ts`
 
 **Checkpoint**: User Story 5 is independently functional with existing backend compatibility.
 
@@ -170,14 +172,14 @@
 
 **Purpose**: Validate accessibility, responsiveness, content integrity, performance, and repository workflow after selected user stories are complete.
 
-- [ ] T061 [P] Run and record frontend lint results for the feature in `specs/006-service-model-ux-repositioning/quickstart.md`
-- [ ] T062 [P] Run and record frontend test results for the feature in `specs/006-service-model-ux-repositioning/quickstart.md`
-- [ ] T063 [P] Run and record frontend production build results and bundle budget status in `specs/006-service-model-ux-repositioning/quickstart.md`
-- [ ] T064 [P] Manually verify `/`, `/produkty`, all direct product URLs, `/demo-w-7-dni`, `/studio`, and `/kontakt` against responsive and reduced-motion criteria in `specs/006-service-model-ux-repositioning/quickstart.md`
-- [ ] T065 [P] Manually verify keyboard navigation, skip link, mobile menu, active nav state, product selector focus, and contact form controls in `specs/006-service-model-ux-repositioning/quickstart.md`
-- [ ] T066 [P] Perform final content integrity review for fake clients, fake deployments, fake testimonials, unverified metrics, unauthorized logos, and misleading seven-day MVP claims in `frontend/src/app/core/content/site.pl.ts`
-- [ ] T067 [P] Confirm no `/lab` route, no new backend endpoint, no CMS, no UI library, and no new dependency were introduced in `frontend/src/app/app.routes.ts`, `frontend/package.json`, and `backend/app/api/router.py`
-- [ ] T068 Update the implementation validation notes and any deviations from the no-backend-change plan in `specs/006-service-model-ux-repositioning/quickstart.md`
+- [X] T061 [P] Run and record frontend lint results for the feature in `specs/006-service-model-ux-repositioning/quickstart.md`
+- [X] T062 [P] Run and record frontend test results for the feature in `specs/006-service-model-ux-repositioning/quickstart.md`
+- [X] T063 [P] Run and record frontend production build results and bundle budget status in `specs/006-service-model-ux-repositioning/quickstart.md`
+- [X] T064 [P] Manually verify `/`, `/produkty`, all direct product URLs, `/demo-w-7-dni`, `/studio`, and `/kontakt` against responsive and reduced-motion criteria in `specs/006-service-model-ux-repositioning/quickstart.md`
+- [X] T065 [P] Manually verify keyboard navigation, skip link, mobile menu, active nav state, product selector focus, and contact form controls in `specs/006-service-model-ux-repositioning/quickstart.md`
+- [X] T066 [P] Perform final content integrity review for fake clients, fake deployments, fake testimonials, unverified metrics, unauthorized logos, and misleading seven-day MVP claims in `frontend/src/app/core/content/site.pl.ts`
+- [X] T067 [P] Confirm no `/lab` route, no new backend endpoint, no CMS, no UI library, and no new dependency were introduced in `frontend/src/app/app.routes.ts`, `frontend/package.json`, and `backend/app/api/router.py`
+- [X] T068 Update the implementation validation notes and any deviations from the no-backend-change plan in `specs/006-service-model-ux-repositioning/quickstart.md`
 
 ---
 

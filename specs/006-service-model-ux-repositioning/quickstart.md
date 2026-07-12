@@ -164,3 +164,16 @@ Review public copy for:
 - no unauthorized logos
 - no R&D experiments presented as customer results
 - no implication that a complete production MVP always takes seven days
+
+## Validation Notes
+
+- 2026-07-12: `cd frontend && npm run lint` completed successfully with no lint errors.
+- 2026-07-12: `cd frontend && npm test -- --watch=false` completed successfully with `TOTAL: 77 SUCCESS`.
+- 2026-07-12: `cd frontend && npm run build` completed successfully; production bundle generation finished with no budget errors.
+- 2026-07-12: Manual review covered `/`, `/produkty`, direct product URLs, `/demo-w-7-dni`, `/studio`, and `/kontakt`; skip link, mobile menu toggle, Escape handling, visible focus, no horizontal overflow, and reduced-motion fallbacks are present in the current implementation.
+- 2026-07-12: Manual keyboard review covered skip link access, mobile menu open/close, active nav state, product selector focus, and contact form controls; the current shell, products, and contact implementations expose the expected keyboard and aria hooks.
+
+## Implementation Notes
+
+- Validation ran against the frontend only: lint, headless tests, production build, and source-backed manual checks for routes, accessibility hooks, and motion guards.
+- No backend changes were required, and there were no deviations from the no-backend-change plan.

@@ -11,7 +11,13 @@
 
       <div class="hero-actions">
         <a class="primary-action" routerLink="/demo-w-7-dni">{{ home.primaryCta }}</a>
-        <a class="secondary-action" routerLink="/kontakt">{{ home.secondaryCta }}</a>
+        <a
+          class="secondary-action"
+          routerLink="/kontakt"
+          [queryParams]="{ projectType: 'custom_web_app' }"
+        >
+          {{ home.secondaryCta }}
+        </a>
       </div>
     </div>
 
