@@ -61,3 +61,10 @@ Thumbs.db
 desktop.ini
 *.swp
 *.swo
+
+# Local Spec Kit active feature context
+.specify/feature.json
+
+# Autonomous loop runtime state
+.automation/state/*.json
+!.automation/state/.gitkeep
