@@ -65,7 +65,9 @@ def main() -> int:
     try:
         path.parent.mkdir(parents=True, exist_ok=True)
         with path.open("a", encoding="utf-8", newline="\n") as stream:
-            stream.write(json.dumps(record, ensure_ascii=False, separators=(",", ":")) + "\n")
+            stream.write(
+                json.dumps(record, ensure_ascii=False, separators=(",", ":")) + "\n"
+            )
     except OSError:
         return 0
     return 0

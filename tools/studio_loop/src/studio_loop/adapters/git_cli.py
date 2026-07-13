@@ -26,14 +26,53 @@ class WorktreeRecord:
 
 
 class GitCli:
+    _EXECUTABLE_LOCAL_CONFIG = (
+        r"^(alias\..*|filter\..*|core\.(hookspath|fsmonitor|sshcommand)|"
+        r"diff\.external|diff\..*\.(command|textconv)|merge\..*\.driver)$"
+    )
+
     def __init__(self, repository: Path) -> None:
         self.repository = repository.resolve()
 
-    def _run(self, arguments: list[str], *, check: bool = True) -> subprocess.CompletedProcess[str]:
+    @staticmethod
+    def _environment() -> dict[str, str]:
+        allowed = {
+            "APPDATA",
+            "COMSPEC",
+            "HOME",
+            "HOMEDRIVE",
+            "HOMEPATH",
+            "LANG",
+            "LC_ALL",
+            "LOCALAPPDATA",
+            "PATH",
+            "PATHEXT",
+            "SSH_AUTH_SOCK",
+            "SYSTEMDRIVE",
+            "SYSTEMROOT",
+            "TEMP",
+            "TMP",
+            "USERPROFILE",
+            "WINDIR",
+        }
+        environment = {key: value for key, value in os.environ.items() if key.upper() in allowed}
+        environment.update(
+            {
+                "GCM_INTERACTIVE": "Never",
+                "GIT_CONFIG_NOSYSTEM": "0",
+                "GIT_TERMINAL_PROMPT": "0",
+                "LC_ALL": "C",
+            }
+        )
+        return environment
+
+    def _run_raw(
+        self, arguments: list[str], *, check: bool = True
+    ) -> subprocess.CompletedProcess[str]:
         completed = subprocess.run(
             ["git", *arguments],
             cwd=self.repository,
-            env={**os.environ, "GIT_TERMINAL_PROMPT": "0"},
+            env=self._environment(),
             text=True,
             encoding="utf-8",
             errors="replace",
@@ -45,6 +84,42 @@ class GitCli:
             detail = completed.stderr.strip() or completed.stdout.strip() or "Git command failed"
             raise GitError(detail)
         return completed
+
+    def ensure_safe_configuration(self) -> None:
+        """Reject repository-owned Git configuration that can execute a process."""
+
+        configured = self._run_raw(
+            [
+                "config",
+                "--local",
+                "--includes",
+                "--name-only",
+                "--get-regexp",
+                self._EXECUTABLE_LOCAL_CONFIG,
+            ],
+            check=False,
+        )
+        if configured.returncode not in {0, 1}:
+            raise GitError(configured.stderr.strip() or "could not inspect local Git configuration")
+        keys = tuple(line for line in configured.stdout.splitlines() if line)
+        if keys:
+            raise CommandError(
+                "GIT_EXECUTABLE_CONFIG_FORBIDDEN",
+                "repository-local Git configuration can execute a process and is forbidden",
+                ExitCategory.POLICY,
+            )
+
+    def _run(self, arguments: list[str], *, check: bool = True) -> subprocess.CompletedProcess[str]:
+        self.ensure_safe_configuration()
+        return self._run_raw(arguments, check=check)
+
+    def _run_mutation(
+        self, arguments: list[str], *, check: bool = True
+    ) -> subprocess.CompletedProcess[str]:
+        """Run a controller mutation with every repository hook disabled."""
+
+        with tempfile.TemporaryDirectory(prefix="studio-loop-empty-hooks-") as hooks:
+            return self._run(["-c", f"core.hooksPath={hooks}", *arguments], check=check)
 
     @classmethod
     def discover(cls, path: Path) -> GitCli:
@@ -166,6 +241,7 @@ class GitCli:
         return tuple(line for line in self._run(["remote"]).stdout.splitlines() if line)
 
     def remote_url(self, remote: str = "origin") -> str:
+        self._validate_remote(remote)
         if remote not in self.remotes():
             raise CommandError(
                 "REMOTE_ORIGIN_MISSING",
@@ -197,7 +273,8 @@ class GitCli:
         return branch in self.remote_branches()
 
     def fetch(self, remote: str) -> None:
-        self._run(["fetch", "--no-tags", remote])
+        self._validate_remote(remote)
+        self._run_mutation(["fetch", "--no-tags", remote])
 
     def worktrees(self) -> tuple[WorktreeRecord, ...]:
         # Git for Windows 2.35 supports porcelain but not its later ``-z`` option.
@@ -235,26 +312,28 @@ class GitCli:
                 "base revision changed before branch creation",
                 ExitCategory.RECONCILIATION,
             )
-        self._run(["branch", branch, expected_base_sha])
+        self._run_mutation(["branch", branch, expected_base_sha])
 
     def create_worktree(self, path: Path, branch: str) -> None:
         self._validate_feature_branch(branch)
-        self._run(["worktree", "add", "--lock", str(path), branch])
+        self._run_mutation(["worktree", "add", "--lock", str(path), branch])
 
     def stage_files(self, files: tuple[str, ...]) -> None:
         self._validate_file_list(files)
-        self._run(["add", "--", *files])
+        self._run_mutation(["add", "--", *files])
 
     def commit(self, message: str) -> str:
         # Repository-local Git hooks are executable code and are not part of the
         # controller's trusted validation allowlist. Use an empty, ephemeral hook
         # directory so a commit cannot trigger push, deployment or secret access.
-        with tempfile.TemporaryDirectory(prefix="studio-loop-empty-hooks-") as hooks:
-            self._run(["-c", f"core.hooksPath={hooks}", "commit", "--no-gpg-sign", "-m", message])
+        self._run_mutation(["commit", "--no-gpg-sign", "-m", message])
         return self.head_sha()
 
     def remote_sha(self, remote: str, branch: str) -> str | None:
+        self._validate_remote(remote)
         self._validate_feature_branch(branch)
+        if remote not in self.remotes():
+            raise CommandError("REMOTE_NOT_FOUND", f"configured remote was not found: {remote}")
         result = self._run(["ls-remote", "--heads", remote, f"refs/heads/{branch}"], check=False)
         if result.returncode:
             raise GitError(result.stderr.strip() or f"could not query remote {remote}")
@@ -265,14 +344,20 @@ class GitCli:
             raise CommandError(
                 "PUSH_PROTECTED_BRANCH", "push to protected base branch is forbidden"
             )
+        self._validate_remote(remote)
+        if remote not in self.remotes():
+            raise CommandError("REMOTE_NOT_FOUND", f"configured remote was not found: {remote}")
         self._validate_feature_branch(branch)
-        self._run(["push", remote, f"refs/heads/{branch}:refs/heads/{branch}"])
+        self._run_mutation(["push", "--", remote, f"refs/heads/{branch}:refs/heads/{branch}"])
 
     @staticmethod
     def _validate_feature_branch(branch: str) -> None:
-        invalid = {"", ".", "..", "main", "master"}
-        if branch in invalid or branch.startswith("-") or ".." in branch or " " in branch:
+        if re.fullmatch(r"[0-9]{3}-[a-z0-9]+(?:-[a-z0-9]+)*", branch) is None:
             raise CommandError("INVALID_BRANCH", "branch name is not an allowed feature branch")
+
+    def _validate_remote(self, remote: str) -> None:
+        if re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]{0,63}", remote) is None:
+            raise CommandError("INVALID_REMOTE", "remote name is not allowed")
 
     @staticmethod
     def _validate_file_list(files: tuple[str, ...]) -> None:

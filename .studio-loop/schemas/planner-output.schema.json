@@ -3,17 +3,17 @@
   "$id": "https://ai-software-studio.local/studio-loop/planner-output.schema.json",
   "type": "object",
   "additionalProperties": false,
-  "required": ["status", "requirements", "files_created_or_updated", "ambiguities", "blocking_issues"],
+  "required": ["schema_version", "status", "spec_markdown", "plan_markdown", "tasks", "ambiguities", "blocking_issues"],
   "properties": {
+    "schema_version": {"const": "1.1.0"},
     "status": {"enum": ["ready", "blocked", "failed"]},
-    "requirements": {"type": "array", "maxItems": 128, "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 256}},
-    "files_created_or_updated": {"$ref": "#/$defs/paths"},
+    "spec_markdown": {"type": "string", "minLength": 1, "maxLength": 100000},
+    "plan_markdown": {"type": "string", "minLength": 1, "maxLength": 100000},
+    "tasks": {"type": "object", "minProperties": 1},
     "ambiguities": {"$ref": "#/$defs/findings"},
     "blocking_issues": {"$ref": "#/$defs/findings"}
   },
   "$defs": {
-    "path": {"type": "string", "minLength": 1, "maxLength": 512, "pattern": "^(?!/)(?![A-Za-z]:)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"},
-    "paths": {"type": "array", "maxItems": 128, "uniqueItems": true, "items": {"$ref": "#/$defs/path"}},
     "findings": {"type": "array", "maxItems": 64, "items": {"type": "string", "minLength": 1, "maxLength": 2000}}
   }
 }

@@ -12,6 +12,7 @@ from .errors import CommandError
 
 _FEATURE = re.compile(r"^(?P<number>[0-9]{3})-(?P<slug>[a-z0-9][a-z0-9-]{0,62})$")
 _NUMBER = re.compile(r"^(?P<number>[0-9]{3})(?:-|$)")
+_METADATA_TITLE = re.compile(r"^\s*(?:title|tytul)\s*:\s*(?P<value>.+?)\s*$", re.IGNORECASE)
 
 
 def normalize_slug(value: str) -> str:
@@ -21,6 +22,42 @@ def normalize_slug(value: str) -> str:
     if not slug or not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,62}", slug):
         raise CommandError("INVALID_SLUG", "slug must contain at least one ASCII letter or digit")
     return slug
+
+
+def request_slug(
+    request: str,
+    *,
+    explicit_slug: str | None = None,
+    metadata_title: str | None = None,
+) -> str:
+    """Derive a feature slug only from request content, never its file name.
+
+    The precedence is deliberately small and deterministic so that a temporary
+    request path (particularly a Windows path) cannot become feature identity.
+    """
+    if explicit_slug is not None and re.match(r"^(?:[A-Za-z]:[\\/]|[\\/])", explicit_slug.strip()):
+        raise CommandError("INVALID_SLUG", "explicit slug must not be a filesystem path")
+    candidates = (explicit_slug, metadata_title, _title_from_request(request))
+    for candidate in candidates:
+        if candidate is not None and candidate.strip():
+            return normalize_slug(candidate)
+    raise CommandError(
+        "REQUEST_TITLE_MISSING",
+        "request needs --slug, metadata title, or a non-empty heading",
+    )
+
+
+def _title_from_request(request: str) -> str | None:
+    for raw_line in request.splitlines():
+        line = raw_line.strip().lstrip("\ufeff")
+        if not line:
+            continue
+        metadata = _METADATA_TITLE.match(line)
+        if metadata:
+            return metadata["value"].strip()
+        heading = re.sub(r"^#{1,6}\s+", "", line).strip()
+        return heading or None
+    return None
 
 
 @dataclass(frozen=True)

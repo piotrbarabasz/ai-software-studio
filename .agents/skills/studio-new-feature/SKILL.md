@@ -15,7 +15,7 @@ Zapytaj kolejno o krótki opis funkcji, gałąź bazową oraz tryb (`dry-run`, `
 Zapisz opis wyłącznie w tymczasowym pliku request poza repozytorium, a następnie uruchom literalne polecenie CLI:
 
 ```powershell
-studio-loop start --request-file <plik-request> --base <base-branch> --mode <dry-run|local|draft-pr> --json
+studio-loop start --request-file <plik-request> --base-branch <base-branch> --mode <dry-run|local|draft-pr> --json
 ```
 
-Najpierw pokaż wynik `dry-run`. Dopiero po wyraźnym wyborze `local` lub `draft-pr` uruchom ten sam command z wybranym trybem. Nie uruchamiaj `git`, `gh`, merge ani deployment.
+Najpierw pokaż wynik `dry-run`. Dopiero po wyraźnym wyborze `local` lub `draft-pr` uruchom ten sam command z wybranym trybem. `local` uruchamia controller, który sam planuje, wykonuje i waliduje zadania; `draft-pr` wymaga przejścia testu end-to-end z fake `gh` przed deklarowaniem publikacji jako dostępnej. Nie uruchamiaj `git`, `gh`, merge ani deployment.

@@ -49,7 +49,10 @@ def load_role_profiles(repository: Path) -> dict[RoleName, RoleProfile]:
         raise RoleConfigurationError(
             f"cannot load canonical role configuration: {error}"
         ) from error
-    if set(payload) != {"schema_version", "roles"} or payload["schema_version"] != "1.0.0":
+    if set(payload) != {"schema_version", "roles"} or payload["schema_version"] not in {
+        "1.0.0",
+        "1.1.0",
+    }:
         raise RoleConfigurationError("unsupported or malformed roles.json")
     roles = payload.get("roles")
     if not isinstance(roles, dict) or set(roles) != _ROLES:

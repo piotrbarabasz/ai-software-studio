@@ -346,6 +346,24 @@ def test_reviewer_pass_cannot_override_failed_validation(repository: Path) -> No
     assert not result.commits
 
 
+def test_reviewer_pass_requires_complete_requirement_coverage(repository: Path) -> None:
+    def incomplete(package: dict[str, Any]) -> dict[str, Any]:
+        output = FakeRoles(repository)._default("reviewer", package)
+        output["covered_requirements"] = []
+        return output
+
+    roles = FakeRoles(repository, actions={"reviewer": [incomplete]})
+    result = controller(
+        repository,
+        roles,
+        FakeValidations(repository),
+        retry_policy=RetryPolicy(debugger=0),
+    ).run(task_collection(), run_id="run-incomplete-review")
+    assert result.state == "BLOCKED"
+    assert "requirement" in (result.blocker or "") or "debugger" in (result.blocker or "")
+    assert not result.commits
+
+
 def test_agent_branch_change_blocks(repository: Path) -> None:
     def change_branch(package: dict[str, Any]) -> dict[str, Any]:
         git(repository, "switch", "-c", "agent-branch")
@@ -422,25 +440,118 @@ def test_implementer_cannot_change_task_status_artifact(repository: Path) -> Non
 
 
 def test_symlink_escape_blocks(repository: Path, tmp_path: Path) -> None:
-    outside = tmp_path / "outside.txt"
-    outside.write_text("outside\n", encoding="utf-8")
+    outside = tmp_path / "outside"
+    outside.mkdir()
+    outside_file = outside / "work.txt"
+    outside_file.write_text("outside\n", encoding="utf-8")
+    link = repository / "linked"
+    try:
+        os.symlink(outside, link, target_is_directory=True)
+    except OSError as symlink_error:
+        if os.name != "nt":
+            pytest.skip(f"directory symlink creation is unavailable: {symlink_error}")
+        junction = subprocess.run(
+            ["cmd.exe", "/d", "/c", "mklink", "/J", str(link), str(outside)],
+            text=True,
+            capture_output=True,
+            shell=False,
+            check=False,
+        )
+        if junction.returncode != 0:
+            pytest.skip(
+                "neither directory symlinks nor Windows junctions are available: "
+                f"{symlink_error}; {junction.stderr.strip()}"
+            )
 
-    def symlink(package: dict[str, Any]) -> dict[str, Any]:
+    try:
+        roles = FakeRoles(repository)
+        result = controller(repository, roles, FakeValidations(repository)).run(
+            task_collection(allowed=("linked/work.txt",)), run_id="run-symlink"
+        )
+        assert result.state == "BLOCKED"
+        assert result.human_gate is True
+        assert result.task_statuses["T100"] == "blocked"
+        assert roles.calls == []
+        assert outside_file.read_text(encoding="utf-8") == "outside\n"
+        assert "pre-execution write-surface policy" in (result.blocker or "")
+        assert "outside the active worktree" in (result.blocker or "")
+        failure_path = (
+            repository
+            / ".automation"
+            / "state"
+            / "controller"
+            / "run-symlink"
+            / "T100"
+            / "failure-package.json"
+        )
+        failure = json.loads(failure_path.read_text(encoding="utf-8"))
+        assert failure["failure_package"]["failure_class"] == "policy"
+        assert "outside the active worktree" in failure["failure_package"]["summary"]
+    finally:
+        if link.is_symlink():
+            link.unlink()
+        elif link.exists():
+            os.rmdir(link)
+
+
+def test_debugger_is_not_invoked_when_write_surface_becomes_unsafe(
+    repository: Path, tmp_path: Path
+) -> None:
+    outside = tmp_path / "debugger-outside"
+    outside.mkdir()
+    outside_file = outside / "output.txt"
+    outside_file.write_text("outside\n", encoding="utf-8")
+    link = repository / "work"
+
+    def replace_with_external_link() -> str:
+        (link / "output.txt").unlink()
+        link.rmdir()
         try:
-            os.symlink(outside, repository / "work.txt")
-        except OSError as error:
-            pytest.skip(f"symlinks are unavailable: {error}")
-        return FakeRoles(repository)._default("implementer", package) | {
-            "claimed_changed_files": ["work.txt"]
+            os.symlink(outside, link, target_is_directory=True)
+        except OSError as symlink_error:
+            if os.name != "nt":
+                pytest.skip(f"directory symlink creation is unavailable: {symlink_error}")
+            junction = subprocess.run(
+                ["cmd.exe", "/d", "/c", "mklink", "/J", str(link), str(outside)],
+                text=True,
+                capture_output=True,
+                shell=False,
+                check=False,
+            )
+            if junction.returncode != 0:
+                pytest.skip(
+                    "neither directory symlinks nor Windows junctions are available: "
+                    f"{symlink_error}; {junction.stderr.strip()}"
+                )
+        return "FAIL"
+
+    def implement(package: dict[str, Any]) -> dict[str, Any]:
+        link.mkdir()
+        (link / "output.txt").write_text("implemented\n", encoding="utf-8")
+        return {
+            "status": "implemented",
+            "task_id": package["task_id"],
+            "summary": "implemented",
+            "claimed_changed_files": ["work/output.txt"],
+            "commands_requested": [],
+            "blocking_issues": [],
         }
 
-    roles = FakeRoles(repository, actions={"implementer": [symlink]})
-    result = controller(repository, roles, FakeValidations(repository)).run(
-        task_collection(), run_id="run-symlink"
-    )
-    assert result.state == "BLOCKED"
-    assert "symlink" in (result.blocker or "")
-    assert outside.read_text(encoding="utf-8") == "outside\n"
+    roles = FakeRoles(repository, actions={"implementer": [implement]})
+    validations = FakeValidations(repository, replace_with_external_link)
+    try:
+        result = controller(repository, roles, validations).run(
+            task_collection(allowed=("work/output.txt",)), run_id="run-debugger-surface"
+        )
+        assert result.state == "BLOCKED"
+        assert [role for role, _ in roles.calls] == ["implementer"]
+        assert "rejected debugger" in (result.blocker or "")
+        assert outside_file.read_text(encoding="utf-8") == "outside\n"
+    finally:
+        if link.is_symlink():
+            link.unlink()
+        elif link.exists():
+            os.rmdir(link)
 
 
 class CrashAt:

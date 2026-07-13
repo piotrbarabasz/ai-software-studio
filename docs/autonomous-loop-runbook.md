@@ -47,7 +47,7 @@ studio-loop resume --feature <feature-id> --mode local --json
 studio-loop abort --feature <feature-id> --reason 'opis decyzji' --json
 ```
 
-`status` jest odczytowy; `--rebuild` rekonstruuje obserwowany stan po awarii. `resume` wykonuj dopiero po poprawnym wyniku rekonstrukcji. `abort` zachowuje branch, worktree, zmiany i evidence; nie resetuje ich, nie usuwa i nie zamyka PR.
+`status` jest odczytowy; `--rebuild` rekonstruuje obserwowany stan po awarii. `resume` wykonuj dopiero po poprawnym wyniku rekonstrukcji. Nie wszystkie granice resume są jeszcze release-complete: wynik `BLOCKED` wymaga ręcznej reconciliation. `abort` zachowuje branch, worktree, zmiany i evidence; nie resetuje ich, nie usuwa i nie zamyka PR. Aktualne CLI nie udostępnia komendy `stop`.
 
 ## Retry i recovery
 
@@ -56,3 +56,21 @@ Nie powtarzaj ręcznie poleceń Git dla funkcji. Gdy controller wskaże błąd r
 ## Logi
 
 Controller utrzymuje własne zsanityzowane evidence w `.automation/state/`. Uruchomienia Codexa używają JSONL i nie zapisują reasoning. Dla diagnozy CLI GitHub użyj ręcznie `gh --version` oraz `gh auth status`; nie wklejaj tokenów do ticketów, promptów lub logów. PostToolUse hook może zapisać wyłącznie nazwę narzędzia, exit code, listę plików i czas, gdy controller jawnie poda bezpieczną ścieżkę audytu.
+
+## First real smoke test prerequisites
+
+Rzeczywistego smoke testu nie uruchamiaj, dopóki niezależnie nie potwierdzisz:
+
+- czystego worktree źródłowego;
+- zainstalowanego Codex CLI;
+- poprawnego logowania Codexa;
+- zainstalowanego `gh`;
+- poprawnego wyniku `gh auth status`;
+- dostępu operatora do remote;
+- ręcznie wypchniętego przez użytkownika brancha `007-autonomous-loop`;
+- wyniku PASS wszystkich testów lokalnych;
+- wyniku PASS GitHub Actions na Windows i Ubuntu;
+- braku niezwiązanych zmian;
+- jawnej zgody użytkownika na jeden testowy branch i jeden Draft PR.
+
+Spełnienie listy nie omija bramek implementacyjnych: dopóki CLI nie skomponuje publikacji i pełnego recovery, release pozostaje `BLOCKED`. Controller nigdy nie wykonuje merge ani deploymentu.

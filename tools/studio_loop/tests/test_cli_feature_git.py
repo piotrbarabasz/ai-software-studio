@@ -10,7 +10,7 @@ import pytest
 from studio_loop.adapters.git_cli import GitCli
 from studio_loop.cli import main
 from studio_loop.errors import EXIT_CODES, CommandError, ExitCategory
-from studio_loop.feature_numbering import FeatureService, normalize_slug
+from studio_loop.feature_numbering import FeatureService, normalize_slug, request_slug
 from studio_loop.git_service import GitService, commit_message
 from studio_loop.worktrees import WorktreeService
 
@@ -80,7 +80,7 @@ def test_start_dry_run_is_json_only_and_does_not_mutate(
 
     payload = json_stdout(capsys)
     assert payload["ok"] is True
-    assert payload["feature_id"] == "002-request-file"
+    assert payload["feature_id"] == "002-change-something-safely"
     assert payload["effects_performed"] == []
     assert git(repository, "status", "--porcelain") == before
     assert not (repository / ".automation").exists()
@@ -98,6 +98,15 @@ def test_numbering_slug_and_branch_collisions_use_all_evidence(repository: Path)
     git(repository, "branch", proposal.branch)
     with pytest.raises(CommandError, match="already in use"):
         service.ensure_available(proposal)
+
+
+def test_request_slug_never_uses_windows_temp_file_name() -> None:
+    assert request_slug("# Zażółć gęślą jaźń") == "zazoc-gesla-jazn"
+    assert request_slug("title: Real feature\nbody") == "real-feature"
+    with pytest.raises(CommandError, match="filesystem path"):
+        request_slug("ignored", explicit_slug="C:\\temp\\not-a-path")
+    with pytest.raises(CommandError, match="request needs"):
+        request_slug(" \n\t")
 
 
 def test_remote_branch_numbers_are_observed_when_a_remote_exists(
@@ -201,8 +210,111 @@ def test_safe_commit_contract_and_prohibited_stage_or_push(repository: Path) -> 
 
 
 def test_cli_local_lifecycle_and_draft_pr_controlled_stop(
-    repository: Path, capsys: pytest.CaptureFixture[str], tmp_path: Path
+    repository: Path,
+    capsys: pytest.CaptureFixture[str],
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
+    # CLI E2E uses a role fake: planner remains read-only, while the controller
+    # owns artifacts, task state and its local commits.
+    from dataclasses import dataclass
+    from typing import Any
+
+    @dataclass
+    class Result:
+        output: dict[str, Any]
+        succeeded: bool = True
+
+    def fake_run(self: Any, role: str, path: Path, *, invocation_id: str) -> Result:
+        package = json.loads(path.read_text(encoding="utf-8"))
+        feature = "001-local-feature"
+        if role == "planner":
+            return Result(
+                {
+                    "schema_version": "1.1.0",
+                    "status": "ready",
+                    "spec_markdown": "# Spec\n",
+                    "plan_markdown": "# Plan\n",
+                    "tasks": {
+                        "schema_version": "1.0.0",
+                        "feature_id": feature,
+                        "requirements": ["FR-001"],
+                        "tasks": [
+                            {
+                                "id": "T001",
+                                "phase": "core",
+                                "title": "write",
+                                "description": "write controlled file",
+                                "dependencies": [],
+                                "requirement_ids": ["FR-001"],
+                                "allowed_read_paths": ["README.md"],
+                                "allowed_write_paths": ["result.txt"],
+                                "writes": True,
+                                "validation_profile": "studio-loop-tests",
+                                "completion_criteria": ["exists"],
+                                "tests": ["unit"],
+                                "status": "pending",
+                            }
+                        ],
+                    },
+                    "ambiguities": [],
+                    "blocking_issues": [],
+                }
+            )
+        if role == "implementer":
+            (self.repository / "result.txt").write_text("done\n", encoding="utf-8")
+            return Result(
+                {
+                    "status": "implemented",
+                    "task_id": package["task_id"],
+                    "summary": "done",
+                    "claimed_changed_files": ["result.txt"],
+                    "commands_requested": [],
+                    "blocking_issues": [],
+                }
+            )
+        if role == "reviewer":
+            return Result(
+                {
+                    "verdict": "PASS",
+                    "task_id": package["task_id"],
+                    "blocking_findings": [],
+                    "non_blocking_findings": [],
+                    "covered_requirements": ["FR-001"],
+                    "recommended_action": "commit",
+                }
+            )
+        return Result(
+            {
+                "status": "repaired",
+                "task_id": package["task_id"],
+                "addressed_failures": [],
+                "remaining_failures": [],
+                "claimed_changed_files": [],
+            }
+        )
+
+    monkeypatch.setattr("studio_loop.codex_runner.CodexRunner.run", fake_run)
+    source_config = Path(__file__).parents[3] / ".studio-loop"
+    import shutil
+
+    shutil.copytree(source_config, repository / ".studio-loop", dirs_exist_ok=True)
+    (repository / ".studio-loop" / "validation-profiles.json").write_text(
+        json.dumps(
+            {
+                "schema_version": "1.0.0",
+                "profiles": {
+                    "studio-loop-tests": {
+                        "argv": [sys.executable, "-c", "raise SystemExit(0)"],
+                        "working_directory": ".",
+                    }
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    git(repository, "add", ".studio-loop")
+    git(repository, "commit", "-m", "add loop role fixtures")
     request = tmp_path / "request.txt"
     request.write_text("a local feature", encoding="utf-8")
     root = tmp_path / "isolated worktrees"
@@ -227,33 +339,10 @@ def test_cli_local_lifecycle_and_draft_pr_controlled_stop(
     )
     started = json_stdout(capsys)
     feature = str(started["feature_id"])
+    assert started["feature_state"] == "LOCALLY_COMPLETE"
     assert git(repository, "branch", "--show-current") == "main"
     assert main(["status", "--feature", feature, "--repo", str(repository), "--json"]) == 0
-    assert json_stdout(capsys)["feature_state"] == "initialized"
-    worktree = root / feature
-    tasks = {
-        "schema_version": "1.0.0",
-        "feature_id": feature,
-        "requirements": ["FR-001"],
-        "tasks": [
-            {
-                "id": "T001",
-                "phase": "setup",
-                "title": "Test renderer",
-                "description": "Render canonical tasks.",
-                "dependencies": [],
-                "requirement_ids": ["FR-001"],
-                "allowed_read_paths": ["specs"],
-                "allowed_write_paths": [],
-                "writes": False,
-                "validation_profile": "studio-loop-tests",
-                "completion_criteria": ["rendered"],
-                "tests": ["pytest"],
-                "status": "pending",
-            }
-        ],
-    }
-    (worktree / "specs" / feature / "tasks.json").write_text(json.dumps(tasks), encoding="utf-8")
+    _ = json_stdout(capsys)
     assert main(["validate", "--feature", feature, "--repo", str(repository), "--json"]) == 0
     assert json_stdout(capsys)["feature_state"] == "validated"
     assert main(["render-tasks", "--feature", feature, "--repo", str(repository), "--json"]) == 0

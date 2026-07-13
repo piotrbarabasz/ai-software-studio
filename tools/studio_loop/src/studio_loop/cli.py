@@ -14,7 +14,7 @@ from typing import Any, Never, cast
 from .adapters.gh_cli import GhCli
 from .adapters.git_cli import GitCli
 from .errors import EXIT_CODES, CommandError, ExitCategory
-from .feature_numbering import FeatureProposal, FeatureService
+from .feature_numbering import FeatureProposal, FeatureService, request_slug
 from .git_service import GitService
 from .locking import RepositoryLock
 from .models import FEATURE_ID
@@ -46,19 +46,32 @@ def _response(
     next_action: str | None = None,
     diagnostics: list[dict[str, Any]] | None = None,
     data: dict[str, Any] | None = None,
+    run_id: str | None = None,
 ) -> dict[str, Any]:
+    details = data or {}
     return {
         "contract_version": CONTRACT_VERSION,
         "ok": ok,
         "exit_category": category,
         "feature_id": feature_id,
-        "run_id": None,
+        "run_id": run_id,
         "feature_state": state,
         "mode": mode,
         "effects_performed": effects or [],
         "next_safe_action": next_action,
         "diagnostics": diagnostics or [],
-        "data": data or {},
+        "status": details.get("status", state),
+        "branch": details.get("branch"),
+        "worktree": details.get("worktree"),
+        "phase": details.get("phase"),
+        "current_task": details.get("current_task"),
+        "local_sha": details.get("local_sha"),
+        "remote_sha": details.get("remote_sha"),
+        "pull_request": details.get("pull_request"),
+        "next_action": details.get("next_action", next_action),
+        "human_gate": details.get("human_gate", False),
+        "blocking_issues": details.get("blocking_issues", []),
+        "data": details,
     }
 
 
@@ -220,11 +233,18 @@ def start(arguments: argparse.Namespace) -> dict[str, Any]:
     git = _repository(arguments.repo)
     if arguments.mode == "draft-pr":
         _draft_pr_preflight(git)
-    request = Path(arguments.request_file).read_bytes()
-    if not request:
+    request_path = Path(arguments.request_file)
+    request = request_path.read_bytes()
+    if not request or not request.strip():
         raise CommandError("EMPTY_REQUEST", "request file must not be empty", ExitCategory.USAGE)
+    try:
+        request_text = request.decode("utf-8")
+    except UnicodeDecodeError as error:
+        raise CommandError(
+            "REQUEST_ENCODING_INVALID", "request file must be UTF-8", ExitCategory.USAGE
+        ) from error
     service = FeatureService(git.repository_root(), git)
-    slug = arguments.slug or Path(arguments.request_file).stem
+    slug = request_slug(request_text, explicit_slug=arguments.slug)
     proposal = service.propose(slug)
     worktrees = WorktreeService(git.repository_root(), git)
     root = (
@@ -276,15 +296,32 @@ def start(arguments: argparse.Namespace) -> dict[str, Any]:
             json.dumps(metadata, sort_keys=True, indent=2) + "\n", encoding="utf-8"
         )
     data["worktree"] = str(result.path)
+    # The roles are instantiated only inside the isolated worktree.  Planner is
+    # read-only; all artifact writes below are controller-owned.
+    from .codex_runner import CodexRunner
+    from .lifecycle import LifecycleController
+
+    lifecycle = LifecycleController(result.path, role_runner=CodexRunner(result.path)).run(
+        metadata=metadata,
+        request=request_text,
+        mode=arguments.mode,
+    )
+    data.update(lifecycle.data())
     return _response(
-        ok=True,
-        category=ExitCategory.SUCCESS,
+        ok=lifecycle.status != "BLOCKED",
+        category=ExitCategory.SUCCESS if lifecycle.status != "BLOCKED" else ExitCategory.TASK,
         feature_id=proposal.feature_id,
         mode=arguments.mode,
-        state="initialized",
-        effects=["branch_created", "worktree_created", "feature_metadata_written"],
-        next_action="plan",
+        state=lifecycle.status,
+        effects=[
+            "branch_created",
+            "worktree_created",
+            "feature_metadata_written",
+            "planner_invoked",
+        ],
+        next_action=lifecycle.next_action,
         data=data,
+        run_id=lifecycle.run_id,
     )
 
 
@@ -340,7 +377,8 @@ def status(arguments: argparse.Namespace) -> dict[str, Any]:
 
 def resume(arguments: argparse.Namespace) -> dict[str, Any]:
     git = _repository(arguments.repo)
-    _validate_metadata(_feature_metadata_path(git, arguments.feature), arguments.feature)
+    metadata_path = _feature_metadata_path(git, arguments.feature)
+    metadata = _validate_metadata(metadata_path, arguments.feature)
     mode = arguments.mode or "local"
     if mode == "draft-pr":
         if not arguments.allow_mode_upgrade:
@@ -350,13 +388,47 @@ def resume(arguments: argparse.Namespace) -> dict[str, Any]:
                 ExitCategory.POLICY,
             )
         _draft_pr_preflight(git)
+    worktree = metadata_path.parents[2]
+    tasks_path = metadata_path.parent / "tasks.json"
+    if not tasks_path.exists():
+        raise CommandError(
+            "TASKS_NOT_FOUND",
+            "cannot resume before validated planner artifacts",
+            ExitCategory.RECONCILIATION,
+        )
+    from .codex_runner import CodexRunner
+    from .lifecycle import LifecycleController
+
+    # The controller run state is deliberately selected from its durable
+    # directory; multiple candidates are ambiguous rather than guessed.
+    runs = worktree / ".automation" / "state" / "runs"
+    candidates = (
+        tuple(path.name for path in runs.iterdir() if path.is_dir()) if runs.exists() else ()
+    )
+    if len(candidates) != 1:
+        raise CommandError(
+            "RUN_STATE_AMBIGUOUS",
+            "resume requires exactly one durable run state",
+            ExitCategory.RECONCILIATION,
+        )
+    request_digest = str(metadata["request_sha256"])
+    lifecycle = LifecycleController(worktree, role_runner=CodexRunner(worktree)).run(
+        metadata=metadata,
+        request=f"title: {metadata['slug']}\nrequest digest: {request_digest}",
+        mode=mode,
+        run_id=candidates[0],
+    )
     return _response(
-        ok=True,
-        category=ExitCategory.SUCCESS,
+        ok=lifecycle.status != "BLOCKED",
+        category=ExitCategory.SUCCESS
+        if lifecycle.status != "BLOCKED"
+        else ExitCategory.RECONCILIATION,
         feature_id=arguments.feature,
         mode=mode,
-        state="initialized",
-        next_action="planner is not implemented; no executor was started",
+        state=lifecycle.status,
+        next_action=lifecycle.next_action,
+        data=lifecycle.data(),
+        run_id=lifecycle.run_id,
     )
 
 
@@ -491,7 +563,7 @@ def build_parser() -> argparse.ArgumentParser:
         sub = commands.add_parser(command, allow_abbrev=False)
         sub.add_argument("--request-file", required=True)
         sub.add_argument("--slug")
-        sub.add_argument("--base")
+        sub.add_argument("--base", "--base-branch", dest="base")
         sub.add_argument("--mode", choices=MODES, default="dry-run")
         sub.add_argument("--worktree-root")
     for command in ("status", "resume", "abort", "validate", "validate-tasks", "render-tasks"):

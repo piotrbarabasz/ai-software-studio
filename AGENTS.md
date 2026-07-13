@@ -10,5 +10,7 @@ Pythonowy `studio-loop` controller jest jedynym orkiestratorem Autonomous Loop. 
 - Merge i deployment są zabronione. Draft PR, jeśli zostanie kiedyś obsłużony przez controller, pozostaje do ręcznej oceny.
 - Hooki i command rules są wyłącznie dodatkową ochroną. Nie mogą tworzyć stanu pętli, wywoływać `run`/`resume` ani zastępować controllerowego sprawdzania diffów.
 - Nie wolno odtwarzać usuniętego starego manager loopa na podstawie historii, dokumentów ani pamięci rozmowy.
+- Prawdziwy smoke test remote wymaga osobnej, jawnej zgody użytkownika na dokładnie jeden testowy branch i jeden Draft PR. Samo istnienie adapterów `git`/`gh` nie otwiera tej bramki.
+- Obecna kompozycja CLI kończy `draft-pr` jako `BLOCKED` przed publikacją. Nie wolno obchodzić tej granicy przez bezpośrednie uruchamianie adapterów.
 
 Przed zmianą contractów, policy, konfiguracji ról lub dokumentacji loopa uruchom testy narzędzia z `tools/studio_loop`. Nie wykonuj commita ani pusha w imieniu użytkownika.

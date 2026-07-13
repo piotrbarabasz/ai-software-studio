@@ -10,6 +10,8 @@ import subprocess
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 
+from .adapters.git_cli import GitCli
+
 _SECRET_PATH = re.compile(
     r"(?:^|/)(?:\.env(?:\.(?!example$|sample$)[^/]*)?|secrets?(?:/|\.|$)|credentials?(?:/|\.|$))"
     r"|\.(?:pem|p12|pfx|key)$",
@@ -61,10 +63,12 @@ class DiffGuard:
         ),
     ) -> None:
         self.repository = repository.resolve()
+        self.git = GitCli(self.repository)
         self.forbidden_paths = tuple(self._normalise(item) for item in forbidden_paths)
         self.ignore_case = self._repository_ignores_case()
 
     def _git(self, *arguments: str, check: bool = True) -> bytes:
+        self.git.ensure_safe_configuration()
         result = subprocess.run(
             ["git", *arguments],
             cwd=self.repository,
@@ -79,6 +83,7 @@ class DiffGuard:
         return result.stdout
 
     def _repository_ignores_case(self) -> bool:
+        self.git.ensure_safe_configuration()
         result = subprocess.run(
             ["git", "config", "--bool", "core.ignorecase"],
             cwd=self.repository,

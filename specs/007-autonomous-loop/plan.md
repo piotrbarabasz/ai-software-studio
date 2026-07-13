@@ -4,7 +4,9 @@
 
 **Input**: Feature specification from `specs/007-autonomous-loop/spec.md`
 
-**Planning boundary**: This plan defines a future implementation. It does not implement, run, or restore a manager/controller loop; it does not authorize commit, push, merge, deployment, or changes under `frontend/` or `backend/`.
+**Planning boundary**: This plan originally defined the future implementation. Implementation was subsequently authorized under `tasks.md`; this artifact still does not itself authorize commit, push, merge, deployment, or changes under `frontend/` or `backend/`.
+
+**Implementation reconciliation (2026-07-13)**: The current tree implements a substantial safe local slice and isolated publication/recovery services, with some implementation filenames consolidated into `controller.py`, `lifecycle.py`, and flat tests rather than the planned module tree. [`reconciliation.md`](reconciliation.md) preserves those mappings and the remaining scope instead of rewriting this plan. The release remains blocked because the CLI does not compose push/Draft PR/checks, resume/stop and event recovery are incomplete, approved/committed schemas drift, and GitHub's Windows/Ubuntu workflow has not yet run.
 
 ## Summary
 
@@ -14,7 +16,7 @@ Committed policy and schema files live under `.studio-loop/`; disposable state, 
 
 ## Technical Context
 
-**Language/Version**: Python `>=3.11,<4` for the standalone controller. The controller is independent of the FastAPI backend and Angular frontend. The local planning machine currently has Python 3.9.12, so implementation preflight and quickstart explicitly require an upgraded interpreter.
+**Language/Version**: Python `>=3.11,<4` for the standalone controller. The controller is independent of the FastAPI backend and Angular frontend. Release validation on 2026-07-13 used Python 3.12.5; CI is configured for Python 3.11 on Windows and Ubuntu.
 
 **Primary Dependencies**:
 

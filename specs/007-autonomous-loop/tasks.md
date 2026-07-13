@@ -4,6 +4,8 @@
 **Prerequisites**: `spec.md`, `plan.md`, `research.md`, `data-model.md`, `contracts/`, `quickstart.md`  
 **Bootstrap note**: This feature predates the controller, so this Spec Kit `tasks.md` is the implementation plan. Once implemented, `tasks.json` becomes canonical for future features and `tasks.md` is generated. This document is specification, not runtime state.
 
+**Release reconciliation (2026-07-13)**: Per-task implementation/test/blocker evidence is recorded in [`reconciliation.md`](reconciliation.md). Checkboxes below were evaluated individually; partial implementation and passing partial tests do not satisfy a task's complete `Done when` contract.
+
 **Execution rule**: Tasks are dependency-ordered and V1 work is sequential. Only one executor may write at a time. No task authorizes commit, push, merge, rebase, reset-hard, clean, or deployment during the current specification phase.
 
 ## Task record format
@@ -272,6 +274,7 @@ Each checklist line follows `[ID] [Story?] outcome with exact paths`. Its metada
   - **Requirements**: FR-025, FR-030, FR-053
   - **Done when**: Argv/cwd/env/stdin/time/output/network policy is explicit, streams are bounded, canaries are removed before persistence, and no `shell=True` path exists.
   - **Tests**: `tools/studio_loop/tests/security/test_process_runner.py` injects metacharacters, env secrets, timeout, oversized output, child processes, and verifies literal argv/redaction.
+  - **Hardening evidence (2026-07-13)**: `tools/studio_loop/tests/test_process_runner.py` verifies partial stdout/stderr retention across timeout, final-capture deduplication, output caps, child-process termination, empty/large/near-timeout/success cases, and literal argv with `shell=False`. The broader task remains open until its planned security-suite path and full validation/network/redaction matrix are complete.
 
 - [ ] T030 Implement Codex CLI adapter with fresh ephemeral structured invocations in `tools/studio_loop/src/studio_loop/adapters/codex_cli.py` and `tools/studio_loop/src/studio_loop/ports/codex.py`
   - **Depends on**: T008, T029
@@ -370,6 +373,7 @@ Each checklist line follows `[ID] [Story?] outcome with exact paths`. Its metada
   - **Requirements**: FR-026, FR-053
   - **Done when**: Absolute/traversal/control/case collision/symlink/reparse/submodule/protected escapes fail on Windows and POSIX semantics.
   - **Tests**: `tools/studio_loop/tests/property/test_paths.py` generates hostile paths and validates containment against real temp symlinks/reparse-capable fixtures.
+  - **Hardening evidence (2026-07-13)**: `tools/studio_loop/src/studio_loop/write_surface.py`, controller integration, and `tools/studio_loop/tests/test_write_surface.py` now reject absolute/traversal and external symlink/reparse write surfaces before Implementer/Debugger dispatch, including a Windows junction fixture. This task remains open because the planned shared `paths.py` policy, case-collision, submodule, and full property matrix are broader than this fix.
 
 - [ ] T040 [US2] Implement pre/post repository snapshots and full diff guard in `tools/studio_loop/src/studio_loop/diff_guard.py`
   - **Depends on**: T026, T037, T039
@@ -582,6 +586,7 @@ Each checklist line follows `[ID] [Story?] outcome with exact paths`. Its metada
   - **Requirements**: FR-055
   - **Done when**: Hooks can request stop/check policy only, contain no `run`/`resume`/manager state, and are safe when absent/disabled; no removed manager loop is restored.
   - **Tests**: `tools/studio_loop/tests/test_codex_project_guards.py` statically and behaviorally proves Stop hook cannot dispatch/continue and controller tests pass with hooks disabled.
+  - **Hardening evidence (2026-07-13)**: PreToolUse tests use the current Codex canonical `apply_patch` payload for Edit/Write matcher aliases and cover resolved worktree/allowed-path containment, symlink/reparse escape, read-only roles, `.git`, runtime state, secrets, and fail-closed unknown payloads. The task remains open pending its declared dependencies and the complete hooks-disabled controller matrix in T064.
 
 - [ ] T064 Verify controller enforcement remains complete without hooks/rules in `tools/studio_loop/tests/test_codex_project_guards.py`
   - **Depends on**: T062, T063

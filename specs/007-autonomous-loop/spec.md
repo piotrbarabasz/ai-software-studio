@@ -6,6 +6,8 @@
 
 **Status**: In Progress
 
+**Release reconciliation (2026-07-13)**: The specification remains the target contract, not a claim of implementation completeness. [`reconciliation.md`](reconciliation.md) records per-task implementation, executed tests and blockers. The current CLI completes the tested local slice, but Draft-PR publication composition, complete resume/stop recovery, contract synchronization and cross-platform CI evidence remain open; therefore the feature is not ready for a real remote smoke test.
+
 **Input**: Original specification request: "Specify a safe, deterministic Autonomous Loop v2 that converts one user request into one isolated feature workflow ending at a Draft PR ready for manual review. Do not implement the controller or agents." The final sentence constrained the original Spec Kit authoring pass; implementation is separately authorized and tracked by `tasks.md`.
 
 ## Business Context *(mandatory)*

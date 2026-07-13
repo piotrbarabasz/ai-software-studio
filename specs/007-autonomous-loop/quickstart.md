@@ -1,216 +1,100 @@
-# Quickstart and Validation Guide: Autonomous Loop v2
+# Quickstart and validation guide: Autonomous Loop
 
-**Purpose**: Validate the implemented safe local lifecycle slice and document the remaining controller boundaries.
+This guide describes the controller slice that exists in this checkout. Python 3.11+ is
+required. `dry-run` is read-only. `local` creates an isolated feature branch/worktree, invokes
+Planner and the sequential task roles, validates controller-observed diffs, and creates local
+controller-owned commits. The publication/check services have isolated mocked tests, but the
+CLI lifecycle does not yet compose them: `draft-pr` performs GitHub preflight and then ends at
+an explicit `BLOCKED` boundary without push or PR creation.
 
-## Current repository preflight (2026-07-12)
+## Install and validate
 
-| Requirement | Observed | Result |
-|---|---|---|
-| Branch | `007-autonomous-loop` | Ready; do not switch. |
-| Python | 3.9.12 | Not ready for implementation; install Python 3.11+ without changing application runtimes. |
-| Git | 2.35.1.windows.2 | Available; implementation must define/probe its tested minimum and required flags. |
-| Codex CLI | 0.144.0-alpha.4 | Exposes required non-interactive/schema/sandbox flags. |
-| GitHub CLI | not installed/on PATH | Required only for `draft-pr`; dry-run/local must remain usable without it. |
-| Existing worktree | `.specify/integrations/codex.manifest.json` modified by user | Preserve untouched; do not include in feature artifacts/commits. |
-
-No command in this guide authorizes commit, push, PR creation, merge, or deployment during the specification phase.
-
-## Planned prerequisites
-
-1. Python 3.11 or newer, Git at the tested minimum, and Codex CLI with `exec --output-schema --json --sandbox --ephemeral`.
-2. For `draft-pr` only: GitHub CLI on PATH and authenticated to the configured host/repository.
-3. An implementation checkout or disposable test repository with no unrelated changes in the controller-owned feature worktree.
-4. `.automation/state/` ignored by Git and committed `.studio-loop/` configuration validated.
-5. Installation from the standalone tool directory, for example:
+From the repository root:
 
 ```powershell
 py -3.11 -m venv tools/studio_loop/.venv
 tools/studio_loop/.venv/Scripts/python -m pip install -e "tools/studio_loop[dev]"
-```
-
-POSIX shells use the corresponding `.venv/bin/python`. Dependency installation is an implementation-phase action and may require approved network access.
-
-## Implemented foundation checks (2026-07-12)
-
-The package foundations are now implemented. From the repository root, the commands below install and validate only the typed contracts, state store, task graph/scheduler, and renderer; they do not call Codex, GitHub, hooks, skills, commit, push, merge, or deployment.
-
-```powershell
-py -3.12 -m venv tools/studio_loop/.venv
-tools/studio_loop/.venv/Scripts/python -m pip install -e "tools/studio_loop[dev]"
-tools/studio_loop/.venv/Scripts/python -m pytest tools/studio_loop/tests -q
-tools/studio_loop/.venv/Scripts/python -m ruff check tools/studio_loop
-tools/studio_loop/.venv/Scripts/python -m ruff format --check tools/studio_loop
+tools/studio_loop/.venv/Scripts/python -m pytest tools/studio_loop/tests -ra
+tools/studio_loop/.venv/Scripts/python -m ruff check tools/studio_loop .codex/hooks
+tools/studio_loop/.venv/Scripts/python -m ruff format --check tools/studio_loop .codex/hooks
 tools/studio_loop/.venv/Scripts/python -m mypy tools/studio_loop/src
+tools/studio_loop/.venv/Scripts/python -m compileall -q tools/studio_loop/src .codex/hooks
 ```
 
-## Implemented CLI slice
+On POSIX use `.venv/bin/python`. A skipped Codex ExecPolicy test means only that Codex CLI was
+not installed; it is not evidence that command rules passed.
 
-The package now exposes a non-interactive PowerShell-compatible CLI. `--json` emits exactly one structured object on stdout; readable diagnostics go to stderr. The implemented commands do not invoke Codex or GitHub and never commit, push, merge, rebase, reset, clean, delete a branch, or remove a worktree.
+## CLI inspection and read-only dry-run
 
 ```powershell
-tools/studio_loop/.venv/Scripts/studio-loop start --request-file C:\Temp\request.txt --slug "safe local change" --mode dry-run --json
-tools/studio_loop/.venv/Scripts/studio-loop start --request-file C:\Temp\request.txt --slug "safe local change" --mode local --worktree-root C:\Temp\studio-worktrees --json
-tools/studio_loop/.venv/Scripts/studio-loop status --feature 008-safe-local-change --json
-tools/studio_loop/.venv/Scripts/studio-loop validate --feature 008-safe-local-change --json
-tools/studio_loop/.venv/Scripts/studio-loop resume --feature 008-safe-local-change --mode local --json
-tools/studio_loop/.venv/Scripts/studio-loop abort --feature 008-safe-local-change --reason "operator stop" --json
-tools/studio_loop/.venv/Scripts/studio-loop render-tasks --feature 008-safe-local-change --check --json
+tools/studio_loop/.venv/Scripts/studio-loop --help
+$request = Join-Path $env:TEMP "studio-loop-request.md"
+Set-Content -LiteralPath $request -Encoding utf8 -Value "title: Safe local change`nAdd a controlled local fixture."
+tools/studio_loop/.venv/Scripts/studio-loop start --request-file $request --base 007-autonomous-loop --mode dry-run --json
 ```
 
-`init` is an alias for `start`; `validate-tasks` is an alias for `validate`. `draft-pr` deliberately returns `NOT_IMPLEMENTED` before any mutation, until the GitHub publication service is implemented. `render-tasks` requires a previously created canonical `tasks.json` and is intentionally not a Planner.
+The JSON response proposes a content-derived slug, branch, worktree and planned effects. The
+command must not create a branch, worktree, runtime state, commit, remote update or PR. The
+temporary filename never becomes the slug.
 
-`dry-run` only reads Git/specification evidence and reports the proposed number, branch, worktree and effects. `local` creates a non-forced branch and an isolated linked worktree only after verifying that the source worktree is clean. It writes `feature.json` only inside that isolated worktree. The default worktree root is a sibling named `<repository>-worktrees`, so it is portable on Windows and is not tied to a user profile.
+## Local lifecycle
 
-## 1. Contract and static validation
+Run `local` only from a clean source worktree and only after reviewing the dry-run proposal:
 
 ```powershell
-tools/studio_loop/.venv/Scripts/python -m pytest tools/studio_loop/tests/contract
-tools/studio_loop/.venv/Scripts/python -m ruff check tools/studio_loop
-tools/studio_loop/.venv/Scripts/python -m ruff format --check tools/studio_loop
-tools/studio_loop/.venv/Scripts/python -m mypy tools/studio_loop/src
+tools/studio_loop/.venv/Scripts/studio-loop start --request-file $request --base 007-autonomous-loop --mode local --json
 ```
 
-Expected:
-
-- Every schema validates against Draft 2020-12 and accepts/rejects the documented fixtures.
-- Role schemas reject extra fields, mismatched role/IDs, oversized collections, and unsupported versions.
-- Static checks pass without modifying `frontend/` or `backend/`.
-
-## 2. Environment doctor
-
-The full `doctor` command remains planned. The available `start --mode dry-run` command performs the current safe repository and feature-allocation probes.
-
-Expected:
-
-- Dry-run/local do not require `gh` auth.
-- Draft-pr reports missing/unauthenticated `gh`, wrong repository, or insufficient access precisely.
-- Unsupported Python/Codex/Git/schema/config versions fail before branch/worktree/runtime mutation.
-- Output contains no environment values or tokens.
-
-## 3. Dry-run initialization
-
-Create a request file outside committed paths, then run:
+This is a mutating local operation. It creates a feature branch and linked worktree, calls the
+configured Codex roles, writes validated Spec Kit artifacts through the controller, and may
+create local commits. It never pushes, creates a PR, merges or deploys. Save the returned
+`feature_id` and use the supported inspection commands:
 
 ```powershell
-studio-loop start --request-file C:\Temp\request.txt --slug sample-safe-change --mode dry-run --json
+tools/studio_loop/.venv/Scripts/studio-loop status --feature <feature-id> --json
+tools/studio_loop/.venv/Scripts/studio-loop status --feature <feature-id> --rebuild --json
+tools/studio_loop/.venv/Scripts/studio-loop validate --feature <feature-id> --json
+tools/studio_loop/.venv/Scripts/studio-loop render-tasks --feature <feature-id> --check --json
+tools/studio_loop/.venv/Scripts/studio-loop resume --feature <feature-id> --mode local --json
+tools/studio_loop/.venv/Scripts/studio-loop abort --feature <feature-id> --reason "operator decision" --json
 ```
 
-Expected:
+`init` aliases `start`, and `validate-tasks` aliases `validate`. There is no `stop` command in
+the current CLI. `abort` records the operator decision and preserves the branch, worktree,
+commits and evidence. Recovery is conservative and blocks contradictory or ambiguous facts.
+Resume from all lifecycle boundaries is not yet release-complete; a blocked resume requires
+manual reconciliation, never a force reset.
 
-- Reports exactly one next feature number, branch, worktree path, planned artifacts, role/profile, tasks, and effects.
-- Creates no filesystem/runtime-cache/lock/branch/worktree/commit/remote/PR effect.
-- Repeating with identical authoritative inputs gives identical decisions apart from run ID/timestamps.
-- Existing unrelated modifications remain byte-for-byte unchanged.
+## Local integration and publication-service fixtures
 
-## 4. Canonical task validation and rendering
-
-Against a fixture feature created by tests:
+These tests create only temporary repositories/fake transports:
 
 ```powershell
-studio-loop validate --feature 008-sample-safe-change --json
-studio-loop render-tasks --feature 008-sample-safe-change --check --json
+tools/studio_loop/.venv/Scripts/python -m pytest tools/studio_loop/tests/test_cli_feature_git.py::test_start_dry_run_is_json_only_and_does_not_mutate -q
+tools/studio_loop/.venv/Scripts/python -m pytest tools/studio_loop/tests/test_cli_feature_git.py::test_cli_local_lifecycle_and_draft_pr_controlled_stop -q
+tools/studio_loop/.venv/Scripts/python -m pytest tools/studio_loop/tests/test_draft_pr_services.py::test_mocked_draft_pr_service_e2e -q
 ```
 
-Expected:
+The mocked draft-PR fixture verifies explicit push policy, matching remote SHA, one Draft PR,
+current-head checks, manual-review gating, and the absence of merge capability. It is not an
+end-to-end CLI publication flow and does not authorize a real GitHub operation.
 
-- Duplicate IDs, missing dependencies, cycles, unknown requirement/profile, unsafe paths, read-only writes, and missing tests fail.
-- Valid graphs select a stable sequential order.
-- Manual `tasks.md` edits cause drift failure; regeneration restores the view from `tasks.json`.
+## First real smoke test prerequisites
 
-## 5. Local-mode integration fixture
+Do not run a real smoke test until every item is independently verified:
 
-Run only in a temporary repository constructed by the test suite:
+- the controller source worktree is clean;
+- Codex CLI is installed;
+- Codex is logged in correctly for the intended account;
+- `gh` is installed;
+- `gh auth status` succeeds for the intended GitHub host/account;
+- the operator has access to the configured remote;
+- branch `007-autonomous-loop` was pushed manually by the user;
+- all local controller tests are PASS;
+- the Autonomous Loop GitHub Actions workflow is PASS on Windows and Ubuntu;
+- there are no unrelated changes in the participating worktrees;
+- the user explicitly consents to exactly one test branch and one Draft PR.
 
-```powershell
-tools/studio_loop/.venv/Scripts/python -m pytest tools/studio_loop/tests/integration/test_local_loop.py -vv
-```
-
-Expected fixture flow:
-
-1. Lock repository allocation and create one non-forced, locked linked worktree.
-2. Invoke Planner/Implementer/Reviewer as separate fake-Codex processes; Debugger appears only after injected failure.
-3. Reject malformed output and forbidden-path diff without a commit.
-4. Execute fixed validation argv with shell disabled and sanitized environment.
-5. Create exactly one logical commit for the accepted writing task with required trailers.
-6. Leave read-only task without a commit and stop at `locally_complete` with no push/PR.
-
-## 6. Recovery fault matrix
-
-```powershell
-tools/studio_loop/.venv/Scripts/python -m pytest tools/studio_loop/tests/recovery -vv
-```
-
-Inject a process loss immediately before and after every intended branch, worktree, invocation, validation, commit, push, and PR effect.
-
-Expected:
-
-- Deleting/corrupting `snapshot.json` triggers reconstruction.
-- One incomplete final JSONL line may be quarantined under the documented rule; a corrupt complete/middle event blocks.
-- Resume never duplicates a task commit, remote push effect, or Draft PR.
-- Unexpected HEAD/remote/PR head or multiple matching PRs yields exit category `reconciliation_required`.
-- Attempt budgets and stop requests survive restart.
-
-## 7. Stop and abort
-
-In a temporary long-running validation fixture:
-
-```powershell
-studio-loop stop --feature 008-sample-safe-change --reason "operator test" --json
-studio-loop status --feature 008-sample-safe-change --rebuild --json
-studio-loop resume --feature 008-sample-safe-change --mode local --json
-studio-loop abort --feature 008-sample-safe-change --reason "abort test" --json
-```
-
-Expected:
-
-- Stop dispatches no next task after the safe boundary and remains resumable.
-- Resume reconciles before continuing.
-- Mode remains unchanged/narrowed unless a local fixture in `stopped` or `locally_complete` is resumed with the exact `--mode draft-pr --allow-mode-upgrade` pair and passes fresh draft-pr preflight; every other upgrade attempt fails before a broader effect.
-- Abort preserves evidence/branch/commits and does not force-remove a dirty worktree.
-- No hook invokes automatic continuation.
-
-## 8. Draft PR and CI with fake transport
-
-```powershell
-tools/studio_loop/.venv/Scripts/python -m pytest tools/studio_loop/tests/integration/test_draft_pr_loop.py -vv
-```
-
-Expected:
-
-- Explicit push verifies expected remote SHA.
-- Lost push response is reconciled before retry.
-- One matching Draft PR is created or reused; duplicate/non-draft/wrong-head PR blocks.
-- Pending, pass, fail, cancel, missing, and indeterminate checks are normalized for the current head SHA.
-- CI repair is bounded and traverses normal task/diff/validation/review/commit/push gates.
-- Passing checks stop at `ready_for_manual_review`; fake logs show no merge/deploy command.
-
-## 9. Opt-in disposable GitHub smoke test
-
-This test is implementation-phase only and requires an explicitly named disposable repository, dedicated test branch namespace, authenticated `gh`, and operator opt-in environment flag. It must refuse the production repository.
-
-```powershell
-tools/studio_loop/.venv/Scripts/python -m pytest tools/studio_loop/tests/smoke/test_disposable_github.py -m external -vv
-```
-
-Success criteria:
-
-- Exactly one feature branch and one open Draft PR exist for the run.
-- Draft PR head matches recorded remote SHA and required test checks are accurately reported.
-- PR remains Draft and unmerged.
-- No GCP/deployment operation occurs.
-- Test cleanup, if enabled, is handled by the test harness under separate explicit authorization; controller V1 itself never auto-deletes remote evidence.
-
-## 10. Final acceptance suite
-
-```powershell
-tools/studio_loop/.venv/Scripts/python -m pytest tools/studio_loop/tests --cov=studio_loop --cov-report=term-missing
-studio-loop render-tasks --feature 008-sample-safe-change --check --json
-git status --short
-```
-
-Expected:
-
-- All lifecycle transitions, policy rejection classes, modes, retry exhaustion, recovery boundaries, secret canaries, and cross-platform path cases pass.
-- Generated view is current.
-- Only explicitly expected test fixture paths differ; application source is untouched.
-- The feature is ready for human review, never merge or deployment.
+Even with these prerequisites, the current CLI publication composition is incomplete. Keep the
+smoke gate closed until reconciliation marks the corresponding implementation, recovery and
+traceability tasks complete. Merge and deployment remain outside controller capabilities.

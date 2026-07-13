@@ -4,6 +4,8 @@
 **Schema dialect**: JSON Schema Draft 2020-12  
 **Authority rule**: Runtime objects are projections. Feature artifacts, Git facts/trailers, expected/observed remote SHA, and GitHub Draft PR/check facts are the recovery evidence.
 
+**Implementation reconciliation (2026-07-13)**: This document remains the approved target model. Current Pydantic/state-store schemas implement only part of it and the committed `.studio-loop/schemas/` set is not fully synchronized with `contracts/`. In particular, current task status serialization and snapshot/event recovery do not yet prove every authority/digest invariant below. These are open T005-T012/T056/T076 blockers in [`reconciliation.md`](reconciliation.md), not retroactive changes to the model.
+
 ## 1. Common value objects
 
 ### VersionedArtifact

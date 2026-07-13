@@ -69,6 +69,8 @@ def ready_for_review(
     feature_validation_passed: bool,
     local_sha: str | None,
     remote_sha: str | None,
+    draft_pr_open: bool,
+    pull_request_head_sha: str | None,
     ci_passed: bool,
     clean_worktree: bool,
     human_gate: bool,
@@ -79,6 +81,8 @@ def ready_for_review(
         and feature_validation_passed
         and local_sha
         and local_sha == remote_sha
+        and draft_pr_open
+        and pull_request_head_sha == remote_sha
         and ci_passed
         and clean_worktree
         and not human_gate

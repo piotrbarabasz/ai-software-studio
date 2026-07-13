@@ -34,9 +34,39 @@ def _hook(
 def _pretool(command: str, *, role: str = "implementer") -> dict[str, Any]:
     return _hook(
         "pre_tool_use.py",
-        {"tool_name": "Bash", "tool_input": {"command": command}},
+        _pretool_event("Bash", {"command": command}, cwd=ROOT),
         environment={"STUDIO_LOOP_ROLE": role, "STUDIO_LOOP_ALLOWED_WRITE_PATHS": '["tools/**"]'},
     )
+
+
+def _pretool_event(tool_name: str, tool_input: Any, *, cwd: Path) -> dict[str, Any]:
+    """Build the PreToolUse wire shape documented for Codex CLI 0.144."""
+
+    return {
+        "session_id": "session-test",
+        "transcript_path": None,
+        "cwd": str(cwd),
+        "hook_event_name": "PreToolUse",
+        "model": "gpt-test",
+        "permission_mode": "dontAsk",
+        "turn_id": "turn-test",
+        "tool_name": tool_name,
+        "tool_use_id": "tool-use-test",
+        "tool_input": tool_input,
+    }
+
+
+def _patch_event(operation: str, path: str, *, cwd: Path) -> dict[str, Any]:
+    if operation == "Edit":
+        tool_input = {
+            "file_path": path,
+            "old_string": "before\n",
+            "new_string": "after\n",
+            "replace_all": False,
+        }
+    else:
+        tool_input = {"file_path": path, "content": "created\n"}
+    return _pretool_event(operation, tool_input, cwd=cwd)
 
 
 def _decision(result: dict[str, Any]) -> str | None:
@@ -99,17 +129,17 @@ def test_pretool_enforces_role_and_allowed_write_paths() -> None:
     patch = "*** Begin Patch\n*** Update File: tools/example.py\n*** End Patch\n"
     allowed = _hook(
         "pre_tool_use.py",
-        {"tool_name": "apply_patch", "tool_input": {"command": patch}},
+        _pretool_event("apply_patch", {"command": patch}, cwd=ROOT),
         environment={
             "STUDIO_LOOP_ROLE": "implementer",
             "STUDIO_LOOP_ALLOWED_WRITE_PATHS": '["tools"]',
         },
     )
-    assert allowed == {}
+    assert _decision(allowed) == "allow"
 
     protected = _hook(
         "pre_tool_use.py",
-        {"tool_name": "apply_patch", "tool_input": {"command": "*** Update File: .env\n"}},
+        _pretool_event("apply_patch", {"command": "*** Update File: .env\n"}, cwd=ROOT),
         environment={
             "STUDIO_LOOP_ROLE": "implementer",
             "STUDIO_LOOP_ALLOWED_WRITE_PATHS": '["**"]',
@@ -119,13 +149,175 @@ def test_pretool_enforces_role_and_allowed_write_paths() -> None:
 
     readonly = _hook(
         "pre_tool_use.py",
-        {"tool_name": "apply_patch", "tool_input": {"command": patch}},
+        _pretool_event("apply_patch", {"command": patch}, cwd=ROOT),
         environment={
             "STUDIO_LOOP_ROLE": "reviewer",
             "STUDIO_LOOP_ALLOWED_WRITE_PATHS": '["tools"]',
         },
     )
     assert _decision(readonly) == "deny"
+
+
+@pytest.mark.parametrize("operation", ["Edit", "Write"])
+def test_pretool_allows_edit_and_write_in_allowed_path(tmp_path: Path, operation: str) -> None:
+    worktree = tmp_path / "worktree"
+    allowed = worktree / "allowed"
+    allowed.mkdir(parents=True)
+    if operation == "Edit":
+        (allowed / "example.py").write_text("before\n", encoding="utf-8")
+    result = _hook(
+        "pre_tool_use.py",
+        _patch_event(operation, "allowed/example.py", cwd=worktree),
+        environment={
+            "STUDIO_LOOP_ROLE": "implementer",
+            "STUDIO_LOOP_ALLOWED_WRITE_PATHS": '["allowed"]',
+        },
+    )
+    assert _decision(result) == "allow"
+
+
+def test_pretool_denies_edit_outside_allowed_path(tmp_path: Path) -> None:
+    worktree = tmp_path / "worktree"
+    worktree.mkdir()
+    result = _hook(
+        "pre_tool_use.py",
+        _patch_event("Edit", "other/example.py", cwd=worktree),
+        environment={
+            "STUDIO_LOOP_ROLE": "implementer",
+            "STUDIO_LOOP_ALLOWED_WRITE_PATHS": '["allowed"]',
+        },
+    )
+    assert _decision(result) == "deny"
+
+
+def test_pretool_denies_write_outside_worktree(tmp_path: Path) -> None:
+    worktree = tmp_path / "worktree"
+    worktree.mkdir()
+    result = _hook(
+        "pre_tool_use.py",
+        _patch_event("Write", "../outside.txt", cwd=worktree),
+        environment={
+            "STUDIO_LOOP_ROLE": "implementer",
+            "STUDIO_LOOP_ALLOWED_WRITE_PATHS": '["**"]',
+        },
+    )
+    assert _decision(result) == "deny"
+
+
+def test_pretool_denies_path_through_external_symlink_or_reparse_point(tmp_path: Path) -> None:
+    worktree = tmp_path / "worktree"
+    worktree.mkdir()
+    outside = tmp_path / "outside"
+    outside.mkdir()
+    link = worktree / "link"
+    try:
+        os.symlink(outside, link, target_is_directory=True)
+    except OSError as symlink_error:
+        if os.name != "nt":
+            pytest.skip(f"directory symlink creation is unavailable: {symlink_error}")
+        created = subprocess.run(
+            ["cmd.exe", "/d", "/c", "mklink", "/J", str(link), str(outside)],
+            text=True,
+            capture_output=True,
+            shell=False,
+            check=False,
+        )
+        if created.returncode != 0:
+            pytest.skip(
+                "neither directory symlinks nor Windows junctions are available: "
+                f"{symlink_error}; {created.stderr.strip()}"
+            )
+    try:
+        result = _hook(
+            "pre_tool_use.py",
+            _patch_event("Write", "link/outside.txt", cwd=worktree),
+            environment={
+                "STUDIO_LOOP_ROLE": "implementer",
+                "STUDIO_LOOP_ALLOWED_WRITE_PATHS": '["link"]',
+            },
+        )
+        assert _decision(result) == "deny"
+        assert "escape" in json.dumps(result).lower()
+    finally:
+        if link.is_symlink():
+            link.unlink()
+        elif link.exists():
+            os.rmdir(link)
+
+
+def test_pretool_denies_unknown_writing_payload_format(tmp_path: Path) -> None:
+    worktree = tmp_path / "worktree"
+    worktree.mkdir()
+    result = _hook(
+        "pre_tool_use.py",
+        _pretool_event("Write", {"file_path": "allowed/file.py"}, cwd=worktree),
+        environment={
+            "STUDIO_LOOP_ROLE": "implementer",
+            "STUDIO_LOOP_ALLOWED_WRITE_PATHS": '["allowed"]',
+        },
+    )
+    assert _decision(result) == "deny"
+
+
+@pytest.mark.parametrize("role", ["planner", "reviewer"])
+def test_pretool_denies_every_planner_and_reviewer_write(tmp_path: Path, role: str) -> None:
+    worktree = tmp_path / "worktree"
+    worktree.mkdir()
+    result = _hook(
+        "pre_tool_use.py",
+        _patch_event("Write", "allowed/file.py", cwd=worktree),
+        environment={
+            "STUDIO_LOOP_ROLE": role,
+            "STUDIO_LOOP_ALLOWED_WRITE_PATHS": '["allowed"]',
+        },
+    )
+    assert _decision(result) == "deny"
+
+
+def test_pretool_allows_implementer_in_allowed_file(tmp_path: Path) -> None:
+    worktree = tmp_path / "worktree"
+    worktree.mkdir()
+    result = _hook(
+        "pre_tool_use.py",
+        _patch_event("Write", "allowed.py", cwd=worktree),
+        environment={
+            "STUDIO_LOOP_ROLE": "implementer",
+            "STUDIO_LOOP_ALLOWED_WRITE_PATHS": '["allowed.py"]',
+        },
+    )
+    assert _decision(result) == "allow"
+
+
+@pytest.mark.parametrize("path", [".git/config", ".automation/state/run.json"])
+def test_pretool_denies_git_and_runtime_state_writes(tmp_path: Path, path: str) -> None:
+    worktree = tmp_path / "worktree"
+    worktree.mkdir()
+    result = _hook(
+        "pre_tool_use.py",
+        _patch_event("Write", path, cwd=worktree),
+        environment={
+            "STUDIO_LOOP_ROLE": "implementer",
+            "STUDIO_LOOP_ALLOWED_WRITE_PATHS": '["**"]',
+        },
+    )
+    assert _decision(result) == "deny"
+
+
+def test_pretool_denies_secret_file_write_without_echoing_content(tmp_path: Path) -> None:
+    worktree = tmp_path / "worktree"
+    worktree.mkdir()
+    result = _hook(
+        "pre_tool_use.py",
+        _patch_event("Write", ".env.production", cwd=worktree),
+        environment={
+            "STUDIO_LOOP_ROLE": "implementer",
+            "STUDIO_LOOP_ALLOWED_WRITE_PATHS": '["**"]',
+        },
+    )
+    rendered = json.dumps(result)
+    assert _decision(result) == "deny"
+    assert "secret-bearing paths" in rendered
+    assert "production" not in rendered
 
 
 def test_stop_hook_explicitly_refuses_continuation() -> None:
@@ -165,6 +357,8 @@ def test_project_hook_configuration_supports_windows_paths_with_spaces() -> None
     hooks = json.loads((ROOT / ".codex" / "hooks.json").read_text(encoding="utf-8"))
     handlers = hooks["hooks"]["PreToolUse"][0]["hooks"]
     command = handlers[0]["commandWindows"]
+    matcher = hooks["hooks"]["PreToolUse"][0]["matcher"].split("|")
+    assert {"Bash", "Shell", "shell", "apply_patch", "Edit", "Write"} <= set(matcher)
     assert "Join-Path $root" in command
     assert ".codex\\hooks\\pre_tool_use.py" in command
 

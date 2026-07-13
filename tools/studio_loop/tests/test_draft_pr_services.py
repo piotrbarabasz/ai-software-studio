@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import subprocess
 from pathlib import Path
 from typing import Any
 
@@ -10,6 +11,7 @@ from studio_loop.adapters.gh_cli import Check, GhCli, PullRequest
 from studio_loop.checks import CheckState, CiObserver
 from studio_loop.ci_repair import CiRepairService
 from studio_loop.errors import CommandError
+from studio_loop.git_service import GitService
 from studio_loop.publishing import PublishingService, PushRequest, ready_for_review
 from studio_loop.pull_requests import PullRequestRequest, PullRequestService
 from studio_loop.recovery import RecoveryService
@@ -177,6 +179,110 @@ def test_push_rejects_base_branch() -> None:
             PushRequest("draft-pr", "main", "main", "origin", git.sha, True, True, True)
         )  # type: ignore[arg-type]
     assert error.value.code == "PUSH_PROTECTED_BRANCH"
+
+
+def _git(repository: Path, *arguments: str) -> str:
+    return subprocess.run(
+        ["git", *arguments],
+        cwd=repository,
+        text=True,
+        capture_output=True,
+        check=True,
+    ).stdout.strip()
+
+
+def test_real_push_uses_bare_remote_and_disables_repository_hooks(tmp_path: Path) -> None:
+    repository = tmp_path / "repository"
+    remote = tmp_path / "remote.git"
+    repository.mkdir()
+    _git(repository, "init", "-b", "main")
+    _git(repository, "config", "user.name", "Release Test")
+    _git(repository, "config", "user.email", "release@example.invalid")
+    (repository / "README.md").write_text("base\n", encoding="utf-8")
+    _git(repository, "add", "README.md")
+    _git(repository, "commit", "-m", "base")
+    _git(tmp_path, "init", "--bare", str(remote))
+    _git(repository, "remote", "add", "origin", str(remote))
+    _git(repository, "switch", "-c", "007-autonomous-loop")
+    service = GitService(repository)
+    (repository / "controlled.txt").write_text("controlled\n", encoding="utf-8")
+    local_sha = service.commit_files(
+        files=("controlled.txt",),
+        feature_id="007-autonomous-loop",
+        task_id="T050",
+        run_id="run-real-push",
+        subject="controlled push fixture",
+        expected_branch="007-autonomous-loop",
+    )
+    marker = tmp_path / "pre-push-hook-ran"
+    hook = repository / ".git" / "hooks" / "pre-push"
+    hook.write_text(f"#!/bin/sh\nprintf bad > '{marker.as_posix()}'\nexit 99\n", encoding="utf-8")
+    hook.chmod(0o755)
+
+    observed = PublishingService(service).push(
+        PushRequest(
+            "draft-pr",
+            "007-autonomous-loop",
+            "main",
+            "origin",
+            local_sha,
+            True,
+            True,
+            True,
+        )
+    )
+
+    assert observed == local_sha
+    assert (
+        _git(tmp_path, "--git-dir", str(remote), "rev-parse", "refs/heads/007-autonomous-loop")
+        == local_sha
+    )
+    assert not marker.exists()
+
+
+def test_push_rejects_remote_argument_injection_before_git(tmp_path: Path) -> None:
+    repository = tmp_path / "repository"
+    repository.mkdir()
+    _git(repository, "init", "-b", "007-autonomous-loop")
+    _git(repository, "config", "user.name", "Release Test")
+    _git(repository, "config", "user.email", "release@example.invalid")
+    (repository / "README.md").write_text("base\n", encoding="utf-8")
+    _git(repository, "add", "README.md")
+    _git(repository, "commit", "-m", "base")
+    service = GitService(repository)
+    with pytest.raises(CommandError) as raised:
+        service.push_feature(
+            remote="--receive-pack=malicious", branch="007-autonomous-loop", base_branch="main"
+        )
+    assert raised.value.code == "INVALID_REMOTE"
+
+
+def test_git_rejects_repository_owned_executable_config_without_external_effect(
+    tmp_path: Path,
+) -> None:
+    repository = tmp_path / "repository"
+    repository.mkdir()
+    _git(repository, "init", "-b", "007-autonomous-loop")
+    _git(repository, "config", "user.name", "Release Test")
+    _git(repository, "config", "user.email", "release@example.invalid")
+    (repository / "README.md").write_text("base\n", encoding="utf-8")
+    _git(repository, "add", "README.md")
+    _git(repository, "commit", "-m", "base")
+    external = tmp_path / "external.txt"
+    external.write_text("unchanged\n", encoding="utf-8")
+    _git(
+        repository,
+        "config",
+        "filter.adversarial.clean",
+        f"printf changed > '{external.as_posix()}'",
+    )
+    (repository / ".gitattributes").write_text("*.txt filter=adversarial\n", encoding="utf-8")
+
+    with pytest.raises(CommandError) as raised:
+        GitService(repository).git.is_clean()
+
+    assert raised.value.code == "GIT_EXECUTABLE_CONFIG_FORBIDDEN"
+    assert external.read_text(encoding="utf-8") == "unchanged\n"
 
 
 def test_create_and_reuse_draft_pr_preserves_manual_section(tmp_path: Path) -> None:
@@ -448,12 +554,68 @@ def test_gh_capability_distinguishes_missing_and_unauthenticated() -> None:
     )
 
 
+def test_gh_create_uses_exact_noninteractive_draft_argv(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    calls: list[list[str]] = []
+
+    def fake_run(argv: list[str], **_: Any) -> subprocess.CompletedProcess[str]:
+        calls.append(argv)
+        payload = {
+            "number": 42,
+            "url": "https://example.invalid/42",
+            "state": "OPEN",
+            "isDraft": True,
+            "baseRefName": "main",
+            "headRefName": "007-autonomous-loop",
+            "headRefOid": "a" * 40,
+            "body": "",
+        }
+        return subprocess.CompletedProcess(argv, 0, json.dumps(payload), "")
+
+    monkeypatch.setattr("studio_loop.adapters.gh_cli.subprocess.run", fake_run)
+    body = tmp_path / "body.md"
+    body.write_text("body\n", encoding="utf-8")
+    GhCli(tmp_path).create_draft_pull_request(
+        owner="owner",
+        repository="repo",
+        base="main",
+        head="007-autonomous-loop",
+        title="Controlled draft",
+        body_file=str(body),
+    )
+
+    assert calls == [
+        [
+            "gh",
+            "pr",
+            "create",
+            "--repo",
+            "owner/repo",
+            "--base",
+            "main",
+            "--head",
+            "007-autonomous-loop",
+            "--title",
+            "Controlled draft",
+            "--body-file",
+            str(body),
+            "--draft",
+            "--json",
+            "number,url,state,isDraft,baseRefName,headRefName,headRefOid,body",
+        ]
+    ]
+    assert all("merge" not in argument.casefold() for argument in calls[0])
+
+
 def test_ready_predicate_and_source_contains_no_merge_transport() -> None:
     assert ready_for_review(
         tasks_completed=True,
         feature_validation_passed=True,
         local_sha="a",
         remote_sha="a",
+        draft_pr_open=True,
+        pull_request_head_sha="a",
         ci_passed=True,
         clean_worktree=True,
         human_gate=False,
@@ -463,6 +625,19 @@ def test_ready_predicate_and_source_contains_no_merge_transport() -> None:
         feature_validation_passed=True,
         local_sha="a",
         remote_sha="b",
+        draft_pr_open=True,
+        pull_request_head_sha="b",
+        ci_passed=True,
+        clean_worktree=True,
+        human_gate=False,
+    )
+    assert not ready_for_review(
+        tasks_completed=True,
+        feature_validation_passed=True,
+        local_sha="a",
+        remote_sha="a",
+        draft_pr_open=False,
+        pull_request_head_sha=None,
         ci_passed=True,
         clean_worktree=True,
         human_gate=False,
@@ -502,9 +677,49 @@ def test_mocked_draft_pr_service_e2e(tmp_path: Path) -> None:
         feature_validation_passed=True,
         local_sha=git.sha,
         remote_sha=remote_sha,
+        draft_pr_open=pull_request.is_draft and pull_request.state == "OPEN",
+        pull_request_head_sha=pull_request.head_sha,
         ci_passed=True,
         clean_worktree=True,
         human_gate=False,
     )
     assert pull_request.is_draft and pull_request.state == "OPEN"
     assert not hasattr(github, "merge") and not hasattr(git, "merge")
+
+
+def test_recovery_uses_real_commit_trailers_without_runtime_cache(tmp_path: Path) -> None:
+    repository = tmp_path / "repository"
+    repository.mkdir()
+    _git(repository, "init", "-b", "main")
+    _git(repository, "config", "user.name", "Recovery Test")
+    _git(repository, "config", "user.email", "recovery@example.invalid")
+    (repository / "README.md").write_text("base\n", encoding="utf-8")
+    _git(repository, "add", "README.md")
+    _git(repository, "commit", "-m", "base")
+    base_sha = _git(repository, "rev-parse", "HEAD")
+    _git(repository, "switch", "-c", "007-autonomous-loop")
+    service = GitService(repository)
+    (repository / "work.txt").write_text("recovered\n", encoding="utf-8")
+    task_sha = service.commit_files(
+        files=("work.txt",),
+        feature_id="007-autonomous-loop",
+        task_id="T050",
+        run_id="run-recovery",
+        subject="recovery evidence",
+        expected_parent_sha=base_sha,
+        expected_branch="007-autonomous-loop",
+    )
+    # Recovery inputs are controller artifacts, not uncommitted feature-worktree
+    # files. Keeping them outside the repository also verifies that recovery
+    # observes a genuinely clean Git worktree.
+    metadata = tmp_path / "feature.json"
+    tasks = tmp_path / "tasks.json"
+    metadata.write_text(json.dumps({**recovery_metadata(), "base_sha": base_sha}), encoding="utf-8")
+    tasks.write_text(json.dumps(recovery_tasks(status="pending")), encoding="utf-8")
+
+    result = RecoveryService(service).rebuild(
+        feature_metadata=metadata, tasks_path=tasks, runtime_state=None
+    )
+
+    assert result.state == "LOCALLY_COMPLETE"
+    assert result.local_sha == task_sha

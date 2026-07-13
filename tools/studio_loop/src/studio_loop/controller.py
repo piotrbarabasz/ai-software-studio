@@ -20,6 +20,7 @@ from .retry_policy import RetryBudget, RetryExhausted, RetryKind, RetryPolicy
 from .task_package_service import BuiltPackage, TaskPackageService
 from .task_scheduler import ScheduleState, TaskScheduler
 from .validation_runner import ValidationPolicyError, ValidationReport, ValidationRunner
+from .write_surface import WriteSurfaceGuard
 
 
 class RoleRunner(Protocol):
@@ -100,6 +101,7 @@ class AutonomousLoopController:
         diff_guard: DiffGuard | None = None,
         git_service: GitService | None = None,
         retry_policy: RetryPolicy | None = None,
+        write_surface_guard: WriteSurfaceGuard | None = None,
         runtime_directory: Path | None = None,
         forbidden_paths: tuple[str, ...] = (
             ".git",
@@ -120,6 +122,7 @@ class AutonomousLoopController:
         self.diff_guard = diff_guard or DiffGuard(self.repository, forbidden_paths=forbidden_paths)
         self.git_service = git_service or GitService(self.repository)
         self.retry_policy = retry_policy or RetryPolicy()
+        self.write_surface_guard = write_surface_guard or WriteSurfaceGuard(self.repository)
         self.package_service = TaskPackageService(self.runtime_directory)
         self.checkpoint = checkpoint or (lambda _name: None)
         self.effects: list[str] = []
@@ -290,6 +293,32 @@ class AutonomousLoopController:
             task_status_paths=protected,
         )
 
+    def _guard_write_surface(
+        self, task: TaskDefinition, package: BuiltPackage, *, role: str
+    ) -> ControllerResult | None:
+        assert self.state is not None
+        assessment = self.write_surface_guard.assess(task.allowed_write_paths)
+        if assessment.passed:
+            return None
+        summary = f"pre-execution write-surface policy rejected {role}: " + "; ".join(
+            assessment.violations
+        )
+        failure = self.package_service.failure_package(
+            package,
+            failure_class="policy",
+            summary=summary,
+            diff="",
+            validation_reports=[],
+            reviewer_output=None,
+            remaining_debugger_attempts=RetryBudget(
+                self.retry_policy, self.state.attempts
+            ).remaining(RetryKind.DEBUGGER),
+        )
+        self.state.package_path = str(failure.path)
+        self.effects.append("failure_package_written")
+        self._save()
+        return self._block(summary)
+
     def _validate(self, task: TaskDefinition) -> tuple[list[dict[str, Any]], str | None]:
         report = self.validation_runner.run(task.validation_profile)
         if isinstance(report, ValidationReport):
@@ -337,6 +366,12 @@ class AutonomousLoopController:
             return output, "reviewer task_id does not match the active task"
         if output.get("verdict") != "PASS":
             return output, "reviewer requested changes"
+        blocking = output.get("blocking_findings")
+        if not isinstance(blocking, list) or blocking:
+            return output, "Reviewer PASS contains blocking findings"
+        covered = output.get("covered_requirements")
+        if not isinstance(covered, list) or not set(task.requirement_ids).issubset(set(covered)):
+            return output, "Reviewer PASS does not cover every task requirement"
         return output, None
 
     def _repair(
@@ -409,6 +444,9 @@ class AutonomousLoopController:
                     return None
             failure_class = "validation" if validation_failure else "review"
             summary = validation_failure or review_failure or "controller gate failed"
+            surface_failure = self._guard_write_surface(task, package, role="debugger")
+            if surface_failure is not None:
+                return surface_failure
             try:
                 repaired, repair_failure = self._repair(
                     task,
@@ -496,8 +534,6 @@ class AutonomousLoopController:
         self.effects.append("task_in_progress")
 
         baseline = self.diff_guard.snapshot()
-        if baseline.status:
-            return self._block("repository contained unrelated changes before task start")
         package = self.package_service.task_package(
             feature_id=self.state.feature_id,
             run_id=self.state.run_id,
@@ -516,6 +552,12 @@ class AutonomousLoopController:
         self.state.phase = "PACKAGED"
         self._save()
 
+        surface_failure = self._guard_write_surface(task, package, role="implementer")
+        if surface_failure is not None:
+            return surface_failure
+        if baseline.status:
+            return self._block("repository contained unrelated changes before task start")
+
         return self._implement_and_gate(task, package)
 
     def _implement_and_gate(
@@ -524,6 +566,9 @@ class AutonomousLoopController:
         assert self.state is not None
 
         while True:
+            surface_failure = self._guard_write_surface(task, package, role="implementer")
+            if surface_failure is not None:
+                return surface_failure
             try:
                 result = self._invoke("implementer", package, RetryKind.IMPLEMENTER)
             except RetryExhausted as error:
@@ -566,9 +611,16 @@ class AutonomousLoopController:
         return self._block(f"cannot reconcile controller phase {self.state.phase}")
 
     def run(
-        self, collection: TaskCollection, *, run_id: str, mode: str = "local"
+        self,
+        collection: TaskCollection,
+        *,
+        run_id: str,
+        mode: str = "local",
+        writer_lock_held: bool = False,
     ) -> ControllerResult:
         if mode == "dry-run":
+            return self._run_unlocked(collection, run_id=run_id, mode=mode)
+        if writer_lock_held:
             return self._run_unlocked(collection, run_id=run_id, mode=mode)
         with RepositoryLock.for_repository(self.repository):
             return self._run_unlocked(collection, run_id=run_id, mode=mode)

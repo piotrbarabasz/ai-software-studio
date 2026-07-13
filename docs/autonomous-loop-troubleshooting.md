@@ -25,7 +25,11 @@ Uruchom instalację z [runbooka](autonomous-loop-runbook.md#instalacja-i-kontrol
 
 ## GitHub i deployment
 
-`draft-pr` może wymagać dostępnego oraz zalogowanego `gh`, ale aktualny controller nie wykonuje remote write. `gh pr merge`, `gh pr close`, `gcloud run deploy` i `gcloud builds submit` są blokowane dla LLM. Merge i deployment pozostają osobnymi, ręcznymi procesami poza Autonomous Loop.
+`draft-pr` wymaga dostępnego i zalogowanego `gh` już na preflight. Aktualny lifecycle nie komponuje jednak publication service: po lokalnych bramkach kończy jawnie jako `BLOCKED`, bez pushu i bez PR. Nie obchodź tego przez ręczne wywołanie adaptera. `gh pr merge`, `gh pr close`, `gcloud run deploy` i `gcloud builds submit` są blokowane dla LLM. Merge i deployment pozostają osobnymi, ręcznymi procesami poza Autonomous Loop.
+
+## Resume wraca jako `BLOCKED`
+
+Rekonstrukcja ufa wyłącznie zgodnym artefaktom, trailerom commitów i obserwacji Git. Nie wszystkie przejścia resume są jeszcze release-complete. Zachowaj worktree i evidence, uruchom odczytowe `status --rebuild`, a niejednoznaczność zgłoś do ręcznej reconciliation. Nie używaj force push, resetu, clean ani ręcznej zmiany plików runtime.
 
 ## Sekrety i zbyt szczegółowe logi
 
