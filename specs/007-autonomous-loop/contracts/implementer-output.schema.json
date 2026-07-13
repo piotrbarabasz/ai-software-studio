@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-software-studio.local/studio-loop/agent/implementer-output.schema.json",
+  "title": "Implementer final output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "role", "feature_id", "run_id", "task_id", "attempt_id",
+    "invocation_id", "decision", "summary", "claimed_changed_paths",
+    "tests_requested", "blocker"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "role": {"const": "implementer"},
+    "feature_id": {"$ref": "#/$defs/featureId"},
+    "run_id": {"$ref": "#/$defs/id"},
+    "task_id": {"$ref": "#/$defs/taskId"},
+    "attempt_id": {"$ref": "#/$defs/id"},
+    "invocation_id": {"$ref": "#/$defs/id"},
+    "decision": {"enum": ["implementation_ready", "no_change_required", "blocked", "failed"]},
+    "summary": {"$ref": "#/$defs/summary"},
+    "claimed_changed_paths": {"type": "array", "maxItems": 128, "uniqueItems": true, "items": {"$ref": "#/$defs/path"}},
+    "tests_requested": {
+      "type": "array",
+      "maxItems": 16,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[a-z][a-z0-9-]{0,63}$"}
+    },
+    "blocker": {"oneOf": [{"$ref": "#/$defs/summary"}, {"type": "null"}]}
+  },
+  "$defs": {
+    "featureId": {"type": "string", "pattern": "^[0-9]{3}-[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "taskId": {"type": "string", "pattern": "^T[0-9]{3,}$"},
+    "id": {"type": "string", "minLength": 8, "maxLength": 128},
+    "summary": {"type": "string", "minLength": 1, "maxLength": 2000},
+    "path": {"type": "string", "minLength": 1, "maxLength": 512, "pattern": "^(?!/)(?![A-Za-z]:)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"}
+  }
+}

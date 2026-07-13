@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-software-studio.local/studio-loop/config.schema.json",
+  "title": "Studio Loop configuration after TOML parsing",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["config_version", "repository", "modes", "roles", "models", "validations", "git", "github", "security", "recovery"],
+  "properties": {
+    "config_version": {"type": "string", "pattern": "^1\\.[0-9]+\\.[0-9]+$"},
+    "repository": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["remote", "base_branch", "worktree_parent", "protected_paths", "max_tasks"],
+      "properties": {
+        "remote": {"type": "string", "minLength": 1, "maxLength": 64},
+        "base_branch": {"type": "string", "minLength": 1, "maxLength": 255},
+        "worktree_parent": {"type": "string", "minLength": 1},
+        "protected_paths": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/repositoryPath"}},
+        "max_tasks": {"type": "integer", "minimum": 1, "maximum": 200}
+      }
+    },
+    "modes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dry-run", "local", "draft-pr"],
+      "properties": {
+        "dry-run": {"$ref": "#/$defs/mode"},
+        "local": {"$ref": "#/$defs/mode"},
+        "draft-pr": {"$ref": "#/$defs/mode"}
+      }
+    },
+    "roles": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["planner", "implementer", "reviewer", "debugger"],
+      "properties": {
+        "planner": {"$ref": "#/$defs/role"},
+        "implementer": {"$ref": "#/$defs/role"},
+        "reviewer": {"$ref": "#/$defs/role"},
+        "debugger": {"$ref": "#/$defs/role"}
+      }
+    },
+    "models": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"$ref": "#/$defs/model"}
+    },
+    "validations": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"$ref": "#/$defs/validationProfile"}
+    },
+    "git": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minimum_version", "commit_identity", "trailers", "push_with_lease"],
+      "properties": {
+        "minimum_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+(\\.[0-9]+)?$"},
+        "commit_identity": {"type": "string", "minLength": 1},
+        "trailers": {"type": "array", "minItems": 5, "uniqueItems": true, "items": {"type": "string"}},
+        "push_with_lease": {"const": true}
+      }
+    },
+    "github": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["host", "repository", "base_branch", "required_checks", "poll_seconds", "timeout_seconds"],
+      "properties": {
+        "host": {"type": "string", "minLength": 1},
+        "repository": {"type": "string", "pattern": "^[^/]+/[^/]+$"},
+        "base_branch": {"type": "string", "minLength": 1},
+        "required_checks": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "poll_seconds": {"type": "integer", "minimum": 5, "maximum": 300},
+        "timeout_seconds": {"type": "integer", "minimum": 30, "maximum": 86400}
+      }
+    },
+    "security": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["environment_allowlist", "max_output_bytes", "redaction_patterns", "network_default"],
+      "properties": {
+        "environment_allowlist": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^[A-Z_][A-Z0-9_]*$"}},
+        "max_output_bytes": {"type": "integer", "minimum": 1024, "maximum": 104857600},
+        "redaction_patterns": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "network_default": {"const": "denied"}
+      }
+    },
+    "recovery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lock_timeout_seconds", "allow_incomplete_tail_repair", "abort_removes_clean_worktree"],
+      "properties": {
+        "lock_timeout_seconds": {"type": "integer", "minimum": 1, "maximum": 3600},
+        "allow_incomplete_tail_repair": {"const": true},
+        "abort_removes_clean_worktree": {"type": "boolean"}
+      }
+    }
+  },
+  "$defs": {
+    "repositoryPath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^(?!/)(?![A-Za-z]:)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*[\\u0000-\\u001f]).+$"
+    },
+    "mode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["agent_writes", "commit", "push", "draft_pr"],
+      "properties": {
+        "agent_writes": {"type": "boolean"},
+        "commit": {"type": "boolean"},
+        "push": {"type": "boolean"},
+        "draft_pr": {"type": "boolean"}
+      }
+    },
+    "role": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["model_profile", "sandbox", "output_schema", "timeout_seconds", "max_output_bytes"],
+      "properties": {
+        "model_profile": {"type": "string", "minLength": 1},
+        "sandbox": {"enum": ["read-only", "workspace-write"]},
+        "output_schema": {"$ref": "#/$defs/repositoryPath"},
+        "timeout_seconds": {"type": "integer", "minimum": 1, "maximum": 7200},
+        "max_output_bytes": {"type": "integer", "minimum": 1024, "maximum": 104857600}
+      }
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["model", "reasoning_effort"],
+      "properties": {
+        "model": {"type": "string", "minLength": 1},
+        "reasoning_effort": {"enum": ["low", "medium", "high", "xhigh"]}
+      }
+    },
+    "validationProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["steps"],
+      "properties": {
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["executable", "argv", "cwd", "timeout_seconds", "max_output_bytes", "network", "success_exit_codes"],
+            "properties": {
+              "executable": {"type": "string", "minLength": 1},
+              "argv": {"type": "array", "items": {"type": "string"}},
+              "cwd": {"enum": ["repository", "controller", "frontend", "backend"]},
+              "environment_allowlist": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+              "timeout_seconds": {"type": "integer", "minimum": 1, "maximum": 7200},
+              "max_output_bytes": {"type": "integer", "minimum": 1024, "maximum": 104857600},
+              "network": {"enum": ["denied", "profile-required"]},
+              "success_exit_codes": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "integer", "minimum": 0, "maximum": 255}}
+            }
+          }
+        }
+      }
+    }
+  }
+}

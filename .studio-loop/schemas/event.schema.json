@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-software-studio.local/studio-loop/event.schema.json",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "event_id", "sequence", "occurred_at", "feature_id", "run_id", "event_type", "from_state", "to_state", "task_id", "evidence"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"}, "event_id": {"type": "string", "minLength": 8}, "sequence": {"type": "integer", "minimum": 1},
+    "occurred_at": {"type": "string", "format": "date-time"}, "feature_id": {"type": "string", "pattern": "^[0-9]{3}-[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "run_id": {"type": "string", "minLength": 8}, "event_type": {"type": "string", "minLength": 1},
+    "from_state": {"type": ["string", "null"]}, "to_state": {"type": ["string", "null"]},
+    "task_id": {"type": ["string", "null"], "pattern": "^T[0-9]{3,}$"}, "evidence": {"type": "array", "items": {"type": "string"}}
+  }
+}

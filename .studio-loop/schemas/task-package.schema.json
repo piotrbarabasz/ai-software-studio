@@ -1,0 +1,7 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-software-studio.local/studio-loop/task-package.schema.json",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "feature", "tasks"],
+  "properties": {"schema_version": {"const": "1.0.0"}, "feature": {"$ref": "feature.schema.json"}, "tasks": {"$ref": "tasks.schema.json"}}
+}

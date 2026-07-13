@@ -1,3 +1,8 @@
 [agents]
 max_threads = 1
 max_depth = 1
+
+[features]
+# Project-local hooks are a defence-in-depth control. The Python controller
+# remains authoritative when this feature is unavailable or hooks are disabled.
+hooks = true

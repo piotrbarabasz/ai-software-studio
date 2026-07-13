@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-software-studio.local/studio-loop/reviewer-output.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["verdict", "task_id", "blocking_findings", "non_blocking_findings", "covered_requirements", "recommended_action"],
+  "properties": {
+    "verdict": {"enum": ["PASS", "FAIL"]},
+    "task_id": {"type": "string", "pattern": "^T[0-9]{3,}$"},
+    "blocking_findings": {"$ref": "#/$defs/findings"},
+    "non_blocking_findings": {"$ref": "#/$defs/findings"},
+    "covered_requirements": {"type": "array", "maxItems": 128, "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 128}},
+    "recommended_action": {"type": "string", "minLength": 1, "maxLength": 2000}
+  },
+  "$defs": {"findings": {"type": "array", "maxItems": 64, "items": {"type": "string", "minLength": 1, "maxLength": 2000}}}
+}

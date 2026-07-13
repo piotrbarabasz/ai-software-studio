@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-software-studio.local/studio-loop/debugger-role-output.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["status", "task_id", "addressed_failures", "remaining_failures", "claimed_changed_files"],
+  "properties": {
+    "status": {"enum": ["repaired", "partially_repaired", "blocked", "failed"]},
+    "task_id": {"type": "string", "pattern": "^T[0-9]{3,}$"},
+    "addressed_failures": {"$ref": "#/$defs/findings"},
+    "remaining_failures": {"$ref": "#/$defs/findings"},
+    "claimed_changed_files": {"$ref": "#/$defs/paths"}
+  },
+  "$defs": {
+    "path": {"type": "string", "minLength": 1, "maxLength": 512, "pattern": "^(?!/)(?![A-Za-z]:)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"},
+    "paths": {"type": "array", "maxItems": 128, "uniqueItems": true, "items": {"$ref": "#/$defs/path"}},
+    "findings": {"type": "array", "maxItems": 64, "items": {"type": "string", "minLength": 1, "maxLength": 2000}}
+  }
+}

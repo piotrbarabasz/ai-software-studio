@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-software-studio.local/studio-loop/agent/debugger-output.schema.json",
+  "title": "Failure-only Debugger final output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "role", "feature_id", "run_id", "task_id", "attempt_id",
+    "invocation_id", "failure_signature", "decision", "root_cause", "repair_summary",
+    "proposed_paths", "validation_profile_ids"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "role": {"const": "debugger"},
+    "feature_id": {"$ref": "#/$defs/featureId"},
+    "run_id": {"$ref": "#/$defs/id"},
+    "task_id": {"$ref": "#/$defs/taskId"},
+    "attempt_id": {"$ref": "#/$defs/id"},
+    "invocation_id": {"$ref": "#/$defs/id"},
+    "failure_signature": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "decision": {"enum": ["retry_with_repair", "blocked", "non_retryable"]},
+    "root_cause": {"$ref": "#/$defs/summary"},
+    "repair_summary": {"$ref": "#/$defs/summary"},
+    "proposed_paths": {"type": "array", "maxItems": 128, "uniqueItems": true, "items": {"$ref": "#/$defs/path"}},
+    "validation_profile_ids": {
+      "type": "array",
+      "maxItems": 16,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[a-z][a-z0-9-]{0,63}$"}
+    }
+  },
+  "$defs": {
+    "featureId": {"type": "string", "pattern": "^[0-9]{3}-[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "taskId": {"type": "string", "pattern": "^T[0-9]{3,}$"},
+    "id": {"type": "string", "minLength": 8, "maxLength": 128},
+    "summary": {"type": "string", "minLength": 1, "maxLength": 2000},
+    "path": {"type": "string", "minLength": 1, "maxLength": 512, "pattern": "^(?!/)(?![A-Za-z]:)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"}
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-software-studio.local/studio-loop/event.schema.json",
+  "title": "Studio Loop append-only event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "event_id", "sequence", "previous_event_sha256", "occurred_at",
+    "feature_id", "run_id", "task_id", "attempt_id", "invocation_id", "actor", "type",
+    "from_state", "to_state", "effect", "evidence", "config_digest", "artifact_digest",
+    "event_sha256"
+  ],
+  "properties": {
+    "schema_version": {"type": "string", "pattern": "^1\\.[0-9]+\\.[0-9]+$"},
+    "event_id": {"type": "string", "minLength": 16, "maxLength": 128},
+    "sequence": {"type": "integer", "minimum": 1},
+    "previous_event_sha256": {"oneOf": [{"$ref": "#/$defs/digest"}, {"type": "null"}]},
+    "occurred_at": {"type": "string", "format": "date-time"},
+    "feature_id": {"type": "string", "pattern": "^[0-9]{3}-[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "run_id": {"type": "string", "minLength": 16, "maxLength": 128},
+    "task_id": {"oneOf": [{"type": "string", "pattern": "^T[0-9]{3,}$"}, {"type": "null"}]},
+    "attempt_id": {"oneOf": [{"type": "string", "minLength": 1}, {"type": "null"}]},
+    "invocation_id": {"oneOf": [{"type": "string", "minLength": 1}, {"type": "null"}]},
+    "actor": {"enum": ["operator", "controller", "codex", "git", "github", "validation"]},
+    "type": {
+      "enum": [
+        "feature_transition", "run_started", "run_ended", "task_transition",
+        "attempt_started", "attempt_finished", "invocation_started", "invocation_finished",
+        "validation_finished", "review_finished", "effect_intended", "effect_succeeded",
+        "effect_failed", "effect_ambiguous", "stop_requested", "abort_requested",
+        "reconciliation_started", "reconciliation_finished", "policy_rejected"
+      ]
+    },
+    "from_state": {"type": ["string", "null"]},
+    "to_state": {"type": ["string", "null"]},
+    "effect": {"oneOf": [{"$ref": "#/$defs/effect"}, {"type": "null"}]},
+    "evidence": {"type": "array", "maxItems": 64, "items": {"$ref": "#/$defs/evidence"}},
+    "config_digest": {"$ref": "#/$defs/digest"},
+    "artifact_digest": {"$ref": "#/$defs/digest"},
+    "event_sha256": {"$ref": "#/$defs/digest"}
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["effect_id", "kind", "idempotency_key", "status", "target_digest", "observed_result_digest"],
+      "properties": {
+        "effect_id": {"type": "string", "minLength": 1},
+        "kind": {"enum": ["branch", "worktree", "invocation", "validation", "stage", "commit", "push", "draft_pr", "checks", "cleanup"]},
+        "idempotency_key": {"type": "string", "minLength": 1, "maxLength": 512},
+        "status": {"enum": ["intended", "succeeded", "failed", "ambiguous"]},
+        "target_digest": {"$ref": "#/$defs/digest"},
+        "observed_result_digest": {"oneOf": [{"$ref": "#/$defs/digest"}, {"type": "null"}]}
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "uri", "sha256", "redacted"],
+      "properties": {
+        "kind": {"enum": ["artifact", "git", "remote", "github", "command", "invocation", "event"]},
+        "uri": {"type": "string", "minLength": 1, "maxLength": 2048},
+        "sha256": {"oneOf": [{"$ref": "#/$defs/digest"}, {"type": "null"}]},
+        "redacted": {"type": "boolean"}
+      }
+    }
+  }
+}

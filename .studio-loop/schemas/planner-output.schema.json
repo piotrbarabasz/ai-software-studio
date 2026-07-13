@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-software-studio.local/studio-loop/planner-output.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["status", "requirements", "files_created_or_updated", "ambiguities", "blocking_issues"],
+  "properties": {
+    "status": {"enum": ["ready", "blocked", "failed"]},
+    "requirements": {"type": "array", "maxItems": 128, "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 256}},
+    "files_created_or_updated": {"$ref": "#/$defs/paths"},
+    "ambiguities": {"$ref": "#/$defs/findings"},
+    "blocking_issues": {"$ref": "#/$defs/findings"}
+  },
+  "$defs": {
+    "path": {"type": "string", "minLength": 1, "maxLength": 512, "pattern": "^(?!/)(?![A-Za-z]:)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"},
+    "paths": {"type": "array", "maxItems": 128, "uniqueItems": true, "items": {"$ref": "#/$defs/path"}},
+    "findings": {"type": "array", "maxItems": 64, "items": {"type": "string", "minLength": 1, "maxLength": 2000}}
+  }
+}

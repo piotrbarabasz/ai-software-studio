@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0.0",
+  "profiles": {
+    "backend-tests": {
+      "argv": ["python", "-m", "pytest"],
+      "working_directory": "backend"
+    },
+    "backend-lint": {
+      "argv": ["python", "-m", "ruff", "check", "."],
+      "working_directory": "backend"
+    },
+    "backend-format-check": {
+      "argv": ["python", "-m", "ruff", "format", "--check", "."],
+      "working_directory": "backend"
+    },
+    "frontend-tests": {
+      "argv": ["npm", "test"],
+      "working_directory": "frontend",
+      "timeout_seconds": 1200
+    },
+    "frontend-lint": {
+      "argv": ["npm", "run", "lint"],
+      "working_directory": "frontend"
+    },
+    "frontend-build": {
+      "argv": ["npm", "run", "build"],
+      "working_directory": "frontend",
+      "timeout_seconds": 1200
+    },
+    "studio-loop-tests": {
+      "argv": ["python", "-m", "pytest"],
+      "working_directory": "tools/studio_loop"
+    },
+    "studio-loop-lint": {
+      "argv": ["python", "-m", "ruff", "check", "."],
+      "working_directory": "tools/studio_loop"
+    }
+  }
+}

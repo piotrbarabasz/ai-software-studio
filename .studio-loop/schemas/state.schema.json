@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-software-studio.local/studio-loop/state.schema.json",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "feature_id", "run_id", "state", "revision", "updated_at", "active_task_id"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "feature_id": {"type": "string", "pattern": "^[0-9]{3}-[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "run_id": {"type": "string", "minLength": 8},
+    "state": {"enum": ["CREATED", "PREFLIGHT", "WORKTREE_CREATED", "SPECIFICATION", "PLANNING", "TASK_GENERATION", "SPEC_VALIDATION", "DRAFT_PR_CREATED", "TASK_SELECTED", "IMPLEMENTING", "VALIDATING", "REVIEWING", "REPAIRING", "COMMITTING", "PUSHING", "CI_PENDING", "FEATURE_VALIDATION", "READY_FOR_REVIEW", "BLOCKED", "ABORTED"]},
+    "revision": {"type": "integer", "minimum": 0},
+    "updated_at": {"type": "string", "format": "date-time"},
+    "active_task_id": {"type": ["string", "null"], "pattern": "^T[0-9]{3,}$"}
+  }
+}

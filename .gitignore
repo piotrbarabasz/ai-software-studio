@@ -66,5 +66,5 @@ desktop.ini
 .specify/feature.json
 
 # Autonomous loop runtime state
-.automation/state/*.json
+.automation/state/*
 !.automation/state/.gitkeep

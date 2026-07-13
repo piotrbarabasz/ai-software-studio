@@ -1,0 +1,6 @@
+{
+  "schema_version": "1.0.0",
+  "supported_modes": ["dry-run", "local", "draft-pr"],
+  "runtime_state_directory": ".automation/state",
+  "task_schema_version": "1.0.0"
+}

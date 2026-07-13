@@ -67,3 +67,11 @@ Run the local deployment preflight first:
 ```powershell
 .\scripts\gcp\preflight.ps1
 ```
+
+## Autonomous Loop
+
+`tools/studio_loop` to lokalny Python controller dla jednej izolowanej funkcji naraz. Codex roles nie sterują stanem ani Git writes; `tasks.json` jest źródłem prawdy, a `tasks.md` widokiem. Merge i deployment są poza zakresem.
+
+- [Architektura](docs/autonomous-loop-architecture.md)
+- [Runbook](docs/autonomous-loop-runbook.md)
+- [Troubleshooting](docs/autonomous-loop-troubleshooting.md)

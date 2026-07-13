@@ -1,0 +1,36 @@
+# Defence in depth for commands proposed by an LLM.  The Python controller has
+# separate argv-only adapters and does not execute commands through Codex.
+# Keep these rules stateless: they are never a source of loop state or scheduling.
+
+prefix_rule(pattern=["git", "add"], decision="forbidden")
+prefix_rule(pattern=["git", "commit"], decision="forbidden")
+prefix_rule(pattern=["git", "push"], decision="forbidden")
+prefix_rule(pattern=["git", "merge"], decision="forbidden")
+prefix_rule(pattern=["git", "rebase"], decision="forbidden")
+prefix_rule(pattern=["git", "reset", "--hard"], decision="forbidden")
+prefix_rule(pattern=["git", "clean"], decision="forbidden")
+prefix_rule(pattern=["git", "branch", "-D"], decision="forbidden")
+prefix_rule(pattern=["git", "checkout"], decision="forbidden")
+prefix_rule(pattern=["git", "switch"], decision="forbidden")
+prefix_rule(pattern=["git", "tag"], decision="forbidden")
+prefix_rule(pattern=["git", "cherry-pick"], decision="forbidden")
+prefix_rule(pattern=["git", "revert"], decision="forbidden")
+prefix_rule(pattern=["git", "restore"], decision="forbidden")
+prefix_rule(pattern=["git", "stash"], decision="forbidden")
+prefix_rule(pattern=["git", "worktree"], decision="forbidden")
+
+prefix_rule(pattern=["gh", "pr", "merge"], decision="forbidden")
+prefix_rule(pattern=["gh", "pr", "close"], decision="forbidden")
+
+prefix_rule(pattern=["gcloud", "run", "deploy"], decision="forbidden")
+prefix_rule(pattern=["gcloud", "builds", "submit"], decision="forbidden")
+
+# Common direct environment/secret-dumping commands. Shell-wrapped variants
+# are checked by the PreToolUse hook as well.
+prefix_rule(pattern=["env"], decision="forbidden")
+prefix_rule(pattern=["printenv"], decision="forbidden")
+prefix_rule(pattern=["set"], decision="forbidden")
+prefix_rule(pattern=["Get-ChildItem", "Env:"], decision="forbidden")
+prefix_rule(pattern=["Get-Content", ".env"], decision="forbidden")
+prefix_rule(pattern=["cat", ".env"], decision="forbidden")
+prefix_rule(pattern=["type", ".env"], decision="forbidden")

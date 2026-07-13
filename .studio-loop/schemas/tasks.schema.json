@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-software-studio.local/studio-loop/tasks.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "feature_id", "requirements", "tasks"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "feature_id": {"type": "string", "pattern": "^[0-9]{3}-[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "requirements": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "tasks": {"type": "array", "minItems": 1, "maxItems": 200, "items": {"$ref": "#/$defs/task"}}
+  },
+  "$defs": {
+    "task": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "phase", "title", "description", "dependencies", "requirement_ids", "allowed_read_paths", "allowed_write_paths", "writes", "validation_profile", "completion_criteria", "tests", "status"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^T[0-9]{3,}$"},
+        "phase": {"type": "string", "minLength": 1}, "title": {"type": "string", "minLength": 1}, "description": {"type": "string", "minLength": 1},
+        "dependencies": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^T[0-9]{3,}$"}},
+        "requirement_ids": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "allowed_read_paths": {"type": "array", "items": {"$ref": "#/$defs/path"}},
+        "allowed_write_paths": {"type": "array", "items": {"$ref": "#/$defs/path"}},
+        "writes": {"type": "boolean"}, "validation_profile": {"type": "string", "minLength": 1},
+        "completion_criteria": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "tests": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "status": {"enum": ["pending", "in_progress", "completed", "blocked", "failed", "aborted"]}
+      }
+    },
+    "path": {"type": "string", "minLength": 1, "pattern": "^(?!/)(?!\\\\)(?![A-Za-z]:)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"}
+  }
+}
