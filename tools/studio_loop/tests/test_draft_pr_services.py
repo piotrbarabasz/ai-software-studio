@@ -8,8 +8,8 @@ from typing import Any
 import pytest
 
 from studio_loop.adapters.gh_cli import Check, GhCli, PullRequest
-from studio_loop.checks import CheckState, CiObserver
-from studio_loop.ci_repair import CiRepairService
+from studio_loop.checks import CheckObservation, CheckState, CiObserver
+from studio_loop.ci_repair import CiRepairService, map_failure_to_task
 from studio_loop.errors import CommandError
 from studio_loop.git_service import GitService
 from studio_loop.publishing import PublishingService, PushRequest, ready_for_review
@@ -37,7 +37,7 @@ class FakeGitCli:
         return self.trailers.get((name, value), ())
 
     def is_ancestor(self, ancestor: str, descendant: str) -> bool:
-        return ancestor == "b" * 40 and descendant == "a" * 40
+        return ancestor == descendant or (ancestor == "b" * 40 and descendant == "a" * 40)
 
 
 class FakeGit:
@@ -129,7 +129,7 @@ def recovery_metadata() -> dict[str, Any]:
 
 def recovery_tasks(*, status: str = "completed") -> dict[str, Any]:
     return {
-        "schema_version": "1.0.0",
+        "schema_version": "1.1.0",
         "feature_id": "007-autonomous-loop",
         "requirements": ["FR-001"],
         "tasks": [
@@ -143,7 +143,7 @@ def recovery_tasks(*, status: str = "completed") -> dict[str, Any]:
                 "allowed_read_paths": ["README.md"],
                 "allowed_write_paths": ["work.txt"],
                 "writes": True,
-                "validation_profile": "trusted",
+                "validation_profiles": ["trusted"],
                 "completion_criteria": ["commit exists"],
                 "tests": ["trusted validation"],
                 "status": status,
@@ -305,6 +305,41 @@ def test_create_and_reuse_draft_pr_preserves_manual_section(tmp_path: Path) -> N
     assert github.updated and "Keep this" in github.body
 
 
+def test_pull_request_body_replaces_only_managed_markers(tmp_path: Path) -> None:
+    prior = "Operator intro\n\n<!-- studio-loop:auto:start -->\nold\n<!-- studio-loop:auto:end -->\n\nOperator footer\n"
+    existing = PullRequest(
+        42,
+        "url",
+        "OPEN",
+        True,
+        "main",
+        "007-autonomous-loop",
+        "a" * 40,
+        prior,
+    )
+    github = FakeGithub([existing])
+    service = PullRequestService(github, workspace=tmp_path)
+    service.reconcile(
+        PullRequestRequest(
+            **{
+                **request().__dict__,
+                "remaining_tasks": ("T052",),
+                "current_state": "CI_PENDING",
+                "validation_summary": "studio-loop-tests PASS",
+                "remote_sha": "a" * 40,
+                "ci_history": ("tests: success",),
+            }
+        )
+    )
+
+    assert github.body.startswith("Operator intro")
+    assert github.body.rstrip().endswith("Operator footer")
+    assert github.body.count("<!-- studio-loop:auto:start -->") == 1
+    assert "## Remaining tasks\n- [ ] T052" in github.body
+    assert "State: `CI_PENDING`" in github.body
+    assert "tests: success" in github.body
+
+
 def test_ci_observer_uses_current_head_and_polls_without_busy_loop() -> None:
     pr = PullRequest(42, "url", "OPEN", True, "main", "007-autonomous-loop", "a" * 40)
     github = FakeGithub(
@@ -366,6 +401,29 @@ def test_ci_observer_classifies_failure_timeout_and_skipped() -> None:
         timeout_seconds=1,
     )
     assert timeout.state is CheckState.TIMEOUT
+
+
+def test_ci_poll_can_wait_for_missing_checks_and_honours_max_attempts() -> None:
+    pr = PullRequest(42, "url", "OPEN", True, "main", "007-autonomous-loop", "a" * 40)
+    github = FakeGithub(prs=[pr], checks=[(), (), ()])
+    sleeps: list[float] = []
+    observer = CiObserver(github, clock=lambda: 0.0, sleep=sleeps.append)
+
+    result = observer.poll(
+        owner="owner",
+        repository="repo",
+        pull_request=pr,
+        expected_head_sha="a" * 40,
+        required=("tests",),
+        interval_seconds=0.25,
+        timeout_seconds=60,
+        max_attempts=3,
+        missing_checks="pending",
+    )
+
+    assert result.state is CheckState.MISSING
+    assert result.diagnostics == ("required checks missing after 3 attempts",)
+    assert sleeps == [0.25, 0.25]
 
 
 def test_ci_observer_rejects_head_race_and_nonconclusive_completed_state() -> None:
@@ -430,6 +488,31 @@ def test_ci_failure_and_exhaustion_create_bounded_repair_decisions() -> None:
     )
 
 
+def test_ci_failure_mapping_requires_one_task_supported_by_committed_profiles() -> None:
+    collection = recovery_tasks(status="pending")
+    collection["tasks"][0]["validation_profiles"] = ["tests"]
+    tasks = __import__(
+        "studio_loop.models", fromlist=["TaskCollection"]
+    ).TaskCollection.model_validate(collection)
+    failed = CheckObservation(
+        "a" * 40,
+        CheckState.FAILED,
+        (Check("tests", "FAILURE"),),
+    )
+
+    assert map_failure_to_task(failed, tasks) == "T050"
+    duplicate = tasks.model_copy(
+        update={"tasks": (tasks.tasks[0], tasks.tasks[0].model_copy(update={"id": "T051"}))}
+    )
+    assert map_failure_to_task(failed, duplicate) is None
+    unknown = CheckObservation(
+        "a" * 40,
+        CheckState.FAILED,
+        (Check("unmapped", "FAILURE"),),
+    )
+    assert map_failure_to_task(unknown, tasks) is None
+
+
 def test_recovery_matrix_blocks_ambiguity_and_recovers_remote_without_state(tmp_path: Path) -> None:
     metadata = tmp_path / "feature.json"
     tasks = tmp_path / "tasks.json"
@@ -449,6 +532,22 @@ def test_recovery_matrix_blocks_ambiguity_and_recovers_remote_without_state(tmp_
         .state
         == "BLOCKED"
     )  # type: ignore[arg-type]
+
+
+def test_recovery_can_resume_before_planner_without_guessing_task_state(tmp_path: Path) -> None:
+    metadata = tmp_path / "feature.json"
+    state = tmp_path / "snapshot.json"
+    metadata.write_text(json.dumps(recovery_metadata()), encoding="utf-8")
+    state.write_text(json.dumps({"local_sha": "a" * 40}), encoding="utf-8")
+
+    result = RecoveryService(FakeGit()).rebuild(
+        feature_metadata=metadata,
+        tasks_path=tmp_path / "missing-tasks.json",
+        runtime_state=state,
+    )  # type: ignore[arg-type]
+
+    assert result.state == "PLANNING"
+    assert result.local_sha == "a" * 40
 
 
 def test_recovery_handles_commit_push_pr_state_and_corruption_cases(tmp_path: Path) -> None:
@@ -488,6 +587,13 @@ def test_recovery_handles_commit_push_pr_state_and_corruption_cases(tmp_path: Pa
         )  # type: ignore[arg-type]
     assert corrupt.value.code == "RECOVERY_STATE_CORRUPT"
     state.write_text(json.dumps({"local_sha": "b" * 40}), encoding="utf-8")
+    assert (
+        RecoveryService(git)
+        .rebuild(feature_metadata=metadata, tasks_path=tasks, runtime_state=state)
+        .state
+        == "LOCALLY_COMPLETE"
+    )  # type: ignore[arg-type]
+    state.write_text(json.dumps({"local_sha": "c" * 40}), encoding="utf-8")
     assert (
         RecoveryService(git)
         .rebuild(feature_metadata=metadata, tasks_path=tasks, runtime_state=state)

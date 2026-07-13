@@ -57,13 +57,13 @@ jobs:
       - name: Test hooks without optional Codex ExecPolicy
         run: python -m pytest tools/studio_loop/tests/test_codex_project_guards.py -k "not execpolicy" -q
       - name: Test skills and controller configuration
-        run: python -m pytest tools/studio_loop/tests/test_codex_project_guards.py::test_skills_and_guidance_match_the_cli_and_safety_contract tools/studio_loop/tests/test_role_configuration.py tools/studio_loop/tests/test_validation_profiles.py -q
+        run: python -m pytest tools/studio_loop/tests/test_codex_project_guards.py::test_skills_and_guidance_match_the_cli_and_safety_contract tools/studio_loop/tests/test_codex_runner.py::test_each_role_uses_canonical_least_privilege_and_never_unsafe_flags tools/studio_loop/tests/test_validation_profiles.py -q
       - name: Dry-run E2E
         run: python -m pytest tools/studio_loop/tests/test_cli_feature_git.py::test_start_dry_run_is_json_only_and_does_not_mutate tools/studio_loop/tests/test_autonomous_controller.py::test_dry_run_has_no_effects -q
       - name: Local E2E in a temporary repository
         run: python -m pytest tools/studio_loop/tests/test_cli_feature_git.py::test_cli_local_lifecycle_and_draft_pr_controlled_stop -q
-      - name: Mocked draft-PR E2E
-        run: python -m pytest tools/studio_loop/tests/test_draft_pr_services.py::test_mocked_draft_pr_service_e2e -q
+      - name: Mocked draft-PR E2E (bare remote and fake GitHub)
+        run: python -m pytest tools/studio_loop/tests/test_draft_pr_services.py tools/studio_loop/tests/test_draft_pr_lifecycle.py -q
 
   codex-execpolicy:
     name: Optional Codex ExecPolicy (${{ matrix.os }})

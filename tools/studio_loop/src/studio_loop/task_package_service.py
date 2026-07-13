@@ -109,6 +109,17 @@ class TaskPackageService:
             _atomic_json(path, payload)
         return BuiltPackage(path, payload)
 
+    def validation_report(
+        self, package: BuiltPackage, summary: dict[str, Any], *, write: bool = True
+    ) -> BuiltPackage:
+        """Persist the controller's complete, ordered validation observation."""
+        payload = dict(package.payload)
+        payload.update({"package_type": "validation", "validation_report": summary})
+        path = package.path.with_name("validation-report.json")
+        if write:
+            _atomic_json(path, payload)
+        return BuiltPackage(path, payload)
+
     def review_package(
         self,
         package: BuiltPackage,
@@ -116,6 +127,7 @@ class TaskPackageService:
         diff: str,
         changed_paths: tuple[str, ...],
         validation_reports: list[dict[str, Any]],
+        validation_summary: dict[str, Any],
         write: bool = True,
     ) -> BuiltPackage:
         payload = dict(package.payload)
@@ -126,6 +138,7 @@ class TaskPackageService:
                     "diff": diff[:131072],
                     "changed_paths": list(changed_paths),
                     "validation_reports": validation_reports,
+                    "validation_summary": validation_summary,
                     "all_validations_passed": all(
                         report.get("status") == "PASS" for report in validation_reports
                     ),

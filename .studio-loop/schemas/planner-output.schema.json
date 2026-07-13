@@ -9,11 +9,37 @@
     "status": {"enum": ["ready", "blocked", "failed"]},
     "spec_markdown": {"type": "string", "minLength": 1, "maxLength": 100000},
     "plan_markdown": {"type": "string", "minLength": 1, "maxLength": 100000},
-    "tasks": {"type": "object", "minProperties": 1},
+    "tasks": {"$ref": "#/$defs/taskCollection"},
     "ambiguities": {"$ref": "#/$defs/findings"},
     "blocking_issues": {"$ref": "#/$defs/findings"}
   },
   "$defs": {
-    "findings": {"type": "array", "maxItems": 64, "items": {"type": "string", "minLength": 1, "maxLength": 2000}}
+    "findings": {"type": "array", "maxItems": 64, "items": {"type": "string", "minLength": 1, "maxLength": 2000}},
+    "taskCollection": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_version", "feature_id", "requirements", "tasks"],
+      "properties": {
+        "schema_version": {"const": "1.1.0"},
+        "feature_id": {"type": "string", "pattern": "^[0-9]{3}-[a-z0-9]+(?:-[a-z0-9]+)*$"},
+        "requirements": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "tasks": {"type": "array", "minItems": 1, "maxItems": 200, "items": {"$ref": "#/$defs/task"}}
+      }
+    },
+    "task": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "phase", "title", "description", "dependencies", "requirement_ids", "allowed_read_paths", "allowed_write_paths", "writes", "validation_profiles", "completion_criteria", "tests", "status"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^T[0-9]{3,}$"},
+        "phase": {"type": "string", "minLength": 1}, "title": {"type": "string", "minLength": 1}, "description": {"type": "string", "minLength": 1},
+        "dependencies": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^T[0-9]{3,}$"}},
+        "requirement_ids": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "allowed_read_paths": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "allowed_write_paths": {"type": "array", "items": {"type": "string", "minLength": 1}}, "writes": {"type": "boolean"},
+        "validation_profiles": {"type": "array", "minItems": 1, "maxItems": 32, "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 100}},
+        "completion_criteria": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "tests": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "status": {"enum": ["pending", "in_progress", "completed", "blocked", "failed", "aborted"]}
+      }
+    }
   }
 }

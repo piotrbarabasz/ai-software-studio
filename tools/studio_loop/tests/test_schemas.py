@@ -30,6 +30,33 @@ def test_tasks_schema_rejects_extra_field_and_unknown_status(collection: object)
     payload["tasks"][0]["status"] = "ready"
     with pytest.raises(ValidationError):
         Draft202012Validator(schema).validate(payload)
+    payload["tasks"][0]["status"] = "pending"
+    payload["tasks"][0]["validation_profile"] = "python"
+    with pytest.raises(ValidationError):
+        Draft202012Validator(schema).validate(payload)
+
+
+def test_planner_output_schema_accepts_ordered_multiple_validation_profiles(
+    collection: object,
+) -> None:
+    schema = json.loads((SCHEMAS / "planner-output.schema.json").read_text(encoding="utf-8"))
+    tasks = collection.model_dump(mode="json")  # type: ignore[attr-defined]
+    tasks["tasks"][0]["validation_profiles"] = [
+        "frontend-tests",
+        "frontend-lint",
+        "frontend-build",
+    ]
+    Draft202012Validator(schema).validate(
+        {
+            "schema_version": "1.1.0",
+            "status": "ready",
+            "spec_markdown": "# Spec",
+            "plan_markdown": "# Plan",
+            "tasks": tasks,
+            "ambiguities": [],
+            "blocking_issues": [],
+        }
+    )
 
 
 def test_all_loop_json_and_toml_documents_parse_and_schema_documents_self_validate() -> None:

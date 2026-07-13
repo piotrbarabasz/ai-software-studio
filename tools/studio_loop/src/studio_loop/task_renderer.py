@@ -48,7 +48,7 @@ def render_tasks(collection: TaskCollection) -> str:
                 f"- Writes: {'yes' if task.writes else 'no'}",
                 f"- Read paths: {_items(task.allowed_read_paths)}",
                 f"- Write paths: {_items(task.allowed_write_paths)}",
-                f"- Validation profile: {task.validation_profile}",
+                f"- Validation profiles: {_items(task.validation_profiles)}",
                 f"- Completion criteria: {_items(task.completion_criteria)}",
                 f"- Tests: {_items(task.tests)}",
                 "",

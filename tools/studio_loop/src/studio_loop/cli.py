@@ -68,6 +68,7 @@ def _response(
         "local_sha": details.get("local_sha"),
         "remote_sha": details.get("remote_sha"),
         "pull_request": details.get("pull_request"),
+        "ci_status": details.get("ci_status"),
         "next_action": details.get("next_action", next_action),
         "human_gate": details.get("human_gate", False),
         "blocking_issues": details.get("blocking_issues", []),
@@ -229,10 +230,69 @@ def _draft_pr_preflight(git: GitCli) -> tuple[str, str]:
     return owner, repository
 
 
+def _draft_pr_policy(repository: Path) -> Any:
+    from .lifecycle import DraftPrPolicy
+
+    path = repository / ".studio-loop" / "config.json"
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise CommandError(
+            "DRAFT_PR_CONFIG_INVALID",
+            "committed draft-pr policy is unreadable",
+            ExitCategory.PREFLIGHT,
+        ) from error
+    raw = payload.get("draft_pr", {})
+    if not isinstance(raw, dict):
+        raise CommandError(
+            "DRAFT_PR_CONFIG_INVALID",
+            "draft_pr policy must be an object",
+            ExitCategory.PREFLIGHT,
+        )
+    allowed = {
+        "remote",
+        "required_checks",
+        "check_interval_seconds",
+        "check_timeout_seconds",
+        "check_max_attempts",
+        "missing_checks",
+        "feature_validation_profiles",
+        "ci_repair_attempts",
+        "check_task_map",
+    }
+    if set(raw) - allowed:
+        raise CommandError(
+            "DRAFT_PR_CONFIG_INVALID",
+            "draft_pr policy contains unsupported fields",
+            ExitCategory.PREFLIGHT,
+        )
+    try:
+        return DraftPrPolicy(
+            remote=str(raw.get("remote", "origin")),
+            required_checks=tuple(raw.get("required_checks", ("studio-loop-ci",))),
+            check_interval_seconds=float(raw.get("check_interval_seconds", 10)),
+            check_timeout_seconds=float(raw.get("check_timeout_seconds", 900)),
+            check_max_attempts=int(raw.get("check_max_attempts", 90)),
+            missing_checks=str(raw.get("missing_checks", "block")),
+            feature_validation_profiles=tuple(
+                raw.get("feature_validation_profiles", ("studio-loop-tests",))
+            ),
+            ci_repair_attempts=int(raw.get("ci_repair_attempts", 2)),
+            check_task_map=raw.get("check_task_map"),
+        )
+    except (TypeError, ValueError) as error:
+        raise CommandError(
+            "DRAFT_PR_CONFIG_INVALID",
+            "committed draft-pr policy failed validation",
+            ExitCategory.PREFLIGHT,
+        ) from error
+
+
 def start(arguments: argparse.Namespace) -> dict[str, Any]:
     git = _repository(arguments.repo)
+    github_identity: tuple[str, str] | None = None
     if arguments.mode == "draft-pr":
-        _draft_pr_preflight(git)
+        github_identity = _draft_pr_preflight(git)
     request_path = Path(arguments.request_file)
     request = request_path.read_bytes()
     if not request or not request.strip():
@@ -301,10 +361,17 @@ def start(arguments: argparse.Namespace) -> dict[str, Any]:
     from .codex_runner import CodexRunner
     from .lifecycle import LifecycleController
 
-    lifecycle = LifecycleController(result.path, role_runner=CodexRunner(result.path)).run(
+    lifecycle = LifecycleController(
+        result.path,
+        role_runner=CodexRunner(result.path),
+        github=GhCli(result.path) if arguments.mode == "draft-pr" else None,
+        draft_pr_policy=(_draft_pr_policy(result.path) if arguments.mode == "draft-pr" else None),
+    ).run(
         metadata=metadata,
         request=request_text,
         mode=arguments.mode,
+        owner=github_identity[0] if github_identity else None,
+        repository=github_identity[1] if github_identity else None,
     )
     data.update(lifecycle.data())
     return _response(
@@ -362,6 +429,41 @@ def status(arguments: argparse.Namespace) -> dict[str, Any]:
                 "metadata": metadata,
                 "local_sha": recovered.local_sha,
                 "remote_sha": recovered.remote_sha,
+                "pull_request": recovered.pull_request_number,
+            },
+        )
+    worktree = metadata_path.parents[2]
+    runs = worktree / ".automation" / "state" / "runs"
+    candidates = (
+        tuple(path / "snapshot.json" for path in runs.iterdir() if path.is_dir())
+        if runs.exists()
+        else ()
+    )
+    if len(candidates) == 1 and candidates[0].exists():
+        snapshot = json.loads(candidates[0].read_text(encoding="utf-8"))
+        return _response(
+            ok=snapshot.get("state") != "BLOCKED",
+            category=ExitCategory.SUCCESS
+            if snapshot.get("state") != "BLOCKED"
+            else ExitCategory.RECONCILIATION,
+            feature_id=arguments.feature,
+            run_id=snapshot.get("run_id"),
+            mode=snapshot.get("mode"),
+            state=snapshot.get("state"),
+            next_action="resume",
+            data={
+                "status": snapshot.get("state"),
+                "branch": snapshot.get("branch"),
+                "worktree": snapshot.get("worktree"),
+                "phase": snapshot.get("state"),
+                "current_task": snapshot.get("active_task_id"),
+                "local_sha": snapshot.get("local_sha"),
+                "remote_sha": snapshot.get("remote_sha"),
+                "pull_request": snapshot.get("pull_request"),
+                "ci_status": snapshot.get("ci_status"),
+                "human_gate": snapshot.get("human_gate", False),
+                "blocking_issues": snapshot.get("blocking_issues", []),
+                "metadata": metadata,
             },
         )
     return _response(
@@ -375,48 +477,125 @@ def status(arguments: argparse.Namespace) -> dict[str, Any]:
     )
 
 
+def _infer_recovery_run_id(git: GitService, feature_id: str) -> str:
+    run_ids: set[str] = set()
+    for commit in git.git.commits_with_trailer("Studio-Feature", feature_id):
+        for line in git.git.commit_message_at(commit).splitlines():
+            if line.startswith("Studio-Run: ") and len(line) > len("Studio-Run: "):
+                run_ids.add(line.removeprefix("Studio-Run: "))
+    if len(run_ids) > 1:
+        raise CommandError(
+            "RUN_STATE_AMBIGUOUS",
+            "multiple controller run identities are present in feature commit trailers",
+            ExitCategory.RECONCILIATION,
+        )
+    return next(iter(run_ids), f"run-recovered-{feature_id}")
+
+
+def _controller_cache_mode(worktree: Path, run_id: str) -> str | None:
+    path = worktree / ".automation" / "state" / "controller" / run_id / "controller-state.json"
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    mode = payload.get("mode") if isinstance(payload, dict) else None
+    return mode if mode in {"local", "draft-pr"} else None
+
+
+def _preserve_invalid_run_cache(directory: Path) -> None:
+    for name in ("snapshot.json", "events.jsonl"):
+        source = directory / name
+        if not source.exists():
+            continue
+        target = directory / f"{name}.recovery-backup"
+        if target.exists():
+            raise CommandError(
+                "RUN_STATE_AMBIGUOUS",
+                "invalid runtime cache and its recovery backup both exist",
+                ExitCategory.RECONCILIATION,
+            )
+        source.replace(target)
+
+
 def resume(arguments: argparse.Namespace) -> dict[str, Any]:
     git = _repository(arguments.repo)
     metadata_path = _feature_metadata_path(git, arguments.feature)
     metadata = _validate_metadata(metadata_path, arguments.feature)
-    mode = arguments.mode or "local"
-    if mode == "draft-pr":
-        if not arguments.allow_mode_upgrade:
-            raise CommandError(
-                "MODE_UPGRADE_REQUIRES_FLAG",
-                "draft-pr resume requires --allow-mode-upgrade",
-                ExitCategory.POLICY,
-            )
-        _draft_pr_preflight(git)
     worktree = metadata_path.parents[2]
     tasks_path = metadata_path.parent / "tasks.json"
-    if not tasks_path.exists():
-        raise CommandError(
-            "TASKS_NOT_FOUND",
-            "cannot resume before validated planner artifacts",
-            ExitCategory.RECONCILIATION,
-        )
     from .codex_runner import CodexRunner
     from .lifecycle import LifecycleController
 
-    # The controller run state is deliberately selected from its durable
-    # directory; multiple candidates are ambiguous rather than guessed.
+    # Runtime cache is rebuildable, but multiple run identities remain
+    # ambiguous and are never guessed.
     runs = worktree / ".automation" / "state" / "runs"
     candidates = (
         tuple(path.name for path in runs.iterdir() if path.is_dir()) if runs.exists() else ()
     )
-    if len(candidates) != 1:
+    if len(candidates) > 1:
         raise CommandError(
             "RUN_STATE_AMBIGUOUS",
-            "resume requires exactly one durable run state",
+            "resume found multiple runtime run identities",
+            ExitCategory.RECONCILIATION,
+        )
+    service = GitService(worktree)
+    run_id = candidates[0] if candidates else _infer_recovery_run_id(service, arguments.feature)
+    run_directory = runs / run_id
+    snapshot_path = run_directory / "snapshot.json"
+    snapshot: dict[str, Any] = {}
+    snapshot_is_valid = False
+    if snapshot_path.exists():
+        try:
+            from .models import RunState
+            from .state_store import StateStore
+
+            loaded = json.loads(snapshot_path.read_text(encoding="utf-8"))
+            state = RunState.model_validate(loaded)
+            StateStore(run_directory).read_events()
+            snapshot = state.model_dump(mode="json")
+            snapshot_is_valid = True
+        except Exception:
+            _preserve_invalid_run_cache(run_directory)
+    elif run_directory.exists():
+        _preserve_invalid_run_cache(run_directory)
+    existing_mode = str(snapshot.get("mode") or _controller_cache_mode(worktree, run_id) or "local")
+    mode = arguments.mode or existing_mode
+    github_identity: tuple[str, str] | None = None
+    if mode == "draft-pr":
+        if existing_mode == "local" and not arguments.allow_mode_upgrade:
+            raise CommandError(
+                "MODE_UPGRADE_REQUIRES_FLAG",
+                "local to draft-pr resume requires --allow-mode-upgrade",
+                ExitCategory.POLICY,
+            )
+        github_identity = _draft_pr_preflight(git)
+    github = GhCli(worktree) if mode == "draft-pr" else None
+    recovered = RecoveryService(service, github).rebuild(
+        feature_metadata=metadata_path,
+        tasks_path=tasks_path,
+        runtime_state=snapshot_path if snapshot_is_valid else None,
+        owner=github_identity[0] if github_identity else None,
+        repository=github_identity[1] if github_identity else None,
+    )
+    if recovered.state == "BLOCKED":
+        raise CommandError(
+            "RECOVERY_BLOCKED",
+            recovered.reason or "durable evidence could not be reconciled",
             ExitCategory.RECONCILIATION,
         )
     request_digest = str(metadata["request_sha256"])
-    lifecycle = LifecycleController(worktree, role_runner=CodexRunner(worktree)).run(
+    lifecycle = LifecycleController(
+        worktree,
+        role_runner=CodexRunner(worktree),
+        github=github,
+        draft_pr_policy=_draft_pr_policy(worktree) if mode == "draft-pr" else None,
+    ).run(
         metadata=metadata,
         request=f"title: {metadata['slug']}\nrequest digest: {request_digest}",
         mode=mode,
-        run_id=candidates[0],
+        run_id=run_id,
+        owner=github_identity[0] if github_identity else None,
+        repository=github_identity[1] if github_identity else None,
     )
     return _response(
         ok=lifecycle.status != "BLOCKED",
@@ -435,8 +614,9 @@ def resume(arguments: argparse.Namespace) -> dict[str, Any]:
 def abort(arguments: argparse.Namespace) -> dict[str, Any]:
     git = _repository(arguments.repo)
     path = _feature_metadata_path(git, arguments.feature)
-    _validate_metadata(path, arguments.feature)
-    marker = path.parents[2] / ".automation" / "state" / arguments.feature / "abort.json"
+    metadata = _validate_metadata(path, arguments.feature)
+    worktree = path.parents[2]
+    marker = worktree / ".automation" / "state" / arguments.feature / "abort.json"
     marker.parent.mkdir(parents=True, exist_ok=True)
     marker.write_text(
         json.dumps(
@@ -449,14 +629,45 @@ def abort(arguments: argparse.Namespace) -> dict[str, Any]:
         + "\n",
         encoding="utf-8",
     )
+    runs = worktree / ".automation" / "state" / "runs"
+    snapshots = (
+        tuple(candidate / "snapshot.json" for candidate in runs.iterdir() if candidate.is_dir())
+        if runs.exists()
+        else ()
+    )
+    snapshot: dict[str, Any] = {}
+    if len(snapshots) == 1 and snapshots[0].exists():
+        try:
+            loaded = json.loads(snapshots[0].read_text(encoding="utf-8"))
+            if isinstance(loaded, dict):
+                snapshot = loaded
+        except (OSError, json.JSONDecodeError):
+            snapshot = {}
+    mode = str(snapshot.get("mode", "local"))
+    data = {
+        "status": "aborted",
+        "branch": metadata["branch"],
+        "worktree": str(worktree),
+        "phase": "ABORTED",
+        "current_task": snapshot.get("active_task_id"),
+        "local_sha": GitService(worktree).head_sha(),
+        "remote_sha": snapshot.get("remote_sha"),
+        "pull_request": snapshot.get("pull_request"),
+        "ci_status": snapshot.get("ci_status"),
+        "next_action": "worktree, branch and Draft PR were preserved",
+        "human_gate": False,
+        "blocking_issues": [],
+    }
     return _response(
         ok=True,
         category=ExitCategory.SUCCESS,
         feature_id=arguments.feature,
-        mode="local",
+        mode=mode,
         state="aborted",
         effects=["abort_recorded"],
-        next_action="worktree and branch were preserved",
+        next_action="worktree, branch and Draft PR were preserved",
+        data=data,
+        run_id=snapshot.get("run_id"),
     )
 
 
@@ -475,7 +686,7 @@ def validate(arguments: argparse.Namespace) -> dict[str, Any]:
         collection = TaskCollection.model_validate_json(tasks_path.read_text(encoding="utf-8"))
         graph = TaskGraph(collection)
         ValidationRunner(path.parents[2]).ensure_known(
-            tuple(task.validation_profile for task in collection.tasks)
+            tuple(profile for task in collection.tasks for profile in task.validation_profiles)
         )
     except ValidationPolicyError as error:
         raise CommandError("TASK_PROFILE_INVALID", str(error), ExitCategory.POLICY) from error

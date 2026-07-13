@@ -2,5 +2,19 @@
   "schema_version": "1.0.0",
   "supported_modes": ["dry-run", "local", "draft-pr"],
   "runtime_state_directory": ".automation/state",
-  "task_schema_version": "1.0.0"
+  "task_schema_version": "1.1.0",
+  "draft_pr": {
+    "remote": "origin",
+    "required_checks": [
+      "Controller validation (ubuntu-latest)",
+      "Controller validation (windows-latest)"
+    ],
+    "check_interval_seconds": 10,
+    "check_timeout_seconds": 900,
+    "check_max_attempts": 90,
+    "missing_checks": "block",
+    "feature_validation_profiles": ["studio-loop-tests", "studio-loop-lint"],
+    "ci_repair_attempts": 2,
+    "check_task_map": {}
+  }
 }

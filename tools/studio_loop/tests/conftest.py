@@ -24,7 +24,7 @@ def task_payload() -> dict[str, object]:
         "allowed_read_paths": ["tools/studio_loop"],
         "allowed_write_paths": ["tools/studio_loop/src/studio_loop/models.py"],
         "writes": True,
-        "validation_profile": "python",
+        "validation_profiles": ["python"],
         "completion_criteria": ["model validates"],
         "tests": ["pytest tests/test_models.py"],
         "status": "pending",
@@ -46,7 +46,7 @@ def collection(task_payload: dict[str, object]) -> TaskCollection:
     )
     return TaskCollection.model_validate(
         {
-            "schema_version": "1.0.0",
+            "schema_version": "1.1.0",
             "feature_id": "007-autonomous-loop",
             "requirements": ["FR-001"],
             "tasks": [task_payload, second],

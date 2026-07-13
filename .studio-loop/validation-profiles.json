@@ -22,6 +22,10 @@
       "argv": ["npm", "run", "lint"],
       "working_directory": "frontend"
     },
+    "frontend-format-check": {
+      "argv": ["npm", "run", "format:check"],
+      "working_directory": "frontend"
+    },
     "frontend-build": {
       "argv": ["npm", "run", "build"],
       "working_directory": "frontend",

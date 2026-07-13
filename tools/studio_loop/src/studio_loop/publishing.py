@@ -42,10 +42,19 @@ class PublishingService:
         if not request.reviewer_passed or not request.validation_passed:
             raise CommandError("PUSH_GATES_FAILED", "validation and reviewer must both pass")
         before = self.git.git.remote_sha(request.remote, branch)
+        if before == request.local_sha:
+            # A previous push may have succeeded before its state/event update.
+            return request.local_sha
         if before != request.expected_remote_sha:
             raise CommandError(
                 "REMOTE_MOVED",
                 "remote feature branch changed since the last observation",
+                ExitCategory.RECONCILIATION,
+            )
+        if before is not None and not self.git.git.is_ancestor(before, request.local_sha):
+            raise CommandError(
+                "REMOTE_DIVERGED",
+                "remote feature branch is not an ancestor of the local revision",
                 ExitCategory.RECONCILIATION,
             )
         self.git.push_feature(remote=request.remote, branch=branch, base_branch=request.base_branch)
@@ -56,10 +65,6 @@ class PublishingService:
                 "remote SHA does not equal verified local SHA",
                 ExitCategory.RECONCILIATION,
             )
-        if before is not None and before != request.local_sha:
-            # A normal push can only advance a known branch through ordinary Git fast-forward.
-            # The post-push equality check is authoritative; this record protects recovery callers.
-            pass
         return observed
 
 

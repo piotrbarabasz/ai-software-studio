@@ -171,14 +171,22 @@ class CiObserver:
         required: tuple[str, ...],
         interval_seconds: float,
         timeout_seconds: float,
+        max_attempts: int | None = None,
+        missing_checks: str = "block",
         interrupted: Callable[[], bool] = lambda: False,
     ) -> CheckObservation:
+        if max_attempts is not None and max_attempts < 1:
+            raise ValueError("max_attempts must be positive")
+        if missing_checks not in {"block", "pending"}:
+            raise ValueError("missing_checks must be 'block' or 'pending'")
         started = self.clock()
+        attempts = 0
         while True:
             if interrupted():
                 return CheckObservation(
                     expected_head_sha, CheckState.CANCELLED, (), ("CI polling interrupted",)
                 )
+            attempts += 1
             result = self.observe_once(
                 owner=owner,
                 repository=repository,
@@ -186,8 +194,25 @@ class CiObserver:
                 expected_head_sha=expected_head_sha,
                 required=required,
             )
-            if result.state is not CheckState.PENDING:
+            wait_for_result = result.state is CheckState.PENDING or (
+                result.state is CheckState.MISSING and missing_checks == "pending"
+            )
+            if not wait_for_result:
                 return result
+            if max_attempts is not None and attempts >= max_attempts:
+                if result.state is CheckState.MISSING:
+                    return CheckObservation(
+                        expected_head_sha,
+                        CheckState.MISSING,
+                        result.checks,
+                        (f"required checks missing after {attempts} attempts",),
+                    )
+                return CheckObservation(
+                    expected_head_sha,
+                    CheckState.TIMEOUT,
+                    result.checks,
+                    (f"CI polling attempt limit reached ({attempts})",),
+                )
             if self.clock() - started >= timeout_seconds:
                 return CheckObservation(
                     expected_head_sha, CheckState.TIMEOUT, result.checks, ("CI polling timeout",)

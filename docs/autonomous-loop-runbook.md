@@ -20,7 +20,7 @@ Przy aktualizacji Codexa wykonaj ją ręcznie zgodnie z lokalną instalacją (`c
 | --- | --- | --- |
 | `dry-run` | tylko plan efektów | przed `local` |
 | `local` | branch, worktree i lokalne artefakty | przed każdą zmianą trybu lub ręczną oceną |
-| `draft-pr` | obecnie preflight/inicjalizacja, bez remote write | jawne `--allow-mode-upgrade` przy resume |
+| `draft-pr` | planning/task push, jeden Draft PR, checks i bounded CI repair | ręczna ocena PR; jawne `--allow-mode-upgrade` przy resume z `local` |
 
 Merge, deployment oraz zamknięcie PR są zabronione we wszystkich trybach.
 
@@ -34,7 +34,9 @@ Set-Content -LiteralPath $request -Encoding utf8 -Value 'Dodaj stronę statusu k
 studio-loop start --request-file $request --base 007-autonomous-loop --mode dry-run --json
 ```
 
-Po ręcznej ocenie proposal uruchom ponownie z `--mode local`. Zapisz `feature_id` zwrócony przez CLI; identyfikuje branch oraz worktree.
+Po ręcznej ocenie proposal uruchom ponownie z `--mode local` albo `--mode draft-pr`.
+Drugi wariant wymaga zalogowanego `gh` i publikuje wyłącznie feature branch. Zapisz
+`feature_id` zwrócony przez CLI; identyfikuje branch oraz worktree.
 
 ## Operacje CLI
 
@@ -44,14 +46,24 @@ studio-loop validate-tasks --feature <feature-id> --json
 studio-loop render-tasks --feature <feature-id> --check --json
 studio-loop status --feature <feature-id> --rebuild --json
 studio-loop resume --feature <feature-id> --mode local --json
+studio-loop resume --feature <feature-id> --mode draft-pr --json
 studio-loop abort --feature <feature-id> --reason 'opis decyzji' --json
 ```
 
-`status` jest odczytowy; `--rebuild` rekonstruuje obserwowany stan po awarii. `resume` wykonuj dopiero po poprawnym wyniku rekonstrukcji. Nie wszystkie granice resume są jeszcze release-complete: wynik `BLOCKED` wymaga ręcznej reconciliation. `abort` zachowuje branch, worktree, zmiany i evidence; nie resetuje ich, nie usuwa i nie zamyka PR. Aktualne CLI nie udostępnia komendy `stop`.
+`status` jest odczytowy; `--rebuild` rekonstruuje obserwowany stan po awarii. `resume`
+ponownie sprawdza artefakty, Git, remote i Draft PR przed kontynuacją. Brakujący lub uszkodzony
+cache jest zachowywany jako backup i odbudowywany tylko wtedy, gdy trwałe evidence jest
+jednoznaczne. Wynik `BLOCKED` wymaga ręcznej reconciliation. `abort` zachowuje branch, worktree,
+zmiany, remote, PR i evidence; nie resetuje ich, nie usuwa i nie zamyka PR. Aktualne CLI nie
+udostępnia komendy `stop`.
 
 ## Retry i recovery
 
-Nie powtarzaj ręcznie poleceń Git dla funkcji. Gdy controller wskaże błąd retryable, zachowaj jego evidence, uruchom `status --rebuild`, usuń przyczynę poza historią Git i dopiero wtedy użyj `resume`. Niejednoznaczny stan jest blokerem do ręcznej decyzji, nie sygnałem do force resetu.
+Nie powtarzaj ręcznie poleceń Git dla funkcji. Gdy controller wskaże błąd retryable, zachowaj
+jego evidence, uruchom `status --rebuild`, usuń przyczynę poza historią Git i dopiero wtedy użyj
+`resume`. Controller rekoncyliuje utraconą odpowiedź po commicie, pushu, utworzeniu PR, pollingu
+CI i naprawie Debuggera. Niejednoznaczny SHA, commit, numer PR albo wiele pasujących PR jest
+blokerem do ręcznej decyzji, nie sygnałem do force resetu.
 
 ## Logi
 
@@ -73,4 +85,6 @@ Rzeczywistego smoke testu nie uruchamiaj, dopóki niezależnie nie potwierdzisz:
 - braku niezwiązanych zmian;
 - jawnej zgody użytkownika na jeden testowy branch i jeden Draft PR.
 
-Spełnienie listy nie omija bramek implementacyjnych: dopóki CLI nie skomponuje publikacji i pełnego recovery, release pozostaje `BLOCKED`. Controller nigdy nie wykonuje merge ani deploymentu.
+Spełnienie listy nie jest zgodą na operację GitHub. Prawdziwy smoke test nadal wymaga osobnej,
+jawnej zgody na dokładnie jeden testowy branch i jeden Draft PR. Controller nigdy nie wykonuje
+approve, merge, close PR ani deploymentu.

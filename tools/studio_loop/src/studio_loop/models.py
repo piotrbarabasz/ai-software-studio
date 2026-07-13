@@ -7,7 +7,7 @@ from enum import StrEnum
 from hashlib import sha256
 from json import dumps
 from re import compile
-from typing import Any, Literal
+from typing import Any, Final, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
@@ -15,7 +15,9 @@ from .errors import ContractValidationError
 from .state_machine import LoopState
 
 SCHEMA_VERSION = "1.0.0"
+TASK_SCHEMA_VERSION: Final[TaskSchemaVersion] = "1.1.0"
 SchemaVersion = Literal["1.0.0"]
+TaskSchemaVersion = Literal["1.0.0", "1.1.0"]
 FEATURE_ID = compile(r"^[0-9]{3}-[a-z0-9]+(?:-[a-z0-9]+)*$")
 TASK_ID = compile(r"^T[0-9]{3,}$")
 DIGEST = compile(r"^[a-f0-9]{64}$")
@@ -80,10 +82,25 @@ class TaskDefinition(StrictModel):
     allowed_read_paths: tuple[str, ...] = ()
     allowed_write_paths: tuple[str, ...] = ()
     writes: bool
-    validation_profile: str = Field(min_length=1, max_length=100)
+    validation_profiles: tuple[str, ...] = Field(min_length=1, max_length=32)
     completion_criteria: tuple[str, ...] = Field(min_length=1)
     tests: tuple[str, ...] = Field(min_length=1)
     status: TaskStatus = TaskStatus.PENDING
+
+    @model_validator(mode="before")
+    @classmethod
+    def migrate_legacy_validation_profile(cls, value: Any) -> Any:
+        """Accept v1.0 input once, while retaining one canonical in-memory field."""
+        if not isinstance(value, dict):
+            return value
+        payload = dict(value)
+        has_legacy = "validation_profile" in payload
+        has_canonical = "validation_profiles" in payload
+        if has_legacy and has_canonical:
+            raise ValueError("validation_profile and validation_profiles cannot both be supplied")
+        if has_legacy:
+            payload["validation_profiles"] = [payload.pop("validation_profile")]
+        return payload
 
     @field_validator("id")
     @classmethod
@@ -99,6 +116,15 @@ class TaskDefinition(StrictModel):
             raise ValueError("task dependencies must be unique")
         if any(not TASK_ID.fullmatch(item) for item in value):
             raise ValueError("dependency task ids must match T followed by at least three digits")
+        return value
+
+    @field_validator("validation_profiles")
+    @classmethod
+    def unique_validation_profiles(cls, value: tuple[str, ...]) -> tuple[str, ...]:
+        if len(value) != len(set(value)):
+            raise ValueError("validation profiles must be unique")
+        if any(not profile.strip() for profile in value):
+            raise ValueError("validation profiles must be non-empty")
         return value
 
     @field_validator("allowed_read_paths", "allowed_write_paths")
@@ -130,10 +156,21 @@ class TaskDefinition(StrictModel):
 
 
 class TaskCollection(StrictModel):
-    schema_version: SchemaVersion = "1.0.0"
+    schema_version: TaskSchemaVersion = TASK_SCHEMA_VERSION
     feature_id: str
     requirements: tuple[str, ...] = Field(min_length=1)
     tasks: tuple[TaskDefinition, ...] = Field(min_length=1, max_length=200)
+
+    @model_validator(mode="before")
+    @classmethod
+    def normalize_legacy_task_document(cls, value: Any) -> Any:
+        """Read v1.0 task documents but always materialize canonical v1.1 data."""
+        if not isinstance(value, dict):
+            return value
+        payload = dict(value)
+        if payload.get("schema_version") == "1.0.0":
+            payload["schema_version"] = TASK_SCHEMA_VERSION
+        return payload
 
     @field_validator("feature_id")
     @classmethod
@@ -170,6 +207,19 @@ class RunState(StrictModel):
     revision: int = Field(ge=0)
     updated_at: datetime
     active_task_id: str | None = None
+    mode: Literal["local", "draft-pr"] = "local"
+    branch: str | None = None
+    worktree: str | None = None
+    local_sha: str | None = None
+    remote_sha: str | None = None
+    pull_request: int | None = Field(default=None, ge=1)
+    ci_status: str | None = None
+    human_gate: bool = False
+    feature_validation_passed: bool = False
+    completed_tasks: tuple[str, ...] = ()
+    validation_summary: str = ""
+    ci_history: tuple[str, ...] = ()
+    blocking_issues: tuple[str, ...] = ()
 
     @field_validator("feature_id")
     @classmethod

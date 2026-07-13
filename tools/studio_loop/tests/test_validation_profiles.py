@@ -18,12 +18,14 @@ def test_committed_validation_profiles_cover_repository_commands() -> None:
         "backend-format-check",
         "frontend-tests",
         "frontend-lint",
+        "frontend-format-check",
         "frontend-build",
         "studio-loop-tests",
         "studio-loop-lint",
     }
     assert runner.profiles["backend-tests"].argv == ("python", "-m", "pytest")
     assert runner.profiles["frontend-build"].argv == ("npm", "run", "build")
+    assert runner.profiles["frontend-format-check"].argv == ("npm", "run", "format:check")
     assert runner.profiles["studio-loop-lint"].working_directory == "tools/studio_loop"
 
 
@@ -119,3 +121,39 @@ def test_validation_evidence_redacts_known_and_pattern_secrets(tmp_path: Path) -
     assert known not in report.stdout and token not in report.stderr
     assert known not in persisted and token not in persisted
     assert "[REDACTED]" in persisted
+
+
+def test_task_validation_report_preserves_profiles_and_runs_all_of_them(tmp_path: Path) -> None:
+    repository = tmp_path / "repo"
+    repository.mkdir()
+    config = repository / "profiles.json"
+    config.write_text(
+        json.dumps(
+            {
+                "schema_version": "1.0.0",
+                "profiles": {
+                    "first": {
+                        "argv": [sys.executable, "-c", "raise SystemExit(1)"],
+                        "working_directory": ".",
+                    },
+                    "middle": {
+                        "argv": [sys.executable, "-c", "print('middle')"],
+                        "working_directory": ".",
+                    },
+                    "last": {
+                        "argv": [sys.executable, "-c", "print('last')"],
+                        "working_directory": ".",
+                    },
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    report = ValidationRunner(repository, config_path=config).run_many(
+        "T100", ("first", "middle", "last")
+    )
+    assert report.task_id == "T100"
+    assert report.required_profiles == ("first", "middle", "last")
+    assert [result.profile for result in report.results] == ["first", "middle", "last"]
+    assert report.passed is False
+    assert [result.status for result in report.results] == ["FAIL", "PASS", "PASS"]

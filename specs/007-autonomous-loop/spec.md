@@ -131,8 +131,8 @@ As the studio owner, I can interrupt, resume, stop, or abort a feature safely an
 
 - **FR-012**: Each feature MUST own durable specification, planning, research, data-model, quickstart, contract, and task artifacts sufficient to understand and recover the workflow without conversation history.
 - **FR-013**: `tasks.json` MUST be the canonical task source for future automated features; `tasks.md` MUST be a generated human-readable view and MUST never be treated as runtime authority.
-- **FR-014**: Every task MUST have a unique stable ID, requirement mappings, dependencies, concrete allowed paths, completion criteria, required tests, write/read-only classification, and a trusted validation profile.
-- **FR-015**: Task ingestion MUST reject duplicate IDs, missing requirements, invalid paths, unknown profiles, contradictory write declarations, missing dependencies, cycles, and schemas newer than the controller supports.
+- **FR-014**: Every task MUST have a unique stable ID, requirement mappings, dependencies, concrete allowed paths, completion criteria, required tests, write/read-only classification, and a non-empty ordered list of trusted validation profiles.
+- **FR-015**: Task ingestion MUST reject duplicate IDs, missing requirements, invalid paths, empty or duplicate profile lists, unknown profiles, contradictory write declarations, missing dependencies, cycles, and schemas newer than the controller supports. The canonical task schema is `1.1.0` with `validation_profiles`; a boundary loader MAY normalize a legacy `1.0.0` singular `validation_profile`, but a payload containing both is invalid.
 - **FR-016**: The generated Markdown task view MUST be deterministic, carry a generated-file warning and source digest, and expose all decision-relevant canonical fields without semantic loss.
 
 #### Scheduling and role execution
@@ -140,7 +140,7 @@ As the studio owner, I can interrupt, resume, stop, or abort a feature safely an
 - **FR-017**: The scheduler MUST select only tasks whose dependencies are complete and MUST produce the same next-task decision for the same canonical state.
 - **FR-018**: A failed, blocked, aborted, or policy-rejected task MUST prevent dependent tasks from becoming eligible unless an explicit recovery transition returns it to an eligible state.
 - **FR-019**: The system MUST support four logical Codex roles: Planner, Implementer, Reviewer, and Debugger; the Debugger MUST run only in response to a recorded failure.
-- **FR-020**: Each role invocation MUST be a separate `codex exec` process with a bounded prompt, explicit role, task ID, declared paths, validation profile, sandbox policy, retry context, and output schema.
+- **FR-020**: Each role invocation MUST be a separate `codex exec` process with a bounded prompt, explicit role, task ID, declared paths, ordered validation profile IDs, sandbox policy, retry context, and output schema.
 - **FR-021**: Agent responses MUST be validated against versioned JSON Schemas before any response field can influence workflow state or privileged actions.
 - **FR-022**: Schema-valid responses MUST also pass semantic validation, including task identity, attempt identity, allowed decisions, referenced paths, evidence, and consistency with observed repository state.
 - **FR-023**: Agent narrative, prior chat, hidden reasoning, and remembered state MUST NOT substitute for controller-observed artifacts or durable evidence.
@@ -221,7 +221,7 @@ As the studio owner, I can interrupt, resume, stop, or abort a feature safely an
 
 - **Feature**: One accepted request, identified by number and slug, bound to one base revision, branch, worktree, artifact set, mode, and optional Draft PR.
 - **Run**: One controller session for a feature, including mode, configuration digest, lifecycle state, timestamps, and recovery evidence.
-- **Task**: A canonical unit of work with ID, requirement mappings, dependencies, paths, write flag, validation profile, completion criteria, tests, and attempt budget. Runtime status is a controller-owned projection associated with the task and is not serialized into canonical `tasks.json` or written by an agent.
+- **Task**: A canonical unit of work with ID, requirement mappings, dependencies, paths, write flag, ordered `validation_profiles`, completion criteria, tests, and attempt budget. Runtime status is a controller-owned projection associated with the task and is not serialized into canonical `tasks.json` or written by an agent.
 - **Task Graph**: The validated directed acyclic graph used to determine sequential eligibility.
 - **Role Invocation**: One bounded Planner, Implementer, Reviewer, or Debugger process with input/output schema versions, sandbox, task/attempt identity, and sanitized evidence.
 - **Validation Profile**: A committed named set of permitted checks with fixed executables, arguments, environment, timeouts, and applicability.

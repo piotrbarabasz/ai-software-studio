@@ -17,16 +17,20 @@ W danej chwili controller dispatchuje zero albo jedno zadanie zapisujące. Plann
 ## Maszyna stanów
 
 ```text
-proposed -> initialized -> active -> validating -> reviewing
-                              |          |             |
-                              +----------+-------------+-> locally_complete
-                              |
-                              +-> stop_requested -> stopped
-                              +-> abort_requested -> aborted
-                              +-> reconciliation_required -> blocked
+CREATED -> PREFLIGHT -> WORKTREE_CREATED -> SPECIFICATION -> PLANNING
+  -> TASK_GENERATION -> SPEC_VALIDATION -> PUSHING -> DRAFT_PR_CREATED
+  -> TASK_SELECTED -> IMPLEMENTING -> VALIDATING -> REVIEWING -> COMMITTING
+  -> PUSHING -> CI_PENDING -> (TASK_SELECTED | REPAIRING | FEATURE_VALIDATION)
+  -> CI_PENDING -> READY_FOR_REVIEW
+
+Każda aktywna granica może przejść do BLOCKED albo ABORTED.
 ```
 
-Rzeczywiste przejścia są kontraktem w [`specs/007-autonomous-loop/contracts/state-machine.md`](../specs/007-autonomous-loop/contracts/state-machine.md). `dry-run` tworzy tylko projekcję efektów; `local` może utworzyć branch i worktree; obecna implementacja `draft-pr` kończy się na bezpiecznej inicjalizacji i preflight GitHub, bez publikacji. Merge i deployment nie są przejściami tej maszyny.
+Rzeczywiste przejścia są egzekwowane w `state_machine.py`. `dry-run` tworzy tylko projekcję
+efektów; `local` może utworzyć branch, worktree i lokalne commity; `draft-pr` dodaje kontrolowane
+pushe feature brancha, jeden Draft PR, exact-SHA checks i bounded CI repair. Stan
+`READY_FOR_REVIEW` oznacza gotowość controllera do ręcznej oceny; nie konwertuje PR z Draft.
+Merge i deployment nie są przejściami tej maszyny.
 
 ## Izolacja i bezpieczeństwo
 
@@ -36,4 +40,4 @@ Kontrola ścieżki i późniejsze otwarcie pliku nie są jedną atomową operacj
 
 `.codex/rules/studio-loop.rules` odmawia LLM-om poleceń Git write, mutacji PR, deploymentów oraz typowych prób ujawnienia sekretów. `.codex/hooks.json` dodaje PreToolUse, PostToolUse i Stop. PreToolUse rozumie rzeczywiste payloady Codexa: `apply_patch` (`tool_input.command`), `Edit` (`file_path`, `old_string`, `new_string`, `replace_all`) i `Write` (`file_path`, `content`). Hook rozwiązuje docelową ścieżkę względem `cwd`, blokuje wyjście poza worktree, taskowe `allowed_write_paths`, `.git`, stan runtime, pliki kontrolne i potencjalne sekrety; nieznany format operacji zapisującej jest odrzucany. Hook Stop zwraca `continue: false`, dlatego nie może uruchomić kolejnej Feature Loop; wznowienie należy wyłącznie do controllera. Ochrony są celowo dodatkowe: controller pozostaje bezpieczny również, gdy hooki są wyłączone.
 
-Controllerowe logi i evidence należą do ignorowanego `.automation/state/`. Codex jest uruchamiany z `--json`; controller zachowuje jedynie zsanityzowane, ograniczone evidence, bez reasoning i sekretów. Po timeout proces i jego potomkowie są kończeni mechanizmem właściwym dla platformy, a częściowy i końcowy stdout/stderr są łączone bez powielania wspólnego prefiksu i ograniczane limitem retencji. Każda obserwacja i mutacja Git najpierw odrzuca lokalną konfigurację zdolną uruchomić proces (`filter`, fsmonitor, sshCommand, external diff/merge driver i alias); kontrolowane mutacje używają argv bez shella, ograniczonego środowiska i pustego `core.hooksPath`. Hook lub filter repozytorium nie może więc zamienić lokalnego commita, checkoutu worktree lub pushu w niejawny efekt. `gh` może być wykrywane dla `draft-pr`, ale obecny CLI nie komponuje pushu, Draft PR ani obserwacji CI; nie ma ścieżki merge, close PR ani deploy.
+Controllerowe logi i evidence należą do ignorowanego `.automation/state/`. Codex jest uruchamiany z `--json`; controller zachowuje jedynie zsanityzowane, ograniczone evidence, bez reasoning i sekretów. Po timeout proces i jego potomkowie są kończeni mechanizmem właściwym dla platformy, a częściowy i końcowy stdout/stderr są łączone bez powielania wspólnego prefiksu i ograniczane limitem retencji. Każda obserwacja i mutacja Git najpierw odrzuca lokalną konfigurację zdolną uruchomić proces (`filter`, fsmonitor, sshCommand, external diff/merge driver i alias); kontrolowane mutacje używają argv bez shella, ograniczonego środowiska i pustego `core.hooksPath`. Hook lub filter repozytorium nie może więc zamienić lokalnego commita, checkoutu worktree lub pushu w niejawny efekt. Transport `gh` udostępnia wyłącznie wykrywanie/reconciliation Draft PR, edycję zarządzanej sekcji opisu i obserwację checks; nie ma ścieżki merge, approve, close PR ani deploy.

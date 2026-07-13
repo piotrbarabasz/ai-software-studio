@@ -236,7 +236,7 @@ def test_cli_local_lifecycle_and_draft_pr_controlled_stop(
                     "spec_markdown": "# Spec\n",
                     "plan_markdown": "# Plan\n",
                     "tasks": {
-                        "schema_version": "1.0.0",
+                        "schema_version": "1.1.0",
                         "feature_id": feature,
                         "requirements": ["FR-001"],
                         "tasks": [
@@ -250,7 +250,7 @@ def test_cli_local_lifecycle_and_draft_pr_controlled_stop(
                                 "allowed_read_paths": ["README.md"],
                                 "allowed_write_paths": ["result.txt"],
                                 "writes": True,
-                                "validation_profile": "studio-loop-tests",
+                                "validation_profiles": ["studio-loop-tests"],
                                 "completion_criteria": ["exists"],
                                 "tests": ["unit"],
                                 "status": "pending",

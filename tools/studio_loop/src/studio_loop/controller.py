@@ -19,12 +19,18 @@ from .models import TaskCollection, TaskDefinition, TaskStatus
 from .retry_policy import RetryBudget, RetryExhausted, RetryKind, RetryPolicy
 from .task_package_service import BuiltPackage, TaskPackageService
 from .task_scheduler import ScheduleState, TaskScheduler
-from .validation_runner import ValidationPolicyError, ValidationReport, ValidationRunner
+from .validation_runner import TaskValidationReport, ValidationPolicyError, ValidationRunner
 from .write_surface import WriteSurfaceGuard
 
 
 class RoleRunner(Protocol):
     def run(self, role: str, task_package_path: Path, *, invocation_id: str) -> Any: ...
+
+
+class ValidationRunnerPort(Protocol):
+    def ensure_known(self, names: tuple[str, ...]) -> None: ...
+
+    def run_many(self, task_id: str, profile_names: tuple[str, ...]) -> TaskValidationReport: ...
 
 
 class ControllerCrash(RuntimeError):
@@ -42,6 +48,16 @@ class ControllerResult:
     planned_task_id: str | None = None
 
 
+@dataclass(frozen=True)
+class TaskCompletionEvidence:
+    task_id: str
+    commit_sha: str | None
+    validation_passed: bool
+    reviewer_passed: bool
+    validation_summary: str
+    all_tasks_completed: bool
+
+
 @dataclass
 class _State:
     schema_version: str
@@ -52,6 +68,7 @@ class _State:
     phase: str
     task_statuses: dict[str, str]
     attempts: dict[str, int] = field(default_factory=dict)
+    ci_repair_attempts: dict[str, int] = field(default_factory=dict)
     commits: dict[str, str] = field(default_factory=dict)
     active_task_id: str | None = None
     base_sha: str | None = None
@@ -60,6 +77,7 @@ class _State:
     git_control_digest: str = ""
     package_path: str | None = None
     validation_reports: list[dict[str, Any]] = field(default_factory=list)
+    validation_summary: dict[str, Any] = field(default_factory=dict)
     reviewer_output: dict[str, Any] | None = None
     changed_paths: list[str] = field(default_factory=list)
     human_gate: bool = False
@@ -97,7 +115,7 @@ class AutonomousLoopController:
         repository: Path,
         *,
         role_runner: RoleRunner,
-        validation_runner: ValidationRunner | Any | None = None,
+        validation_runner: ValidationRunnerPort | None = None,
         diff_guard: DiffGuard | None = None,
         git_service: GitService | None = None,
         retry_policy: RetryPolicy | None = None,
@@ -110,6 +128,8 @@ class AutonomousLoopController:
             ".codex",
         ),
         checkpoint: Callable[[str], None] | None = None,
+        phase_observer: Callable[[str, str], None] | None = None,
+        on_task_completed: Callable[[TaskCompletionEvidence], None] | None = None,
     ) -> None:
         self.repository = repository.resolve()
         self.runtime_directory = (
@@ -125,6 +145,8 @@ class AutonomousLoopController:
         self.write_surface_guard = write_surface_guard or WriteSurfaceGuard(self.repository)
         self.package_service = TaskPackageService(self.runtime_directory)
         self.checkpoint = checkpoint or (lambda _name: None)
+        self.phase_observer = phase_observer or (lambda _phase, _task_id: None)
+        self.on_task_completed = on_task_completed or (lambda _evidence: None)
         self.effects: list[str] = []
         self._state_path: Path | None = None
         self.state: _State | None = None
@@ -156,10 +178,74 @@ class AutonomousLoopController:
             phase="IDLE",
             task_statuses={task.id: task.status.value for task in collection.tasks},
         )
+        self._recover_committed_task_state(state, collection)
+        missing_commit = next(
+            (
+                task.id
+                for task in collection.tasks
+                if task.writes
+                and state.task_statuses.get(task.id) == TaskStatus.COMPLETED.value
+                and task.id not in state.commits
+            ),
+            None,
+        )
+        if missing_commit is not None:
+            raise CommandError(
+                "TASK_COMMIT_EVIDENCE_INVALID",
+                f"completed writing task lacks commit evidence: {missing_commit}",
+            )
         self.state = state
         self._save()
         self.effects.append("run_state_created")
         return state
+
+    def _recover_committed_task_state(self, state: _State, collection: TaskCollection) -> None:
+        """Seed disposable controller cache from unique reachable commit trailers."""
+
+        feature_commits = set(
+            self.git_service.git.commits_with_trailer("Studio-Feature", collection.feature_id)
+        )
+        run_commits = set(self.git_service.git.commits_with_trailer("Studio-Run", state.run_id))
+        recovered: dict[str, str] = {}
+        for task in collection.tasks:
+            if not task.writes:
+                continue
+            task_commits = set(self.git_service.git.commits_with_trailer("Studio-Task", task.id))
+            matches = feature_commits.intersection(run_commits, task_commits)
+            if matches:
+                latest = tuple(
+                    candidate
+                    for candidate in matches
+                    if all(
+                        other == candidate or self.git_service.git.is_ancestor(other, candidate)
+                        for other in matches
+                    )
+                )
+                if len(latest) != 1:
+                    raise RuntimeError(f"controller commits diverge for recovered task {task.id}")
+                commit = latest[0]
+                if not self.git_service.git.is_ancestor(commit, self.git_service.head_sha()):
+                    raise RuntimeError(f"recovered task commit is not reachable: {task.id}")
+                recovered[task.id] = commit
+        recovered_ids = set(recovered)
+        for task in collection.tasks:
+            if task.id not in recovered_ids:
+                continue
+            missing_writing_dependency = next(
+                (
+                    dependency
+                    for dependency in task.dependencies
+                    if next(item for item in collection.tasks if item.id == dependency).writes
+                    and dependency not in recovered_ids
+                ),
+                None,
+            )
+            if missing_writing_dependency is not None:
+                raise RuntimeError(
+                    f"recovered task {task.id} lacks writing dependency {missing_writing_dependency}"
+                )
+            state.task_statuses[task.id] = TaskStatus.COMPLETED.value
+            state.commits[task.id] = recovered[task.id]
 
     @staticmethod
     def _with_statuses(collection: TaskCollection, statuses: dict[str, str]) -> TaskCollection:
@@ -210,6 +296,9 @@ class AutonomousLoopController:
         self.state.task_statuses[task_id] = status.value
         self.collection = self._with_statuses(self.collection, self.state.task_statuses)
         self._save()
+
+    def _observe_phase(self, phase: str, task_id: str) -> None:
+        self.phase_observer(phase, task_id)
 
     def _block(self, reason: str, *, human_gate: bool = True) -> ControllerResult:
         assert self.state is not None
@@ -278,7 +367,7 @@ class AutonomousLoopController:
             base_sha=self.state.base_sha,
             branch=self.state.branch,
             attempt=max(1, self.state.attempts.get(RetryKind.IMPLEMENTER.value, 1)),
-            validation_profiles=(task.validation_profile,),
+            validation_profiles=task.validation_profiles,
         )
 
     def _assessment(self, task: TaskDefinition) -> DiffAssessment:
@@ -319,21 +408,32 @@ class AutonomousLoopController:
         self._save()
         return self._block(summary)
 
-    def _validate(self, task: TaskDefinition) -> tuple[list[dict[str, Any]], str | None]:
-        report = self.validation_runner.run(task.validation_profile)
-        if isinstance(report, ValidationReport):
-            payload = report.as_dict()
-        elif isinstance(report, dict):
-            payload = dict(report)
-        else:
-            payload = asdict(report)
-        reports = [payload]
-        self.effects.append(f"validation:{task.validation_profile}")
-        status = str(payload.get("status", "ERROR"))
-        return (
-            reports,
-            None if status == "PASS" else f"validation {task.validation_profile} {status}",
+    def _validate(
+        self, task: TaskDefinition, package: BuiltPackage
+    ) -> tuple[list[dict[str, Any]], dict[str, Any], str | None]:
+        self._observe_phase("validating", task.id)
+        summary = self.validation_runner.run_many(task.id, task.validation_profiles)
+        payload = summary.as_dict()
+        reports = list(payload["results"])
+        self.package_service.validation_report(package, payload)
+        self.effects.extend(f"validation:{profile}" for profile in task.validation_profiles)
+        expected_profiles = task.validation_profiles
+        observed_profiles = tuple(result.profile for result in summary.results)
+        all_passed = summary.passed and all(result.status == "PASS" for result in summary.results)
+        complete = (
+            summary.task_id == task.id
+            and summary.required_profiles == expected_profiles
+            and observed_profiles == expected_profiles
         )
+        failed_profiles = tuple(
+            result.profile for result in summary.results if result.status != "PASS"
+        )
+        failure = None
+        if not complete:
+            failure = "validation evidence does not match required profiles"
+        elif not all_passed:
+            failure = "validation " + ", ".join(failed_profiles) + " did not PASS"
+        return reports, payload, failure
 
     def _review(
         self,
@@ -342,6 +442,7 @@ class AutonomousLoopController:
         assessment: DiffAssessment,
         reports: list[dict[str, Any]],
     ) -> tuple[dict[str, Any] | None, str | None]:
+        assert self.state is not None
         if not reports or any(report.get("status") != "PASS" for report in reports):
             return None, "review cannot run while a required validation is not PASS"
         review_package = self.package_service.review_package(
@@ -349,7 +450,9 @@ class AutonomousLoopController:
             diff=assessment.diff,
             changed_paths=assessment.changed_paths,
             validation_reports=reports,
+            validation_summary=self.state.validation_summary,
         )
+        self._observe_phase("reviewing", task.id)
         before = self.diff_guard.snapshot()
         result = self._invoke("reviewer", review_package)
         after = self.diff_guard.snapshot()
@@ -425,8 +528,9 @@ class AutonomousLoopController:
                 return self._block("diff guard violation: " + "; ".join(assessment.violations))
             self.state.phase = "VALIDATING"
             self._save()
-            reports, validation_failure = self._validate(task)
+            reports, validation_summary, validation_failure = self._validate(task, package)
             self.state.validation_reports = reports
+            self.state.validation_summary = validation_summary
             self.state.phase = "VALIDATED"
             self._save()
             self.checkpoint("after_validation")
@@ -443,7 +547,7 @@ class AutonomousLoopController:
                     self.checkpoint("after_review")
                     return None
             failure_class = "validation" if validation_failure else "review"
-            summary = validation_failure or review_failure or "controller gate failed"
+            failure_summary = validation_failure or review_failure or "controller gate failed"
             surface_failure = self._guard_write_surface(task, package, role="debugger")
             if surface_failure is not None:
                 return surface_failure
@@ -452,7 +556,7 @@ class AutonomousLoopController:
                     task,
                     package,
                     failure_class=failure_class,
-                    summary=summary,
+                    summary=failure_summary,
                     assessment=assessment,
                     reports=reports,
                     reviewer_output=reviewer_output,
@@ -489,7 +593,9 @@ class AutonomousLoopController:
             return self._block(
                 "pre-commit diff guard violation: " + "; ".join(assessment.violations)
             )
-        if any(report.get("status") != "PASS" for report in self.state.validation_reports):
+        if not self.state.validation_summary.get("passed") or any(
+            report.get("status") != "PASS" for report in self.state.validation_reports
+        ):
             return self._block("commit refused because validation evidence is not PASS")
         reviewer = self.state.reviewer_output or {}
         if reviewer.get("task_id") != task.id or reviewer.get("verdict") != "PASS":
@@ -502,6 +608,7 @@ class AutonomousLoopController:
             return self._block("writing task produced no committable changes")
         self.state.phase = "COMMITTING"
         self._save()
+        self._observe_phase("committing", task.id)
         self.checkpoint("before_commit")
         try:
             sha = self.git_service.commit_files(
@@ -524,10 +631,12 @@ class AutonomousLoopController:
 
     def _start_task(self, task: TaskDefinition) -> ControllerResult | None:
         assert self.state is not None
+        self._observe_phase("task_selected", task.id)
         self.state.active_task_id = task.id
         self.state.phase = "SELECTED"
         self.state.attempts = {}
         self.state.validation_reports = []
+        self.state.validation_summary = {}
         self.state.reviewer_output = None
         self.state.changed_paths = []
         self._set_task_status(task.id, TaskStatus.IN_PROGRESS)
@@ -541,7 +650,7 @@ class AutonomousLoopController:
             base_sha=baseline.head_sha,
             branch=baseline.branch,
             attempt=1,
-            validation_profiles=(task.validation_profile,),
+            validation_profiles=task.validation_profiles,
         )
         self.effects.append("task_package_written")
         self.state.base_sha = baseline.head_sha
@@ -570,6 +679,7 @@ class AutonomousLoopController:
             if surface_failure is not None:
                 return surface_failure
             try:
+                self._observe_phase("implementing", task.id)
                 result = self._invoke("implementer", package, RetryKind.IMPLEMENTER)
             except RetryExhausted as error:
                 return self._block(str(error))
@@ -625,6 +735,185 @@ class AutonomousLoopController:
         with RepositoryLock.for_repository(self.repository):
             return self._run_unlocked(collection, run_id=run_id, mode=mode)
 
+    def repair_ci(
+        self,
+        collection: TaskCollection,
+        *,
+        run_id: str,
+        task_id: str,
+        failure_summary: str,
+        writer_lock_held: bool = False,
+    ) -> ControllerResult:
+        """Run one bounded failure-only CI repair through the normal local gates."""
+
+        if writer_lock_held:
+            return self._repair_ci_unlocked(
+                collection,
+                run_id=run_id,
+                task_id=task_id,
+                failure_summary=failure_summary,
+            )
+        with RepositoryLock.for_repository(self.repository):
+            return self._repair_ci_unlocked(
+                collection,
+                run_id=run_id,
+                task_id=task_id,
+                failure_summary=failure_summary,
+            )
+
+    def _repair_ci_unlocked(
+        self,
+        collection: TaskCollection,
+        *,
+        run_id: str,
+        task_id: str,
+        failure_summary: str,
+    ) -> ControllerResult:
+        try:
+            self.state = self._load_or_create(collection, run_id, "local")
+        except (CommandError, RuntimeError, json.JSONDecodeError) as error:
+            return ControllerResult(
+                state="BLOCKED",
+                task_statuses={task.id: task.status.value for task in collection.tasks},
+                commits={},
+                effects=tuple(self.effects),
+                human_gate=True,
+                blocker=str(error),
+            )
+        self.collection = self._with_statuses(collection, self.state.task_statuses)
+        previous_state = self.state.state
+        previous_phase = self.state.phase
+        if self.state.task_statuses.get(task_id) != TaskStatus.COMPLETED.value:
+            return self._block("CI repair requires a completed mapped task")
+        try:
+            task = self._task(task_id)
+        except StopIteration:
+            return self._block("CI failure maps to an unknown task")
+        if not task.writes:
+            return self._block("CI repair cannot mutate a read-only task")
+        interrupted_repair_phases = {
+            "CI_REPAIRING",
+            "IMPLEMENTED",
+            "VALIDATING",
+            "VALIDATED",
+            "REVIEWING",
+            "REVIEWED",
+            "REPAIRING",
+            "COMMITTING",
+            "COMMITTED",
+        }
+        if (
+            self.state.phase in interrupted_repair_phases
+            and self.state.ci_repair_attempts.get(task.id, 0) >= 1
+        ):
+            if (
+                self.state.active_task_id != task.id
+                or not self.state.base_sha
+                or not self.state.branch
+                or self.state.ci_repair_attempts.get(task.id, 0) < 1
+            ):
+                return self._block("persisted CI repair evidence is incomplete or ambiguous")
+            package = self.package_service.task_package(
+                feature_id=self.state.feature_id,
+                run_id=self.state.run_id,
+                task=task,
+                base_sha=self.state.base_sha,
+                branch=self.state.branch,
+                attempt=self.state.ci_repair_attempts[task.id],
+                validation_profiles=task.validation_profiles,
+            )
+            self.state.package_path = str(package.path)
+            if self.state.phase not in {"REVIEWED", "COMMITTING", "COMMITTED"}:
+                self.state.phase = "IMPLEMENTED"
+                self._save()
+                gated = self._gate_until_pass(task, package)
+                if gated is not None:
+                    return gated
+            if self.state.phase != "COMMITTED":
+                committed = self._recover_or_commit(task)
+                if committed is not None:
+                    return committed
+            self._finish_ci_repair(previous_state, "FINALIZING")
+            return self._result()
+        baseline = self.diff_guard.snapshot()
+        if baseline.status:
+            return self._block("CI repair requires a clean worktree")
+        self.state.active_task_id = task.id
+        self.state.base_sha = baseline.head_sha
+        self.state.branch = baseline.branch
+        self.state.baseline_status = [list(item) for item in baseline.status]
+        self.state.git_control_digest = baseline.git_control_digest
+        self.state.validation_reports = []
+        self.state.validation_summary = {}
+        self.state.reviewer_output = None
+        self.state.changed_paths = []
+        package = self.package_service.task_package(
+            feature_id=self.state.feature_id,
+            run_id=self.state.run_id,
+            task=task,
+            base_sha=baseline.head_sha,
+            branch=baseline.branch,
+            attempt=self.state.ci_repair_attempts.get(task.id, 0) + 1,
+            validation_profiles=task.validation_profiles,
+        )
+        self.state.package_path = str(package.path)
+        self.state.phase = "CI_REPAIRING"
+        budget = RetryBudget(
+            self.retry_policy,
+            {RetryKind.CI_REPAIR.value: self.state.ci_repair_attempts.get(task.id, 0)},
+        )
+        try:
+            attempt = budget.consume(RetryKind.CI_REPAIR)
+        except RetryExhausted as error:
+            return self._block(str(error))
+        self.state.ci_repair_attempts[task.id] = attempt
+        failure = self.package_service.failure_package(
+            package,
+            failure_class="validation",
+            summary=failure_summary,
+            diff="",
+            validation_reports=[],
+            reviewer_output=None,
+            remaining_debugger_attempts=max(0, self.retry_policy.ci_repair - attempt),
+        )
+        self._save()
+        surface_failure = self._guard_write_surface(task, package, role="debugger")
+        if surface_failure is not None:
+            return surface_failure
+        result = self._invoke("debugger", failure)
+        output = self._output(result)
+        if (
+            self._last_runtime_violation
+            or not self._succeeded(result)
+            or output is None
+            or output.get("task_id") != task.id
+            or output.get("status") != "repaired"
+        ):
+            return self._block("CI Debugger failed or returned invalid repair evidence")
+        self.checkpoint("after_debugger")
+        self.state.phase = "IMPLEMENTED"
+        self._save()
+        gated = self._gate_until_pass(task, package)
+        if gated is not None:
+            return gated
+        committed = self._recover_or_commit(task)
+        if committed is not None:
+            return committed
+        self._finish_ci_repair(previous_state, previous_phase)
+        return self._result()
+
+    def _finish_ci_repair(self, previous_state: str, previous_phase: str) -> None:
+        assert self.state is not None
+        self.state.state = previous_state
+        self.state.phase = previous_phase
+        self.state.active_task_id = None
+        self.state.base_sha = None
+        self.state.branch = None
+        self.state.baseline_status = []
+        self.state.git_control_digest = ""
+        self.state.package_path = None
+        self._save()
+
     def _run_unlocked(
         self, collection: TaskCollection, *, run_id: str, mode: str = "local"
     ) -> ControllerResult:
@@ -633,7 +922,9 @@ class AutonomousLoopController:
         if mode == "dry-run":
             try:
                 self.validation_runner.ensure_known(
-                    tuple(task.validation_profile for task in collection.tasks)
+                    tuple(
+                        profile for task in collection.tasks for profile in task.validation_profiles
+                    )
                 )
             except ValidationPolicyError as error:
                 return ControllerResult(
@@ -656,11 +947,21 @@ class AutonomousLoopController:
                 planned_task_id=planned,
             )
 
-        self.state = self._load_or_create(collection, run_id, mode)
+        try:
+            self.state = self._load_or_create(collection, run_id, mode)
+        except (CommandError, RuntimeError, json.JSONDecodeError) as error:
+            return ControllerResult(
+                state="BLOCKED",
+                task_statuses={task.id: task.status.value for task in collection.tasks},
+                commits={},
+                effects=tuple(self.effects),
+                human_gate=True,
+                blocker=str(error),
+            )
         self.collection = self._with_statuses(collection, self.state.task_statuses)
         try:
             self.validation_runner.ensure_known(
-                tuple(task.validation_profile for task in collection.tasks)
+                tuple(profile for task in collection.tasks for profile in task.validation_profiles)
             )
         except ValidationPolicyError as error:
             return self._block(str(error))
@@ -697,6 +998,22 @@ class AutonomousLoopController:
                     return recovery
             self._set_task_status(task.id, TaskStatus.COMPLETED)
             self.effects.append("task_completed")
+            all_tasks_completed = all(
+                status == TaskStatus.COMPLETED.value for status in self.state.task_statuses.values()
+            )
+            self.on_task_completed(
+                TaskCompletionEvidence(
+                    task_id=task.id,
+                    commit_sha=self.state.commits.get(task.id),
+                    validation_passed=bool(self.state.validation_summary.get("passed")),
+                    reviewer_passed=(self.state.reviewer_output or {}).get("verdict") == "PASS",
+                    validation_summary=", ".join(
+                        f"{item.get('profile')}: {item.get('status')}"
+                        for item in self.state.validation_reports
+                    ),
+                    all_tasks_completed=all_tasks_completed,
+                )
+            )
             self.state.active_task_id = None
             self.state.phase = "IDLE"
             self.state.base_sha = None
@@ -705,6 +1022,7 @@ class AutonomousLoopController:
             self.state.git_control_digest = ""
             self.state.package_path = None
             self.state.validation_reports = []
+            self.state.validation_summary = {}
             self.state.reviewer_output = None
             self.state.changed_paths = []
             self._save()

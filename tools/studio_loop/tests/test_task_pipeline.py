@@ -50,4 +50,4 @@ def test_renderer_is_deterministic_and_consistent_with_json_fixture() -> None:
         assert task.id in first
         assert task.title in first
         assert task.description in first
-        assert task.validation_profile in first
+        assert ", ".join(task.validation_profiles) in first

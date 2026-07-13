@@ -60,7 +60,6 @@ class RecoveryService:
         repository: str | None = None,
     ) -> RecoveryResult:
         metadata = self._load(feature_metadata, "feature metadata")
-        tasks = self._load(tasks_path, "tasks")
         state = self._load(runtime_state, "runtime state", optional=True) if runtime_state else None
         branch = metadata.get("branch")
         base = metadata.get("base_branch")
@@ -84,7 +83,17 @@ class RecoveryService:
             return self._blocked("worktree has uncommitted changes")
         saved_local = state.get("local_sha") if isinstance(state, dict) else None
         if saved_local and saved_local != local_sha:
-            return self._blocked("runtime state points to a different local SHA")
+            if not isinstance(saved_local, str) or not self.git.git.is_ancestor(
+                saved_local, local_sha
+            ):
+                return self._blocked("runtime state points to a divergent local SHA")
+        if not tasks_path.exists():
+            if saved_local and saved_local != local_sha:
+                return self._blocked(
+                    "local HEAD advanced before canonical planner artifacts were recorded"
+                )
+            return RecoveryResult("PLANNING", local_sha, None, None)
+        tasks = self._load(tasks_path, "tasks")
         try:
             collection = TaskCollection.model_validate(tasks)
         except ValidationError as error:
@@ -124,7 +133,13 @@ class RecoveryService:
         )
         saved_remote = state.get("remote_sha") if isinstance(state, dict) else None
         if saved_remote and remote_sha != saved_remote:
-            return self._blocked("runtime state points to a different remote SHA")
+            if (
+                remote_sha is None
+                or not isinstance(saved_remote, str)
+                or not self.git.git.is_ancestor(saved_remote, remote_sha)
+                or not self.git.git.is_ancestor(remote_sha, local_sha)
+            ):
+                return self._blocked("runtime state points to a divergent remote SHA")
         if remote_sha is None:
             return RecoveryResult("LOCALLY_COMPLETE", local_sha, None, None)
         if remote_sha != local_sha:
@@ -141,7 +156,11 @@ class RecoveryService:
         pr = prs[0]
         if not pr.is_draft or pr.head_sha != remote_sha:
             return self._blocked("PR is non-draft or points to stale SHA")
-        recorded_number = state.get("pull_request_number") if isinstance(state, dict) else None
+        recorded_number = (
+            state.get("pull_request_number", state.get("pull_request"))
+            if isinstance(state, dict)
+            else None
+        )
         if recorded_number is not None and recorded_number != pr.number:
             return self._blocked("runtime state records a different PR")
         return RecoveryResult("CI_PENDING", local_sha, remote_sha, pr.number)
@@ -190,10 +209,15 @@ class RecoveryService:
                 return None
             task_commits = set(finder("Studio-Task", task_id))
             matches = feature_commits.intersection(task_commits)
-            if len(matches) > 1:
-                return None
-            if len(matches) == 1:
-                commit = next(iter(matches))
+            if matches:
+                latest = tuple(
+                    candidate
+                    for candidate in matches
+                    if all(other == candidate or ancestry(other, candidate) for other in matches)
+                )
+                if len(latest) != 1:
+                    return None
+                commit = latest[0]
                 if (
                     commit == base_sha
                     or not ancestry(base_sha, commit)

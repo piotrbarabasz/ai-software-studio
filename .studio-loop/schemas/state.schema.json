@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://ai-software-studio.local/studio-loop/state.schema.json",
   "type": "object", "additionalProperties": false,
-  "required": ["schema_version", "feature_id", "run_id", "state", "revision", "updated_at", "active_task_id"],
+  "required": ["schema_version", "feature_id", "run_id", "state", "revision", "updated_at", "active_task_id", "mode", "branch", "worktree", "local_sha", "remote_sha", "pull_request", "ci_status", "human_gate", "feature_validation_passed", "completed_tasks", "validation_summary", "ci_history", "blocking_issues"],
   "properties": {
     "schema_version": {"const": "1.0.0"},
     "feature_id": {"type": "string", "pattern": "^[0-9]{3}-[a-z0-9]+(?:-[a-z0-9]+)*$"},
@@ -10,6 +10,19 @@
     "state": {"enum": ["CREATED", "PREFLIGHT", "WORKTREE_CREATED", "SPECIFICATION", "PLANNING", "TASK_GENERATION", "SPEC_VALIDATION", "DRAFT_PR_CREATED", "TASK_SELECTED", "IMPLEMENTING", "VALIDATING", "REVIEWING", "REPAIRING", "COMMITTING", "PUSHING", "CI_PENDING", "FEATURE_VALIDATION", "READY_FOR_REVIEW", "BLOCKED", "ABORTED"]},
     "revision": {"type": "integer", "minimum": 0},
     "updated_at": {"type": "string", "format": "date-time"},
-    "active_task_id": {"type": ["string", "null"], "pattern": "^T[0-9]{3,}$"}
+    "active_task_id": {"type": ["string", "null"], "pattern": "^T[0-9]{3,}$"},
+    "mode": {"enum": ["local", "draft-pr"]},
+    "branch": {"type": ["string", "null"]},
+    "worktree": {"type": ["string", "null"]},
+    "local_sha": {"type": ["string", "null"], "pattern": "^[a-f0-9]{40,64}$"},
+    "remote_sha": {"type": ["string", "null"], "pattern": "^[a-f0-9]{40,64}$"},
+    "pull_request": {"type": ["integer", "null"], "minimum": 1},
+    "ci_status": {"type": ["string", "null"]},
+    "human_gate": {"type": "boolean"},
+    "feature_validation_passed": {"type": "boolean"},
+    "completed_tasks": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^T[0-9]{3,}$"}},
+    "validation_summary": {"type": "string"},
+    "ci_history": {"type": "array", "items": {"type": "string"}},
+    "blocking_issues": {"type": "array", "items": {"type": "string"}}
   }
 }

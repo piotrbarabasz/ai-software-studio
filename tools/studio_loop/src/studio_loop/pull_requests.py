@@ -30,6 +30,14 @@ class PullRequestRequest:
     completed_tasks: tuple[str, ...]
     test_summary: str
     blockers: tuple[str, ...]
+    plan_path: str | None = None
+    remaining_tasks: tuple[str, ...] = ()
+    current_state: str = ""
+    validation_summary: str = ""
+    local_sha: str | None = None
+    remote_sha: str | None = None
+    ci_history: tuple[str, ...] = ()
+    recorded_number: int | None = None
 
 
 class _PullRequestTransport(Protocol):
@@ -45,37 +53,51 @@ class _PullRequestTransport(Protocol):
 
 
 def render_body(request: PullRequestRequest, prior_body: str = "") -> str:
-    manual = ""
-    if MANUAL_START in prior_body and MANUAL_END in prior_body:
-        start, end = prior_body.index(MANUAL_START), prior_body.index(MANUAL_END) + len(MANUAL_END)
-        manual = prior_body[start:end]
-    if not manual:
-        manual = f"{MANUAL_START}\n<!-- Human-maintained notes. -->\n{MANUAL_END}"
-    tasks = "\n".join(f"- [x] {task}" for task in request.completed_tasks) or "- none"
+    completed = "\n".join(f"- [x] {task}" for task in request.completed_tasks) or "- none"
+    remaining = "\n".join(f"- [ ] {task}" for task in request.remaining_tasks) or "- none"
     blockers = "\n".join(f"- {redact(blocker)[:1000]}" for blocker in request.blockers) or "- none"
-    return "\n".join(
+    ci_history = "\n".join(f"- {redact(item)[:1000]}" for item in request.ci_history) or "- none"
+    local_sha = request.local_sha or request.head_sha
+    remote_sha = request.remote_sha or request.head_sha
+    managed = "\n".join(
         (
             AUTO_START,
             f"Feature: `{request.feature_id}`",
             f"Base: `{request.base_branch}`",
-            f"Head SHA: `{request.head_sha}`",
+            f"State: `{request.current_state or 'unknown'}`",
             "",
             "## Completed tasks",
-            tasks,
+            completed,
             "",
-            "## Tests",
-            redact(request.test_summary)[:2000],
+            "## Remaining tasks",
+            remaining,
+            "",
+            "## Last validations",
+            redact(request.validation_summary or request.test_summary)[:2000],
+            "",
+            "## Revisions",
+            f"- Local SHA: `{local_sha}`",
+            f"- Remote SHA: `{remote_sha}`",
             "",
             "## Blockers",
             blockers,
             "",
+            "## CI history",
+            ci_history,
+            "",
             f"Specification: `{request.spec_path}`",
+            f"Plan: `{request.plan_path or request.spec_path.replace('spec.md', 'plan.md')}`",
             AUTO_END,
-            "",
-            manual,
-            "",
         )
     )
+    if AUTO_START in prior_body and AUTO_END in prior_body:
+        start = prior_body.index(AUTO_START)
+        end = prior_body.index(AUTO_END, start) + len(AUTO_END)
+        return prior_body[:start] + managed + prior_body[end:]
+    if prior_body:
+        return managed + "\n\n" + prior_body
+    manual = f"{MANUAL_START}\n<!-- Human-maintained notes. -->\n{MANUAL_END}"
+    return managed + "\n\n" + manual + "\n"
 
 
 class PullRequestService:
@@ -98,6 +120,12 @@ class PullRequestService:
             )
         existing = items[0] if items else None
         if existing is not None:
+            if request.recorded_number is not None and existing.number != request.recorded_number:
+                raise CommandError(
+                    "PR_NUMBER_MISMATCH",
+                    "runtime state points to a different pull request",
+                    ExitCategory.RECONCILIATION,
+                )
             if (
                 not existing.is_draft
                 or existing.state.lower() != "open"

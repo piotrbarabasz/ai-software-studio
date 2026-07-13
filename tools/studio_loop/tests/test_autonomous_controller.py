@@ -13,7 +13,11 @@ import pytest
 from studio_loop.controller import AutonomousLoopController, ControllerCrash
 from studio_loop.models import TaskCollection
 from studio_loop.retry_policy import RetryPolicy
-from studio_loop.validation_runner import ValidationPolicyError
+from studio_loop.validation_runner import (
+    TaskValidationReport,
+    ValidationPolicyError,
+    ValidationReport,
+)
 
 
 def git(repository: Path, *arguments: str) -> str:
@@ -40,7 +44,7 @@ def repository(tmp_path: Path) -> Path:
 def task_collection(
     *,
     allowed: tuple[str, ...] = ("work.txt",),
-    profile: str = "trusted",
+    profiles: tuple[str, ...] = ("trusted",),
     status: str = "pending",
     tasks: list[dict[str, Any]] | None = None,
 ) -> TaskCollection:
@@ -56,7 +60,7 @@ def task_collection(
                 "allowed_read_paths": ["README.md"],
                 "allowed_write_paths": list(allowed),
                 "writes": bool(allowed),
-                "validation_profile": profile,
+                "validation_profiles": list(profiles),
                 "completion_criteria": ["controlled file exists"],
                 "tests": ["trusted validation"],
                 "status": status,
@@ -64,7 +68,7 @@ def task_collection(
         ]
     return TaskCollection.model_validate(
         {
-            "schema_version": "1.0.0",
+            "schema_version": "1.1.0",
             "feature_id": "007-autonomous-loop",
             "requirements": ["FR-001"],
             "tasks": tasks,
@@ -149,6 +153,34 @@ class FakeValidations:
         unknown = set(names) - self.known
         if unknown:
             raise ValidationPolicyError("outside allowlist: " + ", ".join(sorted(unknown)))
+
+    def run_many(self, task_id: str, profiles: tuple[str, ...]) -> TaskValidationReport:
+        self.ensure_known(profiles)
+        results: list[ValidationReport] = []
+        for profile in profiles:
+            self.calls.append(profile)
+            status = self.status() if callable(self.status) else self.status
+            results.append(
+                ValidationReport(
+                    profile=profile,
+                    argv=("python", "-m", "pytest"),
+                    working_directory=".",
+                    started_at="2026-07-12T10:00:00+00:00",
+                    ended_at="2026-07-12T10:00:01+00:00",
+                    exit_code=0 if status == "PASS" else 1,
+                    stdout="ok" if status == "PASS" else "failed",
+                    stderr="",
+                    truncated=False,
+                    truncation_marker=None,
+                    status=status,
+                )
+            )
+        return TaskValidationReport(
+            task_id=task_id,
+            required_profiles=profiles,
+            results=tuple(results),
+            passed=all(result.status == "PASS" for result in results),
+        )
 
     def run(self, profile: str) -> dict[str, Any]:
         self.calls.append(profile)
@@ -250,6 +282,55 @@ def test_validation_failure_blocks_without_review_or_commit(repository: Path) ->
     assert result.state == "BLOCKED"
     assert [role for role, _ in roles.calls].count("reviewer") == 0
     assert "T100" not in result.commits
+
+
+@pytest.mark.parametrize(
+    ("statuses", "failed_profile"),
+    [(("FAIL", "PASS", "PASS"), "first"), (("PASS", "FAIL", "PASS"), "middle")],
+)
+def test_any_failed_required_profile_blocks_review_and_commit(
+    repository: Path, statuses: tuple[str, str, str], failed_profile: str
+) -> None:
+    values = iter(statuses)
+    validations = FakeValidations(
+        repository,
+        lambda: next(values),
+        known=("first", "middle", "last"),
+    )
+    roles = FakeRoles(repository)
+    result = controller(repository, roles, validations, retry_policy=RetryPolicy(debugger=0)).run(
+        task_collection(profiles=("first", "middle", "last")), run_id=f"run-{failed_profile}"
+    )
+    assert result.state == "BLOCKED"
+    assert validations.calls == ["first", "middle", "last"]
+    assert all(role != "reviewer" for role, _ in roles.calls)
+    assert not result.commits
+
+
+def test_multiple_validation_reports_are_saved_and_given_to_reviewer(repository: Path) -> None:
+    validations = FakeValidations(repository, known=("first", "second", "third"))
+    roles = FakeRoles(repository)
+    result = controller(repository, roles, validations).run(
+        task_collection(profiles=("first", "second", "third")), run_id="run-many-validations"
+    )
+    assert result.state == "ALL_COMPLETED"
+    assert validations.calls == ["first", "second", "third"]
+    report_path = (
+        repository
+        / ".automation"
+        / "state"
+        / "controller"
+        / "run-many-validations"
+        / "T100"
+        / "validation-report.json"
+    )
+    report = json.loads(report_path.read_text(encoding="utf-8"))["validation_report"]
+    assert report["required_profiles"] == ["first", "second", "third"]
+    assert report["passed"] is True
+    assert [item["profile"] for item in report["results"]] == ["first", "second", "third"]
+    review_path = report_path.with_name("review-package.json")
+    review = json.loads(review_path.read_text(encoding="utf-8"))["controller_evidence"]
+    assert review["validation_summary"] == report
 
 
 def test_reviewer_failure_blocks_after_debugger_budget(repository: Path) -> None:
@@ -616,7 +697,7 @@ def test_multiple_tasks_dependencies_and_all_completed(repository: Path) -> None
                 "allowed_read_paths": ["README.md"],
                 "allowed_write_paths": [f"{task_id}.txt"],
                 "writes": True,
-                "validation_profile": "trusted",
+                "validation_profiles": ["trusted"],
                 "completion_criteria": ["file exists"],
                 "tests": ["trusted validation"],
                 "status": "pending",
@@ -640,7 +721,8 @@ def test_multiple_tasks_dependencies_and_all_completed(repository: Path) -> None
     finished = controller(repository, second_roles, FakeValidations(repository)).run(
         already_done, run_id="run-already-complete"
     )
-    assert finished.state == "ALL_COMPLETED"
+    assert finished.state == "BLOCKED"
+    assert "lacks commit evidence" in str(finished.blocker)
     assert second_roles.calls == []
 
 
@@ -649,7 +731,7 @@ def test_unknown_validation_profile_requires_human_gate_without_dry_run_mutation
 ) -> None:
     roles = FakeRoles(repository)
     result = controller(repository, roles, FakeValidations(repository)).run(
-        task_collection(profile="arbitrary-shell"), run_id="run-unknown", mode="dry-run"
+        task_collection(profiles=("arbitrary-shell",)), run_id="run-unknown", mode="dry-run"
     )
     assert result.state == "BLOCKED"
     assert result.human_gate is True

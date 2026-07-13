@@ -44,6 +44,24 @@ class ValidationReport:
         return asdict(self)
 
 
+@dataclass(frozen=True)
+class TaskValidationReport:
+    """Ordered controller evidence for every required validation of one task."""
+
+    task_id: str
+    required_profiles: tuple[str, ...]
+    results: tuple[ValidationReport, ...]
+    passed: bool
+
+    def as_dict(self) -> dict[str, Any]:
+        return {
+            "task_id": self.task_id,
+            "passed": self.passed,
+            "required_profiles": list(self.required_profiles),
+            "results": [result.as_dict() for result in self.results],
+        }
+
+
 class ValidationPolicyError(ValueError):
     pass
 
@@ -200,6 +218,26 @@ class ValidationRunner:
         if self.evidence_directory is not None:
             self.evidence_directory.mkdir(parents=True, exist_ok=True)
             path = self.evidence_directory / f"{profile.name}-{started.replace(':', '-')}.json"
+            path.write_text(
+                json.dumps(report.as_dict(), indent=2, sort_keys=True) + "\n", encoding="utf-8"
+            )
+        return report
+
+    def run_many(self, task_id: str, profile_names: tuple[str, ...]) -> TaskValidationReport:
+        """Run the trusted profiles in declared order and preserve every observation."""
+        if not profile_names:
+            raise ValidationPolicyError("task validation profiles must not be empty")
+        self.ensure_known(profile_names)
+        results = tuple(self.run(profile_name) for profile_name in profile_names)
+        report = TaskValidationReport(
+            task_id=task_id,
+            required_profiles=profile_names,
+            results=results,
+            passed=all(result.status == "PASS" for result in results),
+        )
+        if self.evidence_directory is not None:
+            self.evidence_directory.mkdir(parents=True, exist_ok=True)
+            path = self.evidence_directory / f"{task_id}-validation-report.json"
             path.write_text(
                 json.dumps(report.as_dict(), indent=2, sort_keys=True) + "\n", encoding="utf-8"
             )

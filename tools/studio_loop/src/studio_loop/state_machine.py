@@ -44,10 +44,22 @@ TRANSITIONS: dict[LoopState, frozenset[LoopState]] = {
         {LoopState.SPEC_VALIDATION, LoopState.BLOCKED, LoopState.ABORTED}
     ),
     LoopState.SPEC_VALIDATION: frozenset(
-        {LoopState.DRAFT_PR_CREATED, LoopState.TASK_SELECTED, LoopState.BLOCKED, LoopState.ABORTED}
+        {
+            LoopState.PUSHING,
+            LoopState.DRAFT_PR_CREATED,
+            LoopState.TASK_SELECTED,
+            LoopState.FEATURE_VALIDATION,
+            LoopState.BLOCKED,
+            LoopState.ABORTED,
+        }
     ),
     LoopState.DRAFT_PR_CREATED: frozenset(
-        {LoopState.TASK_SELECTED, LoopState.BLOCKED, LoopState.ABORTED}
+        {
+            LoopState.TASK_SELECTED,
+            LoopState.FEATURE_VALIDATION,
+            LoopState.BLOCKED,
+            LoopState.ABORTED,
+        }
     ),
     LoopState.TASK_SELECTED: frozenset(
         {LoopState.IMPLEMENTING, LoopState.BLOCKED, LoopState.ABORTED}
@@ -62,25 +74,63 @@ TRANSITIONS: dict[LoopState, frozenset[LoopState]] = {
         {LoopState.COMMITTING, LoopState.REPAIRING, LoopState.BLOCKED, LoopState.ABORTED}
     ),
     LoopState.REPAIRING: frozenset(
-        {LoopState.TASK_SELECTED, LoopState.IMPLEMENTING, LoopState.BLOCKED, LoopState.ABORTED}
+        {
+            LoopState.TASK_SELECTED,
+            LoopState.IMPLEMENTING,
+            LoopState.VALIDATING,
+            LoopState.PUSHING,
+            LoopState.BLOCKED,
+            LoopState.ABORTED,
+        }
     ),
     LoopState.COMMITTING: frozenset(
         {
             LoopState.TASK_SELECTED,
             LoopState.FEATURE_VALIDATION,
+            LoopState.PUSHING,
             LoopState.BLOCKED,
             LoopState.ABORTED,
         }
     ),
-    LoopState.PUSHING: frozenset({LoopState.CI_PENDING, LoopState.BLOCKED, LoopState.ABORTED}),
+    LoopState.PUSHING: frozenset(
+        {
+            LoopState.DRAFT_PR_CREATED,
+            LoopState.CI_PENDING,
+            LoopState.BLOCKED,
+            LoopState.ABORTED,
+        }
+    ),
     LoopState.CI_PENDING: frozenset(
-        {LoopState.FEATURE_VALIDATION, LoopState.REPAIRING, LoopState.BLOCKED, LoopState.ABORTED}
+        {
+            LoopState.TASK_SELECTED,
+            LoopState.FEATURE_VALIDATION,
+            LoopState.REPAIRING,
+            LoopState.READY_FOR_REVIEW,
+            LoopState.BLOCKED,
+            LoopState.ABORTED,
+        }
     ),
     LoopState.FEATURE_VALIDATION: frozenset(
-        {LoopState.PUSHING, LoopState.READY_FOR_REVIEW, LoopState.BLOCKED, LoopState.ABORTED}
+        {
+            LoopState.PUSHING,
+            LoopState.CI_PENDING,
+            LoopState.READY_FOR_REVIEW,
+            LoopState.BLOCKED,
+            LoopState.ABORTED,
+        }
     ),
     LoopState.READY_FOR_REVIEW: frozenset(),
-    LoopState.BLOCKED: frozenset({LoopState.PREFLIGHT, LoopState.TASK_SELECTED, LoopState.ABORTED}),
+    LoopState.BLOCKED: frozenset(
+        {
+            LoopState.PREFLIGHT,
+            LoopState.SPEC_VALIDATION,
+            LoopState.TASK_SELECTED,
+            LoopState.PUSHING,
+            LoopState.CI_PENDING,
+            LoopState.FEATURE_VALIDATION,
+            LoopState.ABORTED,
+        }
+    ),
     LoopState.ABORTED: frozenset(),
 }
 

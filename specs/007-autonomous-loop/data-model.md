@@ -141,7 +141,7 @@ Canonical document at `specs/<feature>/tasks.json` for post-bootstrap features.
 | `allowed_read_paths` | array of RepositoryPath/policy pattern | Minimal read scope. |
 | `allowed_write_paths` | array of RepositoryPath/policy pattern | Empty when `writes=false`; cannot include runtime/protected paths without explicit policy. |
 | `writes` | boolean | Determines sandbox and commit expectation. |
-| `validation_profile` | string | Must reference committed trusted profile. |
+| `validation_profiles` | non-empty ordered array of string | Unique committed trusted profile IDs; order is controller-preserved. Legacy `validation_profile` is accepted only at the loader boundary and immediately normalized before persistence. |
 | `completion_criteria` | non-empty array | Observable, task-specific conditions. |
 | `tests` | non-empty array | Named test expectations; no arbitrary shell. |
 | `attempt_budget` | integer | Within committed policy limit. |

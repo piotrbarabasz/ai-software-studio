@@ -12,10 +12,10 @@ studio-loop --help
 roles, validate the real Git diff, and create controller-owned local commits. Agents never own
 Git or runtime state. Future-feature `tasks.json` is canonical; `tasks.md` is generated.
 
-The `gh`, Draft-PR, required-check and recovery services have isolated tests, but the current
-CLI lifecycle does not compose remote publication. `draft-pr` performs preflight and stops at an
-explicit `BLOCKED` boundary without push or PR creation. There is no merge, PR-close or
-deployment capability.
+`draft-pr` composes the `gh`, publication, one-Draft-PR, exact-SHA required-check, bounded repair
+and recovery services. It stops at controller state `READY_FOR_REVIEW` while the GitHub PR stays
+Draft for manual review. There is no merge, approval, PR-close, force-push or deployment
+capability.
 
 Run the complete controller gate:
 
@@ -28,5 +28,5 @@ python -m compileall -q tools/studio_loop/src .codex/hooks
 ```
 
 See [the feature quickstart](../../specs/007-autonomous-loop/quickstart.md) for the supported CLI,
-known resume boundary, temporary-repository E2E commands, and the mandatory prerequisites for
+recovery boundaries, temporary-repository E2E commands, and the mandatory prerequisites for
 the first real smoke test.

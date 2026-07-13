@@ -6,7 +6,7 @@
 
 **Planning boundary**: This plan originally defined the future implementation. Implementation was subsequently authorized under `tasks.md`; this artifact still does not itself authorize commit, push, merge, deployment, or changes under `frontend/` or `backend/`.
 
-**Implementation reconciliation (2026-07-13)**: The current tree implements a substantial safe local slice and isolated publication/recovery services, with some implementation filenames consolidated into `controller.py`, `lifecycle.py`, and flat tests rather than the planned module tree. [`reconciliation.md`](reconciliation.md) preserves those mappings and the remaining scope instead of rewriting this plan. The release remains blocked because the CLI does not compose push/Draft PR/checks, resume/stop and event recovery are incomplete, approved/committed schemas drift, and GitHub's Windows/Ubuntu workflow has not yet run.
+**Implementation reconciliation (2026-07-13)**: The current tree composes the safe local controller with feature-branch push, one Draft PR, exact-SHA checks, bounded CI repair, feature validation, and conservative resume/rebuild logic. Some implementation filenames are consolidated into `controller.py`, `lifecycle.py`, and flat tests rather than the planned module tree. [`reconciliation.md`](reconciliation.md) preserves those mappings and the remaining scope instead of rewriting this plan. Remaining release work includes the absent stop/events surfaces, broader schema/config traceability, and an observed GitHub Windows/Ubuntu workflow run.
 
 ## Summary
 

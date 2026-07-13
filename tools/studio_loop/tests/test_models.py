@@ -50,7 +50,7 @@ def test_task_collection_rejects_duplicate_tasks_and_unknown_status(
 ) -> None:
     duplicate = dict(task_payload)
     payload = {
-        "schema_version": "1.0.0",
+        "schema_version": "1.1.0",
         "feature_id": "007-autonomous-loop",
         "requirements": ["FR-001"],
         "tasks": [task_payload, duplicate],
@@ -70,13 +70,79 @@ def test_task_collection_rejects_more_than_one_active_task(
     task_payload["status"] = "in_progress"
     second["status"] = "in_progress"
     payload = {
-        "schema_version": "1.0.0",
+        "schema_version": "1.1.0",
         "feature_id": "007-autonomous-loop",
         "requirements": ["FR-001"],
         "tasks": [task_payload, second],
     }
     with pytest.raises(ValidationError, match="at most one"):
         TaskCollection.model_validate(payload)
+
+
+def test_legacy_validation_profile_is_normalized_to_canonical_v11(
+    task_payload: dict[str, object],
+) -> None:
+    task_payload.pop("validation_profiles")
+    task_payload["validation_profile"] = "python"
+    collection = TaskCollection.model_validate(
+        {
+            "schema_version": "1.0.0",
+            "feature_id": "007-autonomous-loop",
+            "requirements": ["FR-001"],
+            "tasks": [task_payload],
+        }
+    )
+    assert collection.schema_version == "1.1.0"
+    assert collection.tasks[0].validation_profiles == ("python",)
+    assert "validation_profile" not in collection.model_dump(mode="json")["tasks"][0]
+
+
+@pytest.mark.parametrize("profiles", [[], ["python", "python"]])
+def test_task_collection_rejects_empty_or_duplicate_validation_profiles(
+    task_payload: dict[str, object], profiles: list[str]
+) -> None:
+    task_payload["validation_profiles"] = profiles
+    with pytest.raises(ValidationError, match="validation_profiles|validation profiles"):
+        TaskCollection.model_validate(
+            {
+                "schema_version": "1.1.0",
+                "feature_id": "007-autonomous-loop",
+                "requirements": ["FR-001"],
+                "tasks": [task_payload],
+            }
+        )
+
+
+def test_task_collection_rejects_legacy_and_canonical_profiles_together(
+    task_payload: dict[str, object],
+) -> None:
+    task_payload["validation_profile"] = "python"
+    with pytest.raises(ValidationError, match="cannot both"):
+        TaskCollection.model_validate(
+            {
+                "schema_version": "1.1.0",
+                "feature_id": "007-autonomous-loop",
+                "requirements": ["FR-001"],
+                "tasks": [task_payload],
+            }
+        )
+
+
+def test_validation_profile_order_is_stable(task_payload: dict[str, object]) -> None:
+    task_payload["validation_profiles"] = ["frontend-tests", "frontend-lint", "frontend-build"]
+    collection = TaskCollection.model_validate(
+        {
+            "schema_version": "1.1.0",
+            "feature_id": "007-autonomous-loop",
+            "requirements": ["FR-001"],
+            "tasks": [task_payload],
+        }
+    )
+    assert collection.tasks[0].validation_profiles == (
+        "frontend-tests",
+        "frontend-lint",
+        "frontend-build",
+    )
 
 
 @pytest.mark.parametrize("unsafe", ["../outside", "..\\outside", "C:/outside", "safe\\file.py"])
@@ -87,7 +153,7 @@ def test_task_paths_require_canonical_relative_posix_form(
     with pytest.raises(ValidationError, match="repository-relative POSIX"):
         TaskCollection.model_validate(
             {
-                "schema_version": "1.0.0",
+                "schema_version": "1.1.0",
                 "feature_id": "007-autonomous-loop",
                 "requirements": ["FR-001"],
                 "tasks": [task_payload],

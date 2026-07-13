@@ -388,6 +388,7 @@ Each checklist line follows `[ID] [Story?] outcome with exact paths`. Its metada
   - **Requirements**: FR-029, FR-030, FR-031, FR-033, FR-053
   - **Done when**: Only literal committed argv/profile/cwd/env/time/output/network policy runs; exact accepted diff/profile results are recorded and failure blocks review.
   - **Tests**: `tools/studio_loop/tests/security/test_validation_runner.py` covers shell fragments, executable substitution, cwd escape, env leak, timeout/output cap, network denial, and exit mapping.
+  - **Hardening evidence (2026-07-13)**: `validation_runner.py` now executes the canonical ordered `validation_profiles` list, writes a bounded aggregate report per task, and preserves each profile report for Reviewer evidence. Model/schema/controller tests cover one/multiple profiles, migration, empty/duplicate/unknown IDs, stable order, first/middle failure, and the no-Reviewer/no-commit gates. This task remains open because its planned executable-substitution/network/diff-binding matrix is broader than the executed slice.
 
 - [ ] T042 [US2] Add path/diff/validation acceptance tests in `tools/studio_loop/tests/integration/test_execution_guards.py`
   - **Depends on**: T039, T040, T041
