@@ -17,30 +17,23 @@ describe('HomeComponent', () => {
     fixture.detectChanges();
   });
 
-  it('renders the concise hero, two collaboration tracks, and closing contact CTAs', () => {
+  it('renders the demo-first hero, three offer families, and a decision-ready contact CTA', () => {
     const element: HTMLElement = fixture.nativeElement;
 
-    expect(element.querySelector('h1')?.textContent).toContain('Sprawdzaj AI przez klikalne demo');
-    expect(element.querySelector('a[href="/demo-w-7-dni"]')).not.toBeNull();
-    expect(element.querySelector('a[href^="/kontakt?projectType=custom_web_app"]')).not.toBeNull();
-    expect(element.textContent).toContain('Zweryfikuj pomysł');
-    expect(element.textContent).toContain('maksymalnie siedem dni');
-    expect(element.textContent).toContain('Dwa wyraźne tory rozpoczęcia współpracy');
-    expect(element.textContent).toContain('Pomysł → Demo / PoC → MVP → Produkcja');
-    expect(element.textContent).toContain('Zaplecze eksperymentów dla projektów klientów');
-    expect(element.textContent).toContain('Mam pomysł do szybkiego zweryfikowania');
-    expect(element.textContent).toContain('Szukam partnera do rozwoju aplikacji');
-    expect(element.querySelector('a[href="/produkty"]')).not.toBeNull();
-    expect(element.querySelector('a[href="/studio"]')).not.toBeNull();
+    expect(element.querySelector('h1')?.textContent).toContain('Demo AI w 7 dni');
+    expect(element.querySelectorAll('.hero-actions a').length).toBe(2);
+    expect(element.textContent).toContain('Asystent wiedzy / chatbot RAG');
+    expect(element.textContent).toContain('Automatyzacje komunikacji');
+    expect(element.textContent).toContain('Demo produktu AI / landing / panel');
+    expect(element.textContent).toContain('Ilustracyjny scenariusz, nie case study');
+    expect(element.textContent).toContain('Co klient dostaje po 7 dniach');
     expect(element.querySelector('a[href^="/kontakt?projectType=mvp_prototype"]')).not.toBeNull();
   });
 
-  it('renders a standalone Build path without forcing the demo flow first', () => {
+  it('keeps demo limitations in one clear production-stage explanation', () => {
     const element: HTMLElement = fixture.nativeElement;
 
-    expect(element.textContent).toContain('Zbuduj produkt');
-    expect(element.textContent).toContain('Po udanej walidacji');
-    expect(element.textContent).toContain('indywidualny zakres');
-    expect(element.querySelector('a[href^="/kontakt?projectType=custom_web_app"]')).not.toBeNull();
+    expect(element.querySelector('#demo-delivery')?.textContent).toContain('Etap produkcyjny może później objąć');
+    expect(element.querySelectorAll('.faq-list details').length).toBe(3);
   });
 });

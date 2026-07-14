@@ -130,12 +130,12 @@ export class ContactFormComponent implements OnInit {
       return 'Podaj poprawny adres e-mail.';
     }
     if (control.hasError('minlength')) {
-      return 'Wpisz wiÄ™cej szczegĂłĹ‚Ăłw.';
+      return 'Wpisz więcej szczegółów.';
     }
     if (control.hasError('maxlength')) {
-      return 'Wpis jest zbyt dĹ‚ugi.';
+      return 'Wpis jest zbyt długi.';
     }
-    return 'SprawdĹş wartoĹ›Ä‡ pola.';
+    return 'Sprawdź wartość pola.';
   }
 
   private isProjectType(value: string | null): value is ProjectType {

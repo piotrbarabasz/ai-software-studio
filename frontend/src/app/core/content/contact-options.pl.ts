@@ -3,18 +3,18 @@ import type { ContactIntentOption, SelectOption } from './site-content.types';
 
 export const projectTypeOptions = [
   { value: 'rag_chatbot_demo', label: 'Chatbot / asystent wiedzy' },
-  { value: 'website_seo', label: 'Strona internetowa / landing' },
+  { value: 'website_seo', label: 'Demo produktu / landing' },
   { value: 'voice_agent_demo', label: 'Voice agent' },
   { value: 'whatsapp_agent_management', label: 'WhatsApp / obsługa rozmów' },
-  { value: 'email_automation', label: 'Automatyzacja e-mail' },
+  { value: 'email_automation', label: 'Automatyzacja komunikacji: e-mail' },
   { value: 'agent_management_panel', label: 'Panel lub dashboard' },
-  { value: 'custom_web_app', label: 'Aplikacja webowa' },
-  { value: 'ai_automation', label: 'AI / automatyzacja lub asystent' },
-  { value: 'backend_api', label: 'Backend lub API' },
-  { value: 'business_process_automation', label: 'Automatyzacja procesu' },
-  { value: 'external_integration', label: 'Integracja z systemem' },
-  { value: 'dashboard_internal_tool', label: 'Panel wewnętrzny / dashboard' },
-  { value: 'mvp_prototype', label: 'MVP lub prototyp' },
+  { value: 'custom_web_app', label: 'Aplikacja lub proces do rozwoju' },
+  { value: 'ai_automation', label: 'Automatyzacja komunikacji' },
+  { value: 'backend_api', label: 'Konsultacja zakresu wdrożenia' },
+  { value: 'business_process_automation', label: 'Inny proces do automatyzacji' },
+  { value: 'external_integration', label: 'Proces z użyciem obecnych narzędzi' },
+  { value: 'dashboard_internal_tool', label: 'Panel lub dashboard' },
+  { value: 'mvp_prototype', label: 'Demo produktu / prototyp' },
   { value: 'other', label: 'Inny proces do automatyzacji' },
 ] satisfies readonly SelectOption<ProjectType>[];
 

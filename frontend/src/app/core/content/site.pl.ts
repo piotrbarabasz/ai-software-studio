@@ -502,9 +502,9 @@ const routeMetadata = [
   {
     path: '/',
     label: 'Start',
-    title: 'AISoftware Studio - Validate i Build dla AI',
+    title: 'AISoftware Studio — demo AI w 7 dni dla firm',
     description:
-      'Najpierw szybka walidacja pomysłu, a potem produkcyjna aplikacja AI, automatyzacja lub narzędzie wewnętrzne.',
+      'Zweryfikuj pomysł na AI przez klikalne demo w 7 dni, zanim zainwestujesz w pełne wdrożenie.',
     kind: 'home',
   },
   {
@@ -560,19 +560,19 @@ export const siteContent = {
   home: {
     path: '/',
     eyebrow: 'AISoftware Studio',
-    title: 'Sprawdzaj AI przez klikalne demo, zanim zbudujesz produkcję.',
+    title: 'Demo AI w 7 dni — zanim inwestujesz w pełne wdrożenie.',
     subtitle:
-      'Najpierw walidujemy przepływ, wartość i zakres. Dopiero potem projektujemy backend, integracje i dalsze wdrożenie.',
-    primaryCta: 'Zacznij od demo',
-    secondaryCta: 'Omów rozwój aplikacji',
+      'Pokazujemy jeden kluczowy proces, żeby sprawdzić wartość biznesową, doświadczenie użytkownika i sens dalszej inwestycji.',
+    primaryCta: 'Umów zakres demo',
+    secondaryCta: 'Zobacz, co dostajesz po 7 dniach',
     highlights: [
-      'szybka walidacja pomysłu przez demo lub PoC',
-      'odrębna ścieżka do budowy pełnej aplikacji produkcyjnej',
-      'R&D jako zaplecze kompetencji, a nie osobny pakiet sprzedażowy',
+      'jeden proces i jasne kryterium decyzji',
+      'klikalne demo gotowe do rozmowy z zespołem lub zarządem',
+      'czytelny następny krok do etapu produkcyjnego',
     ],
     workTracks: [
       {
-        title: 'Zweryfikuj pomysł',
+        title: 'Najpierw walidacja demo',
         lead:
           'Demo lub PoC w maksymalnie siedem dni dla jednego, ograniczonego scenariusza. To dobry format dla presales, zarządu, inwestora albo wniosku grantowego.',
         bullets: [
@@ -580,11 +580,11 @@ export const siteContent = {
           'materiał do podjęcia decyzji biznesowej',
           'bez obietnicy produkcyjnego MVP w 7 dni',
         ],
-        ctaLabel: 'Zacznij od demo',
-        ctaPath: '/demo-w-7-dni',
+        ctaLabel: 'Zobacz zakres demo',
+        ctaPath: '/',
       },
       {
-        title: 'Zbuduj produkt',
+        title: 'Potem wdrożenie produkcyjne',
         lead:
           'Po udanej walidacji można zaprojektować i rozwijać pełną aplikację: od UX i architektury, przez frontend i backend, po AI, integracje, testy i utrzymanie.',
         bullets: [
@@ -592,38 +592,38 @@ export const siteContent = {
           'produkcyjna jakość, monitoring i bezpieczeństwo',
           'iteracje dopasowane do etapu projektu',
         ],
-        ctaLabel: 'Omów rozwój aplikacji',
+        ctaLabel: 'Omów dalsze wdrożenie',
         ctaPath: '/kontakt',
       },
     ],
     solutionGroups: [
       {
-        title: 'Obsługa klienta i sprzedaż',
+        title: 'Asystent wiedzy / chatbot RAG',
         lead:
-          'Asystenci wiedzy, chatboty, voice agents i kwalifikacja leadów pomagają szybciej odpowiadać i lepiej domykać rozmowy.',
+          'Sprawdź, czy wiedza firmy może szybciej prowadzić klientów i zespół do trafnej odpowiedzi.',
         bullets: [
-          'asystenci wiedzy i RAG',
-          'chatboty i kwalifikacja leadów',
-          'voice agents wspierające rozmowę',
+          'pytania klientów i wsparcie sprzedaży',
+          'źródła odpowiedzi widoczne w demo',
+          'przekazanie trudnej sprawy do człowieka',
         ],
       },
       {
-        title: 'Automatyzacja operacji',
+        title: 'Automatyzacje komunikacji',
         lead:
-          'AI może odciążyć zespół z powtarzalnych zadań i połączyć komunikację z procesami wewnętrznymi.',
+          'Zobacz, które wiadomości i rozmowy warto usprawnić, a gdzie decyzja człowieka pozostaje potrzebna.',
         bullets: [
-          'automatyzacja e-maili',
-          'sterowanie procesami przez WhatsApp',
-          'agenci wykonujący zadania i integracje między systemami',
+          'e-mail, WhatsApp i voice',
+          'statusy, przekazania i akceptacje',
+          'jeden czytelny scenariusz operacyjny',
         ],
       },
       {
-        title: 'Aplikacje i kontrola',
-        lead: 'Dedykowane aplikacje webowe, dashboardy i backendy porządkują przepływ pracy po stronie operacyjnej.',
+        title: 'Demo produktu AI / landing / panel',
+        lead: 'Zweryfikuj ofertę lub proces w klikalnym widoku, zanim powstanie pełny produkt.',
         bullets: [
-          'dedykowane aplikacje webowe',
-          'panele zarządzania agentami i dashboardy',
-          'backendy, API oraz narzędzia administracyjne',
+          'landing do walidacji komunikatu',
+          'panel do omówienia przepływu',
+          'koncept gotowy do decyzji o zakresie',
         ],
       },
     ],

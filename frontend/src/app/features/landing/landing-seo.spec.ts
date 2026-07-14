@@ -51,7 +51,7 @@ describe('Site shell metadata', () => {
     );
   });
 
-  it('renders route-based navigation and the mobile menu toggle', async () => {
+  it('renders focused landing navigation and the mobile menu toggle', async () => {
     const fixture = TestBed.createComponent(SiteShellComponent);
     const router = TestBed.inject(Router);
 
@@ -64,7 +64,8 @@ describe('Site shell metadata', () => {
     expect(
       fixture.nativeElement.querySelector('nav[aria-label="Główna nawigacja"]'),
     ).not.toBeNull();
-    expect(fixture.nativeElement.querySelector('a[href="/"]')).not.toBeNull();
-    expect(fixture.nativeElement.querySelector('a[href="/kontakt"]')).not.toBeNull();
+    expect(fixture.nativeElement.querySelectorAll('.nav-links a').length).toBe(5);
+    expect(fixture.nativeElement.querySelector('a[href="/#offers"]')).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('a[href="/#contact"]')).not.toBeNull();
   });
 });
