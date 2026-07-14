@@ -112,7 +112,7 @@ describe('ContactFormComponent', () => {
     expect(optionValues).toContain('rag_chatbot_demo');
     expect(optionValues).toContain('website_seo');
     expect(fixture.nativeElement.textContent).toContain('Chatbot / asystent wiedzy');
-    expect(fixture.nativeElement.textContent).toContain('Panel wewnętrzny / dashboard');
+    expect(fixture.nativeElement.textContent).toContain('Panel lub dashboard');
   });
 
   it('submits a productized project type using the existing payload shape', () => {

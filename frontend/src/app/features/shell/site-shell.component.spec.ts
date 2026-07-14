@@ -18,7 +18,7 @@ describe('SiteShellComponent', () => {
     }).compileComponents();
   });
 
-  it('navigates to route-backed pages and marks the active top-level link', async () => {
+  it('keeps landing navigation focused while route-backed product pages remain accessible', async () => {
     const fixture = TestBed.createComponent(SiteShellComponent);
     const router = TestBed.inject(Router);
 
@@ -27,12 +27,10 @@ describe('SiteShellComponent', () => {
     await fixture.whenStable();
 
     expect(fixture.nativeElement.querySelector('h1')?.textContent).toContain('Voice agent');
-    expect(
-      fixture.nativeElement.querySelector('a[href="/produkty"]')?.getAttribute('aria-current'),
-    ).toBe('page');
-    expect(fixture.nativeElement.querySelector('a[href="/produkty"]')?.classList).toContain(
-      'is-active',
-    );
+    const navigationLinks = fixture.nativeElement.querySelectorAll('.nav-links a');
+    expect(navigationLinks.length).toBe(5);
+    expect(fixture.nativeElement.querySelector('a[href="/#offers"]')).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('a[href="/#contact"]')).not.toBeNull();
   });
 
   it('opens and closes the mobile navigation', async () => {

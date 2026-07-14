@@ -6,9 +6,9 @@
 
 **Alternatives considered**: GitHub Actions, manual-only `gcloud builds submit`, hybrid trigger orchestration. GitHub Actions is out of scope; manual-only deployment would not satisfy the automation requirement.
 
-## Decision: Make `main` the production branch and keep `002-gcp-deployment` only for temporary trigger testing
+## Decision: Make `master` the production branch and keep `002-gcp-deployment` only for temporary trigger testing
 
-**Rationale**: The clarified scope names `main` as the production branch and treats `002-gcp-deployment` as a temporary branch only for testing trigger behavior.
+**Rationale**: The clarified scope names `master` as the production branch and treats `002-gcp-deployment` as a temporary branch only for testing trigger behavior.
 
 **Alternatives considered**: Using the existing deployment branch as production, or allowing both branches to deploy. Both would create ambiguity and weaken release safety.
 

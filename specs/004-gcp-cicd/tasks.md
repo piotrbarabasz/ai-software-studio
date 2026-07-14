@@ -61,9 +61,9 @@
 - [X] T016 Create `docs/gcp-cicd.md` as the user-facing guide for GitHub-to-GCP CI/CD setup and operations.
 - [X] T017 Create `infra/gcp/triggers.md` with exact Cloud Build trigger settings, substitutions, and operator notes.
 - [X] T018 Document the one-time GitHub repository connection to Cloud Build in `docs/gcp-cicd.md`, using Google Cloud Console as the primary path.
-- [X] T019 Document the production push trigger in `docs/gcp-cicd.md` and `infra/gcp/triggers.md` with `deploy-prod`, push event, `^main$`, and `infra/gcp/cloudbuild.deploy.yaml`.
+- [X] T019 Document the production push trigger in `docs/gcp-cicd.md` and `infra/gcp/triggers.md` with `deploy-prod`, push event, `^master$`, and `infra/gcp/cloudbuild.deploy.yaml`.
 - [X] T020 Document the temporary test trigger in `docs/gcp-cicd.md` and `infra/gcp/triggers.md` with `^002-gcp-deployment$` and explicit disable/delete guidance after testing.
-- [X] T021 Document the PR validation trigger in `docs/gcp-cicd.md` and `infra/gcp/triggers.md` with pull request event, `^main$` base branch, and `infra/gcp/cloudbuild.pr-checks.yaml` with no deploy.
+- [X] T021 Document the PR validation trigger in `docs/gcp-cicd.md` and `infra/gcp/triggers.md` with pull request event, `^master$` base branch, and `infra/gcp/cloudbuild.pr-checks.yaml` with no deploy.
 - [X] T022 Document the required substitutions in `docs/gcp-cicd.md` and `infra/gcp/triggers.md`, including project, region, service names, URLs, secret name, rate limit, and placeholder SMTP/contact email values.
 - [X] T023 Document required IAM permissions in `docs/gcp-cicd.md` and `infra/gcp/triggers.md` for the Cloud Build service account and runtime Cloud Run service account.
 - [X] T024 Document deployment verification and rollback steps in `docs/gcp-cicd.md` and `infra/gcp/triggers.md`, including Cloud Build logs, Cloud Run URLs, trigger disablement, and revision rollback.
@@ -105,7 +105,7 @@
 - [X] T033 Validate `infra/gcp/cloudbuild.deploy.yaml`, `infra/gcp/cloudbuild.backend.yaml`, `infra/gcp/cloudbuild.frontend.yaml`, `infra/gcp/cloudbuild.pr-checks.yaml`, `infra/gcp/triggers.md`, `docs/gcp-cicd.md`, `scripts/gcp/create-triggers.sh`, and `scripts/gcp/create-triggers.ps1` for YAML/syntax sanity and readable formatting where applicable.
 - [ ] T034 Run `scripts/gcp/preflight.ps1` and confirm the existing backend and frontend quality gates still pass in the current environment.
 - [X] T035 Search `infra/gcp/`, `docs/`, `scripts/gcp/`, and `README.md` to confirm no real secrets, service account keys, SMTP passwords, tokens, or API keys were added.
-- [X] T036 Confirm `docs/gcp-cicd.md` and `infra/gcp/triggers.md` describe `main` as the production branch and `002-gcp-deployment` as temporary test-only.
+- [X] T036 Confirm `docs/gcp-cicd.md` and `infra/gcp/triggers.md` describe `master` as the production branch and `002-gcp-deployment` as temporary test-only.
 - [X] T037 Confirm `docs/gcp-cicd.md` and `infra/gcp/triggers.md` state that the PR validation trigger uses `infra/gcp/cloudbuild.pr-checks.yaml` and does not deploy.
 - [X] T038 Confirm `docs/gcp-cicd.md` and `infra/gcp/triggers.md` state that the production push trigger deploys through `infra/gcp/cloudbuild.deploy.yaml`.
 
@@ -150,7 +150,7 @@
 1. Finish Phase 1 audit.
 2. Build Phase 2 combined production pipeline.
 3. Harden manual build tags in Phase 3.
-4. Validate the production path with Phase 7 checks as soon as the main pipeline is in place.
+4. Validate the production path with Phase 7 checks as soon as the master pipeline is in place.
 
 ### Incremental Delivery
 
@@ -164,7 +164,7 @@
 
 ### Suggested MVP Scope
 
-Start with Phase 2 plus the minimum Phase 3 updates required to keep manual builds safe. That delivers the core business value: automatic production deployment on `main` with a safe manual fallback.
+Start with Phase 2 plus the minimum Phase 3 updates required to keep manual builds safe. That delivers the core business value: automatic production deployment on `master` with a safe manual fallback.
 
 ## Notes
 

@@ -82,12 +82,12 @@
 
 ### Implementation for User Story 2
 
-- [ ] T028 [US2] Update Build track content with product analysis, UX, frontend, backend, API, AI/RAG, agents, integrations, security, testing, deployment, monitoring, costs, maintenance, and iteration in `frontend/src/app/core/content/site.pl.ts`
-- [ ] T029 [US2] Update homepage Build CTA and final full-development CTA to route directly to `/kontakt` with an allowed full-development value in `frontend/src/app/features/home/home.component.html`
-- [ ] T030 [US2] Update route titles and descriptions to reposition the company beyond "Demo AI w 7 dni" in `frontend/src/app/core/content/site.pl.ts`
-- [ ] T031 [US2] Update shell primary CTA label if needed to support full development without demo-first framing in `frontend/src/app/features/shell/site-shell.component.ts`
-- [ ] T032 [US2] Refine homepage section order so the first decision area stays short and does not become a full catalog in `frontend/src/app/features/home/home.component.html`
-- [ ] T033 [US2] Adjust homepage layout spacing, composition, and CTA sizing for Build/Validate hierarchy in `frontend/src/app/features/home/home.component.scss`
+- [X] T028 [US2] Update Build track content with product analysis, UX, frontend, backend, API, AI/RAG, agents, integrations, security, testing, deployment, monitoring, costs, maintenance, and iteration in `frontend/src/app/core/content/site.pl.ts`
+- [X] T029 [US2] Update homepage Build CTA and final full-development CTA to route directly to `/kontakt` with an allowed full-development value in `frontend/src/app/features/home/home.component.html`
+- [X] T030 [US2] Update route titles and descriptions to reposition the company beyond "Demo AI w 7 dni" in `frontend/src/app/core/content/site.pl.ts`
+- [X] T031 [US2] Update shell primary CTA label if needed to support full development without demo-first framing in `frontend/src/app/features/shell/site-shell.component.ts`
+- [X] T032 [US2] Refine homepage section order so the first decision area stays short and does not become a full catalog in `frontend/src/app/features/home/home.component.html`
+- [X] T033 [US2] Adjust homepage layout spacing, composition, and CTA sizing for Build/Validate hierarchy in `frontend/src/app/features/home/home.component.scss`
 
 **Checkpoint**: User Story 2 is independently functional and does not depend on a visitor buying a demo first.
 
@@ -132,7 +132,7 @@
 ### Implementation for User Story 4
 
 - [X] T045 [US4] Populate product category assignments and richer solution fields for all existing products in `frontend/src/app/core/content/site.pl.ts`
-- [ ] T046 [US4] Update products page category overview and route-backed selector markup in `frontend/src/app/features/products/products-page.component.html`
+- [X] T046 [US4] Update products page category overview and route-backed selector markup in `frontend/src/app/features/products/products-page.component.html`
 - [X] T047 [US4] Update products page component state derivation for categories while keeping product selection derived from Angular Router in `frontend/src/app/features/products/products-page.component.ts`
 - [X] T048 [US4] Render demo scope, demo limits, production scope, and development path separately in `frontend/src/app/features/products/products-page.component.html`
 - [X] T049 [US4] Style category navigation, selector rail, and detail sections for touch, keyboard focus, and responsive layouts in `frontend/src/app/features/products/products-page.component.scss`

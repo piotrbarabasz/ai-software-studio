@@ -63,6 +63,13 @@ Frontend:
 - `npm run build`
 - `npm test`, if relevant
 
+Workflow gates:
+
+- Before closing any Spec Kit task package, run `scripts/spec/validate-task-state.ps1` against the active feature task list.
+- Do not mark a UX/UI task as complete unless the task package includes a browser-based visual review or an explicit `MANUAL REVIEW REQUIRED` note.
+- Do not treat HTTP 200 responses as a visual PASS for UI work.
+- Release verification must record the commit SHA, Cloud Build source SHA, Cloud Run revision, image reference, deployment timestamp, and public URL before calling a deployment verified.
+
 Backend:
 
 - `cd backend`

@@ -69,7 +69,7 @@ describe('Site content model', () => {
   it('keeps repositioned route titles and descriptions aligned with the current public pages', () => {
     const routeByPath = Object.fromEntries(siteContent.routes.map((route) => [route.path, route]));
 
-    expect(routeByPath['/']?.title).toContain('AISoftware Studio - Validate i Build dla AI');
+    expect(routeByPath['/']?.title).toContain('AISoftware Studio — demo AI w 7 dni dla firm');
     expect(routeByPath['/produkty']?.title).toContain('Rozwiązania AI według problemu biznesowego');
     expect(routeByPath['/demo-w-7-dni']?.title).toContain('Demo, PoC i walidacja pomysłu');
     expect(routeByPath['/studio']?.title).toContain('Studio, proces i R&D');

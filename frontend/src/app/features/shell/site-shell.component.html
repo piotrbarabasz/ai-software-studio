@@ -24,19 +24,14 @@
     aria-label="Główna nawigacja"
   >
     <div class="nav-links">
-      <a
-        *ngFor="let item of navigation"
-        [routerLink]="item.path"
-        routerLinkActive="is-active"
-        [routerLinkActiveOptions]="{ exact: item.path === '/' ? true : item.path !== '/produkty' }"
-        ariaCurrentWhenActive="page"
-        (click)="closeNavigation()"
-      >
-        {{ item.label }}
-      </a>
+      <a href="/#offers" (click)="closeNavigation()">Oferta</a>
+      <a href="/#demo" (click)="closeNavigation()">Demo w 7 dni</a>
+      <a href="/#packages" (click)="closeNavigation()">Pakiety</a>
+      <a href="/#faq" (click)="closeNavigation()">FAQ</a>
+      <a href="/#contact" (click)="closeNavigation()">Kontakt</a>
     </div>
 
-    <a class="primary-cta" [routerLink]="contactPath" (click)="closeNavigation()">
+    <a class="primary-cta" href="/#contact" (click)="closeNavigation()">
       {{ primaryCtaLabel }}
     </a>
   </nav>
@@ -47,6 +42,6 @@
 </div>
 
 <footer class="site-footer">
-  <p>AISoftware Studio - aplikacje webowe, API i automatyzacje AI.</p>
-  <a [routerLink]="contactPath" (click)="closeNavigation()">Kontakt</a>
+  <p>AISoftware Studio — demo AI w 7 dni przed pełnym wdrożeniem.</p>
+  <a href="/#contact" (click)="closeNavigation()">Kontakt</a>
 </footer>
