@@ -1,49 +1,35 @@
-<section id="product-offers" class="section product-offers" aria-labelledby="product-offers-title">
+<section class="section product-offers" aria-labelledby="product-offers-title">
   <div class="section-shell" appRevealOnScroll>
     <div class="section-heading">
-      <p class="section-kicker">Produktowe usługi AI</p>
-      <h2 id="product-offers-title">
-        Trzy główne kierunki demo, które można sprawdzić przed wdrożeniem
-      </h2>
+      <p class="section-kicker">Kierunki demo</p>
+      <h2 id="product-offers-title">Wybierz scenariusz, który chcesz zobaczyć</h2>
       <p class="section-lead">
-        Każda grupa łączy kilka usług w jeden czytelny kierunek biznesowy. Dzięki temu klient
-        szybciej rozumie, co walidujemy i jaki wynik otrzyma po 7 dniach.
+        Każda karta wybiera jedną prezentację przepływu. To materiał do rozmowy o zakresie, nie
+        gotowy system.
       </p>
     </div>
-    <div class="offers-grid">
-      <article
+    <div class="offers-grid" role="tablist" aria-label="Scenariusze demo">
+      <button
         *ngFor="let offer of offers"
+        type="button"
         class="offer-card"
-        [attr.id]="offer.id"
-        [attr.data-visual-kind]="offer.visualKind"
+        role="tab"
+        [attr.id]="'showcase-tab-' + offer.id"
+        [class.is-selected]="offer.id === selectedId"
+        [attr.aria-selected]="offer.id === selectedId"
+        [attr.aria-controls]="showcasePanelId"
+        (click)="selectedOfferIdChange.emit(offer.id)"
       >
-        <div class="offer-card__top">
-          <span class="offer-card__label">{{ offer.shortLabel }}</span>
-          <span class="offer-card__visual" aria-hidden="true">{{ offer.visualKind }}</span>
-        </div>
+        <span class="offer-card__label">{{ offer.shortLabel }}</span>
         <h3>{{ offer.title }}</h3>
         <p>{{ offer.summary }}</p>
-
-        <div class="offer-card__outcome">
-          <span>Efekt biznesowy</span>
-          <strong>{{ offer.businessOutcome }}</strong>
-        </div>
-
-        <div>
-          <h4>Przykłady użycia</h4>
-          <ul>
-            <li *ngFor="let useCase of offer.useCases">{{ useCase }}</li>
-          </ul>
-        </div>
-
-        <div class="offer-card__demo">
-          <h4>Artefakt demo</h4>
-          <p>{{ offer.demoArtifact }}</p>
-        </div>
-
-        <p class="offer-card__boundary">{{ offer.scopeBoundary }}</p>
-        <a class="offer-card__cta" href="#contact">{{ offer.ctaLabel }}</a>
-      </article>
+        <span class="offer-card__outcome"
+          ><strong>{{ offer.businessOutcome }}</strong></span
+        >
+        <span class="offer-card__select">{{
+          offer.id === selectedId ? 'Wybrano scenariusz' : 'Pokaż scenariusz'
+        }}</span>
+      </button>
     </div>
   </div>
 </section>

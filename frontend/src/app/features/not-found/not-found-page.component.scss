@@ -1,0 +1,25 @@
+.not-found {
+  display: grid;
+  place-items: start;
+  gap: 1rem;
+  min-height: 55vh;
+  padding-block: clamp(4rem, 12vw, 9rem);
+}
+h1 {
+  max-width: 16ch;
+  margin: 0;
+  font-size: clamp(2.2rem, 6vw, 4.5rem);
+  line-height: 1;
+}
+p {
+  max-width: 56ch;
+  color: var(--color-muted);
+}
+a {
+  border-radius: 999px;
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 700;
+  padding: 0.85rem 1.2rem;
+  text-decoration: none;
+}

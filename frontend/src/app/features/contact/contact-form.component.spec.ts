@@ -56,6 +56,18 @@ describe('ContactFormComponent', () => {
     expect(fixture.componentInstance.form.controls.projectType.value).toBe('rag_chatbot_demo');
   });
 
+  it('maps an allowlisted interest and does not overwrite a manual project-type choice', () => {
+    projectTypeParams$.next(convertToParamMap({ interest: 'demo-rag' }));
+    const fixture = TestBed.createComponent(ContactFormComponent);
+    fixture.detectChanges();
+    expect(fixture.componentInstance.form.controls.projectType.value).toBe('rag_chatbot_demo');
+    expect(fixture.nativeElement.textContent).toContain('Pytasz o:');
+    fixture.componentInstance.form.controls.projectType.setValue('ai_automation');
+    fixture.componentInstance.form.controls.projectType.markAsDirty();
+    projectTypeParams$.next(convertToParamMap({ interest: 'development' }));
+    expect(fixture.componentInstance.form.controls.projectType.value).toBe('ai_automation');
+  });
+
   it('preselects the quick-validation intent from an allowlisted query param', () => {
     projectTypeParams$.next(convertToParamMap({ projectType: 'mvp_prototype' }));
 
@@ -165,7 +177,9 @@ describe('ContactFormComponent', () => {
       'ai-automation',
       'technology-consultation',
     ]);
-    expect(contactIntentOptions.every((option) => backendProjectTypeValues.includes(option.projectType))).toBeTrue();
+    expect(
+      contactIntentOptions.every((option) => backendProjectTypeValues.includes(option.projectType)),
+    ).toBeTrue();
     expect(
       contactIntentOptions.every((option) =>
         option.allowedQueryValues.every((value) => backendProjectTypeValues.includes(value)),

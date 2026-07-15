@@ -1,0 +1,11 @@
+<div class="contact-page section-shell">
+  <section class="contact-intro" appRevealOnScroll>
+    <p class="eyebrow">{{ content.eyebrow }}</p>
+    <h1>{{ content.title }}</h1>
+    <p class="page-lead">{{ content.lead }}</p>
+    <ul>
+      <li *ngFor="let note of content.contextNotes">{{ note }}</li>
+    </ul>
+  </section>
+  <section aria-label="Formularz kontaktowy" appRevealOnScroll><app-contact-form /></section>
+</div>

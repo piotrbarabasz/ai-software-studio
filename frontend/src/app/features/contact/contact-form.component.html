@@ -1,4 +1,8 @@
 <form class="contact-form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+  <div *ngIf="interest" class="contact-context" role="status">
+    <span>Pytasz o: {{ interestLabel }}.</span>
+    <button type="button" (click)="clearInterest()">Usuń kontekst</button>
+  </div>
   <div class="field">
     <label for="name">Imię i nazwisko</label>
     <input

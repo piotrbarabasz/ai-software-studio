@@ -2,7 +2,7 @@ import { CommonModule, DOCUMENT } from '@angular/common';
 import { Component, DestroyRef, HostListener, inject } from '@angular/core';
 import type { OnInit } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
-import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import type { ActivatedRouteSnapshot } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';
@@ -12,7 +12,7 @@ import { siteContent } from '../../core/content/site.pl';
 @Component({
   selector: 'app-site-shell',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterOutlet],
+  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet],
   templateUrl: './site-shell.component.html',
   styleUrl: './site-shell.component.scss',
 })
@@ -22,8 +22,6 @@ export class SiteShellComponent implements OnInit {
   private readonly meta = inject(Meta);
   private readonly document = inject(DOCUMENT);
   private readonly destroyRef = inject(DestroyRef);
-
-  readonly primaryCtaLabel = 'Umów zakres demo';
 
   isMobileNavigationOpen = false;
 
