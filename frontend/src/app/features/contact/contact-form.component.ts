@@ -8,7 +8,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { finalize } from 'rxjs';
 
-import { budgetRangeOptions, projectTypeOptions } from '../../core/content/contact-options.pl';
+import { budgetRangeOptions, contactInterestOptions, projectTypeOptions } from '../../core/content/contact-options.pl';
+import type { ContactInterest } from '../../core/content/contact-options.pl';
 import { plContent } from '../../core/content/pl';
 import { ContactApiService } from '../../services/contact-api.service';
 import type {
@@ -66,6 +67,8 @@ export class ContactFormComponent implements OnInit {
   isSubmitting = false;
   status: 'idle' | 'success' | 'error' = 'idle';
   statusMessage = '';
+  interest: ContactInterest | null = null;
+  interestLabel = '';
 
   ngOnInit(): void {
     if (!this.route) {
@@ -73,11 +76,25 @@ export class ContactFormComponent implements OnInit {
     }
 
     this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
-      const requestedProjectType = params.get('projectType');
-      this.form.controls.projectType.setValue(
-        this.isProjectType(requestedProjectType) ? requestedProjectType : '',
-      );
+      const context = contactInterestOptions.find((item) => item.id === params.get('interest'));
+      if (!context) {
+        const requestedProjectType = params.get('projectType');
+        if (!this.form.controls.projectType.dirty && this.isProjectType(requestedProjectType)) {
+          this.form.controls.projectType.setValue(requestedProjectType, { emitEvent: false });
+        }
+        return;
+      }
+      this.interest = context.id;
+      this.interestLabel = context.label;
+      if (!this.form.controls.projectType.dirty) {
+        this.form.controls.projectType.setValue(context.projectType, { emitEvent: false });
+      }
     });
+  }
+
+  clearInterest(): void {
+    this.interest = null;
+    this.interestLabel = '';
   }
 
   submit(): void {

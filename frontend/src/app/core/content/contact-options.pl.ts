@@ -18,6 +18,18 @@ export const projectTypeOptions = [
   { value: 'other', label: 'Inny proces do automatyzacji' },
 ] satisfies readonly SelectOption<ProjectType>[];
 
+export const contactInterestOptions = [
+  { id: 'demo-rag', label: 'demo chatbota / asystenta wiedzy', projectType: 'rag_chatbot_demo' },
+  { id: 'voice-agent', label: 'demo voice agenta', projectType: 'voice_agent_demo' },
+  { id: 'automation', label: 'automatyzacja procesu', projectType: 'ai_automation' },
+  { id: 'web-app', label: 'strona lub aplikacja webowa', projectType: 'custom_web_app' },
+  { id: 'development', label: 'development rozwiązania', projectType: 'custom_web_app' },
+  { id: 'research', label: 'rozmowa o R&D', projectType: 'backend_api' },
+  { id: 'general', label: 'ogólne zapytanie', projectType: 'other' },
+] as const satisfies readonly { readonly id: string; readonly label: string; readonly projectType: ProjectType }[];
+
+export type ContactInterest = (typeof contactInterestOptions)[number]['id'];
+
 export const contactIntentOptions = [
   {
     id: 'quick-validation',
