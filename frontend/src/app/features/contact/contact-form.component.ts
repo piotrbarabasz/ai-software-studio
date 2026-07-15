@@ -8,7 +8,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { finalize } from 'rxjs';
 
-import { budgetRangeOptions, contactInterestOptions, projectTypeOptions } from '../../core/content/contact-options.pl';
+import {
+  budgetRangeOptions,
+  contactInterestOptions,
+  projectTypeOptions,
+} from '../../core/content/contact-options.pl';
 import type { ContactInterest } from '../../core/content/contact-options.pl';
 import { plContent } from '../../core/content/pl';
 import { ContactApiService } from '../../services/contact-api.service';
@@ -116,6 +120,7 @@ export class ContactFormComponent implements OnInit {
         next: () => {
           this.status = 'success';
           this.statusMessage = this.content.messages.success;
+          this.clearInterest();
           this.form.reset({
             name: '',
             email: '',

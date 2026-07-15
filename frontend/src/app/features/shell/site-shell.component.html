@@ -24,14 +24,38 @@
     aria-label="Główna nawigacja"
   >
     <div class="nav-links">
-      <a routerLink="/demo-ai" routerLinkActive="is-active" (click)="closeNavigation()"
+      <a
+        routerLink="/demo-ai"
+        routerLinkActive="is-active"
+        #demoLink="routerLinkActive"
+        [attr.aria-current]="demoLink.isActive ? 'page' : null"
+        (click)="closeNavigation()"
         >Demo w 7 dni</a
       >
-      <a routerLink="/development" routerLinkActive="is-active" (click)="closeNavigation()"
+      <a
+        routerLink="/development"
+        routerLinkActive="is-active"
+        #developmentLink="routerLinkActive"
+        [attr.aria-current]="developmentLink.isActive ? 'page' : null"
+        (click)="closeNavigation()"
         >Development</a
       >
-      <a routerLink="/studio" routerLinkActive="is-active" (click)="closeNavigation()">Studio</a>
-      <a routerLink="/kontakt" routerLinkActive="is-active" (click)="closeNavigation()">Kontakt</a>
+      <a
+        routerLink="/studio"
+        routerLinkActive="is-active"
+        #studioLink="routerLinkActive"
+        [attr.aria-current]="studioLink.isActive ? 'page' : null"
+        (click)="closeNavigation()"
+        >Studio</a
+      >
+      <a
+        routerLink="/kontakt"
+        routerLinkActive="is-active"
+        #contactLink="routerLinkActive"
+        [attr.aria-current]="contactLink.isActive ? 'page' : null"
+        (click)="closeNavigation()"
+        >Kontakt</a
+      >
     </div>
   </nav>
 </header>

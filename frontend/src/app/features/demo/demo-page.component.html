@@ -10,12 +10,9 @@
       <ul>
         <li *ngFor="let item of routeContent.includes">{{ item }}</li>
       </ul>
-      <a
-        class="primary-action"
-        routerLink="/kontakt"
-        [queryParams]="{ projectType: 'mvp_prototype' }"
-        >{{ routeContent.ctaLabel }}</a
-      >
+      <a class="primary-action" routerLink="/kontakt" [queryParams]="{ interest: 'general' }">{{
+        routeContent.ctaLabel
+      }}</a>
     </aside>
   </section>
   <app-demo-promise-section [content]="content.demoPromise" />
@@ -55,11 +52,8 @@
       <h2 id="demo-outcome-title">{{ routeContent.resultTitle }}</h2>
       <p class="section-copy">{{ routeContent.result }}</p>
     </div>
-    <a
-      class="primary-action"
-      routerLink="/kontakt"
-      [queryParams]="{ projectType: 'mvp_prototype' }"
-      >{{ routeContent.ctaLabel }}</a
-    >
+    <a class="primary-action" routerLink="/kontakt" [queryParams]="{ interest: 'general' }">{{
+      routeContent.ctaLabel
+    }}</a>
   </section>
 </div>

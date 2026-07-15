@@ -15,7 +15,7 @@ describe('DemoPageComponent', () => {
     expect(element.querySelectorAll('h1').length).toBe(1);
     expect(element.querySelectorAll('[role="tab"]').length).toBe(3);
     expect(element.querySelectorAll('#demo-showcase-panel app-showcase-section').length).toBe(1);
-    expect(element.querySelector('a[href^="/kontakt?projectType=mvp_prototype"]')).not.toBeNull();
+    expect(element.querySelector('a[href^="/kontakt?interest=general"]')).not.toBeNull();
   });
 
   it('does not render duplicate HTML ids in the selectable demo flow', async () => {

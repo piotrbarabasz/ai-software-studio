@@ -346,7 +346,6 @@ export interface SiteContent {
   readonly routes: readonly PublicRouteMetadata[];
   readonly navigation: readonly NavigationItem[];
   readonly products: readonly ProductCatalogEntry[];
-  readonly legacyHome?: unknown;
   readonly home: HomePageContent;
   readonly demo: DemoPageContent;
   readonly development: StudioPageContent;

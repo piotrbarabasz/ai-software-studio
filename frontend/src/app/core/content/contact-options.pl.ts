@@ -26,7 +26,11 @@ export const contactInterestOptions = [
   { id: 'development', label: 'development rozwiązania', projectType: 'custom_web_app' },
   { id: 'research', label: 'rozmowa o R&D', projectType: 'backend_api' },
   { id: 'general', label: 'ogólne zapytanie', projectType: 'other' },
-] as const satisfies readonly { readonly id: string; readonly label: string; readonly projectType: ProjectType }[];
+] as const satisfies readonly {
+  readonly id: string;
+  readonly label: string;
+  readonly projectType: ProjectType;
+}[];
 
 export type ContactInterest = (typeof contactInterestOptions)[number]['id'];
 

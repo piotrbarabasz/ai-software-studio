@@ -23,8 +23,6 @@ export class SiteShellComponent implements OnInit {
   private readonly document = inject(DOCUMENT);
   private readonly destroyRef = inject(DestroyRef);
 
-  readonly primaryCtaLabel = 'Umów zakres demo';
-
   isMobileNavigationOpen = false;
 
   ngOnInit(): void {

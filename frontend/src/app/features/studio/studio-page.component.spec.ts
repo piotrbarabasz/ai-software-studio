@@ -12,6 +12,8 @@ describe('StudioPageComponent', () => {
     const fixture = TestBed.createComponent(StudioPageComponent);
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelectorAll('h1').length).toBe(1);
-    expect(fixture.nativeElement.querySelector('a[href="/kontakt"]')).not.toBeNull();
+    expect(
+      fixture.nativeElement.querySelector('a[href="/kontakt?interest=general"]'),
+    ).not.toBeNull();
   });
 });

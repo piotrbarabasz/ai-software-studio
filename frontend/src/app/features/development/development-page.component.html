@@ -10,12 +10,9 @@
       <ul>
         <li *ngFor="let item of routeContent.principles">{{ item }}</li>
       </ul>
-      <a
-        class="primary-action"
-        routerLink="/kontakt"
-        [queryParams]="{ projectType: 'custom_web_app' }"
-        >{{ routeContent.ctaLabel }}</a
-      >
+      <a class="primary-action" routerLink="/kontakt" [queryParams]="{ interest: 'development' }">{{
+        routeContent.ctaLabel
+      }}</a>
     </aside>
   </section>
   <section class="section-shell" aria-labelledby="engagement-title" appRevealOnScroll>
