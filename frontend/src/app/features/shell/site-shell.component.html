@@ -41,8 +41,11 @@
 </main>
 
 <footer class="site-footer">
-  <p>AISoftware Studio — demo AI w 7 dni przed pełnym wdrożeniem.</p>
+  <p>AISoftware Studio — samodzielnie prowadzone studio tworzące dema AI i rozwiązania cyfrowe.</p>
   <div class="footer-links">
+    <a routerLink="/demo-ai" (click)="closeNavigation()">Demo w 7 dni</a>
+    <a routerLink="/development" (click)="closeNavigation()">Development</a>
+    <a routerLink="/studio" (click)="closeNavigation()">Studio</a>
     <a routerLink="/rd" (click)="closeNavigation()">R&D</a>
     <a routerLink="/kontakt" (click)="closeNavigation()">Kontakt</a>
   </div>
