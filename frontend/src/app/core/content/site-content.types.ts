@@ -146,9 +146,7 @@ export interface HomeTeaser {
   readonly eyebrow: string;
   readonly title: string;
   readonly lead: string;
-  readonly bullets: readonly string[];
-  readonly ctaLabel: string;
-  readonly ctaPath: PublicRoutePath;
+  readonly cta: HomeCta;
 }
 
 export interface HomeResearchTeaser {
@@ -159,9 +157,10 @@ export interface HomeResearchTeaser {
 }
 
 export interface HomeClosingCta {
-  readonly label: string;
+  readonly title: string;
   readonly lead: string;
-  readonly queryParams?: Readonly<Record<string, string>>;
+  readonly primaryCta: HomeCta;
+  readonly secondaryCta?: HomeCta;
 }
 
 export interface ServiceModel {
@@ -246,25 +245,43 @@ export interface ProductCatalogEntry<TProductId extends ProductId = ProductId> {
 
 export interface HomePageContent {
   readonly path: StaticRoutePath;
+  readonly hero: HomeHero;
+  readonly paths: readonly [HomePath, HomePath];
+  readonly capabilities: readonly [HomeCapability, HomeCapability, HomeCapability];
+  readonly process: readonly [HomeProcessStep, HomeProcessStep, HomeProcessStep];
+  readonly studioTeaser: HomeTeaser;
+  readonly closingCta: HomeClosingCta;
+}
+
+export interface HomeCta {
+  readonly label: string;
+  readonly path: PublicRoutePath;
+}
+
+export interface HomeHero {
   readonly eyebrow: string;
   readonly title: string;
-  readonly subtitle: string;
-  readonly primaryCta: string;
-  readonly secondaryCta: string;
-  readonly highlights: readonly string[];
-  readonly workTracks: readonly [HomeWorkTrack, HomeWorkTrack];
-  readonly solutionGroups: readonly HomeSolutionGroup[];
-  readonly journeySteps: readonly [
-    HomeJourneyStep,
-    HomeJourneyStep,
-    HomeJourneyStep,
-    HomeJourneyStep,
-    HomeJourneyStep,
-  ];
-  readonly studioTeaser: HomeTeaser;
-  readonly researchTeaser: HomeResearchTeaser;
-  readonly closingCtas: readonly [HomeClosingCta, HomeClosingCta];
-  readonly featuredProducts: readonly ProductRoutePath[];
+  readonly lead: string;
+  readonly primaryCta: HomeCta;
+  readonly secondaryCta: HomeCta;
+}
+
+export interface HomePath {
+  readonly eyebrow: string;
+  readonly title: string;
+  readonly lead: string;
+  readonly points: readonly [string, string, string];
+  readonly cta: HomeCta;
+}
+
+export interface HomeCapability {
+  readonly title: string;
+  readonly lead: string;
+}
+
+export interface HomeProcessStep {
+  readonly title: string;
+  readonly lead: string;
 }
 
 export interface DemoPageContent {
@@ -329,6 +346,7 @@ export interface SiteContent {
   readonly routes: readonly PublicRouteMetadata[];
   readonly navigation: readonly NavigationItem[];
   readonly products: readonly ProductCatalogEntry[];
+  readonly legacyHome?: unknown;
   readonly home: HomePageContent;
   readonly demo: DemoPageContent;
   readonly development: StudioPageContent;

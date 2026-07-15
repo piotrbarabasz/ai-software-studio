@@ -573,7 +573,7 @@ export const siteContent = {
     { label: 'Kontakt', path: '/kontakt' },
   ],
   products,
-  home: {
+  legacyHome: {
     path: '/',
     eyebrow: 'AISoftware Studio',
     title: 'Demo AI w 7 dni — zanim inwestujesz w pełne wdrożenie.',
@@ -697,6 +697,79 @@ export const siteContent = {
       },
     ],
     featuredProducts: products.map((product) => product.path),
+  },
+  home: {
+    path: '/',
+    hero: {
+      eyebrow: 'AISoftware Studio',
+      title: 'Sprawdź pomysł na rozwiązanie AI w 7 dni albo zbuduj je produkcyjnie',
+      lead: 'Tworzę interaktywne dema, aplikacje webowe, API i automatyzacje. Możesz najpierw zweryfikować pomysł w małym zakresie albo od razu zaplanować pełne wdrożenie.',
+      primaryCta: { label: 'Sprawdź demo w 7 dni', path: '/demo-ai' },
+      secondaryCta: { label: 'Zobacz development', path: '/development' },
+    },
+    paths: [
+      {
+        eyebrow: 'Demo w 7 dni',
+        title: 'Sprawdź pomysł',
+        lead: 'Krótki sprint, który pomaga podjąć decyzję przed większą inwestycją.',
+        points: [
+          'krótki sprint wokół jednego procesu',
+          'interaktywny prototyp do rozmowy z zespołem',
+          'jasna decyzja o kolejnym kroku',
+        ],
+        cta: { label: 'Sprawdź demo w 7 dni', path: '/demo-ai' },
+      },
+      {
+        eyebrow: 'Development',
+        title: 'Zbuduj rozwiązanie',
+        lead: 'Rozwijaj aplikację, API lub automatyzację w zakresie dopasowanym do procesu.',
+        points: [
+          'aplikacja, API lub automatyzacja',
+          'iteracyjne wdrożenie z widocznymi etapami',
+          'integracje i dalszy rozwój',
+        ],
+        cta: { label: 'Zobacz development', path: '/development' },
+      },
+    ],
+    capabilities: [
+      {
+        title: 'Chatbot i wyszukiwanie wiedzy',
+        lead: 'Pomóż klientom i zespołowi szybciej docierać do potrzebnych odpowiedzi.',
+      },
+      {
+        title: 'Automatyzacja procesu',
+        lead: 'Uporządkuj powtarzalne kroki, statusy i przekazywanie spraw między ludźmi i systemami.',
+      },
+      {
+        title: 'Aplikacja webowa lub panel',
+        lead: 'Zbuduj czytelne narzędzie do obsługi procesu, decyzji i codziennej pracy zespołu.',
+      },
+    ],
+    process: [
+      {
+        title: 'Ustalamy cel',
+        lead: 'Wybieramy problem, użytkownika i rezultat, który ma znaczenie.',
+      },
+      {
+        title: 'Projektujemy zakres',
+        lead: 'Porządkujemy priorytety, ryzyka i najkrótszą drogę do wartości.',
+      },
+      {
+        title: 'Dostarczamy etapami',
+        lead: 'Sprawdzasz kolejne efekty i decydujesz o dalszym rozwoju.',
+      },
+    ],
+    studioTeaser: {
+      eyebrow: 'Studio',
+      title: 'Partner techniczny od pierwszej decyzji do rozwoju produktu',
+      lead: 'Pracuję w krótkich iteracjach, z jasnym zakresem i odpowiedzialnością za kolejne etapy.',
+      cta: { label: 'Poznaj sposób pracy', path: '/studio' },
+    },
+    closingCta: {
+      title: 'Wybierz ścieżkę, od której warto zacząć',
+      lead: 'Opisz proces lub pomysł. Wspólnie ustalimy, czy lepszy będzie sprint demo czy plan pełnego wdrożenia.',
+      primaryCta: { label: 'Skontaktuj się', path: '/kontakt' },
+    },
   },
   demo: {
     path: '/demo-ai',

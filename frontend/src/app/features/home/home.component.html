@@ -1,45 +1,83 @@
 <div class="home-page">
   <section class="hero section-shell" aria-labelledby="hero-title">
     <div class="hero-copy">
-      <p class="eyebrow">{{ home.eyebrow }}</p>
-      <h1 id="hero-title">{{ home.title }}</h1>
-      <p class="hero-lead">{{ home.subtitle }}</p>
+      <p class="eyebrow">{{ home.hero.eyebrow }}</p>
+      <h1 id="hero-title">{{ home.hero.title }}</h1>
+      <p class="hero-lead">{{ home.hero.lead }}</p>
       <div class="hero-actions" aria-label="Główne akcje">
-        <a class="primary-action" routerLink="/demo-ai">{{ home.primaryCta }}</a>
-        <a class="secondary-action" routerLink="/development">Rozwój aplikacji i automatyzacji</a>
+        <a class="primary-action" [routerLink]="home.hero.primaryCta.path">{{
+          home.hero.primaryCta.label
+        }}</a>
+        <a class="secondary-action" [routerLink]="home.hero.secondaryCta.path">{{
+          home.hero.secondaryCta.label
+        }}</a>
       </div>
     </div>
-    <aside class="hero-panel" aria-label="Rezultat etapu demo">
-      <p class="panel-kicker">Po 7 dniach</p>
-      <h2>Decyzja, nie obietnica gotowego systemu</h2>
-      <p>Otrzymujesz klikalny scenariusz, opis założeń i rekomendację następnego kroku.</p>
-    </aside>
   </section>
 
-  <section class="solutions section-shell" aria-labelledby="offers-title">
+  <section class="paths section-shell" aria-labelledby="paths-title">
     <div class="section-heading">
-      <p class="eyebrow">Kierunki</p>
-      <h2 id="offers-title">Od walidacji do wdrożenia</h2>
+      <p class="eyebrow">Dwie ścieżki</p>
+      <h2 id="paths-title">Wybierz punkt startu odpowiedni do decyzji</h2>
     </div>
-    <div class="solution-grid">
-      <article *ngFor="let group of home.solutionGroups" class="solution-card">
-        <h3>{{ group.title }}</h3>
-        <p>{{ group.lead }}</p>
+    <div class="path-grid">
+      <article *ngFor="let path of home.paths" class="path-card">
+        <p class="card-kicker">{{ path.eyebrow }}</p>
+        <h3>{{ path.title }}</h3>
+        <p>{{ path.lead }}</p>
+        <ul>
+          <li *ngFor="let point of path.points">{{ point }}</li>
+        </ul>
+        <a class="secondary-action" [routerLink]="path.cta.path">{{ path.cta.label }}</a>
       </article>
+    </div>
+  </section>
+
+  <section class="capabilities section-shell" aria-labelledby="capabilities-title">
+    <div class="section-heading">
+      <p class="eyebrow">Wybrane możliwości</p>
+      <h2 id="capabilities-title">Rozwiązania skupione na użytecznym efekcie</h2>
+    </div>
+    <div class="capability-grid">
+      <article *ngFor="let capability of home.capabilities" class="capability-card">
+        <h3>{{ capability.title }}</h3>
+        <p>{{ capability.lead }}</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="process section-shell" aria-labelledby="process-title">
+    <div class="section-heading">
+      <p class="eyebrow">Współpraca</p>
+      <h2 id="process-title">Krótka droga od problemu do kolejnego kroku</h2>
+    </div>
+    <ol class="process-list">
+      <li *ngFor="let step of home.process">
+        <h3>{{ step.title }}</h3>
+        <p>{{ step.lead }}</p>
+      </li>
+    </ol>
+  </section>
+
+  <section class="studio section-shell" aria-labelledby="studio-title">
+    <div class="studio-card">
+      <p class="eyebrow">{{ home.studioTeaser.eyebrow }}</p>
+      <h2 id="studio-title">{{ home.studioTeaser.title }}</h2>
+      <p>{{ home.studioTeaser.lead }}</p>
+      <a class="secondary-action" [routerLink]="home.studioTeaser.cta.path">{{
+        home.studioTeaser.cta.label
+      }}</a>
     </div>
   </section>
 
   <section class="contact section-shell" aria-labelledby="contact-title">
     <div class="contact-card">
-      <p class="eyebrow">Studio</p>
-      <h2 id="contact-title">Poznaj sposób pracy albo zacznij rozmowę</h2>
-      <p class="section-copy">
-        Wybierz krótki sprint walidacyjny, development dopasowany do zakresu lub opisz proces w
-        formularzu.
-      </p>
+      <h2 id="contact-title">{{ home.closingCta.title }}</h2>
+      <p>{{ home.closingCta.lead }}</p>
       <div class="hero-actions">
-        <a class="secondary-action" routerLink="/studio">O studio</a
-        ><a class="primary-action" routerLink="/kontakt">Kontakt</a>
+        <a class="primary-action" [routerLink]="home.closingCta.primaryCta.path">{{
+          home.closingCta.primaryCta.label
+        }}</a>
       </div>
     </div>
   </section>
