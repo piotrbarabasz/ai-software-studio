@@ -25,6 +25,11 @@ h2 {
 }
 
 .offer-card {
+  width: 100%;
+  appearance: none;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
   display: grid;
   min-height: 100%;
   gap: 1rem;
@@ -38,6 +43,15 @@ h2 {
     border-color 180ms ease,
     transform 180ms ease,
     box-shadow 180ms ease;
+}
+
+.offer-card.is-selected {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(0, 108, 91, 0.15);
+}
+.offer-card__select {
+  color: var(--color-primary-strong);
+  font-weight: 800;
 }
 
 .offer-card:hover {

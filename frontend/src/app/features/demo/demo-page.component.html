@@ -5,9 +5,8 @@
       <h1>{{ routeContent.title }}</h1>
       <p class="page-lead">{{ routeContent.lead }}</p>
     </div>
-
-    <div class="hero-aside">
-      <p class="panel-kicker">Po co jest ten etap</p>
+    <aside class="hero-aside">
+      <p class="panel-kicker">Dla kogo</p>
       <ul>
         <li *ngFor="let item of routeContent.includes">{{ item }}</li>
       </ul>
@@ -15,76 +14,37 @@
         class="primary-action"
         routerLink="/kontakt"
         [queryParams]="{ projectType: 'mvp_prototype' }"
+        >{{ routeContent.ctaLabel }}</a
       >
-        {{ routeContent.ctaLabel }}
-      </a>
-    </div>
+    </aside>
   </section>
-
-  <section
-    class="demo-compare section-shell"
-    aria-labelledby="demo-compare-title"
-    appRevealOnScroll
+  <app-demo-promise-section [content]="content.demoPromise" />
+  <app-product-offers-section
+    [offers]="content.offers"
+    [selectedId]="selectedOfferId"
+    showcasePanelId="demo-showcase-panel"
+    (selectedOfferIdChange)="selectedOfferId = $event"
+  />
+  <div
+    id="demo-showcase-panel"
+    class="demo-showcase-panel"
+    role="tabpanel"
+    [attr.aria-labelledby]="'showcase-tab-' + selectedOfferId"
   >
-    <div class="section-heading">
-      <p class="eyebrow">Rozróżnienie etapów</p>
-      <h2 id="demo-compare-title">Etap demo vs etap produkcyjny</h2>
-      <p class="section-copy">
-        Każdy z etapów ma inny cel: demo pokazuje przepływ, PoC sprawdza hipotezę, MVP buduje
-        pierwszą wersję produktu, a produkcja obejmuje pełny system.
-      </p>
-    </div>
-
-    <div class="compare-grid">
-      <article class="compare-card">
-        <h3>{{ routeContent.demoExplanationTitle }}</h3>
-        <p>{{ routeContent.demoExplanation }}</p>
-      </article>
-
-      <article class="compare-card">
-        <h3>{{ routeContent.pocExplanationTitle }}</h3>
-        <p>{{ routeContent.pocExplanation }}</p>
-      </article>
-    </div>
-  </section>
-
-  <section class="demo-scope section-shell" aria-labelledby="demo-scope-title" appRevealOnScroll>
-    <div class="section-heading">
-      <p class="eyebrow">Zakres siedmiu dni</p>
-      <h2 id="demo-scope-title">{{ routeContent.sevenDayTitle }}</h2>
-    </div>
-
-    <ul class="bullet-grid" aria-label="Co może powstać w siedem dni">
-      <li *ngFor="let item of routeContent.sevenDayPoints">{{ item }}</li>
-    </ul>
-  </section>
-
-  <section
-    class="demo-boundaries section-shell"
-    aria-labelledby="demo-boundaries-title"
-    appRevealOnScroll
-  >
-    <div class="section-heading">
-      <p class="eyebrow">{{ routeContent.exclusionsTitle }}</p>
-      <h2 id="demo-boundaries-title">Co jest wykluczone z etapu demo</h2>
-    </div>
-
-    <ul class="bullet-grid" aria-label="Wykluczenia demo">
-      <li *ngFor="let item of routeContent.exclusions">{{ item }}</li>
-    </ul>
-  </section>
-
+    <app-showcase-section [showcase]="selectedShowcase" />
+  </div>
   <section class="demo-inputs section-shell" aria-labelledby="demo-inputs-title" appRevealOnScroll>
     <div class="section-heading">
       <p class="eyebrow">{{ routeContent.clientInputTitle }}</p>
       <h2 id="demo-inputs-title">Materiały potrzebne przed startem</h2>
     </div>
-
     <ol class="ordered-grid">
       <li *ngFor="let item of routeContent.clientInputs">{{ item }}</li>
     </ol>
   </section>
-
+  <app-demo-sprint-section [steps]="content.demoSprint" />
+  <app-pricing-section [packages]="content.packages" />
+  <app-faq-section [items]="content.faq" />
   <section
     class="demo-outcome section-shell"
     aria-labelledby="demo-outcome-title"
@@ -95,24 +55,11 @@
       <h2 id="demo-outcome-title">{{ routeContent.resultTitle }}</h2>
       <p class="section-copy">{{ routeContent.result }}</p>
     </div>
-
-    <div class="outcome-grid">
-      <article class="outcome-card">
-        <h3>{{ routeContent.decisionTitle }}</h3>
-        <p>{{ routeContent.decision }}</p>
-      </article>
-
-      <article class="outcome-card">
-        <h3>{{ routeContent.transitionTitle }}</h3>
-        <p>{{ routeContent.transition }}</p>
-        <a
-          class="primary-action"
-          routerLink="/kontakt"
-          [queryParams]="{ projectType: 'mvp_prototype' }"
-        >
-          {{ routeContent.ctaLabel }}
-        </a>
-      </article>
-    </div>
+    <a
+      class="primary-action"
+      routerLink="/kontakt"
+      [queryParams]="{ projectType: 'mvp_prototype' }"
+      >{{ routeContent.ctaLabel }}</a
+    >
   </section>
 </div>

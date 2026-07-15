@@ -35,4 +35,22 @@
   </section>
 
   <app-trust-section [content]="content.trust" />
+
+  <section class="section-shell" aria-labelledby="examples-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">Materiały koncepcyjne</p>
+      <h2 id="examples-title">Przykłady rozmów o możliwym rozwiązaniu</h2>
+      <p class="page-lead">
+        To nie są wdrożenia klientów. Pokazują jedynie, jak można uporządkować problem i zakres.
+      </p>
+    </div>
+    <div class="approach-grid">
+      <article *ngFor="let example of content.examples">
+        <p class="panel-kicker">{{ example.label }}</p>
+        <h3>{{ example.problem }}</h3>
+        <p>{{ example.approach }}</p>
+        <p><strong>Możliwy rezultat:</strong> {{ example.outcome }}</p>
+      </article>
+    </div>
+  </section>
 </div>

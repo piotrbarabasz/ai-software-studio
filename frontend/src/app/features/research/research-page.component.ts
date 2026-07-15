@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 import { siteContent } from '../../core/content/site.pl';
 import { RevealOnScrollDirective } from '../../shared/reveal/reveal-on-scroll.directive';
@@ -7,7 +8,7 @@ import { RevealOnScrollDirective } from '../../shared/reveal/reveal-on-scroll.di
 @Component({
   selector: 'app-research-page',
   standalone: true,
-  imports: [CommonModule, RevealOnScrollDirective],
+  imports: [CommonModule, RevealOnScrollDirective, RouterLink],
   templateUrl: './research-page.component.html',
   styleUrl: '../studio/studio-page.component.scss',
 })

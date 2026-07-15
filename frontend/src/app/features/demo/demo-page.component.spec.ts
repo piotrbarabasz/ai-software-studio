@@ -1,39 +1,32 @@
-import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
-import { API_CONFIG } from '../../core/api-config';
 import { DemoPageComponent } from './demo-page.component';
 
 describe('DemoPageComponent', () => {
-  beforeEach(async () => {
+  it('keeps one selectable showcase, the sprint, packages, FAQ and contact CTA', async () => {
     await TestBed.configureTestingModule({
       imports: [DemoPageComponent],
-      providers: [
-        provideRouter([]),
-        provideHttpClient(),
-        { provide: API_CONFIG, useValue: { apiUrl: 'http://api.test' } },
-      ],
+      providers: [provideRouter([])],
     }).compileComponents();
-  });
-
-  it('renders the demo route with demo, PoC, MVP, production, exclusions, inputs, and next-step guidance', () => {
     const fixture = TestBed.createComponent(DemoPageComponent);
     fixture.detectChanges();
-
     const element: HTMLElement = fixture.nativeElement;
-
-    expect(element.querySelector('h1')?.textContent).toContain('Jedna iteracja, jeden scenariusz');
-    expect(element.textContent).toContain('demo');
-    expect(element.textContent).toContain('PoC');
-    expect(element.textContent).toContain('MVP');
-    expect(element.textContent).toContain('produkc');
-    expect(element.textContent).toContain('Etap demo vs etap produkcyjny');
-    expect(element.textContent).toContain('Wykluczenia');
-    expect(element.textContent).toContain('Materiały od klienta');
-    expect(element.textContent).toContain('Wynik sprintu');
-    expect(element.textContent).toContain('Decyzja o kolejnym etapie');
-    expect(element.textContent).toContain('Przejście do pełnego rozwoju');
+    expect(element.querySelectorAll('h1').length).toBe(1);
+    expect(element.querySelectorAll('[role="tab"]').length).toBe(3);
+    expect(element.querySelectorAll('#demo-showcase-panel app-showcase-section').length).toBe(1);
     expect(element.querySelector('a[href^="/kontakt?projectType=mvp_prototype"]')).not.toBeNull();
+  });
+
+  it('does not render duplicate HTML ids in the selectable demo flow', async () => {
+    await TestBed.configureTestingModule({
+      imports: [DemoPageComponent],
+      providers: [provideRouter([])],
+    }).compileComponents();
+    const fixture = TestBed.createComponent(DemoPageComponent);
+    fixture.detectChanges();
+    const elements = fixture.nativeElement.querySelectorAll('[id]') as NodeListOf<HTMLElement>;
+    const ids = Array.from(elements, (element) => element.id);
+    expect(new Set(ids).size).toBe(ids.length);
   });
 });
