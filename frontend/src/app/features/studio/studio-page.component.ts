@@ -10,12 +10,7 @@ import { TrustSectionComponent } from '../landing/sections/trust-section.compone
 @Component({
   selector: 'app-studio-page',
   standalone: true,
-  imports: [
-    CommonModule,
-    RevealOnScrollDirective,
-    RouterLink,
-    TrustSectionComponent,
-  ],
+  imports: [CommonModule, RevealOnScrollDirective, RouterLink, TrustSectionComponent],
   templateUrl: './studio-page.component.html',
   styleUrl: './studio-page.component.scss',
 })

@@ -165,7 +165,9 @@ describe('ContactFormComponent', () => {
       'ai-automation',
       'technology-consultation',
     ]);
-    expect(contactIntentOptions.every((option) => backendProjectTypeValues.includes(option.projectType))).toBeTrue();
+    expect(
+      contactIntentOptions.every((option) => backendProjectTypeValues.includes(option.projectType)),
+    ).toBeTrue();
     expect(
       contactIntentOptions.every((option) =>
         option.allowedQueryValues.every((value) => backendProjectTypeValues.includes(value)),

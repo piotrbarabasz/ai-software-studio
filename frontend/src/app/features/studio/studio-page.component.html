@@ -1,108 +1,25 @@
-<main id="main-content" class="studio-page">
+<div class="studio-page">
   <section class="hero section-shell" appRevealOnScroll>
     <div class="hero-copy">
       <p class="eyebrow">{{ routeContent.eyebrow }}</p>
       <h1>{{ routeContent.title }}</h1>
       <p class="page-lead">{{ routeContent.lead }}</p>
     </div>
-
-    <div class="hero-panel">
+    <aside class="hero-panel" aria-label="Zasady współpracy">
       <p class="panel-kicker">Zasady współpracy</p>
       <ul>
         <li *ngFor="let item of routeContent.principles">{{ item }}</li>
       </ul>
       <a class="primary-action" routerLink="/kontakt">{{ routeContent.ctaLabel }}</a>
-    </div>
-  </section>
-
-  <section class="section-shell" aria-labelledby="services-title" appRevealOnScroll>
-    <div class="section-heading">
-      <p class="eyebrow">Zakres pracy</p>
-      <h2 id="services-title">Najpierw walidacja i przepływ, potem stabilne wdrożenie</h2>
-    </div>
-
-    <div class="card-grid">
-      <article *ngFor="let service of content.services" class="info-card">
-        <h3>{{ service.title }}</h3>
-        <p>{{ service.summary }}</p>
-        <ul>
-          <li *ngFor="let outcome of service.outcomes">{{ outcome }}</li>
-        </ul>
-      </article>
-    </div>
-  </section>
-
-  <section class="section-shell section-muted" aria-labelledby="process-title" appRevealOnScroll>
-    <div class="section-heading">
-      <p class="eyebrow">Proces</p>
-      <h2 id="process-title">Od diagnozy przez demo do decyzji o dalszym kroku</h2>
-    </div>
-
-    <ol class="process-list">
-      <li *ngFor="let step of content.process">
-        <span class="step-number">{{ step.order }}</span>
-        <div>
-          <h3>{{ step.title }}</h3>
-          <p>{{ step.description }}</p>
-          <strong>{{ step.clientOutcome }}</strong>
-        </div>
-      </li>
-    </ol>
-  </section>
-
-  <section class="section-shell" aria-labelledby="technology-title" appRevealOnScroll>
-    <div class="section-heading">
-      <p class="eyebrow">Technologie</p>
-      <h2 id="technology-title">Dobór stosu pod czytelny demo flow i dalsze utrzymanie</h2>
-    </div>
-
-    <div class="tech-grid">
-      <article *ngFor="let tech of content.technologies" class="tech-card">
-        <span>{{ tech.category }}</span>
-        <h3>{{ tech.name }}</h3>
-        <p>{{ tech.businessUse }}</p>
-      </article>
-    </div>
-  </section>
-
-  <app-trust-section [content]="content.trust" />
-
-  <section class="section-shell section-muted" aria-labelledby="research-title" appRevealOnScroll>
-    <div class="section-heading">
-      <p class="eyebrow">R&D</p>
-      <h2 id="research-title">Zaplecze eksperymentów dla projektów klientów</h2>
-      <p class="page-lead">
-        Studio testuje rozwiązania, które mogą później obniżać koszt i podnosić jakość wdrożeń.
-      </p>
-    </div>
-
-    <div class="approach-grid">
-      <article>
-        <h3>Obszary eksperymentów</h3>
-        <ul>
-          <li>automatyzacja pracy agentów programistycznych</li>
-          <li>kontrola kosztów i jakości systemów RAG</li>
-          <li>zarządzanie agentami przez komunikatory</li>
-          <li>automatyczna ewaluacja odpowiedzi i nowe wzorce orkiestracji</li>
-        </ul>
-      </article>
-      <article>
-        <h3>Jak wraca do projektów klientów</h3>
-        <p>{{ routeContent.engagementModel[3] }}</p>
-        <p>{{ content.about.body }}</p>
-      </article>
-    </div>
+    </aside>
   </section>
 
   <section class="section-shell" aria-labelledby="approach-title" appRevealOnScroll>
     <div class="section-heading">
       <p class="eyebrow">Sposób pracy</p>
-      <h2 id="approach-title">
-        Przejrzysty zakres, małe iteracje i jasna granica odpowiedzialności
-      </h2>
+      <h2 id="approach-title">Małe iteracje i jasne granice odpowiedzialności</h2>
       <p class="page-lead">{{ routeContent.lead }}</p>
     </div>
-
     <div class="approach-grid">
       <article>
         <h3>Jak zaczynamy</h3>
@@ -111,33 +28,11 @@
         </ul>
       </article>
       <article>
-        <h3>Kim jesteśmy po wdrożeniu</h3>
+        <h3>O studio</h3>
         <p>{{ content.about.body }}</p>
       </article>
     </div>
   </section>
 
-  <section class="section-shell section-muted" aria-labelledby="contact-title" appRevealOnScroll>
-    <div class="section-heading">
-      <p class="eyebrow">Kontakt</p>
-      <h2 id="contact-title">{{ content.contact.title }}</h2>
-      <p class="page-lead">{{ content.contact.lead }}</p>
-    </div>
-
-    <div class="approach-grid">
-      <article>
-        <h3>Co przygotować</h3>
-        <ul>
-          <li>opis procesu lub problemu do sprawdzenia</li>
-          <li>przykładowe materiały i oczekiwany rezultat</li>
-          <li>jedną osobę decyzyjną do kontaktu</li>
-        </ul>
-      </article>
-      <article>
-        <h3>Start rozmowy</h3>
-        <p>{{ content.contact.consent }}</p>
-        <a class="primary-action" routerLink="/kontakt">{{ content.contact.submit }}</a>
-      </article>
-    </div>
-  </section>
-</main>
+  <app-trust-section [content]="content.trust" />
+</div>

@@ -24,24 +24,26 @@
     aria-label="Główna nawigacja"
   >
     <div class="nav-links">
-      <a href="/#offers" (click)="closeNavigation()">Oferta</a>
-      <a href="/#demo" (click)="closeNavigation()">Demo w 7 dni</a>
-      <a href="/#packages" (click)="closeNavigation()">Pakiety</a>
-      <a href="/#faq" (click)="closeNavigation()">FAQ</a>
-      <a href="/#contact" (click)="closeNavigation()">Kontakt</a>
+      <a routerLink="/demo-ai" routerLinkActive="is-active" (click)="closeNavigation()"
+        >Demo w 7 dni</a
+      >
+      <a routerLink="/development" routerLinkActive="is-active" (click)="closeNavigation()"
+        >Development</a
+      >
+      <a routerLink="/studio" routerLinkActive="is-active" (click)="closeNavigation()">Studio</a>
+      <a routerLink="/kontakt" routerLinkActive="is-active" (click)="closeNavigation()">Kontakt</a>
     </div>
-
-    <a class="primary-cta" href="/#contact" (click)="closeNavigation()">
-      {{ primaryCtaLabel }}
-    </a>
   </nav>
 </header>
 
-<div id="main-content" class="site-main">
+<main id="main-content" class="site-main" tabindex="-1">
   <router-outlet />
-</div>
+</main>
 
 <footer class="site-footer">
   <p>AISoftware Studio — demo AI w 7 dni przed pełnym wdrożeniem.</p>
-  <a href="/#contact" (click)="closeNavigation()">Kontakt</a>
+  <div class="footer-links">
+    <a routerLink="/rd" (click)="closeNavigation()">R&D</a>
+    <a routerLink="/kontakt" (click)="closeNavigation()">Kontakt</a>
+  </div>
 </footer>

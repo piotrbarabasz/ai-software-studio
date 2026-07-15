@@ -13,21 +13,14 @@ export type CollaborationTrackId = 'validate' | 'build';
 
 export type ResearchDirectionStatus = 'experiment' | 'prototype' | 'validated-internally';
 
-export type SolutionCategoryId = 'customer-sales' | 'operations-automation' | 'applications-control';
+export type SolutionCategoryId =
+  'customer-sales' | 'operations-automation' | 'applications-control';
 
 export type ProjectJourneyStepId =
-  | 'idea'
-  | 'demo-poc'
-  | 'mvp'
-  | 'production'
-  | 'further-development';
+  'idea' | 'demo-poc' | 'mvp' | 'production' | 'further-development';
 
 export type ContactIntentOptionId =
-  | 'quick-validation'
-  | 'mvp'
-  | 'full-development'
-  | 'ai-automation'
-  | 'technology-consultation';
+  'quick-validation' | 'mvp' | 'full-development' | 'ai-automation' | 'technology-consultation';
 
 export const productRoutePaths = {
   rag_chatbot_demo: '/produkty/asystent-wiedzy-rag',
@@ -45,7 +38,8 @@ export type ProductRoutePath = (typeof productRoutePaths)[ProductId];
 export type ProductRoutePathFor<TProductId extends ProductId> =
   (typeof productRoutePaths)[TProductId];
 
-export type StaticRoutePath = '/' | '/produkty' | '/demo-w-7-dni' | '/studio' | '/kontakt';
+export type StaticRoutePath =
+  '/' | '/produkty' | '/demo-ai' | '/development' | '/studio' | '/rd' | '/kontakt';
 
 export type PublicRoutePath = ProductRoutePath | StaticRoutePath;
 
@@ -82,7 +76,14 @@ export interface ProductRouteMetadata<
 
 export interface DemoRouteMetadata extends RouteMetadataBase {
   readonly kind: 'demo';
-  readonly path: '/demo-w-7-dni';
+  readonly path: '/demo-ai';
+  readonly productId?: never;
+  readonly contactContext?: never;
+}
+
+export interface DevelopmentRouteMetadata extends RouteMetadataBase {
+  readonly kind: 'development';
+  readonly path: '/development';
   readonly productId?: never;
   readonly contactContext?: never;
 }
@@ -90,6 +91,13 @@ export interface DemoRouteMetadata extends RouteMetadataBase {
 export interface StudioRouteMetadata extends RouteMetadataBase {
   readonly kind: 'studio';
   readonly path: '/studio';
+  readonly productId?: never;
+  readonly contactContext?: never;
+}
+
+export interface ResearchRouteMetadata extends RouteMetadataBase {
+  readonly kind: 'research';
+  readonly path: '/rd';
   readonly productId?: never;
   readonly contactContext?: never;
 }
@@ -323,7 +331,15 @@ export interface SiteContent {
   readonly products: readonly ProductCatalogEntry[];
   readonly home: HomePageContent;
   readonly demo: DemoPageContent;
+  readonly development: StudioPageContent;
   readonly studio: StudioPageContent;
+  readonly research: {
+    readonly path: '/rd';
+    readonly eyebrow: string;
+    readonly title: string;
+    readonly lead: string;
+    readonly directions: readonly ResearchDirection[];
+  };
   readonly contact: ContactPageContent;
 }
 
@@ -332,5 +348,7 @@ export type PublicRouteMetadata =
   | ProductsIndexRouteMetadata
   | ProductRouteMetadata
   | DemoRouteMetadata
+  | DevelopmentRouteMetadata
   | StudioRouteMetadata
+  | ResearchRouteMetadata
   | ContactRouteMetadata;

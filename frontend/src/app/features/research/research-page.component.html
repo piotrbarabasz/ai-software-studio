@@ -1,0 +1,24 @@
+<div class="studio-page">
+  <section class="hero section-shell" appRevealOnScroll>
+    <div class="hero-copy">
+      <p class="eyebrow">{{ content.eyebrow }}</p>
+      <h1>{{ content.title }}</h1>
+      <p class="page-lead">{{ content.lead }}</p>
+    </div>
+  </section>
+  <section class="section-shell" aria-labelledby="directions-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">Obszary</p>
+      <h2 id="directions-title">Eksperymenty prowadzone z jasno określoną granicą</h2>
+    </div>
+    <div class="card-grid">
+      <article *ngFor="let direction of content.directions" class="info-card">
+        <h3>{{ direction.area }}</h3>
+        <p>{{ direction.problem }}</p>
+        <p><strong>Cel:</strong> {{ direction.goal }}</p>
+        <p><strong>Możliwe zastosowanie:</strong> {{ direction.potentialBusinessUse }}</p>
+        <p>{{ direction.claimBoundary }}</p>
+      </article>
+    </div>
+  </section>
+</div>

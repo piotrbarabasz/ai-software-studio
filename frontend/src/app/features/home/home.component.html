@@ -1,171 +1,46 @@
-<main id="main-content" class="home-page">
-  <section id="hero" class="hero section-shell" aria-labelledby="hero-title">
+<div class="home-page">
+  <section class="hero section-shell" aria-labelledby="hero-title">
     <div class="hero-copy">
       <p class="eyebrow">{{ home.eyebrow }}</p>
       <h1 id="hero-title">{{ home.title }}</h1>
       <p class="hero-lead">{{ home.subtitle }}</p>
-
       <div class="hero-actions" aria-label="Główne akcje">
-        <a class="primary-action" href="#contact">{{ home.primaryCta }}</a>
-        <a class="secondary-action" href="#demo-delivery">{{ home.secondaryCta }}</a>
+        <a class="primary-action" routerLink="/demo-ai">{{ home.primaryCta }}</a>
+        <a class="secondary-action" routerLink="/development">Rozwój aplikacji i automatyzacji</a>
       </div>
-
-      <ul class="hero-highlights" aria-label="Najważniejsze informacje">
-        <li *ngFor="let highlight of home.highlights">{{ highlight }}</li>
-      </ul>
     </div>
-
     <aside class="hero-panel" aria-label="Rezultat etapu demo">
       <p class="panel-kicker">Po 7 dniach</p>
       <h2>Decyzja, nie obietnica gotowego systemu</h2>
-      <p>
-        Otrzymujesz klikalny scenariusz, opis założeń i rekomendację, czy przejść do
-        produkcyjnego wdrożenia.
-      </p>
+      <p>Otrzymujesz klikalny scenariusz, opis założeń i rekomendację następnego kroku.</p>
     </aside>
   </section>
 
-  <section id="offers" class="solutions section-shell" aria-labelledby="offers-title">
+  <section class="solutions section-shell" aria-labelledby="offers-title">
     <div class="section-heading">
-      <p class="eyebrow">Oferta</p>
-      <h2 id="offers-title">Trzy kierunki, które warto najpierw sprawdzić w demo</h2>
-      <p class="section-copy">
-        Skupiamy się na jednym scenariuszu i decyzji biznesowej — nie na katalogu przypadkowych usług.
-      </p>
+      <p class="eyebrow">Kierunki</p>
+      <h2 id="offers-title">Od walidacji do wdrożenia</h2>
     </div>
-
     <div class="solution-grid">
       <article *ngFor="let group of home.solutionGroups" class="solution-card">
         <h3>{{ group.title }}</h3>
         <p>{{ group.lead }}</p>
-        <ul>
-          <li *ngFor="let item of group.bullets">{{ item }}</li>
-        </ul>
       </article>
     </div>
   </section>
 
-  <section id="demo" class="tracks section-shell" aria-labelledby="demo-title">
-    <div class="section-heading">
-      <p class="eyebrow">Demo w 7 dni</p>
-      <h2 id="demo-title">Od walidacji do wdrożenia — w świadomie oddzielonych etapach</h2>
-      <p class="section-copy">
-        Demo sprawdza proces, UX, założenia i wartość biznesową. Jeśli wynik uzasadnia inwestycję,
-        dopiero wtedy wspólnie określamy zakres produkcji.
-      </p>
-    </div>
-
-    <div class="track-grid">
-      <article *ngFor="let track of home.workTracks" class="track-card">
-        <p class="card-kicker">{{ track.title }}</p>
-        <p class="card-lead">{{ track.lead }}</p>
-        <ul class="card-list">
-          <li *ngFor="let bullet of track.bullets">{{ bullet }}</li>
-        </ul>
-      </article>
-    </div>
-
-    <div id="demo-delivery" class="delivery-card">
-      <h3>Co klient dostaje po 7 dniach</h3>
-      <ul>
-        <li>klikalne demo jednego uzgodnionego scenariusza,</li>
-        <li>opis założeń, ryzyk i granic rozwiązania,</li>
-        <li>jasną decyzję: rozwijamy, doprecyzowujemy albo zatrzymujemy pomysł.</li>
-      </ul>
-      <p>
-        Etap produkcyjny może później objąć integracje, backend, logowanie, monitoring, RAG runtime,
-        WhatsApp API, voice stack lub połączenie ze skrzynką e-mail — zgodnie z osobnym zakresem.
-      </p>
-    </div>
-  </section>
-
-  <section id="example" class="example section-shell" aria-labelledby="example-title">
-    <div class="section-heading">
-      <p class="eyebrow">Przykład demo po 7 dniach</p>
-      <h2 id="example-title">Ilustracyjny scenariusz, nie case study</h2>
-      <p class="section-copy">Przykład pokazuje rodzaj rozmowy, który można przeprowadzić po demo.</p>
-    </div>
-
-    <div class="example-grid">
-      <article>
-        <h3>Problem</h3>
-        <p>Firma usługowa odpowiada codziennie na podobne pytania o ofertę, dokumenty i zakres usług.</p>
-      </article>
-      <article>
-        <h3>Co pokazuje demo</h3>
-        <p>Przebieg rozmowy z asystentem, przykładowe źródła wiedzy i moment przekazania sprawy człowiekowi.</p>
-      </article>
-      <article>
-        <h3>Co klient otrzymuje</h3>
-        <p>Klikalny widok, opis ograniczeń oraz wstępny zakres tego, co byłoby potrzebne w produkcji.</p>
-      </article>
-      <article>
-        <h3>Jaka decyzja staje się możliwa</h3>
-        <p>Czy warto inwestować w produkcyjnego asystenta wiedzy, czy najpierw uporządkować materiały i proces.</p>
-      </article>
-    </div>
-  </section>
-
-  <section id="packages" class="packages section-shell" aria-labelledby="packages-title">
-    <div class="section-heading">
-      <p class="eyebrow">Pakiety</p>
-      <h2 id="packages-title">Pakiet dobierany do pytania, na które ma odpowiedzieć demo</h2>
-      <p class="section-copy">To inwestycja w redukcję ryzyka i decyzję o dalszym zakresie, nie „tylko makieta”.</p>
-    </div>
-
-    <div class="package-grid">
-      <article class="package-card">
-        <h3>Demo Start</h3>
-        <p><strong>Pytanie:</strong> czy jeden proces ma sens biznesowy?</p>
-        <p><strong>Otrzymujesz:</strong> klikalny przepływ i rekomendację następnego kroku.</p>
-        <p><strong>Po demo:</strong> wiesz, czy warto przygotować produkcyjny zakres.</p>
-      </article>
-      <article class="package-card">
-        <h3>Demo Produktowe</h3>
-        <p><strong>Pytanie:</strong> czy pełniejsza ścieżka użytkownika jest zrozumiała?</p>
-        <p><strong>Otrzymujesz:</strong> połączone ekrany i opis kluczowych stanów.</p>
-        <p><strong>Po demo:</strong> możesz podjąć decyzję o priorytetach produkcyjnych.</p>
-      </article>
-      <article class="package-card">
-        <h3>Sprint AI / Discovery</h3>
-        <p><strong>Pytanie:</strong> jak bezpiecznie przejść od demo do produkcji?</p>
-        <p><strong>Otrzymujesz:</strong> ryzyka, zależności i kierunek dalszego zakresu.</p>
-        <p><strong>Po demo:</strong> produkcja otrzymuje jaśniejszy plan, bez obietnicy wdrożenia w 7 dni.</p>
-      </article>
-    </div>
-  </section>
-
-  <section id="faq" class="faq section-shell" aria-labelledby="faq-title">
-    <div class="section-heading">
-      <p class="eyebrow">FAQ</p>
-      <h2 id="faq-title">Najważniejsze pytania przed rozpoczęciem demo</h2>
-    </div>
-    <div class="faq-list">
-      <details>
-        <summary>Od kiedy liczy się 7 dni?</summary>
-        <p>Od potwierdzenia zakresu, kryterium decyzji i otrzymania materiałów potrzebnych do scenariusza.</p>
-      </details>
-      <details>
-        <summary>Czy demo jest gotowym wdrożeniem?</summary>
-        <p>Nie. To etap walidacji, który wyjaśnia wartość i zakres przed osobną decyzją o produkcji.</p>
-      </details>
-      <details>
-        <summary>Co warto przygotować do rozmowy?</summary>
-        <p>Wystarczy opis jednego procesu, przykładowe materiały i informacja, co ma pomóc podjąć decyzję.</p>
-      </details>
-    </div>
-  </section>
-
-  <section id="contact" class="contact section-shell" aria-labelledby="contact-title">
+  <section class="contact section-shell" aria-labelledby="contact-title">
     <div class="contact-card">
-      <p class="eyebrow">Kontakt</p>
-      <h2 id="contact-title">Umów zakres jednego procesu do sprawdzenia</h2>
+      <p class="eyebrow">Studio</p>
+      <h2 id="contact-title">Poznaj sposób pracy albo zacznij rozmowę</h2>
       <p class="section-copy">
-        Opisz krótko sytuację, użytkownika i decyzję, którą chcesz podjąć. To wystarczy do pierwszej rozmowy o demo.
+        Wybierz krótki sprint walidacyjny, development dopasowany do zakresu lub opisz proces w
+        formularzu.
       </p>
-      <a class="primary-action" routerLink="/kontakt" [queryParams]="{ projectType: 'mvp_prototype' }">
-        Umów zakres demo
-      </a>
+      <div class="hero-actions">
+        <a class="secondary-action" routerLink="/studio">O studio</a
+        ><a class="primary-action" routerLink="/kontakt">Kontakt</a>
+      </div>
     </div>
   </section>
-</main>
+</div>
