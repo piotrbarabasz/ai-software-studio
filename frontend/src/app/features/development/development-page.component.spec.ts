@@ -11,5 +11,9 @@ describe('DevelopmentPageComponent', () => {
     const fixture = TestBed.createComponent(DevelopmentPageComponent);
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelectorAll('h1').length).toBe(1);
+    expect(fixture.nativeElement.textContent).toContain('testy, monitoring i bezpieczeństwo');
+    expect(
+      fixture.nativeElement.querySelector('a[href="/kontakt?interest=development"]')?.textContent,
+    ).toContain('Omów wdrożenie');
   });
 });

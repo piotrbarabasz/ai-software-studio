@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://aisoftware-studio-web-k6wldgptjq-lm.a.run.app/sitemap.xml

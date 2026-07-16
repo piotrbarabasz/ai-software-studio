@@ -8,13 +8,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { finalize } from 'rxjs';
 
-import {
-  budgetRangeOptions,
-  contactInterestOptions,
-  projectTypeOptions,
-} from '../../core/content/contact-options.pl';
+import { contactInterestOptions, projectTypeOptions } from '../../core/content/contact-options.pl';
 import type { ContactInterest } from '../../core/content/contact-options.pl';
-import { plContent } from '../../core/content/pl';
+import { siteContent } from '../../core/content/site.pl';
 import { ContactApiService } from '../../services/contact-api.service';
 import type {
   BudgetRange,
@@ -45,11 +41,7 @@ export class ContactFormComponent implements OnInit {
   private readonly route = inject(ActivatedRoute, { optional: true });
   private readonly destroyRef = inject(DestroyRef);
 
-  readonly content = {
-    ...plContent.contact,
-    projectTypes: projectTypeOptions,
-    budgetRanges: budgetRangeOptions,
-  };
+  readonly content = siteContent.contact;
   readonly form = this.fb.group<ContactFormControls>({
     name: this.fb.control('', [
       Validators.required,

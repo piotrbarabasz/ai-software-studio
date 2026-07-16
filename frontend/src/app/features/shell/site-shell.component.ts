@@ -1,13 +1,14 @@
 import { CommonModule, DOCUMENT } from '@angular/common';
-import { Component, DestroyRef, HostListener, inject } from '@angular/core';
-import type { OnInit } from '@angular/core';
+import { Component, DestroyRef, HostListener, ViewChild, inject } from '@angular/core';
+import type { ElementRef, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Meta, Title } from '@angular/platform-browser';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import type { ActivatedRouteSnapshot } from '@angular/router';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';
 
 import { siteContent } from '../../core/content/site.pl';
+import { absoluteSiteUrl, siteSeo, siteSocialImageUrl } from '../../core/seo/site-seo.config';
 
 @Component({
   selector: 'app-site-shell',
@@ -23,9 +24,15 @@ export class SiteShellComponent implements OnInit {
   private readonly document = inject(DOCUMENT);
   private readonly destroyRef = inject(DestroyRef);
 
+  @ViewChild('menuToggle') private readonly menuToggle?: ElementRef<HTMLButtonElement>;
+  @ViewChild('primaryNavigation') private readonly primaryNavigation?: ElementRef<HTMLElement>;
+
   isMobileNavigationOpen = false;
+  isMobileViewport = false;
+  readonly navigation = siteContent.navigation;
 
   ngOnInit(): void {
+    this.updateViewportState();
     this.syncRouteMetadata();
 
     this.router.events
@@ -35,7 +42,7 @@ export class SiteShellComponent implements OnInit {
       )
       .subscribe(() => {
         this.syncRouteMetadata();
-        this.isMobileNavigationOpen = false;
+        this.closeNavigation(false);
       });
   }
 
@@ -43,13 +50,28 @@ export class SiteShellComponent implements OnInit {
     this.isMobileNavigationOpen = !this.isMobileNavigationOpen;
   }
 
-  closeNavigation(): void {
+  closeNavigation(restoreFocus = false): void {
+    const navigation = this.primaryNavigation?.nativeElement;
+    const activeElement = this.document.activeElement;
+
     this.isMobileNavigationOpen = false;
+
+    if (restoreFocus && navigation?.contains(activeElement)) {
+      this.menuToggle?.nativeElement.focus();
+    }
   }
 
   @HostListener('document:keydown.escape')
   handleEscape(): void {
-    this.closeNavigation();
+    this.closeNavigation(true);
+  }
+
+  @HostListener('window:resize')
+  updateViewportState(): void {
+    this.isMobileViewport = (this.document.defaultView?.innerWidth ?? 0) <= 920;
+    if (!this.isMobileViewport) {
+      this.closeNavigation(false);
+    }
   }
 
   private syncRouteMetadata(): void {
@@ -63,7 +85,19 @@ export class SiteShellComponent implements OnInit {
     this.meta.updateTag({ property: 'og:title', content: title });
     this.meta.updateTag({ property: 'og:description', content: description });
     this.meta.updateTag({ property: 'og:type', content: 'website' });
+    this.meta.updateTag({ property: 'og:url', content: absoluteSiteUrl(canonicalPath) });
+    this.meta.updateTag({ property: 'og:image', content: siteSocialImageUrl });
+    this.meta.updateTag({ property: 'og:locale', content: siteSeo.locale });
+    this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+    this.meta.updateTag({ name: 'twitter:title', content: title });
+    this.meta.updateTag({ name: 'twitter:description', content: description });
+    this.meta.updateTag({ name: 'twitter:image', content: siteSocialImageUrl });
+    this.meta.updateTag({
+      name: 'robots',
+      content: canonicalPath === '/404' ? 'noindex, follow' : 'index, follow',
+    });
     this.setCanonical(canonicalPath);
+    this.setStructuredData();
   }
 
   private getDeepestRoute(route: ActivatedRouteSnapshot): ActivatedRouteSnapshot {
@@ -82,19 +116,16 @@ export class SiteShellComponent implements OnInit {
 
   private resolveDescription(route: ActivatedRouteSnapshot): string | undefined {
     const description = route.data['description'];
-
     return typeof description === 'string' ? description : undefined;
   }
 
   private resolveCanonicalPath(route: ActivatedRouteSnapshot): string | undefined {
     const canonicalPath = route.data['canonicalPath'];
-
     return typeof canonicalPath === 'string' ? canonicalPath : undefined;
   }
 
   private setCanonical(canonicalPath: string): void {
-    const origin = this.document.location?.origin ?? '';
-    const href = `${origin}${canonicalPath.startsWith('/') ? canonicalPath : `/${canonicalPath}`}`;
+    const href = absoluteSiteUrl(canonicalPath);
     let canonical = this.document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
 
     if (!canonical) {
@@ -104,5 +135,46 @@ export class SiteShellComponent implements OnInit {
     }
 
     canonical.setAttribute('href', href);
+  }
+
+  private setStructuredData(): void {
+    const id = 'site-structured-data';
+    let script = this.document.getElementById(id) as HTMLScriptElement | null;
+
+    if (!script) {
+      script = this.document.createElement('script');
+      script.id = id;
+      script.type = 'application/ld+json';
+      this.document.head.appendChild(script);
+    }
+
+    script.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@id': `${siteSeo.origin}#organization`,
+          '@type': 'Organization',
+          name: siteSeo.name,
+          url: siteSeo.origin,
+          description: siteSeo.organizationDescription,
+        },
+        {
+          '@id': `${siteSeo.origin}#professional-service`,
+          '@type': 'ProfessionalService',
+          name: siteSeo.name,
+          url: siteSeo.origin,
+          description: siteSeo.organizationDescription,
+          parentOrganization: { '@id': `${siteSeo.origin}#organization` },
+        },
+        {
+          '@id': `${siteSeo.origin}#website`,
+          '@type': 'WebSite',
+          name: siteSeo.name,
+          url: siteSeo.origin,
+          inLanguage: 'pl-PL',
+          publisher: { '@id': `${siteSeo.origin}#organization` },
+        },
+      ],
+    });
   }
 }

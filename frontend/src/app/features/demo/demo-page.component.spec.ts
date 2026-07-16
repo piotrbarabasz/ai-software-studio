@@ -4,7 +4,7 @@ import { provideRouter } from '@angular/router';
 import { DemoPageComponent } from './demo-page.component';
 
 describe('DemoPageComponent', () => {
-  it('keeps one selectable showcase, the sprint, packages, FAQ and contact CTA', async () => {
+  it('renders the demo scope, boundaries and contact CTA from the shared content model', async () => {
     await TestBed.configureTestingModule({
       imports: [DemoPageComponent],
       providers: [provideRouter([])],
@@ -13,12 +13,12 @@ describe('DemoPageComponent', () => {
     fixture.detectChanges();
     const element: HTMLElement = fixture.nativeElement;
     expect(element.querySelectorAll('h1').length).toBe(1);
-    expect(element.querySelectorAll('[role="tab"]').length).toBe(3);
-    expect(element.querySelectorAll('#demo-showcase-panel app-showcase-section').length).toBe(1);
-    expect(element.querySelector('a[href^="/kontakt?interest=general"]')).not.toBeNull();
+    expect(element.querySelectorAll('.ordered-grid li').length).toBeGreaterThanOrEqual(5);
+    expect(element.textContent).toContain('Wykluczenia');
+    expect(element.querySelector('a[href^="/kontakt?projectType=mvp_prototype"]')).not.toBeNull();
   });
 
-  it('does not render duplicate HTML ids in the selectable demo flow', async () => {
+  it('does not render duplicate HTML ids', async () => {
     await TestBed.configureTestingModule({
       imports: [DemoPageComponent],
       providers: [provideRouter([])],

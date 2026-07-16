@@ -1,59 +1,107 @@
 <div class="demo-page">
   <section class="hero section-shell" appRevealOnScroll>
     <div class="hero-copy">
-      <p class="eyebrow">{{ routeContent.eyebrow }}</p>
-      <h1>{{ routeContent.title }}</h1>
-      <p class="page-lead">{{ routeContent.lead }}</p>
+      <p class="eyebrow">{{ content.eyebrow }}</p>
+      <h1>{{ content.title }}</h1>
+      <p class="page-lead">{{ content.lead }}</p>
     </div>
-    <aside class="hero-aside">
-      <p class="panel-kicker">Dla kogo</p>
+    <aside class="hero-aside" aria-label="Zakres demo">
+      <p class="panel-kicker">{{ content.audienceTitle }}</p>
       <ul>
-        <li *ngFor="let item of routeContent.includes">{{ item }}</li>
+        <li *ngFor="let item of content.includes">{{ item }}</li>
       </ul>
-      <a class="primary-action" routerLink="/kontakt" [queryParams]="{ interest: 'general' }">{{
-        routeContent.ctaLabel
-      }}</a>
+      <a
+        class="primary-action"
+        routerLink="/kontakt"
+        [queryParams]="{ projectType: 'mvp_prototype' }"
+      >
+        {{ content.ctaLabel }}
+      </a>
     </aside>
   </section>
-  <app-demo-promise-section [content]="content.demoPromise" />
-  <app-product-offers-section
-    [offers]="content.offers"
-    [selectedId]="selectedOfferId"
-    showcasePanelId="demo-showcase-panel"
-    (selectedOfferIdChange)="selectedOfferId = $event"
-  />
-  <div
-    id="demo-showcase-panel"
-    class="demo-showcase-panel"
-    role="tabpanel"
-    [attr.aria-labelledby]="'showcase-tab-' + selectedOfferId"
-  >
-    <app-showcase-section [showcase]="selectedShowcase" />
-  </div>
-  <section class="demo-inputs section-shell" aria-labelledby="demo-inputs-title" appRevealOnScroll>
+
+  <section class="demo-inputs section-shell" aria-labelledby="demo-process-title" appRevealOnScroll>
     <div class="section-heading">
-      <p class="eyebrow">{{ routeContent.clientInputTitle }}</p>
-      <h2 id="demo-inputs-title">Materiały potrzebne przed startem</h2>
+      <p class="eyebrow">Siedem dni</p>
+      <h2 id="demo-process-title">{{ content.processTitle }}</h2>
     </div>
     <ol class="ordered-grid">
-      <li *ngFor="let item of routeContent.clientInputs">{{ item }}</li>
+      <li *ngFor="let step of content.flowSteps">{{ step }}</li>
     </ol>
   </section>
-  <app-demo-sprint-section [steps]="content.demoSprint" />
-  <app-pricing-section [packages]="content.packages" />
-  <app-faq-section [items]="content.faq" />
+
+  <section class="section-shell" aria-labelledby="demo-explained-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">Walidacja przed produkcją</p>
+      <h2 id="demo-explained-title">
+        {{ content.demoExplanationTitle }} i {{ content.pocExplanationTitle }}
+      </h2>
+    </div>
+    <div class="card-grid">
+      <article class="info-card">
+        <h3>{{ content.demoExplanationTitle }}</h3>
+        <p>{{ content.demoExplanation }}</p>
+      </article>
+      <article class="info-card">
+        <h3>{{ content.pocExplanationTitle }}</h3>
+        <p>{{ content.pocExplanation }}</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="demo-inputs section-shell" aria-labelledby="seven-day-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">{{ content.sevenDayTitle }}</p>
+      <h2 id="seven-day-title">{{ content.sevenDayTitle }}</h2>
+    </div>
+    <ol class="ordered-grid">
+      <li *ngFor="let item of content.sevenDayPoints">{{ item }}</li>
+    </ol>
+  </section>
+
+  <section
+    class="section-shell section-muted"
+    aria-labelledby="demo-boundaries-title"
+    appRevealOnScroll
+  >
+    <div class="section-heading">
+      <p class="eyebrow">{{ content.exclusionsTitle }}</p>
+      <h2 id="demo-boundaries-title">Czego demo nie zastępuje</h2>
+    </div>
+    <div class="card-grid">
+      <article class="info-card">
+        <h3>Poza zakresem</h3>
+        <ul>
+          <li *ngFor="let item of content.exclusions">{{ item }}</li>
+        </ul>
+      </article>
+      <article class="info-card">
+        <h3>{{ content.clientInputTitle }}</h3>
+        <ul>
+          <li *ngFor="let item of content.clientInputs">{{ item }}</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
   <section
     class="demo-outcome section-shell"
     aria-labelledby="demo-outcome-title"
     appRevealOnScroll
   >
     <div class="section-heading">
-      <p class="eyebrow">{{ routeContent.resultTitle }}</p>
-      <h2 id="demo-outcome-title">{{ routeContent.resultTitle }}</h2>
-      <p class="section-copy">{{ routeContent.result }}</p>
+      <p class="eyebrow">{{ content.resultTitle }}</p>
+      <h2 id="demo-outcome-title">{{ content.decisionTitle }}</h2>
+      <p class="section-copy">{{ content.result }}</p>
+      <p class="section-copy">{{ content.decision }}</p>
+      <p class="section-copy">{{ content.transition }}</p>
     </div>
-    <a class="primary-action" routerLink="/kontakt" [queryParams]="{ interest: 'general' }">{{
-      routeContent.ctaLabel
-    }}</a>
+    <a
+      class="primary-action"
+      routerLink="/kontakt"
+      [queryParams]="{ projectType: 'mvp_prototype' }"
+    >
+      {{ content.ctaLabel }}
+    </a>
   </section>
 </div>

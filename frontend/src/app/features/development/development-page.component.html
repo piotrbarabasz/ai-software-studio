@@ -1,79 +1,61 @@
 <div class="studio-page">
   <section class="hero section-shell" appRevealOnScroll>
     <div class="hero-copy">
-      <p class="eyebrow">{{ routeContent.eyebrow }}</p>
-      <h1>{{ routeContent.title }}</h1>
-      <p class="page-lead">{{ routeContent.lead }}</p>
+      <p class="eyebrow">{{ content.eyebrow }}</p>
+      <h1>{{ content.title }}</h1>
+      <p class="page-lead">{{ content.lead }}</p>
     </div>
     <aside class="hero-panel" aria-label="Zakres developmentu">
-      <p class="panel-kicker">Zakres pracy</p>
+      <p class="panel-kicker">Zasady pracy</p>
       <ul>
-        <li *ngFor="let item of routeContent.principles">{{ item }}</li>
+        <li *ngFor="let item of content.principles">{{ item }}</li>
       </ul>
-      <a class="primary-action" routerLink="/kontakt" [queryParams]="{ interest: 'development' }">{{
-        routeContent.ctaLabel
-      }}</a>
+      <a class="primary-action" routerLink="/kontakt" [queryParams]="{ interest: 'development' }">
+        {{ content.ctaLabel }}
+      </a>
     </aside>
   </section>
-  <section class="section-shell" aria-labelledby="engagement-title" appRevealOnScroll>
-    <div class="section-heading">
-      <p class="eyebrow">Trzy sytuacje</p>
-      <h2 id="engagement-title">Development dopasowany do punktu, w którym jesteś</h2>
-    </div>
-    <div class="card-grid">
-      <article class="info-card">
-        <h3>Nowy produkt lub MVP</h3>
-        <p>Projektujemy pierwszą użyteczną wersję rozwiązania i jej drogę do dalszego rozwoju.</p>
-      </article>
-      <article class="info-card">
-        <h3>Rozwój istniejącego systemu</h3>
-        <p>Porządkujemy kolejne funkcje, API i interfejsy wokół realnych potrzeb zespołu.</p>
-      </article>
-      <article class="info-card">
-        <h3>Automatyzacja procesu</h3>
-        <p>Łączymy narzędzia i etapy pracy tam, gdzie ogranicza to ręczne powtarzalne zadania.</p>
-      </article>
-    </div>
-  </section>
+
   <section class="section-shell" aria-labelledby="services-title" appRevealOnScroll>
     <div class="section-heading">
-      <p class="eyebrow">Możliwości</p>
-      <h2 id="services-title">Od aplikacji po integracje i automatyzacje</h2>
+      <p class="eyebrow">Zakres</p>
+      <h2 id="services-title">Od aplikacji po integracje i monitoring</h2>
     </div>
     <div class="card-grid">
       <article *ngFor="let service of content.services" class="info-card">
         <h3>{{ service.title }}</h3>
-        <p>{{ service.summary }}</p>
+        <p>{{ service.description }}</p>
       </article>
     </div>
   </section>
+
+  <section
+    class="section-shell section-muted"
+    aria-labelledby="technical-scope-title"
+    appRevealOnScroll
+  >
+    <div class="section-heading">
+      <p class="eyebrow">Zakres techniczny</p>
+      <h2 id="technical-scope-title">Elementy potrzebne od MVP do produkcji</h2>
+    </div>
+    <ul class="bullet-grid">
+      <li *ngFor="let item of content.technicalScope">{{ item }}</li>
+    </ul>
+  </section>
+
   <section class="section-shell section-muted" aria-labelledby="process-title" appRevealOnScroll>
     <div class="section-heading">
       <p class="eyebrow">Proces</p>
       <h2 id="process-title">Zakres, implementacja i kolejne decyzje</h2>
     </div>
     <ol class="process-list">
-      <li *ngFor="let step of content.process">
-        <span class="step-number">{{ step.order }}</span>
+      <li *ngFor="let step of content.deliverySteps; let index = index">
+        <span class="step-number">{{ index + 1 }}</span>
         <div>
           <h3>{{ step.title }}</h3>
           <p>{{ step.description }}</p>
-          <strong>{{ step.clientOutcome }}</strong>
         </div>
       </li>
     </ol>
-  </section>
-  <section class="section-shell" aria-labelledby="technology-title" appRevealOnScroll>
-    <div class="section-heading">
-      <p class="eyebrow">Technologie</p>
-      <h2 id="technology-title">Dobierane do konkretnego wdrożenia</h2>
-    </div>
-    <div class="tech-grid">
-      <article *ngFor="let tech of content.technologies" class="tech-card">
-        <span>{{ tech.category }}</span>
-        <h3>{{ tech.name }}</h3>
-        <p>{{ tech.businessUse }}</p>
-      </article>
-    </div>
   </section>
 </div>

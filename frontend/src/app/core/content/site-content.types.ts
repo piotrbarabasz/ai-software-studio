@@ -38,12 +38,13 @@ export type ProductRoutePath = (typeof productRoutePaths)[ProductId];
 export type ProductRoutePathFor<TProductId extends ProductId> =
   (typeof productRoutePaths)[TProductId];
 
-export type StaticRoutePath =
-  '/' | '/produkty' | '/demo-ai' | '/development' | '/studio' | '/rd' | '/kontakt';
+export type StaticRoutePath = '/' | '/demo-ai' | '/development' | '/studio' | '/rd' | '/kontakt';
 
-export type PublicRoutePath = ProductRoutePath | StaticRoutePath;
+export type LegacyRoutePath = '/demo-w-7-dni' | '/produkty' | ProductRoutePath;
 
-export type PublicRouteKind = 'home' | 'products-index' | 'product' | 'demo' | 'studio' | 'contact';
+export type PublicRoutePath = StaticRoutePath;
+
+export type PublicRouteKind = 'home' | 'demo' | 'development' | 'studio' | 'research' | 'contact';
 
 interface RouteMetadataBase {
   readonly label: string;
@@ -56,22 +57,6 @@ export interface HomeRouteMetadata extends RouteMetadataBase {
   readonly path: '/';
   readonly productId?: never;
   readonly contactContext?: never;
-}
-
-export interface ProductsIndexRouteMetadata extends RouteMetadataBase {
-  readonly kind: 'products-index';
-  readonly path: '/produkty';
-  readonly productId?: never;
-  readonly contactContext?: never;
-}
-
-export interface ProductRouteMetadata<
-  TProductId extends ProductId = ProductId,
-> extends RouteMetadataBase {
-  readonly kind: 'product';
-  readonly path: ProductRoutePathFor<TProductId>;
-  readonly productId: TProductId;
-  readonly contactContext: ContactContext<TProductId>;
 }
 
 export interface DemoRouteMetadata extends RouteMetadataBase {
@@ -107,12 +92,6 @@ export interface ContactRouteMetadata extends RouteMetadataBase {
   readonly path: '/kontakt';
   readonly productId?: never;
   readonly contactContext?: never;
-}
-
-export interface ContactContext<TProductId extends ProductId = ProductId> {
-  readonly productId: TProductId;
-  readonly sourcePage: string;
-  readonly sourceRoute: ProductRoutePathFor<TProductId>;
 }
 
 export interface NavigationItem {
@@ -246,6 +225,11 @@ export interface ProductCatalogEntry<TProductId extends ProductId = ProductId> {
 export interface HomePageContent {
   readonly path: StaticRoutePath;
   readonly hero: HomeHero;
+  readonly problemsHeading: HomeSectionHeading;
+  readonly problemGroups: readonly [HomeProblemGroup, HomeProblemGroup, HomeProblemGroup];
+  readonly demonstration: HomeDemonstration;
+  readonly outcome: HomeOutcome;
+  readonly pathsHeading: HomeSectionHeading;
   readonly paths: readonly [HomePath, HomePath];
   readonly capabilities: readonly [HomeCapability, HomeCapability, HomeCapability];
   readonly process: readonly [HomeProcessStep, HomeProcessStep, HomeProcessStep];
@@ -253,9 +237,16 @@ export interface HomePageContent {
   readonly closingCta: HomeClosingCta;
 }
 
+export interface HomeSectionHeading {
+  readonly eyebrow: string;
+  readonly title: string;
+  readonly lead?: string;
+}
+
 export interface HomeCta {
   readonly label: string;
   readonly path: PublicRoutePath;
+  readonly queryParams?: Readonly<Record<string, string>>;
 }
 
 export interface HomeHero {
@@ -264,6 +255,48 @@ export interface HomeHero {
   readonly lead: string;
   readonly primaryCta: HomeCta;
   readonly secondaryCta: HomeCta;
+  readonly proof: {
+    readonly label: string;
+    readonly steps: readonly [string, string, string];
+  };
+}
+
+export interface HomeProblemGroup {
+  readonly title: string;
+  readonly effect: string;
+  readonly examples: readonly [string, string, string];
+  readonly cta: HomeCta;
+}
+
+export interface HomeDemonstration {
+  readonly eyebrow: string;
+  readonly title: string;
+  readonly lead: string;
+  readonly problemLabel: string;
+  readonly problem: string;
+  readonly userLabel: string;
+  readonly user: string;
+  readonly flowLabel: string;
+  readonly flow: readonly [string, string, string];
+  readonly validatesLabel: string;
+  readonly validates: readonly [string, string, string];
+  readonly boundaryLabel: string;
+  readonly boundaries: readonly [string, string, string];
+  readonly nextStep: string;
+  readonly cta: HomeCta;
+}
+
+export interface HomeOutcome {
+  readonly eyebrow: string;
+  readonly title: string;
+  readonly lead: string;
+  readonly demo: HomeComparisonCard;
+  readonly production: HomeComparisonCard;
+}
+
+export interface HomeComparisonCard {
+  readonly title: string;
+  readonly points: readonly string[];
 }
 
 export interface HomePath {
@@ -289,6 +322,8 @@ export interface DemoPageContent {
   readonly eyebrow: string;
   readonly title: string;
   readonly lead: string;
+  readonly audienceTitle: string;
+  readonly processTitle: string;
   readonly includes: readonly string[];
   readonly outOfScope: readonly string[];
   readonly flowSteps: readonly string[];
@@ -308,6 +343,28 @@ export interface DemoPageContent {
   readonly decision: string;
   readonly transitionTitle: string;
   readonly transition: string;
+  readonly ctaLabel: string;
+}
+
+export interface DevelopmentService {
+  readonly title: string;
+  readonly description: string;
+}
+
+export interface DevelopmentProcessStep {
+  readonly title: string;
+  readonly description: string;
+}
+
+export interface DevelopmentPageContent {
+  readonly path: '/development';
+  readonly eyebrow: string;
+  readonly title: string;
+  readonly lead: string;
+  readonly principles: readonly string[];
+  readonly services: readonly DevelopmentService[];
+  readonly technicalScope: readonly string[];
+  readonly deliverySteps: readonly DevelopmentProcessStep[];
   readonly ctaLabel: string;
 }
 
@@ -344,28 +401,35 @@ export interface ContactPageContent {
 
 export interface SiteContent {
   readonly routes: readonly PublicRouteMetadata[];
+  readonly legacyRedirects: readonly LegacyRedirect[];
   readonly navigation: readonly NavigationItem[];
   readonly products: readonly ProductCatalogEntry[];
   readonly home: HomePageContent;
   readonly demo: DemoPageContent;
-  readonly development: StudioPageContent;
+  readonly development: DevelopmentPageContent;
   readonly studio: StudioPageContent;
-  readonly research: {
-    readonly path: '/rd';
-    readonly eyebrow: string;
-    readonly title: string;
-    readonly lead: string;
-    readonly directions: readonly ResearchDirection[];
-  };
+  readonly research: ResearchPageContent;
   readonly contact: ContactPageContent;
 }
 
 export type PublicRouteMetadata =
   | HomeRouteMetadata
-  | ProductsIndexRouteMetadata
-  | ProductRouteMetadata
   | DemoRouteMetadata
   | DevelopmentRouteMetadata
   | StudioRouteMetadata
   | ResearchRouteMetadata
   | ContactRouteMetadata;
+
+export interface LegacyRedirect {
+  readonly from: LegacyRoutePath;
+  readonly to: StaticRoutePath;
+}
+
+export interface ResearchPageContent {
+  readonly path: '/rd';
+  readonly eyebrow: string;
+  readonly title: string;
+  readonly lead: string;
+  readonly directions: readonly ResearchDirection[];
+  readonly statusLabels: Readonly<Record<ResearchDirectionStatus, string>>;
+}
