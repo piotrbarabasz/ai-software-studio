@@ -5,22 +5,7 @@ export interface SelectOption<TValue extends string> {
   readonly label: string;
 }
 
-export type ProductVisualKind = 'rag' | 'websiteSeo' | 'voice' | 'whatsapp' | 'email' | 'panel';
-
-export type ServiceModelId = 'validate' | 'build' | 'research';
-
-export type CollaborationTrackId = 'validate' | 'build';
-
 export type ResearchDirectionStatus = 'experiment' | 'prototype' | 'validated-internally';
-
-export type SolutionCategoryId =
-  'customer-sales' | 'operations-automation' | 'applications-control';
-
-export type ProjectJourneyStepId =
-  'idea' | 'demo-poc' | 'mvp' | 'production' | 'further-development';
-
-export type ContactIntentOptionId =
-  'quick-validation' | 'mvp' | 'full-development' | 'ai-automation' | 'technology-consultation';
 
 export const productRoutePaths = {
   rag_chatbot_demo: '/produkty/asystent-wiedzy-rag',
@@ -102,25 +87,6 @@ export interface NavigationItem {
 export type ProductApplications =
   readonly [string, string, string] | readonly [string, string, string, string];
 
-export interface HomeWorkTrack {
-  readonly title: string;
-  readonly lead: string;
-  readonly bullets: readonly string[];
-  readonly ctaLabel: string;
-  readonly ctaPath: PublicRoutePath;
-}
-
-export interface HomeSolutionGroup {
-  readonly title: string;
-  readonly lead: string;
-  readonly bullets: readonly string[];
-}
-
-export interface HomeJourneyStep {
-  readonly title: string;
-  readonly lead: string;
-}
-
 export interface HomeTeaser {
   readonly eyebrow: string;
   readonly title: string;
@@ -128,40 +94,11 @@ export interface HomeTeaser {
   readonly cta: HomeCta;
 }
 
-export interface HomeResearchTeaser {
-  readonly eyebrow: string;
-  readonly title: string;
-  readonly lead: string;
-  readonly items: readonly string[];
-}
-
 export interface HomeClosingCta {
   readonly title: string;
   readonly lead: string;
   readonly primaryCta: HomeCta;
   readonly secondaryCta?: HomeCta;
-}
-
-export interface ServiceModel {
-  readonly id: ServiceModelId;
-  readonly label: string;
-  readonly role: string;
-  readonly summary: string;
-  readonly claimBoundary?: string;
-}
-
-export interface CollaborationTrack {
-  readonly id: CollaborationTrackId;
-  readonly title: string;
-  readonly customerValue: string;
-  readonly useCases: readonly string[];
-  readonly scope: readonly string[];
-  readonly result: string;
-  readonly limitations: readonly string[];
-  readonly timing: string;
-  readonly ctaLabel: string;
-  readonly targetRoute: PublicRoutePath;
-  readonly contactIntent: ProjectType;
 }
 
 export interface ResearchDirection {
@@ -172,31 +109,6 @@ export interface ResearchDirection {
   readonly potentialBusinessUse: string;
   readonly status?: ResearchDirectionStatus;
   readonly claimBoundary: string;
-}
-
-export interface SolutionCategory {
-  readonly id: SolutionCategoryId;
-  readonly title: string;
-  readonly lead: string;
-  readonly examples: readonly string[];
-  readonly productIds: readonly ProductId[];
-  readonly homepageSummary?: string;
-}
-
-export interface ProjectJourneyStep {
-  readonly id: ProjectJourneyStepId;
-  readonly title: string;
-  readonly description: string;
-  readonly clientDecision?: string;
-  readonly researchInfluence?: string;
-}
-
-export interface ContactIntentOption {
-  readonly id: ContactIntentOptionId;
-  readonly label: string;
-  readonly description?: string;
-  readonly projectType: ProjectType;
-  readonly allowedQueryValues: readonly string[];
 }
 
 export interface ProductCatalogEntry<TProductId extends ProductId = ProductId> {
@@ -210,9 +122,9 @@ export interface ProductCatalogEntry<TProductId extends ProductId = ProductId> {
   readonly applications: ProductApplications;
   readonly demoScope: string;
   readonly outOfScope: readonly string[];
-  readonly visualKind: ProductVisualKind;
+  readonly visualKind: 'rag' | 'websiteSeo' | 'voice' | 'whatsapp' | 'email' | 'panel';
   readonly ctaLabel: string;
-  readonly categoryId?: SolutionCategoryId;
+  readonly categoryId?: 'customer-sales' | 'operations-automation' | 'applications-control';
   readonly businessProblem?: string;
   readonly value?: string;
   readonly exampleUseCases?: readonly string[];
@@ -231,8 +143,6 @@ export interface HomePageContent {
   readonly outcome: HomeOutcome;
   readonly pathsHeading: HomeSectionHeading;
   readonly paths: readonly [HomePath, HomePath];
-  readonly capabilities: readonly [HomeCapability, HomeCapability, HomeCapability];
-  readonly process: readonly [HomeProcessStep, HomeProcessStep, HomeProcessStep];
   readonly studioTeaser: HomeTeaser;
   readonly closingCta: HomeClosingCta;
 }
@@ -307,48 +217,37 @@ export interface HomePath {
   readonly cta: HomeCta;
 }
 
-export interface HomeCapability {
-  readonly title: string;
-  readonly lead: string;
-}
-
-export interface HomeProcessStep {
-  readonly title: string;
-  readonly lead: string;
-}
-
 export interface DemoPageContent {
   readonly path: StaticRoutePath;
   readonly eyebrow: string;
   readonly title: string;
   readonly lead: string;
   readonly audienceTitle: string;
+  readonly audienceProblems: readonly string[];
   readonly processTitle: string;
-  readonly includes: readonly string[];
-  readonly outOfScope: readonly string[];
   readonly flowSteps: readonly string[];
-  readonly demoExplanationTitle: string;
-  readonly demoExplanation: string;
-  readonly pocExplanationTitle: string;
-  readonly pocExplanation: string;
-  readonly sevenDayTitle: string;
-  readonly sevenDayPoints: readonly string[];
-  readonly exclusionsTitle: string;
-  readonly exclusions: readonly string[];
-  readonly clientInputTitle: string;
-  readonly clientInputs: readonly string[];
+  readonly example: {
+    readonly title: string;
+    readonly lead: string;
+    readonly points: readonly string[];
+  };
+  readonly comparison: {
+    readonly title: string;
+    readonly demo: HomeComparisonCard;
+    readonly production: HomeComparisonCard;
+  };
   readonly resultTitle: string;
   readonly result: string;
-  readonly decisionTitle: string;
   readonly decision: string;
-  readonly transitionTitle: string;
   readonly transition: string;
   readonly ctaLabel: string;
 }
 
-export interface DevelopmentService {
+export interface DevelopmentOutcome {
   readonly title: string;
-  readonly description: string;
+  readonly problem: string;
+  readonly result: string;
+  readonly scope: string;
 }
 
 export interface DevelopmentProcessStep {
@@ -362,10 +261,11 @@ export interface DevelopmentPageContent {
   readonly title: string;
   readonly lead: string;
   readonly principles: readonly string[];
-  readonly services: readonly DevelopmentService[];
+  readonly outcomes: readonly [DevelopmentOutcome, DevelopmentOutcome, DevelopmentOutcome];
   readonly technicalScope: readonly string[];
   readonly deliverySteps: readonly DevelopmentProcessStep[];
   readonly ctaLabel: string;
+  readonly closingCta: HomeClosingCta;
 }
 
 export interface StudioPageContent {
@@ -375,6 +275,11 @@ export interface StudioPageContent {
   readonly lead: string;
   readonly principles: readonly string[];
   readonly capabilities: readonly string[];
+  readonly collaboration: {
+    readonly title: string;
+    readonly lead: string;
+    readonly points: readonly string[];
+  };
   readonly engagementModel: readonly string[];
   readonly ctaLabel: string;
 }

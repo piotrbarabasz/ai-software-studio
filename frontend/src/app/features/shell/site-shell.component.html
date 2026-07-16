@@ -45,7 +45,9 @@
 </main>
 
 <footer class="site-footer">
-  <p>AISoftware Studio — samodzielnie prowadzone studio tworzące dema AI i rozwiązania cyfrowe.</p>
+  <p>
+    © AISoftware Studio — samodzielnie prowadzone studio tworzące dema AI i rozwiązania cyfrowe.
+  </p>
   <div class="footer-links">
     <a *ngFor="let item of navigation" [routerLink]="item.path" (click)="closeNavigation()">{{
       item.label

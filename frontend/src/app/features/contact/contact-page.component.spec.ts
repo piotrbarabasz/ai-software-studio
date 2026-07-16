@@ -5,7 +5,7 @@ import { API_CONFIG } from '../../core/api-config';
 import { ContactPageComponent } from './contact-page.component';
 
 describe('ContactPageComponent', () => {
-  it('keeps the contact form on its dedicated page', async () => {
+  it('keeps the contact form on its dedicated page with business-only copy', async () => {
     await TestBed.configureTestingModule({
       imports: [ContactPageComponent],
       providers: [
@@ -18,5 +18,12 @@ describe('ContactPageComponent', () => {
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelectorAll('h1').length).toBe(1);
     expect(fixture.nativeElement.querySelector('app-contact-form')).not.toBeNull();
+    expect(fixture.nativeElement.textContent).toContain('Opisz proces, który chcesz usprawnić');
+    expect(fixture.nativeElement.textContent).toContain(
+      'Nie musisz mieć gotowej specyfikacji technicznej',
+    );
+    expect(fixture.nativeElement.textContent).not.toMatch(
+      /\bintent\b|\bpayload\b|\bprojectType\b/i,
+    );
   });
 });

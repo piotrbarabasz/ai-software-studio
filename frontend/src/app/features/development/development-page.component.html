@@ -10,21 +10,27 @@
       <ul>
         <li *ngFor="let item of content.principles">{{ item }}</li>
       </ul>
-      <a class="primary-action" routerLink="/kontakt" [queryParams]="{ interest: 'development' }">
+      <a
+        class="primary-action"
+        routerLink="/kontakt"
+        [queryParams]="{ projectType: 'custom_web_app' }"
+      >
         {{ content.ctaLabel }}
       </a>
     </aside>
   </section>
 
-  <section class="section-shell" aria-labelledby="services-title" appRevealOnScroll>
+  <section class="section-shell" aria-labelledby="outcomes-title" appRevealOnScroll>
     <div class="section-heading">
-      <p class="eyebrow">Zakres</p>
-      <h2 id="services-title">Od aplikacji po integracje i monitoring</h2>
+      <p class="eyebrow">Rezultaty</p>
+      <h2 id="outcomes-title">Co może usprawnić dobrze zaprojektowane rozwiązanie</h2>
     </div>
     <div class="card-grid">
-      <article *ngFor="let service of content.services" class="info-card">
-        <h3>{{ service.title }}</h3>
-        <p>{{ service.description }}</p>
+      <article *ngFor="let outcome of content.outcomes" class="info-card">
+        <h3>{{ outcome.title }}</h3>
+        <p><strong>Problem:</strong> {{ outcome.problem }}</p>
+        <p><strong>Efekt:</strong> {{ outcome.result }}</p>
+        <p><strong>Zakres:</strong> {{ outcome.scope }}</p>
       </article>
     </div>
   </section>
@@ -36,7 +42,7 @@
   >
     <div class="section-heading">
       <p class="eyebrow">Zakres techniczny</p>
-      <h2 id="technical-scope-title">Elementy potrzebne od MVP do produkcji</h2>
+      <h2 id="technical-scope-title">Elementy potrzebne od pierwszej wersji do produkcji</h2>
     </div>
     <ul class="bullet-grid">
       <li *ngFor="let item of content.technicalScope">{{ item }}</li>
@@ -57,5 +63,23 @@
         </div>
       </li>
     </ol>
+  </section>
+
+  <section
+    class="section-shell development-cta"
+    aria-labelledby="development-cta-title"
+    appRevealOnScroll
+  >
+    <div>
+      <p class="eyebrow">Następny krok</p>
+      <h2 id="development-cta-title">{{ content.closingCta.title }}</h2>
+      <p class="page-lead">{{ content.closingCta.lead }}</p>
+    </div>
+    <a
+      class="primary-action"
+      [routerLink]="content.closingCta.primaryCta.path"
+      [queryParams]="content.closingCta.primaryCta.queryParams"
+      >{{ content.closingCta.primaryCta.label }}</a
+    >
   </section>
 </div>

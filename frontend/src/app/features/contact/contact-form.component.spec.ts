@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { BehaviorSubject, of } from 'rxjs';
 
-import { contactIntentOptions, projectTypeOptions } from '../../core/content/contact-options.pl';
+import { projectTypeOptions } from '../../core/content/contact-options.pl';
 import { ContactApiService } from '../../services/contact-api.service';
 import { ContactFormComponent } from './contact-form.component';
 
@@ -56,16 +56,29 @@ describe('ContactFormComponent', () => {
     expect(fixture.componentInstance.form.controls.projectType.value).toBe('rag_chatbot_demo');
   });
 
-  it('maps an allowlisted interest and does not overwrite a manual project-type choice', () => {
-    projectTypeParams$.next(convertToParamMap({ interest: 'demo-rag' }));
+  it('keeps the CTA-selected project type when the visitor edits another form field', () => {
+    projectTypeParams$.next(convertToParamMap({ projectType: 'rag_chatbot_demo' }));
     const fixture = TestBed.createComponent(ContactFormComponent);
     fixture.detectChanges();
     expect(fixture.componentInstance.form.controls.projectType.value).toBe('rag_chatbot_demo');
-    expect(fixture.nativeElement.textContent).toContain('Pytasz o:');
-    fixture.componentInstance.form.controls.projectType.setValue('ai_automation');
+    fixture.componentInstance.form.controls.projectType.setValue('business_process_automation');
     fixture.componentInstance.form.controls.projectType.markAsDirty();
-    projectTypeParams$.next(convertToParamMap({ interest: 'development' }));
-    expect(fixture.componentInstance.form.controls.projectType.value).toBe('ai_automation');
+    projectTypeParams$.next(convertToParamMap({ projectType: 'custom_web_app' }));
+    expect(fixture.componentInstance.form.controls.projectType.value).toBe(
+      'business_process_automation',
+    );
+  });
+
+  it('uses business-only helper copy in the visible form', () => {
+    const fixture = TestBed.createComponent(ContactFormComponent);
+    fixture.detectChanges();
+
+    const text = fixture.nativeElement.textContent as string;
+
+    expect(text).toContain('Czego dotyczy rozmowa?');
+    expect(text).toContain('Wybierz opcję najbardziej zbliżoną do Twojego pomysłu.');
+    expect(text).toContain('Wyślij opis projektu');
+    expect(text).not.toMatch(/\bintent\b|\bpayload\b|\bprojectType\b/i);
   });
 
   it('preselects the quick-validation intent from an allowlisted query param', () => {
@@ -95,7 +108,7 @@ describe('ContactFormComponent', () => {
       name: 'Jan Kowalski',
       email: 'jan@example.com',
       company: '',
-      projectType: 'ai_automation',
+      projectType: 'business_process_automation',
       budgetRange: '25k_50k_pln',
       message: 'Potrzebujemy automatyzacji procesu obsługi zapytań od klientów.',
       consent: true,
@@ -106,7 +119,7 @@ describe('ContactFormComponent', () => {
     expect(api.submit).toHaveBeenCalledWith(
       jasmine.objectContaining({
         company: null,
-        projectType: 'ai_automation',
+        projectType: 'business_process_automation',
         consent: true,
       }),
     );
@@ -121,10 +134,19 @@ describe('ContactFormComponent', () => {
     ) as HTMLOptionElement[];
     const optionValues = options.map((option) => option.value);
 
-    expect(optionValues).toContain('rag_chatbot_demo');
-    expect(optionValues).toContain('website_seo');
-    expect(fixture.nativeElement.textContent).toContain('Chatbot / asystent wiedzy');
-    expect(fixture.nativeElement.textContent).toContain('Panel lub dashboard');
+    expect(optionValues).toEqual([
+      '',
+      'mvp_prototype',
+      'custom_web_app',
+      'business_process_automation',
+      'rag_chatbot_demo',
+      'backend_api',
+      'external_integration',
+      'other',
+    ]);
+    expect(new Set(optionValues).size).toBe(optionValues.length);
+    expect(fixture.nativeElement.textContent).toContain('Asystent AI lub RAG');
+    expect(fixture.nativeElement.textContent).toContain('Konsultacja techniczna');
   });
 
   it('submits a productized project type using the existing payload shape', () => {
@@ -155,45 +177,42 @@ describe('ContactFormComponent', () => {
     );
   });
 
-  it('renders consent wording with email and no-database boundary', () => {
+  it('renders concise consent wording without delivery implementation details', () => {
     const fixture = TestBed.createComponent(ContactFormComponent);
     fixture.detectChanges();
 
     const text = fixture.nativeElement.textContent as string;
 
-    expect(text).toContain('e-mailem');
-    expect(text).toContain('bazie danych');
+    expect(text).toContain('Wyrażam zgodę na kontakt w sprawie tego zapytania.');
+    expect(text).not.toMatch(/e-mailem|bazie danych/i);
   });
 
-  it('keeps the required contact intents mapped to backend-compatible project types', () => {
-    const backendProjectTypeValues: readonly string[] = projectTypeOptions.map(
-      (option) => option.value,
+  it('keeps budget optional and sends the backend-compatible not-sure value when blank', () => {
+    const fixture = TestBed.createComponent(ContactFormComponent);
+    fixture.detectChanges();
+    const api = TestBed.inject(ContactApiService) as jasmine.SpyObj<ContactApiService>;
+
+    expect(fixture.componentInstance.form.controls.budgetRange.valid).toBeTrue();
+    expect(fixture.nativeElement.textContent).toContain('Budżet orientacyjny');
+    expect(fixture.nativeElement.textContent).toContain('Jeszcze nie wiem');
+    expect(fixture.nativeElement.textContent).toContain('Opisz krótko obecny proces');
+    expect(fixture.nativeElement.querySelector('#message')?.getAttribute('aria-describedby')).toBe(
+      'message-hint',
     );
 
-    expect(contactIntentOptions.map((option) => option.id)).toEqual([
-      'quick-validation',
-      'mvp',
-      'full-development',
-      'ai-automation',
-      'technology-consultation',
-    ]);
-    expect(
-      contactIntentOptions.every((option) => backendProjectTypeValues.includes(option.projectType)),
-    ).toBeTrue();
-    expect(
-      contactIntentOptions.every((option) =>
-        option.allowedQueryValues.every((value) => backendProjectTypeValues.includes(value)),
-      ),
-    ).toBeTrue();
-  });
+    fixture.componentInstance.form.setValue({
+      name: 'Jan Kowalski',
+      email: 'jan@example.com',
+      company: '',
+      projectType: 'business_process_automation',
+      budgetRange: '',
+      message: 'Chcemy uprościć powtarzalny proces obsługi zapytań od klientów.',
+      consent: true,
+    });
 
-  it('keeps the required contact intent labels aligned with the shared contact intent model', () => {
-    expect(contactIntentOptions.map((option) => option.label)).toEqual([
-      'Demo / szybka walidacja',
-      'Zbuduj MVP',
-      'Pełne wdrożenie',
-      'AI / automatyzacja',
-      'Konsultacja techniczna',
-    ]);
+    fixture.componentInstance.submit();
+
+    expect(api.submit).toHaveBeenCalledWith(jasmine.objectContaining({ budgetRange: 'not_sure' }));
+    expect(projectTypeOptions).toHaveSize(7);
   });
 });
