@@ -13,6 +13,9 @@
     </div>
     <div class="card-grid">
       <article *ngFor="let direction of content.directions" class="info-card">
+        <p class="panel-kicker" *ngIf="direction.status">
+          {{ content.statusLabels[direction.status] }}
+        </p>
         <h3>{{ direction.area }}</h3>
         <p>{{ direction.problem }}</p>
         <p><strong>Cel:</strong> {{ direction.goal }}</p>

@@ -21,10 +21,19 @@
             "outputPath": "dist/aisoftware-studio",
             "index": "src/index.html",
             "browser": "src/main.ts",
+            "server": "src/main.server.ts",
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": ["src/assets"],
+            "assets": [
+              "src/assets",
+              { "glob": "robots.txt", "input": "src", "output": "/" },
+              { "glob": "sitemap.xml", "input": "src", "output": "/" }
+            ],
+            "prerender": {
+              "routesFile": "src/prerender-routes.txt",
+              "discoverRoutes": false
+            },
             "styles": ["src/styles.scss"]
           },
           "configurations": {
@@ -83,4 +92,3 @@
     }
   }
 }
-

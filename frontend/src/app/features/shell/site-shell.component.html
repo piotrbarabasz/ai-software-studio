@@ -7,6 +7,7 @@
   </a>
 
   <button
+    #menuToggle
     type="button"
     class="menu-toggle"
     aria-controls="primary-navigation"
@@ -18,43 +19,22 @@
   </button>
 
   <nav
+    #primaryNavigation
     id="primary-navigation"
     class="primary-nav"
     [class.is-open]="isMobileNavigationOpen"
+    [attr.inert]="isMobileViewport && !isMobileNavigationOpen ? '' : null"
     aria-label="Główna nawigacja"
   >
     <div class="nav-links">
       <a
-        routerLink="/demo-ai"
+        *ngFor="let item of navigation"
+        [routerLink]="item.path"
         routerLinkActive="is-active"
-        #demoLink="routerLinkActive"
-        [attr.aria-current]="demoLink.isActive ? 'page' : null"
+        #routeLink="routerLinkActive"
+        [attr.aria-current]="routeLink.isActive ? 'page' : null"
         (click)="closeNavigation()"
-        >Demo w 7 dni</a
-      >
-      <a
-        routerLink="/development"
-        routerLinkActive="is-active"
-        #developmentLink="routerLinkActive"
-        [attr.aria-current]="developmentLink.isActive ? 'page' : null"
-        (click)="closeNavigation()"
-        >Development</a
-      >
-      <a
-        routerLink="/studio"
-        routerLinkActive="is-active"
-        #studioLink="routerLinkActive"
-        [attr.aria-current]="studioLink.isActive ? 'page' : null"
-        (click)="closeNavigation()"
-        >Studio</a
-      >
-      <a
-        routerLink="/kontakt"
-        routerLinkActive="is-active"
-        #contactLink="routerLinkActive"
-        [attr.aria-current]="contactLink.isActive ? 'page' : null"
-        (click)="closeNavigation()"
-        >Kontakt</a
+        >{{ item.label }}</a
       >
     </div>
   </nav>
@@ -67,10 +47,9 @@
 <footer class="site-footer">
   <p>AISoftware Studio — samodzielnie prowadzone studio tworzące dema AI i rozwiązania cyfrowe.</p>
   <div class="footer-links">
-    <a routerLink="/demo-ai" (click)="closeNavigation()">Demo w 7 dni</a>
-    <a routerLink="/development" (click)="closeNavigation()">Development</a>
-    <a routerLink="/studio" (click)="closeNavigation()">Studio</a>
+    <a *ngFor="let item of navigation" [routerLink]="item.path" (click)="closeNavigation()">{{
+      item.label
+    }}</a>
     <a routerLink="/rd" (click)="closeNavigation()">R&D</a>
-    <a routerLink="/kontakt" (click)="closeNavigation()">Kontakt</a>
   </div>
 </footer>
