@@ -16,6 +16,9 @@ FROM nginx:1.27-alpine
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY nginx-security-headers.conf /etc/nginx/security-headers.conf
+
+RUN nginx -t
+
 COPY --from=build /app/dist/aisoftware-studio/browser /usr/share/nginx/html
 
 EXPOSE 8080
