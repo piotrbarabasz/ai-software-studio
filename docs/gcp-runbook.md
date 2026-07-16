@@ -6,6 +6,8 @@ Use this runbook after the first production deployment of AISoftware Studio.
 
 - Confirm the backend build passed.
 - Confirm the frontend build passed.
+- Confirm `npm run validate:site:production` passed with the final HTTPS public origin and API URL.
+- Confirm `npm run validate:legal:production` passed with verified public privacy data.
 - Confirm no real secrets or project IDs were committed.
 - Confirm Cloud Build configs use placeholders and substitutions.
 - Confirm Cloud Run min instances remain `0`.
@@ -15,11 +17,13 @@ Use this runbook after the first production deployment of AISoftware Studio.
 
 ## Smoke Tests
 
-1. Open the frontend Cloud Run URL.
+1. Open the frontend on the final public origin.
 2. Request `GET /health` on the backend Cloud Run URL.
 3. Confirm browser requests from the frontend origin are allowed by CORS.
 4. Confirm an unapproved origin is rejected by CORS.
 5. Submit a safe contact request through the deployed frontend/backend path.
+6. Open `/polityka-prywatnosci` and verify that no development notice or `__LEGAL_REQUIRED__` value is visible.
+7. Verify canonical, `og:url`, JSON-LD, `/robots.txt` and `/sitemap.xml` use only the final public origin.
 
 ## Rollback
 
@@ -45,7 +49,7 @@ Use this runbook after the first production deployment of AISoftware Studio.
 ## Common Failures
 
 - Missing `SMTP_PASSWORD` secret binding
-- Wrong frontend URL in `CORS_ALLOWED_ORIGINS`
+- Wrong public frontend origin in `CORS_ALLOWED_ORIGINS` or `PUBLIC_SITE_ORIGIN`
 - Missing Cloud Build or Artifact Registry permissions
 - Missing required GCP APIs
 - Incorrect API URL in the frontend build
@@ -71,8 +75,8 @@ Use this runbook after the first production deployment of AISoftware Studio.
 
 ## Cloud Run URL Verification
 
-After any deployment, verify the live service URLs documented in `docs/gcp-cicd.md`.
-Use the backend URL for health checks and the frontend URL for browser validation.
+After any deployment, verify the final public origin and the backend URL configured for that release.
+Use the backend URL for health checks and the final public origin for browser validation. See [public-origin-deployment.md](public-origin-deployment.md) for custom-domain and certificate checks.
 
 ## Local Recovery Checks
 

@@ -22,6 +22,12 @@ describe('ContactPageComponent', () => {
     expect(fixture.nativeElement.textContent).toContain(
       'Nie musisz mieć gotowej specyfikacji technicznej',
     );
+    expect(fixture.nativeElement.textContent).toContain(
+      'Wiadomość może być niepełna: opisz obecną pracę, problem i efekt',
+    );
+    expect(fixture.nativeElement.textContent).toContain(
+      'Wysłanie formularza nie jest zamówieniem, akceptacją wyceny',
+    );
     expect(fixture.nativeElement.querySelectorAll('.next-steps li')).toHaveSize(3);
     expect(fixture.nativeElement.querySelector('a[href^="mailto:"]')).toBeNull();
     expect(fixture.nativeElement.textContent).not.toMatch(

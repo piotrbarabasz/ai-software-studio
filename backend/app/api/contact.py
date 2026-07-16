@@ -26,6 +26,9 @@ router = APIRouter(tags=["contact"])
 def submit_contact(
     inquiry: ContactInquiry, request: Request
 ) -> ContactInquiryAccepted | JSONResponse:
+    if inquiry.website:
+        return ContactInquiryAccepted()
+
     service: ContactIntakeService = request.app.state.contact_intake
     client_key = request.client.host if request.client else "unknown"
 

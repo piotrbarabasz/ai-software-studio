@@ -24,26 +24,14 @@ export type ProductRoutePathFor<TProductId extends ProductId> =
   (typeof productRoutePaths)[TProductId];
 
 export type StaticRoutePath =
-  | '/'
-  | '/demo-ai'
-  | '/development'
-  | '/studio'
-  | '/rd'
-  | '/kontakt'
-  | '/polityka-prywatnosci';
+  '/' | '/demo-ai' | '/development' | '/studio' | '/rd' | '/kontakt' | '/polityka-prywatnosci';
 
 export type LegacyRoutePath = '/demo-w-7-dni' | '/produkty' | ProductRoutePath;
 
 export type PublicRoutePath = StaticRoutePath;
 
 export type PublicRouteKind =
-  | 'home'
-  | 'demo'
-  | 'development'
-  | 'studio'
-  | 'research'
-  | 'contact'
-  | 'privacy';
+  'home' | 'demo' | 'development' | 'studio' | 'research' | 'contact' | 'privacy';
 
 interface RouteMetadataBase {
   readonly label: string;
@@ -138,32 +126,45 @@ export interface OwnerProfile {
   };
 }
 
-export type EvidenceProjectStatus = 'own-project' | 'demo' | 'experiment';
+export type WorkEvidenceId = 'knowledge-demo' | 'studio-application';
 
-export interface EvidenceProject {
+export interface WorkEvidence {
+  readonly id: WorkEvidenceId;
+  readonly typeLabel: string;
   readonly title: string;
-  readonly status: EvidenceProjectStatus;
-  readonly statusLabel: string;
   readonly problem: string;
-  readonly solution: string;
-  readonly infrastructure?: string;
-  readonly scope: readonly string[];
-  readonly repository: ExternalLink;
+  readonly built: string;
+  readonly technologies: readonly string[];
+  readonly verification: readonly string[];
   readonly limitation: string;
+  readonly liveLink?: ExternalLink;
+  readonly repositoryLink?: ExternalLink;
+}
+
+export interface WorkEvidenceContent {
+  readonly eyebrow: string;
+  readonly title: string;
+  readonly lead: string;
+  readonly items: readonly [WorkEvidence, WorkEvidence];
 }
 
 export interface TrustContent {
   readonly ownerSectionTitle: string;
   readonly ownerSectionEyebrow: string;
-  readonly projectSectionEyebrow: string;
   readonly owner: OwnerProfile;
-  readonly ownProject: EvidenceProject;
+  readonly evidence: WorkEvidenceContent;
 }
 
 export interface HomeTrustTeaser {
   readonly statement: string;
   readonly cta: HomeCta;
   readonly github: ExternalLink;
+}
+
+export interface HomeEvidenceTeaser {
+  readonly eyebrow: string;
+  readonly title: string;
+  readonly lead: string;
 }
 
 export interface HomeClosingCta {
@@ -217,6 +218,7 @@ export interface HomePageContent {
   readonly paths: readonly [HomePath, HomePath];
   readonly studioTeaser: HomeTeaser;
   readonly trustTeaser: HomeTrustTeaser;
+  readonly evidenceTeaser: HomeEvidenceTeaser;
   readonly closingCta: HomeClosingCta;
 }
 
@@ -235,6 +237,7 @@ export interface HomeCta {
 export interface HomeHero {
   readonly eyebrow: string;
   readonly title: string;
+  readonly audience: string;
   readonly lead: string;
   readonly primaryCta: HomeCta;
   readonly secondaryCta: HomeCta;
@@ -345,9 +348,32 @@ export interface KnowledgeDemoContent {
 
 export interface DevelopmentOutcome {
   readonly title: string;
-  readonly problem: string;
-  readonly result: string;
-  readonly scope: string;
+  readonly startingPoint: string;
+  readonly targetWorkflow: string;
+  readonly solutionElements: readonly [string, string, string];
+  readonly dependency: string;
+}
+
+export interface DevelopmentReadiness {
+  readonly title: string;
+  readonly lead: string;
+  readonly points: readonly [string, string, string, string, string];
+}
+
+export interface DevelopmentPreparation {
+  readonly title: string;
+  readonly lead: string;
+  readonly points: readonly [string, string, string, string, string, string, string, string];
+}
+
+export interface DevelopmentScope {
+  readonly title: string;
+  readonly lead: string;
+  readonly includedTitle: string;
+  readonly included: readonly [string, string, string, string, string];
+  readonly excludedTitle: string;
+  readonly excluded: readonly [string, string, string, string];
+  readonly pricingNote: string;
 }
 
 export interface DevelopmentProcessStep {
@@ -361,10 +387,11 @@ export interface DevelopmentPageContent {
   readonly title: string;
   readonly lead: string;
   readonly principles: readonly string[];
+  readonly readiness: DevelopmentReadiness;
   readonly outcomesTitle: string;
   readonly outcomes: readonly [DevelopmentOutcome, DevelopmentOutcome, DevelopmentOutcome];
-  readonly technicalScopeTitle: string;
-  readonly technicalScope: readonly string[];
+  readonly preparation: DevelopmentPreparation;
+  readonly scope: DevelopmentScope;
   readonly processTitle: string;
   readonly deliverySteps: readonly DevelopmentProcessStep[];
   readonly closingCta: HomeClosingCta;
@@ -413,6 +440,7 @@ export interface ContactPageContent {
   };
   readonly success: {
     readonly title: string;
+    readonly summaryTitle: string;
     readonly nextStep: string;
     readonly homeCta: HomeCta;
     readonly anotherInquiryLabel: string;
@@ -426,11 +454,20 @@ export interface PrivacyPageContent {
   readonly path: '/polityka-prywatnosci';
   readonly eyebrow: string;
   readonly title: string;
-  readonly incompleteNotice: string;
-  readonly verifiedTitle: string;
-  readonly verifiedItems: readonly string[];
-  readonly confirmationTitle: string;
-  readonly confirmationItems: readonly string[];
+  readonly developmentNotice: string;
+  readonly introduction: string;
+  readonly administratorTitle: string;
+  readonly dataScopeTitle: string;
+  readonly dataScopeItems: readonly string[];
+  readonly transmissionTitle: string;
+  readonly transmissionDescription: string;
+  readonly purposesTitle: string;
+  readonly legalBasesTitle: string;
+  readonly recipientsTitle: string;
+  readonly retentionTitle: string;
+  readonly rightsTitle: string;
+  readonly contactTitle: string;
+  readonly updatedAtLabel: string;
 }
 
 export interface NotFoundMetadata {

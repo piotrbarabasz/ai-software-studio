@@ -11,6 +11,11 @@
   --color-accent-soft: #f4dfc4;
   --color-focus: #0b63ce;
   --shadow-soft: 0 16px 40px rgba(23, 32, 27, 0.08);
+  --radius-panel: 18px;
+  --radius-control: 10px;
+  --space-section: clamp(2.75rem, 6vw, 5.5rem);
+  --space-content: clamp(1.15rem, 2.5vw, 2rem);
+  --measure-copy: 68ch;
   font-family:
     Inter,
     ui-sans-serif,
@@ -35,7 +40,7 @@ body {
   color: var(--color-ink);
   font-size: 16px;
   line-height: 1.6;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 img {
@@ -45,6 +50,7 @@ img {
 
 a {
   color: inherit;
+  min-width: 0;
   overflow-wrap: anywhere;
 }
 
@@ -57,11 +63,29 @@ button {
   overflow-wrap: anywhere;
 }
 
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
 button,
 input,
 select,
 textarea {
   font: inherit;
+}
+
+button {
+  min-width: 0;
+}
+
+.primary-action,
+.secondary-action,
+.contact-cta,
+.reset-button,
+.submit-button {
+  max-width: 100%;
 }
 
 :focus-visible {
@@ -85,7 +109,7 @@ textarea {
   width: 100%;
   max-width: 1180px;
   margin: 0 auto;
-  padding-inline: clamp(1rem, 6vw, 5rem);
+  padding-inline: clamp(1rem, 5vw, 4.5rem);
 }
 
 .eyebrow,
@@ -99,22 +123,44 @@ textarea {
 }
 
 .section-lead {
+  margin: 0;
   color: var(--color-muted);
   font-size: clamp(1rem, 1.4vw, 1.2rem);
-  max-width: 68ch;
+  max-width: var(--measure-copy);
+}
+
+.section-heading {
+  display: grid;
+  gap: 0.65rem;
+  max-width: var(--measure-copy);
+}
+
+.section-heading h2 {
+  margin: 0;
+  font-size: clamp(1.8rem, 4vw, 3.25rem);
+  line-height: 1.08;
 }
 
 .reveal {
-  opacity: 0;
-  transform: translateY(18px);
-  transition:
-    opacity 520ms ease,
-    transform 520ms ease;
+  opacity: 1;
+  transform: none;
 }
 
 .reveal.is-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
+}
+
+@media (max-width: 480px) {
+  .section-shell {
+    padding-inline: 1rem;
+  }
+
+  .eyebrow,
+  .section-kicker {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

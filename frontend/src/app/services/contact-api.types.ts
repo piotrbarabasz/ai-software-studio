@@ -25,6 +25,7 @@ export interface ContactInquiryRequest {
   readonly budgetRange: BudgetRange;
   readonly message: string;
   readonly consent: true;
+  readonly website?: string;
 }
 
 export interface ContactInquiryAccepted {

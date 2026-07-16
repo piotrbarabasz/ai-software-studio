@@ -49,8 +49,8 @@ Required substitutions for the trigger:
 - `_FRONTEND_SERVICE=aisoftware-studio-web`
 - `_BACKEND_IMAGE_NAME=aisoftware-studio-api`
 - `_FRONTEND_IMAGE_NAME=aisoftware-studio-web`
-- `_BACKEND_URL=https://aisoftware-studio-api-k6wldgptjq-lm.a.run.app`
-- `_FRONTEND_URL=https://aisoftware-studio-web-k6wldgptjq-lm.a.run.app`
+- `_BACKEND_URL=https://<BACKEND_CLOUD_RUN_URL>`
+- `_FRONTEND_URL=https://<PUBLIC_SITE_ORIGIN>`
 - `_SMTP_PASSWORD_SECRET=aisoftware-studio-smtp-password`
 - `_CONTACT_RATE_LIMIT_PER_MINUTE=30`
 - `_CONTACT_RECIPIENT_EMAIL=<placeholder>`
@@ -64,7 +64,11 @@ Required substitutions for the trigger:
 - `_MIN_INSTANCES=0`
 - `_IMAGE_TAG=$SHORT_SHA`
 
-The production trigger must deploy the backend first and the frontend second.
+The production trigger must deploy the backend first and the frontend second. `_FRONTEND_URL` is the single production frontend origin: it is passed to the frontend Docker build as `PUBLIC_SITE_ORIGIN` and to the backend as `CORS_ALLOWED_ORIGINS`.
+
+Before enabling that trigger, complete the public privacy configuration described in [`privacy-configuration.md`](privacy-configuration.md). The frontend container runs `npm run build`, which rejects explicit legal-data placeholders. PR validation uses the development build while the repository intentionally contains those placeholders.
+
+For the manual domain mapping, certificate, technical URL policy and canonical verification, follow [public-origin-deployment.md](public-origin-deployment.md).
 
 ## Temporary Test Trigger
 

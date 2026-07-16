@@ -1,32 +1,43 @@
-<form *ngIf="status !== 'success'" class="contact-form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+<form
+  *ngIf="status !== 'success'"
+  class="contact-form"
+  [formGroup]="form"
+  [attr.aria-busy]="isSubmitting"
+  (ngSubmit)="submit()"
+  novalidate
+>
   <div class="field">
-    <label for="name">Imię i nazwisko</label>
+    <label for="name">Imię i nazwisko <span aria-hidden="true">*</span></label>
     <input
       id="name"
       type="text"
       autocomplete="name"
       formControlName="name"
+      required
       [attr.aria-invalid]="isInvalid('name')"
-      [attr.aria-describedby]="isInvalid('name') ? 'name-error' : null"
+      [attr.aria-describedby]="isInvalid('name') ? 'name-hint name-error' : 'name-hint'"
     />
+    <p id="name-hint" class="field-hint">Wymagane — wystarczy imię i nazwisko osoby do kontaktu.</p>
     <p *ngIf="isInvalid('name')" id="name-error" class="field-error">{{ errorFor('name') }}</p>
   </div>
 
   <div class="field">
-    <label for="email">E-mail</label>
+    <label for="email">E-mail <span aria-hidden="true">*</span></label>
     <input
       id="email"
       type="email"
       autocomplete="email"
       formControlName="email"
+      required
       [attr.aria-invalid]="isInvalid('email')"
-      [attr.aria-describedby]="isInvalid('email') ? 'email-error' : null"
+      [attr.aria-describedby]="isInvalid('email') ? 'email-hint email-error' : 'email-hint'"
     />
+    <p id="email-hint" class="field-hint">Wymagane — użyj adresu, na który można odpisać.</p>
     <p *ngIf="isInvalid('email')" id="email-error" class="field-error">{{ errorFor('email') }}</p>
   </div>
 
   <div class="field">
-    <label for="company">Firma</label>
+    <label for="company">Firma <span class="optional-label">(opcjonalnie)</span></label>
     <input
       id="company"
       type="text"
@@ -41,10 +52,11 @@
   </div>
 
   <div class="field">
-    <label for="projectType">Czego dotyczy rozmowa?</label>
+    <label for="projectType">Czego dotyczy rozmowa? <span aria-hidden="true">*</span></label>
     <select
       id="projectType"
       formControlName="projectType"
+      required
       [attr.aria-invalid]="isInvalid('projectType')"
       [attr.aria-describedby]="
         isInvalid('projectType') ? 'project-type-hint project-type-error' : 'project-type-hint'
@@ -83,12 +95,13 @@
   </div>
 
   <div class="field field-full">
-    <label for="message">Wiadomość</label>
+    <label for="message">Wiadomość <span aria-hidden="true">*</span></label>
     <textarea
       id="message"
       rows="6"
       maxlength="4000"
       formControlName="message"
+      required
       [attr.aria-invalid]="isInvalid('message')"
       [attr.aria-describedby]="isInvalid('message') ? 'message-hint message-error' : 'message-hint'"
     ></textarea>
@@ -100,16 +113,22 @@
     </p>
   </div>
 
+  <div class="honeypot" aria-hidden="true">
+    <label for="website">Strona internetowa</label>
+    <input id="website" type="text" tabindex="-1" autocomplete="off" formControlName="website" />
+  </div>
+
   <div class="consent field-full">
     <input
       id="consent"
       type="checkbox"
       formControlName="consent"
+      required
       [attr.aria-invalid]="isInvalid('consent')"
       [attr.aria-describedby]="isInvalid('consent') ? 'consent-error' : null"
     />
     <div class="consent-copy">
-      <label for="consent">{{ content.consent }}</label>
+      <label for="consent">{{ content.consent }} <span aria-hidden="true">*</span></label>
       <a class="privacy-link" routerLink="/polityka-prywatnosci">{{ content.consentLinkLabel }}</a>
       <span aria-hidden="true">{{ content.consentAfterLink }}</span>
     </div>
@@ -118,23 +137,42 @@
     </p>
   </div>
 
-  <div
-    *ngIf="statusMessage"
-    class="form-status error"
-    role="alert"
-  >
+  <div *ngIf="statusMessage" class="form-status error" role="alert">
     {{ statusMessage }}
   </div>
 
   <button class="submit-button" type="submit" [disabled]="isSubmitting">
     {{ isSubmitting ? content.submitting : content.submit }}
   </button>
-  <p *ngIf="isSubmitting" class="visually-hidden" aria-live="polite">{{ content.submitting }}</p>
+  <p *ngIf="isSubmitting" class="form-processing" role="status">{{ content.submitting }}</p>
 </form>
 
-<section *ngIf="status === 'success'" class="contact-success" aria-live="polite">
+<section
+  *ngIf="status === 'success'"
+  class="contact-success"
+  role="status"
+  aria-live="polite"
+  tabindex="-1"
+>
   <h2>{{ content.success.title }}</h2>
   <p>{{ statusMessage }}</p>
+  <div *ngIf="submissionSummary" class="submission-summary">
+    <h3>{{ content.success.summaryTitle }}</h3>
+    <dl>
+      <div>
+        <dt>Kontakt</dt>
+        <dd>{{ submissionSummary.name }}</dd>
+      </div>
+      <div>
+        <dt>Temat rozmowy</dt>
+        <dd>{{ submissionSummary.projectType }}</dd>
+      </div>
+      <div>
+        <dt>Opis</dt>
+        <dd>{{ submissionSummary.message }}</dd>
+      </div>
+    </dl>
+  </div>
   <p>{{ content.success.nextStep }}</p>
   <p *ngIf="content.directEmail" class="success-email">
     {{ content.success.directEmailLead }}

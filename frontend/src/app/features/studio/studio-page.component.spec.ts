@@ -24,7 +24,7 @@ describe('StudioPageComponent', () => {
     expect(fixture.nativeElement.textContent).not.toMatch(/TODO|placeholder|tu będzie/i);
   });
 
-  it('shows the named owner, GitHub profile, and an honestly labelled own project', async () => {
+  it('shows the named owner and two verifiable, honestly labelled work-evidence items', async () => {
     await TestBed.configureTestingModule({
       imports: [StudioPageComponent],
       providers: [provideRouter([])],
@@ -38,6 +38,11 @@ describe('StudioPageComponent', () => {
     expect(
       element.querySelector('a[href="https://github.com/piotrbarabasz/ai-software-studio"]'),
     ).not.toBeNull();
+    expect(element.querySelectorAll('.evidence-card').length).toBe(2);
+    expect(element.querySelectorAll('.verification-list').length).toBe(2);
+    expect(element.textContent).toContain('Asystent wiedzy z obsługą pytań poza zakresem');
+    expect(element.textContent).toContain('Wielostronicowy frontend Angular');
+    expect(element.textContent).toContain('Cloud Run');
     expect(element.textContent).toContain('Projekt własny');
     expect(element.textContent).toContain('nie case study klienta');
     expect(element.querySelector('.owner-image')).toBeNull();

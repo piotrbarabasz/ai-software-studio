@@ -13,6 +13,17 @@
     </aside>
   </section>
 
+  <section class="section-shell" aria-labelledby="readiness-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">Decyzja o starcie</p>
+      <h2 id="readiness-title">{{ content.readiness.title }}</h2>
+      <p class="page-lead">{{ content.readiness.lead }}</p>
+    </div>
+    <ul class="bullet-grid readiness-grid">
+      <li *ngFor="let point of content.readiness.points">{{ point }}</li>
+    </ul>
+  </section>
+
   <section class="section-shell" aria-labelledby="outcomes-title" appRevealOnScroll>
     <div class="section-heading">
       <p class="eyebrow">Rezultaty</p>
@@ -21,25 +32,52 @@
     <div class="card-grid">
       <article *ngFor="let outcome of content.outcomes" class="info-card">
         <h3>{{ outcome.title }}</h3>
-        <p><strong>Problem:</strong> {{ outcome.problem }}</p>
-        <p><strong>Efekt:</strong> {{ outcome.result }}</p>
-        <p><strong>Zakres:</strong> {{ outcome.scope }}</p>
+        <p><strong>Punkt wyjścia:</strong> {{ outcome.startingPoint }}</p>
+        <p><strong>Docelowy sposób pracy:</strong> {{ outcome.targetWorkflow }}</p>
+        <ul class="outcome-elements">
+          <li *ngFor="let element of outcome.solutionElements">{{ element }}</li>
+        </ul>
+        <p class="outcome-dependency"><strong>Ważna zależność:</strong> {{ outcome.dependency }}</p>
       </article>
     </div>
   </section>
 
   <section
     class="section-shell section-muted"
-    aria-labelledby="technical-scope-title"
+    aria-labelledby="preparation-title"
     appRevealOnScroll
   >
     <div class="section-heading">
-      <p class="eyebrow">Zakres techniczny</p>
-      <h2 id="technical-scope-title">{{ content.technicalScopeTitle }}</h2>
+      <p class="eyebrow">Przed rozpoczęciem</p>
+      <h2 id="preparation-title">{{ content.preparation.title }}</h2>
+      <p class="page-lead">{{ content.preparation.lead }}</p>
     </div>
-    <ul class="bullet-grid">
-      <li *ngFor="let item of content.technicalScope">{{ item }}</li>
+    <ul class="bullet-grid preparation-grid">
+      <li *ngFor="let item of content.preparation.points">{{ item }}</li>
     </ul>
+  </section>
+
+  <section class="section-shell" aria-labelledby="scope-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">Zakres i wycena</p>
+      <h2 id="scope-title">{{ content.scope.title }}</h2>
+      <p class="page-lead">{{ content.scope.lead }}</p>
+    </div>
+    <div class="scope-grid">
+      <article class="scope-card scope-card-included">
+        <h3>{{ content.scope.includedTitle }}</h3>
+        <ul>
+          <li *ngFor="let item of content.scope.included">{{ item }}</li>
+        </ul>
+      </article>
+      <article class="scope-card scope-card-excluded">
+        <h3>{{ content.scope.excludedTitle }}</h3>
+        <ul>
+          <li *ngFor="let item of content.scope.excluded">{{ item }}</li>
+        </ul>
+      </article>
+    </div>
+    <p class="pricing-note">{{ content.scope.pricingNote }}</p>
   </section>
 
   <section class="section-shell section-muted" aria-labelledby="process-title" appRevealOnScroll>

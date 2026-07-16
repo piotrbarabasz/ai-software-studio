@@ -55,36 +55,57 @@
     </article>
   </section>
 
-  <section class="section-shell evidence-section" aria-labelledby="project-title" appRevealOnScroll>
+  <section
+    class="section-shell evidence-section"
+    aria-labelledby="evidence-title"
+    appRevealOnScroll
+  >
     <div class="section-heading">
-      <p class="eyebrow">{{ trust.projectSectionEyebrow }}</p>
-      <h2 id="project-title">{{ trust.ownProject.title }}</h2>
+      <p class="eyebrow">{{ trust.evidence.eyebrow }}</p>
+      <h2 id="evidence-title">{{ trust.evidence.title }}</h2>
+      <p class="page-lead">{{ trust.evidence.lead }}</p>
     </div>
-    <article class="evidence-card">
-      <div class="evidence-summary">
-        <p class="status-badge">{{ trust.ownProject.statusLabel }}</p>
-        <p><strong>Problem:</strong> {{ trust.ownProject.problem }}</p>
-        <p><strong>Rozwiązanie:</strong> {{ trust.ownProject.solution }}</p>
-        <p *ngIf="trust.ownProject.infrastructure">
-          <strong>Infrastruktura:</strong> {{ trust.ownProject.infrastructure }}
-        </p>
-      </div>
-      <div class="evidence-details">
-        <h3>Zakres</h3>
-        <ul>
-          <li *ngFor="let item of trust.ownProject.scope">{{ item }}</li>
-        </ul>
-        <p class="project-limitation">{{ trust.ownProject.limitation }}</p>
-        <a
-          class="secondary-action"
-          [href]="trust.ownProject.repository.url"
-          target="_blank"
-          rel="noopener noreferrer"
-          [attr.aria-label]="trust.ownProject.repository.accessibleName"
-          >{{ trust.ownProject.repository.label }}</a
-        >
-      </div>
-    </article>
+    <div class="evidence-list">
+      <article *ngFor="let item of trust.evidence.items" class="evidence-card">
+        <div class="evidence-summary">
+          <p class="status-badge">{{ item.typeLabel }}</p>
+          <h3>{{ item.title }}</h3>
+          <p><strong>Problem:</strong> {{ item.problem }}</p>
+          <p><strong>Co zostało zbudowane:</strong> {{ item.built }}</p>
+        </div>
+        <div class="evidence-details">
+          <h4>Technologie</h4>
+          <ul class="technology-list" aria-label="Technologie użyte w dowodzie pracy">
+            <li *ngFor="let technology of item.technologies">{{ technology }}</li>
+          </ul>
+          <h4>Jak sprawdzić</h4>
+          <ul class="verification-list">
+            <li *ngFor="let step of item.verification">{{ step }}</li>
+          </ul>
+          <p class="project-limitation">{{ item.limitation }}</p>
+          <div class="external-links">
+            <a
+              *ngIf="item.liveLink"
+              class="secondary-action"
+              [href]="item.liveLink.url"
+              target="_blank"
+              rel="noopener noreferrer"
+              [attr.aria-label]="item.liveLink.accessibleName"
+              >{{ item.liveLink.label }}</a
+            >
+            <a
+              *ngIf="item.repositoryLink"
+              class="secondary-action"
+              [href]="item.repositoryLink.url"
+              target="_blank"
+              rel="noopener noreferrer"
+              [attr.aria-label]="item.repositoryLink.accessibleName"
+              >{{ item.repositoryLink.label }}</a
+            >
+          </div>
+        </div>
+      </article>
+    </div>
   </section>
 
   <section

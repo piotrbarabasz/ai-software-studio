@@ -1,9 +1,13 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DOCUMENT } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import type { OnDestroy } from '@angular/core';
+import { inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import type { KnowledgeDemoContent, KnowledgeDemoScenario } from '../../../core/content/site-content.types';
+import type {
+  KnowledgeDemoContent,
+  KnowledgeDemoScenario,
+} from '../../../core/content/site-content.types';
 
 type DemoViewState = 'idle' | 'checking' | 'result';
 
@@ -15,6 +19,8 @@ type DemoViewState = 'idle' | 'checking' | 'result';
   styleUrl: './knowledge-demo.component.scss',
 })
 export class KnowledgeDemoComponent implements OnDestroy {
+  private readonly document = inject(DOCUMENT);
+
   @Input({ required: true }) content!: KnowledgeDemoContent;
   @Input() compact = false;
 
@@ -26,10 +32,16 @@ export class KnowledgeDemoComponent implements OnDestroy {
     this.clearRevealTimer();
     this.selectedScenario = scenario;
     this.state = 'checking';
+
+    if (this.prefersReducedMotion()) {
+      this.state = 'result';
+      return;
+    }
+
     this.revealTimer = setTimeout(() => {
       this.state = 'result';
       this.revealTimer = undefined;
-    }, 400);
+    }, 250);
   }
 
   reset(): void {
@@ -51,5 +63,11 @@ export class KnowledgeDemoComponent implements OnDestroy {
       clearTimeout(this.revealTimer);
       this.revealTimer = undefined;
     }
+  }
+
+  private prefersReducedMotion(): boolean {
+    return (
+      this.document.defaultView?.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
+    );
   }
 }

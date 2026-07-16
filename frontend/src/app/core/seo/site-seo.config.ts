@@ -1,7 +1,7 @@
 import type { StaticRoutePath } from '../content/site-content.types';
 import { environment } from '../../../environments/environment';
 
-const siteOrigin = environment.publicSiteUrl.replace(/\/$/, '');
+const siteOrigin = environment.publicSiteOrigin.replace(/\/$/, '');
 
 export const siteSeo = {
   origin: siteOrigin,

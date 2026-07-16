@@ -11,6 +11,7 @@
     type="button"
     class="menu-toggle"
     aria-controls="primary-navigation"
+    aria-haspopup="true"
     [attr.aria-expanded]="isMobileNavigationOpen"
     (click)="toggleNavigation()"
   >
@@ -49,7 +50,9 @@
     <p>
       © AISoftware Studio — samodzielnie prowadzone studio tworzące dema AI i rozwiązania cyfrowe.
     </p>
-    <p><strong>{{ trust.owner.name }}</strong> — {{ trust.owner.accountability.statement }}</p>
+    <p>
+      <strong>{{ trust.owner.name }}</strong> — {{ trust.owner.accountability.statement }}
+    </p>
   </div>
   <div class="footer-links">
     <a *ngFor="let item of navigation" [routerLink]="item.path" (click)="closeNavigation()">{{

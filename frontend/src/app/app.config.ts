@@ -1,5 +1,5 @@
 import type { ApplicationConfig } from '@angular/core';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 
 import { environment } from '../environments/environment';
@@ -15,7 +15,7 @@ export const appConfig: ApplicationConfig = {
         scrollPositionRestoration: 'enabled',
       }),
     ),
-    provideHttpClient(),
+    provideHttpClient(withFetch()),
     {
       provide: API_CONFIG,
       useValue: {
