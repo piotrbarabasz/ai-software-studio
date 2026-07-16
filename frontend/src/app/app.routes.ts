@@ -7,6 +7,7 @@ import { DemoPageComponent } from './features/demo/demo-page.component';
 import { DevelopmentPageComponent } from './features/development/development-page.component';
 import { HomeComponent } from './features/home/home.component';
 import { NotFoundPageComponent } from './features/not-found/not-found-page.component';
+import { PrivacyPageComponent } from './features/privacy/privacy-page.component';
 import { ResearchPageComponent } from './features/research/research-page.component';
 import { StudioPageComponent } from './features/studio/studio-page.component';
 
@@ -28,6 +29,8 @@ function componentFor(route: PublicRouteMetadata) {
       return ResearchPageComponent;
     case 'contact':
       return ContactPageComponent;
+    case 'privacy':
+      return PrivacyPageComponent;
   }
 }
 
@@ -51,10 +54,10 @@ export const routes: Routes = [
   {
     path: '**',
     component: NotFoundPageComponent,
-    title: 'Strona nie została znaleziona | AISoftware Studio',
+    title: siteContent.notFound.title,
     data: {
-      description: 'Nie znaleźliśmy strony pod podanym adresem.',
-      canonicalPath: '/404',
+      description: siteContent.notFound.description,
+      canonicalPath: siteContent.notFound.canonicalPath,
     },
   },
 ];

@@ -10,20 +10,13 @@
       <ul>
         <li *ngFor="let item of content.principles">{{ item }}</li>
       </ul>
-      <a
-        class="primary-action"
-        routerLink="/kontakt"
-        [queryParams]="{ projectType: 'custom_web_app' }"
-      >
-        {{ content.ctaLabel }}
-      </a>
     </aside>
   </section>
 
   <section class="section-shell" aria-labelledby="outcomes-title" appRevealOnScroll>
     <div class="section-heading">
       <p class="eyebrow">Rezultaty</p>
-      <h2 id="outcomes-title">Co może usprawnić dobrze zaprojektowane rozwiązanie</h2>
+      <h2 id="outcomes-title">{{ content.outcomesTitle }}</h2>
     </div>
     <div class="card-grid">
       <article *ngFor="let outcome of content.outcomes" class="info-card">
@@ -42,7 +35,7 @@
   >
     <div class="section-heading">
       <p class="eyebrow">Zakres techniczny</p>
-      <h2 id="technical-scope-title">Elementy potrzebne od pierwszej wersji do produkcji</h2>
+      <h2 id="technical-scope-title">{{ content.technicalScopeTitle }}</h2>
     </div>
     <ul class="bullet-grid">
       <li *ngFor="let item of content.technicalScope">{{ item }}</li>
@@ -52,7 +45,7 @@
   <section class="section-shell section-muted" aria-labelledby="process-title" appRevealOnScroll>
     <div class="section-heading">
       <p class="eyebrow">Proces</p>
-      <h2 id="process-title">Zakres, implementacja i kolejne decyzje</h2>
+      <h2 id="process-title">{{ content.processTitle }}</h2>
     </div>
     <ol class="process-list">
       <li *ngFor="let step of content.deliverySteps; let index = index">

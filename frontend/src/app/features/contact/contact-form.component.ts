@@ -5,11 +5,12 @@ import type { OnInit } from '@angular/core';
 import type { FormControl } from '@angular/forms';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 
 import { budgetRangeOptions, projectTypeOptions } from '../../core/content/contact-options.pl';
 import { siteContent } from '../../core/content/site.pl';
+import type { ContactPageContent } from '../../core/content/site-content.types';
 import { ContactApiService } from '../../services/contact-api.service';
 import type {
   BudgetRange,
@@ -30,7 +31,7 @@ type ContactFormControls = {
 @Component({
   selector: 'app-contact-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './contact-form.component.html',
   styleUrl: './contact-form.component.scss',
 })
@@ -40,7 +41,7 @@ export class ContactFormComponent implements OnInit {
   private readonly route = inject(ActivatedRoute, { optional: true });
   private readonly destroyRef = inject(DestroyRef);
 
-  readonly content = siteContent.contact;
+  readonly content: ContactPageContent = siteContent.contact;
   readonly form = this.fb.group<ContactFormControls>({
     name: this.fb.control('', [
       Validators.required,
@@ -77,6 +78,10 @@ export class ContactFormComponent implements OnInit {
   }
 
   submit(): void {
+    if (this.isSubmitting) {
+      return;
+    }
+
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       this.status = 'error';
@@ -95,15 +100,7 @@ export class ContactFormComponent implements OnInit {
         next: () => {
           this.status = 'success';
           this.statusMessage = this.content.messages.success;
-          this.form.reset({
-            name: '',
-            email: '',
-            company: '',
-            projectType: '',
-            budgetRange: '',
-            message: '',
-            consent: false,
-          });
+          this.resetForm();
         },
         error: (error: HttpErrorResponse) => {
           this.status = 'error';
@@ -134,6 +131,12 @@ export class ContactFormComponent implements OnInit {
     return 'Sprawdź wartość pola.';
   }
 
+  resetForAnotherInquiry(): void {
+    this.resetForm();
+    this.status = 'idle';
+    this.statusMessage = '';
+  }
+
   private isProjectType(value: string | null): value is ProjectType {
     return value !== null && projectTypeOptions.some((option) => option.value === value);
   }
@@ -156,15 +159,27 @@ export class ContactFormComponent implements OnInit {
   }
 
   private messageForError(error: HttpErrorResponse): string {
+    if (error.status === 0) {
+      return this.content.messages.apiUnavailable;
+    }
     if (error.status === 429) {
       return this.content.messages.rateLimit;
-    }
-    if (error.status === 503) {
-      return this.content.messages.deliveryFailed;
     }
     if (error.status === 422) {
       return this.content.messages.validation;
     }
-    return this.content.messages.genericError;
+    return this.content.messages.serverError;
+  }
+
+  private resetForm(): void {
+    this.form.reset({
+      name: '',
+      email: '',
+      company: '',
+      projectType: '',
+      budgetRange: '',
+      message: '',
+      consent: false,
+    });
   }
 }

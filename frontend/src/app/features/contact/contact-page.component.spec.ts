@@ -18,10 +18,12 @@ describe('ContactPageComponent', () => {
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelectorAll('h1').length).toBe(1);
     expect(fixture.nativeElement.querySelector('app-contact-form')).not.toBeNull();
-    expect(fixture.nativeElement.textContent).toContain('Opisz proces, który chcesz usprawnić');
+    expect(fixture.nativeElement.textContent).toContain('Opisz pracę, którą chcesz usprawnić');
     expect(fixture.nativeElement.textContent).toContain(
       'Nie musisz mieć gotowej specyfikacji technicznej',
     );
+    expect(fixture.nativeElement.querySelectorAll('.next-steps li')).toHaveSize(3);
+    expect(fixture.nativeElement.querySelector('a[href^="mailto:"]')).toBeNull();
     expect(fixture.nativeElement.textContent).not.toMatch(
       /\bintent\b|\bpayload\b|\bprojectType\b/i,
     );

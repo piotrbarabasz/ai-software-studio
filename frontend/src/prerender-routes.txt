@@ -4,4 +4,5 @@
 /studio
 /rd
 /kontakt
+/polityka-prywatnosci
 /404

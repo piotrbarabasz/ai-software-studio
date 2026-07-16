@@ -16,6 +16,8 @@ describe('DemoPageComponent', () => {
     expect(element.querySelectorAll('.ordered-grid li').length).toBe(5);
     expect(element.querySelector('.demo-scope')).not.toBeNull();
     expect(element.querySelector('.demo-example')).not.toBeNull();
+    expect(element.querySelector('.interactive-demo app-knowledge-demo')).not.toBeNull();
+    expect(element.querySelector('#interactive-demo')).not.toBeNull();
     expect(element.querySelector('.demo-compare')).not.toBeNull();
     expect(element.textContent).toContain('Demo a system produkcyjny');
     const sectionHeadings = Array.from(
@@ -25,6 +27,10 @@ describe('DemoPageComponent', () => {
     expect(new Set(sectionHeadings).size).toBe(sectionHeadings.length);
     expect(sectionHeadings.join(' ')).not.toMatch(/PoC|prototypu|MVP/i);
     expect(element.querySelector('a[href^="/kontakt?projectType=mvp_prototype"]')).not.toBeNull();
+    expect(element.textContent).toContain('Co otrzymujesz po siedmiu dniach');
+    expect(element.querySelector('a[href="#interactive-demo"]')?.textContent).toContain(
+      'Uruchom przykładowe demo',
+    );
   });
 
   it('does not render duplicate HTML ids', async () => {

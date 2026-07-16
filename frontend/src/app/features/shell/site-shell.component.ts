@@ -26,10 +26,12 @@ export class SiteShellComponent implements OnInit {
 
   @ViewChild('menuToggle') private readonly menuToggle?: ElementRef<HTMLButtonElement>;
   @ViewChild('primaryNavigation') private readonly primaryNavigation?: ElementRef<HTMLElement>;
+  @ViewChild('mainContent') private readonly mainContent?: ElementRef<HTMLElement>;
 
   isMobileNavigationOpen = false;
   isMobileViewport = false;
   readonly navigation = siteContent.navigation;
+  readonly trust = siteContent.trust;
 
   ngOnInit(): void {
     this.updateViewportState();
@@ -43,6 +45,7 @@ export class SiteShellComponent implements OnInit {
       .subscribe(() => {
         this.syncRouteMetadata();
         this.closeNavigation(false);
+        this.mainContent?.nativeElement.focus();
       });
   }
 
@@ -148,15 +151,25 @@ export class SiteShellComponent implements OnInit {
       this.document.head.appendChild(script);
     }
 
+    const owner = siteContent.trust.owner;
+
     script.textContent = JSON.stringify({
       '@context': 'https://schema.org',
       '@graph': [
+        {
+          '@id': `${siteSeo.origin}#person`,
+          '@type': 'Person',
+          name: owner.name,
+          jobTitle: owner.role,
+          sameAs: owner.links.map((link) => link.url),
+        },
         {
           '@id': `${siteSeo.origin}#organization`,
           '@type': 'Organization',
           name: siteSeo.name,
           url: siteSeo.origin,
           description: siteSeo.organizationDescription,
+          founder: { '@id': `${siteSeo.origin}#person` },
         },
         {
           '@id': `${siteSeo.origin}#professional-service`,
@@ -165,6 +178,7 @@ export class SiteShellComponent implements OnInit {
           url: siteSeo.origin,
           description: siteSeo.organizationDescription,
           parentOrganization: { '@id': `${siteSeo.origin}#organization` },
+          founder: { '@id': `${siteSeo.origin}#person` },
         },
         {
           '@id': `${siteSeo.origin}#website`,

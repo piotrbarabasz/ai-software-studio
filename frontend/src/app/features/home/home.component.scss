@@ -249,6 +249,16 @@
 .studio-card .eyebrow {
   color: var(--color-accent-soft);
 }
+.studio-card .trust-statement {
+  color: #ffffff;
+  font-weight: 700;
+}
+.github-link {
+  display: inline-block;
+  margin-top: 0.5rem;
+  color: var(--color-accent-soft);
+  font-weight: 700;
+}
 .contact-card {
   background:
     radial-gradient(circle at top right, rgba(197, 106, 20, 0.1), transparent 36%),

@@ -95,6 +95,21 @@
   text-decoration: none;
 }
 
+.secondary-action,
+.external-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--color-primary-strong);
+  font-weight: 700;
+  padding: 0.7rem 1rem;
+  text-decoration: none;
+}
+
 .section-heading {
   display: grid;
   gap: 0.5rem;
@@ -195,9 +210,112 @@
   border-radius: 18px;
 }
 
+.owner-section,
+.evidence-section {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.owner-card,
+.evidence-card {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  border: 1px solid var(--color-line);
+  border-radius: 18px;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-soft);
+  padding: clamp(1.25rem, 3vw, 2.25rem);
+}
+
+.owner-card {
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+}
+
+.owner-image {
+  width: clamp(6rem, 15vw, 10rem);
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: 14px;
+  object-fit: cover;
+}
+
+.owner-copy,
+.evidence-summary,
+.evidence-details {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.owner-copy h3,
+.evidence-details h3 {
+  margin: 0;
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+}
+
+.owner-copy p,
+.evidence-summary p,
+.evidence-details p {
+  max-width: 70ch;
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.owner-role,
+.status-badge {
+  width: fit-content;
+  margin: 0;
+  border-radius: 999px;
+  background: #eef2ec;
+  color: var(--color-primary-strong) !important;
+  font-size: 0.82rem;
+  font-weight: 800;
+  padding: 0.35rem 0.65rem;
+}
+
+.accountability {
+  color: var(--color-ink) !important;
+  font-weight: 700;
+}
+
+.technology-list,
+.evidence-details ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.technology-list li,
+.evidence-details li {
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  color: var(--color-muted);
+  padding: 0.4rem 0.65rem;
+}
+
+.external-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 0.25rem;
+}
+
+.evidence-card {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.project-limitation {
+  border-left: 3px solid var(--color-accent);
+  padding-left: 0.75rem;
+}
+
 @media (max-width: 960px) {
   .hero,
-  .card-grid {
+  .card-grid,
+  .evidence-card {
     grid-template-columns: 1fr;
   }
 
@@ -208,5 +326,9 @@
   .development-cta {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .owner-card {
+    grid-template-columns: 1fr;
   }
 }

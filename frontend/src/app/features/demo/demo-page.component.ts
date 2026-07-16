@@ -4,11 +4,12 @@ import { RouterLink } from '@angular/router';
 
 import { siteContent } from '../../core/content/site.pl';
 import { RevealOnScrollDirective } from '../../shared/reveal/reveal-on-scroll.directive';
+import { KnowledgeDemoComponent } from './knowledge-demo/knowledge-demo.component';
 
 @Component({
   selector: 'app-demo-page',
   standalone: true,
-  imports: [CommonModule, RevealOnScrollDirective, RouterLink],
+  imports: [CommonModule, RevealOnScrollDirective, RouterLink, KnowledgeDemoComponent],
   templateUrl: './demo-page.component.html',
   styleUrl: './demo-page.component.scss',
 })

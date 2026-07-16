@@ -4,13 +4,7 @@
       <p class="eyebrow">{{ content.eyebrow }}</p>
       <h1>{{ content.title }}</h1>
       <p class="page-lead">{{ content.lead }}</p>
-      <a
-        class="primary-action"
-        routerLink="/kontakt"
-        [queryParams]="{ projectType: 'mvp_prototype' }"
-      >
-        {{ content.ctaLabel }}
-      </a>
+      <a class="primary-action" href="#interactive-demo">{{ content.interactiveCtaLabel }}</a>
     </div>
   </section>
 
@@ -32,6 +26,10 @@
     <ol class="ordered-grid">
       <li *ngFor="let step of content.flowSteps">{{ step }}</li>
     </ol>
+  </section>
+
+  <section class="interactive-demo section-shell" appRevealOnScroll>
+    <app-knowledge-demo [content]="content.interactiveDemo" />
   </section>
 
   <section
@@ -80,7 +78,7 @@
     appRevealOnScroll
   >
     <div class="section-heading">
-      <p class="eyebrow">{{ content.resultTitle }}</p>
+      <p class="eyebrow">{{ content.resultEyebrow }}</p>
       <h2 id="demo-outcome-title">{{ content.resultTitle }}</h2>
       <p class="section-copy">{{ content.result }}</p>
       <p class="section-copy">{{ content.decision }}</p>
