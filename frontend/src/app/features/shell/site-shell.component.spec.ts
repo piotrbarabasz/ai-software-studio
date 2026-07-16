@@ -26,8 +26,15 @@ describe('SiteShellComponent', () => {
     expect(element.querySelectorAll('.nav-links a').length).toBe(siteContent.navigation.length);
     expect(element.querySelector('.footer-links a[href="/rd"]')).not.toBeNull();
     expect(element.querySelector('.site-footer')?.textContent).toContain('© AISoftware Studio');
+    expect(element.querySelector('.site-footer')?.textContent).toContain('Piotr Barabasz');
     expect(element.querySelector('.site-footer a[href="/kontakt"]')).not.toBeNull();
+    expect(element.querySelector('.site-footer a[href="/polityka-prywatnosci"]')).not.toBeNull();
     expect(element.querySelector('.site-footer a[href^="mailto:"]')).toBeNull();
+    const githubLink = element.querySelector(
+      '.site-footer a[href="https://github.com/piotrbarabasz"]',
+    );
+    expect(githubLink?.getAttribute('target')).toBe('_blank');
+    expect(githubLink?.getAttribute('rel')).toContain('noopener');
     expect(element.querySelectorAll('#main-content').length).toBe(1);
   });
 
@@ -103,6 +110,7 @@ describe('SiteShellComponent', () => {
       expect(document.querySelector('meta[property="og:url"]')?.getAttribute('content')).toBe(
         absoluteSiteUrl(route.path),
       );
+      expect(document.activeElement?.id).toBe('main-content');
     }
 
     expect(document.querySelector('meta[property="og:image"]')?.getAttribute('content')).toBe(
@@ -119,5 +127,7 @@ describe('SiteShellComponent', () => {
     expect(document.querySelector('#site-structured-data')?.textContent).toContain(
       'ProfessionalService',
     );
+    expect(document.querySelector('#site-structured-data')?.textContent).toContain('Person');
+    expect(document.querySelector('#site-structured-data')?.textContent).toContain('Piotr Barabasz');
   });
 });

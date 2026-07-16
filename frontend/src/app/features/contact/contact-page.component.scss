@@ -17,10 +17,42 @@ h1 {
   color: var(--color-muted);
   font-size: 1.1rem;
 }
-ul {
+.next-steps {
+  display: grid;
+  gap: 1rem;
+  padding: 0;
+  margin: 1.5rem 0;
+  list-style: none;
+}
+.next-steps li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.75rem;
+  align-items: start;
+}
+.next-steps span {
+  display: grid;
+  width: 1.75rem;
+  height: 1.75rem;
+  place-items: center;
+  border-radius: 6px;
+  background: var(--color-primary);
+  color: #ffffff;
+  font-weight: 800;
+}
+.contact-assurances {
   display: grid;
   gap: 0.75rem;
-  padding-left: 1.2rem;
+  border-left: 3px solid var(--color-accent);
+  padding-left: 1rem;
+}
+.contact-assurances p,
+.direct-email {
+  margin: 0;
+  color: var(--color-muted);
+}
+.direct-email {
+  margin-top: 1.25rem;
 }
 
 @media (max-width: 860px) {

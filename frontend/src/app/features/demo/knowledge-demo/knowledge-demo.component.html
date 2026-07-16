@@ -1,0 +1,78 @@
+<section
+  id="interactive-demo"
+  class="knowledge-demo"
+  [class.is-compact]="compact"
+  aria-labelledby="knowledge-demo-title"
+>
+  <header class="demo-intro">
+    <p class="simulation-label">{{ content.simulationLabel }}</p>
+    <h2 id="knowledge-demo-title">{{ content.heading }}</h2>
+    <p class="disclaimer">{{ content.disclaimer }}</p>
+  </header>
+
+  <div class="demo-layout">
+    <div class="scenario-picker">
+      <h3>{{ content.questionsLabel }}</h3>
+      <div class="scenario-list">
+        <button
+          *ngFor="let scenario of content.scenarios; trackBy: trackScenario"
+          type="button"
+          class="scenario-button"
+          [class.is-selected]="selectedScenario?.id === scenario.id"
+          [attr.aria-pressed]="selectedScenario?.id === scenario.id"
+          aria-controls="knowledge-demo-result"
+          (click)="selectScenario(scenario)"
+        >
+          {{ scenario.question }}
+        </button>
+      </div>
+    </div>
+
+    <div id="knowledge-demo-result" class="conversation" aria-live="polite" aria-atomic="true">
+      <ng-container *ngIf="state === 'idle'">
+        <p class="empty-state">{{ content.emptyStateLabel }}</p>
+      </ng-container>
+
+      <p *ngIf="state === 'checking'" class="checking-state" role="status">
+        {{ content.checkingLabel }}
+      </p>
+
+      <ng-container *ngIf="state === 'result' && selectedScenario">
+        <p class="question-history">
+          <strong>{{ content.questionLabel }}:</strong> {{ selectedScenario.question }}
+        </p>
+        <article class="answer-card">
+          <h3>{{ content.answerLabel }}</h3>
+          <p>{{ selectedScenario.answer }}</p>
+          <p class="confidence">
+            <strong>{{ content.confidenceLabel }}:</strong> {{ selectedScenario.confidence }}
+          </p>
+
+          <div *ngIf="selectedScenario.sources.length" class="sources">
+            <h4>{{ content.sourcesLabel }}</h4>
+            <ul>
+              <li *ngFor="let source of selectedScenario.sources">{{ source }}</li>
+            </ul>
+          </div>
+
+          <div *ngIf="selectedScenario.handoff" class="handoff">
+            <h4>{{ content.handoffLabel }}</h4>
+            <p>{{ selectedScenario.handoff }}</p>
+          </div>
+        </article>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="demo-actions">
+    <button type="button" class="reset-button" (click)="reset()" [disabled]="state === 'idle'">
+      {{ content.resetLabel }}
+    </button>
+    <a
+      class="contact-cta"
+      [routerLink]="content.contactCta.path"
+      [queryParams]="content.contactCta.queryParams"
+      >{{ content.contactCta.label }}</a
+    >
+  </div>
+</section>

@@ -1,6 +1,7 @@
 FROM node:20-bookworm-slim AS build
 
 ARG API_URL=http://127.0.0.1:8000
+ARG PUBLIC_SITE_URL=https://aisoftware-studio-web-k6wldgptjq-lm.a.run.app
 
 WORKDIR /app
 
@@ -9,7 +10,7 @@ RUN npm ci
 
 COPY . .
 
-RUN printf "export const environment = {\n  production: true,\n  apiUrl: '%s',\n} as const;\n" "$API_URL" > src/environments/environment.prod.ts \
+RUN printf "export const environment = {\n  production: true,\n  apiUrl: '%s',\n  publicSiteUrl: '%s',\n} as const;\n" "$API_URL" "$PUBLIC_SITE_URL" > src/environments/environment.prod.ts \
     && npm run build
 
 FROM nginx:1.27-alpine

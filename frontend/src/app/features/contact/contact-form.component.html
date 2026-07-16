@@ -1,4 +1,4 @@
-<form class="contact-form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+<form *ngIf="status !== 'success'" class="contact-form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
   <div class="field">
     <label for="name">Imię i nazwisko</label>
     <input
@@ -69,13 +69,14 @@
       id="budgetRange"
       formControlName="budgetRange"
       [attr.aria-invalid]="isInvalid('budgetRange')"
-      [attr.aria-describedby]="isInvalid('budgetRange') ? 'budget-range-error' : null"
+      aria-describedby="budget-range-hint"
     >
-      <option value="">Wybierz zakres</option>
+      <option value="">Nie wybieram teraz (opcjonalnie)</option>
       <option *ngFor="let option of content.budgetRanges" [value]="option.value">
         {{ option.label }}
       </option>
     </select>
+    <p id="budget-range-hint" class="field-hint">{{ content.budgetHint }}</p>
     <p *ngIf="isInvalid('budgetRange')" id="budget-range-error" class="field-error">
       {{ errorFor('budgetRange') }}
     </p>
@@ -107,7 +108,11 @@
       [attr.aria-invalid]="isInvalid('consent')"
       [attr.aria-describedby]="isInvalid('consent') ? 'consent-error' : null"
     />
-    <label for="consent">{{ content.consent }}</label>
+    <div class="consent-copy">
+      <label for="consent">{{ content.consent }}</label>
+      <a class="privacy-link" routerLink="/polityka-prywatnosci">{{ content.consentLinkLabel }}</a>
+      <span aria-hidden="true">{{ content.consentAfterLink }}</span>
+    </div>
     <p *ngIf="isInvalid('consent')" id="consent-error" class="field-error">
       {{ errorFor('consent') }}
     </p>
@@ -115,10 +120,8 @@
 
   <div
     *ngIf="statusMessage"
-    class="form-status"
-    [class.success]="status === 'success'"
-    [class.error]="status === 'error'"
-    [attr.role]="status === 'error' ? 'alert' : 'status'"
+    class="form-status error"
+    role="alert"
   >
     {{ statusMessage }}
   </div>
@@ -126,4 +129,23 @@
   <button class="submit-button" type="submit" [disabled]="isSubmitting">
     {{ isSubmitting ? content.submitting : content.submit }}
   </button>
+  <p *ngIf="isSubmitting" class="visually-hidden" aria-live="polite">{{ content.submitting }}</p>
 </form>
+
+<section *ngIf="status === 'success'" class="contact-success" aria-live="polite">
+  <h2>{{ content.success.title }}</h2>
+  <p>{{ statusMessage }}</p>
+  <p>{{ content.success.nextStep }}</p>
+  <p *ngIf="content.directEmail" class="success-email">
+    {{ content.success.directEmailLead }}
+    <a [href]="'mailto:' + content.directEmail">{{ content.directEmail }}</a>
+  </p>
+  <div class="success-actions">
+    <a class="secondary-action" [routerLink]="content.success.homeCta.path">{{
+      content.success.homeCta.label
+    }}</a>
+    <button type="button" class="submit-button" (click)="resetForAnotherInquiry()">
+      {{ content.success.anotherInquiryLabel }}
+    </button>
+  </div>
+</section>

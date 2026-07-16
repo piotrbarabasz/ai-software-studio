@@ -23,4 +23,24 @@ describe('StudioPageComponent', () => {
     );
     expect(fixture.nativeElement.textContent).not.toMatch(/TODO|placeholder|tu będzie/i);
   });
+
+  it('shows the named owner, GitHub profile, and an honestly labelled own project', async () => {
+    await TestBed.configureTestingModule({
+      imports: [StudioPageComponent],
+      providers: [provideRouter([])],
+    }).compileComponents();
+    const fixture = TestBed.createComponent(StudioPageComponent);
+    fixture.detectChanges();
+    const element: HTMLElement = fixture.nativeElement;
+
+    expect(element.textContent).toContain('Piotr Barabasz');
+    expect(element.querySelector('a[href="https://github.com/piotrbarabasz"]')).not.toBeNull();
+    expect(
+      element.querySelector('a[href="https://github.com/piotrbarabasz/ai-software-studio"]'),
+    ).not.toBeNull();
+    expect(element.textContent).toContain('Projekt własny');
+    expect(element.textContent).toContain('nie case study klienta');
+    expect(element.querySelector('.owner-image')).toBeNull();
+    expect(element.textContent).not.toMatch(/referencje|nasi klienci|opinie klient/i);
+  });
 });

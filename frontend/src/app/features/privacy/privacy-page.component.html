@@ -1,0 +1,22 @@
+<main class="privacy-page section-shell">
+  <p class="eyebrow">{{ content.eyebrow }}</p>
+  <h1>{{ content.title }}</h1>
+
+  <section class="incomplete-notice" aria-label="Status polityki prywatności">
+    <p>{{ content.incompleteNotice }}</p>
+  </section>
+
+  <section aria-labelledby="verified-title">
+    <h2 id="verified-title">{{ content.verifiedTitle }}</h2>
+    <ul>
+      <li *ngFor="let item of content.verifiedItems">{{ item }}</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="confirmation-title">
+    <h2 id="confirmation-title">{{ content.confirmationTitle }}</h2>
+    <ul>
+      <li *ngFor="let item of content.confirmationItems">{{ item }}</li>
+    </ul>
+  </section>
+</main>

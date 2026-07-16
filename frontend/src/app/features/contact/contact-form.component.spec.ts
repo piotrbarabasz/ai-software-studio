@@ -1,7 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
-import { BehaviorSubject, of } from 'rxjs';
+import { BehaviorSubject, of, throwError } from 'rxjs';
 
 import { projectTypeOptions } from '../../core/content/contact-options.pl';
 import { ContactApiService } from '../../services/contact-api.service';
@@ -183,8 +183,12 @@ describe('ContactFormComponent', () => {
 
     const text = fixture.nativeElement.textContent as string;
 
-    expect(text).toContain('Wyrażam zgodę na kontakt w sprawie tego zapytania.');
+    expect(text).toContain('Wyrażam zgodę na kontakt w sprawie tego zapytania zgodnie z');
     expect(text).not.toMatch(/e-mailem|bazie danych/i);
+    const consent = fixture.nativeElement.querySelector('#consent') as HTMLInputElement;
+    expect(consent.checked).toBeFalse();
+    expect(fixture.nativeElement.querySelector('label[for="consent"]')).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('a[href="/polityka-prywatnosci"]')).not.toBeNull();
   });
 
   it('keeps budget optional and sends the backend-compatible not-sure value when blank', () => {
@@ -214,5 +218,53 @@ describe('ContactFormComponent', () => {
 
     expect(api.submit).toHaveBeenCalledWith(jasmine.objectContaining({ budgetRange: 'not_sure' }));
     expect(projectTypeOptions).toHaveSize(7);
+  });
+
+  it('shows the success path with a reset action and a home link', () => {
+    const fixture = TestBed.createComponent(ContactFormComponent);
+    fixture.detectChanges();
+
+    fixture.componentInstance.form.setValue({
+      name: 'Jan Kowalski',
+      email: 'jan@example.com',
+      company: '',
+      projectType: 'mvp_prototype',
+      budgetRange: '',
+      message: 'Chcemy sprawdzić jeden proces przed rozpoczęciem większego wdrożenia.',
+      consent: true,
+    });
+    fixture.componentInstance.submit();
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).toContain('Wiadomość została odebrana');
+    expect(fixture.nativeElement.querySelector('a[href="/"]')).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('.contact-form')).toBeNull();
+
+    (fixture.nativeElement.querySelector('.contact-success button') as HTMLButtonElement).click();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.contact-form')).not.toBeNull();
+    expect(fixture.componentInstance.form.controls.consent.value).toBeFalse();
+  });
+
+  it('uses a user-facing message when the API is unavailable', () => {
+    const fixture = TestBed.createComponent(ContactFormComponent);
+    fixture.detectChanges();
+    const api = TestBed.inject(ContactApiService) as jasmine.SpyObj<ContactApiService>;
+    api.submit.and.returnValue(throwError(() => ({ status: 0 })));
+
+    fixture.componentInstance.form.setValue({
+      name: 'Jan Kowalski',
+      email: 'jan@example.com',
+      company: '',
+      projectType: 'mvp_prototype',
+      budgetRange: '',
+      message: 'Chcemy sprawdzić jeden proces przed rozpoczęciem większego wdrożenia.',
+      consent: true,
+    });
+    fixture.componentInstance.submit();
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).toContain('Formularz jest chwilowo niedostępny');
+    expect(fixture.nativeElement.textContent).not.toMatch(/stack|trace|HTTP/i);
   });
 });

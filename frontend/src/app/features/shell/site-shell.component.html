@@ -40,18 +40,30 @@
   </nav>
 </header>
 
-<main id="main-content" class="site-main" tabindex="-1">
+<main #mainContent id="main-content" class="site-main" tabindex="-1">
   <router-outlet />
 </main>
 
 <footer class="site-footer">
-  <p>
-    © AISoftware Studio — samodzielnie prowadzone studio tworzące dema AI i rozwiązania cyfrowe.
-  </p>
+  <div class="footer-intro">
+    <p>
+      © AISoftware Studio — samodzielnie prowadzone studio tworzące dema AI i rozwiązania cyfrowe.
+    </p>
+    <p><strong>{{ trust.owner.name }}</strong> — {{ trust.owner.accountability.statement }}</p>
+  </div>
   <div class="footer-links">
     <a *ngFor="let item of navigation" [routerLink]="item.path" (click)="closeNavigation()">{{
       item.label
     }}</a>
     <a routerLink="/rd" (click)="closeNavigation()">R&D</a>
+    <a routerLink="/polityka-prywatnosci" (click)="closeNavigation()">Polityka prywatności</a>
+    <a
+      *ngFor="let link of trust.owner.links"
+      [href]="link.url"
+      target="_blank"
+      rel="noopener noreferrer"
+      [attr.aria-label]="link.accessibleName"
+      >{{ link.label }}</a
+    >
   </div>
 </footer>

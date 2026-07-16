@@ -1,18 +1,29 @@
 import { siteContent } from './site.pl';
-import { absoluteSiteUrl } from '../seo/site-seo.config';
+import { absoluteSiteUrl, siteSeo } from '../seo/site-seo.config';
 
 describe('Site content model', () => {
-  it('defines metadata and content for the six public pages', () => {
+  it('defines metadata and content for the public pages', () => {
     const publicPaths = siteContent.routes
       .filter((route) =>
-        ['home', 'demo', 'development', 'studio', 'research', 'contact'].includes(route.kind),
+        ['home', 'demo', 'development', 'studio', 'research', 'contact', 'privacy'].includes(
+          route.kind,
+        ),
       )
       .map((route) => route.path);
 
-    expect(publicPaths).toEqual(['/', '/demo-ai', '/development', '/studio', '/rd', '/kontakt']);
+    expect(publicPaths).toEqual([
+      '/',
+      '/demo-ai',
+      '/development',
+      '/studio',
+      '/rd',
+      '/kontakt',
+      '/polityka-prywatnosci',
+    ]);
     expect(siteContent.development.path).toBe('/development');
     expect(siteContent.research.path).toBe('/rd');
     expect(siteContent.research.directions.length).toBeGreaterThan(0);
+    expect(siteContent.privacy.incompleteNotice).toContain('wymaga uzupełnienia');
   });
 
   it('keeps homepage content focused on one demo promise and a compact decision path', () => {
@@ -41,6 +52,15 @@ describe('Site content model', () => {
     expect(new Set(titles).size).toBe(siteContent.routes.length);
     expect(new Set(descriptions).size).toBe(siteContent.routes.length);
     expect(new Set(canonicalUrls).size).toBe(siteContent.routes.length);
-    expect(canonicalUrls.every((url) => url.startsWith('https://'))).toBeTrue();
+    expect(canonicalUrls.every((url) => url.startsWith(siteSeo.origin))).toBeTrue();
+  });
+
+  it('keeps owner and own-project credibility content explicit without client claims', () => {
+    expect(siteContent.trust.owner.name).toBe('Piotr Barabasz');
+    expect(siteContent.trust.owner.links[0].url).toBe('https://github.com/piotrbarabasz');
+    expect('image' in siteContent.trust.owner).toBeFalse();
+    expect(siteContent.trust.ownProject.status).toBe('own-project');
+    expect(siteContent.trust.ownProject.limitation).toContain('nie case study klienta');
+    expect(siteContent.trust.ownProject.title).not.toMatch(/klient|referencje|opinie/i);
   });
 });

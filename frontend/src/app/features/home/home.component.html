@@ -39,9 +39,6 @@
         <ul>
           <li *ngFor="let example of group.examples">{{ example }}</li>
         </ul>
-        <a [routerLink]="group.cta.path" [queryParams]="group.cta.queryParams">{{
-          group.cta.label
-        }}</a>
       </article>
     </div>
   </section>
@@ -52,24 +49,7 @@
       <h2 id="demo-project-title">{{ home.demonstration.title }}</h2>
       <p class="section-lead">{{ home.demonstration.lead }}</p>
     </div>
-    <div class="demo-project-grid">
-      <article class="demo-brief">
-        <p class="card-kicker">{{ home.demonstration.problemLabel }}</p>
-        <p>{{ home.demonstration.problem }}</p>
-        <p class="card-kicker">{{ home.demonstration.userLabel }}</p>
-        <p>{{ home.demonstration.user }}</p>
-        <p class="next-step">{{ home.demonstration.nextStep }}</p>
-      </article>
-      <article class="demo-visual" [attr.aria-label]="home.demonstration.flowLabel">
-        <p class="card-kicker">{{ home.demonstration.flowLabel }}</p>
-        <ol>
-          <li *ngFor="let step of home.demonstration.flow; let index = index">
-            <span>{{ index + 1 }}</span
-            >{{ step }}
-          </li>
-        </ol>
-      </article>
-    </div>
+    <app-knowledge-demo [content]="interactiveDemo" [compact]="true" />
     <div class="demo-boundaries">
       <article>
         <h3>{{ home.demonstration.validatesLabel }}</h3>
@@ -84,12 +64,6 @@
         </ul>
       </article>
     </div>
-    <a
-      class="secondary-action"
-      [routerLink]="home.demonstration.cta.path"
-      [queryParams]="home.demonstration.cta.queryParams"
-      >{{ home.demonstration.cta.label }}</a
-    >
   </section>
 
   <section class="outcome section-shell" aria-labelledby="outcome-title">
@@ -114,6 +88,28 @@
     </div>
   </section>
 
+  <section class="studio section-shell" aria-labelledby="studio-title">
+    <div class="studio-card">
+      <div>
+        <p class="eyebrow">{{ home.studioTeaser.eyebrow }}</p>
+        <h2 id="studio-title">{{ home.studioTeaser.title }}</h2>
+        <p>{{ home.studioTeaser.lead }}</p>
+        <p class="trust-statement">{{ home.trustTeaser.statement }}</p>
+        <a
+          class="github-link"
+          [href]="home.trustTeaser.github.url"
+          target="_blank"
+          rel="noopener noreferrer"
+          [attr.aria-label]="home.trustTeaser.github.accessibleName"
+          >{{ home.trustTeaser.github.label }}</a
+        >
+      </div>
+      <a class="secondary-action" [routerLink]="home.trustTeaser.cta.path">{{
+        home.trustTeaser.cta.label
+      }}</a>
+    </div>
+  </section>
+
   <section class="paths section-shell" aria-labelledby="paths-title">
     <div class="section-heading">
       <p class="eyebrow">{{ home.pathsHeading.eyebrow }}</p>
@@ -134,19 +130,6 @@
           >{{ path.cta.label }}</a
         >
       </article>
-    </div>
-  </section>
-
-  <section class="studio section-shell" aria-labelledby="studio-title">
-    <div class="studio-card">
-      <div>
-        <p class="eyebrow">{{ home.studioTeaser.eyebrow }}</p>
-        <h2 id="studio-title">{{ home.studioTeaser.title }}</h2>
-        <p>{{ home.studioTeaser.lead }}</p>
-      </div>
-      <a class="secondary-action" [routerLink]="home.studioTeaser.cta.path">{{
-        home.studioTeaser.cta.label
-      }}</a>
     </div>
   </section>
 

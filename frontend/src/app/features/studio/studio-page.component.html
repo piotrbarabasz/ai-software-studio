@@ -16,6 +16,77 @@
     </aside>
   </section>
 
+  <section class="section-shell owner-section" aria-labelledby="owner-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">{{ trust.ownerSectionEyebrow }}</p>
+      <h2 id="owner-title">{{ trust.ownerSectionTitle }}</h2>
+    </div>
+    <article class="owner-card">
+      <img
+        *ngIf="trust.owner.image"
+        class="owner-image"
+        [src]="trust.owner.image.src"
+        [alt]="trust.owner.image.alt"
+        width="160"
+        height="160"
+        loading="lazy"
+        decoding="async"
+      />
+      <div class="owner-copy">
+        <p class="owner-role">{{ trust.owner.role }}</p>
+        <h3>{{ trust.owner.name }}</h3>
+        <p>{{ trust.owner.bio }}</p>
+        <p class="accountability">{{ trust.owner.accountability.statement }}</p>
+        <p>{{ trust.owner.accountability.detail }}</p>
+        <ul class="technology-list" aria-label="Technologie">
+          <li *ngFor="let technology of trust.owner.technologies">{{ technology }}</li>
+        </ul>
+        <div class="external-links" *ngIf="trust.owner.links.length">
+          <a
+            *ngFor="let link of trust.owner.links"
+            [href]="link.url"
+            target="_blank"
+            rel="noopener noreferrer"
+            [attr.aria-label]="link.accessibleName"
+            >{{ link.label }}</a
+          >
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section class="section-shell evidence-section" aria-labelledby="project-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">{{ trust.projectSectionEyebrow }}</p>
+      <h2 id="project-title">{{ trust.ownProject.title }}</h2>
+    </div>
+    <article class="evidence-card">
+      <div class="evidence-summary">
+        <p class="status-badge">{{ trust.ownProject.statusLabel }}</p>
+        <p><strong>Problem:</strong> {{ trust.ownProject.problem }}</p>
+        <p><strong>Rozwiązanie:</strong> {{ trust.ownProject.solution }}</p>
+        <p *ngIf="trust.ownProject.infrastructure">
+          <strong>Infrastruktura:</strong> {{ trust.ownProject.infrastructure }}
+        </p>
+      </div>
+      <div class="evidence-details">
+        <h3>Zakres</h3>
+        <ul>
+          <li *ngFor="let item of trust.ownProject.scope">{{ item }}</li>
+        </ul>
+        <p class="project-limitation">{{ trust.ownProject.limitation }}</p>
+        <a
+          class="secondary-action"
+          [href]="trust.ownProject.repository.url"
+          target="_blank"
+          rel="noopener noreferrer"
+          [attr.aria-label]="trust.ownProject.repository.accessibleName"
+          >{{ trust.ownProject.repository.label }}</a
+        >
+      </div>
+    </article>
+  </section>
+
   <section
     class="section-shell collaboration"
     aria-labelledby="collaboration-title"

@@ -3,9 +3,20 @@
     <p class="eyebrow">{{ content.eyebrow }}</p>
     <h1>{{ content.title }}</h1>
     <p class="page-lead">{{ content.lead }}</p>
-    <ul>
-      <li *ngFor="let note of content.contextNotes">{{ note }}</li>
-    </ul>
+    <ol class="next-steps" aria-label="Co wydarzy się dalej">
+      <li *ngFor="let step of content.nextSteps; let index = index">
+        <span aria-hidden="true">{{ index + 1 }}</span>{{ step }}
+      </li>
+    </ol>
+    <div class="contact-assurances">
+      <p>{{ content.noSpecificationNeeded }}</p>
+      <p>{{ content.firstMessagePurpose }}</p>
+      <p>{{ content.noCommitment }}</p>
+    </div>
+    <p *ngIf="content.directEmail" class="direct-email">
+      <strong>{{ content.directEmailLabel }}:</strong>
+      <a [href]="'mailto:' + content.directEmail">{{ content.directEmail }}</a>
+    </p>
   </section>
-  <section aria-label="Formularz kontaktowy" appRevealOnScroll><app-contact-form /></section>
+  <section [attr.aria-label]="content.formLabel" appRevealOnScroll><app-contact-form /></section>
 </div>
