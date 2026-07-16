@@ -49,7 +49,7 @@ gcloud artifacts repositories create aisoftware-studio `
 
 ## Secret Manager
 
-Create the SMTP password secret. Do not commit the password to the repository.
+Create the SMTP password secret and a separate JSON secret with verified public legal configuration. Do not commit either deployment input to the repository.
 
 Example:
 
@@ -60,6 +60,8 @@ Write-Output 'paste-real-password-locally-only' | gcloud secrets create aisoftwa
 ```
 
 If the secret already exists, add a new version rather than replacing the value in source control.
+
+The production frontend build also reads the secret selected by `_PUBLIC_LEGAL_CONFIG_SECRET` (default: `aisoftware-studio-public-legal-config`). Its content must be the verified JSON described in [`privacy-configuration.md`](privacy-configuration.md); it is validated before Angular compiles.
 
 ## Backend Deployment
 

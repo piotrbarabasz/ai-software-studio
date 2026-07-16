@@ -8,9 +8,17 @@ substitutions:
   _MIN_INSTANCES: "0"
   _API_URL: "https://<BACKEND_CLOUD_RUN_URL>"
   _PUBLIC_SITE_ORIGIN: "https://<PUBLIC_SITE_ORIGIN>"
+  _PUBLIC_LEGAL_CONFIG_SECRET: "aisoftware-studio-public-legal-config"
 
 steps:
+  - id: frontend-public-legal-config
+    name: node:20-bookworm-slim
+    entrypoint: node
+    secretEnv: ["PUBLIC_LEGAL_CONFIG_JSON"]
+    args: ["frontend/scripts/write-build-legal-config.cjs"]
+
   - name: gcr.io/cloud-builders/docker
+    waitFor: ["frontend-public-legal-config"]
     args:
       [
         "build",
@@ -49,3 +57,8 @@ steps:
 
 images:
   - "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_IMAGE_NAME:$_IMAGE_TAG"
+
+availableSecrets:
+  secretManager:
+    - versionName: projects/$_PROJECT_ID/secrets/$_PUBLIC_LEGAL_CONFIG_SECRET/versions/latest
+      env: PUBLIC_LEGAL_CONFIG_JSON

@@ -6,6 +6,8 @@ Ten dokument opisuje techniczną konfigurację publicznej strony polityki prywat
 
 Publiczne dane są w `frontend/src/app/core/legal/public-legal.config.ts`. Są celowo oddzielone od tekstów interfejsu oraz od sekretów SMTP.
 
+W repozytorium plik zawiera wyłącznie placeholdery. Produkcyjny Cloud Build pobiera zweryfikowany obiekt JSON z Secret Managera, waliduje go i zapisuje do tego samego modułu tylko w efemerycznym workspace builda. To mechanizm dostarczenia konfiguracji do CI, a nie deklaracja, że publiczne dane są tajne; nie należy wstawiać ich do substitutions ani logów Cloud Build.
+
 Należy uzupełnić wszystkie pola oznaczone `__LEGAL_REQUIRED__`:
 
 - pełną nazwę albo imię i nazwisko administratora;
@@ -38,6 +40,14 @@ npm run build:development
 ```
 
 Strona prywatności pokaże wtedy komunikat o konfiguracji demonstracyjnej. Nie jest to wersja do publikacji.
+
+## Cloud Build
+
+Przed produkcyjnym deploymentem utwórz wersjonowany sekret Secret Manager zawierający **wyłącznie poprawny JSON** odpowiadający strukturze `PublicLegalConfiguration`. Nazwę sekretu ustaw jako `_PUBLIC_LEGAL_CONFIG_SECRET` w Cloud Build (domyślnie `aisoftware-studio-public-legal-config`).
+
+Krok `frontend-public-legal-config` przekazuje zawartość jako `PUBLIC_LEGAL_CONFIG_JSON` do skryptu przygotowującego plik builda. Następnie Docker uruchamia `write-production-legal-config.cjs`, który ponownie waliduje wszystkie pola przed `npm run build`. Brak sekretu, niepoprawny JSON, puste wartości i `__LEGAL_REQUIRED__` kończą build z listą wymagających uzupełnienia pól.
+
+Cloud Build service account potrzebuje `Secret Manager Secret Accessor` zarówno dla `SMTP_PASSWORD`, jak i dla konfiguracji prawnej.
 
 ## Kontrola przed wdrożeniem
 

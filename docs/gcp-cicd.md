@@ -51,6 +51,7 @@ Required substitutions for the trigger:
 - `_FRONTEND_IMAGE_NAME=aisoftware-studio-web`
 - `_BACKEND_URL=https://<BACKEND_CLOUD_RUN_URL>`
 - `_FRONTEND_URL=https://<PUBLIC_SITE_ORIGIN>`
+- `_PUBLIC_LEGAL_CONFIG_SECRET=aisoftware-studio-public-legal-config`
 - `_SMTP_PASSWORD_SECRET=aisoftware-studio-smtp-password`
 - `_CONTACT_RATE_LIMIT_PER_MINUTE=30`
 - `_CONTACT_RECIPIENT_EMAIL=<placeholder>`
@@ -112,6 +113,8 @@ Cloud Build service account:
 Runtime Cloud Run service account:
 
 - Secret Manager Secret Accessor on `aisoftware-studio-smtp-password`
+
+Cloud Build service account also needs Secret Manager Secret Accessor on `_PUBLIC_LEGAL_CONFIG_SECRET`, because it prepares the public legal configuration before the frontend Docker build.
 
 ## Verification
 
