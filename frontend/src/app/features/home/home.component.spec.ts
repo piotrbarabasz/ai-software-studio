@@ -26,6 +26,10 @@ describe('HomeComponent', () => {
     expect(element.querySelector('a[href="/demo-ai"]')?.textContent).toContain(
       'Zobacz, jak wygląda demo',
     );
+    expect(element.querySelectorAll('.hero-proof li').length).toBe(3);
+    expect(element.querySelector('.hero-proof')?.textContent).toContain('Jeden proces biznesowy');
+    expect(element.querySelector('.hero-proof')?.textContent).toContain('Działające demo');
+    expect(element.querySelector('.hero-proof')?.textContent).toContain('Decyzja o wdrożeniu');
   });
 
   it('keeps a compact decision path with one honest demonstration and a demo-to-production comparison', () => {
@@ -37,8 +41,12 @@ describe('HomeComponent', () => {
     expect(element.querySelectorAll('.problem-card').length).toBe(3);
     expect(element.querySelectorAll('.comparison-card').length).toBe(2);
     expect(element.textContent).toContain('Projekt demonstracyjny AISoftware Studio');
+    expect(element.querySelector('.demo-project')).not.toBeNull();
+    expect(element.textContent).toContain('Asystent wiedzy dla powtarzalnych pytań');
     expect(element.textContent).toContain('Wdrożenie produkcyjne');
     expect(element.querySelectorAll('details').length).toBe(0);
     expect(element.textContent).not.toMatch(/TODO|Lorem ipsum|przykładowy klient/i);
+    expect(element.textContent).not.toMatch(/case study klienta|wdrożenie klienta/i);
+    expect(element.querySelector('a[href="/kontakt?projectType=custom_web_app"]')).not.toBeNull();
   });
 });

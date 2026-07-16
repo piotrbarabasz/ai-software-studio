@@ -4,7 +4,7 @@ import { provideRouter } from '@angular/router';
 import { DemoPageComponent } from './demo-page.component';
 
 describe('DemoPageComponent', () => {
-  it('renders the demo scope, boundaries and contact CTA from the shared content model', async () => {
+  it('renders a compact decision path and a contact CTA from the shared content model', async () => {
     await TestBed.configureTestingModule({
       imports: [DemoPageComponent],
       providers: [provideRouter([])],
@@ -13,8 +13,17 @@ describe('DemoPageComponent', () => {
     fixture.detectChanges();
     const element: HTMLElement = fixture.nativeElement;
     expect(element.querySelectorAll('h1').length).toBe(1);
-    expect(element.querySelectorAll('.ordered-grid li').length).toBeGreaterThanOrEqual(5);
-    expect(element.textContent).toContain('Wykluczenia');
+    expect(element.querySelectorAll('.ordered-grid li').length).toBe(5);
+    expect(element.querySelector('.demo-scope')).not.toBeNull();
+    expect(element.querySelector('.demo-example')).not.toBeNull();
+    expect(element.querySelector('.demo-compare')).not.toBeNull();
+    expect(element.textContent).toContain('Demo a system produkcyjny');
+    const sectionHeadings = Array.from(
+      element.querySelectorAll('h2') as NodeListOf<HTMLHeadingElement>,
+      (heading) => heading.textContent?.trim() ?? '',
+    );
+    expect(new Set(sectionHeadings).size).toBe(sectionHeadings.length);
+    expect(sectionHeadings.join(' ')).not.toMatch(/PoC|prototypu|MVP/i);
     expect(element.querySelector('a[href^="/kontakt?projectType=mvp_prototype"]')).not.toBeNull();
   });
 

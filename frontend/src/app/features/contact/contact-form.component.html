@@ -1,8 +1,4 @@
 <form class="contact-form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
-  <div *ngIf="interest" class="contact-context" role="status">
-    <span>Pytasz o: {{ interestLabel }}.</span>
-    <button type="button" (click)="clearInterest()">Usuń kontekst</button>
-  </div>
   <div class="field">
     <label for="name">Imię i nazwisko</label>
     <input
@@ -45,7 +41,7 @@
   </div>
 
   <div class="field">
-    <label for="projectType">Typ projektu</label>
+    <label for="projectType">Czego dotyczy rozmowa?</label>
     <select
       id="projectType"
       formControlName="projectType"
@@ -54,13 +50,13 @@
         isInvalid('projectType') ? 'project-type-hint project-type-error' : 'project-type-hint'
       "
     >
-      <option value="">Wybierz typ projektu</option>
+      <option value="">Wybierz najbliższą opcję</option>
       <option *ngFor="let option of content.projectTypes" [value]="option.value">
         {{ option.label }}
       </option>
     </select>
     <p id="project-type-hint" class="field-hint">
-      Wybór typu projektu zachowuje kontekst formularza, ale nie zmienia wysyłanego payloadu.
+      Wybierz opcję najbardziej zbliżoną do Twojego pomysłu.
     </p>
     <p *ngIf="isInvalid('projectType')" id="project-type-error" class="field-error">
       {{ errorFor('projectType') }}
@@ -68,7 +64,7 @@
   </div>
 
   <div class="field">
-    <label for="budgetRange">Budżet</label>
+    <label for="budgetRange">Budżet orientacyjny — opcjonalnie</label>
     <select
       id="budgetRange"
       formControlName="budgetRange"
@@ -93,8 +89,11 @@
       maxlength="4000"
       formControlName="message"
       [attr.aria-invalid]="isInvalid('message')"
-      [attr.aria-describedby]="isInvalid('message') ? 'message-error' : null"
+      [attr.aria-describedby]="isInvalid('message') ? 'message-hint message-error' : 'message-hint'"
     ></textarea>
+    <p id="message-hint" class="field-hint">
+      Opisz krótko obecny proces, największy problem i efekt, który chcesz osiągnąć.
+    </p>
     <p *ngIf="isInvalid('message')" id="message-error" class="field-error">
       {{ errorFor('message') }}
     </p>

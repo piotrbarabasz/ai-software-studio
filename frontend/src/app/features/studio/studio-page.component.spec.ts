@@ -13,7 +13,14 @@ describe('StudioPageComponent', () => {
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelectorAll('h1').length).toBe(1);
     expect(
-      fixture.nativeElement.querySelector('a[href="/kontakt?interest=general"]'),
+      fixture.nativeElement.querySelector('a[href="/kontakt?projectType=other"]'),
     ).not.toBeNull();
+    expect(fixture.nativeElement.textContent).toContain(
+      'Z kim i w jaki sposób będziesz współpracować?',
+    );
+    expect(fixture.nativeElement.textContent).toContain(
+      'AISoftware Studio jest prowadzone samodzielnie',
+    );
+    expect(fixture.nativeElement.textContent).not.toMatch(/TODO|placeholder|tu będzie/i);
   });
 });

@@ -1,14 +1,10 @@
 import { budgetRangeOptions, projectTypeOptions } from './contact-options.pl';
 import type {
-  CollaborationTrack,
   ProductCatalogEntry,
   ProductId,
   PublicRouteMetadata,
-  ProjectJourneyStep,
   ResearchDirection,
-  ServiceModel,
   SiteContent,
-  SolutionCategory,
 } from './site-content.types';
 import { productRoutePaths } from './site-content.types';
 
@@ -17,73 +13,6 @@ function createProductCatalogEntry<TProductId extends ProductId>(
 ): ProductCatalogEntry<TProductId> {
   return entry;
 }
-
-export const serviceModels = [
-  {
-    id: 'validate',
-    label: 'Zweryfikuj pomysł',
-    role: 'collaboration-track',
-    summary:
-      'Krótki format demo lub PoC, który pokazuje sens scenariusza przed większą inwestycją.',
-    claimBoundary: 'Nie obiecuje produkcyjnego MVP ani pełnego wdrożenia w siedem dni.',
-  },
-  {
-    id: 'build',
-    label: 'Zbuduj produkt',
-    role: 'collaboration-track',
-    summary:
-      'Indywidualnie planowana współpraca nad aplikacją, backendem, integracjami i utrzymaniem.',
-  },
-  {
-    id: 'research',
-    label: 'R&D',
-    role: 'credibility-layer',
-    summary:
-      'Eksperymenty techniczne, które wzmacniają jakość i szybkość realizacji projektów klienta.',
-    claimBoundary: 'Nie jest to gwarancja wyniku klienta ani zamiennik gotowego projektu.',
-  },
-] satisfies readonly ServiceModel[];
-
-export const collaborationTracks = [
-  {
-    id: 'validate',
-    title: 'Zweryfikuj pomysł',
-    customerValue: 'Szybko sprawdzasz sens scenariusza zanim zainwestujesz w produkcyjny build.',
-    useCases: ['presales', 'demo dla zarządu', 'materiał dla inwestora'],
-    scope: [
-      'jeden ograniczony scenariusz',
-      'czytelny flow i granice zakresu',
-      'demo lub PoC bez obietnicy produkcji',
-    ],
-    result: 'Otrzymujesz klikalny demo-flow i jasną decyzję o dalszym kroku.',
-    limitations: [
-      'maksymalnie siedem dni dla jednego scenariusza',
-      'bez produkcyjnego backendu i pełnych integracji',
-    ],
-    timing: 'Maksymalnie siedem dni przy ograniczonym zakresie.',
-    ctaLabel: 'Zacznij od demo',
-    targetRoute: '/demo-ai',
-    contactIntent: 'mvp_prototype',
-  },
-  {
-    id: 'build',
-    title: 'Zbuduj produkt',
-    customerValue:
-      'Planujesz pełne wdrożenie i chcesz przejść od walidacji do produkcyjnej aplikacji.',
-    useCases: ['nowy produkt AI', 'automatyzacja procesów', 'aplikacja z backendem'],
-    scope: [
-      'analiza i projekt UX',
-      'frontend, backend i API',
-      'AI, integracje, testy i monitoring',
-    ],
-    result: 'Otrzymujesz zakres współpracy i plan budowy rozwiązania dopasowany do projektu.',
-    limitations: ['zakres planowany indywidualnie', 'bez obietnicy siedmiodniowego delivery'],
-    timing: 'Zakres planowany indywidualnie po doprecyzowaniu potrzeb.',
-    ctaLabel: 'Omów rozwój aplikacji',
-    targetRoute: '/kontakt',
-    contactIntent: 'custom_web_app',
-  },
-] satisfies readonly CollaborationTrack[];
 
 export const researchDirections = [
   {
@@ -123,65 +52,6 @@ export const researchDirections = [
     claimBoundary: 'Nie zastępuje pełnej weryfikacji biznesowej ani testów produkcyjnych.',
   },
 ] satisfies readonly ResearchDirection[];
-
-export const solutionCategories = [
-  {
-    id: 'customer-sales',
-    title: 'Obsługa klienta i sprzedaż',
-    lead: 'Asystenci wiedzy, chatboty i voice agents pomagają szybciej odpowiadać i lepiej domykać rozmowy.',
-    examples: ['asystent wiedzy / RAG', 'chatbot leadowy', 'voice agent do kwalifikacji'],
-    productIds: ['rag_chatbot_demo', 'voice_agent_demo', 'website_seo'],
-    homepageSummary: 'Asystenci, lead generation i szybka walidacja komunikatu.',
-  },
-  {
-    id: 'operations-automation',
-    title: 'Automatyzacja operacji',
-    lead: 'AI może odciążyć zespół z powtarzalnych zadań i połączyć komunikację z procesami.',
-    examples: ['e-mail automation', 'WhatsApp statusy', 'agent orchestration'],
-    productIds: ['email_automation', 'whatsapp_agent_management'],
-    homepageSummary: 'Procesy, komunikatory i automatyzacje back-office.',
-  },
-  {
-    id: 'applications-control',
-    title: 'Aplikacje i kontrola',
-    lead: 'Dedykowane aplikacje webowe i dashboardy porządkują przepływ pracy oraz nadzór.',
-    examples: ['panel agentów', 'dashboard operacyjny', 'back-office app'],
-    productIds: ['agent_management_panel'],
-    homepageSummary: 'Panele, backendy i wewnętrzne narzędzia kontroli.',
-  },
-] satisfies readonly SolutionCategory[];
-
-export const projectJourneySteps = [
-  {
-    id: 'idea',
-    title: 'Pomysł',
-    description: 'Wybieramy jeden proces, jedną hipotezę i jeden oczekiwany efekt biznesowy.',
-  },
-  {
-    id: 'demo-poc',
-    title: 'Demo / PoC',
-    description: 'Sprawdzamy flow, wartość i granice zakresu bez udawania pełnej produkcji.',
-    clientDecision: 'Czy warto przejść dalej?',
-  },
-  {
-    id: 'mvp',
-    title: 'MVP',
-    description: 'Po walidacji projektujemy pierwszy indywidualny etap rozwoju produktu.',
-    clientDecision: 'Co ma wejść do pierwszej wersji?',
-  },
-  {
-    id: 'production',
-    title: 'Produkcja',
-    description: 'Dostarczamy aplikację, backend, integracje, testy, monitoring i bezpieczeństwo.',
-    clientDecision: 'Czy zakres jest gotowy do wdrożenia?',
-  },
-  {
-    id: 'further-development',
-    title: 'Dalszy rozwój i R&D',
-    description: 'Eksperymenty z agentami, ewaluacją i automatyzacją wracają do projektów klienta.',
-    researchInfluence: 'R&D poprawia jakość i koszt kolejnych iteracji.',
-  },
-] satisfies readonly ProjectJourneyStep[];
 
 const products = [
   createProductCatalogEntry({
@@ -484,9 +354,8 @@ const routeMetadata = [
   {
     path: '/demo-ai',
     label: 'Demo w 7 dni',
-    title: 'Demo, PoC i walidacja pomysłu',
-    description:
-      'Ograniczone demo lub PoC dla jednego scenariusza z jasnymi granicami i możliwością przejścia do Build.',
+    title: 'Demo AI i sprawdzenie pomysłu',
+    description: 'Demo jednego scenariusza z jasnym zakresem i decyzją o kolejnym kroku.',
     kind: 'demo',
   },
   {
@@ -501,7 +370,7 @@ const routeMetadata = [
     label: 'Studio',
     title: 'Studio, proces i R&D',
     description:
-      'Jak wygląda współpraca, jakie są zasady techniczne i jak R&D wspiera projekty bez fikcyjnych dowodów.',
+      'Jak wygląda współpraca, jakie są zasady techniczne i jak R&D wspiera projekty przez transparentny zakres pracy.',
     kind: 'studio',
   },
   {
@@ -551,7 +420,7 @@ export const siteContent = {
       secondaryCta: { label: 'Zobacz, jak wygląda demo', path: '/demo-ai' },
       proof: {
         label: 'Jedna decyzja, widoczny przepływ',
-        steps: ['Problem', 'Demo', 'Decyzja'],
+        steps: ['Jeden proces biznesowy', 'Działające demo', 'Decyzja o wdrożeniu'],
       },
     },
     problemsHeading: {
@@ -563,14 +432,14 @@ export const siteContent = {
         title: 'Obsługa klienta i sprzedaż',
         effect: 'Skraca drogę od pytania klienta do właściwej odpowiedzi lub kolejnego działania.',
         examples: ['asystent wiedzy / RAG', 'kwalifikacja zapytań', 'scenariusz voice agenta'],
-        cta: { label: 'Omów demo dla obsługi klienta', path: '/demo-ai', queryParams: {} },
+        cta: { label: 'Zobacz, jak wygląda demo', path: '/demo-ai', queryParams: {} },
       },
       {
         title: 'Automatyzacja operacji',
         effect:
           'Porządkuje powtarzalne kroki, statusy i przekazywanie spraw między ludźmi oraz systemami.',
         examples: ['klasyfikacja e-mail', 'statusy w WhatsApp', 'routing zadań'],
-        cta: { label: 'Omów automatyzację procesu', path: '/demo-ai', queryParams: {} },
+        cta: { label: 'Omów proces do sprawdzenia', path: '/demo-ai', queryParams: {} },
       },
       {
         title: 'Aplikacje i kontrola procesów',
@@ -578,7 +447,7 @@ export const siteContent = {
           'Daje zespołowi jedno miejsce do pracy z decyzjami, danymi i bieżącym stanem procesu.',
         examples: ['aplikacja webowa', 'dashboard operacyjny', 'panel wewnętrzny'],
         cta: {
-          label: 'Zobacz możliwości developmentu',
+          label: 'Zobacz zakres developmentu',
           path: '/development',
           queryParams: {},
         },
@@ -608,7 +477,7 @@ export const siteContent = {
       boundaries: [
         'produkcyjnego indeksu wiedzy',
         'integracji z systemami firmy',
-        'monitoringu i zabezpieczeń runtime',
+        'monitoringu i zabezpieczeń środowiska działania',
       ],
       nextStep:
         'Po pozytywnej walidacji można zaplanować produkcyjny RAG, integracje i sposób utrzymania.',
@@ -673,36 +542,8 @@ export const siteContent = {
         cta: {
           label: 'Omów wdrożenie',
           path: '/kontakt',
-          queryParams: { interest: 'development' },
+          queryParams: { projectType: 'custom_web_app' },
         },
-      },
-    ],
-    capabilities: [
-      {
-        title: 'Chatbot i wyszukiwanie wiedzy',
-        lead: 'Pomóż klientom i zespołowi szybciej docierać do potrzebnych odpowiedzi.',
-      },
-      {
-        title: 'Automatyzacja procesu',
-        lead: 'Uporządkuj powtarzalne kroki, statusy i przekazywanie spraw między ludźmi i systemami.',
-      },
-      {
-        title: 'Aplikacja webowa lub panel',
-        lead: 'Zbuduj czytelne narzędzie do obsługi procesu, decyzji i codziennej pracy zespołu.',
-      },
-    ],
-    process: [
-      {
-        title: 'Ustalamy cel',
-        lead: 'Wybieramy problem, użytkownika i rezultat, który ma znaczenie.',
-      },
-      {
-        title: 'Projektujemy zakres',
-        lead: 'Porządkujemy priorytety, ryzyka i najkrótszą drogę do wartości.',
-      },
-      {
-        title: 'Dostarczamy etapami',
-        lead: 'Sprawdzasz kolejne efekty i decydujesz o dalszym rozwoju.',
       },
     ],
     studioTeaser: {
@@ -723,21 +564,16 @@ export const siteContent = {
   },
   demo: {
     path: '/demo-ai',
-    eyebrow: 'Demo, PoC i walidacja',
+    eyebrow: 'Demo i sprawdzenie wykonalności',
     title: 'Zobacz jeden proces swojej firmy w działającym demo',
-    lead: 'Demo w 7 dni służy do walidacji jednego scenariusza. Pokazuje wartość, przepływ i granice zakresu przed decyzją o MVP lub produkcji.',
+    lead: 'W siedem dni sprawdzamy jeden scenariusz, jego wartość i granice zakresu przed decyzją o dalszym wdrożeniu.',
     audienceTitle: 'Dla zespołów, które chcą sprawdzić jeden proces przed większą inwestycją',
+    audienceProblems: [
+      'powtarzalne pytania klientów lub zespołu',
+      'ręczne przekazywanie spraw między ludźmi i narzędziami',
+      'brak jednego widoku statusów, danych lub decyzji',
+    ],
     processTitle: 'Jak wygląda siedem dni pracy nad demo',
-    includes: [
-      'klikalny przepływ lub czytelny prototyp',
-      'opis założeń, ograniczeń i ryzyk',
-      'wstępna decyzja o kolejnym kroku',
-    ],
-    outOfScope: [
-      'brak produkcyjnych integracji',
-      'brak długiego backend builda',
-      'brak obietnicy pełnego wdrożenia w 7 dni',
-    ],
     flowSteps: [
       'wybór jednego problemu',
       'ustalenie danych i scenariusza',
@@ -745,37 +581,40 @@ export const siteContent = {
       'budowa demo',
       'prezentacja i decyzja o dalszym kroku',
     ],
-    demoExplanationTitle: 'Czym jest demo?',
-    demoExplanation:
-      'Demo to klikalny, ograniczony scenariusz, który pokazuje przepływ i wartość biznesową bez udawania gotowej produkcji.',
-    pocExplanationTitle: 'Czym jest PoC?',
-    pocExplanation:
-      'PoC sprawdza, czy hipoteza ma sens technicznie lub biznesowo w kontrolowanym zakresie i przy minimalnym ryzyku.',
-    sevenDayTitle: 'Co może powstać w 7 dni',
-    sevenDayPoints: [
-      'jeden scenariusz o jasno zamkniętym zakresie',
-      'klikalny przepływ lub prototyp prezentacyjny',
-      'krótka decyzja o dalszym kroku',
-    ],
-    exclusionsTitle: 'Wykluczenia',
-    exclusions: [
-      'produkcyjny backend i pełne integracje',
-      'skomplikowany system z wieloma kanałami',
-      'obietnica kompletnego MVP w 7 dni',
-    ],
-    clientInputTitle: 'Materiały od klienta',
-    clientInputs: [
-      'opis procesu lub problemu do zweryfikowania',
-      'przykładowe treści, dokumenty lub pytania',
-      'osoba decyzyjna i kryterium sukcesu',
-    ],
+    example: {
+      title: 'Przykład: asystent wiedzy dla powtarzalnych pytań',
+      lead: 'Demo może pokazać, jak pytanie o ofertę lub procedurę trafia do materiałów firmy, a następnie do właściwej odpowiedzi.',
+      points: [
+        'pytanie użytkownika o ofertę lub procedurę',
+        'odpowiedź ze wskazaniem materiału źródłowego',
+        'przekazanie rozmowy pracownikowi przy sprawie poza zakresem',
+      ],
+    },
+    comparison: {
+      title: 'Demo a system produkcyjny',
+      demo: {
+        title: 'Demo w siedem dni',
+        points: [
+          'jeden ograniczony scenariusz',
+          'klikalny lub działający przepływ',
+          'materiał do decyzji o kolejnym kroku',
+        ],
+      },
+      production: {
+        title: 'System produkcyjny',
+        points: [
+          'pełne integracje i dane',
+          'testy, bezpieczeństwo i monitoring',
+          'zakres rozwijany zgodnie z potrzebami zespołu',
+        ],
+      },
+    },
     resultTitle: 'Wynik sprintu',
     result: 'Powstaje czytelne demo z zakresem, ryzykami i rekomendacją dalszego kroku.',
-    decisionTitle: 'Decyzja o kolejnym etapie',
     decision:
-      'Po przeglądzie decydujemy, czy warto wejść w MVP, pełne wdrożenie, czy wrócić do doprecyzowania zakresu.',
-    transitionTitle: 'Przejście do pełnego rozwoju',
-    transition: 'Demo może przejść w Build bez kupowania kolejnego prezentacyjnego etapu.',
+      'Po przeglądzie decydujemy, czy przygotować pierwszą wersję systemu, pełne wdrożenie, czy wrócić do doprecyzowania zakresu.',
+    transition:
+      'Po decyzji można przygotować analizę zakresu albo rozpocząć development rozwiązania.',
     ctaLabel: 'Omów proces do sprawdzenia',
   },
   studio: {
@@ -795,13 +634,22 @@ export const siteContent = {
       'AI, RAG i automatyzacje',
       'Angular, FastAPI i GCP',
     ],
+    collaboration: {
+      title: 'Z kim i w jaki sposób będziesz współpracować?',
+      lead: 'AISoftware Studio jest prowadzone samodzielnie, dlatego kontakt, analiza i realizacja pozostają po jednej stronie odpowiedzialności.',
+      points: [
+        'bezpośredni kontakt od pierwszej rozmowy do kolejnych decyzji',
+        'jeden odpowiedzialny partner techniczny dla zakresu i realizacji',
+        'weryfikacja założeń oraz widoczne etapy pracy zamiast niejasnego procesu',
+      ],
+    },
     engagementModel: [
       'jeden scenariusz, jeden efekt',
       'krótkie iteracje i decyzje po każdym etapie',
       'wycena po zamknięciu zakresu',
       'R&D wraca do klienta jako praktyczne usprawnienia kolejnych iteracji',
     ],
-    ctaLabel: 'Opisz proces do zweryfikowania',
+    ctaLabel: 'Wyślij opis projektu',
   },
   development: {
     path: '/development',
@@ -813,37 +661,24 @@ export const siteContent = {
       'frontend, backend i API projektowane jako jedna ścieżka wdrożenia',
       'integracje i automatyzacje rozwijane w widocznych iteracjach',
     ],
-    services: [
+    outcomes: [
       {
-        title: 'Aplikacje webowe',
-        description: 'Narzędzia dla klientów i zespołów, od MVP po rozwój istniejącego produktu.',
+        title: 'Panel operacyjny',
+        problem: 'Dane, zadania i decyzje są rozproszone między narzędziami.',
+        result: 'Zespół pracuje na jednym widoku procesu i aktualnego stanu spraw.',
+        scope: 'Może obejmować aplikację webową, role użytkowników, dane i integracje.',
       },
       {
-        title: 'Backend i API',
-        description:
-          'Logika biznesowa, kontrakty API i zaplecze potrzebne do bezpiecznego rozwoju.',
+        title: 'Asystent wiedzy',
+        problem: 'Odpowiedzi są rozproszone w dokumentach, wiadomościach i doświadczeniu zespołu.',
+        result: 'Użytkownik szybciej dociera do odpowiedzi na podstawie materiałów firmy.',
+        scope: 'Może obejmować AI, wyszukiwanie wiedzy RAG oraz przekazanie sprawy pracownikowi.',
       },
       {
-        title: 'Agenci AI i RAG',
-        description:
-          'Asystenci, wyszukiwanie wiedzy i ewaluacja odpowiedzi po potwierdzeniu zakresu.',
-      },
-      {
-        title: 'Automatyzacja e-mail',
-        description: 'Klasyfikacja, szkice odpowiedzi i kontrolowany routing korespondencji.',
-      },
-      {
-        title: 'WhatsApp i voice agenci',
-        description:
-          'Kanały komunikacji ze scenariuszami, przekazaniem sprawy i kontrolą człowieka.',
-      },
-      {
-        title: 'Panele i dashboardy',
-        description: 'Widoki statusów, decyzji i danych potrzebnych w codziennej pracy.',
-      },
-      {
-        title: 'Integracje i monitoring',
-        description: 'Połączenia z obecnymi systemami oraz obserwowalność działania po wdrożeniu.',
+        title: 'Automatyzacja procesu',
+        problem: 'Formularze, wiadomości i systemy wymagają ręcznego przekazywania informacji.',
+        result: 'Powtarzalne kroki wykonują się w uporządkowanej kolejności z kontrolą zespołu.',
+        scope: 'Może obejmować formularze, API, integracje, komunikację i automatyzacje.',
       },
     ],
     technicalScope: [
@@ -873,6 +708,15 @@ export const siteContent = {
       },
     ],
     ctaLabel: 'Omów wdrożenie',
+    closingCta: {
+      title: 'Masz proces, który wymaga aplikacji albo integracji?',
+      lead: 'Opisz obecny sposób pracy i oczekiwany rezultat. Na pierwszej rozmowie ustalimy, czy lepszym krokiem będzie analiza, demo czy rozpoczęcie developmentu.',
+      primaryCta: {
+        label: 'Omów wdrożenie',
+        path: '/kontakt',
+        queryParams: { projectType: 'custom_web_app' },
+      },
+    },
   },
   research: {
     path: '/rd',
@@ -889,17 +733,14 @@ export const siteContent = {
   contact: {
     path: '/kontakt',
     eyebrow: 'Kontakt',
-    title: 'Wybierz intent i opisz proces, który chcesz zweryfikować',
-    lead: 'Wybierz typ projektu, opisz krótko problem i efekt, a formularz zachowa ten sam payload bez dodatkowych pól.',
+    title: 'Opisz proces, który chcesz usprawnić',
+    lead: 'Napisz krótko, jak dziś wygląda praca i jaki efekt chcesz osiągnąć. Na tej podstawie zaproponujemy najlepszy kolejny krok.',
     contextNotes: [
-      'wybrany intent trafia do tego samego pola projectType',
-      'formularz służy do rozpoczęcia rozmowy, nie do zbierania danych produkcyjnych',
-      'najlepiej sprawdza się jeden proces lub jeden scenariusz do walidacji',
-      'odpowiedź ma wskazać kolejny krok, a nie od razu pełne wdrożenie',
+      'Nie musisz mieć gotowej specyfikacji technicznej. Wystarczy opis problemu, procesu lub pomysłu.',
+      'Najlepiej zacząć od jednego procesu lub scenariusza, który chcesz sprawdzić.',
     ],
-    consent:
-      'Wyrażam zgodę na przesłanie danych z formularza e-mailem do właściciela AISoftware Studio w celu odpowiedzi na zapytanie. Zgłoszenie nie jest zapisywane w bazie danych.',
-    submit: 'Wyślij zapytanie',
+    consent: 'Wyrażam zgodę na kontakt w sprawie tego zapytania.',
+    submit: 'Wyślij opis projektu',
     submitting: 'Wysyłanie...',
     messages: {
       success: 'Dziękuję. Wiadomość została przyjęta i trafi do właściciela AISoftware Studio.',

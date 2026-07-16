@@ -10,10 +10,25 @@
       <ul>
         <li *ngFor="let item of content.principles">{{ item }}</li>
       </ul>
-      <a class="primary-action" routerLink="/kontakt" [queryParams]="{ interest: 'general' }">
+      <a class="primary-action" routerLink="/kontakt" [queryParams]="{ projectType: 'other' }">
         {{ content.ctaLabel }}
       </a>
     </aside>
+  </section>
+
+  <section
+    class="section-shell collaboration"
+    aria-labelledby="collaboration-title"
+    appRevealOnScroll
+  >
+    <div class="section-heading">
+      <p class="eyebrow">Współpraca</p>
+      <h2 id="collaboration-title">{{ content.collaboration.title }}</h2>
+      <p class="page-lead">{{ content.collaboration.lead }}</p>
+    </div>
+    <ul class="bullet-grid">
+      <li *ngFor="let point of content.collaboration.points">{{ point }}</li>
+    </ul>
   </section>
 
   <section class="section-shell" aria-labelledby="capabilities-title" appRevealOnScroll>

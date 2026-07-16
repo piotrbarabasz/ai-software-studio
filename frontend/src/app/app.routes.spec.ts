@@ -37,6 +37,9 @@ describe('public routes', () => {
       await fixture.whenStable();
       expect(fixture.nativeElement.querySelector(selector)).not.toBeNull();
       expect(fixture.nativeElement.querySelectorAll('h1').length).toBe(1);
+      expect(fixture.nativeElement.textContent).not.toMatch(
+        /\bpayload\b|\bintent\b|\bhandoff\b|\bruntime\b/i,
+      );
     }
   });
 
@@ -51,6 +54,20 @@ describe('public routes', () => {
     expect(router.url).toBe('/missing');
     expect(fixture.nativeElement.querySelector('app-not-found-page')).not.toBeNull();
     expect(fixture.nativeElement.textContent).toContain('Nie znaleźliśmy tej strony');
+  });
+
+  it('renders business language on the contact page', async () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const router = TestBed.inject(Router);
+
+    await fixture.ngZone!.run(() => router.navigateByUrl('/kontakt'));
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const text = fixture.nativeElement.textContent as string;
+    expect(text).toContain('Opisz proces, który chcesz usprawnić');
+    expect(text).toContain('Nie musisz mieć gotowej specyfikacji technicznej');
+    expect(text).not.toMatch(/\bintent\b|\bpayload\b|\bprojectType\b/i);
   });
 
   it('redirects retired public routes explicitly', async () => {

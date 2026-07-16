@@ -25,6 +25,9 @@ describe('SiteShellComponent', () => {
     expect(element.querySelector('.skip-link')).not.toBeNull();
     expect(element.querySelectorAll('.nav-links a').length).toBe(siteContent.navigation.length);
     expect(element.querySelector('.footer-links a[href="/rd"]')).not.toBeNull();
+    expect(element.querySelector('.site-footer')?.textContent).toContain('© AISoftware Studio');
+    expect(element.querySelector('.site-footer a[href="/kontakt"]')).not.toBeNull();
+    expect(element.querySelector('.site-footer a[href^="mailto:"]')).toBeNull();
     expect(element.querySelectorAll('#main-content').length).toBe(1);
   });
 
