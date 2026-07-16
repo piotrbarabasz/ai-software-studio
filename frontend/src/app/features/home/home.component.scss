@@ -3,8 +3,8 @@
 }
 .home-page {
   display: grid;
-  gap: clamp(2.5rem, 6vw, 5rem);
-  padding: clamp(1rem, 2vw, 1.5rem) 0 clamp(3rem, 6vw, 5rem);
+  gap: var(--space-section);
+  padding: clamp(1rem, 2vw, 1.5rem) 0 var(--space-section);
 }
 .hero,
 .demo-project-grid,
@@ -21,13 +21,10 @@
 }
 .hero-copy,
 .hero-proof,
-.problem-card,
 .demo-brief,
 .demo-visual,
-.demo-boundaries article,
-.comparison-card,
-.path-card,
-.studio-card,
+.evidence-teaser,
+.evidence-teaser-card,
 .contact-card {
   border: 1px solid var(--color-line);
   border-radius: 18px;
@@ -47,12 +44,13 @@
   line-height: 0.98;
 }
 .hero-lead,
+.hero-audience,
 .section-lead,
 .problem-card p,
 .demo-brief p,
 .comparison-card,
 .path-card p,
-.studio-card p,
+.evidence-teaser p,
 .contact-card p {
   color: var(--color-muted);
   font-size: clamp(1rem, 1.3vw, 1.1rem);
@@ -62,6 +60,15 @@
   flex-wrap: wrap;
   gap: 0.75rem;
   margin-top: 1.75rem;
+}
+.hero-audience {
+  max-width: 66ch;
+  margin: 1.25rem 0 0;
+  color: var(--color-ink);
+  font-weight: 650;
+}
+.hero-lead {
+  max-width: 66ch;
 }
 .primary-action,
 .secondary-action {
@@ -130,8 +137,9 @@
   max-width: 70ch;
 }
 .section-heading h2,
-.studio-card h2,
-.contact-card h2 {
+.evidence-teaser h2,
+.contact-card h2,
+.contact-card h3 {
   max-width: 19ch;
   margin: 0;
   font-size: clamp(2rem, 4vw, 3.6rem);
@@ -139,6 +147,7 @@
 }
 .problem-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
   margin-top: 1.25rem;
 }
 .problem-card,
@@ -152,6 +161,16 @@
   gap: 0.9rem;
   padding: clamp(1.25rem, 3vw, 2rem);
 }
+
+.problem-card {
+  border-top: 1px solid var(--color-line);
+  padding-block: 1.25rem;
+}
+
+.problem-card + .problem-card {
+  border-left: 1px solid var(--color-line);
+  padding-left: clamp(1rem, 2vw, 1.5rem);
+}
 .problem-card h3,
 .comparison-card h3,
 .path-card h3 {
@@ -161,7 +180,7 @@
 .problem-card p,
 .demo-brief p,
 .path-card p,
-.studio-card p,
+.evidence-teaser p,
 .contact-card p {
   margin: 0;
 }
@@ -222,6 +241,20 @@
 }
 .demo-boundaries {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  border-top: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.demo-boundaries article {
+  display: grid;
+  gap: 0.9rem;
+  padding: clamp(1.15rem, 2.5vw, 1.75rem) 0;
+}
+
+.demo-boundaries article + article {
+  border-left: 1px solid var(--color-line);
+  padding-left: clamp(1rem, 3vw, 2rem);
 }
 .comparison-card:first-child {
   border-top: 4px solid var(--color-primary);
@@ -229,35 +262,98 @@
 .comparison-card:last-child {
   border-top: 4px solid var(--color-accent);
 }
+
+.comparison-card {
+  background: #eef2ec;
+  box-shadow: none;
+}
 .path-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
   margin-top: 1.25rem;
 }
-.studio-card {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
+
+.path-card {
+  border: 0;
+  border-top: 1px solid var(--color-line);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 1.5rem 0;
+}
+
+.path-card + .path-card {
+  border-left: 1px solid var(--color-line);
+  padding-left: clamp(1rem, 3vw, 2rem);
+}
+.paths .contact-card {
+  margin-top: 1.25rem;
+}
+.evidence-teaser {
+  display: grid;
   gap: 1rem;
   padding: clamp(1.5rem, 3vw, 2.5rem);
   background: #17201b;
   color: #fff;
 }
-.studio-card p {
+.evidence-teaser p {
   max-width: 60ch;
   color: #d8ded6;
 }
-.studio-card .eyebrow {
+.evidence-teaser .eyebrow {
   color: var(--color-accent-soft);
 }
-.studio-card .trust-statement {
+.evidence-teaser .trust-statement {
   color: #ffffff;
   font-weight: 700;
 }
-.github-link {
-  display: inline-block;
-  margin-top: 0.5rem;
+.evidence-teaser-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  gap: 1rem;
+}
+.evidence-teaser-card {
+  display: grid;
+  align-content: start;
+  gap: 0.85rem;
+  padding: clamp(1.25rem, 2vw, 1.75rem);
+  background: #223027;
+  box-shadow: none;
+}
+.evidence-teaser-card h3 {
+  margin: 0;
+  font-size: clamp(1.25rem, 2vw, 1.65rem);
+}
+.evidence-type {
+  width: fit-content;
+  margin: 0;
+  border: 1px solid rgba(216, 222, 214, 0.45);
+  border-radius: 999px;
+  color: var(--color-accent-soft) !important;
+  font-size: 0.8rem;
+  font-weight: 800;
+  padding: 0.3rem 0.6rem;
+}
+.evidence-limitation {
+  border-left: 3px solid var(--color-accent);
+  padding-left: 0.75rem;
+}
+.evidence-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+.evidence-links a:not(.secondary-action) {
   color: var(--color-accent-soft);
   font-weight: 700;
+}
+.evidence-teaser-footer {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  border-top: 1px solid rgba(216, 222, 214, 0.25);
+  padding-top: 1rem;
 }
 .contact-card {
   background:
@@ -270,30 +366,47 @@
   .demo-project-grid,
   .demo-boundaries,
   .comparison-grid,
-  .path-grid {
+  .path-grid,
+  .evidence-teaser-grid {
     grid-template-columns: 1fr;
   }
   .hero-actions,
   .hero-actions a,
   .path-card .secondary-action,
-  .studio-card .secondary-action,
+  .evidence-teaser-footer .secondary-action,
   .contact-card .primary-action {
     width: 100%;
   }
-  .studio-card {
+  .evidence-teaser-footer {
     align-items: stretch;
     flex-direction: column;
   }
   .hero-copy,
   .hero-proof,
-  .problem-card,
   .demo-brief,
   .demo-visual,
-  .demo-boundaries article,
   .comparison-card,
-  .path-card,
-  .studio-card,
+  .evidence-teaser,
+  .evidence-teaser-card,
   .contact-card {
     border-radius: 14px;
+  }
+
+  .problem-grid,
+  .path-grid,
+  .demo-boundaries {
+    gap: 0;
+  }
+
+  .problem-card + .problem-card,
+  .path-card + .path-card,
+  .demo-boundaries article + article {
+    border-top: 1px solid var(--color-line);
+    border-left: 0;
+    padding-left: 0;
+  }
+
+  .path-card {
+    padding-block: 1.25rem;
   }
 }

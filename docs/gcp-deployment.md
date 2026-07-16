@@ -15,7 +15,7 @@ This guide covers first-time production deployment of the existing AISoftware St
 - `gcloud` installed and authenticated
 - A clean GCP project with billing enabled
 - Permissions to enable APIs, create Artifact Registry repositories, create Secret Manager secrets, and deploy Cloud Run services
-- A deployed frontend URL and backend URL for CORS configuration
+- A verified public frontend origin and backend URL for CORS configuration
 
 ## Required APIs
 
@@ -68,7 +68,7 @@ Use `scripts/gcp/deploy-backend.ps1` or `infra/gcp/cloudbuild.backend.yaml`.
 Required runtime values:
 
 - `APP_ENV=production`
-- `CORS_ALLOWED_ORIGINS=https://<FRONTEND_CLOUD_RUN_URL>`
+- `CORS_ALLOWED_ORIGINS=https://<PUBLIC_SITE_ORIGIN>`
 - `CONTACT_DELIVERY_MODE=email`
 - `CONTACT_RECIPIENT_EMAIL`
 - `CONTACT_FROM_EMAIL`
@@ -85,15 +85,17 @@ The backend must listen on Cloud Run `PORT` and expose `GET /health` plus the ex
 
 Use `scripts/gcp/deploy-frontend.ps1` or `infra/gcp/cloudbuild.frontend.yaml`.
 
-Pass the deployed backend URL as the frontend API URL build value.
+Pass the deployed backend URL as `API_URL` and the verified public frontend origin as `PUBLIC_SITE_ORIGIN`. The Docker build rejects a placeholder, `localhost`, an example domain, or an HTTP origin in production.
 
-The production container must serve the Angular app through Nginx on port `8080` and support SPA fallback to `index.html`.
+Before the frontend production build, complete and validate `frontend/src/app/core/legal/public-legal.config.ts` according to [`privacy-configuration.md`](privacy-configuration.md). The configuration is public but must contain verified administrator, contact, retention, recipient, SMTP-provider, legal-basis, rights, and update-date information. The production build intentionally fails while its explicit placeholders remain.
+
+The production container serves prerendered Angular routes through Nginx on port `8080`. It also serves generated `robots.txt` and `sitemap.xml`; their URLs are derived from `PUBLIC_SITE_ORIGIN` during the build.
 
 ## CORS Update Order
 
-1. Deploy the backend with the frontend URL if known.
-2. Deploy the frontend and capture its Cloud Run URL.
-3. If needed, update and redeploy the backend so `CORS_ALLOWED_ORIGINS` contains the exact frontend origin.
+1. Establish the final frontend origin (or use the technical Cloud Run URL only for a test deployment).
+2. Deploy the backend with that exact origin in `CORS_ALLOWED_ORIGINS`.
+3. Build and deploy the frontend with the same origin in `PUBLIC_SITE_ORIGIN`.
 
 Production CORS must not use wildcard origins.
 
@@ -102,10 +104,9 @@ Production CORS must not use wildcard origins.
 See `docs/gcp-cicd.md` for the GitHub-connected production trigger, PR validation trigger, and temporary test trigger.
 The production pipeline uses `infra/gcp/cloudbuild.deploy.yaml`.
 
-## Custom Domain Notes
+## Custom Domain, Canonical and SEO
 
-Custom domain mapping is a later manual step.
-Do not automate it in this feature.
+Follow [public-origin-deployment.md](public-origin-deployment.md) before publishing a custom domain. It covers the manual DNS/domain mapping and certificate verification steps, the Cloud Build substitutions, technical Cloud Run URL policy, canonical checks and the CORS update.
 
 ## Cost Notes
 

@@ -49,15 +49,53 @@ describe('SiteShellComponent', () => {
     }).compileComponents();
     const fixture = TestBed.createComponent(SiteShellComponent);
     fixture.detectChanges();
+    fixture.componentInstance.isMobileViewport = true;
     const toggle = fixture.nativeElement.querySelector('.menu-toggle') as HTMLButtonElement;
     toggle.click();
     fixture.detectChanges();
+    await fixture.whenStable();
     expect(toggle.getAttribute('aria-expanded')).toBe('true');
+    expect(fixture.nativeElement.ownerDocument.activeElement).toBe(
+      fixture.nativeElement.querySelector('.nav-links a'),
+    );
     fixture.nativeElement.ownerDocument.dispatchEvent(
       new KeyboardEvent('keydown', { key: 'Escape' }),
     );
     fixture.detectChanges();
     expect(toggle.getAttribute('aria-expanded')).toBe('false');
+    expect(fixture.nativeElement.ownerDocument.activeElement).toBe(toggle);
+  });
+
+  it('keeps Tab focus inside an open mobile navigation panel', async () => {
+    await TestBed.configureTestingModule({
+      imports: [SiteShellComponent],
+      providers: [
+        provideRouter(routes),
+        provideHttpClient(),
+        { provide: API_CONFIG, useValue: { apiUrl: 'http://api.test' } },
+      ],
+    }).compileComponents();
+    const fixture = TestBed.createComponent(SiteShellComponent);
+    fixture.componentInstance.isMobileViewport = true;
+    fixture.componentInstance.isMobileNavigationOpen = true;
+    fixture.detectChanges();
+
+    const links = Array.from(
+      fixture.nativeElement.querySelectorAll('.nav-links a'),
+    ) as HTMLAnchorElement[];
+    links.at(-1)?.focus();
+    fixture.nativeElement.ownerDocument.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }),
+    );
+
+    expect(fixture.nativeElement.ownerDocument.activeElement).toBe(links[0]);
+
+    links[0].focus();
+    fixture.nativeElement.ownerDocument.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true }),
+    );
+
+    expect(fixture.nativeElement.ownerDocument.activeElement).toBe(links.at(-1));
   });
 
   it('closes the mobile menu when a navigation link is activated', async () => {
@@ -70,12 +108,37 @@ describe('SiteShellComponent', () => {
       ],
     }).compileComponents();
     const fixture = TestBed.createComponent(SiteShellComponent);
+    fixture.componentInstance.isMobileViewport = true;
     fixture.componentInstance.isMobileNavigationOpen = true;
     fixture.detectChanges();
 
     const firstLink = fixture.nativeElement.querySelector('.nav-links a') as HTMLAnchorElement;
     firstLink.click();
     fixture.detectChanges();
+
+    expect(fixture.componentInstance.isMobileNavigationOpen).toBeFalse();
+  });
+
+  it('closes an open mobile menu when the viewport becomes desktop-sized', async () => {
+    await TestBed.configureTestingModule({
+      imports: [SiteShellComponent],
+      providers: [
+        provideRouter(routes),
+        provideHttpClient(),
+        { provide: API_CONFIG, useValue: { apiUrl: 'http://api.test' } },
+      ],
+    }).compileComponents();
+    const fixture = TestBed.createComponent(SiteShellComponent);
+    fixture.detectChanges();
+    fixture.componentInstance.isMobileViewport = true;
+    fixture.componentInstance.isMobileNavigationOpen = true;
+
+    const descriptor = Object.getOwnPropertyDescriptor(window, 'innerWidth');
+    Object.defineProperty(window, 'innerWidth', { configurable: true, value: 1024 });
+    window.dispatchEvent(new Event('resize'));
+    if (descriptor) {
+      Object.defineProperty(window, 'innerWidth', descriptor);
+    }
 
     expect(fixture.componentInstance.isMobileNavigationOpen).toBeFalse();
   });
@@ -110,12 +173,56 @@ describe('SiteShellComponent', () => {
       expect(document.querySelector('meta[property="og:url"]')?.getAttribute('content')).toBe(
         absoluteSiteUrl(route.path),
       );
+      expect(document.querySelector('meta[property="og:title"]')?.getAttribute('content')).toBe(
+        route.title,
+      );
+      expect(
+        document.querySelector('meta[property="og:description"]')?.getAttribute('content'),
+      ).toBe(route.description);
+      expect(document.querySelector('meta[property="og:type"]')?.getAttribute('content')).toBe(
+        'website',
+      );
+      expect(document.querySelector('meta[name="twitter:card"]')?.getAttribute('content')).toBe(
+        'summary_large_image',
+      );
+      expect(document.querySelector('meta[name="twitter:title"]')?.getAttribute('content')).toBe(
+        route.title,
+      );
+      expect(
+        document.querySelector('meta[name="twitter:description"]')?.getAttribute('content'),
+      ).toBe(route.description);
+      const activeNavigationPath = document
+        .querySelector('.nav-links a[aria-current="page"]')
+        ?.getAttribute('href');
+      if (siteContent.navigation.some((item) => item.path === route.path)) {
+        expect(activeNavigationPath).toBe(route.path);
+      } else {
+        expect(activeNavigationPath).toBeUndefined();
+      }
       expect(document.activeElement?.id).toBe('main-content');
     }
 
     expect(document.querySelector('meta[property="og:image"]')?.getAttribute('content')).toBe(
       siteSocialImageUrl,
     );
+    expect(document.querySelector('meta[name="twitter:image"]')?.getAttribute('content')).toBe(
+      siteSocialImageUrl,
+    );
+
+    await fixture.ngZone!.run(() => router.navigateByUrl('/studio'));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const structuredData = JSON.parse(
+      document.querySelector('#site-structured-data')?.textContent ?? '{}',
+    ) as { '@graph': Array<Record<string, unknown>> };
+    const types = structuredData['@graph'].map((item) => item['@type']);
+    expect(types).toContain('Person');
+    expect(types).toContain('ProfessionalService');
+    expect(types).toContain('WebSite');
+    expect(types).toContain('BreadcrumbList');
+    expect(JSON.stringify(structuredData)).not.toContain('aggregateRating');
+    expect(JSON.stringify(structuredData)).not.toContain('PostalAddress');
+    expect(JSON.stringify(structuredData)).not.toContain('telephone');
 
     await fixture.ngZone!.run(() => router.navigateByUrl('/missing'));
     fixture.detectChanges();
@@ -124,10 +231,11 @@ describe('SiteShellComponent', () => {
     expect(document.querySelector('meta[name="robots"]')?.getAttribute('content')).toBe(
       'noindex, follow',
     );
-    expect(document.querySelector('#site-structured-data')?.textContent).toContain(
-      'ProfessionalService',
+    const notFoundStructuredData = JSON.parse(
+      document.querySelector('#site-structured-data')?.textContent ?? '{}',
+    ) as { '@graph': Array<Record<string, unknown>> };
+    expect(notFoundStructuredData['@graph'].map((item) => item['@type'])).not.toContain(
+      'BreadcrumbList',
     );
-    expect(document.querySelector('#site-structured-data')?.textContent).toContain('Person');
-    expect(document.querySelector('#site-structured-data')?.textContent).toContain('Piotr Barabasz');
   });
 });

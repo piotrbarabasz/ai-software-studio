@@ -72,6 +72,27 @@ def test_contact_accepts_productized_project_type(
     assert response.json()["status"] == "accepted"
 
 
+def test_contact_honeypot_returns_accepted_without_delivery(
+    settings: Settings,
+    valid_contact_payload: dict[str, object],
+) -> None:
+    app = create_app(settings)
+    app.state.contact_intake = ContactIntakeService(
+        delivery=FailingDelivery(),
+        rate_limiter=InMemoryRateLimiter(),
+        settings=settings,
+    )
+
+    with TestClient(app) as client:
+        response = client.post(
+            "/api/contact",
+            json={**valid_contact_payload, "website": "https://spam.example"},
+        )
+
+    assert response.status_code == 202
+    assert response.json()["status"] == "accepted"
+
+
 def test_contact_rejects_invalid_payload(
     client: TestClient,
     valid_contact_payload: dict[str, object],

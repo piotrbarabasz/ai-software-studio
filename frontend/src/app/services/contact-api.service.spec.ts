@@ -17,6 +17,7 @@ describe('ContactApiService', () => {
     budgetRange: '25k_50k_pln',
     message: 'Potrzebujemy automatyzacji procesu obsługi zapytań od klientów.',
     consent: true,
+    website: '',
   };
 
   beforeEach(() => {
@@ -68,6 +69,7 @@ describe('ContactApiService', () => {
       'budgetRange',
       'message',
       'consent',
+      'website',
     ]);
     request.flush({ status: 'accepted', message: 'ok' }, { status: 202, statusText: 'Accepted' });
   });
@@ -101,6 +103,7 @@ describe('ContactApiService', () => {
         'budgetRange',
         'message',
         'consent',
+        'website',
       ]);
       request.flush({ status: 'accepted', message: 'ok' }, { status: 202, statusText: 'Accepted' });
     });

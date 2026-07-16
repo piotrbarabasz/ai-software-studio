@@ -75,6 +75,8 @@ steps:
         "frontend/Dockerfile",
         "--build-arg",
         "API_URL=$_BACKEND_URL",
+        "--build-arg",
+        "PUBLIC_SITE_ORIGIN=$_FRONTEND_URL",
         "-t",
         "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_FRONTEND_IMAGE_NAME:$_IMAGE_TAG",
         "frontend",

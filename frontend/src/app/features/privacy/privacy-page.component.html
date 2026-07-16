@@ -1,22 +1,89 @@
 <main class="privacy-page section-shell">
   <p class="eyebrow">{{ content.eyebrow }}</p>
   <h1>{{ content.title }}</h1>
+  <p class="privacy-introduction">{{ content.introduction }}</p>
 
-  <section class="incomplete-notice" aria-label="Status polityki prywatności">
-    <p>{{ content.incompleteNotice }}</p>
+  <section *ngIf="isDevelopment" class="development-notice" aria-label="Tryb deweloperski">
+    <p>{{ content.developmentNotice }}</p>
   </section>
 
-  <section aria-labelledby="verified-title">
-    <h2 id="verified-title">{{ content.verifiedTitle }}</h2>
+  <section aria-labelledby="administrator-title">
+    <h2 id="administrator-title">{{ content.administratorTitle }}</h2>
+    <dl>
+      <div>
+        <dt>Administrator danych</dt>
+        <dd>{{ legal.administrator.name }}</dd>
+      </div>
+      <div>
+        <dt>Adres korespondencyjny</dt>
+        <dd>{{ legal.administrator.correspondenceAddress }}</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section aria-labelledby="data-scope-title">
+    <h2 id="data-scope-title">{{ content.dataScopeTitle }}</h2>
     <ul>
-      <li *ngFor="let item of content.verifiedItems">{{ item }}</li>
+      <li *ngFor="let item of content.dataScopeItems">{{ item }}</li>
     </ul>
   </section>
 
-  <section aria-labelledby="confirmation-title">
-    <h2 id="confirmation-title">{{ content.confirmationTitle }}</h2>
+  <section aria-labelledby="transmission-title">
+    <h2 id="transmission-title">{{ content.transmissionTitle }}</h2>
+    <p>{{ content.transmissionDescription }}</p>
+  </section>
+
+  <section aria-labelledby="purposes-title">
+    <h2 id="purposes-title">{{ content.purposesTitle }}</h2>
     <ul>
-      <li *ngFor="let item of content.confirmationItems">{{ item }}</li>
+      <li *ngFor="let item of legal.processing.purposes">{{ item }}</li>
     </ul>
+  </section>
+
+  <section aria-labelledby="legal-bases-title">
+    <h2 id="legal-bases-title">{{ content.legalBasesTitle }}</h2>
+    <ul>
+      <li *ngFor="let item of legal.processing.legalBases">{{ item }}</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="recipients-title">
+    <h2 id="recipients-title">{{ content.recipientsTitle }}</h2>
+    <h3>Odbiorcy danych</h3>
+    <ul>
+      <li *ngFor="let item of legal.processing.recipients">{{ item }}</li>
+    </ul>
+    <h3>Dostawcy infrastruktury</h3>
+    <ul>
+      <li *ngFor="let item of legal.processing.infrastructureProviders">{{ item }}</li>
+    </ul>
+    <h3>Dostawcy poczty</h3>
+    <ul>
+      <li *ngFor="let item of legal.processing.emailProviders">{{ item }}</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="retention-title">
+    <h2 id="retention-title">{{ content.retentionTitle }}</h2>
+    <ul>
+      <li *ngFor="let item of legal.processing.retention">{{ item }}</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="rights-title">
+    <h2 id="rights-title">{{ content.rightsTitle }}</h2>
+    <ul>
+      <li *ngFor="let item of legal.processing.dataSubjectRights">{{ item }}</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="contact-title">
+    <h2 id="contact-title">{{ content.contactTitle }}</h2>
+    <p>{{ legal.administrator.privacyContact }}</p>
+  </section>
+
+  <section aria-labelledby="updated-at-title">
+    <h2 id="updated-at-title">{{ content.updatedAtLabel }}</h2>
+    <p>{{ legal.updatedAt }}</p>
   </section>
 </main>

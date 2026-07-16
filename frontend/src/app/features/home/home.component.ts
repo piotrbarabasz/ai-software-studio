@@ -14,5 +14,6 @@ import { KnowledgeDemoComponent } from '../demo/knowledge-demo/knowledge-demo.co
 })
 export class HomeComponent {
   readonly home = siteContent.home;
+  readonly trust = siteContent.trust;
   readonly interactiveDemo = siteContent.demo.interactiveDemo;
 }

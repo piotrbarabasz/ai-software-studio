@@ -418,7 +418,6 @@ export const siteContent = {
   trust: {
     ownerSectionTitle: 'Kto prowadzi AISoftware Studio?',
     ownerSectionEyebrow: 'Osoba odpowiedzialna',
-    projectSectionEyebrow: 'Dowód pracy',
     owner: {
       name: 'Piotr Barabasz',
       role: 'Właściciel i odpowiedzialny partner techniczny',
@@ -437,50 +436,96 @@ export const siteContent = {
         },
       ],
     },
-    ownProject: {
-      title: 'Projekt własny: AISoftware Studio',
-      status: 'own-project',
-      statusLabel: 'Projekt własny',
-      problem: 'Czytelne przedstawienie kilku ścieżek usług bez mieszania demonstracji z produkcyjnym wdrożeniem.',
-      solution:
-        'Wielostronicowa aplikacja Angular z formularzem kontaktowym obsługiwanym przez FastAPI.',
-      infrastructure:
-        'Konfiguracja repozytorium obejmuje wdrożenie frontendu i API w GCP Cloud Run.',
-      scope: [
-        'frontend i routing',
-        'backend oraz formularz kontaktowy',
-        'responsywność i testy',
-        'konfiguracja deploymentu',
+    evidence: {
+      eyebrow: 'Co działa naprawdę',
+      title: 'Dwa dowody pracy, które możesz sprawdzić samodzielnie',
+      lead: 'Pokazujemy działające elementy i kod, a przy każdym zaznaczamy granice tego, co faktycznie potwierdza.',
+      items: [
+        {
+          id: 'knowledge-demo',
+          typeLabel: 'Interaktywne demo',
+          title: 'Asystent wiedzy z obsługą pytań poza zakresem',
+          problem:
+            'Jak pokazać doświadczenie użytkownika asystenta wiedzy, zanim powstanie produkcyjna baza danych i integracje?',
+          built:
+            'Interaktywna symulacja z trzema pytaniami, odpowiedziami ze wskazaniem przykładowych źródeł oraz przekazaniem sprawy do człowieka, gdy brakuje danych.',
+          technologies: ['Angular', 'stan komponentu', 'szablony i dostępne kontrolki'],
+          verification: [
+            'Uruchom demo i wybierz jedno z trzech przykładowych pytań.',
+            'Sprawdź odpowiedź ze źródłami oraz scenariusz przekazania sprawy do człowieka.',
+            'Kod komponentu i testów jest dostępny w publicznym repozytorium.',
+          ],
+          limitation:
+            'Odpowiedzi są przykładowe. Demo nie korzysta z produkcyjnej bazy wiedzy ani z danych lub integracji firmy.',
+          liveLink: {
+            label: 'Uruchom interaktywne demo',
+            url: '/demo-ai',
+            accessibleName: 'Uruchom interaktywne demo asystenta wiedzy AISoftware Studio',
+          },
+          repositoryLink: {
+            label: 'Zobacz kod demonstracji',
+            url: 'https://github.com/piotrbarabasz/ai-software-studio',
+            accessibleName:
+              'Publiczne repozytorium demonstracji asystenta wiedzy AISoftware Studio',
+          },
+        },
+        {
+          id: 'studio-application',
+          typeLabel: 'Projekt własny',
+          title: 'AISoftware Studio jako działająca aplikacja',
+          problem:
+            'Jak udostępnić wielostronicową ofertę z działającym demo i formularzem kontaktowym, zachowując jasne granice między demonstracją a produkcją?',
+          built:
+            'Wielostronicowy frontend Angular z routingiem i prerenderingiem, formularzem kontaktowym obsługiwanym przez API FastAPI oraz konfiguracją wdrożenia obu usług w GCP Cloud Run.',
+          technologies: ['Angular', 'Angular Router', 'prerendering', 'FastAPI', 'Cloud Run'],
+          verification: [
+            'Otwórz działającą stronę oraz trasę interaktywnego demo.',
+            'Publiczny endpoint API /health potwierdza dostępność usługi FastAPI.',
+            'Repozytorium zawiera frontend, backend, testy oraz konfigurację buildów i wdrożeń Cloud Run.',
+          ],
+          limitation:
+            'To projekt własny, a nie case study klienta. Nie potwierdza wyników biznesowych ani efektów wdrożeń u klientów.',
+          liveLink: {
+            label: 'Otwórz działającą stronę',
+            url: '/',
+            accessibleName: 'Otwórz działającą stronę AISoftware Studio',
+          },
+          repositoryLink: {
+            label: 'Zobacz kod aplikacji i wdrożenia',
+            url: 'https://github.com/piotrbarabasz/ai-software-studio',
+            accessibleName:
+              'Publiczne repozytorium aplikacji i konfiguracji wdrożenia AISoftware Studio',
+          },
+        },
       ],
-      repository: {
-        label: 'Zobacz publiczne repozytorium',
-        url: 'https://github.com/piotrbarabasz/ai-software-studio',
-        accessibleName: 'Publiczne repozytorium projektu AISoftware Studio w serwisie GitHub',
-      },
-      limitation:
-        'Projekt jest nadal rozwijany; to projekt własny, a nie case study klienta.',
     },
   },
   home: {
     path: '/',
     hero: {
       eyebrow: 'AISoftware Studio',
-      title: 'Sprawdź jeden proces AI w działającym demo w 7 dni.',
-      lead: 'W siedem dni otrzymujesz działający lub klikalny przepływ jednego scenariusza, jego założenia i ograniczenia oraz rekomendację dalszej ścieżki — nie pełne wdrożenie produkcyjne.',
+      title: 'Sprawdź w 7 dni, jak AI lub automatyzacja usprawni powtarzalny proces.',
+      audience:
+        'Dla zespołów, które ręcznie przekazują informacje między ludźmi i narzędziami — w operacjach, sprzedaży lub obsłudze — i chcą zweryfikować pomysł przed większym wydatkiem. Gotowa specyfikacja techniczna nie jest potrzebna.',
+      lead: 'Powstaje działający albo klikalny przepływ, opis założeń i granic oraz rekomendacja następnego kroku. To demo, a nie pełne wdrożenie produkcyjne.',
       primaryCta: {
-        label: 'Omów sytuację do sprawdzenia',
+        label: 'Opisz proces do sprawdzenia',
         path: '/kontakt',
         queryParams: { projectType: 'mvp_prototype' },
       },
-      secondaryCta: { label: 'Zobacz, jak wygląda demo', path: '/demo-ai' },
+      secondaryCta: { label: 'Uruchom przykładowe demo', path: '/demo-ai' },
       proof: {
         label: 'Co dostajesz po siedmiu dniach',
-        steps: ['Jeden scenariusz do sprawdzenia', 'Widoczny sposób działania', 'Rekomendacja dalszej ścieżki'],
+        steps: [
+          'Przepływ do pokazania zespołowi',
+          'Założenia i granice rozwiązania',
+          'Rekomendacja następnego kroku',
+        ],
       },
     },
     problemsHeading: {
-      eyebrow: 'Jedna sytuacja na początek',
-      title: 'Problemy, które warto najpierw sprawdzić w demo',
+      eyebrow: 'Czy to pasuje do Twojej sytuacji?',
+      title: 'Procesy, które warto zweryfikować przed inwestycją',
     },
     problemGroups: [
       {
@@ -502,8 +547,8 @@ export const siteContent = {
       },
     ],
     demonstration: {
-      eyebrow: 'Projekt demonstracyjny AISoftware Studio',
-      title: 'Asystent wiedzy dla powtarzalnych pytań',
+      eyebrow: 'Interaktywne demo',
+      title: 'Zobacz przykład asystenta wiedzy w działaniu',
       lead: 'Wybierz pytanie, aby zobaczyć odpowiedź ze źródłem albo uczciwe przekazanie sprawy do człowieka.',
       validatesLabel: 'Co sprawdza demo',
       validates: [
@@ -520,15 +565,15 @@ export const siteContent = {
     },
     outcome: {
       eyebrow: 'Demo a produkcja',
-      title: 'Po siedmiu dniach masz materiał do świadomego wyboru',
-      lead: 'Widzisz jeden scenariusz, jego granice i wskazanie, czy warto przejść do planowania produkcji.',
+      title: 'Po siedmiu dniach wiesz, co sprawdzono i czego jeszcze nie ma',
+      lead: 'Demo pomaga podjąć decyzję o dalszych pracach. Nie zastępuje produkcyjnych danych, integracji, zabezpieczeń ani utrzymania.',
       demo: {
         title: 'Demo w 7 dni',
         points: [
-          'jeden ograniczony scenariusz',
-          'klikalny lub działający przepływ',
-          'założenia oraz granice rozwiązania',
-          'rekomendację dalszej ścieżki',
+          'działający lub klikalny przepływ',
+          'opis założeń i granic',
+          'materiał do rozmowy z zespołem',
+          'rekomendację następnego kroku',
         ],
       },
       production: {
@@ -542,21 +587,21 @@ export const siteContent = {
       },
     },
     pathsHeading: {
-      eyebrow: 'Wybierz ścieżkę',
-      title: 'Demo do sprawdzenia albo development do zaplanowania',
+      eyebrow: 'Wybierz następny krok',
+      title: 'Zacznij od demo lub zaplanuj rozwiązanie gotowe do produkcji',
     },
     paths: [
       {
         eyebrow: 'Demo w 7 dni',
-        title: 'Sprawdź pomysł',
-        lead: 'Sprawdź jeden scenariusz przed większą inwestycją.',
+        title: 'Najpierw sprawdź pomysł',
+        lead: 'Wybierz ograniczony fragment procesu, zanim zdecydujesz o większych pracach.',
         points: [
-          'jeden scenariusz do pokazania zespołowi',
+          'przepływ do pokazania zespołowi',
           'widoczny sposób działania i ograniczenia',
-          'rekomendacja, co robić dalej',
+          'jasny kolejny krok',
         ],
         cta: {
-          label: 'Omów sytuację do sprawdzenia',
+          label: 'Opisz proces do sprawdzenia',
           path: '/kontakt',
           queryParams: { projectType: 'mvp_prototype' },
         },
@@ -564,7 +609,7 @@ export const siteContent = {
       {
         eyebrow: 'Development',
         title: 'Zbuduj rozwiązanie',
-        lead: 'Zaplanuj aplikację, API lub automatyzację wokół potwierdzonej potrzeby.',
+        lead: 'Zaplanuj aplikację, API lub automatyzację, gdy potrzebny jest system gotowy do użycia.',
         points: [
           'aplikacja, API lub automatyzacja',
           'indywidualnie ustalony zakres prac',
@@ -579,7 +624,7 @@ export const siteContent = {
     ],
     studioTeaser: {
       eyebrow: 'Studio',
-      title: 'Jedna osoba odpowiedzialna za techniczny kierunek prac',
+      title: 'Jedna osoba odpowiedzialna za techniczny kierunek i realizację',
       lead: 'Piotr Barabasz prowadzi analizę, kontakt i realizację bez udawania większej agencji.',
     },
     trustTeaser: {
@@ -591,11 +636,16 @@ export const siteContent = {
         accessibleName: 'Profil Piotra Barabasza w serwisie GitHub',
       },
     },
+    evidenceTeaser: {
+      eyebrow: 'Dowody pracy',
+      title: 'Sprawdź działające demo, aplikację i kod',
+      lead: 'Dwa krótkie przykłady pokazują, co jest dostępne do samodzielnej weryfikacji — bez przedstawiania projektu własnego jako realizacji klienckiej.',
+    },
     closingCta: {
-      title: 'Opisz sytuację, którą chcesz uporządkować',
-      lead: 'W pierwszej rozmowie sprawdzimy, czy lepsze będzie demo jednego scenariusza, czy plan wdrożenia.',
+      title: 'Nie masz specyfikacji? Zacznij od opisu procesu.',
+      lead: 'Napisz, gdzie informacje są przekazywane ręcznie i kto uczestniczy w pracy. W pierwszej rozmowie ustalimy, czy właściwym krokiem będzie demo czy plan wdrożenia.',
       primaryCta: {
-        label: 'Omów sytuację do sprawdzenia',
+        label: 'Opisz proces do sprawdzenia',
         path: '/kontakt',
         queryParams: { projectType: 'mvp_prototype' },
       },
@@ -750,67 +800,134 @@ export const siteContent = {
   development: {
     path: '/development',
     eyebrow: 'Development',
-    title: 'Aplikacje, API i automatyzacje rozwijane po walidacji',
-    lead: 'Gdy kierunek jest potwierdzony, zamieniamy go w aplikację, API lub automatyzację z jasno opisanym zakresem prac.',
+    title: 'Aplikacje, API, integracje i automatyzacje z jasno ustalonym pierwszym etapem',
+    lead: 'Demo pomaga przy niejasnym lub ryzykownym pomyśle, ale nie jest obowiązkowe. Do developmentu można przejść od razu, gdy potrzeba i zakres są już wystarczająco potwierdzone.',
     principles: [
-      'najpierw ustalamy, co ma powstać i czego nie obejmuje wycena',
-      'frontend, backend i API są planowane jako jedna całość',
-      'integracje oraz automatyzacje rozwijamy po potwierdzeniu założeń',
+      'demo służy walidacji niejasnego pomysłu lub procesu, a nie jest obowiązkowym etapem każdego projektu',
+      'przed startem ustalamy pierwszy etap, odpowiedzialności i kryteria odbioru',
+      'zmiana potwierdzonego zakresu może zmienić harmonogram oraz wycenę',
     ],
+    readiness: {
+      title: 'Kiedy development ma sens',
+      lead: 'Rozpoczęcie prac jest zasadne, gdy zespół potrafi wspólnie potwierdzić podstawy pierwszego etapu. Jeśli brakuje tych odpowiedzi, najpierw potrzebna jest walidacja.',
+      points: [
+        'istnieje potwierdzona potrzeba biznesowa',
+        'znani są użytkownicy rozwiązania',
+        'wiadomo, jaki rezultat ma umożliwiać system',
+        'dostępne są dane lub systemy potrzebne do integracji',
+        'firma jest gotowa ustalić zakres pierwszego etapu',
+      ],
+    },
     outcomesTitle: 'Od rozproszonej pracy do konkretnego rezultatu',
     outcomes: [
       {
         title: 'Panel operacyjny',
-        problem: 'Dane, zadania i decyzje są rozproszone między narzędziami.',
-        result: 'Zespół widzi aktualny stan spraw i pracuje w jednym miejscu.',
-        scope: 'Przykładowe elementy: aplikacja webowa, role użytkowników, dane i integracje. Dokładny zakres ustalamy indywidualnie.',
+        startingPoint: 'Dane, zadania i decyzje są rozproszone między narzędziami.',
+        targetWorkflow: 'Zespół widzi aktualny stan spraw i podejmuje decyzje w jednym miejscu.',
+        solutionElements: [
+          'aplikacja webowa dopasowana do pracy zespołu',
+          'role użytkowników i widoki odpowiedzialności',
+          'dane lub integracje potrzebne w pierwszym etapie',
+        ],
+        dependency: 'Wymaga ustalenia, które dane są źródłem prawdy i kto może je zmieniać.',
       },
       {
         title: 'Asystent wiedzy',
-        problem: 'Odpowiedzi są rozproszone w dokumentach, wiadomościach i doświadczeniu zespołu.',
-        result: 'Użytkownik szybciej dociera do odpowiedzi na podstawie materiałów firmy.',
-        scope: 'Przykładowe elementy: AI, wyszukiwanie wiedzy RAG i przekazanie sprawy pracownikowi. Dokładny zakres ustalamy indywidualnie.',
+        startingPoint:
+          'Odpowiedzi są rozproszone w dokumentach, wiadomościach i doświadczeniu zespołu.',
+        targetWorkflow:
+          'Użytkownik otrzymuje odpowiedź na podstawie zatwierdzonych materiałów albo sprawa trafia do właściwej osoby.',
+        solutionElements: [
+          'przygotowanie i wyszukiwanie wiedzy',
+          'interfejs rozmowy lub punkt wejścia w obecnym systemie',
+          'przekazanie pytania poza zakresem do człowieka',
+        ],
+        dependency:
+          'Jakość rozwiązania zależy od dostępności, aktualności i właściciela materiałów źródłowych.',
       },
       {
         title: 'Automatyzacja procesu',
-        problem: 'Formularze, wiadomości i systemy wymagają ręcznego przekazywania informacji.',
-        result: 'Powtarzalne działania przebiegają w ustalonej kolejności, z kontrolą zespołu.',
-        scope: 'Przykładowe elementy: formularze, API, integracje i komunikacja. Dokładny zakres ustalamy indywidualnie.',
+        startingPoint:
+          'Formularze, wiadomości i systemy wymagają ręcznego przekazywania informacji.',
+        targetWorkflow:
+          'Powtarzalne działania przebiegają w ustalonej kolejności, z widocznym statusem i kontrolą zespołu.',
+        solutionElements: [
+          'formularz, API lub zdarzenie rozpoczynające proces',
+          'integracje przekazujące dane między systemami',
+          'statusy, powiadomienia i obsługa wyjątków',
+        ],
+        dependency:
+          'Wymaga dostępu do systemów oraz uzgodnienia, gdzie automatyzacja ma się zatrzymać i przekazać sprawę człowiekowi.',
       },
     ],
-    technicalScopeTitle: 'Elementy dobierane do potwierdzonej potrzeby',
-    technicalScope: [
-      'frontend i doświadczenie użytkownika',
-      'backend, dane i API',
-      'AI, RAG i automatyzacje',
-      'integracje z obecnymi systemami',
-      'testy, monitoring i bezpieczeństwo',
-    ],
-    processTitle: 'Od ustaleń do gotowego planu prac',
+    preparation: {
+      title: 'Co ustalamy przed rozpoczęciem',
+      lead: 'Te ustalenia tworzą zakres pierwszego etapu i podstawę wyceny — nie są techniczną dokumentacją dla samej dokumentacji.',
+      points: [
+        'użytkowników i główne scenariusze',
+        'zakres pierwszej wersji',
+        'integracje i odpowiedzialności stron',
+        'bezpieczeństwo oraz dostęp do danych',
+        'kryteria odbioru',
+        'dokumentację potrzebną zespołowi',
+        'utrzymanie po odbiorze',
+        'elementy wyłączone z wyceny',
+      ],
+    },
+    scope: {
+      title: 'Co może wejść do pierwszego etapu — i co nie dzieje się automatycznie',
+      lead: 'Dobieramy elementy do potwierdzonego celu, zamiast sprzedawać z góry pełny zestaw funkcji.',
+      includedTitle: 'Przykładowe elementy realizacji',
+      included: [
+        'interfejs, panel lub punkt wejścia dla użytkownika',
+        'backend, dane lub API potrzebne do działania',
+        'integracja z uzgodnionym systemem',
+        'automatyzacja, obsługa wyjątków i przekazanie sprawy',
+        'testy, dokumentacja i monitoring uzgodnione dla etapu',
+      ],
+      excludedTitle: 'Nie wchodzą automatycznie w wycenę',
+      excluded: [
+        'nowe wymagania poza potwierdzonym zakresem',
+        'licencje, usługi zewnętrzne i koszty ich użycia',
+        'dostęp lub przygotowanie danych, których nie da się potwierdzić przed startem',
+        'utrzymanie, rozwój i dyżury po odbiorze',
+      ],
+      pricingNote:
+        'Wycena powstaje po potwierdzeniu zakresu. Budżet w formularzu jest orientacyjny; zmiana zakresu może zmienić wycenę i harmonogram.',
+    },
+    processTitle: 'Od diagnozy do odbioru i kolejnego etapu',
     deliverySteps: [
       {
-        title: 'Diagnoza problemu',
-        description: 'Ustalamy użytkowników, ograniczenia oraz efekt, który rozwiązanie ma umożliwić.',
-      },
-      {
-        title: 'Plan prac i ryzyka',
-        description: 'Przed rozpoczęciem developmentu wiesz, co budujemy, czego nie obejmuje wycena i co wymaga dodatkowej walidacji.',
-      },
-      {
-        title: 'Budowa i weryfikacja',
+        title: 'Diagnoza i ustalenie celu',
         description:
-          'Pokazujemy kolejne elementy, sprawdzamy ich działanie i aktualizujemy plan tylko tam, gdzie wymaga tego potwierdzona potrzeba.',
+          'Sprawdzamy użytkowników, obecny sposób pracy, ograniczenia i rezultat, który system ma umożliwić.',
       },
       {
-        title: 'Utrzymanie i rozwój',
-        description: 'Ustalamy, jakie utrzymanie, monitoring i poprawki są potrzebne po wdrożeniu.',
+        title: 'Zakres pierwszego etapu',
+        description:
+          'Uzgadniamy elementy realizacji, zależności, kryteria odbioru, dokumentację oraz to, czego wycena nie obejmuje.',
+      },
+      {
+        title: 'Implementacja z punktami kontrolnymi',
+        description:
+          'Pokazujemy kolejne elementy i sprawdzamy ich działanie. Nowe potrzeby oceniamy osobno pod kątem wpływu na zakres, termin i wycenę.',
+      },
+      {
+        title: 'Odbiór według kryteriów',
+        description:
+          'Wspólnie sprawdzamy uzgodnione scenariusze i przekazujemy ustaloną dokumentację pierwszego etapu.',
+      },
+      {
+        title: 'Utrzymanie lub kolejny etap',
+        description:
+          'Po odbiorze osobno ustalamy potrzebne utrzymanie, monitoring, poprawki i ewentualny rozwój rozwiązania.',
       },
     ],
     closingCta: {
-      title: 'Planujesz aplikację, API albo integrację?',
-      lead: 'Opisz obecną sytuację i oczekiwany rezultat. Wspólnie sprawdzimy, czy można przejść do planowania developmentu.',
+      title: 'Planujesz aplikację, API, integrację albo automatyzację?',
+      lead: 'Opisz obecną sytuację, użytkowników i oczekiwany rezultat. Jeśli zakres jest gotowy, przejdziemy do planowania developmentu; jeśli nie, najpierw określimy właściwą walidację.',
       primaryCta: {
-        label: 'Opisz planowane wdrożenie',
+        label: 'Opisz potrzebę developmentu',
         path: '/kontakt',
         queryParams: { projectType: 'custom_web_app' },
       },
@@ -832,20 +949,21 @@ export const siteContent = {
     path: '/kontakt',
     eyebrow: 'Kontakt',
     title: 'Opisz pracę, którą chcesz usprawnić',
-    lead: 'Napisz krótko, jak dziś wygląda praca i jaki efekt chcesz osiągnąć. To wystarczy, by ocenić sensowną drogę dalej.',
+    lead: 'Wystarczy krótko opisać obecną pracę, problem i oczekiwany efekt. Nie potrzebujesz gotowej specyfikacji technicznej.',
     nextSteps: [
-      'Odbieram opis sytuacji i sprawdzam, od czego warto zacząć.',
-      'Wspólnie doprecyzowujemy jeden scenariusz, jeśli wymaga dodatkowych informacji.',
-      'Dopiero potem ustalamy, czy właściwe będzie demo, przygotowanie planu czy development.',
+      'Otrzymuję opis sytuacji i sprawdzam, jakie informacje są potrzebne do dalszej rozmowy.',
+      'Na jego podstawie wskazuję właściwą ścieżkę: demo, walidację, plan prac albo development.',
+      'Dalsze ustalenia odbywają się przed rozpoczęciem jakiejkolwiek płatnej realizacji.',
     ],
     noSpecificationNeeded: 'Nie musisz mieć gotowej specyfikacji technicznej.',
     firstMessagePurpose:
-      'Pierwsza wiadomość służy ocenie właściwej ścieżki, a nie przygotowaniu zobowiązującej wyceny.',
+      'Wiadomość może być niepełna: opisz obecną pracę, problem i efekt, który chcesz osiągnąć.',
     noCommitment:
-      'Wysłanie formularza nie oznacza automatycznego rozpoczęcia płatnej realizacji.',
+      'Wysłanie formularza nie jest zamówieniem, akceptacją wyceny ani automatycznym rozpoczęciem płatnej realizacji.',
     directEmailLabel: 'Bezpośredni kontakt e-mail',
     formLabel: 'Formularz kontaktowy',
-    budgetHint: 'Budżet jest opcjonalny. Możesz wybrać „Jeszcze nie wiem” albo zostawić pole puste.',
+    budgetHint:
+      'Budżet jest opcjonalny. Możesz wybrać „Jeszcze nie wiem” albo zostawić pole puste.',
     consent: 'Wyrażam zgodę na kontakt w sprawie tego zapytania zgodnie z',
     consentLinkLabel: 'polityką prywatności',
     consentAfterLink: '.',
@@ -861,8 +979,9 @@ export const siteContent = {
     },
     success: {
       title: 'Wiadomość została odebrana',
+      summaryTitle: 'Wysłany opis',
       nextStep:
-        'Ocenimy opisaną sytuację i ustalimy, czy potrzebne jest demo, przygotowanie planu czy development.',
+        'Na podstawie opisu wskażemy właściwą ścieżkę: demo, walidację, plan prac albo development.',
       homeCta: { label: 'Wróć na stronę główną', path: '/' },
       anotherInquiryLabel: 'Wyślij kolejne zapytanie',
       directEmailLead: 'Jeśli wolisz, możesz również skontaktować się bezpośrednio:',
@@ -874,22 +993,25 @@ export const siteContent = {
     path: '/polityka-prywatnosci',
     eyebrow: 'Prywatność',
     title: 'Informacja o prywatności formularza kontaktowego',
-    incompleteNotice:
-      'Ta strona wymaga uzupełnienia danych administratora i kontaktu przed publikacją kompletnej polityki prywatności.',
-    verifiedTitle: 'Co wynika z obecnej konfiguracji formularza',
-    verifiedItems: [
+    developmentNotice:
+      'Konfiguracja demonstracyjna dla środowiska deweloperskiego. Nie publikuj tej wersji jako polityki prywatności.',
+    introduction:
+      'Poniższa informacja opisuje dane przetwarzane przy wysłaniu formularza kontaktowego AISoftware Studio.',
+    administratorTitle: 'Administrator i kontakt',
+    dataScopeTitle: 'Zakres zbieranych danych',
+    dataScopeItems: [
       'Formularz zbiera imię i nazwisko, adres e-mail, opcjonalną nazwę firmy, rodzaj projektu, opcjonalny budżet oraz treść wiadomości.',
-      'Dane są przekazywane do API formularza, aby obsłużyć zapytanie kontaktowe.',
-      'Po poprawnym przyjęciu wiadomość jest wysyłana przez skonfigurowaną usługę SMTP na adres odbiorcy formularza.',
-      'Repozytorium nie określa publicznie okresu przechowywania danych ani pełnych danych administratora.',
     ],
-    confirmationTitle: 'Co wymaga potwierdzenia przed publikacją pełnej polityki',
-    confirmationItems: [
-      'imię lub nazwa administratora danych oraz adres korespondencyjny',
-      'adres e-mail do spraw dotyczących danych osobowych',
-      'okres przechowywania danych i sposób realizacji praw osoby, której dane dotyczą',
-      'faktyczna konfiguracja dostawców infrastruktury i poczty po wdrożeniu',
-    ],
+    transmissionTitle: 'Sposób przesyłania danych',
+    transmissionDescription:
+      'Po wysłaniu formularza dane trafiają do API formularza. Po poprawnym przyjęciu API przekazuje wiadomość na skonfigurowany adres odbiorcy przez usługę SMTP.',
+    purposesTitle: 'Cele przetwarzania',
+    legalBasesTitle: 'Podstawy przetwarzania',
+    recipientsTitle: 'Odbiorcy i dostawcy',
+    retentionTitle: 'Okres przechowywania',
+    rightsTitle: 'Prawa użytkownika',
+    contactTitle: 'Kontakt w sprawach danych osobowych',
+    updatedAtLabel: 'Data aktualizacji',
   },
   notFound: {
     title: 'Strona nie została znaleziona | AISoftware Studio',

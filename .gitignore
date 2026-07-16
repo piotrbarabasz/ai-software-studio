@@ -34,6 +34,7 @@ coverage/
 .ruff_cache/
 tmp/
 .tmp/
+frontend/generated/
 
 # Environment and secrets
 .env

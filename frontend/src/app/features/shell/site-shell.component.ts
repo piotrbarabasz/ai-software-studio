@@ -50,7 +50,15 @@ export class SiteShellComponent implements OnInit {
   }
 
   toggleNavigation(): void {
+    if (!this.isMobileViewport) {
+      return;
+    }
+
     this.isMobileNavigationOpen = !this.isMobileNavigationOpen;
+
+    if (this.isMobileNavigationOpen) {
+      queueMicrotask(() => this.focusFirstNavigationItem());
+    }
   }
 
   closeNavigation(restoreFocus = false): void {
@@ -64,9 +72,21 @@ export class SiteShellComponent implements OnInit {
     }
   }
 
-  @HostListener('document:keydown.escape')
-  handleEscape(): void {
-    this.closeNavigation(true);
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboardNavigation(event: KeyboardEvent): void {
+    if (!this.isMobileNavigationOpen) {
+      return;
+    }
+
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      this.closeNavigation(true);
+      return;
+    }
+
+    if (event.key === 'Tab') {
+      this.trapNavigationFocus(event);
+    }
   }
 
   @HostListener('window:resize')
@@ -100,7 +120,42 @@ export class SiteShellComponent implements OnInit {
       content: canonicalPath === '/404' ? 'noindex, follow' : 'index, follow',
     });
     this.setCanonical(canonicalPath);
-    this.setStructuredData();
+    this.setStructuredData(canonicalPath);
+  }
+
+  private focusFirstNavigationItem(): void {
+    this.navigationItems()[0]?.focus();
+  }
+
+  private trapNavigationFocus(event: KeyboardEvent): void {
+    const items = this.navigationItems();
+    if (items.length === 0) {
+      return;
+    }
+
+    const activeElement = this.document.activeElement;
+    const firstItem = items[0];
+    const lastItem = items[items.length - 1];
+
+    if (
+      event.shiftKey &&
+      (activeElement === firstItem || !items.includes(activeElement as HTMLElement))
+    ) {
+      event.preventDefault();
+      lastItem.focus();
+      return;
+    }
+
+    if (!event.shiftKey && activeElement === lastItem) {
+      event.preventDefault();
+      firstItem.focus();
+    }
+  }
+
+  private navigationItems(): HTMLElement[] {
+    return Array.from(
+      this.primaryNavigation?.nativeElement.querySelectorAll<HTMLElement>('a[href]') ?? [],
+    );
   }
 
   private getDeepestRoute(route: ActivatedRouteSnapshot): ActivatedRouteSnapshot {
@@ -140,7 +195,7 @@ export class SiteShellComponent implements OnInit {
     canonical.setAttribute('href', href);
   }
 
-  private setStructuredData(): void {
+  private setStructuredData(canonicalPath: string): void {
     const id = 'site-structured-data';
     let script = this.document.getElementById(id) as HTMLScriptElement | null;
 
@@ -153,42 +208,56 @@ export class SiteShellComponent implements OnInit {
 
     const owner = siteContent.trust.owner;
 
+    const route = siteContent.routes.find((item) => item.path === canonicalPath);
+    const graph: Record<string, unknown>[] = [
+      {
+        '@id': `${siteSeo.origin}#person`,
+        '@type': 'Person',
+        name: owner.name,
+        jobTitle: owner.role,
+        sameAs: owner.links.map((link) => link.url),
+      },
+      {
+        '@id': `${siteSeo.origin}#professional-service`,
+        '@type': 'ProfessionalService',
+        name: siteSeo.name,
+        url: siteSeo.origin,
+        description: siteSeo.organizationDescription,
+        founder: { '@id': `${siteSeo.origin}#person` },
+      },
+      {
+        '@id': `${siteSeo.origin}#website`,
+        '@type': 'WebSite',
+        name: siteSeo.name,
+        url: siteSeo.origin,
+        inLanguage: 'pl-PL',
+        publisher: { '@id': `${siteSeo.origin}#professional-service` },
+      },
+    ];
+
+    if (route && route.path !== '/') {
+      graph.push({
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Strona główna',
+            item: absoluteSiteUrl('/'),
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: route.label,
+            item: absoluteSiteUrl(route.path),
+          },
+        ],
+      });
+    }
+
     script.textContent = JSON.stringify({
       '@context': 'https://schema.org',
-      '@graph': [
-        {
-          '@id': `${siteSeo.origin}#person`,
-          '@type': 'Person',
-          name: owner.name,
-          jobTitle: owner.role,
-          sameAs: owner.links.map((link) => link.url),
-        },
-        {
-          '@id': `${siteSeo.origin}#organization`,
-          '@type': 'Organization',
-          name: siteSeo.name,
-          url: siteSeo.origin,
-          description: siteSeo.organizationDescription,
-          founder: { '@id': `${siteSeo.origin}#person` },
-        },
-        {
-          '@id': `${siteSeo.origin}#professional-service`,
-          '@type': 'ProfessionalService',
-          name: siteSeo.name,
-          url: siteSeo.origin,
-          description: siteSeo.organizationDescription,
-          parentOrganization: { '@id': `${siteSeo.origin}#organization` },
-          founder: { '@id': `${siteSeo.origin}#person` },
-        },
-        {
-          '@id': `${siteSeo.origin}#website`,
-          '@type': 'WebSite',
-          name: siteSeo.name,
-          url: siteSeo.origin,
-          inLanguage: 'pl-PL',
-          publisher: { '@id': `${siteSeo.origin}#organization` },
-        },
-      ],
+      '@graph': graph,
     });
   }
 }

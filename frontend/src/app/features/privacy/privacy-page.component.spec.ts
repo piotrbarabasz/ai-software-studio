@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { PrivacyPageComponent } from './privacy-page.component';
 
 describe('PrivacyPageComponent', () => {
-  it('discloses that administrator details still require confirmation', async () => {
+  it('renders the typed privacy configuration with a development-only notice', async () => {
     await TestBed.configureTestingModule({
       imports: [PrivacyPageComponent],
     }).compileComponents();
@@ -12,10 +12,12 @@ describe('PrivacyPageComponent', () => {
     const element: HTMLElement = fixture.nativeElement;
 
     expect(element.querySelectorAll('h1')).toHaveSize(1);
-    expect(element.querySelector('.incomplete-notice')?.textContent).toContain(
-      'wymaga uzupełnienia',
+    expect(element.querySelector('.development-notice')?.textContent).toContain(
+      'Konfiguracja demonstracyjna',
     );
+    expect(element.textContent).toContain('Administrator danych');
     expect(element.textContent).toContain('API formularza');
-    expect(element.textContent).not.toMatch(/\[PUBLIC_EMAIL\]|\[PRIVACY_/);
+    expect(element.textContent).toContain('Google Cloud Platform (Cloud Run)');
+    expect(element.textContent).not.toContain('wymaga uzupełnienia');
   });
 });

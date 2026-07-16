@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://api.example.com',
-  publicSiteUrl: 'https://aisoftware-studio-web-k6wldgptjq-lm.a.run.app',
+  apiUrl: '__PUBLIC_CONFIG_REQUIRED__:apiUrl',
+  publicSiteOrigin: '__PUBLIC_CONFIG_REQUIRED__:publicSiteOrigin',
 } as const;

@@ -11,7 +11,9 @@ describe('DevelopmentPageComponent', () => {
     const fixture = TestBed.createComponent(DevelopmentPageComponent);
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelectorAll('h1').length).toBe(1);
-    expect(fixture.nativeElement.textContent).toContain('testy, monitoring i bezpieczeństwo');
+    expect(fixture.nativeElement.textContent).toContain(
+      'Demo pomaga przy niejasnym lub ryzykownym pomyśle',
+    );
     expect(fixture.nativeElement.querySelectorAll('.info-card').length).toBe(3);
     expect(fixture.nativeElement.textContent).toContain('Panel operacyjny');
     expect(fixture.nativeElement.textContent).toContain('Asystent wiedzy');
@@ -20,20 +22,25 @@ describe('DevelopmentPageComponent', () => {
       fixture.nativeElement.querySelectorAll('h2') as NodeListOf<HTMLElement>,
       (heading) => heading.textContent?.trim(),
     );
-    expect(headings.indexOf('Od rozproszonej pracy do konkretnego rezultatu')).toBeLessThan(
-      headings.indexOf('Elementy dobierane do potwierdzonej potrzeby'),
+    expect(headings.indexOf('Kiedy development ma sens')).toBeLessThan(
+      headings.indexOf('Od rozproszonej pracy do konkretnego rezultatu'),
     );
     expect(
       fixture.nativeElement.querySelector('a[href="/kontakt?projectType=custom_web_app"]')
         ?.textContent,
-    ).toContain('Opisz planowane wdrożenie');
+    ).toContain('Opisz potrzebę developmentu');
     expect(fixture.nativeElement.textContent).toContain(
-      'Planujesz aplikację, API albo integrację?',
+      'Planujesz aplikację, API, integrację albo automatyzację?',
     );
     expect(
       fixture.nativeElement.querySelector(
         '.development-cta a[href="/kontakt?projectType=custom_web_app"]',
       ),
     ).not.toBeNull();
+    expect(fixture.nativeElement.querySelectorAll('.readiness-grid li').length).toBe(5);
+    expect(fixture.nativeElement.querySelectorAll('.preparation-grid li').length).toBe(8);
+    expect(fixture.nativeElement.querySelectorAll('.scope-card').length).toBe(2);
+    expect(fixture.nativeElement.textContent).toContain('Nie wchodzą automatycznie w wycenę');
+    expect(fixture.nativeElement.textContent).toContain('zmienić wycenę i harmonogram');
   });
 });

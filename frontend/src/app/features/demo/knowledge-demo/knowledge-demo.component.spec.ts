@@ -28,7 +28,7 @@ describe('KnowledgeDemoComponent', () => {
     fixture.detectChanges();
     expect(element.textContent).toContain('Sprawdzam materiały');
 
-    tick(400);
+    tick(250);
     fixture.detectChanges();
 
     expect(element.textContent).toContain('Nie. Demo sprawdza ograniczony scenariusz');
@@ -43,7 +43,7 @@ describe('KnowledgeDemoComponent', () => {
 
     (element.querySelectorAll('.scenario-button')[2] as HTMLButtonElement).click();
     fixture.detectChanges();
-    tick(400);
+    tick(250);
     fixture.detectChanges();
 
     expect(element.textContent).toContain('Przekazanie do pracownika');
@@ -63,14 +63,24 @@ describe('KnowledgeDemoComponent', () => {
 
     (element.querySelector('.scenario-button') as HTMLButtonElement).click();
     fixture.detectChanges();
-    tick(400);
+    tick(250);
     fixture.detectChanges();
 
     expect(element.textContent).toContain('Interaktywna symulacja przepływu demo');
     expect(element.textContent).toContain('nie połączenie z produkcyjną bazą wiedzy');
-    expect(
-      element.querySelector('a[href="/kontakt?projectType=ai_automation"]'),
-    ).not.toBeNull();
+    expect(element.querySelector('a[href="/kontakt?projectType=ai_automation"]')).not.toBeNull();
     expect(fetchSpy).not.toHaveBeenCalled();
   }));
+
+  it('shows a result immediately when reduced motion is preferred', () => {
+    spyOn(window, 'matchMedia').and.returnValue({ matches: true } as MediaQueryList);
+    const fixture = createComponent();
+    const element: HTMLElement = fixture.nativeElement;
+
+    (element.querySelector('.scenario-button') as HTMLButtonElement).click();
+    fixture.detectChanges();
+
+    expect(element.querySelector('.checking-state')).toBeNull();
+    expect(element.querySelector('.answer-card')).not.toBeNull();
+  });
 });

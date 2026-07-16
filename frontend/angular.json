@@ -27,8 +27,8 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/assets",
-              { "glob": "robots.txt", "input": "src", "output": "/" },
-              { "glob": "sitemap.xml", "input": "src", "output": "/" }
+              { "glob": "robots.txt", "input": "generated", "output": "/" },
+              { "glob": "sitemap.xml", "input": "generated", "output": "/" }
             ],
             "prerender": {
               "routesFile": "src/prerender-routes.txt",
@@ -41,8 +41,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "475kb",
+                  "maximumError": "600kb"
                 },
                 {
                   "type": "anyComponentStyle",

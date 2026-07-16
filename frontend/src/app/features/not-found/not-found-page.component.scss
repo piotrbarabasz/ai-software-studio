@@ -16,10 +16,27 @@ p {
   color: var(--color-muted);
 }
 a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
   border-radius: 999px;
   background: var(--color-primary);
   color: #fff;
   font-weight: 700;
   padding: 0.85rem 1.2rem;
   text-decoration: none;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+@media (max-width: 480px) {
+  nav,
+  nav a {
+    width: 100%;
+  }
 }

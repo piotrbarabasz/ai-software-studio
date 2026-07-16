@@ -11,7 +11,7 @@ The repository connection is a one-time interactive setup.
 
 - Name: `deploy-prod`
 - Event: push
-- Branch regex: `^master$`
+- Branch regex: `^main$`
 - Config file: `infra/gcp/cloudbuild.deploy.yaml`
 - Purpose: production deployment to Cloud Run
 
@@ -24,8 +24,8 @@ Use these substitutions:
 - `_FRONTEND_SERVICE=aisoftware-studio-web`
 - `_BACKEND_IMAGE_NAME=aisoftware-studio-api`
 - `_FRONTEND_IMAGE_NAME=aisoftware-studio-web`
-- `_BACKEND_URL=https://aisoftware-studio-api-k6wldgptjq-lm.a.run.app`
-- `_FRONTEND_URL=https://aisoftware-studio-web-k6wldgptjq-lm.a.run.app`
+- `_BACKEND_URL=https://<BACKEND_CLOUD_RUN_URL>`
+- `_FRONTEND_URL=https://<PUBLIC_SITE_ORIGIN>`
 - `_SMTP_PASSWORD_SECRET=aisoftware-studio-smtp-password`
 - `_CONTACT_RATE_LIMIT_PER_MINUTE=30`
 - `_CONTACT_RECIPIENT_EMAIL=<placeholder>`
@@ -53,7 +53,7 @@ Delete or disable this trigger after testing.
 
 - Name: `pr-checks-master`
 - Event: pull request
-- Base branch regex: `^master$`
+- Base branch regex: `^main$`
 - Config file: `infra/gcp/cloudbuild.pr-checks.yaml`
 - Purpose: validation only
 
@@ -83,6 +83,6 @@ Runtime Cloud Run service account:
 ## Operator Notes
 
 - Use Cloud Build logs to verify the trigger fired and the deploy steps ran in order.
-- Use the Cloud Run URLs to verify the deployed services.
+- Use the final public origin to verify the frontend, canonical URL, sitemap and robots; use the backend URL for health checks.
 - Disable or delete triggers when they are no longer needed.
 - Roll back by redeploying the previous known-good revision or image tag.

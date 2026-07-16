@@ -26,7 +26,14 @@ type ContactFormControls = {
   budgetRange: FormControl<string>;
   message: FormControl<string>;
   consent: FormControl<boolean>;
+  website: FormControl<string>;
 };
+
+interface SubmissionSummary {
+  readonly name: string;
+  readonly projectType: string;
+  readonly message: string;
+}
 
 @Component({
   selector: 'app-contact-form',
@@ -58,11 +65,13 @@ export class ContactFormComponent implements OnInit {
       Validators.maxLength(4000),
     ]),
     consent: this.fb.control(false, [Validators.requiredTrue]),
+    website: this.fb.control(''),
   });
 
   isSubmitting = false;
   status: 'idle' | 'success' | 'error' = 'idle';
   statusMessage = '';
+  submissionSummary?: SubmissionSummary;
 
   ngOnInit(): void {
     if (!this.route) {
@@ -93,13 +102,20 @@ export class ContactFormComponent implements OnInit {
     this.status = 'idle';
     this.statusMessage = '';
 
+    const inquiry = this.toPayload();
+
     this.api
-      .submit(this.toPayload())
+      .submit(inquiry)
       .pipe(finalize(() => (this.isSubmitting = false)))
       .subscribe({
         next: () => {
           this.status = 'success';
           this.statusMessage = this.content.messages.success;
+          this.submissionSummary = {
+            name: inquiry.name,
+            projectType: this.projectTypeLabel(inquiry.projectType),
+            message: this.messagePreview(inquiry.message),
+          };
           this.resetForm();
         },
         error: (error: HttpErrorResponse) => {
@@ -135,6 +151,7 @@ export class ContactFormComponent implements OnInit {
     this.resetForm();
     this.status = 'idle';
     this.statusMessage = '';
+    this.submissionSummary = undefined;
   }
 
   private isProjectType(value: string | null): value is ProjectType {
@@ -155,7 +172,22 @@ export class ContactFormComponent implements OnInit {
       budgetRange: this.isBudgetRange(raw.budgetRange) ? raw.budgetRange : 'not_sure',
       message: raw.message.trim(),
       consent: true,
+      website: raw.website.trim(),
     };
+  }
+
+  private projectTypeLabel(projectType: ProjectType): string {
+    return (
+      this.content.projectTypes.find((option) => option.value === projectType)?.label ?? projectType
+    );
+  }
+
+  private messagePreview(message: string): string {
+    const maximumLength = 240;
+
+    return message.length <= maximumLength
+      ? message
+      : `${message.slice(0, maximumLength).trimEnd()}…`;
   }
 
   private messageForError(error: HttpErrorResponse): string {
@@ -180,6 +212,7 @@ export class ContactFormComponent implements OnInit {
       budgetRange: '',
       message: '',
       consent: false,
+      website: '',
     });
   }
 }

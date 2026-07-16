@@ -5,7 +5,8 @@
     <p class="page-lead">{{ content.lead }}</p>
     <ol class="next-steps" aria-label="Co wydarzy się dalej">
       <li *ngFor="let step of content.nextSteps; let index = index">
-        <span aria-hidden="true">{{ index + 1 }}</span>{{ step }}
+        <span aria-hidden="true">{{ index + 1 }}</span
+        >{{ step }}
       </li>
     </ol>
     <div class="contact-assurances">

@@ -1,7 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
-import { BehaviorSubject, of, throwError } from 'rxjs';
+import { BehaviorSubject, of, Subject, throwError } from 'rxjs';
 
 import { projectTypeOptions } from '../../core/content/contact-options.pl';
 import { ContactApiService } from '../../services/contact-api.service';
@@ -47,6 +47,11 @@ describe('ContactFormComponent', () => {
     expect(api.submit).not.toHaveBeenCalled();
     expect(fixture.nativeElement.textContent).toContain('wymagane pola');
     expect(fixture.nativeElement.querySelector('label[for="email"]')).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('#name-error')).not.toBeNull();
+    expect(
+      fixture.nativeElement.querySelector('#name')?.getAttribute('aria-describedby'),
+    ).toContain('name-error');
+    expect(fixture.nativeElement.querySelector('.form-status[role="alert"]')).not.toBeNull();
   });
 
   it('preselects a product type from the contact route query param without changing the payload shape', () => {
@@ -90,6 +95,31 @@ describe('ContactFormComponent', () => {
     expect(fixture.componentInstance.form.controls.projectType.value).toBe('mvp_prototype');
   });
 
+  it('preselects the development category from the Development CTA query param', () => {
+    projectTypeParams$.next(convertToParamMap({ projectType: 'custom_web_app' }));
+
+    const fixture = TestBed.createComponent(ContactFormComponent);
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.form.controls.projectType.value).toBe('custom_web_app');
+    expect(fixture.nativeElement.textContent).toContain(
+      'Development: aplikacja, API albo integracja',
+    );
+  });
+
+  it('preselects automation and API categories from allowlisted CTA query params', () => {
+    projectTypeParams$.next(convertToParamMap({ projectType: 'business_process_automation' }));
+    const fixture = TestBed.createComponent(ContactFormComponent);
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.form.controls.projectType.value).toBe(
+      'business_process_automation',
+    );
+
+    projectTypeParams$.next(convertToParamMap({ projectType: 'backend_api' }));
+    expect(fixture.componentInstance.form.controls.projectType.value).toBe('backend_api');
+  });
+
   it('falls back to the default state for an invalid contact query param', () => {
     projectTypeParams$.next(convertToParamMap({ projectType: 'unknown' }));
 
@@ -112,6 +142,7 @@ describe('ContactFormComponent', () => {
       budgetRange: '25k_50k_pln',
       message: 'Potrzebujemy automatyzacji procesu obsługi zapytań od klientów.',
       consent: true,
+      website: '',
     });
 
     fixture.componentInstance.submit();
@@ -141,12 +172,36 @@ describe('ContactFormComponent', () => {
       'business_process_automation',
       'rag_chatbot_demo',
       'backend_api',
+      'ai_automation',
+      'email_automation',
+      'voice_agent_demo',
+      'whatsapp_agent_management',
+      'agent_management_panel',
+      'dashboard_internal_tool',
+      'website_seo',
       'external_integration',
       'other',
     ]);
     expect(new Set(optionValues).size).toBe(optionValues.length);
     expect(fixture.nativeElement.textContent).toContain('Asystent AI lub RAG');
     expect(fixture.nativeElement.textContent).toContain('Konsultacja techniczna');
+  });
+
+  it('uses accessible field semantics without making the budget mandatory', () => {
+    const fixture = TestBed.createComponent(ContactFormComponent);
+    fixture.detectChanges();
+    const element: HTMLElement = fixture.nativeElement;
+
+    expect((element.querySelector('#name') as HTMLInputElement).required).toBeTrue();
+    expect((element.querySelector('#email') as HTMLInputElement).autocomplete).toBe('email');
+    expect((element.querySelector('#company') as HTMLInputElement).autocomplete).toBe(
+      'organization',
+    );
+    expect((element.querySelector('#budgetRange') as HTMLSelectElement).required).toBeFalse();
+    expect(element.querySelector('#message')?.getAttribute('aria-describedby')).toBe(
+      'message-hint',
+    );
+    expect(element.querySelector('.honeypot [tabindex="-1"]')).not.toBeNull();
   });
 
   it('submits a productized project type using the existing payload shape', () => {
@@ -162,6 +217,7 @@ describe('ContactFormComponent', () => {
       budgetRange: '10k_25k_pln',
       message: 'Chcemy sprawdzić demo chatbota RAG dla materiałów sprzedażowych.',
       consent: true,
+      website: '',
     });
 
     fixture.componentInstance.submit();
@@ -189,6 +245,7 @@ describe('ContactFormComponent', () => {
     expect(consent.checked).toBeFalse();
     expect(fixture.nativeElement.querySelector('label[for="consent"]')).not.toBeNull();
     expect(fixture.nativeElement.querySelector('a[href="/polityka-prywatnosci"]')).not.toBeNull();
+    expect(text).not.toMatch(/marketing|newsletter/i);
   });
 
   it('keeps budget optional and sends the backend-compatible not-sure value when blank', () => {
@@ -212,12 +269,13 @@ describe('ContactFormComponent', () => {
       budgetRange: '',
       message: 'Chcemy uprościć powtarzalny proces obsługi zapytań od klientów.',
       consent: true,
+      website: '',
     });
 
     fixture.componentInstance.submit();
 
     expect(api.submit).toHaveBeenCalledWith(jasmine.objectContaining({ budgetRange: 'not_sure' }));
-    expect(projectTypeOptions).toHaveSize(7);
+    expect(projectTypeOptions).toHaveSize(14);
   });
 
   it('shows the success path with a reset action and a home link', () => {
@@ -232,11 +290,16 @@ describe('ContactFormComponent', () => {
       budgetRange: '',
       message: 'Chcemy sprawdzić jeden proces przed rozpoczęciem większego wdrożenia.',
       consent: true,
+      website: '',
     });
     fixture.componentInstance.submit();
     fixture.detectChanges();
 
     expect(fixture.nativeElement.textContent).toContain('Wiadomość została odebrana');
+    expect(fixture.nativeElement.textContent).toContain('Wysłany opis');
+    expect(fixture.nativeElement.textContent).toContain('Jan Kowalski');
+    expect(fixture.nativeElement.textContent).toContain('Chcemy sprawdzić jeden proces');
+    expect(fixture.nativeElement.querySelector('.contact-success[role="status"]')).not.toBeNull();
     expect(fixture.nativeElement.querySelector('a[href="/"]')).not.toBeNull();
     expect(fixture.nativeElement.querySelector('.contact-form')).toBeNull();
 
@@ -260,11 +323,77 @@ describe('ContactFormComponent', () => {
       budgetRange: '',
       message: 'Chcemy sprawdzić jeden proces przed rozpoczęciem większego wdrożenia.',
       consent: true,
+      website: '',
     });
     fixture.componentInstance.submit();
     fixture.detectChanges();
 
     expect(fixture.nativeElement.textContent).toContain('Formularz jest chwilowo niedostępny');
     expect(fixture.nativeElement.textContent).not.toMatch(/stack|trace|HTTP/i);
+    expect(fixture.componentInstance.form.controls.message.value).toContain(
+      'Chcemy sprawdzić jeden proces',
+    );
+    expect(fixture.componentInstance.form.controls.name.value).toBe('Jan Kowalski');
+  });
+
+  it('keeps the entered values and uses generic copy after a server error', () => {
+    const fixture = TestBed.createComponent(ContactFormComponent);
+    fixture.detectChanges();
+    const api = TestBed.inject(ContactApiService) as jasmine.SpyObj<ContactApiService>;
+    api.submit.and.returnValue(
+      throwError(() => ({ status: 503, error: { message: 'SMTP timeout' } })),
+    );
+
+    fixture.componentInstance.form.setValue({
+      name: 'Jan Kowalski',
+      email: 'jan@example.com',
+      company: 'Firma Testowa',
+      projectType: 'backend_api',
+      budgetRange: '',
+      message: 'Potrzebujemy połączyć dane z kilku systemów przez bezpieczne API.',
+      consent: true,
+      website: '',
+    });
+    fixture.componentInstance.submit();
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).toContain('Nie udało się teraz przyjąć wiadomości');
+    expect(fixture.nativeElement.textContent).not.toContain('SMTP timeout');
+    expect(fixture.componentInstance.form.controls.company.value).toBe('Firma Testowa');
+    expect(fixture.componentInstance.form.controls.projectType.value).toBe('backend_api');
+  });
+
+  it('prevents a second submission while the first request is still processing', () => {
+    const fixture = TestBed.createComponent(ContactFormComponent);
+    fixture.detectChanges();
+    const api = TestBed.inject(ContactApiService) as jasmine.SpyObj<ContactApiService>;
+    const response$ = new Subject<{ status: 'accepted'; message: string }>();
+    api.submit.and.returnValue(response$.asObservable());
+
+    fixture.componentInstance.form.setValue({
+      name: 'Jan Kowalski',
+      email: 'jan@example.com',
+      company: '',
+      projectType: 'mvp_prototype',
+      budgetRange: '',
+      message: 'Chcemy sprawdzić jeden proces przed rozpoczęciem większego wdrożenia.',
+      consent: true,
+      website: '',
+    });
+    fixture.componentInstance.submit();
+    fixture.componentInstance.submit();
+    fixture.detectChanges();
+
+    expect(api.submit).toHaveBeenCalledTimes(1);
+    expect(
+      fixture.nativeElement.querySelector('.submit-button')?.hasAttribute('disabled'),
+    ).toBeTrue();
+    expect(fixture.nativeElement.querySelector('.form-processing')?.textContent).toContain(
+      'Wysyłanie',
+    );
+    expect(fixture.nativeElement.querySelector('.form-processing[role="status"]')).not.toBeNull();
+
+    response$.next({ status: 'accepted', message: 'ok' });
+    response$.complete();
   });
 });

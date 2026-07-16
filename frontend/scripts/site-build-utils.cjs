@@ -1,0 +1,152 @@
+const fs = require('node:fs');
+const path = require('node:path');
+const vm = require('node:vm');
+const ts = require('typescript');
+
+const FRONTEND_ROOT = path.resolve(__dirname, '..');
+const PLACEHOLDER_PATTERN = /__PUBLIC_CONFIG_REQUIRED__|<[^>]+>|localhost|\.example(?:\.com)?/i;
+
+function environmentPath(mode) {
+  return path.join(
+    FRONTEND_ROOT,
+    'src/environments',
+    mode === 'production' ? 'environment.prod.ts' : 'environment.ts',
+  );
+}
+
+function loadEnvironment(mode) {
+  const filePath = environmentPath(mode);
+  const source = fs.readFileSync(filePath, 'utf8');
+  const output = ts.transpileModule(source, {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
+    fileName: filePath,
+  }).outputText;
+  const module = { exports: {} };
+  vm.runInNewContext(output, { module, exports: module.exports }, { filename: filePath });
+  return module.exports.environment;
+}
+
+function normalizeOrigin(origin) {
+  return typeof origin === 'string' ? origin.replace(/\/$/, '') : '';
+}
+
+function validateProductionSiteConfig(environment) {
+  const errors = [];
+  const origin = normalizeOrigin(environment?.publicSiteOrigin);
+  const apiUrl = typeof environment?.apiUrl === 'string' ? environment.apiUrl : '';
+
+  if (!origin || PLACEHOLDER_PATTERN.test(origin)) {
+    errors.push('publicSiteOrigin');
+  } else {
+    try {
+      const url = new URL(origin);
+      if (url.protocol !== 'https:' || url.pathname !== '/' || url.search || url.hash) {
+        errors.push('publicSiteOrigin');
+      }
+    } catch {
+      errors.push('publicSiteOrigin');
+    }
+  }
+
+  if (!apiUrl || PLACEHOLDER_PATTERN.test(apiUrl)) {
+    errors.push('apiUrl');
+  } else {
+    try {
+      const url = new URL(apiUrl);
+      if (url.protocol !== 'https:') {
+        errors.push('apiUrl');
+      }
+    } catch {
+      errors.push('apiUrl');
+    }
+  }
+
+  return errors;
+}
+
+function publicPrerenderRoutes() {
+  const routes = fs
+    .readFileSync(path.join(FRONTEND_ROOT, 'src/prerender-routes.txt'), 'utf8')
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  return routes.filter((route) => route !== '/404');
+}
+
+function escapeXml(value) {
+  return value.replace(/[<>&'\"]/g, (character) => {
+    return { '<': '&lt;', '>': '&gt;', '&': '&amp;', "'": '&apos;', '"': '&quot;' }[character];
+  });
+}
+
+function generatedDirectory() {
+  return path.join(FRONTEND_ROOT, 'generated');
+}
+
+function writeSeoArtifacts(environment) {
+  const origin = normalizeOrigin(environment.publicSiteOrigin);
+  const routes = publicPrerenderRoutes();
+  const outputDirectory = generatedDirectory();
+  fs.mkdirSync(outputDirectory, { recursive: true });
+
+  const sitemap = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ...routes.map(
+      (route) => `  <url><loc>${escapeXml(`${origin}${route === '/' ? '' : route}`)}</loc></url>`,
+    ),
+    '</urlset>',
+    '',
+  ].join('\n');
+  const robots = ['User-agent: *', 'Allow: /', '', `Sitemap: ${origin}/sitemap.xml`, ''].join('\n');
+
+  fs.writeFileSync(path.join(outputDirectory, 'sitemap.xml'), sitemap, 'utf8');
+  fs.writeFileSync(path.join(outputDirectory, 'robots.txt'), robots, 'utf8');
+}
+
+function validateSeoArtifacts(environment, { production = false } = {}) {
+  const origin = normalizeOrigin(environment.publicSiteOrigin);
+  const expectedRoutes = publicPrerenderRoutes();
+  const sitemapPath = path.join(generatedDirectory(), 'sitemap.xml');
+  const robotsPath = path.join(generatedDirectory(), 'robots.txt');
+  const errors = [];
+
+  if (!fs.existsSync(sitemapPath) || !fs.existsSync(robotsPath)) {
+    return ['generated SEO artifacts are missing'];
+  }
+
+  const sitemap = fs.readFileSync(sitemapPath, 'utf8');
+  const robots = fs.readFileSync(robotsPath, 'utf8');
+  const locations = Array.from(sitemap.matchAll(/<loc>([^<]+)<\/loc>/g), (match) => match[1]);
+  const expectedLocations = expectedRoutes.map((route) => `${origin}${route === '/' ? '' : route}`);
+
+  if (
+    locations.length !== expectedLocations.length ||
+    locations.some((location, index) => location !== expectedLocations[index])
+  ) {
+    errors.push('sitemap routes do not match prerender routes');
+  }
+  if (/__PUBLIC_CONFIG_REQUIRED__|\.example(?:\.com)?/i.test(sitemap + robots)) {
+    errors.push('SEO artifacts contain a placeholder origin');
+  }
+  if (production && /localhost/i.test(sitemap + robots)) {
+    errors.push('production SEO artifacts contain a localhost origin');
+  }
+  if (!robots.includes(`Sitemap: ${origin}/sitemap.xml`)) {
+    errors.push('robots sitemap URL does not match publicSiteOrigin');
+  }
+
+  return errors;
+}
+
+module.exports = {
+  FRONTEND_ROOT,
+  generatedDirectory,
+  loadEnvironment,
+  normalizeOrigin,
+  publicPrerenderRoutes,
+  validateProductionSiteConfig,
+  validateSeoArtifacts,
+  writeSeoArtifacts,
+};

@@ -39,6 +39,7 @@ class ContactInquiry(BaseModel):
     budget_range: BudgetRange = Field(alias="budgetRange")
     message: str = Field(min_length=20, max_length=4000)
     consent: bool
+    website: str = Field(default="", max_length=200, exclude=True)
     submitted_at: datetime = Field(default_factory=lambda: datetime.now(UTC), exclude=True)
 
     model_config = ConfigDict(populate_by_name=True, extra="forbid", str_strip_whitespace=True)
