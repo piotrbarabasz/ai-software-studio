@@ -13,7 +13,7 @@
     "validate:seo:production": "node scripts/validate-seo-artifacts.cjs production",
     "validate:seo:development": "node scripts/validate-seo-artifacts.cjs development",
     "validate:legal:production": "node scripts/validate-public-legal-config.cjs",
-    "test:legal-config": "node --test scripts/validate-public-legal-config.test.cjs",
+    "test:legal-config": "node --test scripts/validate-public-legal-config.test.cjs scripts/write-production-legal-config.test.cjs",
     "validate:static-routes": "node scripts/validate-static-routes.cjs",
     "test:site-build": "node --test scripts/site-build-utils.test.cjs",
     "test": "npm run validate:static-routes && npm run test:legal-config && npm run test:site-build && ng test --watch=false --browsers=ChromeHeadless",

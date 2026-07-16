@@ -11,6 +11,8 @@ RUN npm ci
 COPY . .
 
 RUN API_URL="$API_URL" PUBLIC_SITE_ORIGIN="$PUBLIC_SITE_ORIGIN" node scripts/write-production-environment.cjs \
+    && node scripts/write-production-legal-config.cjs \
+    && rm .public-legal-config.json \
     && npm run build
 
 FROM nginx:1.27-alpine
