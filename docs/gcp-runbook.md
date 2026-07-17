@@ -7,7 +7,7 @@ Use this runbook after the first production deployment of AISoftware Studio.
 - Confirm the backend build passed.
 - Confirm the frontend build passed.
 - Confirm `npm run validate:site:production` passed with the final HTTPS public origin and API URL.
-- Confirm `npm run validate:legal:production` passed with verified public privacy data.
+- Confirm `npm run validate:legal:production` and `npm run validate:artifact:production` passed with the same verified public privacy JSON.
 - Confirm no real secrets or project IDs were committed.
 - Confirm Cloud Build configs use placeholders and substitutions.
 - Confirm Cloud Run min instances remain `0`.
@@ -22,7 +22,7 @@ Use this runbook after the first production deployment of AISoftware Studio.
 3. Confirm browser requests from the frontend origin are allowed by CORS.
 4. Confirm an unapproved origin is rejected by CORS.
 5. Submit a safe contact request through the deployed frontend/backend path.
-6. Open `/polityka-prywatnosci` and verify that no development notice or `__LEGAL_REQUIRED__` value is visible.
+6. Open `/polityka-prywatnosci`, compare it with the approved JSON, and verify that no local-test value, `WPISZ`, `example` or `LEGAL_REQUIRED` marker is visible.
 7. Verify canonical, `og:url`, JSON-LD, `/robots.txt` and `/sitemap.xml` use only the final public origin.
 
 ## Rollback
@@ -49,10 +49,12 @@ Use this runbook after the first production deployment of AISoftware Studio.
 ## Common Failures
 
 - Missing `SMTP_PASSWORD` secret binding
-- Wrong public frontend origin in `CORS_ALLOWED_ORIGINS` or `PUBLIC_SITE_ORIGIN`
+- Wrong public frontend origin in `CORS_ALLOWED_ORIGINS` or `PUBLIC_SITE_URL`
 - Missing Cloud Build or Artifact Registry permissions
 - Missing required GCP APIs
 - Incorrect API URL in the frontend build
+- Legal JSON secret granted only to the Cloud Run runtime account instead of the Cloud Build service account
+- Updated legal secret version without a new frontend image build and Cloud Run revision
 
 ## Secret Rotation
 
@@ -83,5 +85,9 @@ Use the backend URL for health checks and the final public origin for browser va
 If the deployment seems broken, re-run the local validation script and the container smoke tests before changing production settings:
 
 ```powershell
-.\scripts\gcp\preflight.ps1
+.\scripts\gcp\preflight.ps1 `
+  -PublicLegalConfigPath "C:\bezpieczna-lokalizacja\public-legal.json" `
+  -ApiUrl "https://<BACKEND_ORIGIN>" `
+  -PublicSiteUrl "https://<PUBLIC_SITE_URL>" `
+  -EnableIndexing $true
 ```

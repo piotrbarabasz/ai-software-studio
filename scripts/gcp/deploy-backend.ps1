@@ -10,7 +10,7 @@ param(
   [string]$ServiceName = 'aisoftware-studio-api',
 
   [Parameter(Mandatory = $true)]
-  [string]$FrontendUrl,
+  [string]$PublicSiteUrl,
 
   [string]$AppEnv = 'production',
 
@@ -67,7 +67,7 @@ $substitutions = @(
   "_IMAGE_NAME=aisoftware-studio-api",
   "_MIN_INSTANCES=0",
   "_APP_ENV=$AppEnv",
-  "_CORS_ALLOWED_ORIGINS=$FrontendUrl",
+  "_CORS_ALLOWED_ORIGINS=$PublicSiteUrl",
   "_CONTACT_DELIVERY_MODE=$ContactDeliveryMode",
   "_CONTACT_RECIPIENT_EMAIL=$ContactRecipientEmail",
   "_CONTACT_FROM_EMAIL=$ContactFromEmail",

@@ -10,6 +10,7 @@
     <label for="name">Imię i nazwisko <span aria-hidden="true">*</span></label>
     <input
       id="name"
+      name="name"
       type="text"
       autocomplete="name"
       formControlName="name"
@@ -25,6 +26,7 @@
     <label for="email">E-mail <span aria-hidden="true">*</span></label>
     <input
       id="email"
+      name="email"
       type="email"
       autocomplete="email"
       formControlName="email"
@@ -40,6 +42,7 @@
     <label for="company">Firma <span class="optional-label">(opcjonalnie)</span></label>
     <input
       id="company"
+      name="company"
       type="text"
       autocomplete="organization"
       formControlName="company"
@@ -55,6 +58,7 @@
     <label for="projectType">Czego dotyczy rozmowa? <span aria-hidden="true">*</span></label>
     <select
       id="projectType"
+      name="projectType"
       formControlName="projectType"
       required
       [attr.aria-invalid]="isInvalid('projectType')"
@@ -79,6 +83,7 @@
     <label for="budgetRange">Budżet orientacyjny — opcjonalnie</label>
     <select
       id="budgetRange"
+      name="budgetRange"
       formControlName="budgetRange"
       [attr.aria-invalid]="isInvalid('budgetRange')"
       aria-describedby="budget-range-hint"
@@ -98,6 +103,7 @@
     <label for="message">Wiadomość <span aria-hidden="true">*</span></label>
     <textarea
       id="message"
+      name="message"
       rows="6"
       maxlength="4000"
       formControlName="message"
@@ -115,12 +121,20 @@
 
   <div class="honeypot" aria-hidden="true">
     <label for="website">Strona internetowa</label>
-    <input id="website" type="text" tabindex="-1" autocomplete="off" formControlName="website" />
+    <input
+      id="website"
+      name="website"
+      type="text"
+      tabindex="-1"
+      autocomplete="off"
+      formControlName="website"
+    />
   </div>
 
   <div class="consent field-full">
     <input
       id="consent"
+      name="consent"
       type="checkbox"
       formControlName="consent"
       required
@@ -137,9 +151,20 @@
     </p>
   </div>
 
-  <div *ngIf="statusMessage" class="form-status error" role="alert">
-    {{ statusMessage }}
+  <div
+    *ngIf="status === 'error' && statusMessage"
+    #errorSummary
+    id="contact-form-error-summary"
+    class="form-status error"
+    role="alert"
+    aria-labelledby="contact-form-error-title"
+    tabindex="-1"
+  >
+    <p id="contact-form-error-title"><strong>Formularz wymaga uwagi.</strong></p>
+    <p>{{ statusMessage }}</p>
   </div>
+
+  <p class="form-next-step">{{ content.formNextStep }}</p>
 
   <button class="submit-button" type="submit" [disabled]="isSubmitting">
     {{ isSubmitting ? content.submitting : content.submit }}
@@ -149,12 +174,14 @@
 
 <section
   *ngIf="status === 'success'"
+  #successMessage
   class="contact-success"
   role="status"
   aria-live="polite"
+  aria-labelledby="contact-success-title"
   tabindex="-1"
 >
-  <h2>{{ content.success.title }}</h2>
+  <h2 id="contact-success-title">{{ content.success.title }}</h2>
   <p>{{ statusMessage }}</p>
   <div *ngIf="submissionSummary" class="submission-summary">
     <h3>{{ content.success.summaryTitle }}</h3>

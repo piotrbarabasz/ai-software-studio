@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
   apiUrl: '__PUBLIC_CONFIG_REQUIRED__:apiUrl',
-  publicSiteOrigin: '__PUBLIC_CONFIG_REQUIRED__:publicSiteOrigin',
+  publicSiteUrl: '__PUBLIC_CONFIG_REQUIRED__:publicSiteUrl',
+  indexingEnabled: false,
 } as const;

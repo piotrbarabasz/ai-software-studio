@@ -6,20 +6,20 @@ const { parseAndValidatePublicLegalConfig } = require('./write-production-legal-
 function completeConfiguration() {
   return {
     administrator: {
-      name: 'configured administrator',
-      correspondenceAddress: 'configured correspondence address',
-      privacyContact: 'configured privacy contact',
+      name: 'Administrator Walidacji Lokalnej',
+      correspondenceAddress: 'Adres Walidacji 7, 00-001 Miasto',
+      privacyContact: 'privacy@walidacja-konfiguracji.pl',
     },
     processing: {
-      purposes: ['configured purpose'],
-      legalBases: ['configured legal basis'],
-      retention: ['configured retention criterion'],
-      recipients: ['configured recipient category'],
-      infrastructureProviders: ['configured infrastructure provider'],
-      emailProviders: ['configured email provider'],
-      dataSubjectRights: ['configured rights information'],
+      purposes: ['Obsługa zapytań z formularza'],
+      legalBases: ['Podstawa zatwierdzona przez właściciela'],
+      retention: ['Okres zatwierdzony przez właściciela'],
+      recipients: ['Zatwierdzona kategoria odbiorców'],
+      infrastructureProviders: ['Zatwierdzony dostawca infrastruktury'],
+      emailProviders: ['Zatwierdzony dostawca poczty'],
+      dataSubjectRights: ['Zatwierdzona informacja o prawach'],
     },
-    updatedAt: 'configured update date',
+    updatedAt: '2026-07-17',
   };
 }
 
@@ -30,12 +30,17 @@ test('accepts a complete JSON public legal configuration', () => {
   );
 });
 
-test('reports missing fields from a production JSON public legal configuration', () => {
+test('reports the exact path of a forbidden production value', () => {
   const configuration = completeConfiguration();
-  configuration.administrator.privacyContact = '__LEGAL_REQUIRED__:administrator.privacyContact';
+  configuration.administrator.privacyContact = 'owner@example.com';
 
   assert.throws(
     () => parseAndValidatePublicLegalConfig(JSON.stringify(configuration)),
-    /administrator\.privacyContact/,
+    /administrator\.privacyContact.*example/s,
   );
+});
+
+test('rejects invalid JSON and non-object JSON', () => {
+  assert.throws(() => parseAndValidatePublicLegalConfig('{'), /poprawny obiekt JSON/);
+  assert.throws(() => parseAndValidatePublicLegalConfig('[]'), /obiekt JSON/);
 });

@@ -23,6 +23,7 @@ export class SiteShellComponent implements OnInit {
   private readonly meta = inject(Meta);
   private readonly document = inject(DOCUMENT);
   private readonly destroyRef = inject(DestroyRef);
+  private currentRouteUrl = this.router.url;
 
   @ViewChild('menuToggle') private readonly menuToggle?: ElementRef<HTMLButtonElement>;
   @ViewChild('primaryNavigation') private readonly primaryNavigation?: ElementRef<HTMLElement>;
@@ -31,6 +32,7 @@ export class SiteShellComponent implements OnInit {
   isMobileNavigationOpen = false;
   isMobileViewport = false;
   readonly navigation = siteContent.navigation;
+  readonly footer = siteContent.footer;
   readonly trust = siteContent.trust;
 
   ngOnInit(): void {
@@ -42,10 +44,14 @@ export class SiteShellComponent implements OnInit {
         filter((event): event is NavigationEnd => event instanceof NavigationEnd),
         takeUntilDestroyed(this.destroyRef),
       )
-      .subscribe(() => {
+      .subscribe((event) => {
+        const shouldMoveFocus = event.urlAfterRedirects !== this.currentRouteUrl;
+        this.currentRouteUrl = event.urlAfterRedirects;
         this.syncRouteMetadata();
         this.closeNavigation(false);
-        this.mainContent?.nativeElement.focus();
+        if (shouldMoveFocus) {
+          queueMicrotask(() => this.focusMainContent());
+        }
       });
   }
 
@@ -57,7 +63,7 @@ export class SiteShellComponent implements OnInit {
     this.isMobileNavigationOpen = !this.isMobileNavigationOpen;
 
     if (this.isMobileNavigationOpen) {
-      queueMicrotask(() => this.focusFirstNavigationItem());
+      setTimeout(() => this.focusFirstNavigationItem());
     }
   }
 
@@ -72,6 +78,11 @@ export class SiteShellComponent implements OnInit {
     }
   }
 
+  focusMainContent(event?: Event): void {
+    event?.preventDefault();
+    this.mainContent?.nativeElement.focus();
+  }
+
   @HostListener('document:keydown', ['$event'])
   handleKeyboardNavigation(event: KeyboardEvent): void {
     if (!this.isMobileNavigationOpen) {
@@ -81,11 +92,6 @@ export class SiteShellComponent implements OnInit {
     if (event.key === 'Escape') {
       event.preventDefault();
       this.closeNavigation(true);
-      return;
-    }
-
-    if (event.key === 'Tab') {
-      this.trapNavigationFocus(event);
     }
   }
 
@@ -110,6 +116,9 @@ export class SiteShellComponent implements OnInit {
     this.meta.updateTag({ property: 'og:type', content: 'website' });
     this.meta.updateTag({ property: 'og:url', content: absoluteSiteUrl(canonicalPath) });
     this.meta.updateTag({ property: 'og:image', content: siteSocialImageUrl });
+    this.meta.updateTag({ property: 'og:image:type', content: 'image/jpeg' });
+    this.meta.updateTag({ property: 'og:image:width', content: '1200' });
+    this.meta.updateTag({ property: 'og:image:height', content: '630' });
     this.meta.updateTag({ property: 'og:locale', content: siteSeo.locale });
     this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
     this.meta.updateTag({ name: 'twitter:title', content: title });
@@ -117,45 +126,15 @@ export class SiteShellComponent implements OnInit {
     this.meta.updateTag({ name: 'twitter:image', content: siteSocialImageUrl });
     this.meta.updateTag({
       name: 'robots',
-      content: canonicalPath === '/404' ? 'noindex, follow' : 'index, follow',
+      content:
+        canonicalPath === '/404' || !siteSeo.indexingEnabled ? 'noindex, follow' : 'index, follow',
     });
     this.setCanonical(canonicalPath);
     this.setStructuredData(canonicalPath);
   }
 
   private focusFirstNavigationItem(): void {
-    this.navigationItems()[0]?.focus();
-  }
-
-  private trapNavigationFocus(event: KeyboardEvent): void {
-    const items = this.navigationItems();
-    if (items.length === 0) {
-      return;
-    }
-
-    const activeElement = this.document.activeElement;
-    const firstItem = items[0];
-    const lastItem = items[items.length - 1];
-
-    if (
-      event.shiftKey &&
-      (activeElement === firstItem || !items.includes(activeElement as HTMLElement))
-    ) {
-      event.preventDefault();
-      lastItem.focus();
-      return;
-    }
-
-    if (!event.shiftKey && activeElement === lastItem) {
-      event.preventDefault();
-      firstItem.focus();
-    }
-  }
-
-  private navigationItems(): HTMLElement[] {
-    return Array.from(
-      this.primaryNavigation?.nativeElement.querySelectorAll<HTMLElement>('a[href]') ?? [],
-    );
+    this.primaryNavigation?.nativeElement.querySelector<HTMLElement>('a[href]')?.focus();
   }
 
   private getDeepestRoute(route: ActivatedRouteSnapshot): ActivatedRouteSnapshot {

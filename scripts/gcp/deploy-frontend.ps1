@@ -12,6 +12,13 @@ param(
   [Parameter(Mandatory = $true)]
   [string]$ApiUrl,
 
+  [Parameter(Mandatory = $true)]
+  [string]$PublicSiteUrl,
+
+  [bool]$EnableIndexing = $false,
+
+  [string]$PublicLegalConfigSecret = 'aisoftware-studio-public-legal-config',
+
   [string]$ImageTag = ''
 )
 
@@ -46,6 +53,9 @@ $substitutions = @(
   "_IMAGE_NAME=aisoftware-studio-web",
   "_MIN_INSTANCES=0",
   "_API_URL=$ApiUrl",
+  "_PUBLIC_SITE_URL=$PublicSiteUrl",
+  "_PUBLIC_SITE_INDEXING=$($EnableIndexing.ToString().ToLowerInvariant())",
+  "_PUBLIC_LEGAL_CONFIG_SECRET=$PublicLegalConfigSecret",
   "_IMAGE_TAG=$ImageTag"
 ) -join ','
 

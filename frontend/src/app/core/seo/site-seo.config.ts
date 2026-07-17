@@ -1,13 +1,14 @@
 import type { StaticRoutePath } from '../content/site-content.types';
 import { environment } from '../../../environments/environment';
 
-const siteOrigin = environment.publicSiteOrigin.replace(/\/$/, '');
+const siteOrigin = environment.publicSiteUrl.replace(/\/$/, '');
 
 export const siteSeo = {
   origin: siteOrigin,
   name: 'AISoftware Studio',
   locale: 'pl_PL',
-  socialImagePath: '/assets/aisoftware-studio-social-preview.png',
+  indexingEnabled: environment.indexingEnabled,
+  socialImagePath: '/assets/aisoftware-studio-social-preview.jpg',
   organizationDescription:
     'Samodzielnie prowadzone studio tworzące dema AI i rozwiązania cyfrowe dla firm.',
 } as const;

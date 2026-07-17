@@ -48,7 +48,9 @@ img {
   max-width: 100%;
 }
 
-a {
+a,
+p,
+li {
   color: inherit;
   min-width: 0;
   overflow-wrap: anywhere;
@@ -56,16 +58,10 @@ a {
 
 h1,
 h2,
-h3,
-p,
-li,
-button {
-  overflow-wrap: anywhere;
-}
-
-h1,
-h2,
 h3 {
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: manual;
   text-wrap: balance;
 }
 
@@ -107,6 +103,7 @@ button {
 
 .section-shell {
   width: 100%;
+  min-width: 0;
   max-width: 1180px;
   margin: 0 auto;
   padding-inline: clamp(1rem, 5vw, 4.5rem);

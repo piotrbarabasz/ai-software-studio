@@ -8,7 +8,7 @@ This guide covers first-time production deployment of the existing AISoftware St
 - Backend: `aisoftware-studio-api` as a FastAPI Cloud Run service
 - Registry: Artifact Registry for container images
 - CI/CD: Cloud Build YAML files plus GitHub-connected Cloud Build triggers documented in `docs/gcp-cicd.md`
-- Secrets: Secret Manager for `SMTP_PASSWORD`
+- Secrets: Secret Manager for runtime `SMTP_PASSWORD` and build-time public legal JSON
 
 ## Prerequisites
 
@@ -61,7 +61,7 @@ Write-Output 'paste-real-password-locally-only' | gcloud secrets create aisoftwa
 
 If the secret already exists, add a new version rather than replacing the value in source control.
 
-The production frontend build also reads the secret selected by `_PUBLIC_LEGAL_CONFIG_SECRET` (default: `aisoftware-studio-public-legal-config`). Its content must be the verified JSON described in [`privacy-configuration.md`](privacy-configuration.md); it is validated before Angular compiles.
+The production frontend build reads the secret selected by `_PUBLIC_LEGAL_CONFIG_SECRET` (default: `aisoftware-studio-public-legal-config`). Its content must be the exact verified JSON described in [`privacy-configuration.md`](privacy-configuration.md). Grant access to the Cloud Build service account, not only to the Cloud Run runtime service account. A runtime secret binding cannot change prerendered HTML.
 
 ## Backend Deployment
 
@@ -70,7 +70,7 @@ Use `scripts/gcp/deploy-backend.ps1` or `infra/gcp/cloudbuild.backend.yaml`.
 Required runtime values:
 
 - `APP_ENV=production`
-- `CORS_ALLOWED_ORIGINS=https://<PUBLIC_SITE_ORIGIN>`
+- `CORS_ALLOWED_ORIGINS=https://<PUBLIC_SITE_URL>`
 - `CONTACT_DELIVERY_MODE=email`
 - `CONTACT_RECIPIENT_EMAIL`
 - `CONTACT_FROM_EMAIL`
@@ -85,19 +85,19 @@ The backend must listen on Cloud Run `PORT` and expose `GET /health` plus the ex
 
 ## Frontend Deployment
 
-Use `scripts/gcp/deploy-frontend.ps1` or `infra/gcp/cloudbuild.frontend.yaml`.
+Use `scripts/gcp/deploy-frontend.ps1` or `infra/gcp/cloudbuild.frontend.yaml`. The script requires both `-ApiUrl` and `-PublicSiteUrl`; optionally pass `-EnableIndexing $true` only for production and `-PublicLegalConfigSecret` when the secret uses a non-default name.
 
-Pass the deployed backend URL as `API_URL` and the verified public frontend origin as `PUBLIC_SITE_ORIGIN`. The Docker build rejects a placeholder, `localhost`, an example domain, or an HTTP origin in production.
+Pass the deployed backend URL as `API_URL` and the verified public frontend origin as `PUBLIC_SITE_URL`. The Docker build rejects a placeholder, `localhost`, an example domain, or an HTTP origin in production. `PUBLIC_SITE_INDEXING` defaults to `false` for staging and preview.
 
-Before the frontend production build, complete and validate `frontend/src/app/core/legal/public-legal.config.ts` according to [`privacy-configuration.md`](privacy-configuration.md). The configuration is public but must contain verified administrator, contact, retention, recipient, SMTP-provider, legal-basis, rights, and update-date information. The production build intentionally fails while its explicit placeholders remain.
+Before the frontend production build, prepare the verified JSON described in [`privacy-configuration.md`](privacy-configuration.md). Do not edit a TypeScript fallback: no production fallback exists. Cloud Build passes JSON as a BuildKit secret and the Docker build fails on a missing field, empty value, placeholder, test data, invalid e-mail, missing prerendered route, or forbidden artifact content.
 
-The production container serves prerendered Angular routes through Nginx on port `8080`. It also serves generated `robots.txt` and `sitemap.xml`; their URLs are derived from `PUBLIC_SITE_ORIGIN` during the build.
+The production container serves prerendered Angular routes through Nginx on port `8080`. It also serves generated `robots.txt` and `sitemap.xml`; their URLs are derived from `PUBLIC_SITE_URL` during the build.
 
 ## CORS Update Order
 
 1. Establish the final frontend origin (or use the technical Cloud Run URL only for a test deployment).
 2. Deploy the backend with that exact origin in `CORS_ALLOWED_ORIGINS`.
-3. Build and deploy the frontend with the same origin in `PUBLIC_SITE_ORIGIN`.
+3. Build and deploy the frontend with the same origin in `PUBLIC_SITE_URL`.
 
 Production CORS must not use wildcard origins.
 
@@ -121,7 +121,11 @@ Follow [public-origin-deployment.md](public-origin-deployment.md) before publish
 Run the local preflight script first:
 
 ```powershell
-.\scripts\gcp\preflight.ps1
+.\scripts\gcp\preflight.ps1 `
+  -PublicLegalConfigPath "C:\bezpieczna-lokalizacja\public-legal.json" `
+  -ApiUrl "https://<BACKEND_ORIGIN>" `
+  -PublicSiteUrl "https://<PUBLIC_SITE_URL>" `
+  -EnableIndexing $true
 ```
 
 Then confirm the backend and frontend container smoke tests described in `docs/gcp-runbook.md`.

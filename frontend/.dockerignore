@@ -6,6 +6,8 @@ coverage/
 *.log
 .env
 .env.*
+.public-legal-config.json
+config/local-test/
 Dockerfile*
 .dockerignore
 README.md

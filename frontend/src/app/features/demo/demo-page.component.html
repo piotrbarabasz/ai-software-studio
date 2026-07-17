@@ -4,7 +4,17 @@
       <p class="eyebrow">{{ content.eyebrow }}</p>
       <h1>{{ content.title }}</h1>
       <p class="page-lead">{{ content.lead }}</p>
-      <a class="primary-action" href="#interactive-demo">{{ content.interactiveCtaLabel }}</a>
+      <div class="hero-actions" aria-label="Główne działania">
+        <a
+          class="primary-action"
+          routerLink="/kontakt"
+          [queryParams]="{ projectType: 'mvp_prototype' }"
+          >{{ content.ctaLabel }}</a
+        >
+        <a class="secondary-action" routerLink="/demo-ai" fragment="interactive-demo">{{
+          content.interactiveCtaLabel
+        }}</a>
+      </div>
     </div>
   </section>
 
@@ -30,21 +40,17 @@
 
   <section class="interactive-demo section-shell" appRevealOnScroll>
     <app-knowledge-demo [content]="content.interactiveDemo" />
-  </section>
-
-  <section
-    class="demo-example section-shell"
-    aria-labelledby="demo-example-title"
-    appRevealOnScroll
-  >
-    <div class="section-heading">
-      <p class="eyebrow">Jeden przykład</p>
-      <h2 id="demo-example-title">{{ content.example.title }}</h2>
-      <p class="section-copy">{{ content.example.lead }}</p>
+    <div class="demo-code-link">
+      <p>Kod komponentu i jego testy są dostępne publicznie.</p>
+      <a
+        class="secondary-action"
+        [href]="content.codeLink.url"
+        target="_blank"
+        rel="noopener noreferrer"
+        [attr.aria-label]="content.codeLink.accessibleName"
+        >{{ content.codeLink.label }}</a
+      >
     </div>
-    <ul class="bullet-grid">
-      <li *ngFor="let point of content.example.points">{{ point }}</li>
-    </ul>
   </section>
 
   <section
@@ -82,7 +88,6 @@
       <h2 id="demo-outcome-title">{{ content.resultTitle }}</h2>
       <p class="section-copy">{{ content.result }}</p>
       <p class="section-copy">{{ content.decision }}</p>
-      <p class="section-copy">{{ content.transition }}</p>
     </div>
     <a
       class="primary-action"

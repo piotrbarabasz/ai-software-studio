@@ -1,0 +1,17 @@
+{
+  "administrator": {
+    "name": "AI Software Studio",
+    "correspondenceAddress": "Polska ul. Testowa 5",
+    "privacyContact": "ai.korepetycje3@gmail.com"
+  },
+  "processing": {
+    "purposes": ["Testowy cel obsługi formularza lokalnego"],
+    "legalBases": ["Testowa podstawa przetwarzania do pracy lokalnej"],
+    "retention": ["Testowy okres przechowywania"],
+    "recipients": ["Testowa kategoria odbiorców"],
+    "infrastructureProviders": ["Google Cloud Platform (Cloud Run)"],
+    "emailProviders": ["Testowy dostawca poczty"],
+    "dataSubjectRights": ["Testowa informacja o prawach"]
+  },
+  "updatedAt": "2000-01-01"
+}

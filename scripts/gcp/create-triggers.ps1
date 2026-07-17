@@ -11,9 +11,11 @@ param(
 
   [string]$Branch = 'master',
 
-  [string]$BackendUrl = 'https://aisoftware-studio-api-k6wldgptjq-lm.a.run.app',
+  [Parameter(Mandatory = $true)]
+  [string]$BackendUrl,
 
-  [string]$FrontendUrl = 'https://aisoftware-studio-web-k6wldgptjq-lm.a.run.app',
+  [Parameter(Mandatory = $true)]
+  [string]$PublicSiteUrl,
 
   [string]$ContactRecipientEmail = 'owner@example.com',
 
@@ -29,7 +31,9 @@ param(
 
   [string]$ContactRateLimitPerMinute = '30',
 
-  [string]$SmtpPasswordSecret = 'aisoftware-studio-smtp-password'
+  [string]$SmtpPasswordSecret = 'aisoftware-studio-smtp-password',
+
+  [string]$PublicLegalConfigSecret = 'aisoftware-studio-public-legal-config'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -149,8 +153,10 @@ $substitutions = @(
   "_BACKEND_IMAGE_NAME=aisoftware-studio-api",
   "_FRONTEND_IMAGE_NAME=aisoftware-studio-web",
   "_BACKEND_URL=$BackendUrl",
-  "_FRONTEND_URL=$FrontendUrl",
+  "_PUBLIC_SITE_URL=$PublicSiteUrl",
+  "_PUBLIC_SITE_INDEXING=true",
   "_SMTP_PASSWORD_SECRET=$SmtpPasswordSecret",
+  "_PUBLIC_LEGAL_CONFIG_SECRET=$PublicLegalConfigSecret",
   "_CONTACT_RATE_LIMIT_PER_MINUTE=$ContactRateLimitPerMinute",
   "_CONTACT_RECIPIENT_EMAIL=$ContactRecipientEmail",
   "_CONTACT_FROM_EMAIL=$ContactFromEmail",
@@ -170,6 +176,7 @@ Write-Host "Creating production trigger deploy-prod for branch $prodBranchPatter
 New-Trigger -Name 'deploy-prod' -BranchPattern $prodBranchPattern -Substitutions $substitutions
 
 Write-Host 'Creating temporary test trigger deploy-test-002-gcp-deployment for branch ^002-gcp-deployment$'
-New-Trigger -Name 'deploy-test-002-gcp-deployment' -BranchPattern '^002-gcp-deployment$' -Substitutions $substitutions
+$testSubstitutions = $substitutions.Replace('_PUBLIC_SITE_INDEXING=true', '_PUBLIC_SITE_INDEXING=false')
+New-Trigger -Name 'deploy-test-002-gcp-deployment' -BranchPattern '^002-gcp-deployment$' -Substitutions $testSubstitutions
 
 Write-Host 'Create the PR validation trigger in Cloud Console: event pull request, base branch ^master$, config infra/gcp/cloudbuild.pr-checks.yaml, no deploy.'

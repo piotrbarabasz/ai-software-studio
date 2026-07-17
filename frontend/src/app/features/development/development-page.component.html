@@ -4,6 +4,15 @@
       <p class="eyebrow">{{ content.eyebrow }}</p>
       <h1>{{ content.title }}</h1>
       <p class="page-lead">{{ content.lead }}</p>
+      <div class="hero-actions" aria-label="Główne działanie">
+        <a
+          class="primary-action"
+          [routerLink]="content.closingCta.primaryCta.path"
+          [queryParams]="content.closingCta.primaryCta.queryParams"
+          >{{ content.closingCta.primaryCta.label }}</a
+        >
+        <p class="hero-cta-note">{{ content.heroNextStep }}</p>
+      </div>
     </div>
     <aside class="hero-panel" aria-label="Zakres developmentu">
       <p class="panel-kicker">Zasady pracy</p>

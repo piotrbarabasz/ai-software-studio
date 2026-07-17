@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import type { HttpErrorResponse } from '@angular/common/http';
-import { Component, DestroyRef, inject } from '@angular/core';
-import type { OnInit } from '@angular/core';
+import { Component, DestroyRef, ViewChild, inject } from '@angular/core';
+import type { ElementRef, OnInit } from '@angular/core';
 import type { FormControl } from '@angular/forms';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -47,6 +47,9 @@ export class ContactFormComponent implements OnInit {
   private readonly api = inject(ContactApiService);
   private readonly route = inject(ActivatedRoute, { optional: true });
   private readonly destroyRef = inject(DestroyRef);
+
+  @ViewChild('errorSummary') private readonly errorSummary?: ElementRef<HTMLElement>;
+  @ViewChild('successMessage') private readonly successMessage?: ElementRef<HTMLElement>;
 
   readonly content: ContactPageContent = siteContent.contact;
   readonly form = this.fb.group<ContactFormControls>({
@@ -95,6 +98,7 @@ export class ContactFormComponent implements OnInit {
       this.form.markAllAsTouched();
       this.status = 'error';
       this.statusMessage = this.content.messages.validation;
+      this.focusStatusMessage('error');
       return;
     }
 
@@ -117,10 +121,12 @@ export class ContactFormComponent implements OnInit {
             message: this.messagePreview(inquiry.message),
           };
           this.resetForm();
+          this.focusStatusMessage('success');
         },
         error: (error: HttpErrorResponse) => {
           this.status = 'error';
           this.statusMessage = this.messageForError(error);
+          this.focusStatusMessage('error');
         },
       });
   }
@@ -213,6 +219,14 @@ export class ContactFormComponent implements OnInit {
       message: '',
       consent: false,
       website: '',
+    });
+  }
+
+  private focusStatusMessage(target: 'error' | 'success'): void {
+    setTimeout(() => {
+      const element =
+        target === 'error' ? this.errorSummary?.nativeElement : this.successMessage?.nativeElement;
+      element?.focus();
     });
   }
 }

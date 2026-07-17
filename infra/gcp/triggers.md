@@ -25,7 +25,8 @@ Use these substitutions:
 - `_BACKEND_IMAGE_NAME=aisoftware-studio-api`
 - `_FRONTEND_IMAGE_NAME=aisoftware-studio-web`
 - `_BACKEND_URL=https://<BACKEND_CLOUD_RUN_URL>`
-- `_FRONTEND_URL=https://<PUBLIC_SITE_ORIGIN>`
+- `_PUBLIC_SITE_URL=https://<PUBLIC_SITE_URL>`
+- `_PUBLIC_SITE_INDEXING=true`
 - `_PUBLIC_LEGAL_CONFIG_SECRET=aisoftware-studio-public-legal-config`
 - `_SMTP_PASSWORD_SECRET=aisoftware-studio-smtp-password`
 - `_CONTACT_RATE_LIMIT_PER_MINUTE=30`
@@ -81,7 +82,7 @@ Runtime Cloud Run service account:
 
 - Secret Manager Secret Accessor on `aisoftware-studio-smtp-password`
 
-Cloud Build service account also needs Secret Manager Secret Accessor on `_PUBLIC_LEGAL_CONFIG_SECRET` for the frontend build configuration.
+Cloud Build service account also needs Secret Manager Secret Accessor on `_PUBLIC_LEGAL_CONFIG_SECRET` for the frontend build configuration. A binding on the frontend Cloud Run runtime account is not a substitute because the legal page is prerendered during the build.
 
 ## Operator Notes
 

@@ -28,16 +28,18 @@ Local default:
 
 ```text
 apiUrl=http://127.0.0.1:8000
-publicSiteOrigin=http://localhost:4200
+publicSiteUrl=http://localhost:4200
+indexingEnabled=false
 ```
 
-Production Docker builds receive `API_URL` and `PUBLIC_SITE_ORIGIN` as build arguments. The committed production environment deliberately contains placeholders; `npm run build` rejects placeholders, local origins, example domains and non-HTTPS values before Angular compiles. The same origin generates canonical URLs, Open Graph URLs, JSON-LD, `robots.txt` and `sitemap.xml`.
+Production Docker builds receive `API_URL`, `PUBLIC_SITE_URL` and `PUBLIC_SITE_INDEXING` as build arguments. The committed production environment deliberately contains placeholders; `npm run build` rejects placeholders, local origins, example domains and non-HTTPS values before Angular compiles. The same `PUBLIC_SITE_URL` generates canonical URLs, Open Graph URLs, JSON-LD, `robots.txt` and `sitemap.xml`. Indexing defaults to `false`; set it to `true` only for the verified production domain.
 
 See [`../docs/public-origin-deployment.md`](../docs/public-origin-deployment.md) for the custom-domain, CORS and post-deployment checks.
+See [`../docs/frontend-hosting.md`](../docs/frontend-hosting.md) for gzip, cache, security headers, CSP staging and container smoke tests.
 
 ## Public privacy configuration
 
-Production builds validate public privacy data from `src/app/core/legal/public-legal.config.ts`. The committed configuration contains explicit development placeholders, so `npm run build` intentionally fails until the owner provides verified public data. Use `npm run build:development` for a local build with the clearly marked demonstration configuration.
+Production builds require `PUBLIC_LEGAL_CONFIG_PATH` pointing to a verified JSON file. They generate an ignored TypeScript module, validate the JSON before compilation, and scan the prerendered artifact afterwards. There is no committed production configuration and no fallback. Use `npm run build:development` for the explicitly named local-test configuration under `config/local-test/`; Docker excludes that directory.
 
 See [`../docs/privacy-configuration.md`](../docs/privacy-configuration.md) for required fields, validation, and the pre-deployment check.
 
@@ -57,6 +59,6 @@ src/environments/          environment-based API URL configuration
 - `npm run lint` checks TypeScript with ESLint.
 - `npm run format` applies Prettier formatting.
 - `npm test` runs Angular unit/component tests in Chrome Headless.
-- `npm run build` validates the public origin and legal configuration, generates SEO artifacts and creates the production build.
+- `npm run build` requires `PUBLIC_LEGAL_CONFIG_PATH`, validates the public origin and legal JSON, generates SEO artifacts, creates the production build, and scans the result.
 - `npm run check` runs format verification, linting, tests and the production build without formatting files.
 - `npm run build:development` generates local SEO artifacts and creates a development build without publishing-ready legal data.

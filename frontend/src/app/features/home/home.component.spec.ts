@@ -11,83 +11,91 @@ describe('HomeComponent', () => {
     }).compileComponents();
   });
 
-  it('states the audience, demo boundary and concrete next-step CTAs', () => {
+  it('states the audience, one short boundary and concrete hero CTAs', () => {
     const fixture = TestBed.createComponent(HomeComponent);
     fixture.detectChanges();
     const element: HTMLElement = fixture.nativeElement;
 
-    expect(element.querySelectorAll('h1').length).toBe(1);
+    expect(element.querySelectorAll('h1')).toHaveSize(1);
     expect(element.querySelector('h1')?.textContent).toContain(
-      'Sprawdź w 7 dni, jak AI lub automatyzacja usprawni powtarzalny proces',
+      'Sprawdź w 7 dni, czy AI lub automatyzacja usprawni Twój proces',
     );
     expect(element.querySelector('.hero-audience')?.textContent).toContain(
-      'ręcznie przekazują informacje między ludźmi i narzędziami',
+      'ręcznie przenoszą informacje',
     );
     expect(element.querySelector('.hero-audience')?.textContent).toContain(
-      'Gotowa specyfikacja techniczna nie jest potrzebna',
+      'bez gotowej specyfikacji',
     );
+    expect(element.querySelector('.hero-lead')?.textContent).toContain('nie wdrożenie produkcyjne');
     expect(
       element.querySelector('a[href="/kontakt?projectType=mvp_prototype"]')?.textContent,
     ).toContain('Opisz proces do sprawdzenia');
     expect(element.querySelector('a[href="/demo-ai"]')?.textContent).toContain(
       'Uruchom przykładowe demo',
     );
-    expect(element.querySelectorAll('.hero-proof li').length).toBe(3);
-    expect(element.querySelector('.hero-proof')?.textContent).toContain(
-      'Przepływ do pokazania zespołowi',
-    );
-    expect(element.querySelector('.hero-proof')?.textContent).toContain(
-      'Założenia i granice rozwiązania',
-    );
-    expect(element.querySelector('.hero-proof')?.textContent).toContain(
-      'Rekomendacja następnego kroku',
-    );
+    expect(element.querySelectorAll('.hero-proof li')).toHaveSize(3);
   });
 
-  it('keeps a compact decision path with one honest demonstration and a demo-to-production comparison', () => {
+  it('keeps the primary and secondary CTA together in the hero action group', () => {
     const fixture = TestBed.createComponent(HomeComponent);
     fixture.detectChanges();
     const element: HTMLElement = fixture.nativeElement;
 
-    expect(element.querySelectorAll('.path-card').length).toBe(2);
-    expect(element.querySelectorAll('.problem-card').length).toBe(3);
-    expect(element.querySelectorAll('.comparison-card').length).toBe(2);
-    expect(element.textContent).toContain('Interaktywne demo');
-    expect(element.querySelector('.demo-project')).not.toBeNull();
-    expect(element.querySelector('.demo-project app-knowledge-demo')).not.toBeNull();
-    expect(element.querySelector('.demo-project-grid')).toBeNull();
-    expect(element.textContent).toContain('Wdrożenie produkcyjne');
-    expect(element.querySelectorAll('details').length).toBe(0);
-    expect(element.textContent).not.toMatch(/TODO|Lorem ipsum|przykładowy klient/i);
-    expect(element.textContent).not.toMatch(/wdrożenie klienta/i);
-    expect(element.textContent).toContain('nie case study klienta');
-    expect(element.querySelector('a[href="/kontakt?projectType=custom_web_app"]')).not.toBeNull();
-    expect(element.querySelectorAll('.home-page > section').length).toBe(6);
+    const heroActions = element.querySelector('.hero-actions');
+    expect(heroActions?.querySelectorAll('a')).toHaveSize(2);
+    expect(heroActions?.querySelector('a:first-child')).toHaveClass('primary-action');
+    expect(heroActions?.querySelector('a:last-child')).toHaveClass('secondary-action');
+  });
+
+  it('is a short decision page without the detailed demo or delivery process', () => {
+    const fixture = TestBed.createComponent(HomeComponent);
+    fixture.detectChanges();
+    const element: HTMLElement = fixture.nativeElement;
+
+    expect(element.querySelectorAll('.home-page > section')).toHaveSize(5);
+    expect(element.querySelectorAll('.problem-card')).toHaveSize(3);
+    expect(element.querySelectorAll('.path-card')).toHaveSize(2);
+    expect(element.querySelector('.demo-project')).toBeNull();
+    expect(element.querySelector('app-knowledge-demo')).toBeNull();
+    expect(element.querySelector('.comparison-card')).toBeNull();
+    expect(element.querySelector('.process-list')).toBeNull();
+    expect(element.querySelector('a[href="/demo-ai"]')).not.toBeNull();
+    expect(element.querySelector('a[href="/development"]')).not.toBeNull();
+
+    const productionBoundaryOccurrences =
+      element.textContent?.match(/wdrożenie produkcyjne/gi)?.length ?? 0;
+    expect(productionBoundaryOccurrences).toBe(1);
+
     const heroCta = element.querySelector('.hero .primary-action')?.textContent?.trim();
     const closingCta = element.querySelector('.contact-card .primary-action')?.textContent?.trim();
     expect(closingCta).toBe(heroCta);
-    const homeSections = Array.from(element.querySelectorAll('.home-page > section'));
-    expect(homeSections.indexOf(element.querySelector('.studio')!)).toBeLessThan(
-      homeSections.indexOf(element.querySelector('.paths')!),
+
+    const sections = Array.from(element.querySelectorAll('.home-page > section'));
+    expect(sections.indexOf(element.querySelector('.paths')!)).toBeLessThan(
+      sections.indexOf(element.querySelector('.studio')!),
     );
   });
 
-  it('adds a compact evidence layer with live and repository verification links', () => {
+  it('shows concise, verifiable work evidence without presenting a client case study', () => {
     const fixture = TestBed.createComponent(HomeComponent);
     fixture.detectChanges();
     const element: HTMLElement = fixture.nativeElement;
 
-    expect(element.querySelector('.trust-statement')?.textContent).toContain('Piotra Barabasza');
-    expect(element.querySelector('a[href="/studio"]')?.textContent).toContain(
-      'Poznaj osobę odpowiedzialną',
-    );
-    expect(element.querySelector('a[href="https://github.com/piotrbarabasz"]')).not.toBeNull();
-    expect(element.querySelectorAll('.evidence-teaser-card').length).toBe(2);
+    expect(element.querySelectorAll('.evidence-teaser-card')).toHaveSize(2);
     expect(element.textContent).toContain('Interaktywne demo');
     expect(element.textContent).toContain('Projekt własny');
-    expect(element.querySelector('a[href="/demo-ai"]')).not.toBeNull();
+    expect(element.textContent).toContain('publiczny kod projektu');
+    expect(element.querySelectorAll('.evidence-boundary')).toHaveSize(2);
+    expect(element.textContent).toContain('Nie potwierdza jakości odpowiedzi na danych firmy');
+    expect(element.textContent).toContain('nie case study klienta');
+    expect(element.querySelector('a[href="https://github.com/piotrbarabasz"]')).not.toBeNull();
     expect(
       element.querySelector('a[href="https://github.com/piotrbarabasz/ai-software-studio"]'),
     ).not.toBeNull();
+    const externalLinks = element.querySelectorAll<HTMLAnchorElement>('a[target="_blank"]');
+    externalLinks.forEach((link) => {
+      expect(link.getAttribute('rel')).toContain('noopener');
+      expect(link.getAttribute('rel')).toContain('noreferrer');
+    });
   });
 });
