@@ -30,6 +30,9 @@ describe('ContactPageComponent', () => {
     );
     expect(fixture.nativeElement.querySelectorAll('.next-steps li')).toHaveSize(3);
     expect(fixture.nativeElement.querySelector('a[href^="mailto:"]')).toBeNull();
+    const noScript = fixture.nativeElement.querySelector('noscript');
+    expect(noScript).not.toBeNull();
+    expect(noScript?.textContent).toContain('Publiczny alternatywny adres kontaktowy');
     expect(fixture.nativeElement.textContent).not.toMatch(
       /\bintent\b|\bpayload\b|\bprojectType\b/i,
     );

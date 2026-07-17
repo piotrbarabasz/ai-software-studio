@@ -1,36 +1,47 @@
-import type { Routes } from '@angular/router';
+import type { Route, Routes } from '@angular/router';
 
 import { siteContent } from './core/content/site.pl';
 import type { PublicRouteMetadata } from './core/content/site-content.types';
-import { ContactPageComponent } from './features/contact/contact-page.component';
-import { DemoPageComponent } from './features/demo/demo-page.component';
-import { DevelopmentPageComponent } from './features/development/development-page.component';
-import { HomeComponent } from './features/home/home.component';
-import { NotFoundPageComponent } from './features/not-found/not-found-page.component';
-import { PrivacyPageComponent } from './features/privacy/privacy-page.component';
-import { ResearchPageComponent } from './features/research/research-page.component';
-import { StudioPageComponent } from './features/studio/studio-page.component';
 
 function toAngularPath(publicPath: string): string {
   return publicPath === '/' ? '' : publicPath.slice(1);
 }
 
-function componentFor(route: PublicRouteMetadata) {
+function lazyComponentFor(route: PublicRouteMetadata): NonNullable<Route['loadComponent']> {
   switch (route.kind) {
     case 'home':
-      return HomeComponent;
+      return () =>
+        import('./features/home/home.component').then(({ HomeComponent }) => HomeComponent);
     case 'demo':
-      return DemoPageComponent;
+      return () =>
+        import('./features/demo/demo-page.component').then(
+          ({ DemoPageComponent }) => DemoPageComponent,
+        );
     case 'development':
-      return DevelopmentPageComponent;
+      return () =>
+        import('./features/development/development-page.component').then(
+          ({ DevelopmentPageComponent }) => DevelopmentPageComponent,
+        );
     case 'studio':
-      return StudioPageComponent;
+      return () =>
+        import('./features/studio/studio-page.component').then(
+          ({ StudioPageComponent }) => StudioPageComponent,
+        );
     case 'research':
-      return ResearchPageComponent;
+      return () =>
+        import('./features/research/research-page.component').then(
+          ({ ResearchPageComponent }) => ResearchPageComponent,
+        );
     case 'contact':
-      return ContactPageComponent;
+      return () =>
+        import('./features/contact/contact-page.component').then(
+          ({ ContactPageComponent }) => ContactPageComponent,
+        );
     case 'privacy':
-      return PrivacyPageComponent;
+      return () =>
+        import('./features/privacy/privacy-page.component').then(
+          ({ PrivacyPageComponent }) => PrivacyPageComponent,
+        );
   }
 }
 
@@ -38,7 +49,7 @@ export const routes: Routes = [
   ...siteContent.routes.map((route) => ({
     path: toAngularPath(route.path),
     ...(route.path === '/' ? { pathMatch: 'full' as const } : {}),
-    component: componentFor(route),
+    loadComponent: lazyComponentFor(route),
     title: route.title,
     data: {
       description: route.description,
@@ -53,7 +64,10 @@ export const routes: Routes = [
   })),
   {
     path: '**',
-    component: NotFoundPageComponent,
+    loadComponent: () =>
+      import('./features/not-found/not-found-page.component').then(
+        ({ NotFoundPageComponent }) => NotFoundPageComponent,
+      ),
     title: siteContent.notFound.title,
     data: {
       description: siteContent.notFound.description,

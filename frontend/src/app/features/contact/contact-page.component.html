@@ -19,5 +19,18 @@
       <a [href]="'mailto:' + content.directEmail">{{ content.directEmail }}</a>
     </p>
   </section>
-  <section [attr.aria-label]="content.formLabel" appRevealOnScroll><app-contact-form /></section>
+  <section [attr.aria-label]="content.formLabel" appRevealOnScroll>
+    <noscript>
+      <div class="noscript-contact" role="note">
+        <p *ngIf="content.directEmail; else noPublicEmail">
+          {{ content.noScript.emailLead }}
+          <a [href]="'mailto:' + content.directEmail">{{ content.directEmail }}</a>
+        </p>
+        <ng-template #noPublicEmail>
+          <p>{{ content.noScript.unavailable }}</p>
+        </ng-template>
+      </div>
+    </noscript>
+    <app-contact-form />
+  </section>
 </div>

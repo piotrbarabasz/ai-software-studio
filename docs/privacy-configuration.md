@@ -1,58 +1,130 @@
-# Konfiguracja informacji o prywatności
+# Publiczna konfiguracja danych prawnych
 
-Ten dokument opisuje techniczną konfigurację publicznej strony polityki prywatności. Nie jest poradą prawną. Przed publikacją właściciel powinien potwierdzić treść względem rzeczywistej działalności, umów i dostawców.
+Ten dokument opisuje mechanizm techniczny, nie stanowi porady prawnej. Właściciel musi zatwierdzić dane i treść przed publikacją. Repozytorium nie zawiera i nie zgaduje rzeczywistych danych administratora.
 
-## Jedno źródło danych
+## Dlaczego konfiguracja jest potrzebna podczas builda
 
-Publiczne dane są w `frontend/src/app/core/legal/public-legal.config.ts`. Są celowo oddzielone od tekstów interfejsu oraz od sekretów SMTP.
+Polityka prywatności jest prerenderowana do statycznego HTML. Z tego powodu konfiguracja musi zostać dostarczona podczas produkcyjnego builda frontendu. Zmienna lub sekret podpięty dopiero do kontenera Cloud Run nie zmieni HTML znajdującego się już w obrazie.
 
-W repozytorium plik zawiera wyłącznie placeholdery. Produkcyjny Cloud Build pobiera zweryfikowany obiekt JSON z Secret Managera, waliduje go i zapisuje do tego samego modułu tylko w efemerycznym workspace builda. To mechanizm dostarczenia konfiguracji do CI, a nie deklaracja, że publiczne dane są tajne; nie należy wstawiać ich do substitutions ani logów Cloud Build.
+Jedynym wejściem produkcyjnym jest obiekt JSON wskazany przez `PUBLIC_LEGAL_CONFIG_PATH`. W Cloud Build zawartość sekretu `_PUBLIC_LEGAL_CONFIG_SECRET` jest walidowana, zapisywana do efemerycznego pliku i przekazywana do Docker BuildKit jako build secret. Plik nie jest kopiowany do kontekstu ani warstw obrazu. Generator tworzy tymczasowy, ignorowany przez Git moduł `public-legal.config.generated.ts`; tylko z niego korzysta komponent polityki prywatności.
 
-Należy uzupełnić wszystkie pola oznaczone `__LEGAL_REQUIRED__`:
+Konfiguracja lokalna jest oddzielona w `frontend/config/local-test/public-legal.config.local-test.json`. Nazwa i zawartość jednoznacznie oznaczają ją jako testową, a `.dockerignore` wyklucza cały katalog `config/local-test` z produkcyjnego builda.
 
-- pełną nazwę albo imię i nazwisko administratora;
-- adres korespondencyjny administratora;
-- kontakt w sprawach danych osobowych;
-- cele oraz podstawy przetwarzania, które właściciel zweryfikował;
-- okres lub kryteria przechowywania;
-- kategorie odbiorców;
-- faktycznego dostawcę poczty SMTP;
-- informacje o prawach użytkownika;
-- datę aktualizacji dokumentu.
+## Dokładny kontrakt JSON
 
-`Google Cloud Platform (Cloud Run)` pozostaje w konfiguracji, ponieważ repozytorium i dokumentacja wdrożeniowa potwierdzają tę infrastrukturę. Repozytorium nie potwierdza nazwy dostawcy SMTP, danych administratora ani retencji — tych wartości nie wolno zgadywać.
+Sekret ma zawierać wyłącznie jeden obiekt JSON, bez wrappera, komentarzy i kodowania base64. Poniższy JSON Schema opisuje kontrakt 1:1:
 
-## Walidacja i build
-
-W katalogu `frontend` uruchom:
-
-```powershell
-npm run validate:legal:production
-npm run build
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["administrator", "processing", "updatedAt"],
+  "properties": {
+    "administrator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "correspondenceAddress", "privacyContact"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "correspondenceAddress": { "type": "string", "minLength": 1 },
+        "privacyContact": { "type": "string", "format": "email" }
+      }
+    },
+    "processing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "purposes",
+        "legalBases",
+        "retention",
+        "recipients",
+        "infrastructureProviders",
+        "emailProviders",
+        "dataSubjectRights"
+      ],
+      "properties": {
+        "purposes": { "$ref": "#/$defs/nonEmptyStringList" },
+        "legalBases": { "$ref": "#/$defs/nonEmptyStringList" },
+        "retention": { "$ref": "#/$defs/nonEmptyStringList" },
+        "recipients": { "$ref": "#/$defs/nonEmptyStringList" },
+        "infrastructureProviders": { "$ref": "#/$defs/nonEmptyStringList" },
+        "emailProviders": { "$ref": "#/$defs/nonEmptyStringList" },
+        "dataSubjectRights": { "$ref": "#/$defs/nonEmptyStringList" }
+      }
+    },
+    "updatedAt": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    }
+  },
+  "$defs": {
+    "nonEmptyStringList": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}
 ```
 
-Walidator sprawdza puste wartości i placeholdery. Jeśli konfiguracja jest niepełna, kończy się błędem oraz wypisuje dokładne ścieżki pól, na przykład `administrator.privacyContact` albo `processing.retention[0]`. Skrypt `npm run build` zawsze wykonuje tę walidację przed buildem produkcyjnym.
+Znaczenie pól:
 
-Do pracy lokalnej bez danych produkcyjnych użyj:
+- `administrator.name`: pełna, zatwierdzona nazwa administratora albo imię i nazwisko; sama marka `AI Software Studio` jest odrzucana;
+- `administrator.correspondenceAddress`: zatwierdzony adres korespondencyjny;
+- `administrator.privacyContact`: adres e-mail do spraw danych osobowych;
+- `processing.*`: zatwierdzone cele, podstawy, retencja, odbiorcy, dostawcy infrastruktury i poczty oraz informacje o prawach;
+- `updatedAt`: data aktualizacji w formacie `RRRR-MM-DD`.
+
+Każdy tekst jest przycinany i nie może być pusty. Produkcja odrzuca między innymi `Testowa`, `WPISZ`, `example`, `sample`, `dummy`, `fixture`, `configured`, `placeholder`, `TODO`, `TBD`, `uzupełnij`, `LEGAL_REQUIRED`, `**LEGAL_REQUIRED**`, `__LEGAL_REQUIRED__`, znany testowy e-mail oraz wartości w nawiasach ostrych. Nie ma fallbacku.
+
+## Walidacja lokalna
+
+Konfiguracja lokalna/testowa:
 
 ```powershell
+cd frontend
 npm run build:development
 ```
 
-Strona prywatności pokaże wtedy komunikat o konfiguracji demonstracyjnej. Nie jest to wersja do publikacji.
+Produkcyjna walidacja zatwierdzonego pliku bez budowania:
 
-## Cloud Build
+```powershell
+cd frontend
+$env:PUBLIC_LEGAL_CONFIG_PATH = (Resolve-Path "C:\bezpieczna-lokalizacja\public-legal.json").Path
+npm run validate:legal:production
+Remove-Item Env:PUBLIC_LEGAL_CONFIG_PATH
+```
 
-Przed produkcyjnym deploymentem utwórz wersjonowany sekret Secret Manager zawierający **wyłącznie poprawny JSON** odpowiadający strukturze `PublicLegalConfiguration`. Nazwę sekretu ustaw jako `_PUBLIC_LEGAL_CONFIG_SECRET` w Cloud Build (domyślnie `aisoftware-studio-public-legal-config`).
+Pełny produkcyjny build i kontrola prerenderowanego artefaktu:
 
-Krok `frontend-public-legal-config` przekazuje zawartość jako `PUBLIC_LEGAL_CONFIG_JSON` do skryptu przygotowującego plik builda. Następnie Docker uruchamia `write-production-legal-config.cjs`, który ponownie waliduje wszystkie pola przed `npm run build`. Brak sekretu, niepoprawny JSON, puste wartości i `__LEGAL_REQUIRED__` kończą build z listą wymagających uzupełnienia pól.
+```powershell
+$env:PUBLIC_LEGAL_CONFIG_PATH = (Resolve-Path "C:\bezpieczna-lokalizacja\public-legal.json").Path
+$env:API_URL = "https://<ZATWIERDZONY_BACKEND_ORIGIN>"
+$env:PUBLIC_SITE_URL = "https://<ZATWIERDZONY_PUBLICZNY_URL>"
+$env:PUBLIC_SITE_INDEXING = "true"
+npm run build
+npm run validate:artifact:production
+Remove-Item Env:PUBLIC_LEGAL_CONFIG_PATH
+Remove-Item Env:API_URL
+Remove-Item Env:PUBLIC_SITE_URL
+Remove-Item Env:PUBLIC_SITE_INDEXING
+```
 
-Cloud Build service account potrzebuje `Secret Manager Secret Accessor` zarówno dla `SMTP_PASSWORD`, jak i dla konfiguracji prawnej.
+Build sprawdza ponownie JSON, generuje moduł, prerenderuje stronę, skanuje cały artefakt pod kątem znanych zabronionych wartości i potwierdza, że każda wartość z JSON znajduje się w `polityka-prywatnosci/index.html`. Tworzy też marker `.legal-config-validated`; entrypoint Nginx wymaga markera i ponownie skanuje politykę przy starcie kontenera.
 
-## Kontrola przed wdrożeniem
+## Cloud Build i Secret Manager
 
-1. Uzupełnij konfigurację publicznymi, potwierdzonymi danymi.
-2. Uruchom `npm run validate:legal:production` i `npm run build`.
-3. Otwórz prerenderowaną trasę `/polityka-prywatnosci` i sprawdź administratora, zakres danych, sposób przesyłania, odbiorców, dostawców, retencję, prawa, kontakt i datę aktualizacji.
-4. Potwierdź, że link przy zgodzie formularza nadal prowadzi do `/polityka-prywatnosci` i nie opisuje zgody marketingowej.
-5. Przed wdrożeniem porównaj listę dostawców z rzeczywistą konfiguracją Cloud Run i SMTP. Zmiana dostawcy, odbiorcy lub sposobu obsługi zgłoszeń wymaga aktualizacji konfiguracji oraz ponownej weryfikacji treści.
+Wymagany przepływ:
+
+1. `_PUBLIC_LEGAL_CONFIG_SECRET` wskazuje nazwę sekretu, domyślnie `aisoftware-studio-public-legal-config`.
+2. Konto usługi wykonujące Cloud Build ma rolę `roles/secretmanager.secretAccessor` do tego sekretu.
+3. Krok `frontend-public-legal-config` pobiera wersję `latest` jako `PUBLIC_LEGAL_CONFIG_JSON` i waliduje ją przed uruchomieniem Dockera.
+4. Docker otrzymuje efemeryczny plik przez `--secret id=public_legal_config`; brak sekretu zatrzymuje build.
+5. Cloud Run otrzymuje dopiero gotowy, sprawdzony obraz. Frontend nie potrzebuje runtime bindingu tego sekretu.
+
+Publiczne dane prawne nie są danymi tajnymi po publikacji, ale Secret Manager zapobiega trzymaniu danych wdrożeniowych w repozytorium i substitutions/logach.
+
+## Kontrola po wdrożeniu
+
+Po późniejszym, autoryzowanym wdrożeniu należy otworzyć `/polityka-prywatnosci`, sprawdzić wszystkie pola względem zatwierdzonego JSON i upewnić się w Cloud Build logs, że przeszły kroki walidacji artefaktu. Zmiana wersji sekretu sama nie aktualizuje działającej strony: konieczny jest nowy build obrazu i nowa rewizja Cloud Run.

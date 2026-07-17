@@ -7,7 +7,8 @@ substitutions:
   _BACKEND_IMAGE_NAME: "aisoftware-studio-api"
   _FRONTEND_IMAGE_NAME: "aisoftware-studio-web"
   _BACKEND_URL: "https://<BACKEND_CLOUD_RUN_URL>"
-  _FRONTEND_URL: "https://<FRONTEND_CLOUD_RUN_URL>"
+  _PUBLIC_SITE_URL: "https://<PUBLIC_SITE_URL>"
+  _PUBLIC_SITE_INDEXING: "true"
   _PUBLIC_LEGAL_CONFIG_SECRET: "aisoftware-studio-public-legal-config"
   _SMTP_PASSWORD_SECRET: "aisoftware-studio-smtp-password"
   _CONTACT_RATE_LIMIT_PER_MINUTE: "30"
@@ -62,7 +63,7 @@ steps:
         "--image=$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_BACKEND_IMAGE_NAME:$_IMAGE_TAG",
         "--allow-unauthenticated",
         "--min-instances=$_MIN_INSTANCES",
-        "--set-env-vars=APP_ENV=$_APP_ENV,CORS_ALLOWED_ORIGINS=$_FRONTEND_URL,CONTACT_DELIVERY_MODE=$_CONTACT_DELIVERY_MODE,CONTACT_RECIPIENT_EMAIL=$_CONTACT_RECIPIENT_EMAIL,CONTACT_FROM_EMAIL=$_CONTACT_FROM_EMAIL,SMTP_HOST=$_SMTP_HOST,SMTP_PORT=$_SMTP_PORT,SMTP_USERNAME=$_SMTP_USERNAME,SMTP_USE_TLS=$_SMTP_USE_TLS,CONTACT_RATE_LIMIT_PER_MINUTE=$_CONTACT_RATE_LIMIT_PER_MINUTE",
+        "--set-env-vars=APP_ENV=$_APP_ENV,CORS_ALLOWED_ORIGINS=$_PUBLIC_SITE_URL,CONTACT_DELIVERY_MODE=$_CONTACT_DELIVERY_MODE,CONTACT_RECIPIENT_EMAIL=$_CONTACT_RECIPIENT_EMAIL,CONTACT_FROM_EMAIL=$_CONTACT_FROM_EMAIL,SMTP_HOST=$_SMTP_HOST,SMTP_PORT=$_SMTP_PORT,SMTP_USERNAME=$_SMTP_USERNAME,SMTP_USE_TLS=$_SMTP_USE_TLS,CONTACT_RATE_LIMIT_PER_MINUTE=$_CONTACT_RATE_LIMIT_PER_MINUTE",
         "--set-secrets=SMTP_PASSWORD=$_SMTP_PASSWORD_SECRET:latest",
       ]
 
@@ -76,15 +77,20 @@ steps:
   - id: frontend-build
     name: gcr.io/cloud-builders/docker
     waitFor: ["frontend-public-legal-config"]
+    env: ["DOCKER_BUILDKIT=1"]
     args:
       [
         "build",
         "-f",
         "frontend/Dockerfile",
+        "--secret",
+        "id=public_legal_config,src=frontend/.public-legal-config.json",
         "--build-arg",
         "API_URL=$_BACKEND_URL",
         "--build-arg",
-        "PUBLIC_SITE_ORIGIN=$_FRONTEND_URL",
+        "PUBLIC_SITE_URL=$_PUBLIC_SITE_URL",
+        "--build-arg",
+        "PUBLIC_SITE_INDEXING=$_PUBLIC_SITE_INDEXING",
         "-t",
         "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_FRONTEND_IMAGE_NAME:$_IMAGE_TAG",
         "frontend",

@@ -38,6 +38,12 @@ describe('public routes', () => {
       await fixture.whenStable();
       expect(fixture.nativeElement.querySelector(selector)).not.toBeNull();
       expect(fixture.nativeElement.querySelectorAll('h1').length).toBe(1);
+      const h2Texts = Array.from(
+        fixture.nativeElement.querySelectorAll('h2') as NodeListOf<HTMLHeadingElement>,
+        (heading) => heading.textContent?.trim() ?? '',
+      );
+      expect(h2Texts.every((heading) => heading.length > 0)).toBeTrue();
+      expect(new Set(h2Texts).size).toBe(h2Texts.length);
       expect(fixture.nativeElement.textContent).not.toMatch(
         /\bpayload\b|\bintent\b|\bhandoff\b|\bruntime\b/i,
       );

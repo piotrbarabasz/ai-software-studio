@@ -15,11 +15,16 @@ describe('DemoPageComponent', () => {
     expect(element.querySelectorAll('h1').length).toBe(1);
     expect(element.querySelectorAll('.ordered-grid li').length).toBe(5);
     expect(element.querySelector('.demo-scope')).not.toBeNull();
-    expect(element.querySelector('.demo-example')).not.toBeNull();
+    expect(element.querySelector('.demo-example')).toBeNull();
     expect(element.querySelector('.interactive-demo app-knowledge-demo')).not.toBeNull();
     expect(element.querySelector('#interactive-demo')).not.toBeNull();
     expect(element.querySelector('.demo-compare')).not.toBeNull();
     expect(element.textContent).toContain('Demo a system produkcyjny');
+    expect(element.querySelectorAll('.compare-card')).toHaveSize(2);
+    expect(element.querySelector('.interactive-demo .disclaimer')?.textContent).toContain(
+      'nie połączenie z produkcyjną bazą wiedzy',
+    );
+    expect(element.textContent).not.toContain('To nie jest pełne wdrożenie produkcyjne');
     const sectionHeadings = Array.from(
       element.querySelectorAll('h2') as NodeListOf<HTMLHeadingElement>,
       (heading) => heading.textContent?.trim() ?? '',
@@ -27,10 +32,26 @@ describe('DemoPageComponent', () => {
     expect(new Set(sectionHeadings).size).toBe(sectionHeadings.length);
     expect(sectionHeadings.join(' ')).not.toMatch(/PoC|prototypu|MVP/i);
     expect(element.querySelector('a[href^="/kontakt?projectType=mvp_prototype"]')).not.toBeNull();
+    expect(
+      element.querySelector(
+        '.hero-actions a.primary-action[href="/kontakt?projectType=mvp_prototype"]',
+      ),
+    ).not.toBeNull();
+    expect(
+      element.querySelector('.hero-actions a.secondary-action[href="/demo-ai#interactive-demo"]'),
+    ).not.toBeNull();
     expect(element.textContent).toContain('Co otrzymujesz po siedmiu dniach');
-    expect(element.querySelector('a[href="#interactive-demo"]')?.textContent).toContain(
+    expect(element.textContent).toContain('jakie dane lub integracje będą potrzebne');
+    expect(element.querySelector('a[href="/demo-ai#interactive-demo"]')?.textContent).toContain(
       'Uruchom przykładowe demo',
     );
+    const codeLink = element.querySelector<HTMLAnchorElement>(
+      'a[href="https://github.com/piotrbarabasz/ai-software-studio"]',
+    );
+    expect(codeLink?.textContent).toContain('Zobacz kod tego demo');
+    expect(codeLink?.getAttribute('target')).toBe('_blank');
+    expect(codeLink?.getAttribute('rel')).toContain('noopener');
+    expect(codeLink?.getAttribute('rel')).toContain('noreferrer');
   });
 
   it('does not render duplicate HTML ids', async () => {

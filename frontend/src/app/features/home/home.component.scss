@@ -7,48 +7,42 @@
   padding: clamp(1rem, 2vw, 1.5rem) 0 var(--space-section);
 }
 .hero,
-.demo-project-grid,
-.comparison-grid,
 .path-grid,
-.problem-grid,
-.demo-boundaries {
+.problem-grid {
   display: grid;
   gap: 1rem;
 }
 .hero {
   grid-template-columns: minmax(0, 1.25fr) minmax(260px, 0.75fr);
-  align-items: stretch;
+  align-items: start;
 }
 .hero-copy,
 .hero-proof,
-.demo-brief,
-.demo-visual,
 .evidence-teaser,
 .evidence-teaser-card,
 .contact-card {
+  min-width: 0;
   border: 1px solid var(--color-line);
   border-radius: 18px;
   background: var(--color-surface);
   box-shadow: var(--shadow-soft);
 }
 .hero-copy {
-  padding: clamp(2rem, 4vw, 3.5rem);
+  padding: clamp(1.5rem, 3vw, 2.75rem);
   background:
     radial-gradient(circle at top left, rgba(0, 108, 91, 0.1), transparent 42%),
     linear-gradient(180deg, #fff, #fbfaf7);
 }
 .hero h1 {
-  max-width: 15ch;
+  max-width: 17ch;
   margin: 0;
-  font-size: clamp(2.6rem, 6vw, 5.3rem);
+  font-size: clamp(2.25rem, 4.2vw, 4rem);
   line-height: 0.98;
 }
 .hero-lead,
 .hero-audience,
 .section-lead,
 .problem-card p,
-.demo-brief p,
-.comparison-card,
 .path-card p,
 .evidence-teaser p,
 .contact-card p {
@@ -59,16 +53,17 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
-  margin-top: 1.75rem;
+  margin-top: 1.25rem;
 }
 .hero-audience {
   max-width: 66ch;
-  margin: 1.25rem 0 0;
+  margin: 1rem 0 0;
   color: var(--color-ink);
   font-weight: 650;
 }
 .hero-lead {
   max-width: 66ch;
+  margin: 0.75rem 0 0;
 }
 .primary-action,
 .secondary-action {
@@ -95,9 +90,9 @@
 }
 .hero-proof {
   display: grid;
-  align-content: center;
-  gap: 1rem;
-  padding: clamp(1.5rem, 3vw, 2.5rem);
+  align-content: start;
+  gap: 0.75rem;
+  padding: clamp(1.5rem, 2.5vw, 2.25rem);
   background: #17201b;
   color: #fff;
 }
@@ -106,22 +101,19 @@
   color: var(--color-accent-soft);
   font-weight: 800;
 }
-.hero-proof ol,
-.demo-visual ol {
+.hero-proof ol {
   display: grid;
   gap: 0.75rem;
   padding: 0;
   margin: 0;
   list-style: none;
 }
-.hero-proof li,
-.demo-visual li {
+.hero-proof li {
   display: flex;
   align-items: center;
   gap: 0.75rem;
 }
-.hero-proof span,
-.demo-visual span {
+.hero-proof span {
   display: grid;
   width: 2rem;
   height: 2rem;
@@ -151,10 +143,6 @@
   margin-top: 1.25rem;
 }
 .problem-card,
-.demo-brief,
-.demo-visual,
-.demo-boundaries article,
-.comparison-card,
 .path-card,
 .contact-card {
   display: grid;
@@ -172,21 +160,17 @@
   padding-left: clamp(1rem, 2vw, 1.5rem);
 }
 .problem-card h3,
-.comparison-card h3,
 .path-card h3 {
   margin: 0;
   font-size: 1.3rem;
 }
 .problem-card p,
-.demo-brief p,
 .path-card p,
 .evidence-teaser p,
 .contact-card p {
   margin: 0;
 }
 .problem-card ul,
-.demo-boundaries ul,
-.comparison-card ul,
 .path-card ul {
   display: grid;
   gap: 0.55rem;
@@ -195,15 +179,11 @@
   list-style: none;
 }
 .problem-card li,
-.demo-boundaries li,
-.comparison-card li,
 .path-card li {
   position: relative;
   padding-left: 1.15rem;
 }
 .problem-card li::before,
-.demo-boundaries li::before,
-.comparison-card li::before,
 .path-card li::before {
   position: absolute;
   left: 0;
@@ -215,18 +195,6 @@
   color: var(--color-primary-strong);
   font-weight: 700;
 }
-.demo-project {
-  display: grid;
-  gap: 1rem;
-  padding-block: clamp(1rem, 3vw, 2rem);
-}
-.demo-project-grid,
-.comparison-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-.demo-visual {
-  background: linear-gradient(145deg, #eef2ec, #fff);
-}
 .card-kicker {
   margin: 0;
   color: var(--color-accent);
@@ -234,38 +202,6 @@
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-}
-.next-step {
-  padding-top: 0.75rem;
-  border-top: 1px solid var(--color-line);
-}
-.demo-boundaries {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0;
-  border-top: 1px solid var(--color-line);
-  border-bottom: 1px solid var(--color-line);
-}
-
-.demo-boundaries article {
-  display: grid;
-  gap: 0.9rem;
-  padding: clamp(1.15rem, 2.5vw, 1.75rem) 0;
-}
-
-.demo-boundaries article + article {
-  border-left: 1px solid var(--color-line);
-  padding-left: clamp(1rem, 3vw, 2rem);
-}
-.comparison-card:first-child {
-  border-top: 4px solid var(--color-primary);
-}
-.comparison-card:last-child {
-  border-top: 4px solid var(--color-accent);
-}
-
-.comparison-card {
-  background: #eef2ec;
-  box-shadow: none;
 }
 .path-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -286,9 +222,6 @@
   border-left: 1px solid var(--color-line);
   padding-left: clamp(1rem, 3vw, 2rem);
 }
-.paths .contact-card {
-  margin-top: 1.25rem;
-}
 .evidence-teaser {
   display: grid;
   gap: 1rem;
@@ -306,6 +239,15 @@
 .evidence-teaser .trust-statement {
   color: #ffffff;
   font-weight: 700;
+}
+.evidence-teaser .evidence-check strong,
+.evidence-teaser .evidence-boundary strong {
+  color: #ffffff;
+}
+.evidence-teaser .evidence-boundary {
+  border-left: 3px solid var(--color-accent);
+  padding-left: 0.75rem;
+  font-size: 0.95rem;
 }
 .evidence-teaser-grid {
   display: grid;
@@ -334,10 +276,6 @@
   font-weight: 800;
   padding: 0.3rem 0.6rem;
 }
-.evidence-limitation {
-  border-left: 3px solid var(--color-accent);
-  padding-left: 0.75rem;
-}
 .evidence-links {
   display: flex;
   flex-wrap: wrap;
@@ -363,9 +301,6 @@
 @media (max-width: 760px) {
   .hero,
   .problem-grid,
-  .demo-project-grid,
-  .demo-boundaries,
-  .comparison-grid,
   .path-grid,
   .evidence-teaser-grid {
     grid-template-columns: 1fr;
@@ -383,9 +318,6 @@
   }
   .hero-copy,
   .hero-proof,
-  .demo-brief,
-  .demo-visual,
-  .comparison-card,
   .evidence-teaser,
   .evidence-teaser-card,
   .contact-card {
@@ -393,14 +325,12 @@
   }
 
   .problem-grid,
-  .path-grid,
-  .demo-boundaries {
+  .path-grid {
     gap: 0;
   }
 
   .problem-card + .problem-card,
-  .path-card + .path-card,
-  .demo-boundaries article + article {
+  .path-card + .path-card {
     border-top: 1px solid var(--color-line);
     border-left: 0;
     padding-left: 0;
@@ -408,5 +338,15 @@
 
   .path-card {
     padding-block: 1.25rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .hero-copy {
+    padding: 1.25rem;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
   }
 }

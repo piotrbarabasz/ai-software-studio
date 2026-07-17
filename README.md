@@ -65,5 +65,9 @@ Production deployment to Google Cloud Platform is documented separately:
 Run the local deployment preflight first:
 
 ```powershell
-.\scripts\gcp\preflight.ps1
+.\scripts\gcp\preflight.ps1 `
+  -PublicLegalConfigPath "C:\bezpieczna-lokalizacja\public-legal.json" `
+  -ApiUrl "https://<BACKEND_ORIGIN>" `
+  -PublicSiteUrl "https://<PUBLIC_SITE_URL>" `
+  -EnableIndexing $true
 ```

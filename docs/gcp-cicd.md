@@ -50,7 +50,8 @@ Required substitutions for the trigger:
 - `_BACKEND_IMAGE_NAME=aisoftware-studio-api`
 - `_FRONTEND_IMAGE_NAME=aisoftware-studio-web`
 - `_BACKEND_URL=https://<BACKEND_CLOUD_RUN_URL>`
-- `_FRONTEND_URL=https://<PUBLIC_SITE_ORIGIN>`
+- `_PUBLIC_SITE_URL=https://<PUBLIC_SITE_URL>`
+- `_PUBLIC_SITE_INDEXING=true`
 - `_PUBLIC_LEGAL_CONFIG_SECRET=aisoftware-studio-public-legal-config`
 - `_SMTP_PASSWORD_SECRET=aisoftware-studio-smtp-password`
 - `_CONTACT_RATE_LIMIT_PER_MINUTE=30`
@@ -65,9 +66,9 @@ Required substitutions for the trigger:
 - `_MIN_INSTANCES=0`
 - `_IMAGE_TAG=$SHORT_SHA`
 
-The production trigger must deploy the backend first and the frontend second. `_FRONTEND_URL` is the single production frontend origin: it is passed to the frontend Docker build as `PUBLIC_SITE_ORIGIN` and to the backend as `CORS_ALLOWED_ORIGINS`.
+The production trigger must deploy the backend first and the frontend second. `_PUBLIC_SITE_URL` is the single production frontend URL: it is passed to the frontend Docker build as `PUBLIC_SITE_URL` and to the backend as `CORS_ALLOWED_ORIGINS`. `_PUBLIC_SITE_INDEXING=true` is reserved for the verified production domain; preview builds use `false`.
 
-Before enabling that trigger, complete the public privacy configuration described in [`privacy-configuration.md`](privacy-configuration.md). The frontend container runs `npm run build`, which rejects explicit legal-data placeholders. PR validation uses the development build while the repository intentionally contains those placeholders.
+Before enabling that trigger, create a verified JSON version described in [`privacy-configuration.md`](privacy-configuration.md). The frontend build rejects missing values, test data, placeholders and invalid e-mail, then scans the prerendered artifact. PR validation uses only the explicitly separated `config/local-test` file and never deploys it.
 
 For the manual domain mapping, certificate, technical URL policy and canonical verification, follow [public-origin-deployment.md](public-origin-deployment.md).
 
@@ -114,7 +115,7 @@ Runtime Cloud Run service account:
 
 - Secret Manager Secret Accessor on `aisoftware-studio-smtp-password`
 
-Cloud Build service account also needs Secret Manager Secret Accessor on `_PUBLIC_LEGAL_CONFIG_SECRET`, because it prepares the public legal configuration before the frontend Docker build.
+Cloud Build service account also needs Secret Manager Secret Accessor on `_PUBLIC_LEGAL_CONFIG_SECRET`, because it prepares the public legal configuration before the frontend Docker build. Granting this role only to the frontend Cloud Run runtime account is insufficient; the static page is already prerendered before Cloud Run starts.
 
 ## Verification
 

@@ -96,12 +96,6 @@ export interface NavigationItem {
 export type ProductApplications =
   readonly [string, string, string] | readonly [string, string, string, string];
 
-export interface HomeTeaser {
-  readonly eyebrow: string;
-  readonly title: string;
-  readonly lead: string;
-}
-
 export interface ExternalLink {
   readonly label: string;
   readonly url: string;
@@ -113,11 +107,16 @@ export interface OwnerAccountability {
   readonly detail: string;
 }
 
+export interface OwnerCapability {
+  readonly label: string;
+  readonly evidence: string;
+}
+
 export interface OwnerProfile {
   readonly name: string;
   readonly role: string;
   readonly bio: string;
-  readonly technologies: readonly string[];
+  readonly verifiedCapabilities: readonly OwnerCapability[];
   readonly accountability: OwnerAccountability;
   readonly links: readonly ExternalLink[];
   readonly image?: {
@@ -132,6 +131,7 @@ export interface WorkEvidence {
   readonly id: WorkEvidenceId;
   readonly typeLabel: string;
   readonly title: string;
+  readonly teaser: string;
   readonly problem: string;
   readonly built: string;
   readonly technologies: readonly string[];
@@ -212,11 +212,9 @@ export interface HomePageContent {
   readonly hero: HomeHero;
   readonly problemsHeading: HomeSectionHeading;
   readonly problemGroups: readonly [HomeProblemGroup, HomeProblemGroup, HomeProblemGroup];
-  readonly demonstration: HomeDemonstration;
-  readonly outcome: HomeOutcome;
   readonly pathsHeading: HomeSectionHeading;
   readonly paths: readonly [HomePath, HomePath];
-  readonly studioTeaser: HomeTeaser;
+  readonly studioEyebrow: string;
   readonly trustTeaser: HomeTrustTeaser;
   readonly evidenceTeaser: HomeEvidenceTeaser;
   readonly closingCta: HomeClosingCta;
@@ -253,24 +251,6 @@ export interface HomeProblemGroup {
   readonly examples: readonly [string, string, string];
 }
 
-export interface HomeDemonstration {
-  readonly eyebrow: string;
-  readonly title: string;
-  readonly lead: string;
-  readonly validatesLabel: string;
-  readonly validates: readonly [string, string, string];
-  readonly boundaryLabel: string;
-  readonly boundaries: readonly [string, string, string];
-}
-
-export interface HomeOutcome {
-  readonly eyebrow: string;
-  readonly title: string;
-  readonly lead: string;
-  readonly demo: HomeComparisonCard;
-  readonly production: HomeComparisonCard;
-}
-
 export interface HomeComparisonCard {
   readonly title: string;
   readonly points: readonly string[];
@@ -293,11 +273,6 @@ export interface DemoPageContent {
   readonly audienceProblems: readonly string[];
   readonly processTitle: string;
   readonly flowSteps: readonly string[];
-  readonly example: {
-    readonly title: string;
-    readonly lead: string;
-    readonly points: readonly string[];
-  };
   readonly comparison: {
     readonly title: string;
     readonly demo: HomeComparisonCard;
@@ -307,10 +282,10 @@ export interface DemoPageContent {
   readonly resultTitle: string;
   readonly result: string;
   readonly decision: string;
-  readonly transition: string;
   readonly interactiveCtaLabel: string;
   readonly ctaLabel: string;
   readonly interactiveDemo: KnowledgeDemoContent;
+  readonly codeLink: ExternalLink;
 }
 
 export type KnowledgeDemoScenarioStatus = 'answered' | 'handoff';
@@ -386,6 +361,7 @@ export interface DevelopmentPageContent {
   readonly eyebrow: string;
   readonly title: string;
   readonly lead: string;
+  readonly heroNextStep: string;
   readonly principles: readonly string[];
   readonly readiness: DevelopmentReadiness;
   readonly outcomesTitle: string;
@@ -410,7 +386,21 @@ export interface StudioPageContent {
     readonly points: readonly string[];
   };
   readonly engagementModel: readonly string[];
+  readonly verification: {
+    readonly eyebrow: string;
+    readonly title: string;
+    readonly lead: string;
+    readonly steps: readonly [string, string, string, string];
+    readonly demoCta: HomeCta;
+    readonly developmentCta: HomeCta;
+    readonly contactCta: HomeCta;
+    readonly repositoryLink: ExternalLink;
+  };
   readonly ctaLabel: string;
+}
+
+export interface FooterContent {
+  readonly summary: string;
 }
 
 export interface ContactPageContent {
@@ -422,6 +412,7 @@ export interface ContactPageContent {
   readonly consentLinkLabel: string;
   readonly consentAfterLink: string;
   readonly formLabel: string;
+  readonly formNextStep: string;
   readonly budgetHint: string;
   readonly nextSteps: readonly [string, string, string];
   readonly noSpecificationNeeded: string;
@@ -429,6 +420,10 @@ export interface ContactPageContent {
   readonly noCommitment: string;
   readonly directEmail?: string;
   readonly directEmailLabel: string;
+  readonly noScript: {
+    readonly emailLead: string;
+    readonly unavailable: string;
+  };
   readonly submit: string;
   readonly submitting: string;
   readonly messages: {
@@ -480,6 +475,7 @@ export interface SiteContent {
   readonly routes: readonly PublicRouteMetadata[];
   readonly legacyRedirects: readonly LegacyRedirect[];
   readonly navigation: readonly NavigationItem[];
+  readonly footer: FooterContent;
   readonly products: readonly ProductCatalogEntry[];
   readonly trust: TrustContent;
   readonly home: HomePageContent;

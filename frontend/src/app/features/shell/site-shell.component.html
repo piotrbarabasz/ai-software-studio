@@ -1,4 +1,4 @@
-<a class="skip-link" href="#main-content">Przejdź do treści</a>
+<a class="skip-link" href="#main-content" (click)="focusMainContent($event)">Przejdź do treści</a>
 
 <header class="site-header">
   <a class="brand" routerLink="/" (click)="closeNavigation()" aria-label="AISoftware Studio">
@@ -11,7 +11,6 @@
     type="button"
     class="menu-toggle"
     aria-controls="primary-navigation"
-    aria-haspopup="true"
     [attr.aria-expanded]="isMobileNavigationOpen"
     (click)="toggleNavigation()"
   >
@@ -47,11 +46,9 @@
 
 <footer class="site-footer">
   <div class="footer-intro">
+    <p>© AISoftware Studio — {{ footer.summary }}</p>
     <p>
-      © AISoftware Studio — samodzielnie prowadzone studio tworzące dema AI i rozwiązania cyfrowe.
-    </p>
-    <p>
-      <strong>{{ trust.owner.name }}</strong> — {{ trust.owner.accountability.statement }}
+      <strong>{{ trust.owner.name }}</strong> — {{ trust.owner.role }}
     </p>
   </div>
   <div class="footer-links">

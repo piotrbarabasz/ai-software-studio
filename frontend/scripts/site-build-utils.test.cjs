@@ -11,7 +11,8 @@ const {
 const configuredEnvironment = {
   production: true,
   apiUrl: 'https://www.iana.org',
-  publicSiteOrigin: 'https://www.iana.org',
+  publicSiteUrl: 'https://www.iana.org',
+  indexingEnabled: true,
 };
 
 test('rejects placeholder and localhost production origins', () => {
@@ -19,9 +20,10 @@ test('rejects placeholder and localhost production origins', () => {
     validateProductionSiteConfig({
       production: true,
       apiUrl: 'http://localhost:8000',
-      publicSiteOrigin: '__PUBLIC_CONFIG_REQUIRED__:publicSiteOrigin',
+      publicSiteUrl: '__PUBLIC_CONFIG_REQUIRED__:publicSiteUrl',
+      indexingEnabled: false,
     }),
-    ['publicSiteOrigin', 'apiUrl'],
+    ['publicSiteUrl', 'apiUrl'],
   );
 });
 
@@ -48,7 +50,8 @@ test('allows a localhost origin only for development artifacts', () => {
   const developmentEnvironment = {
     production: false,
     apiUrl: 'http://localhost:8000',
-    publicSiteOrigin: 'http://localhost:4200',
+    publicSiteUrl: 'http://localhost:4200',
+    indexingEnabled: false,
   };
 
   writeSeoArtifacts(developmentEnvironment);

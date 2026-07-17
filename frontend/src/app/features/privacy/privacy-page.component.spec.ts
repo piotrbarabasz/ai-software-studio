@@ -12,6 +12,8 @@ describe('PrivacyPageComponent', () => {
     const element: HTMLElement = fixture.nativeElement;
 
     expect(element.querySelectorAll('h1')).toHaveSize(1);
+    expect(element.querySelector('main')).toBeNull();
+    expect(element.querySelectorAll('article.privacy-page')).toHaveSize(1);
     expect(element.querySelector('.development-notice')?.textContent).toContain(
       'Konfiguracja demonstracyjna',
     );

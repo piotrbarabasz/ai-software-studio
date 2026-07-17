@@ -44,64 +44,44 @@
     </div>
   </section>
 
-  <section class="demo-project section-shell" aria-labelledby="demo-project-title">
+  <section class="paths section-shell" aria-labelledby="paths-title">
     <div class="section-heading">
-      <p class="eyebrow">{{ home.demonstration.eyebrow }}</p>
-      <h2 id="demo-project-title">{{ home.demonstration.title }}</h2>
-      <p class="section-lead">{{ home.demonstration.lead }}</p>
+      <p class="eyebrow">{{ home.pathsHeading.eyebrow }}</p>
+      <h2 id="paths-title">{{ home.pathsHeading.title }}</h2>
     </div>
-    <app-knowledge-demo [content]="interactiveDemo" [compact]="true" />
-    <div class="demo-boundaries">
-      <article>
-        <h3>{{ home.demonstration.validatesLabel }}</h3>
+    <div class="path-grid">
+      <article *ngFor="let path of home.paths" class="path-card">
+        <p class="card-kicker">{{ path.eyebrow }}</p>
+        <h3>{{ path.title }}</h3>
+        <p>{{ path.lead }}</p>
         <ul>
-          <li *ngFor="let item of home.demonstration.validates">{{ item }}</li>
+          <li *ngFor="let point of path.points">{{ point }}</li>
         </ul>
-      </article>
-      <article>
-        <h3>{{ home.demonstration.boundaryLabel }}</h3>
-        <ul>
-          <li *ngFor="let item of home.demonstration.boundaries">{{ item }}</li>
-        </ul>
+        <a
+          class="secondary-action"
+          [routerLink]="path.cta.path"
+          [queryParams]="path.cta.queryParams"
+          >{{ path.cta.label }}</a
+        >
       </article>
     </div>
   </section>
 
-  <section class="outcome section-shell" aria-labelledby="outcome-title">
-    <div class="section-heading">
-      <p class="eyebrow">{{ home.outcome.eyebrow }}</p>
-      <h2 id="outcome-title">{{ home.outcome.title }}</h2>
-      <p class="section-lead">{{ home.outcome.lead }}</p>
-    </div>
-    <div class="comparison-grid">
-      <article class="comparison-card">
-        <h3>{{ home.outcome.demo.title }}</h3>
-        <ul>
-          <li *ngFor="let item of home.outcome.demo.points">{{ item }}</li>
-        </ul>
-      </article>
-      <article class="comparison-card">
-        <h3>{{ home.outcome.production.title }}</h3>
-        <ul>
-          <li *ngFor="let item of home.outcome.production.points">{{ item }}</li>
-        </ul>
-      </article>
-    </div>
-  </section>
-
-  <section class="studio section-shell" aria-labelledby="studio-title">
+  <section class="studio section-shell" aria-labelledby="evidence-title">
     <div class="evidence-teaser">
       <div>
         <p class="eyebrow">{{ home.evidenceTeaser.eyebrow }}</p>
-        <h2 id="studio-title">{{ home.evidenceTeaser.title }}</h2>
+        <h2 id="evidence-title">{{ home.evidenceTeaser.title }}</h2>
         <p>{{ home.evidenceTeaser.lead }}</p>
       </div>
       <div class="evidence-teaser-grid">
         <article *ngFor="let item of trust.evidence.items" class="evidence-teaser-card">
           <p class="evidence-type">{{ item.typeLabel }}</p>
           <h3>{{ item.title }}</h3>
-          <p>{{ item.built }}</p>
-          <p class="evidence-limitation">{{ item.limitation }}</p>
+          <p class="evidence-check"><strong>Co można sprawdzić:</strong> {{ item.teaser }}</p>
+          <p class="evidence-boundary">
+            <strong>Czego ten przykład nie potwierdza:</strong> {{ item.limitation }}
+          </p>
           <div class="evidence-links">
             <a
               *ngIf="item.liveLink"
@@ -124,7 +104,7 @@
       </div>
       <div class="evidence-teaser-footer">
         <div>
-          <p class="eyebrow">{{ home.studioTeaser.eyebrow }}</p>
+          <p class="eyebrow">{{ home.studioEyebrow }}</p>
           <p class="trust-statement">{{ home.trustTeaser.statement }}</p>
         </div>
         <div class="evidence-links">
@@ -143,37 +123,14 @@
     </div>
   </section>
 
-  <section class="paths section-shell" aria-labelledby="paths-title">
-    <div class="section-heading">
-      <p class="eyebrow">{{ home.pathsHeading.eyebrow }}</p>
-      <h2 id="paths-title">{{ home.pathsHeading.title }}</h2>
-    </div>
-    <div class="path-grid">
-      <article *ngFor="let path of home.paths" class="path-card">
-        <p class="card-kicker">{{ path.eyebrow }}</p>
-        <h3>{{ path.title }}</h3>
-        <p>{{ path.lead }}</p>
-        <ul>
-          <li *ngFor="let point of path.points">{{ point }}</li>
-        </ul>
-        <a
-          class="secondary-action"
-          [routerLink]="path.cta.path"
-          [queryParams]="path.cta.queryParams"
-          >{{ path.cta.label }}</a
-        >
-      </article>
-    </div>
-
-    <div class="contact-card" aria-labelledby="contact-title">
-      <h3 id="contact-title">{{ home.closingCta.title }}</h3>
-      <p>{{ home.closingCta.lead }}</p>
-      <a
-        class="primary-action"
-        [routerLink]="home.closingCta.primaryCta.path"
-        [queryParams]="home.closingCta.primaryCta.queryParams"
-        >{{ home.closingCta.primaryCta.label }}</a
-      >
-    </div>
+  <section class="contact-card section-shell" aria-labelledby="contact-title">
+    <h2 id="contact-title">{{ home.closingCta.title }}</h2>
+    <p>{{ home.closingCta.lead }}</p>
+    <a
+      class="primary-action"
+      [routerLink]="home.closingCta.primaryCta.path"
+      [queryParams]="home.closingCta.primaryCta.queryParams"
+      >{{ home.closingCta.primaryCta.label }}</a
+    >
   </section>
 </div>

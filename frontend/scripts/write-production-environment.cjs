@@ -1,17 +1,33 @@
 const fs = require('node:fs');
 const path = require('node:path');
 
-const apiUrl = process.env.API_URL ?? '__PUBLIC_CONFIG_REQUIRED__:apiUrl';
-const publicSiteOrigin =
-  process.env.PUBLIC_SITE_ORIGIN ?? '__PUBLIC_CONFIG_REQUIRED__:publicSiteOrigin';
-const outputPath = path.resolve(__dirname, '../src/environments/environment.prod.ts');
+function productionEnvironment(source = process.env) {
+  const apiUrl = source.API_URL ?? '__PUBLIC_CONFIG_REQUIRED__:apiUrl';
+  const publicSiteUrl = source.PUBLIC_SITE_URL ?? '__PUBLIC_CONFIG_REQUIRED__:publicSiteUrl';
+  const rawIndexingEnabled = source.PUBLIC_SITE_INDEXING ?? 'false';
+  if (!['true', 'false'].includes(rawIndexingEnabled)) {
+    throw new Error('PUBLIC_SITE_INDEXING musi mieć wartość true albo false.');
+  }
 
-fs.writeFileSync(
-  outputPath,
-  `export const environment = ${JSON.stringify(
-    { production: true, apiUrl, publicSiteOrigin },
-    null,
-    2,
-  )} as const;\n`,
-  'utf8',
-);
+  return {
+    production: true,
+    apiUrl,
+    publicSiteUrl,
+    indexingEnabled: rawIndexingEnabled === 'true',
+  };
+}
+
+function writeProductionEnvironment(source = process.env) {
+  const outputPath = path.resolve(__dirname, '../src/environments/environment.prod.ts');
+  fs.writeFileSync(
+    outputPath,
+    `export const environment = ${JSON.stringify(productionEnvironment(source), null, 2)} as const;\n`,
+    'utf8',
+  );
+}
+
+if (require.main === module) {
+  writeProductionEnvironment();
+}
+
+module.exports = { productionEnvironment, writeProductionEnvironment };

@@ -69,6 +69,15 @@ describe('KnowledgeDemoComponent', () => {
     expect(element.textContent).toContain('Interaktywna symulacja przepływu demo');
     expect(element.textContent).toContain('nie połączenie z produkcyjną bazą wiedzy');
     expect(element.querySelector('a[href="/kontakt?projectType=ai_automation"]')).not.toBeNull();
+    const scenarioButton = element.querySelector('.scenario-button') as HTMLButtonElement;
+    const result = element.querySelector('#knowledge-demo-result');
+    expect(scenarioButton.textContent?.trim().length).toBeGreaterThan(0);
+    expect(scenarioButton.getAttribute('aria-controls')).toBe('knowledge-demo-result');
+    expect(result?.getAttribute('aria-live')).toBe('polite');
+    expect(result?.getAttribute('aria-atomic')).toBe('true');
+    expect(Number.parseFloat(getComputedStyle(scenarioButton).minHeight)).toBeGreaterThanOrEqual(
+      44,
+    );
     expect(fetchSpy).not.toHaveBeenCalled();
   }));
 

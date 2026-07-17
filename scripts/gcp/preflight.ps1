@@ -1,6 +1,17 @@
 param(
   [string]$BackendPath = (Join-Path $PSScriptRoot '..\..\backend'),
-  [string]$FrontendPath = (Join-Path $PSScriptRoot '..\..\frontend')
+  [string]$FrontendPath = (Join-Path $PSScriptRoot '..\..\frontend'),
+
+  [Parameter(Mandatory = $true)]
+  [string]$PublicLegalConfigPath,
+
+  [Parameter(Mandatory = $true)]
+  [string]$ApiUrl,
+
+  [Parameter(Mandatory = $true)]
+  [string]$PublicSiteUrl,
+
+  [bool]$EnableIndexing = $false
 )
 
 $ErrorActionPreference = 'Stop'
@@ -21,6 +32,7 @@ function Invoke-Checked {
 
 $backendRoot = (Resolve-Path -LiteralPath $BackendPath).Path
 $frontendRoot = (Resolve-Path -LiteralPath $FrontendPath).Path
+$legalConfigPath = (Resolve-Path -LiteralPath $PublicLegalConfigPath).Path
 
 Invoke-Checked -Label 'Backend: ruff check, ruff format --check, pytest' -ScriptBlock {
   Push-Location $backendRoot
@@ -50,8 +62,23 @@ Invoke-Checked -Label 'Frontend: lint, format check, tests, build' -ScriptBlock 
     & npm test
     if ($LASTEXITCODE -ne 0) { throw 'frontend npm test failed' }
 
-    & npm run build
-    if ($LASTEXITCODE -ne 0) { throw 'frontend npm run build failed' }
+    $previousLegalConfigPath = $env:PUBLIC_LEGAL_CONFIG_PATH
+    $previousApiUrl = $env:API_URL
+    $previousPublicSiteUrl = $env:PUBLIC_SITE_URL
+    $previousPublicSiteIndexing = $env:PUBLIC_SITE_INDEXING
+    try {
+      $env:PUBLIC_LEGAL_CONFIG_PATH = $legalConfigPath
+      $env:API_URL = $ApiUrl
+      $env:PUBLIC_SITE_URL = $PublicSiteUrl
+      $env:PUBLIC_SITE_INDEXING = $EnableIndexing.ToString().ToLowerInvariant()
+      & npm run build
+      if ($LASTEXITCODE -ne 0) { throw 'frontend npm run build failed' }
+    } finally {
+      $env:PUBLIC_LEGAL_CONFIG_PATH = $previousLegalConfigPath
+      $env:API_URL = $previousApiUrl
+      $env:PUBLIC_SITE_URL = $previousPublicSiteUrl
+      $env:PUBLIC_SITE_INDEXING = $previousPublicSiteIndexing
+    }
   } finally {
     Pop-Location
   }

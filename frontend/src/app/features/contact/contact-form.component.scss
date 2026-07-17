@@ -30,8 +30,18 @@
 
 .field-full,
 .form-status,
+.form-next-step,
 .submit-button {
   grid-column: 1 / -1;
+}
+
+.form-next-step {
+  margin: 0;
+  border-left: 3px solid var(--color-accent);
+  color: var(--color-muted);
+  font-size: 0.94rem;
+  line-height: 1.45;
+  padding-left: 0.75rem;
 }
 
 label {
@@ -125,6 +135,14 @@ textarea {
   padding: 0.85rem 1rem;
   font-weight: 750;
   line-height: 1.45;
+}
+
+.form-status p {
+  margin: 0;
+}
+
+.form-status p + p {
+  margin-top: 0.25rem;
 }
 
 .form-status.success {

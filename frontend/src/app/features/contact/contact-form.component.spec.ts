@@ -1,5 +1,5 @@
 import { provideHttpClient } from '@angular/common/http';
-import { TestBed } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { BehaviorSubject, of, Subject, throwError } from 'rxjs';
 
@@ -35,7 +35,7 @@ describe('ContactFormComponent', () => {
     }).compileComponents();
   });
 
-  it('blocks invalid submission and shows Polish validation copy', () => {
+  it('blocks invalid submission, exposes errors and focuses their summary', fakeAsync(() => {
     const fixture = TestBed.createComponent(ContactFormComponent);
     fixture.detectChanges();
 
@@ -43,6 +43,7 @@ describe('ContactFormComponent', () => {
 
     fixture.componentInstance.submit();
     fixture.detectChanges();
+    tick();
 
     expect(api.submit).not.toHaveBeenCalled();
     expect(fixture.nativeElement.textContent).toContain('wymagane pola');
@@ -51,8 +52,12 @@ describe('ContactFormComponent', () => {
     expect(
       fixture.nativeElement.querySelector('#name')?.getAttribute('aria-describedby'),
     ).toContain('name-error');
-    expect(fixture.nativeElement.querySelector('.form-status[role="alert"]')).not.toBeNull();
-  });
+    const summary = fixture.nativeElement.querySelector(
+      '#contact-form-error-summary[role="alert"][tabindex="-1"]',
+    );
+    expect(summary).not.toBeNull();
+    expect(fixture.nativeElement.ownerDocument.activeElement).toBe(summary);
+  }));
 
   it('preselects a product type from the contact route query param without changing the payload shape', () => {
     const fixture = TestBed.createComponent(ContactFormComponent);
@@ -93,6 +98,17 @@ describe('ContactFormComponent', () => {
     fixture.detectChanges();
 
     expect(fixture.componentInstance.form.controls.projectType.value).toBe('mvp_prototype');
+  });
+
+  it('preselects every project type used by public CTA links', () => {
+    for (const option of projectTypeOptions) {
+      projectTypeParams$.next(convertToParamMap({ projectType: option.value }));
+      const fixture = TestBed.createComponent(ContactFormComponent);
+      fixture.detectChanges();
+
+      expect(fixture.componentInstance.form.controls.projectType.value).toBe(option.value);
+      fixture.destroy();
+    }
   });
 
   it('preselects the development category from the Development CTA query param', () => {
@@ -201,7 +217,28 @@ describe('ContactFormComponent', () => {
     expect(element.querySelector('#message')?.getAttribute('aria-describedby')).toBe(
       'message-hint',
     );
+    expect((element.querySelector('#name') as HTMLInputElement).name).toBe('name');
+    expect((element.querySelector('#email') as HTMLInputElement).name).toBe('email');
+    expect((element.querySelector('#company') as HTMLInputElement).name).toBe('company');
+    expect((element.querySelector('#projectType') as HTMLSelectElement).name).toBe('projectType');
+    expect((element.querySelector('#budgetRange') as HTMLSelectElement).name).toBe('budgetRange');
+    expect((element.querySelector('#message') as HTMLTextAreaElement).name).toBe('message');
+    expect((element.querySelector('#consent') as HTMLInputElement).name).toBe('consent');
     expect(element.querySelector('.honeypot [tabindex="-1"]')).not.toBeNull();
+    expect((element.querySelector('#website') as HTMLInputElement).name).toBe('website');
+    expect(
+      Number.parseFloat(
+        getComputedStyle(element.querySelector('#name') as HTMLInputElement).minHeight,
+      ),
+    ).toBeGreaterThanOrEqual(44);
+    expect(
+      Number.parseFloat(
+        getComputedStyle(element.querySelector('.submit-button') as HTMLButtonElement).minHeight,
+      ),
+    ).toBeGreaterThanOrEqual(44);
+    expect(element.querySelector('.form-next-step')?.textContent?.trim()).toBe(
+      fixture.componentInstance.content.formNextStep,
+    );
   });
 
   it('submits a productized project type using the existing payload shape', () => {
@@ -278,7 +315,7 @@ describe('ContactFormComponent', () => {
     expect(projectTypeOptions).toHaveSize(14);
   });
 
-  it('shows the success path with a reset action and a home link', () => {
+  it('shows and focuses the success path with a reset action and a home link', fakeAsync(() => {
     const fixture = TestBed.createComponent(ContactFormComponent);
     fixture.detectChanges();
 
@@ -294,12 +331,17 @@ describe('ContactFormComponent', () => {
     });
     fixture.componentInstance.submit();
     fixture.detectChanges();
+    tick();
 
     expect(fixture.nativeElement.textContent).toContain('Wiadomość została odebrana');
     expect(fixture.nativeElement.textContent).toContain('Wysłany opis');
     expect(fixture.nativeElement.textContent).toContain('Jan Kowalski');
     expect(fixture.nativeElement.textContent).toContain('Chcemy sprawdzić jeden proces');
-    expect(fixture.nativeElement.querySelector('.contact-success[role="status"]')).not.toBeNull();
+    const success = fixture.nativeElement.querySelector(
+      '.contact-success[role="status"][tabindex="-1"]',
+    );
+    expect(success).not.toBeNull();
+    expect(fixture.nativeElement.ownerDocument.activeElement).toBe(success);
     expect(fixture.nativeElement.querySelector('a[href="/"]')).not.toBeNull();
     expect(fixture.nativeElement.querySelector('.contact-form')).toBeNull();
 
@@ -307,9 +349,9 @@ describe('ContactFormComponent', () => {
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelector('.contact-form')).not.toBeNull();
     expect(fixture.componentInstance.form.controls.consent.value).toBeFalse();
-  });
+  }));
 
-  it('uses a user-facing message when the API is unavailable', () => {
+  it('uses and focuses a user-facing message when the API is unavailable', fakeAsync(() => {
     const fixture = TestBed.createComponent(ContactFormComponent);
     fixture.detectChanges();
     const api = TestBed.inject(ContactApiService) as jasmine.SpyObj<ContactApiService>;
@@ -327,6 +369,7 @@ describe('ContactFormComponent', () => {
     });
     fixture.componentInstance.submit();
     fixture.detectChanges();
+    tick();
 
     expect(fixture.nativeElement.textContent).toContain('Formularz jest chwilowo niedostępny');
     expect(fixture.nativeElement.textContent).not.toMatch(/stack|trace|HTTP/i);
@@ -334,7 +377,10 @@ describe('ContactFormComponent', () => {
       'Chcemy sprawdzić jeden proces',
     );
     expect(fixture.componentInstance.form.controls.name.value).toBe('Jan Kowalski');
-  });
+    expect(fixture.nativeElement.ownerDocument.activeElement).toBe(
+      fixture.nativeElement.querySelector('#contact-form-error-summary'),
+    );
+  }));
 
   it('keeps the entered values and uses generic copy after a server error', () => {
     const fixture = TestBed.createComponent(ContactFormComponent);

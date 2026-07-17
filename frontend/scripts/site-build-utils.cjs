@@ -32,19 +32,19 @@ function normalizeOrigin(origin) {
 
 function validateProductionSiteConfig(environment) {
   const errors = [];
-  const origin = normalizeOrigin(environment?.publicSiteOrigin);
+  const origin = normalizeOrigin(environment?.publicSiteUrl);
   const apiUrl = typeof environment?.apiUrl === 'string' ? environment.apiUrl : '';
 
   if (!origin || PLACEHOLDER_PATTERN.test(origin)) {
-    errors.push('publicSiteOrigin');
+    errors.push('publicSiteUrl');
   } else {
     try {
       const url = new URL(origin);
       if (url.protocol !== 'https:' || url.pathname !== '/' || url.search || url.hash) {
-        errors.push('publicSiteOrigin');
+        errors.push('publicSiteUrl');
       }
     } catch {
-      errors.push('publicSiteOrigin');
+      errors.push('publicSiteUrl');
     }
   }
 
@@ -59,6 +59,10 @@ function validateProductionSiteConfig(environment) {
     } catch {
       errors.push('apiUrl');
     }
+  }
+
+  if (typeof environment?.indexingEnabled !== 'boolean') {
+    errors.push('indexingEnabled');
   }
 
   return errors;
@@ -85,7 +89,7 @@ function generatedDirectory() {
 }
 
 function writeSeoArtifacts(environment) {
-  const origin = normalizeOrigin(environment.publicSiteOrigin);
+  const origin = normalizeOrigin(environment.publicSiteUrl);
   const routes = publicPrerenderRoutes();
   const outputDirectory = generatedDirectory();
   fs.mkdirSync(outputDirectory, { recursive: true });
@@ -106,7 +110,7 @@ function writeSeoArtifacts(environment) {
 }
 
 function validateSeoArtifacts(environment, { production = false } = {}) {
-  const origin = normalizeOrigin(environment.publicSiteOrigin);
+  const origin = normalizeOrigin(environment.publicSiteUrl);
   const expectedRoutes = publicPrerenderRoutes();
   const sitemapPath = path.join(generatedDirectory(), 'sitemap.xml');
   const robotsPath = path.join(generatedDirectory(), 'robots.txt');
@@ -134,7 +138,7 @@ function validateSeoArtifacts(environment, { production = false } = {}) {
     errors.push('production SEO artifacts contain a localhost origin');
   }
   if (!robots.includes(`Sitemap: ${origin}/sitemap.xml`)) {
-    errors.push('robots sitemap URL does not match publicSiteOrigin');
+    errors.push('robots sitemap URL does not match publicSiteUrl');
   }
 
   return errors;

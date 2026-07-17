@@ -4,6 +4,17 @@
       <p class="eyebrow">{{ content.eyebrow }}</p>
       <h1>{{ content.title }}</h1>
       <p class="page-lead">{{ content.lead }}</p>
+      <div class="hero-actions" aria-label="Główne działanie">
+        <a
+          class="primary-action"
+          routerLink="/kontakt"
+          [queryParams]="{ projectType: 'external_integration' }"
+          >Omów konkretny problem</a
+        >
+        <p class="hero-cta-note">
+          Po wysłaniu opisu ustalimy, czy temat wymaga eksperymentu, demo czy planu prac.
+        </p>
+      </div>
     </div>
   </section>
   <section class="section-shell" aria-labelledby="directions-title" appRevealOnScroll>
@@ -35,9 +46,6 @@
       <p class="page-lead">
         Jeżeli chcesz omówić konkretny problem biznesowy, zacznij od kontaktu i osobnego zakresu.
       </p>
-      <a class="primary-action" routerLink="/kontakt" [queryParams]="{ projectType: 'backend_api' }"
-        >Wyślij opis projektu</a
-      >
     </div>
   </section>
 </div>

@@ -27,6 +27,12 @@ describe('SiteShellComponent', () => {
     expect(element.querySelector('.footer-links a[href="/rd"]')).not.toBeNull();
     expect(element.querySelector('.site-footer')?.textContent).toContain('© AISoftware Studio');
     expect(element.querySelector('.site-footer')?.textContent).toContain('Piotr Barabasz');
+    expect(element.querySelector('.site-footer')?.textContent).toContain(
+      'Właściciel i odpowiedzialny partner techniczny',
+    );
+    expect(element.querySelector('.site-footer')?.textContent).toContain(
+      'Dema AI, aplikacje, API i automatyzacje',
+    );
     expect(element.querySelector('.site-footer a[href="/kontakt"]')).not.toBeNull();
     expect(element.querySelector('.site-footer a[href="/polityka-prywatnosci"]')).not.toBeNull();
     expect(element.querySelector('.site-footer a[href^="mailto:"]')).toBeNull();
@@ -35,6 +41,7 @@ describe('SiteShellComponent', () => {
     );
     expect(githubLink?.getAttribute('target')).toBe('_blank');
     expect(githubLink?.getAttribute('rel')).toContain('noopener');
+    expect(githubLink?.getAttribute('rel')).toContain('noreferrer');
     expect(element.querySelectorAll('#main-content').length).toBe(1);
   });
 
@@ -51,10 +58,16 @@ describe('SiteShellComponent', () => {
     fixture.detectChanges();
     fixture.componentInstance.isMobileViewport = true;
     const toggle = fixture.nativeElement.querySelector('.menu-toggle') as HTMLButtonElement;
+    const navigation = fixture.nativeElement.querySelector('#primary-navigation') as HTMLElement;
+    expect(toggle.getAttribute('aria-controls')).toBe('primary-navigation');
+    expect(toggle.hasAttribute('aria-haspopup')).toBeFalse();
+    expect(toggle.textContent).toContain('Menu');
+    expect(navigation.hasAttribute('inert')).toBeTrue();
     toggle.click();
     fixture.detectChanges();
     await fixture.whenStable();
     expect(toggle.getAttribute('aria-expanded')).toBe('true');
+    expect(navigation.hasAttribute('inert')).toBeFalse();
     expect(fixture.nativeElement.ownerDocument.activeElement).toBe(
       fixture.nativeElement.querySelector('.nav-links a'),
     );
@@ -66,7 +79,7 @@ describe('SiteShellComponent', () => {
     expect(fixture.nativeElement.ownerDocument.activeElement).toBe(toggle);
   });
 
-  it('keeps Tab focus inside an open mobile navigation panel', async () => {
+  it('does not trap Tab focus inside the open mobile navigation panel', async () => {
     await TestBed.configureTestingModule({
       imports: [SiteShellComponent],
       providers: [
@@ -80,22 +93,15 @@ describe('SiteShellComponent', () => {
     fixture.componentInstance.isMobileNavigationOpen = true;
     fixture.detectChanges();
 
-    const links = Array.from(
-      fixture.nativeElement.querySelectorAll('.nav-links a'),
-    ) as HTMLAnchorElement[];
-    links.at(-1)?.focus();
-    fixture.nativeElement.ownerDocument.dispatchEvent(
-      new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }),
-    );
+    const event = new KeyboardEvent('keydown', {
+      key: 'Tab',
+      bubbles: true,
+      cancelable: true,
+    });
+    fixture.nativeElement.ownerDocument.dispatchEvent(event);
 
-    expect(fixture.nativeElement.ownerDocument.activeElement).toBe(links[0]);
-
-    links[0].focus();
-    fixture.nativeElement.ownerDocument.dispatchEvent(
-      new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true }),
-    );
-
-    expect(fixture.nativeElement.ownerDocument.activeElement).toBe(links.at(-1));
+    expect(event.defaultPrevented).toBeFalse();
+    expect(fixture.componentInstance.isMobileNavigationOpen).toBeTrue();
   });
 
   it('closes the mobile menu when a navigation link is activated', async () => {
@@ -176,6 +182,9 @@ describe('SiteShellComponent', () => {
       expect(document.querySelector('meta[property="og:title"]')?.getAttribute('content')).toBe(
         route.title,
       );
+      expect(document.querySelector('meta[name="robots"]')?.getAttribute('content')).toBe(
+        'noindex, follow',
+      );
       expect(
         document.querySelector('meta[property="og:description"]')?.getAttribute('content'),
       ).toBe(route.description);
@@ -199,11 +208,17 @@ describe('SiteShellComponent', () => {
       } else {
         expect(activeNavigationPath).toBeUndefined();
       }
-      expect(document.activeElement?.id).toBe('main-content');
+      expect(document.querySelectorAll('main')).toHaveSize(1);
+      if (route.path === '/polityka-prywatnosci') {
+        expect(document.querySelector('main article.privacy-page')).not.toBeNull();
+      }
     }
 
     expect(document.querySelector('meta[property="og:image"]')?.getAttribute('content')).toBe(
       siteSocialImageUrl,
+    );
+    expect(document.querySelector('meta[property="og:image:type"]')?.getAttribute('content')).toBe(
+      'image/jpeg',
     );
     expect(document.querySelector('meta[name="twitter:image"]')?.getAttribute('content')).toBe(
       siteSocialImageUrl,
@@ -237,5 +252,37 @@ describe('SiteShellComponent', () => {
     expect(notFoundStructuredData['@graph'].map((item) => item['@type'])).not.toContain(
       'BreadcrumbList',
     );
+  });
+
+  it('keeps the initial focus order, supports the skip link and focuses main after route changes', async () => {
+    await TestBed.configureTestingModule({
+      imports: [SiteShellComponent],
+      providers: [
+        provideRouter(routes),
+        provideHttpClient(),
+        { provide: API_CONFIG, useValue: { apiUrl: 'http://api.test' } },
+      ],
+    }).compileComponents();
+    const fixture = TestBed.createComponent(SiteShellComponent);
+    const router = TestBed.inject(Router);
+    fixture.detectChanges();
+
+    const document = fixture.nativeElement.ownerDocument as Document;
+    const main = fixture.nativeElement.querySelector('#main-content') as HTMLElement;
+    const skipLink = fixture.nativeElement.querySelector('.skip-link') as HTMLAnchorElement;
+    const brand = fixture.nativeElement.querySelector('.brand') as HTMLAnchorElement;
+
+    expect(skipLink.getAttribute('href')).toBe('#main-content');
+    expect(document.activeElement).not.toBe(main);
+    expect(brand).not.toBeNull();
+
+    skipLink.click();
+    expect(document.activeElement).toBe(main);
+
+    brand.focus();
+    await fixture.ngZone!.run(() => router.navigateByUrl('/studio'));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(document.activeElement).toBe(main);
   });
 });
