@@ -34,6 +34,17 @@ SECRET_VERSION_PATTERN = re.compile(
     r"^projects/[a-z][a-z0-9-]{4,28}[a-z0-9]/"
     r"secrets/[A-Za-z0-9_-]{1,255}/versions/(?:latest|[1-9][0-9]*)$"
 )
+FRONTEND_CHECK_IMAGE = (
+    "cypress/browsers:node-20.11.1-chrome-123.0.6312.58-1-ff-124.0-"
+    "edge-122.0.2365.92-1@sha256:"
+    "a73fe736a24ad0ba8913c7e4138a1331eb1d361ad5d63976d05a337129639c7e"
+)
+LEGACY_FRONTEND_CHECK_IMAGE = "cypress/browsers:node20.11.1-chrome120-ff121"
+FRONTEND_CHECK_STEPS = {
+    "cloudbuild.deploy.yaml": "frontend-checks",
+    "cloudbuild.frontend.yaml": "manual-frontend-checks",
+    "cloudbuild.pr-checks.yaml": "frontend-checks",
+}
 
 
 def load_config(name: str) -> dict[str, object]:
@@ -86,6 +97,12 @@ def render_images(config: dict[str, object]) -> list[str]:
     return [resolve_value(str(image), substitutions) for image in images]
 
 
+def assert_pinned_frontend_check_image(test: unittest.TestCase, image: str) -> None:
+    test.assertEqual(image, FRONTEND_CHECK_IMAGE)
+    match = re.fullmatch(r"cypress/browsers:[^@]+@sha256:([0-9a-f]{64})", image)
+    test.assertIsNotNone(match)
+
+
 class CloudBuildYamlTest(unittest.TestCase):
     def test_all_cloud_build_files_parse_and_wait_for_known_steps(self) -> None:
         for name in CONFIG_NAMES:
@@ -111,6 +128,27 @@ class CloudBuildYamlTest(unittest.TestCase):
         self.assertIn("DEPLOY_PUBLIC_SITE_URL=$_PUBLIC_SITE_URL", environment)
         self.assertIn("DEPLOY_CORS_ALLOWED_ORIGINS=$_PUBLIC_SITE_URL", environment)
         self.assertIn("DEPLOY_IMAGE_TAG=$SHORT_SHA", environment)
+
+    def test_all_frontend_check_steps_use_the_exact_pinned_browser_image(self) -> None:
+        for config_name, step_id in FRONTEND_CHECK_STEPS.items():
+            with self.subTest(config=config_name, step=step_id):
+                config = load_config(config_name)
+                matching_steps = [
+                    step for step in config["steps"] if step.get("id") == step_id
+                ]
+                self.assertEqual(len(matching_steps), 1)
+                assert_pinned_frontend_check_image(
+                    self, str(matching_steps[0].get("name", ""))
+                )
+                command = " ".join(
+                    str(argument) for argument in matching_steps[0]["args"]
+                )
+                self.assertIn("--karma-config=karma.ci.conf.cjs", command)
+                self.assertIn("--browsers=ChromeHeadlessCI", command)
+
+    def test_legacy_missing_browser_manifest_reference_is_rejected(self) -> None:
+        with self.assertRaises(AssertionError):
+            assert_pinned_frontend_check_image(self, LEGACY_FRONTEND_CHECK_IMAGE)
 
     def test_parse_time_image_and_secret_fields_are_syntactically_safe(self) -> None:
         for name in CONFIG_NAMES:

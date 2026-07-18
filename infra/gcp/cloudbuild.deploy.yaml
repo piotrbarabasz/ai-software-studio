@@ -88,7 +88,7 @@ steps:
         python -m unittest discover -s ../infra/gcp/tests -p 'test_cloudbuild_yaml.py'
 
   - id: frontend-checks
-    name: cypress/browsers:node20.11.1-chrome120-ff121
+    name: cypress/browsers:node-20.11.1-chrome-123.0.6312.58-1-ff-124.0-edge-122.0.2365.92-1@sha256:a73fe736a24ad0ba8913c7e4138a1331eb1d361ad5d63976d05a337129639c7e
     entrypoint: sh
     waitFor: ["deployment-contract-preflight"]
     args:
@@ -98,7 +98,7 @@ steps:
         npm ci &&
         npm run lint &&
         npm run format:check &&
-        npm test
+        npm test -- --karma-config=karma.ci.conf.cjs --browsers=ChromeHeadlessCI
 
   - id: backend-build
     name: gcr.io/cloud-builders/docker
