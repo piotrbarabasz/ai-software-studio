@@ -4,7 +4,10 @@ param(
 
   [string]$TriggerLocation = 'global',
 
-  [string]$TriggerName = 'deploy-prod',
+  [ValidateSet('production', 'pull-request')]
+  [string]$TriggerKind = 'production',
+
+  [string]$TriggerName = '',
 
   [string]$TriggerId = ''
 )
@@ -17,11 +20,19 @@ $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..\')).Path
 $auditScript = Join-Path $PSScriptRoot 'audit_trigger.py'
 $python = Get-Command py -ErrorAction SilentlyContinue
 
-$auditArguments = @($auditScript, '--project', $ProjectId, '--trigger-location', $TriggerLocation)
-if ([string]::IsNullOrWhiteSpace($TriggerId)) {
-  $auditArguments += @('--trigger-name', $TriggerName)
-} else {
+$auditArguments = @(
+  $auditScript,
+  '--project',
+  $ProjectId,
+  '--trigger-location',
+  $TriggerLocation,
+  '--trigger-kind',
+  $TriggerKind
+)
+if (-not [string]::IsNullOrWhiteSpace($TriggerId)) {
   $auditArguments += @('--trigger-id', $TriggerId)
+} elseif (-not [string]::IsNullOrWhiteSpace($TriggerName)) {
+  $auditArguments += @('--trigger-name', $TriggerName)
 }
 
 if ($python) {

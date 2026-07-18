@@ -8,6 +8,7 @@ import type {
   SiteContent,
 } from './site-content.types';
 import { productRoutePaths } from './site-content.types';
+import { environment } from '../../../environments/environment';
 
 function createProductCatalogEntry<TProductId extends ProductId>(
   entry: ProductCatalogEntry<TProductId>,
@@ -705,7 +706,7 @@ export const siteContent = {
       contactCta: {
         label: 'Omów podobne demo',
         path: '/kontakt',
-        queryParams: { projectType: 'ai_automation' },
+        queryParams: { projectType: 'business_process_automation' },
       },
       scenarios: [
         {
@@ -792,7 +793,11 @@ export const siteContent = {
       ],
       demoCta: { label: 'Uruchom demo', path: '/demo-ai' },
       developmentCta: { label: 'Sprawdź zasady pierwszego etapu', path: '/development' },
-      contactCta: { label: 'Opisz problem bez zobowiązania', path: '/kontakt' },
+      contactCta: {
+        label: 'Opisz problem bez zobowiązania',
+        path: '/kontakt',
+        queryParams: { projectType: 'other' },
+      },
       repositoryLink: {
         label: 'Przejrzyj publiczny kod',
         url: publicBrand.links.sourceRepository.url,
@@ -964,6 +969,7 @@ export const siteContent = {
     firstMessagePurpose:
       'Wiadomość może być niepełna: opisz obecną pracę, problem i efekt, który chcesz osiągnąć.',
     noCommitment: contactNoCommitment,
+    directEmail: environment.publicSalesEmail,
     directEmailLabel: 'Bezpośredni kontakt e-mail',
     noScript: {
       emailLead:

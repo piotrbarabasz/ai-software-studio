@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
+import { PLATFORM_ID } from '@angular/core';
 import { provideRouter, Router } from '@angular/router';
 
 import { routes } from '../../app.routes';
@@ -48,6 +49,35 @@ describe('SiteShellComponent', () => {
     expect(element.querySelectorAll('#main-content').length).toBe(1);
   });
 
+  it('keeps the server-rendered navigation available without JavaScript or inert', async () => {
+    await TestBed.configureTestingModule({
+      imports: [SiteShellComponent],
+      providers: [
+        provideRouter(routes),
+        provideHttpClient(),
+        { provide: API_CONFIG, useValue: { apiUrl: 'http://api.test' } },
+        { provide: PLATFORM_ID, useValue: 'server' },
+      ],
+    }).compileComponents();
+    const fixture = TestBed.createComponent(SiteShellComponent);
+    fixture.detectChanges();
+
+    const element = fixture.nativeElement as HTMLElement;
+    const header = element.querySelector('.site-header') as HTMLElement;
+    const toggle = element.querySelector('.menu-toggle') as HTMLButtonElement;
+    const navigation = element.querySelector('#primary-navigation') as HTMLElement;
+    const links = Array.from(navigation.querySelectorAll<HTMLAnchorElement>('a[href]'));
+
+    expect(fixture.componentInstance.isNavigationEnhanced).toBeFalse();
+    expect(header.classList).not.toContain('is-enhanced');
+    expect(toggle.getAttribute('aria-expanded')).toBeNull();
+    expect(getComputedStyle(toggle).display).toBe('none');
+    expect(navigation.hasAttribute('inert')).toBeFalse();
+    expect(getComputedStyle(navigation).display).toBe('flex');
+    expect(links).toHaveSize(siteContent.navigation.length);
+    expect(links.every((link) => link.tabIndex === 0 && link.hasAttribute('href'))).toBeTrue();
+  });
+
   it('supports the accessible mobile-menu state and Escape key', async () => {
     await TestBed.configureTestingModule({
       imports: [SiteShellComponent],
@@ -59,7 +89,9 @@ describe('SiteShellComponent', () => {
     }).compileComponents();
     const fixture = TestBed.createComponent(SiteShellComponent);
     fixture.detectChanges();
+    fixture.componentInstance.isNavigationEnhanced = true;
     fixture.componentInstance.isMobileViewport = true;
+    fixture.detectChanges();
     const toggle = fixture.nativeElement.querySelector('.menu-toggle') as HTMLButtonElement;
     const navigation = fixture.nativeElement.querySelector('#primary-navigation') as HTMLElement;
     expect(toggle.getAttribute('aria-controls')).toBe('primary-navigation');
@@ -92,6 +124,7 @@ describe('SiteShellComponent', () => {
       ],
     }).compileComponents();
     const fixture = TestBed.createComponent(SiteShellComponent);
+    fixture.componentInstance.isNavigationEnhanced = true;
     fixture.componentInstance.isMobileViewport = true;
     fixture.componentInstance.isMobileNavigationOpen = true;
     fixture.detectChanges();
@@ -117,6 +150,7 @@ describe('SiteShellComponent', () => {
       ],
     }).compileComponents();
     const fixture = TestBed.createComponent(SiteShellComponent);
+    fixture.componentInstance.isNavigationEnhanced = true;
     fixture.componentInstance.isMobileViewport = true;
     fixture.componentInstance.isMobileNavigationOpen = true;
     fixture.detectChanges();
@@ -128,7 +162,7 @@ describe('SiteShellComponent', () => {
     expect(fixture.componentInstance.isMobileNavigationOpen).toBeFalse();
   });
 
-  it('closes an open mobile menu when the viewport becomes desktop-sized', async () => {
+  it('keeps desktop navigation expanded and closes a mobile menu at the desktop breakpoint', async () => {
     await TestBed.configureTestingModule({
       imports: [SiteShellComponent],
       providers: [
@@ -139,17 +173,69 @@ describe('SiteShellComponent', () => {
     }).compileComponents();
     const fixture = TestBed.createComponent(SiteShellComponent);
     fixture.detectChanges();
+    fixture.componentInstance.isNavigationEnhanced = true;
     fixture.componentInstance.isMobileViewport = true;
     fixture.componentInstance.isMobileNavigationOpen = true;
 
-    const descriptor = Object.getOwnPropertyDescriptor(window, 'innerWidth');
-    Object.defineProperty(window, 'innerWidth', { configurable: true, value: 1024 });
-    window.dispatchEvent(new Event('resize'));
-    if (descriptor) {
-      Object.defineProperty(window, 'innerWidth', descriptor);
-    }
+    spyOn(window, 'matchMedia').and.returnValue({ matches: false } as MediaQueryList);
+    fixture.componentInstance.updateViewportState();
+    fixture.detectChanges();
 
+    const toggle = fixture.nativeElement.querySelector('.menu-toggle') as HTMLButtonElement;
+    const navigation = fixture.nativeElement.querySelector('#primary-navigation') as HTMLElement;
+    expect(fixture.componentInstance.isMobileViewport).toBeFalse();
     expect(fixture.componentInstance.isMobileNavigationOpen).toBeFalse();
+    expect(toggle.getAttribute('aria-expanded')).toBeNull();
+    expect(navigation.hasAttribute('inert')).toBeFalse();
+  });
+
+  it('does not introduce horizontal navigation overflow at 320px or 360px', async () => {
+    await TestBed.configureTestingModule({
+      imports: [SiteShellComponent],
+      providers: [
+        provideRouter(routes),
+        provideHttpClient(),
+        { provide: API_CONFIG, useValue: { apiUrl: 'http://api.test' } },
+      ],
+    }).compileComponents();
+    const fixture = TestBed.createComponent(SiteShellComponent);
+    fixture.detectChanges();
+
+    const element = fixture.nativeElement as HTMLElement;
+    const header = element.querySelector('.site-header') as HTMLElement;
+    fixture.componentInstance.isMobileViewport = true;
+
+    for (const width of [320, 360]) {
+      element.style.display = 'block';
+      element.style.width = `${width}px`;
+
+      fixture.componentInstance.isNavigationEnhanced = false;
+      fixture.componentInstance.isMobileNavigationOpen = false;
+      fixture.detectChanges();
+      const navigation = element.querySelector('#primary-navigation') as HTMLElement;
+      const firstLink = navigation.querySelector('a') as HTMLAnchorElement;
+      expect(getComputedStyle(navigation).display)
+        .withContext(`no-JS navigation at ${width}px`)
+        .toBe('flex');
+      expect(getComputedStyle(navigation).flexDirection)
+        .withContext(`no-JS navigation layout at ${width}px`)
+        .toBe('column');
+      expect(navigation.clientWidth)
+        .withContext(`no-JS navigation width at ${width}px`)
+        .toBeGreaterThan(width / 2);
+      expect(firstLink.getBoundingClientRect().left)
+        .withContext(`no-JS first link position at ${width}px`)
+        .toBeLessThan(header.getBoundingClientRect().right);
+      expect(header.scrollWidth)
+        .withContext(`no-JS header at ${width}px`)
+        .toBeLessThanOrEqual(header.clientWidth);
+
+      fixture.componentInstance.isNavigationEnhanced = true;
+      fixture.detectChanges();
+      expect(header.scrollWidth)
+        .withContext(`enhanced header at ${width}px`)
+        .toBeLessThanOrEqual(header.clientWidth);
+    }
   });
 
   it('updates unique SEO metadata after client-side navigation and noindexes the 404 page', async () => {
@@ -274,10 +360,23 @@ describe('SiteShellComponent', () => {
     const main = fixture.nativeElement.querySelector('#main-content') as HTMLElement;
     const skipLink = fixture.nativeElement.querySelector('.skip-link') as HTMLAnchorElement;
     const brand = fixture.nativeElement.querySelector('.brand') as HTMLAnchorElement;
+    const toggle = fixture.nativeElement.querySelector('.menu-toggle') as HTMLButtonElement;
+    const firstNavigationLink = fixture.nativeElement.querySelector(
+      '.nav-links a',
+    ) as HTMLAnchorElement;
 
     expect(skipLink.getAttribute('href')).toBe('#main-content');
     expect(document.activeElement).not.toBe(main);
     expect(brand).not.toBeNull();
+    expect(skipLink.compareDocumentPosition(brand) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(brand.compareDocumentPosition(toggle) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(
+      toggle.compareDocumentPosition(firstNavigationLink) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(getComputedStyle(brand).minHeight).toBe('44px');
+    expect(getComputedStyle(toggle).minHeight).toBe('44px');
+    expect(getComputedStyle(firstNavigationLink).minHeight).toBe('44px');
+    expect(getComputedStyle(firstNavigationLink).minWidth).toBe('44px');
 
     skipLink.click();
     expect(document.activeElement).toBe(main);

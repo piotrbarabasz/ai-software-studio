@@ -20,6 +20,9 @@ describe('PrivacyPageComponent', () => {
     expect(element.textContent).toContain('Administrator danych');
     expect(element.textContent).toContain('API formularza');
     expect(element.textContent).toContain('Google Cloud Platform (Cloud Run)');
+    expect(element.querySelector('a[href="mailto:privacy@contact.test"]')?.textContent).toContain(
+      'privacy@contact.test',
+    );
     expect(element.textContent).not.toContain('wymaga uzupełnienia');
   });
 });

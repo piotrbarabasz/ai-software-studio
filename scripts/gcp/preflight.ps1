@@ -11,7 +11,10 @@ param(
   [Parameter(Mandatory = $true)]
   [string]$PublicSiteUrl,
 
-  [bool]$EnableIndexing = $false
+  [bool]$EnableIndexing = $false,
+  [string]$PublicSalesEmail = 'kontakt@protolume.pl',
+
+  [string]$PublicPrivacyEmail = 'kontakt@protolume.pl'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -43,16 +46,25 @@ Invoke-Checked -Label 'Deployment contract CLI tests' -ScriptBlock {
   }
 }
 
+Invoke-Checked -Label 'Cloud Build YAML validation' -ScriptBlock {
+  Push-Location (Split-Path $backendRoot -Parent)
+  try {
+    & py -3.12 -m unittest discover -s infra/gcp/tests -p 'test_cloudbuild_yaml.py'
+  } finally {
+    Pop-Location
+  }
+}
+
 Invoke-Checked -Label 'Backend: ruff check, ruff format --check, pytest' -ScriptBlock {
   Push-Location $backendRoot
   try {
-    & ruff check .
+    & python -m ruff check .
     if ($LASTEXITCODE -ne 0) { throw 'backend ruff check failed' }
 
-    & ruff format --check .
+    & python -m ruff format --check .
     if ($LASTEXITCODE -ne 0) { throw 'backend ruff format --check failed' }
 
-    & pytest
+    & python -m pytest
     if ($LASTEXITCODE -ne 0) { throw 'backend pytest failed' }
   } finally {
     Pop-Location
@@ -65,11 +77,11 @@ Invoke-Checked -Label 'Frontend: lint, format check, tests, build' -ScriptBlock 
     & npm ci
     if ($LASTEXITCODE -ne 0) { throw 'frontend npm ci failed' }
 
-    & npm run lint
-    if ($LASTEXITCODE -ne 0) { throw 'frontend npm run lint failed' }
-
     & npm run format:check
     if ($LASTEXITCODE -ne 0) { throw 'frontend npm run format:check failed' }
+
+    & npm run lint
+    if ($LASTEXITCODE -ne 0) { throw 'frontend npm run lint failed' }
 
     & npm test
     if ($LASTEXITCODE -ne 0) { throw 'frontend npm test failed' }
@@ -78,11 +90,15 @@ Invoke-Checked -Label 'Frontend: lint, format check, tests, build' -ScriptBlock 
     $previousApiUrl = $env:API_URL
     $previousPublicSiteUrl = $env:PUBLIC_SITE_URL
     $previousPublicSiteIndexing = $env:PUBLIC_SITE_INDEXING
+    $previousPublicSalesEmail = $env:PUBLIC_SALES_EMAIL
+    $previousPublicPrivacyEmail = $env:PUBLIC_PRIVACY_EMAIL
     try {
       $env:PUBLIC_LEGAL_CONFIG_PATH = $legalConfigPath
       $env:API_URL = $ApiUrl
       $env:PUBLIC_SITE_URL = $PublicSiteUrl
       $env:PUBLIC_SITE_INDEXING = $EnableIndexing.ToString().ToLowerInvariant()
+      $env:PUBLIC_SALES_EMAIL = $PublicSalesEmail
+      $env:PUBLIC_PRIVACY_EMAIL = $PublicPrivacyEmail
       & npm run build
       if ($LASTEXITCODE -ne 0) { throw 'frontend npm run build failed' }
     } finally {
@@ -90,6 +106,8 @@ Invoke-Checked -Label 'Frontend: lint, format check, tests, build' -ScriptBlock 
       $env:API_URL = $previousApiUrl
       $env:PUBLIC_SITE_URL = $previousPublicSiteUrl
       $env:PUBLIC_SITE_INDEXING = $previousPublicSiteIndexing
+      $env:PUBLIC_SALES_EMAIL = $previousPublicSalesEmail
+      $env:PUBLIC_PRIVACY_EMAIL = $previousPublicPrivacyEmail
     }
   } finally {
     Pop-Location

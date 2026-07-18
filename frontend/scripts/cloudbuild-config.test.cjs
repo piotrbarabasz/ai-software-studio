@@ -23,15 +23,21 @@ test('production contract owns the frontend origin, CORS and indexing invariants
   assert.equal(contract.invariants.PUBLIC_SITE_URL, 'https://protolume.pl');
   assert.equal(contract.invariants.CORS_ALLOWED_ORIGINS, 'https://protolume.pl');
   assert.equal(contract.invariants.PUBLIC_SITE_INDEXING, 'false');
+  assert.equal(contract.invariants.PUBLIC_SALES_EMAIL, 'kontakt@protolume.pl');
+  assert.equal(contract.invariants.PUBLIC_PRIVACY_EMAIL, 'kontakt@protolume.pl');
   assert.equal(
     contract.invariants.BACKEND_URL,
     'https://aisoftware-studio-api-175725977490.europe-central2.run.app',
   );
   assert.match(deploy, /^  _PUBLIC_SITE_URL: "https:\/\/protolume\.pl"$/m);
   assert.match(deploy, /^  _PUBLIC_SITE_INDEXING: "false"$/m);
+  assert.match(deploy, /^  _PUBLIC_SALES_EMAIL: "kontakt@protolume\.pl"$/m);
+  assert.match(deploy, /^  _PUBLIC_PRIVACY_EMAIL: "kontakt@protolume\.pl"$/m);
   assert.match(deploy, /DEPLOY_CORS_ALLOWED_ORIGINS=\$_PUBLIC_SITE_URL/);
   assert.match(deploy, /PUBLIC_SITE_URL=\$_PUBLIC_SITE_URL/);
   assert.match(deploy, /PUBLIC_SITE_INDEXING=\$_PUBLIC_SITE_INDEXING/);
+  assert.match(deploy, /PUBLIC_SALES_EMAIL=\$_PUBLIC_SALES_EMAIL/);
+  assert.match(deploy, /PUBLIC_PRIVACY_EMAIL=\$_PUBLIC_PRIVACY_EMAIL/);
   assert.doesNotMatch(deploy, /manual-local/);
   assert.doesNotMatch(deploy, /\$_IMAGE_TAG/);
   assert.match(deploy, /DEPLOY_IMAGE_TAG=\$SHORT_SHA/);
@@ -48,4 +54,39 @@ test('all deployment configs invoke a real preflight before building', () => {
   assert.match(frontend, /deployment_contract\.py/);
   assert.match(backend, /deployment_contract\.py/);
   assert.doesNotMatch(`${deploy}${frontend}${backend}`, /manual-local/);
+  assert.doesNotMatch(frontend, /CONTACT_RECIPIENT_EMAIL/);
+  assert.doesNotMatch(frontend, /CONTACT_FROM_EMAIL/);
+});
+
+test('only the combined SHA pipeline can deploy Cloud Run', () => {
+  const deploy = readConfig('cloudbuild.deploy.yaml');
+  const frontend = readConfig('cloudbuild.frontend.yaml');
+  const backend = readConfig('cloudbuild.backend.yaml');
+  const pullRequest = readConfig('cloudbuild.pr-checks.yaml');
+
+  assert.match(deploy, /backend-deploy/);
+  assert.match(deploy, /frontend-deploy/);
+  assert.match(deploy, /deployment-read-only-smoke/);
+  assert.match(deploy, /smoke_deployment\.py/);
+  assert.doesNotMatch(`${frontend}${backend}${pullRequest}`, /deploy_cloud_run\.py/);
+  assert.doesNotMatch(`${frontend}${backend}${pullRequest}`, /gcloud run deploy/);
+});
+
+test('pull-request preview checks are fixed to noindex and have no secrets', () => {
+  const pullRequest = readConfig('cloudbuild.pr-checks.yaml');
+
+  assert.match(pullRequest, /^  _PUBLIC_SITE_INDEXING: "false"$/m);
+  assert.match(pullRequest, /DEPLOY_PUBLIC_SITE_INDEXING=\$_PUBLIC_SITE_INDEXING/);
+  assert.match(pullRequest, /deployment_contract\.py/);
+  assert.match(pullRequest, /--scope", "preview/);
+  assert.doesNotMatch(pullRequest, /availableSecrets|secretEnv|docker|gcloud/i);
+});
+
+test('generated legal source is excluded from the root Docker build context', () => {
+  const dockerignore = fs.readFileSync(path.join(repositoryRoot, '.dockerignore'), 'utf8');
+
+  assert.match(
+    dockerignore,
+    /^frontend\/src\/app\/core\/legal\/public-legal\.config\.generated\.ts$/m,
+  );
 });

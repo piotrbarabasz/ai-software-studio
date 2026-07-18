@@ -38,9 +38,9 @@ while [ "$attempt" -le 30 ]; do
   fi
 
   if docker exec "$container" python -c \
-    'import urllib.request; response = urllib.request.urlopen("http://127.0.0.1:8080/health", timeout=2); raise SystemExit(0 if response.status == 200 else 1)' \
+    'import urllib.request; urls = ("http://127.0.0.1:8080/health", "http://127.0.0.1:8080/ready"); raise SystemExit(0 if all(urllib.request.urlopen(url, timeout=2).status == 200 for url in urls) else 1)' \
     >/dev/null 2>&1; then
-    echo "Backend image smoke test passed: CMD is running and /health returned HTTP 200."
+    echo "Backend image smoke test passed: CMD is running and /health plus /ready returned HTTP 200."
     exit 0
   fi
 
@@ -48,6 +48,6 @@ while [ "$attempt" -le 30 ]; do
   sleep 1
 done
 
-echo "Backend image did not return HTTP 200 from /health within 30 seconds. Container logs:" >&2
+echo "Backend image did not return HTTP 200 from /health and /ready within 30 seconds. Container logs:" >&2
 docker logs "$container" >&2 || true
 exit 1

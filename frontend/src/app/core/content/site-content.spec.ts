@@ -79,7 +79,7 @@ describe('Site content model', () => {
     expect(siteContent.contact.noScript.unavailable).toContain(
       'Publiczny alternatywny adres kontaktowy nie jest obecnie skonfigurowany',
     );
-    expect('directEmail' in siteContent.contact).toBeFalse();
+    expect(siteContent.contact.directEmail).toBe('sales@contact.test');
     expect(siteContent.contact.budgetHint).toContain('opcjonalny');
     expect(siteContent.contact.formNextStep).toContain('Po wysłaniu opisu');
     expect(siteContent.contact.success.summaryTitle).toBe('Wysłany opis');
@@ -166,6 +166,11 @@ describe('Site content model', () => {
     expect(siteContent.studio.verification.steps[3]).toBe(siteContent.contact.noCommitment);
     expect(siteContent.studio.verification.demoCta.path).toBe('/demo-ai');
     expect(siteContent.studio.verification.developmentCta.path).toBe('/development');
-    expect(siteContent.studio.verification.contactCta.path).toBe('/kontakt');
+    expect(siteContent.studio.verification.contactCta).toEqual(
+      jasmine.objectContaining({
+        path: '/kontakt',
+        queryParams: { projectType: 'other' },
+      }),
+    );
   });
 });

@@ -10,6 +10,7 @@ const {
 const DEFAULT_ARTIFACT_ROOT = path.resolve(__dirname, '../dist/aisoftware-studio/browser');
 const PUBLIC_BRAND_NAME = 'Protolume';
 const RETIRED_PUBLIC_BRAND_PATTERN = /AISoftware Studio|AI Software Studio/i;
+const PRIMARY_NAVIGATION_ROUTES = ['/demo-ai', '/development', '/studio', '/kontakt'];
 
 function extractAttribute(html, tagName, identifyingAttribute, identifyingValue, resultAttribute) {
   const tags = html.match(new RegExp(`<${tagName}\\b[^>]*>`, 'gi')) ?? [];
@@ -76,6 +77,9 @@ function validateSiteArtifact(artifactRoot, environment) {
       'content',
     );
     const twitterImage = extractAttribute(html, 'meta', 'name', 'twitter:image', 'content');
+    const primaryNavigation = html.match(
+      /<nav\b(?=[^>]*\bid=["']primary-navigation["'])[^>]*>[\s\S]*?<\/nav>/i,
+    )?.[0];
 
     if (canonical !== expectedUrl) {
       errors.push(`${route}: canonical does not match PUBLIC_SITE_URL`);
@@ -124,6 +128,44 @@ function validateSiteArtifact(artifactRoot, environment) {
     }
     if (!origin.includes('.run.app') && /\.run\.app/i.test(html)) {
       errors.push(`${route}: artifact contains an unexpected run.app URL`);
+    }
+    if (/\binert(?:\s|=|>)/i.test(html)) {
+      errors.push(`${route}: prerendered document must not contain inert content`);
+    }
+    if (!primaryNavigation) {
+      errors.push(`${route}: prerendered document is missing primary navigation`);
+    } else {
+      for (const navigationRoute of PRIMARY_NAVIGATION_ROUTES) {
+        const escapedRoute = navigationRoute.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        if (!new RegExp(`<a\\b[^>]*\\bhref=["']${escapedRoute}["']`, 'i').test(primaryNavigation)) {
+          errors.push(
+            `${route}: primary navigation is missing a native link to ${navigationRoute}`,
+          );
+        }
+      }
+
+      if (PRIMARY_NAVIGATION_ROUTES.includes(route)) {
+        const escapedRoute = route.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const activeLinkPattern = new RegExp(
+          `<a\\b(?=[^>]*\\bhref=["']${escapedRoute}["'])(?=[^>]*\\baria-current=["']page["'])[^>]*>`,
+          'i',
+        );
+        if (!activeLinkPattern.test(primaryNavigation)) {
+          errors.push(`${route}: active primary navigation link must have aria-current="page"`);
+        }
+      }
+    }
+    if (
+      !/<a\b(?=[^>]*\bclass=["'][^"']*\bskip-link\b[^"']*["'])(?=[^>]*\bhref=["']#main-content["'])[^>]*>/i.test(
+        html,
+      )
+    ) {
+      errors.push(`${route}: prerendered document is missing a working skip link`);
+    }
+    if (
+      !/<main\b(?=[^>]*\bid=["']main-content["'])(?=[^>]*\btabindex=["']-1["'])[^>]*>/i.test(html)
+    ) {
+      errors.push(`${route}: prerendered document is missing the focusable main target`);
     }
   }
 

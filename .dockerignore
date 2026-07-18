@@ -17,5 +17,6 @@ tmp
 **/.env
 **/.env.*
 **/.public-legal-config.json
+frontend/src/app/core/legal/public-legal.config.generated.ts
 frontend/config/local-test
 pytest-cache-files-*

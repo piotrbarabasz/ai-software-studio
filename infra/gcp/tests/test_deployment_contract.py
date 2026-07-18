@@ -23,6 +23,8 @@ def valid_environment() -> dict[str, str]:
         "PUBLIC_SITE_URL": "https://protolume.pl",
         "CORS_ALLOWED_ORIGINS": "https://protolume.pl",
         "PUBLIC_SITE_INDEXING": "false",
+        "PUBLIC_SALES_EMAIL": "kontakt@protolume.pl",
+        "PUBLIC_PRIVACY_EMAIL": "kontakt@protolume.pl",
         "PUBLIC_LEGAL_CONFIG_SECRET": "aisoftware-studio-public-legal-config",
         "SMTP_PASSWORD_SECRET": "aisoftware-studio-smtp-password",
         "CONTACT_RATE_LIMIT_PER_MINUTE": "30",
@@ -57,7 +59,26 @@ def run_validator(
     )
 
 
+def run_preview_validator(indexing: str) -> subprocess.CompletedProcess[str]:
+    environment = os.environ.copy()
+    environment["DEPLOY_PUBLIC_SITE_INDEXING"] = indexing
+    return subprocess.run(
+        [sys.executable, str(VALIDATOR), "--scope", "preview"],
+        cwd=REPOSITORY_ROOT,
+        env=environment,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+
 class DeploymentContractCliTest(unittest.TestCase):
+    def test_preview_contract_requires_noindex(self) -> None:
+        self.assertEqual(run_preview_validator("false").returncode, 0)
+        enabled = run_preview_validator("true")
+        self.assertNotEqual(enabled.returncode, 0)
+        self.assertIn("PUBLIC_SITE_INDEXING", enabled.stderr)
+
     def test_valid_resolved_contract_exits_zero(self) -> None:
         result = run_validator()
 

@@ -1,11 +1,17 @@
 substitutions:
-  _PROJECT_ID: "<PROJECT_ID>"
-  _REGION: "europe-central2"
+  _PUBLIC_SITE_INDEXING: "false"
 
 steps:
+  - id: preview-config-preflight
+    name: python:3.12-slim
+    entrypoint: python
+    env: ["DEPLOY_PUBLIC_SITE_INDEXING=$_PUBLIC_SITE_INDEXING"]
+    args: ["scripts/gcp/deployment_contract.py", "--scope", "preview"]
+
   - id: backend-checks
     name: python:3.12-slim
     entrypoint: sh
+    waitFor: ["preview-config-preflight"]
     args:
       [
         "-c",
@@ -15,7 +21,7 @@ steps:
   - id: deployment-contract-tests
     name: python:3.12-slim
     entrypoint: python
-    waitFor: ["-"]
+    waitFor: ["preview-config-preflight"]
     args:
       [
         "-m",
@@ -30,9 +36,9 @@ steps:
   - id: frontend-checks
     name: cypress/browsers:node-20.11.1-chrome-123.0.6312.58-1-ff-124.0-edge-122.0.2365.92-1@sha256:a73fe736a24ad0ba8913c7e4138a1331eb1d361ad5d63976d05a337129639c7e
     entrypoint: sh
-    waitFor: ["-"]
+    waitFor: ["preview-config-preflight"]
     args:
       [
         "-c",
-        "cd frontend && npm ci && npm run lint && npm run format:check && npm test -- --karma-config=karma.ci.conf.cjs --browsers=ChromeHeadlessCI && npm run build:development",
+        "cd frontend && npm ci && npm run format:check && npm run lint && npm test -- --karma-config=karma.ci.conf.cjs --browsers=ChromeHeadlessCI && npm run build:development",
       ]

@@ -2,7 +2,6 @@ export interface PublicLegalConfiguration {
   readonly administrator: {
     readonly name: string;
     readonly correspondenceAddress: string;
-    readonly privacyContact: string;
   };
   readonly processing: {
     readonly purposes: readonly string[];

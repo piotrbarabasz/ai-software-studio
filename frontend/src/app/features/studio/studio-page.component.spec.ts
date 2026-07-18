@@ -59,7 +59,9 @@ describe('StudioPageComponent', () => {
     expect(element.textContent).toContain('nie jest zamówieniem');
     expect(element.querySelector('.verification-actions a[href="/demo-ai"]')).not.toBeNull();
     expect(element.querySelector('.verification-actions a[href="/development"]')).not.toBeNull();
-    expect(element.querySelector('.verification-actions a[href="/kontakt"]')).not.toBeNull();
+    expect(
+      element.querySelector('.verification-actions a[href="/kontakt?projectType=other"]'),
+    ).not.toBeNull();
 
     const externalLinks = element.querySelectorAll<HTMLAnchorElement>('a[target="_blank"]');
     externalLinks.forEach((link) => {

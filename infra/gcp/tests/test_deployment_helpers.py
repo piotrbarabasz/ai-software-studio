@@ -24,6 +24,39 @@ def load_script(name: str):
 
 
 class DeploymentHelperTest(unittest.TestCase):
+    def test_shell_and_powershell_release_wrappers_submit_only_combined_pipeline(
+        self,
+    ) -> None:
+        shell = (SCRIPT_ROOT / "deploy-production.sh").read_text(encoding="utf-8")
+        powershell = (SCRIPT_ROOT / "deploy-production.ps1").read_text(encoding="utf-8")
+
+        for expected in (
+            "infra/gcp/cloudbuild.deploy.yaml",
+            "SHORT_SHA",
+            "_CONTACT_RECIPIENT_EMAIL",
+            "_CONTACT_FROM_EMAIL",
+            "_SMTP_HOST",
+            "_SMTP_PORT",
+            "_SMTP_USERNAME",
+            "_SMTP_USE_TLS",
+            "status --porcelain",
+        ):
+            with self.subTest(expected=expected):
+                self.assertIn(expected, shell.replace("\\", "/"))
+                self.assertIn(expected, powershell.replace("\\", "/"))
+        self.assertNotIn("SMTP_PASSWORD=", shell)
+        self.assertNotIn("SMTP_PASSWORD=", powershell)
+        self.assertNotIn("PUBLIC_LEGAL_CONFIG_JSON", shell)
+        self.assertNotIn("PUBLIC_LEGAL_CONFIG_JSON", powershell)
+
+    def test_trigger_wrappers_support_both_exact_trigger_contracts(self) -> None:
+        shell = (SCRIPT_ROOT / "create-triggers.sh").read_text(encoding="utf-8")
+        powershell = (SCRIPT_ROOT / "create-triggers.ps1").read_text(encoding="utf-8")
+
+        for expected in ("production", "pull-request", "trigger-kind"):
+            self.assertIn(expected.lower(), shell.lower())
+            self.assertIn(expected.lower(), powershell.lower())
+
     def test_deploy_diagnostics_never_mask_original_exit_code(self) -> None:
         module = load_script("deploy_cloud_run")
         arguments = argparse.Namespace(
@@ -62,7 +95,9 @@ class DeploymentHelperTest(unittest.TestCase):
 
         self.assertEqual(result, 23)
         self.assertIn("Newest failed revision", stderr.getvalue())
-        self.assertIn("original deploy failure remains authoritative", stderr.getvalue())
+        self.assertIn(
+            "original deploy failure remains authoritative", stderr.getvalue()
+        )
 
     def test_iam_audit_rejects_conditional_all_users_binding(self) -> None:
         module = load_script("audit_cloud_run_iam")
@@ -74,7 +109,9 @@ class DeploymentHelperTest(unittest.TestCase):
                 {
                     "role": "roles/run.invoker",
                     "members": ["allUsers"],
-                    "condition": {"expression": "request.time < timestamp('2030-01-01T00:00:00Z')"},
+                    "condition": {
+                        "expression": "request.time < timestamp('2030-01-01T00:00:00Z')"
+                    },
                 }
             ]
         }

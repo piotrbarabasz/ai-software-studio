@@ -6,7 +6,7 @@ Ten dokument opisuje mechanizm techniczny, nie stanowi porady prawnej. Właścic
 
 Polityka prywatności jest prerenderowana do statycznego HTML. Z tego powodu konfiguracja musi zostać dostarczona podczas produkcyjnego builda frontendu. Zmienna lub sekret podpięty dopiero do kontenera Cloud Run nie zmieni HTML znajdującego się już w obrazie.
 
-Jedynym wejściem produkcyjnym jest obiekt JSON wskazany przez `PUBLIC_LEGAL_CONFIG_PATH`. W Cloud Build zawartość sekretu `_PUBLIC_LEGAL_CONFIG_SECRET` jest walidowana, zapisywana do efemerycznego pliku i przekazywana do Docker BuildKit jako build secret. Plik nie jest kopiowany do kontekstu ani warstw obrazu. Generator tworzy tymczasowy, ignorowany przez Git moduł `public-legal.config.generated.ts`; tylko z niego korzysta komponent polityki prywatności.
+Jedynym wejściem produkcyjnym dla danych administratora i treści prawnych jest obiekt JSON wskazany przez `PUBLIC_LEGAL_CONFIG_PATH`; publiczny e-mail privacy jest osobnym, jawnym wejściem `PUBLIC_PRIVACY_EMAIL`. W Cloud Build zawartość sekretu `_PUBLIC_LEGAL_CONFIG_SECRET` jest walidowana, zapisywana do efemerycznego pliku i przekazywana do Docker BuildKit jako build secret. Plik nie jest kopiowany do kontekstu ani warstw obrazu. Generator tworzy tymczasowy, ignorowany przez Git moduł `public-legal.config.generated.ts`; komponent polityki łączy go wyłącznie ze zweryfikowanym `PUBLIC_PRIVACY_EMAIL`.
 
 Konfiguracja lokalna jest oddzielona w `frontend/config/local-test/public-legal.config.local-test.json`. Nazwa i zawartość jednoznacznie oznaczają ją jako testową, a `.dockerignore` wyklucza cały katalog `config/local-test` z produkcyjnego builda.
 
@@ -24,11 +24,10 @@ Sekret ma zawierać wyłącznie jeden obiekt JSON, bez wrappera, komentarzy i ko
     "administrator": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["name", "correspondenceAddress", "privacyContact"],
+      "required": ["name", "correspondenceAddress"],
       "properties": {
         "name": { "type": "string", "minLength": 1 },
-        "correspondenceAddress": { "type": "string", "minLength": 1 },
-        "privacyContact": { "type": "string", "format": "email" }
+        "correspondenceAddress": { "type": "string", "minLength": 1 }
       }
     },
     "processing": {
@@ -72,7 +71,7 @@ Znaczenie pól:
 
 - `administrator.name`: pełna, zatwierdzona nazwa administratora albo imię i nazwisko; sama marka `Protolume` jest odrzucana;
 - `administrator.correspondenceAddress`: zatwierdzony adres korespondencyjny;
-- `administrator.privacyContact`: adres e-mail do spraw danych osobowych;
+- `PUBLIC_PRIVACY_EMAIL`: publiczny adres do spraw danych osobowych, walidowany osobno od sekretu JSON i wstrzykiwany podczas builda;
 - `processing.*`: zatwierdzone cele, podstawy, retencja, odbiorcy, dostawcy infrastruktury i poczty oraz informacje o prawach;
 - `updatedAt`: data aktualizacji w formacie `RRRR-MM-DD`.
 
@@ -103,12 +102,16 @@ $env:PUBLIC_LEGAL_CONFIG_PATH = (Resolve-Path "C:\bezpieczna-lokalizacja\public-
 $env:API_URL = $env:BACKEND_URL
 $env:PUBLIC_SITE_URL = "https://protolume.pl"
 $env:PUBLIC_SITE_INDEXING = "false"
+$env:PUBLIC_SALES_EMAIL = "kontakt@protolume.pl"
+$env:PUBLIC_PRIVACY_EMAIL = "kontakt@protolume.pl"
 npm run build
 npm run validate:artifact:production
 Remove-Item Env:PUBLIC_LEGAL_CONFIG_PATH
 Remove-Item Env:API_URL
 Remove-Item Env:PUBLIC_SITE_URL
 Remove-Item Env:PUBLIC_SITE_INDEXING
+Remove-Item Env:PUBLIC_SALES_EMAIL
+Remove-Item Env:PUBLIC_PRIVACY_EMAIL
 ```
 
 Build sprawdza ponownie JSON, generuje moduł, prerenderuje stronę, skanuje cały artefakt pod kątem znanych zabronionych wartości i potwierdza, że każda wartość z JSON znajduje się w `polityka-prywatnosci/index.html`. Tworzy też marker `.legal-config-validated`; entrypoint Nginx wymaga markera i ponownie skanuje politykę przy starcie kontenera.

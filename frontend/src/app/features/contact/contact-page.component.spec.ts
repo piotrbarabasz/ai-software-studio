@@ -29,10 +29,13 @@ describe('ContactPageComponent', () => {
       'Wysłanie formularza nie jest zamówieniem, akceptacją wyceny',
     );
     expect(fixture.nativeElement.querySelectorAll('.next-steps li')).toHaveSize(3);
-    expect(fixture.nativeElement.querySelector('a[href^="mailto:"]')).toBeNull();
+    expect(fixture.nativeElement.querySelector('.direct-email a')?.getAttribute('href')).toBe(
+      'mailto:sales@contact.test',
+    );
     const noScript = fixture.nativeElement.querySelector('noscript');
     expect(noScript).not.toBeNull();
-    expect(noScript?.textContent).toContain('Publiczny alternatywny adres kontaktowy');
+    expect(noScript?.textContent).toContain('sales@contact.test');
+    expect(noScript?.innerHTML).toContain('mailto:sales@contact.test');
     expect(fixture.nativeElement.textContent).not.toMatch(
       /\bintent\b|\bpayload\b|\bprojectType\b/i,
     );

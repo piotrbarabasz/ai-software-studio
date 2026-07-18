@@ -43,6 +43,7 @@ def test_contact_delivery_success_logs_non_sensitive_outcome(
     assert elapsed < 1
     assert "contact.accepted" in caplog.text
     assert str(inquiry.email) not in caplog.text
+    assert inquiry.name not in caplog.text
     assert inquiry.message not in caplog.text
 
 
@@ -60,6 +61,7 @@ def test_contact_delivery_failure_logs_without_payload(
 
     assert "contact.delivery_failed" in caplog.text
     assert str(inquiry.email) not in caplog.text
+    assert inquiry.name not in caplog.text
     assert inquiry.message not in caplog.text
 
 
@@ -78,3 +80,40 @@ def test_email_adapter_requires_email_configuration() -> None:
 
     with pytest.raises(DeliveryError):
         adapter.send(inquiry)
+
+
+def test_email_adapter_uses_verified_sender_and_user_reply_to(
+    settings: Settings,
+    valid_contact_payload: dict[str, object],
+    monkeypatch,
+) -> None:
+    sent_messages = []
+
+    class RecordingSmtp:
+        def __init__(self, *args, **kwargs) -> None:
+            pass
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args) -> None:
+            return None
+
+        def starttls(self) -> None:
+            pass
+
+        def login(self, username: str, password: str) -> None:
+            pass
+
+        def send_message(self, message) -> None:
+            sent_messages.append(message)
+
+    monkeypatch.setattr("app.services.contact_delivery.smtplib.SMTP", RecordingSmtp)
+    inquiry = _inquiry(valid_contact_payload)
+
+    EmailContactDelivery(settings).send(inquiry)
+
+    assert len(sent_messages) == 1
+    assert sent_messages[0]["From"] == str(settings.contact_from_email)
+    assert sent_messages[0]["To"] == str(settings.contact_recipient_email)
+    assert sent_messages[0]["Reply-To"] == str(inquiry.email)

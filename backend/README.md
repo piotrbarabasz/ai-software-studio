@@ -16,12 +16,12 @@ py -3.12 -m venv .venv
 APP_ENV=development
 CORS_ALLOWED_ORIGINS=http://localhost:4200
 CONTACT_DELIVERY_MODE=email
-CONTACT_RECIPIENT_EMAIL=owner@example.com
-CONTACT_FROM_EMAIL=noreply@example.com
-SMTP_HOST=smtp.example.com
+CONTACT_RECIPIENT_EMAIL=recipient@fixtures.protolume.pl
+CONTACT_FROM_EMAIL=sender@fixtures.protolume.pl
+SMTP_HOST=smtp.fixtures.protolume.pl
 SMTP_PORT=587
-SMTP_USERNAME=example-user
-SMTP_PASSWORD=example-password
+SMTP_USERNAME=fixture-user
+SMTP_PASSWORD=fixture-password
 SMTP_USE_TLS=true
 CONTACT_RATE_LIMIT_PER_MINUTE=5
 ```
@@ -38,9 +38,10 @@ Health check:
 
 ```bash
 curl http://127.0.0.1:8000/health
+curl http://127.0.0.1:8000/ready
 ```
 
-`GET /health` reports backend application reachability only. It does not check SMTP or email provider readiness in the MVP.
+`GET /health` reports process reachability only. `GET /ready` confirms that every contact-delivery setting is present, without contacting SMTP or returning configuration values. Production startup fails closed on missing, placeholder, example, invalid-email, or invalid-mode settings.
 
 ## Scripts
 
@@ -70,6 +71,6 @@ Review the generated diff, reinstall from `requirements-dev.lock`, run all backe
 
 ## Contact Delivery
 
-`POST /api/contact` validates the inquiry, applies a rate-limit-ready boundary, and sends an email notification to the configured owner address. The MVP does not persist inquiries in a database.
+`POST /api/contact` validates the inquiry, applies a rate-limit-ready boundary, and sends an SMTP notification using the configured `From`; `Reply-To` is the validated address supplied by the user. The MVP does not persist inquiries in a database.
 
 Failed email delivery returns a clear `503` response and logs a non-sensitive operational event without full message bodies, secrets, email addresses, contact payloads, or environment variables.

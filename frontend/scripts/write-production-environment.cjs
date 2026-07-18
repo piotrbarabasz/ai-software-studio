@@ -5,6 +5,10 @@ function productionEnvironment(source = process.env) {
   const apiUrl = source.API_URL ?? '__PUBLIC_CONFIG_REQUIRED__:apiUrl';
   const publicSiteUrl = source.PUBLIC_SITE_URL ?? '__PUBLIC_CONFIG_REQUIRED__:publicSiteUrl';
   const rawIndexingEnabled = source.PUBLIC_SITE_INDEXING ?? 'false';
+  const publicSalesEmail =
+    source.PUBLIC_SALES_EMAIL ?? '__PUBLIC_CONFIG_REQUIRED__:publicSalesEmail';
+  const publicPrivacyEmail =
+    source.PUBLIC_PRIVACY_EMAIL ?? '__PUBLIC_CONFIG_REQUIRED__:publicPrivacyEmail';
   if (!['true', 'false'].includes(rawIndexingEnabled)) {
     throw new Error('PUBLIC_SITE_INDEXING musi mieć wartość true albo false.');
   }
@@ -14,6 +18,8 @@ function productionEnvironment(source = process.env) {
     apiUrl,
     publicSiteUrl,
     indexingEnabled: rawIndexingEnabled === 'true',
+    publicSalesEmail,
+    publicPrivacyEmail,
   };
 }
 

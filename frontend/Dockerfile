@@ -4,6 +4,8 @@ FROM node:20-bookworm-slim AS build
 ARG API_URL=__PUBLIC_CONFIG_REQUIRED__:apiUrl
 ARG PUBLIC_SITE_URL=__PUBLIC_CONFIG_REQUIRED__:publicSiteUrl
 ARG PUBLIC_SITE_INDEXING=false
+ARG PUBLIC_SALES_EMAIL=__PUBLIC_CONFIG_REQUIRED__:publicSalesEmail
+ARG PUBLIC_PRIVACY_EMAIL=__PUBLIC_CONFIG_REQUIRED__:publicPrivacyEmail
 
 WORKDIR /app
 
@@ -16,6 +18,8 @@ COPY infra/gcp/production-contract.json ./production-contract.json
 RUN --mount=type=secret,id=public_legal_config,required=true \
     API_URL="$API_URL" PUBLIC_SITE_URL="$PUBLIC_SITE_URL" \
     PUBLIC_SITE_INDEXING="$PUBLIC_SITE_INDEXING" \
+    PUBLIC_SALES_EMAIL="$PUBLIC_SALES_EMAIL" \
+    PUBLIC_PRIVACY_EMAIL="$PUBLIC_PRIVACY_EMAIL" \
     PUBLIC_LEGAL_CONFIG_PATH=/run/secrets/public_legal_config npm run build
 
 FROM nginx:1.27-alpine

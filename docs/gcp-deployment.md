@@ -65,7 +65,7 @@ The production frontend build reads the secret selected by `_PUBLIC_LEGAL_CONFIG
 
 ## Backend Deployment
 
-Use `scripts/gcp/deploy-backend.ps1` or `infra/gcp/cloudbuild.backend.yaml`.
+`infra/gcp/cloudbuild.backend.yaml` and the historical `scripts/gcp/deploy-backend.ps1` wrapper only build, smoke and publish a component image. They do not deploy Cloud Run. Production deployment is allowed only through `infra/gcp/cloudbuild.deploy.yaml` after both images pass all gates.
 
 Required runtime values:
 
@@ -81,13 +81,13 @@ Required runtime values:
 - `CONTACT_RATE_LIMIT_PER_MINUTE`
 - `SMTP_PASSWORD` from Secret Manager
 
-The backend must listen on Cloud Run `PORT` and expose `GET /health` plus the existing contact API.
+The backend must listen on Cloud Run `PORT`, expose reachability-only `GET /health`, and expose `GET /ready` for contact-delivery configuration readiness. Neither response contains SMTP fields, addresses, or secrets.
 
 ## Frontend Deployment
 
-Use `scripts/gcp/deploy-frontend.ps1` or `infra/gcp/cloudbuild.frontend.yaml`. The script requires both `-ApiUrl` and `-PublicSiteUrl`; keep `-EnableIndexing $false` and pass `-PublicLegalConfigSecret` when the secret uses a non-default name.
+`infra/gcp/cloudbuild.frontend.yaml` and the historical `scripts/gcp/deploy-frontend.ps1` wrapper only validate, build and publish a component image. They do not deploy Cloud Run. Keep `-EnableIndexing $false`; the public legal JSON is resolved by reference from Secret Manager and is never a trigger substitution.
 
-Pass the deployed backend URL as `API_URL` and the verified public frontend origin as `PUBLIC_SITE_URL`. The Docker build rejects a placeholder, `localhost`, an example domain, or an HTTP origin in production. `PUBLIC_SITE_INDEXING` defaults to `false` for staging and preview.
+Pass the deployed backend URL as `API_URL`, the verified public frontend origin as `PUBLIC_SITE_URL`, and the approved public addresses as `PUBLIC_SALES_EMAIL` and `PUBLIC_PRIVACY_EMAIL`. The Docker build rejects a placeholder, `localhost`, an example domain, invalid/mismatched contact addresses, or an HTTP origin in production. `PUBLIC_SITE_INDEXING` remains `false`.
 
 Before the frontend production build, prepare the verified JSON described in [`privacy-configuration.md`](privacy-configuration.md). Do not edit a TypeScript fallback: no production fallback exists. Cloud Build passes JSON as a BuildKit secret and the Docker build fails on a missing field, empty value, placeholder, test data, invalid e-mail, missing prerendered route, or forbidden artifact content.
 
@@ -128,10 +128,10 @@ Run the local preflight script first:
   -EnableIndexing $false
 ```
 
-Then confirm the backend and frontend container smoke tests described in `docs/gcp-runbook.md`.
+Then build both images and confirm the backend container smoke described in `docs/gcp-runbook.md`. The combined Cloud Build pipeline performs the same gates before its first deploy.
 
 ## Manual Image Tags
 
-Manual component submissions must pass `_IMAGE_TAG` explicitly as a 7-64 character lowercase hexadecimal commit ID. `manual-local` is rejected before build.
+Manual component image submissions must pass `_IMAGE_TAG` explicitly as a 7-64 character lowercase hexadecimal commit ID. `manual-local` is rejected before build; component configs never deploy.
 
-The combined production config does not define `_IMAGE_TAG`: a trigger supplies built-in `$SHORT_SHA`. A manual `gcloud builds submit` of that config must pass `SHORT_SHA` explicitly through `--substitutions`, together with the required real SMTP/e-mail environment substitutions.
+The combined production config does not define `_IMAGE_TAG`: a trigger supplies built-in `$SHORT_SHA`. For a manual combined release, use `scripts/gcp/deploy-production.ps1` or `scripts/gcp/deploy-production.sh`. Both require a clean Git tree, derive `SHORT_SHA` from `HEAD`, and submit both services together with the required non-secret SMTP/e-mail settings.

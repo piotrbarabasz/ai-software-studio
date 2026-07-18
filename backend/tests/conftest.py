@@ -20,11 +20,14 @@ class SuccessfulDelivery:
 def settings() -> Settings:
     return Settings(
         cors_allowed_origins="https://protolume.pl",
-        contact_recipient_email="owner@example.com",
-        contact_from_email="noreply@example.com",
-        smtp_host="smtp.example.com",
+        contact_delivery_mode="email",
+        contact_recipient_email="recipient@fixtures.protolume.pl",
+        contact_from_email="sender@fixtures.protolume.pl",
+        smtp_host="smtp.fixtures.protolume.pl",
+        smtp_port=587,
         smtp_username="smtp-user",
         smtp_password="smtp-password",
+        smtp_use_tls=True,
         contact_rate_limit_per_minute=5,
     )
 

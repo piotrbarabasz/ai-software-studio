@@ -24,6 +24,7 @@ function loadProductionContract() {
 
 const PRODUCTION_CONTRACT = loadProductionContract();
 const PRODUCTION_SITE_ORIGIN = PRODUCTION_CONTRACT.PUBLIC_SITE_URL;
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function environmentPath(mode) {
   return path.join(
@@ -82,6 +83,21 @@ function validateProductionSiteConfig(environment) {
 
   if (String(environment?.indexingEnabled) !== PRODUCTION_CONTRACT.PUBLIC_SITE_INDEXING) {
     errors.push('indexingEnabled');
+  }
+
+  for (const [field, invariant] of [
+    ['publicSalesEmail', 'PUBLIC_SALES_EMAIL'],
+    ['publicPrivacyEmail', 'PUBLIC_PRIVACY_EMAIL'],
+  ]) {
+    const value = typeof environment?.[field] === 'string' ? environment[field] : '';
+    if (
+      !value ||
+      PLACEHOLDER_PATTERN.test(value) ||
+      !EMAIL_PATTERN.test(value) ||
+      value !== PRODUCTION_CONTRACT[invariant]
+    ) {
+      errors.push(field);
+    }
   }
 
   return errors;

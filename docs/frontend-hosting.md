@@ -43,6 +43,8 @@ curl.exe -sS -D - -o NUL -H "Accept-Encoding: gzip" http://127.0.0.1:8080/main-<
 - `API_URL`: końcowy URL API HTTPS, używany również przez `connect-src` CSP;
 - `PUBLIC_SITE_URL`: jedyne źródło canonical, `og:url`, JSON-LD, sitemap i robots;
 - `PUBLIC_SITE_INDEXING`: wymagane `false` zgodnie z bieżącym kontraktem produkcyjnym;
+- `PUBLIC_SALES_EMAIL`: publiczny adres sprzedażowy strony Kontakt i fallbacku bez JavaScriptu;
+- `PUBLIC_PRIVACY_EMAIL`: publiczny adres używany wyłącznie w polityce prywatności;
 - `PUBLIC_LEGAL_CONFIG_PATH`: plik zatwierdzonej publicznej konfiguracji prawnej.
 
 Są to dane build-time: zmiana domeny, API lub indeksowania wymaga nowego obrazu. Dla własnej domeny trzeba później osobno skonfigurować mapowanie domeny/DNS i certyfikat, ustawić `PUBLIC_SITE_URL`, dopasować backendowe `CORS_ALLOWED_ORIGINS` oraz potwierdzić, że proxy przekazuje `X-Forwarded-Proto: https`.

@@ -39,6 +39,7 @@ def trigger_payload(substitutions: dict[str, str] | None = None) -> dict[str, ob
 def arguments(**overrides: object) -> argparse.Namespace:
     values: dict[str, object] = {
         "project": "ai-software-studio-501918",
+        "trigger_kind": "production",
         "trigger_location": "global",
         "trigger_id": None,
         "trigger_name": "deploy-prod",
@@ -66,6 +67,63 @@ class TriggerAuditTest(unittest.TestCase):
         self.assertIn("--region=global", command)
         self.assertIn("--filter=name=deploy-prod", command)
         self.assertNotIn("europe-central2", command)
+
+    def test_pull_request_trigger_has_exact_event_name_config_and_no_overrides(
+        self,
+    ) -> None:
+        payload = {
+            "id": "pull-request-trigger-id",
+            "name": "pr-checks",
+            "filename": "infra/gcp/cloudbuild.pr-checks.yaml",
+            "github": {"pullRequest": {"branch": "^master$"}},
+            "substitutions": {},
+        }
+        args = arguments(
+            trigger_kind="pull-request",
+            trigger_name="pr-checks",
+        )
+        result = subprocess.CompletedProcess(
+            [], 0, stdout=json.dumps([payload]), stderr=""
+        )
+
+        with (
+            patch.object(audit_trigger, "parse_args", return_value=args),
+            patch.object(audit_trigger.shutil, "which", return_value="gcloud"),
+            patch.object(audit_trigger.subprocess, "run", return_value=result),
+        ):
+            status = audit_trigger.main()
+
+        self.assertEqual(status, 0)
+
+    def test_pull_request_trigger_rejects_push_event_and_substitution_override(
+        self,
+    ) -> None:
+        payload = {
+            "id": "pull-request-trigger-id",
+            "name": "pr-checks",
+            "filename": "infra/gcp/cloudbuild.pr-checks.yaml",
+            "github": {"push": {"branch": "^master$"}},
+            "substitutions": {"_PUBLIC_SITE_INDEXING": "true"},
+        }
+        args = arguments(
+            trigger_kind="pull-request",
+            trigger_name="pr-checks",
+        )
+        result = subprocess.CompletedProcess(
+            [], 0, stdout=json.dumps([payload]), stderr=""
+        )
+
+        with (
+            patch.object(audit_trigger, "parse_args", return_value=args),
+            patch.object(audit_trigger.shutil, "which", return_value="gcloud"),
+            patch.object(audit_trigger.subprocess, "run", return_value=result),
+            contextlib.redirect_stderr(io.StringIO()) as stderr,
+        ):
+            status = audit_trigger.main()
+
+        self.assertEqual(status, 1)
+        self.assertIn("event: expected 'pull-request'", stderr.getvalue())
+        self.assertIn("must not override", stderr.getvalue())
 
     def test_regional_trigger_can_be_selected_by_explicit_id(self) -> None:
         result = subprocess.CompletedProcess(
