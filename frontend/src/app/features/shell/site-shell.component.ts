@@ -1,5 +1,5 @@
-import { CommonModule, DOCUMENT } from '@angular/common';
-import { Component, DestroyRef, HostListener, ViewChild, inject } from '@angular/core';
+import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { Component, DestroyRef, HostListener, PLATFORM_ID, ViewChild, inject } from '@angular/core';
 import type { ElementRef, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Meta, Title } from '@angular/platform-browser';
@@ -24,6 +24,7 @@ export class SiteShellComponent implements OnInit {
   private readonly meta = inject(Meta);
   private readonly document = inject(DOCUMENT);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private currentRouteUrl = this.router.url;
 
   @ViewChild('menuToggle') private readonly menuToggle?: ElementRef<HTMLButtonElement>;
@@ -32,13 +33,17 @@ export class SiteShellComponent implements OnInit {
 
   isMobileNavigationOpen = false;
   isMobileViewport = false;
+  isNavigationEnhanced = false;
   readonly navigation = siteContent.navigation;
   readonly footer = siteContent.footer;
   readonly trust = siteContent.trust;
   readonly brand = publicBrand;
 
   ngOnInit(): void {
-    this.updateViewportState();
+    if (this.isBrowser) {
+      this.isNavigationEnhanced = true;
+      this.updateViewportState();
+    }
     this.syncRouteMetadata();
 
     this.router.events
@@ -58,7 +63,7 @@ export class SiteShellComponent implements OnInit {
   }
 
   toggleNavigation(): void {
-    if (!this.isMobileViewport) {
+    if (!this.isNavigationEnhanced || !this.isMobileViewport) {
       return;
     }
 
@@ -70,12 +75,9 @@ export class SiteShellComponent implements OnInit {
   }
 
   closeNavigation(restoreFocus = false): void {
-    const navigation = this.primaryNavigation?.nativeElement;
-    const activeElement = this.document.activeElement;
-
     this.isMobileNavigationOpen = false;
 
-    if (restoreFocus && navigation?.contains(activeElement)) {
+    if (restoreFocus) {
       this.menuToggle?.nativeElement.focus();
     }
   }
@@ -99,7 +101,12 @@ export class SiteShellComponent implements OnInit {
 
   @HostListener('window:resize')
   updateViewportState(): void {
-    this.isMobileViewport = (this.document.defaultView?.innerWidth ?? 0) <= 920;
+    if (!this.isBrowser) {
+      return;
+    }
+
+    this.isMobileViewport =
+      this.document.defaultView?.matchMedia('(max-width: 920px)').matches ?? false;
     if (!this.isMobileViewport) {
       this.closeNavigation(false);
     }
