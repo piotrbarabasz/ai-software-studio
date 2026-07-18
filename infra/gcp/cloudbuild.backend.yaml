@@ -1,11 +1,11 @@
 # Explicit manual bootstrap/component pipeline. It is not the routine production trigger.
 substitutions:
-  _PROJECT_ID: "<REQUIRED_PROJECT_ID>"
-  _REGION: "<REQUIRED_REGION>"
-  _ARTIFACT_REPO: "<REQUIRED_ARTIFACT_REPO>"
-  _SERVICE_NAME: "<REQUIRED_BACKEND_SERVICE>"
-  _IMAGE_NAME: "<REQUIRED_BACKEND_IMAGE_NAME>"
-  _IMAGE_TAG: "<REQUIRED_COMMIT_SHA>"
+  _PROJECT_ID: "required-project-id"
+  _REGION: "required-region"
+  _ARTIFACT_REPO: "required-artifact-repo"
+  _SERVICE_NAME: "required-backend-service"
+  _IMAGE_NAME: "required-backend-image"
+  _IMAGE_TAG: "required-commit-sha"
   _MIN_INSTANCES: "<REQUIRED_INTEGER>"
   _APP_ENV: "<REQUIRED_APP_ENV>"
   _PUBLIC_SITE_URL: "<REQUIRED_PUBLIC_SITE_URL>"
@@ -18,7 +18,7 @@ substitutions:
   _SMTP_USERNAME: "<REQUIRED_SMTP_USERNAME>"
   _SMTP_USE_TLS: "<REQUIRED_BOOLEAN>"
   _CONTACT_RATE_LIMIT_PER_MINUTE: "<REQUIRED_INTEGER>"
-  _SMTP_PASSWORD_SECRET: "<REQUIRED_SECRET_NAME>"
+  _SMTP_PASSWORD_SECRET: "required-secret-name"
 
 steps:
   - id: manual-backend-preflight

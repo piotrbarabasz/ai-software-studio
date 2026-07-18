@@ -1,15 +1,15 @@
 # Cloud Build trigger contract
 
-`deploy-prod` is a push trigger for `^master$` and `infra/gcp/cloudbuild.deploy.yaml`. Its fixed substitutions are the `invariants` in `production-contract.json`, mapped to names prefixed with `_`, except that backend CORS is deliberately derived from `_PUBLIC_SITE_URL`. `_IMAGE_TAG` must be the literal `$SHORT_SHA`.
+The production trigger is `deploy-prod` (`901333cb-1c13-4929-90e5-6df070eb647e`) in trigger location `global`, on branch `^master$`, using `infra/gcp/cloudbuild.deploy.yaml`. Its deployment region remains independently fixed to `europe-central2` by `production-contract.json`.
 
-The required operational substitutions are `_BACKEND_URL`, `_CONTACT_RECIPIENT_EMAIL`, `_CONTACT_FROM_EMAIL`, `_SMTP_HOST`, `_SMTP_PORT`, `_SMTP_USERNAME`, `_SMTP_USE_TLS`, and `_CONTACT_RATE_LIMIT_PER_MINUTE`. They must be actual non-example production configuration, not templates or secret values.
+The YAML uses built-in `$SHORT_SHA` directly. `_IMAGE_TAG` is not a production trigger substitution. The minimal target trigger contains only the six real environment-specific values: `_CONTACT_RECIPIENT_EMAIL`, `_CONTACT_FROM_EMAIL`, `_SMTP_HOST`, `_SMTP_PORT`, `_SMTP_USERNAME` and `_SMTP_USE_TLS`.
 
-Audit the active trigger without changing GCP:
+Audit the active trigger by exact ID without changing GCP:
 
 ```powershell
-.\scripts\gcp\create-triggers.ps1 -ProjectId ai-software-studio-501918
+.\scripts\gcp\create-triggers.ps1 -ProjectId ai-software-studio-501918 -TriggerLocation global -TriggerId 901333cb-1c13-4929-90e5-6df070eb647e
 ```
 
-On drift, update the trigger in Cloud Console to the exact values documented in `docs/gcp-cicd.md`, then rerun the audit. The repository intentionally provides no cross-provider automatic update operation.
+The historical `create-triggers` name is read-only. Exact migration values and the manual checklist are in `docs/gcp-cicd.md`.
 
-The PR trigger targets base branch `^master$`, uses `infra/gcp/cloudbuild.pr-checks.yaml`, and never deploys. Remove obsolete temporary deployment triggers after verifying the production trigger.
+The PR trigger targets base branch `^master$`, uses `infra/gcp/cloudbuild.pr-checks.yaml`, and never deploys.

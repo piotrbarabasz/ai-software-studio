@@ -1,16 +1,16 @@
 # Explicit manual bootstrap/component pipeline. It is not the routine production trigger.
 substitutions:
-  _PROJECT_ID: "<REQUIRED_PROJECT_ID>"
-  _REGION: "<REQUIRED_REGION>"
-  _ARTIFACT_REPO: "<REQUIRED_ARTIFACT_REPO>"
-  _SERVICE_NAME: "<REQUIRED_FRONTEND_SERVICE>"
-  _IMAGE_NAME: "<REQUIRED_FRONTEND_IMAGE_NAME>"
-  _IMAGE_TAG: "<REQUIRED_COMMIT_SHA>"
+  _PROJECT_ID: "required-project-id"
+  _REGION: "required-region"
+  _ARTIFACT_REPO: "required-artifact-repo"
+  _SERVICE_NAME: "required-frontend-service"
+  _IMAGE_NAME: "required-frontend-image"
+  _IMAGE_TAG: "required-commit-sha"
   _MIN_INSTANCES: "<REQUIRED_INTEGER>"
   _API_URL: "<REQUIRED_BACKEND_HTTPS_URL>"
   _PUBLIC_SITE_URL: "<REQUIRED_PUBLIC_SITE_URL>"
   _PUBLIC_SITE_INDEXING: "<REQUIRED_BOOLEAN>"
-  _PUBLIC_LEGAL_CONFIG_SECRET: "<REQUIRED_SECRET_NAME>"
+  _PUBLIC_LEGAL_CONFIG_SECRET: "required-secret-name"
 
 steps:
   - id: manual-frontend-preflight

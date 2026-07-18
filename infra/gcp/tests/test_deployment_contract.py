@@ -19,18 +19,18 @@ def valid_environment() -> dict[str, str]:
         "FRONTEND_SERVICE": "aisoftware-studio-web",
         "BACKEND_IMAGE_NAME": "aisoftware-studio-api",
         "FRONTEND_IMAGE_NAME": "aisoftware-studio-web",
-        "BACKEND_URL": "https://aisoftware-studio-api-abc123.europe-central2.run.app",
+        "BACKEND_URL": "https://aisoftware-studio-api-175725977490.europe-central2.run.app",
         "PUBLIC_SITE_URL": "https://protolume.pl",
         "CORS_ALLOWED_ORIGINS": "https://protolume.pl",
         "PUBLIC_SITE_INDEXING": "false",
         "PUBLIC_LEGAL_CONFIG_SECRET": "aisoftware-studio-public-legal-config",
         "SMTP_PASSWORD_SECRET": "aisoftware-studio-smtp-password",
         "CONTACT_RATE_LIMIT_PER_MINUTE": "30",
-        "CONTACT_RECIPIENT_EMAIL": "kontakt@protolume.pl",
-        "CONTACT_FROM_EMAIL": "formularz@protolume.pl",
-        "SMTP_HOST": "smtp.protolume.pl",
+        "CONTACT_RECIPIENT_EMAIL": "recipient@configuration.test",
+        "CONTACT_FROM_EMAIL": "sender@configuration.test",
+        "SMTP_HOST": "smtp.configuration.test",
         "SMTP_PORT": "587",
-        "SMTP_USERNAME": "formularz@protolume.pl",
+        "SMTP_USERNAME": "smtp-test-user",
         "SMTP_USE_TLS": "true",
         "CONTACT_DELIVERY_MODE": "email",
         "APP_ENV": "production",
@@ -66,7 +66,9 @@ class DeploymentContractCliTest(unittest.TestCase):
 
     def test_old_run_app_origin_is_rejected_with_both_field_names(self) -> None:
         old_origin = "https://aisoftware-studio-web-old.europe-central2.run.app"
-        result = run_validator({"PUBLIC_SITE_URL": old_origin, "CORS_ALLOWED_ORIGINS": old_origin})
+        result = run_validator(
+            {"PUBLIC_SITE_URL": old_origin, "CORS_ALLOWED_ORIGINS": old_origin}
+        )
 
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("PUBLIC_SITE_URL", result.stderr)

@@ -14,6 +14,6 @@ This directory contains the production deployment artifacts for AISoftware Studi
 
 ## Notes
 
-- Cloud Build YAML defaults are intentionally invalid; active triggers must provide resolved substitutions that pass `scripts/gcp/deployment_contract.py`.
+- Production defaults are the non-secret contract invariants; only real SMTP/e-mail environment values remain trigger inputs. Manual component YAMLs use parse-safe sentinels that deliberately fail `scripts/gcp/deployment_contract.py`.
 - Do not commit real secrets, service account keys, or private project values.
-- Contract v1 fixes the production region to `europe-central2`, both service/image names, the sole public origin, indexing `false`, and min instances `0`.
+- Contract v1 fixes the production project, deployment region `europe-central2`, service/image names, backend URL, sole public origin, indexing `false`, secret reference names, delivery settings and min instances `0`.
