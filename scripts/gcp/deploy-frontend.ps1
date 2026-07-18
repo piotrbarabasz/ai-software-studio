@@ -17,6 +17,10 @@ param(
 
   [bool]$EnableIndexing = $false,
 
+  [string]$PublicSalesEmail = 'kontakt@protolume.pl',
+
+  [string]$PublicPrivacyEmail = 'kontakt@protolume.pl',
+
   [string]$PublicLegalConfigSecret = 'aisoftware-studio-public-legal-config',
 
   [string]$ImageTag = ''
@@ -55,6 +59,8 @@ $substitutions = @(
   "_API_URL=$ApiUrl",
   "_PUBLIC_SITE_URL=$PublicSiteUrl",
   "_PUBLIC_SITE_INDEXING=$($EnableIndexing.ToString().ToLowerInvariant())",
+  "_PUBLIC_SALES_EMAIL=$PublicSalesEmail",
+  "_PUBLIC_PRIVACY_EMAIL=$PublicPrivacyEmail",
   "_PUBLIC_LEGAL_CONFIG_SECRET=$PublicLegalConfigSecret",
   "_IMAGE_TAG=$ImageTag"
 ) -join ','

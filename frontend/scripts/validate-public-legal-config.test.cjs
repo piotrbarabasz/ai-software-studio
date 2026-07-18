@@ -8,7 +8,6 @@ function completeConfiguration() {
     administrator: {
       name: 'Administrator Walidacji Lokalnej',
       correspondenceAddress: 'Adres Walidacji 7, 00-001 Miasto',
-      privacyContact: 'privacy@walidacja-konfiguracji.pl',
     },
     processing: {
       purposes: ['Obsługa zapytań z formularza'],
@@ -69,20 +68,10 @@ test('rejects every supported placeholder form', () => {
   }
 });
 
-test('rejects an invalid privacy e-mail address', () => {
-  const configuration = completeConfiguration();
-  configuration.administrator.privacyContact = 'not-an-email';
-
-  const errors = validatePublicLegalConfig(configuration);
-  assert.deepEqual(paths(errors), ['administrator.privacyContact']);
-  assert.equal(errors[0].code, 'email');
-});
-
-test('rejects the known test e-mail and brand-only administrator name', () => {
+test('rejects a brand-only administrator name', () => {
   const configuration = completeConfiguration();
   configuration.administrator.name = 'Protolume';
-  configuration.administrator.privacyContact = 'ai.korepetycje3@gmail.com';
 
   const errors = validatePublicLegalConfig(configuration);
-  assert.deepEqual(paths(errors), ['administrator.privacyContact', 'administrator.name']);
+  assert.deepEqual(paths(errors), ['administrator.name']);
 });

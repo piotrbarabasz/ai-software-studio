@@ -13,11 +13,14 @@ cd backend
 py -3.12 -m pip install -e ".[dev]"
 $env:APP_ENV = "development"
 $env:CORS_ALLOWED_ORIGINS = "http://localhost:4200"
-$env:CONTACT_RECIPIENT_EMAIL = "owner@example.com"
-$env:CONTACT_FROM_EMAIL = "noreply@example.com"
-$env:SMTP_HOST = "smtp.example.com"
-$env:SMTP_USERNAME = "example-user"
-$env:SMTP_PASSWORD = "example-password"
+$env:CONTACT_DELIVERY_MODE = "email"
+$env:CONTACT_RECIPIENT_EMAIL = "recipient@fixtures.protolume.pl"
+$env:CONTACT_FROM_EMAIL = "sender@fixtures.protolume.pl"
+$env:SMTP_HOST = "smtp.fixtures.protolume.pl"
+$env:SMTP_PORT = "587"
+$env:SMTP_USERNAME = "fixture-user"
+$env:SMTP_PASSWORD = "fixture-password"
+$env:SMTP_USE_TLS = "true"
 uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
@@ -95,13 +98,14 @@ The MVP is implemented toward WCAG 2.2 AA for the defined scope:
 Implemented endpoints:
 
 - `GET /health` returns `{ "status": "ok", "service": "marketing-api" }`.
+- `GET /ready` returns only readiness status and service name; it returns `503 not_ready` when the explicit contact-delivery fixture is incomplete.
 - `POST /api/contact` accepts the fields from `ContactInquiryRequest`.
 - Successful contact delivery returns `202` with `{ "status": "accepted", "message": "..." }`.
 - Backend validation returns `422` with sanitized validation details.
 - Rate-limit rejection returns `429` with a non-sensitive `code` and `message`.
 - Email delivery failure returns `503` with a non-sensitive `code` and `message`.
 
-This matches `specs/001-marketing-site-mvp/contracts/openapi.yaml`. `GET /health` is reachability-only and does not verify SMTP readiness.
+This matches `specs/001-marketing-site-mvp/contracts/openapi.yaml`. `GET /health` is reachability-only; `GET /ready` verifies configuration completeness without contacting SMTP.
 
 ## Lighthouse And Bundle Review
 

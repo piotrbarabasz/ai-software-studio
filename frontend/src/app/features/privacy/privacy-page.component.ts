@@ -23,4 +23,5 @@ export class PrivacyPageComponent {
   readonly content = siteContent.privacy;
   readonly legal = publicLegalConfig;
   readonly isDevelopment = publicLegalConfigMode === 'local-test';
+  readonly privacyEmail = environment.publicPrivacyEmail;
 }

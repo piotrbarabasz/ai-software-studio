@@ -5,7 +5,7 @@ const PRODUCTION_MODE = 'production';
 const LOCAL_TEST_MODE = 'local-test';
 
 const REQUIRED_SHAPE = {
-  administrator: ['name', 'correspondenceAddress', 'privacyContact'],
+  administrator: ['name', 'correspondenceAddress'],
   processing: [
     'purposes',
     'legalBases',
@@ -28,10 +28,7 @@ const FORBIDDEN_VALUE_PATTERNS = [
   { label: 'uzupełnij', pattern: /\buzupełnij\b/i },
   { label: 'wartość testowa', pattern: /\btestow(?:a|y|e|ego|ej|emu|ym|ych|ymi|ą)\b/i },
   { label: 'znacznik w nawiasach ostrych', pattern: /<[^<>]+>/ },
-  { label: 'znany testowy e-mail', pattern: /ai\.korepetycje3@gmail\.com/i },
 ];
-
-const EMAIL_PATTERN = /^[^\s@]+@[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?\.[a-z]{2,63}$/i;
 
 function isPlainObject(value) {
   return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
@@ -126,21 +123,6 @@ function validatePublicLegalConfig(config, options = {}) {
       errors,
       mode,
     );
-    validateText(config.administrator.privacyContact, 'administrator.privacyContact', errors, mode);
-
-    if (
-      typeof config.administrator.privacyContact === 'string' &&
-      config.administrator.privacyContact.trim() &&
-      !EMAIL_PATTERN.test(config.administrator.privacyContact.trim())
-    ) {
-      addError(
-        errors,
-        'administrator.privacyContact',
-        'email',
-        'wymagany jest poprawny adres e-mail',
-      );
-    }
-
     if (
       mode === PRODUCTION_MODE &&
       typeof config.administrator.name === 'string' &&

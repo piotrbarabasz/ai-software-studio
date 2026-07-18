@@ -127,6 +127,8 @@ class CloudBuildYamlTest(unittest.TestCase):
         environment = set(first_step["env"])
         self.assertIn("DEPLOY_PUBLIC_SITE_URL=$_PUBLIC_SITE_URL", environment)
         self.assertIn("DEPLOY_CORS_ALLOWED_ORIGINS=$_PUBLIC_SITE_URL", environment)
+        self.assertIn("DEPLOY_PUBLIC_SALES_EMAIL=$_PUBLIC_SALES_EMAIL", environment)
+        self.assertIn("DEPLOY_PUBLIC_PRIVACY_EMAIL=$_PUBLIC_PRIVACY_EMAIL", environment)
         self.assertIn("DEPLOY_IMAGE_TAG=$SHORT_SHA", environment)
 
     def test_all_frontend_check_steps_use_the_exact_pinned_browser_image(self) -> None:

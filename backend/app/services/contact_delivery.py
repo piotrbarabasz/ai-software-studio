@@ -25,6 +25,7 @@ class EmailContactDelivery:
         message["Subject"] = f"Nowe zapytanie z {public_brand['name']}"
         message["From"] = str(self._settings.contact_from_email)
         message["To"] = str(self._settings.contact_recipient_email)
+        message["Reply-To"] = str(inquiry.email)
         message.set_content(self._build_email_body(inquiry))
 
         try:
@@ -51,11 +52,7 @@ class EmailContactDelivery:
             raise DeliveryError("Email delivery failed.") from exc
 
     def _has_required_config(self) -> bool:
-        return bool(
-            self._settings.contact_recipient_email
-            and self._settings.contact_from_email
-            and self._settings.smtp_host
-        )
+        return self._settings.contact_delivery_ready
 
     @staticmethod
     def _build_email_body(inquiry: ContactInquiry) -> str:

@@ -23,6 +23,8 @@ def valid_environment() -> dict[str, str]:
         "PUBLIC_SITE_URL": "https://protolume.pl",
         "CORS_ALLOWED_ORIGINS": "https://protolume.pl",
         "PUBLIC_SITE_INDEXING": "false",
+        "PUBLIC_SALES_EMAIL": "kontakt@protolume.pl",
+        "PUBLIC_PRIVACY_EMAIL": "kontakt@protolume.pl",
         "PUBLIC_LEGAL_CONFIG_SECRET": "aisoftware-studio-public-legal-config",
         "SMTP_PASSWORD_SECRET": "aisoftware-studio-smtp-password",
         "CONTACT_RATE_LIMIT_PER_MINUTE": "30",

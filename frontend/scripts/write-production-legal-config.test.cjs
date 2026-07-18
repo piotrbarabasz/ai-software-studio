@@ -8,7 +8,6 @@ function completeConfiguration() {
     administrator: {
       name: 'Administrator Walidacji Lokalnej',
       correspondenceAddress: 'Adres Walidacji 7, 00-001 Miasto',
-      privacyContact: 'privacy@walidacja-konfiguracji.pl',
     },
     processing: {
       purposes: ['Obsługa zapytań z formularza'],
@@ -32,11 +31,11 @@ test('accepts a complete JSON public legal configuration', () => {
 
 test('reports the exact path of a forbidden production value', () => {
   const configuration = completeConfiguration();
-  configuration.administrator.privacyContact = 'owner@example.com';
+  configuration.administrator.correspondenceAddress = 'owner@example.com';
 
   assert.throws(
     () => parseAndValidatePublicLegalConfig(JSON.stringify(configuration)),
-    /administrator\.privacyContact.*example/s,
+    /administrator\.correspondenceAddress.*example/s,
   );
 });
 

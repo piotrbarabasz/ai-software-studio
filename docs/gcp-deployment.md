@@ -81,13 +81,13 @@ Required runtime values:
 - `CONTACT_RATE_LIMIT_PER_MINUTE`
 - `SMTP_PASSWORD` from Secret Manager
 
-The backend must listen on Cloud Run `PORT` and expose `GET /health` plus the existing contact API.
+The backend must listen on Cloud Run `PORT`, expose reachability-only `GET /health`, and expose `GET /ready` for contact-delivery configuration readiness. Neither response contains SMTP fields, addresses, or secrets.
 
 ## Frontend Deployment
 
 Use `scripts/gcp/deploy-frontend.ps1` or `infra/gcp/cloudbuild.frontend.yaml`. The script requires both `-ApiUrl` and `-PublicSiteUrl`; keep `-EnableIndexing $false` and pass `-PublicLegalConfigSecret` when the secret uses a non-default name.
 
-Pass the deployed backend URL as `API_URL` and the verified public frontend origin as `PUBLIC_SITE_URL`. The Docker build rejects a placeholder, `localhost`, an example domain, or an HTTP origin in production. `PUBLIC_SITE_INDEXING` defaults to `false` for staging and preview.
+Pass the deployed backend URL as `API_URL`, the verified public frontend origin as `PUBLIC_SITE_URL`, and the approved public addresses as `PUBLIC_SALES_EMAIL` and `PUBLIC_PRIVACY_EMAIL`. The Docker build rejects a placeholder, `localhost`, an example domain, invalid/mismatched contact addresses, or an HTTP origin in production. `PUBLIC_SITE_INDEXING` remains `false`.
 
 Before the frontend production build, prepare the verified JSON described in [`privacy-configuration.md`](privacy-configuration.md). Do not edit a TypeScript fallback: no production fallback exists. Cloud Build passes JSON as a BuildKit secret and the Docker build fails on a missing field, empty value, placeholder, test data, invalid e-mail, missing prerendered route, or forbidden artifact content.
 

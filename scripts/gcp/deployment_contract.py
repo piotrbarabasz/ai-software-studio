@@ -15,7 +15,8 @@ from urllib.parse import urlsplit
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_CONTRACT_PATH = REPOSITORY_ROOT / "infra" / "gcp" / "production-contract.json"
 PLACEHOLDER_PATTERN = re.compile(
-    r"<[^>]*>|__[^\s]*REQUIRED[^\s]*__|\$(?:\{[^}]+\}|[A-Z_][A-Z0-9_]*)",
+    r"<[^>]*>|__[^\s]*REQUIRED[^\s]*__|\$(?:\{[^}]+\}|[A-Z_][A-Z0-9_]*)|"
+    r"\b(?:placeholder|changeme|todo|tbd|required)\b",
     re.IGNORECASE,
 )
 PROJECT_ID_PATTERN = re.compile(r"^[a-z][a-z0-9-]{4,28}[a-z0-9]$")
@@ -232,7 +233,12 @@ def validate_values(
     ):
         _append(errors, "MIN_INSTANCES", "must be an integer from 0 through 1000")
 
-    for field in {"CONTACT_RECIPIENT_EMAIL", "CONTACT_FROM_EMAIL"} & set(fields):
+    for field in {
+        "CONTACT_RECIPIENT_EMAIL",
+        "CONTACT_FROM_EMAIL",
+        "PUBLIC_SALES_EMAIL",
+        "PUBLIC_PRIVACY_EMAIL",
+    } & set(fields):
         value = values.get(field, "")
         if value and not EMAIL_PATTERN.fullmatch(value):
             _append(errors, field, "must be a syntactically valid non-example email address")

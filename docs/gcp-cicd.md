@@ -16,7 +16,7 @@ Cloud Run and Artifact Registry deploy in `europe-central2`. The existing Cloud 
 
 The routine pipeline uses Cloud Build's built-in `$SHORT_SHA` directly. The trigger must not define `_IMAGE_TAG`.
 
-Repository defaults own project, deployment region, Artifact Registry, service and image names, backend URL, public origin, CORS, indexing, Secret Manager reference names, rate limit, delivery mode, environment and minimum instance count. A trigger may temporarily override those values during migration, but every override must exactly match `production-contract.json` or preflight and the read-only audit fail.
+Repository defaults own project, deployment region, Artifact Registry, service and image names, backend URL, public origin, CORS, indexing, public sales/privacy addresses, Secret Manager reference names, rate limit, delivery mode, environment and minimum instance count. A trigger may temporarily override those values during migration, but every override must exactly match `production-contract.json` or preflight and the read-only audit fail.
 
 ## Minimal trigger substitutions
 
@@ -62,14 +62,15 @@ Perform this migration manually in Cloud Console. Do not automate it from this r
 3. Keep branch `^master$` and config `infra/gcp/cloudbuild.deploy.yaml`.
 4. Set `_PUBLIC_SITE_URL=https://protolume.pl` with no trailing slash.
 5. Set `_PUBLIC_SITE_INDEXING=false`.
-6. Set `_PUBLIC_LEGAL_CONFIG_SECRET=aisoftware-studio-public-legal-config`.
-7. Set `_APP_ENV=production`.
-8. Set `_CONTACT_DELIVERY_MODE=email`.
-9. Set `_MIN_INSTANCES=0`.
-10. Remove `_FRONTEND_URL`.
-11. Remove `_IMAGE_TAG`; the YAML now uses built-in `$SHORT_SHA` directly.
-12. Supply the real `_CONTACT_RECIPIENT_EMAIL`, `_CONTACT_FROM_EMAIL`, `_SMTP_HOST`, `_SMTP_PORT`, `_SMTP_USERNAME` and `_SMTP_USE_TLS` values.
-13. Save the trigger manually and rerun the read-only audit.
+6. Set `_PUBLIC_SALES_EMAIL=kontakt@protolume.pl` and `_PUBLIC_PRIVACY_EMAIL=kontakt@protolume.pl` if migration overrides are still present.
+7. Set `_PUBLIC_LEGAL_CONFIG_SECRET=aisoftware-studio-public-legal-config`.
+8. Set `_APP_ENV=production`.
+9. Set `_CONTACT_DELIVERY_MODE=email`.
+10. Set `_MIN_INSTANCES=0`.
+11. Remove `_FRONTEND_URL`.
+12. Remove `_IMAGE_TAG`; the YAML now uses built-in `$SHORT_SHA` directly.
+13. Supply the real `_CONTACT_RECIPIENT_EMAIL`, `_CONTACT_FROM_EMAIL`, `_SMTP_HOST`, `_SMTP_PORT`, `_SMTP_USERNAME` and `_SMTP_USE_TLS` values.
+14. Save the trigger manually and rerun the read-only audit.
 
 The listed repository-owned overrides are safe during migration only at their exact contract values. After the migrated trigger is verified, they may all be removed from the trigger to reach the minimal substitution set above; the YAML defaults remain authoritative.
 
@@ -97,6 +98,6 @@ Set those six environment variables to the real production values before submiss
 
 ## Pipeline gates
 
-Before the first deploy, the combined pipeline runs contract validation and tests, backend and frontend checks, builds both images, validates the frontend legal artifact, smokes the backend image through `/health`, audits existing public Cloud Run IAM, and pushes both images. It then deploys backend followed by frontend. Routine deployment does not mutate IAM.
+Before the first deploy, the combined pipeline runs contract validation and tests, backend and frontend checks, builds both images, validates the frontend legal artifact, smokes the backend image through `/health` and `/ready`, audits existing public Cloud Run IAM, and pushes both images. It then deploys backend followed by frontend. Routine deployment does not mutate IAM.
 
 No deployment, trigger update, IAM mutation, secret change, commit or push is performed by the repository audit.

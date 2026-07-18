@@ -1,8 +1,7 @@
 {
   "administrator": {
     "name": "Piotr Barabasz",
-    "correspondenceAddress": "Polska ul. Testowa 5",
-    "privacyContact": "ai.korepetycje3@gmail.com"
+    "correspondenceAddress": "Polska ul. Testowa 5"
   },
   "processing": {
     "purposes": ["Testowy cel obsługi formularza lokalnego"],

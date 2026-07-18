@@ -11,7 +11,10 @@ param(
   [Parameter(Mandatory = $true)]
   [string]$PublicSiteUrl,
 
-  [bool]$EnableIndexing = $false
+  [bool]$EnableIndexing = $false,
+  [string]$PublicSalesEmail = 'kontakt@protolume.pl',
+
+  [string]$PublicPrivacyEmail = 'kontakt@protolume.pl'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -78,11 +81,15 @@ Invoke-Checked -Label 'Frontend: lint, format check, tests, build' -ScriptBlock 
     $previousApiUrl = $env:API_URL
     $previousPublicSiteUrl = $env:PUBLIC_SITE_URL
     $previousPublicSiteIndexing = $env:PUBLIC_SITE_INDEXING
+    $previousPublicSalesEmail = $env:PUBLIC_SALES_EMAIL
+    $previousPublicPrivacyEmail = $env:PUBLIC_PRIVACY_EMAIL
     try {
       $env:PUBLIC_LEGAL_CONFIG_PATH = $legalConfigPath
       $env:API_URL = $ApiUrl
       $env:PUBLIC_SITE_URL = $PublicSiteUrl
       $env:PUBLIC_SITE_INDEXING = $EnableIndexing.ToString().ToLowerInvariant()
+      $env:PUBLIC_SALES_EMAIL = $PublicSalesEmail
+      $env:PUBLIC_PRIVACY_EMAIL = $PublicPrivacyEmail
       & npm run build
       if ($LASTEXITCODE -ne 0) { throw 'frontend npm run build failed' }
     } finally {
@@ -90,6 +97,8 @@ Invoke-Checked -Label 'Frontend: lint, format check, tests, build' -ScriptBlock 
       $env:API_URL = $previousApiUrl
       $env:PUBLIC_SITE_URL = $previousPublicSiteUrl
       $env:PUBLIC_SITE_INDEXING = $previousPublicSiteIndexing
+      $env:PUBLIC_SALES_EMAIL = $previousPublicSalesEmail
+      $env:PUBLIC_PRIVACY_EMAIL = $previousPublicPrivacyEmail
     }
   } finally {
     Pop-Location

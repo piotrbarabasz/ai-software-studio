@@ -1,8 +1,7 @@
 {
   "administrator": {
     "name": "Administrator Walidacji Lokalnej",
-    "correspondenceAddress": "Adres Walidacji 7, 00-001 Miasto",
-    "privacyContact": "privacy@walidacja-konfiguracji.pl"
+    "correspondenceAddress": "Adres Walidacji 7, 00-001 Miasto"
   },
   "processing": {
     "purposes": ["Obsługa zapytań z formularza"],

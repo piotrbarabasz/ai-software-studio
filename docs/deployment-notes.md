@@ -31,4 +31,4 @@ Recommended future deployment split:
 - Backend: Cloud Run-ready FastAPI container with `/health` as the application reachability check.
 - Secrets: SMTP credentials from Secret Manager or equivalent managed secret source.
 - CORS: exact production frontend origin configured through `CORS_ALLOWED_ORIGINS`.
-- Readiness: add a separate readiness endpoint later if email-provider checks become operationally required.
+- Readiness: `/ready` potwierdza kompletną konfigurację dostarczania formularza bez ujawniania adresów ani sekretów; `/health` pozostaje kontrolą procesu.

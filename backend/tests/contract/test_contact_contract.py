@@ -184,4 +184,10 @@ def test_contact_returns_delivery_failure(
         response = client.post("/api/contact", json=valid_contact_payload)
 
     assert response.status_code == 503
-    assert response.json()["code"] == "delivery_failed"
+    assert response.json() == {
+        "code": "delivery_failed",
+        "message": (
+            "Nie udało się teraz dostarczyć wiadomości. "
+            "Spróbuj ponownie później lub skontaktuj się bezpośrednio."
+        ),
+    }

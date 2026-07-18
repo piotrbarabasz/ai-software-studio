@@ -11,7 +11,6 @@ function configuration() {
     administrator: {
       name: 'Administrator Walidacji Artefaktu',
       correspondenceAddress: 'Adres Walidacji 7, 00-001 Miasto',
-      privacyContact: 'privacy@walidacja-konfiguracji.pl',
     },
     processing: {
       purposes: ['Obsługa zapytań'],
@@ -40,7 +39,6 @@ test('accepts an artifact containing every validated configuration value', (cont
     `<main>${[
       config.administrator.name,
       config.administrator.correspondenceAddress,
-      config.administrator.privacyContact,
       ...Object.values(config.processing).flat(),
       config.updatedAt,
     ].join(' ')}</main>`,
@@ -59,4 +57,19 @@ test('rejects a forbidden value in the prerendered privacy document', (context) 
   context.after(() => fs.rmSync(root, { recursive: true, force: true }));
 
   assert.throws(() => scanProductionArtifact(root, config), /Testowa 5/);
+});
+
+test('allows the public brand outside the configured administrator field', (context) => {
+  const config = configuration();
+  const root = artifactWith(
+    `<header>Protolume</header><main>${[
+      config.administrator.name,
+      config.administrator.correspondenceAddress,
+      ...Object.values(config.processing).flat(),
+      config.updatedAt,
+    ].join(' ')}</main>`,
+  );
+  context.after(() => fs.rmSync(root, { recursive: true, force: true }));
+
+  assert.doesNotThrow(() => scanProductionArtifact(root, config));
 });

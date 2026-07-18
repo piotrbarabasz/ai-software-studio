@@ -79,7 +79,9 @@
 
   <section aria-labelledby="contact-title">
     <h2 id="contact-title">{{ content.contactTitle }}</h2>
-    <p>{{ legal.administrator.privacyContact }}</p>
+    <p>
+      <a [href]="'mailto:' + privacyEmail">{{ privacyEmail }}</a>
+    </p>
   </section>
 
   <section aria-labelledby="updated-at-title">
