@@ -133,3 +133,5 @@ Then confirm the backend and frontend container smoke tests described in `docs/g
 ## Manual Image Tags
 
 Manual component submissions must pass `_IMAGE_TAG` explicitly as a 7-64 character lowercase hexadecimal commit ID. `manual-local` is rejected before build.
+
+The combined production config does not define `_IMAGE_TAG`: a trigger supplies built-in `$SHORT_SHA`. A manual `gcloud builds submit` of that config must pass `SHORT_SHA` explicitly through `--substitutions`, together with the required real SMTP/e-mail environment substitutions.

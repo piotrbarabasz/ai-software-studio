@@ -2,9 +2,11 @@ param(
   [Parameter(Mandatory = $true)]
   [string]$ProjectId,
 
-  [string]$Region = 'europe-central2',
+  [string]$TriggerLocation = 'global',
 
-  [string]$TriggerName = 'deploy-prod'
+  [string]$TriggerName = 'deploy-prod',
+
+  [string]$TriggerId = ''
 )
 
 $ErrorActionPreference = 'Stop'
@@ -15,10 +17,17 @@ $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..\')).Path
 $auditScript = Join-Path $PSScriptRoot 'audit_trigger.py'
 $python = Get-Command py -ErrorAction SilentlyContinue
 
-if ($python) {
-  & py -3.12 $auditScript --project $ProjectId --region $Region --trigger $TriggerName
+$auditArguments = @($auditScript, '--project', $ProjectId, '--trigger-location', $TriggerLocation)
+if ([string]::IsNullOrWhiteSpace($TriggerId)) {
+  $auditArguments += @('--trigger-name', $TriggerName)
 } else {
-  & python $auditScript --project $ProjectId --region $Region --trigger $TriggerName
+  $auditArguments += @('--trigger-id', $TriggerId)
+}
+
+if ($python) {
+  & py -3.12 @auditArguments
+} else {
+  & python @auditArguments
 }
 
 if ($LASTEXITCODE -ne 0) {

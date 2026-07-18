@@ -49,7 +49,7 @@ Use this runbook after the first production deployment of AISoftware Studio.
 ## Common Failures
 
 - Missing `SMTP_PASSWORD` secret binding
-- Trigger drift in `_PUBLIC_SITE_URL`, `_APP_ENV`, `_PUBLIC_SITE_INDEXING`, secret names, or `_IMAGE_TAG`
+- Trigger drift that overrides repository-owned `_PUBLIC_SITE_URL`, `_APP_ENV`, `_PUBLIC_SITE_INDEXING` or secret reference names; a historical `_IMAGE_TAG` must be removed
 - Wrong public frontend origin in `CORS_ALLOWED_ORIGINS` or `PUBLIC_SITE_URL`
 - Missing Cloud Build or Artifact Registry permissions
 - Missing required GCP APIs
@@ -100,13 +100,20 @@ docker build -f backend/Dockerfile -t aisoftware-studio-api:local .
 $env:DEPLOY_APP_ENV = 'production'
 $env:DEPLOY_CORS_ALLOWED_ORIGINS = 'https://protolume.pl'
 $env:DEPLOY_CONTACT_DELIVERY_MODE = 'email'
-$env:DEPLOY_CONTACT_RECIPIENT_EMAIL = 'kontakt@protolume.pl'
-$env:DEPLOY_CONTACT_FROM_EMAIL = 'formularz@protolume.pl'
-$env:DEPLOY_SMTP_HOST = 'smtp.protolume.pl'
-$env:DEPLOY_SMTP_PORT = '587'
-$env:DEPLOY_SMTP_USERNAME = 'formularz@protolume.pl'
-$env:DEPLOY_SMTP_USE_TLS = 'true'
 $env:DEPLOY_CONTACT_RATE_LIMIT_PER_MINUTE = '30'
+$requiredOperatorValues = @(
+  'DEPLOY_CONTACT_RECIPIENT_EMAIL',
+  'DEPLOY_CONTACT_FROM_EMAIL',
+  'DEPLOY_SMTP_HOST',
+  'DEPLOY_SMTP_PORT',
+  'DEPLOY_SMTP_USERNAME',
+  'DEPLOY_SMTP_USE_TLS'
+)
+foreach ($name in $requiredOperatorValues) {
+  if ([string]::IsNullOrWhiteSpace([Environment]::GetEnvironmentVariable($name))) {
+    throw "Set the real production value for $name before the smoke test."
+  }
+}
 bash scripts/gcp/smoke-backend-image.sh aisoftware-studio-api:local
 ```
 
