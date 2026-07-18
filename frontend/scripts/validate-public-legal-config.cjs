@@ -144,13 +144,15 @@ function validatePublicLegalConfig(config, options = {}) {
     if (
       mode === PRODUCTION_MODE &&
       typeof config.administrator.name === 'string' &&
-      config.administrator.name.trim().toLocaleLowerCase('pl-PL') === 'ai software studio'
+      ['ai software studio', 'protolume'].includes(
+        config.administrator.name.trim().toLocaleLowerCase('pl-PL'),
+      )
     ) {
       addError(
         errors,
         'administrator.name',
         'incomplete',
-        'sama nazwa marki „AI Software Studio” nie potwierdza pełnej nazwy administratora',
+        'sama nazwa marki nie potwierdza pełnej nazwy administratora',
       );
     }
   }

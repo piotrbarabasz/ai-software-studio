@@ -1,6 +1,6 @@
 # GCP Deployment Guide
 
-This guide covers first-time production deployment of the existing AISoftware Studio MVP to Google Cloud Platform.
+This guide covers first-time production deployment of the existing Protolume MVP to Google Cloud Platform.
 
 ## Scope
 
@@ -44,7 +44,7 @@ Example:
 gcloud artifacts repositories create aisoftware-studio `
   --repository-format=docker `
   --location=europe-central2 `
-  --description="AISoftware Studio deployment images"
+  --description="Protolume deployment images"
 ```
 
 ## Secret Manager

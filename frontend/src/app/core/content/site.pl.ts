@@ -1,4 +1,5 @@
 import { budgetRangeOptions, projectTypeOptions } from './contact-options.pl';
+import { publicBrand } from '../brand/public-brand.config';
 import type {
   ProductCatalogEntry,
   ProductId,
@@ -12,6 +13,14 @@ function createProductCatalogEntry<TProductId extends ProductId>(
   entry: ProductCatalogEntry<TProductId>,
 ): ProductCatalogEntry<TProductId> {
   return entry;
+}
+
+function brandTitle(title: string): string {
+  return `${title} | ${publicBrand.name}`;
+}
+
+function brandDescription(description: string): string {
+  return `${description} ${publicBrand.name}.`;
 }
 
 export const researchDirections = [
@@ -346,56 +355,64 @@ const routeMetadata = [
   {
     path: '/',
     label: 'Start',
-    title: 'AISoftware Studio — demo AI w 7 dni dla firm',
-    description:
+    title: brandTitle('Demo AI w 7 dni dla firm'),
+    description: brandDescription(
       'Sprawdź w 7 dni jeden proces z użyciem AI lub automatyzacji i wybierz właściwy następny krok.',
+    ),
     kind: 'home',
   },
   {
     path: '/demo-ai',
     label: 'Demo w 7 dni',
-    title: 'Demo AI i sprawdzenie pomysłu',
-    description: 'Zakres, proces i rezultat demo AI w 7 dni dla jednego scenariusza biznesowego.',
+    title: brandTitle('Demo AI i sprawdzenie pomysłu'),
+    description: brandDescription(
+      'Zakres, proces i rezultat demo AI w 7 dni dla jednego scenariusza biznesowego.',
+    ),
     kind: 'demo',
   },
   {
     path: '/development',
     label: 'Development',
-    title: 'Development aplikacji, API i automatyzacji',
-    description:
+    title: brandTitle('Development aplikacji, API i automatyzacji'),
+    description: brandDescription(
       'Planowanie i realizacja aplikacji, API, integracji oraz automatyzacji w potwierdzonym zakresie.',
+    ),
     kind: 'development',
   },
   {
     path: '/studio',
     label: 'Studio',
-    title: 'Piotr Barabasz i AISoftware Studio',
-    description:
-      'Poznaj sposób współpracy z Piotrem Barabaszem oraz sprawdzalne przykłady pracy AISoftware Studio.',
+    title: brandTitle(publicBrand.owner.name),
+    description: brandDescription(
+      `Poznaj sposób współpracy z ${publicBrand.owner.name} oraz sprawdzalne przykłady pracy.`,
+    ),
     kind: 'studio',
   },
   {
     path: '/rd',
     label: 'R&D',
-    title: 'R&D i eksperymenty AISoftware Studio',
-    description:
+    title: brandTitle('R&D i eksperymenty'),
+    description: brandDescription(
       'Eksperymenty techniczne oceniające wykonalność wybranych kierunków AI i automatyzacji.',
+    ),
     kind: 'research',
   },
   {
     path: '/kontakt',
     label: 'Kontakt',
-    title: 'Kontakt i rozmowa wstępna',
-    description:
+    title: brandTitle('Kontakt i rozmowa wstępna'),
+    description: brandDescription(
       'Krótki formularz do rozmowy o demo w 7 dni, aplikacji, integracji lub automatyzacji.',
+    ),
     kind: 'contact',
   },
   {
     path: '/polityka-prywatnosci',
     label: 'Polityka prywatności',
-    title: 'Polityka prywatności | AISoftware Studio',
-    description:
-      'Informacja o przetwarzaniu danych przekazywanych przez formularz kontaktowy AISoftware Studio.',
+    title: brandTitle('Polityka prywatności'),
+    description: brandDescription(
+      'Informacja o przetwarzaniu danych przekazywanych przez formularz kontaktowy.',
+    ),
     kind: 'privacy',
   },
 ] satisfies readonly PublicRouteMetadata[];
@@ -419,15 +436,15 @@ export const siteContent = {
     { label: 'Kontakt', path: '/kontakt' },
   ],
   footer: {
-    summary: 'Dema AI, aplikacje, API i automatyzacje z jasno ustalonym zakresem.',
+    summary: publicBrand.descriptor,
   },
   products,
   trust: {
-    ownerSectionTitle: 'Kto prowadzi AISoftware Studio?',
+    ownerSectionTitle: `Kto prowadzi ${publicBrand.name}?`,
     ownerSectionEyebrow: 'Osoba odpowiedzialna',
     owner: {
-      name: 'Piotr Barabasz',
-      role: 'Właściciel i odpowiedzialny partner techniczny',
+      name: publicBrand.owner.name,
+      role: publicBrand.owner.role,
       bio: 'Prowadzę analizę, kontakt i realizację po jednej stronie odpowiedzialności. Pomagam zamieniać konkretny problem w sprawdzalne demo albo świadomie zaplanowane wdrożenie.',
       verifiedCapabilities: [
         {
@@ -451,13 +468,7 @@ export const siteContent = {
         detail:
           'Od pierwszej rozmowy do kolejnych decyzji pracujesz bezpośrednio z osobą odpowiedzialną za techniczny kierunek i wykonanie prac.',
       },
-      links: [
-        {
-          label: 'GitHub',
-          url: 'https://github.com/piotrbarabasz',
-          accessibleName: 'Profil Piotra Barabasza w serwisie GitHub',
-        },
-      ],
+      links: [publicBrand.links.githubProfile],
     },
     evidence: {
       eyebrow: 'Co działa naprawdę',
@@ -485,19 +496,18 @@ export const siteContent = {
           liveLink: {
             label: 'Uruchom interaktywne demo',
             url: '/demo-ai',
-            accessibleName: 'Uruchom interaktywne demo asystenta wiedzy AISoftware Studio',
+            accessibleName: `Uruchom interaktywne demo asystenta wiedzy ${publicBrand.name}`,
           },
           repositoryLink: {
             label: 'Zobacz kod demonstracji',
-            url: 'https://github.com/piotrbarabasz/ai-software-studio',
-            accessibleName:
-              'Publiczne repozytorium demonstracji asystenta wiedzy AISoftware Studio',
+            url: publicBrand.links.sourceRepository.url,
+            accessibleName: `Publiczne repozytorium demonstracji asystenta wiedzy ${publicBrand.name}`,
           },
         },
         {
           id: 'studio-application',
           typeLabel: 'Projekt własny',
-          title: 'AISoftware Studio jako działająca aplikacja',
+          title: `${publicBrand.name} jako działająca aplikacja`,
           teaser:
             'Zobacz wielostronicową aplikację, formularz obsługiwany przez API i publiczny kod projektu.',
           problem:
@@ -515,13 +525,12 @@ export const siteContent = {
           liveLink: {
             label: 'Otwórz działającą stronę',
             url: '/',
-            accessibleName: 'Otwórz działającą stronę AISoftware Studio',
+            accessibleName: `Otwórz działającą stronę ${publicBrand.name}`,
           },
           repositoryLink: {
             label: 'Zobacz kod aplikacji i wdrożenia',
-            url: 'https://github.com/piotrbarabasz/ai-software-studio',
-            accessibleName:
-              'Publiczne repozytorium aplikacji i konfiguracji wdrożenia AISoftware Studio',
+            url: publicBrand.links.sourceRepository.url,
+            accessibleName: `Publiczne repozytorium aplikacji i konfiguracji wdrożenia ${publicBrand.name}`,
           },
         },
       ],
@@ -530,7 +539,7 @@ export const siteContent = {
   home: {
     path: '/',
     hero: {
-      eyebrow: 'AISoftware Studio',
+      eyebrow: `${publicBrand.name} — ${publicBrand.descriptor}`,
       title: 'Sprawdź w 7 dni, czy AI lub automatyzacja usprawni Twój proces.',
       audience:
         'Dla zespołów, które ręcznie przenoszą informacje, pilnują statusów lub odpowiadają na powtarzalne pytania. Wystarczy opis obecnej pracy — bez gotowej specyfikacji.',
@@ -735,8 +744,8 @@ export const siteContent = {
     },
     codeLink: {
       label: 'Zobacz kod tego demo',
-      url: 'https://github.com/piotrbarabasz/ai-software-studio',
-      accessibleName: 'Publiczny kod interaktywnego demo AISoftware Studio w serwisie GitHub',
+      url: publicBrand.links.sourceRepository.url,
+      accessibleName: `Publiczny kod interaktywnego demo ${publicBrand.name} w serwisie GitHub`,
     },
   },
   studio: {
@@ -758,7 +767,7 @@ export const siteContent = {
     ],
     collaboration: {
       title: 'Z kim i w jaki sposób będziesz współpracować?',
-      lead: 'AISoftware Studio jest prowadzone samodzielnie, dlatego kontakt, analiza i realizacja pozostają po jednej stronie odpowiedzialności.',
+      lead: `${publicBrand.name} jest prowadzone samodzielnie, dlatego kontakt, analiza i realizacja pozostają po jednej stronie odpowiedzialności.`,
       points: [
         'bezpośredni kontakt od pierwszej rozmowy do odbioru prac',
         'jeden partner techniczny odpowiedzialny za ustalenia i realizację',
@@ -786,8 +795,8 @@ export const siteContent = {
       contactCta: { label: 'Opisz problem bez zobowiązania', path: '/kontakt' },
       repositoryLink: {
         label: 'Przejrzyj publiczny kod',
-        url: 'https://github.com/piotrbarabasz/ai-software-studio',
-        accessibleName: 'Publiczne repozytorium AISoftware Studio w serwisie GitHub',
+        url: publicBrand.links.sourceRepository.url,
+        accessibleName: publicBrand.links.sourceRepository.accessibleName,
       },
     },
     ctaLabel: 'Opisz planowane wdrożenie',
@@ -998,8 +1007,7 @@ export const siteContent = {
     title: 'Informacja o prywatności formularza kontaktowego',
     developmentNotice:
       'Konfiguracja demonstracyjna dla środowiska deweloperskiego. Nie publikuj tej wersji jako polityki prywatności.',
-    introduction:
-      'Poniższa informacja opisuje dane przetwarzane przy wysłaniu formularza kontaktowego AISoftware Studio.',
+    introduction: `Poniższa informacja opisuje dane przetwarzane przy wysłaniu formularza kontaktowego ${publicBrand.name}.`,
     administratorTitle: 'Administrator i kontakt',
     dataScopeTitle: 'Zakres zbieranych danych',
     dataScopeItems: [
@@ -1017,8 +1025,8 @@ export const siteContent = {
     updatedAtLabel: 'Data aktualizacji',
   },
   notFound: {
-    title: 'Strona nie została znaleziona | AISoftware Studio',
-    description: 'Nie znaleźliśmy strony pod podanym adresem.',
+    title: brandTitle('Strona nie została znaleziona'),
+    description: brandDescription('Nie znaleźliśmy strony pod podanym adresem.'),
     canonicalPath: '/404',
   },
 } satisfies SiteContent;

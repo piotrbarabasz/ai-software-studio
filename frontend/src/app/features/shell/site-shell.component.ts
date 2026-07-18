@@ -8,6 +8,7 @@ import type { ActivatedRouteSnapshot } from '@angular/router';
 import { filter } from 'rxjs';
 
 import { siteContent } from '../../core/content/site.pl';
+import { publicBrand } from '../../core/brand/public-brand.config';
 import { absoluteSiteUrl, siteSeo, siteSocialImageUrl } from '../../core/seo/site-seo.config';
 
 @Component({
@@ -34,6 +35,7 @@ export class SiteShellComponent implements OnInit {
   readonly navigation = siteContent.navigation;
   readonly footer = siteContent.footer;
   readonly trust = siteContent.trust;
+  readonly brand = publicBrand;
 
   ngOnInit(): void {
     this.updateViewportState();
@@ -116,7 +118,7 @@ export class SiteShellComponent implements OnInit {
     this.meta.updateTag({ property: 'og:type', content: 'website' });
     this.meta.updateTag({ property: 'og:url', content: absoluteSiteUrl(canonicalPath) });
     this.meta.updateTag({ property: 'og:image', content: siteSocialImageUrl });
-    this.meta.updateTag({ property: 'og:image:type', content: 'image/jpeg' });
+    this.meta.updateTag({ property: 'og:image:type', content: siteSeo.socialImageType });
     this.meta.updateTag({ property: 'og:image:width', content: '1200' });
     this.meta.updateTag({ property: 'og:image:height', content: '630' });
     this.meta.updateTag({ property: 'og:locale', content: siteSeo.locale });

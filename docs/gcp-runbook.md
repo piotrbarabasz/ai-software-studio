@@ -1,6 +1,6 @@
 # GCP Runbook
 
-Use this runbook after the first production deployment of AISoftware Studio.
+Use this runbook after the first production deployment of Protolume.
 
 ## Release Checklist
 

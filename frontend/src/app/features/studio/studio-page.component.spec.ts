@@ -19,9 +19,7 @@ describe('StudioPageComponent', () => {
     expect(fixture.nativeElement.textContent).toContain(
       'Z kim i w jaki sposób będziesz współpracować?',
     );
-    expect(fixture.nativeElement.textContent).toContain(
-      'AISoftware Studio jest prowadzone samodzielnie',
-    );
+    expect(fixture.nativeElement.textContent).toContain('Protolume jest prowadzone samodzielnie');
     expect(fixture.nativeElement.textContent).not.toMatch(/TODO|placeholder|tu będzie/i);
   });
 

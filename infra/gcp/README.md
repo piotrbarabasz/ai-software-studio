@@ -1,6 +1,6 @@
 # GCP Deployment Assets
 
-This directory contains the production deployment artifacts for AISoftware Studio.
+This directory contains the production deployment artifacts for Protolume.
 
 ## Files
 

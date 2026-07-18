@@ -1,5 +1,6 @@
 import { siteContent } from './site.pl';
 import { absoluteSiteUrl, siteSeo } from '../seo/site-seo.config';
+import { publicBrand } from '../brand/public-brand.config';
 
 describe('Site content model', () => {
   it('defines metadata and content for the public pages', () => {
@@ -104,6 +105,10 @@ describe('Site content model', () => {
     expect(canonicalUrls.every((url) => url.startsWith(siteSeo.origin))).toBeTrue();
     expect(siteContent.routes.every((route) => route.description.length >= 60)).toBeTrue();
     expect(siteContent.routes.every((route) => route.description.length <= 160)).toBeTrue();
+    expect(siteContent.routes.every((route) => route.title.includes(publicBrand.name))).toBeTrue();
+    expect(
+      siteContent.routes.every((route) => route.description.includes(publicBrand.name)),
+    ).toBeTrue();
     expect(siteContent.routes.find((route) => route.kind === 'home')?.description).toContain(
       '7 dni',
     );

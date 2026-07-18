@@ -1,6 +1,6 @@
-# AISoftware Studio
+# Protolume
 
-Professional Polish-first marketing website MVP for a solo software development and AI automation service brand.
+Publiczna, polskojęzyczna strona Protolume — dema AI, aplikacje i automatyzacje dla firm, prowadzone przez Piotra Barabasza.
 
 ## Repository Structure
 

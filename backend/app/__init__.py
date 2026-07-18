@@ -1,1 +1,1 @@
-"""AISoftware Studio backend application package."""
+"""Protolume backend application package."""

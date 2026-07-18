@@ -2,6 +2,7 @@ import logging
 import smtplib
 from email.message import EmailMessage
 
+from app.core.brand import public_brand
 from app.core.config import Settings
 from app.schemas.contact import ContactInquiry
 
@@ -21,7 +22,7 @@ class EmailContactDelivery:
             raise DeliveryError("Email delivery is not configured.")
 
         message = EmailMessage()
-        message["Subject"] = "Nowe zapytanie z AISoftware Studio"
+        message["Subject"] = f"Nowe zapytanie z {public_brand['name']}"
         message["From"] = str(self._settings.contact_from_email)
         message["To"] = str(self._settings.contact_recipient_email)
         message.set_content(self._build_email_body(inquiry))
@@ -60,7 +61,7 @@ class EmailContactDelivery:
     def _build_email_body(inquiry: ContactInquiry) -> str:
         company = inquiry.company or "Nie podano"
         return (
-            "Nowe zapytanie z formularza AISoftware Studio\n\n"
+            f"Nowe zapytanie z formularza {public_brand['name']}\n\n"
             f"Imię i nazwisko: {inquiry.name}\n"
             f"Email: {inquiry.email}\n"
             f"Firma: {company}\n"

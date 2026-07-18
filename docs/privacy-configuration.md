@@ -70,7 +70,7 @@ Sekret ma zawierać wyłącznie jeden obiekt JSON, bez wrappera, komentarzy i ko
 
 Znaczenie pól:
 
-- `administrator.name`: pełna, zatwierdzona nazwa administratora albo imię i nazwisko; sama marka `AI Software Studio` jest odrzucana;
+- `administrator.name`: pełna, zatwierdzona nazwa administratora albo imię i nazwisko; sama marka `Protolume` jest odrzucana;
 - `administrator.correspondenceAddress`: zatwierdzony adres korespondencyjny;
 - `administrator.privacyContact`: adres e-mail do spraw danych osobowych;
 - `processing.*`: zatwierdzone cele, podstawy, retencja, odbiorcy, dostawcy infrastruktury i poczty oraz informacje o prawach;

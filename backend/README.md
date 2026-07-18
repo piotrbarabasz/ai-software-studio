@@ -1,6 +1,6 @@
 # Backend
 
-FastAPI contact intake API for the AISoftware Studio marketing website MVP.
+FastAPI contact intake API for the public Protolume marketing website.
 
 ## Setup
 

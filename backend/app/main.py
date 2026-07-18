@@ -6,6 +6,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
 from app.api.router import api_router
+from app.core.brand import public_brand
 from app.core.config import Settings, get_settings
 from app.core.cors import configure_cors
 from app.services.contact_delivery import EmailContactDelivery
@@ -22,9 +23,11 @@ def _sanitize_validation_errors(errors: Sequence[dict[str, object]]) -> list[dic
 def create_app(settings: Settings | None = None) -> FastAPI:
     app_settings = settings or get_settings()
     app = FastAPI(
-        title="AISoftware Studio Marketing API",
+        title=f"{public_brand['name']} Marketing API",
         version="0.1.0",
-        description="Contact intake API for the AISoftware Studio marketing website MVP.",
+        description=(
+            f"Contact intake API for {public_brand['name']}: {public_brand['descriptor']}."
+        ),
     )
     configure_cors(app, app_settings)
 

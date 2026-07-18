@@ -51,14 +51,10 @@
 }
 
 .brand-mark {
-  display: grid;
+  display: block;
   width: 2.25rem;
   height: 2.25rem;
-  place-items: center;
-  border-radius: 6px;
-  background: var(--color-primary);
-  color: #ffffff;
-  font-size: 0.9rem;
+  flex: 0 0 auto;
 }
 
 .menu-toggle {
