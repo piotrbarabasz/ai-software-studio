@@ -25,7 +25,7 @@ const PRIVACY_FORBIDDEN_PATTERNS = [
   { label: 'przykładowa wartość', pattern: /\bprzyk(?:ład|ladow)/i },
   { label: 'placeholder', pattern: /\bplaceholder\b/i },
   { label: 'testowa wartość', pattern: /\btestow(?:a|y|e|ego|ej|emu|ym|ych|ymi|ą)\b/i },
-  { label: 'niepełna nazwa administratora', pattern: />\s*AI Software Studio\s*</i },
+  { label: 'niepełna nazwa administratora', pattern: />\s*(?:AI Software Studio|Protolume)\s*</i },
 ];
 
 function listTextFiles(root) {

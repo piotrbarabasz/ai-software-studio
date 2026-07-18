@@ -1,16 +1,15 @@
 import type { StaticRoutePath } from '../content/site-content.types';
 import { environment } from '../../../environments/environment';
-
-const siteOrigin = environment.publicSiteUrl.replace(/\/$/, '');
+import { publicBrand } from '../brand/public-brand.config';
 
 export const siteSeo = {
-  origin: siteOrigin,
-  name: 'AISoftware Studio',
+  origin: publicBrand.publicOrigin,
+  name: publicBrand.name,
   locale: 'pl_PL',
   indexingEnabled: environment.indexingEnabled,
-  socialImagePath: '/assets/aisoftware-studio-social-preview.jpg',
-  organizationDescription:
-    'Samodzielnie prowadzone studio tworzące dema AI i rozwiązania cyfrowe dla firm.',
+  socialImagePath: publicBrand.assets.socialPreviewPath,
+  socialImageType: publicBrand.assets.socialPreviewType,
+  organizationDescription: `Samodzielnie prowadzone studio: ${publicBrand.descriptor.toLocaleLowerCase('pl-PL')}.`,
 } as const;
 
 export function absoluteSiteUrl(path: StaticRoutePath | '/404' | string): string {

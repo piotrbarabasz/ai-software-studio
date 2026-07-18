@@ -12,6 +12,7 @@ RUN addgroup --system app && adduser --system --ingroup app app
 
 COPY backend/pyproject.toml backend/requirements.lock ./
 COPY backend/app ./app
+COPY frontend/config/public-brand.json ./app/core/public-brand.json
 COPY infra/gcp/production-contract.json ./app/core/production-contract.json
 
 RUN pip install --requirement requirements.lock \

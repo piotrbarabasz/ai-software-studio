@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "aisoftware-studio-backend"
 version = "0.1.0"
-description = "FastAPI backend for the AISoftware Studio marketing website MVP."
+description = "FastAPI backend for the Protolume marketing website."
 requires-python = ">=3.11"
 dependencies = [
   "fastapi>=0.111,<1.0",

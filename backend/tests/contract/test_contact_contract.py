@@ -2,6 +2,7 @@ import re
 import time
 from pathlib import Path
 
+from app.core.brand import public_brand
 from app.core.config import Settings
 from app.main import create_app
 from app.schemas.contact import ContactInquiry, ProjectType
@@ -138,6 +139,13 @@ def test_contact_openapi_exposes_project_type_enum(settings: Settings) -> None:
 
     assert project_type_ref == "#/components/schemas/ProjectType"
     assert enum_values == EXPECTED_PROJECT_TYPES
+
+
+def test_openapi_uses_the_shared_public_brand(settings: Settings) -> None:
+    schema = create_app(settings).openapi()
+
+    assert schema["info"]["title"] == f"{public_brand['name']} Marketing API"
+    assert public_brand["descriptor"] in schema["info"]["description"]
 
 
 def test_contact_returns_rate_limit_response(

@@ -80,7 +80,7 @@ test('rejects an invalid privacy e-mail address', () => {
 
 test('rejects the known test e-mail and brand-only administrator name', () => {
   const configuration = completeConfiguration();
-  configuration.administrator.name = 'AI Software Studio';
+  configuration.administrator.name = 'Protolume';
   configuration.administrator.privacyContact = 'ai.korepetycje3@gmail.com';
 
   const errors = validatePublicLegalConfig(configuration);

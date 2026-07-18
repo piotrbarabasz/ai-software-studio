@@ -5,6 +5,7 @@ import { provideRouter, Router } from '@angular/router';
 import { routes } from '../../app.routes';
 import { API_CONFIG } from '../../core/api-config';
 import { siteContent } from '../../core/content/site.pl';
+import { publicBrand } from '../../core/brand/public-brand.config';
 import { absoluteSiteUrl, siteSocialImageUrl } from '../../core/seo/site-seo.config';
 import { SiteShellComponent } from './site-shell.component';
 
@@ -25,14 +26,16 @@ describe('SiteShellComponent', () => {
     expect(element.querySelector('.skip-link')).not.toBeNull();
     expect(element.querySelectorAll('.nav-links a').length).toBe(siteContent.navigation.length);
     expect(element.querySelector('.footer-links a[href="/rd"]')).not.toBeNull();
-    expect(element.querySelector('.site-footer')?.textContent).toContain('© AISoftware Studio');
+    expect(element.querySelector('.brand')?.getAttribute('aria-label')).toBe(publicBrand.name);
+    expect(element.querySelector('.brand-mark')?.getAttribute('src')).toBe(
+      publicBrand.assets.faviconPath,
+    );
+    expect(element.querySelector('.site-footer')?.textContent).toContain(`© ${publicBrand.name}`);
     expect(element.querySelector('.site-footer')?.textContent).toContain('Piotr Barabasz');
     expect(element.querySelector('.site-footer')?.textContent).toContain(
       'Właściciel i odpowiedzialny partner techniczny',
     );
-    expect(element.querySelector('.site-footer')?.textContent).toContain(
-      'Dema AI, aplikacje, API i automatyzacje',
-    );
+    expect(element.querySelector('.site-footer')?.textContent).toContain(publicBrand.descriptor);
     expect(element.querySelector('.site-footer a[href="/kontakt"]')).not.toBeNull();
     expect(element.querySelector('.site-footer a[href="/polityka-prywatnosci"]')).not.toBeNull();
     expect(element.querySelector('.site-footer a[href^="mailto:"]')).toBeNull();
@@ -218,7 +221,7 @@ describe('SiteShellComponent', () => {
       siteSocialImageUrl,
     );
     expect(document.querySelector('meta[property="og:image:type"]')?.getAttribute('content')).toBe(
-      'image/jpeg',
+      'image/png',
     );
     expect(document.querySelector('meta[name="twitter:image"]')?.getAttribute('content')).toBe(
       siteSocialImageUrl,

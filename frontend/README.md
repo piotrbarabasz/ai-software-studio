@@ -1,6 +1,6 @@
 # Frontend
 
-Angular single-page marketing website for AISoftware Studio.
+Angular single-page marketing website for Protolume.
 
 ## Commands
 
