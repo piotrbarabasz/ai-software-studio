@@ -100,9 +100,9 @@ Pełny produkcyjny build i kontrola prerenderowanego artefaktu:
 
 ```powershell
 $env:PUBLIC_LEGAL_CONFIG_PATH = (Resolve-Path "C:\bezpieczna-lokalizacja\public-legal.json").Path
-$env:API_URL = "https://<ZATWIERDZONY_BACKEND_ORIGIN>"
-$env:PUBLIC_SITE_URL = "https://<ZATWIERDZONY_PUBLICZNY_URL>"
-$env:PUBLIC_SITE_INDEXING = "true"
+$env:API_URL = $env:BACKEND_URL
+$env:PUBLIC_SITE_URL = "https://protolume.pl"
+$env:PUBLIC_SITE_INDEXING = "false"
 npm run build
 npm run validate:artifact:production
 Remove-Item Env:PUBLIC_LEGAL_CONFIG_PATH

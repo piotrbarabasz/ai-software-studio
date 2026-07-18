@@ -1,75 +1,120 @@
 substitutions:
-  _PROJECT_ID: "<PROJECT_ID>"
-  _REGION: "europe-central2"
-  _ARTIFACT_REPO: "aisoftware-studio"
-  _BACKEND_SERVICE: "aisoftware-studio-api"
-  _FRONTEND_SERVICE: "aisoftware-studio-web"
-  _BACKEND_IMAGE_NAME: "aisoftware-studio-api"
-  _FRONTEND_IMAGE_NAME: "aisoftware-studio-web"
-  _BACKEND_URL: "https://<BACKEND_CLOUD_RUN_URL>"
-  _PUBLIC_SITE_URL: "https://protolume.pl"
-  _PUBLIC_SITE_INDEXING: "false"
-  _PUBLIC_LEGAL_CONFIG_SECRET: "aisoftware-studio-public-legal-config"
-  _SMTP_PASSWORD_SECRET: "aisoftware-studio-smtp-password"
-  _CONTACT_RATE_LIMIT_PER_MINUTE: "30"
-  _CONTACT_RECIPIENT_EMAIL: "owner@example.com"
-  _CONTACT_FROM_EMAIL: "noreply@example.com"
-  _SMTP_HOST: "smtp.example.com"
-  _SMTP_PORT: "587"
-  _SMTP_USERNAME: "smtp-user@example.com"
-  _SMTP_USE_TLS: "true"
-  _CONTACT_DELIVERY_MODE: "email"
-  _APP_ENV: "production"
-  _MIN_INSTANCES: "0"
-  _IMAGE_TAG: "manual-local"
+  _PROJECT_ID: "<REQUIRED_PROJECT_ID>"
+  _REGION: "<REQUIRED_REGION>"
+  _ARTIFACT_REPO: "<REQUIRED_ARTIFACT_REPO>"
+  _BACKEND_SERVICE: "<REQUIRED_BACKEND_SERVICE>"
+  _FRONTEND_SERVICE: "<REQUIRED_FRONTEND_SERVICE>"
+  _BACKEND_IMAGE_NAME: "<REQUIRED_BACKEND_IMAGE_NAME>"
+  _FRONTEND_IMAGE_NAME: "<REQUIRED_FRONTEND_IMAGE_NAME>"
+  _BACKEND_URL: "<REQUIRED_BACKEND_HTTPS_URL>"
+  _PUBLIC_SITE_URL: "<REQUIRED_PUBLIC_SITE_URL>"
+  _PUBLIC_SITE_INDEXING: "<REQUIRED_BOOLEAN>"
+  _PUBLIC_LEGAL_CONFIG_SECRET: "<REQUIRED_SECRET_NAME>"
+  _SMTP_PASSWORD_SECRET: "<REQUIRED_SECRET_NAME>"
+  _CONTACT_RATE_LIMIT_PER_MINUTE: "<REQUIRED_INTEGER>"
+  _CONTACT_RECIPIENT_EMAIL: "<REQUIRED_EMAIL>"
+  _CONTACT_FROM_EMAIL: "<REQUIRED_EMAIL>"
+  _SMTP_HOST: "<REQUIRED_SMTP_HOST>"
+  _SMTP_PORT: "<REQUIRED_PORT>"
+  _SMTP_USERNAME: "<REQUIRED_SMTP_USERNAME>"
+  _SMTP_USE_TLS: "<REQUIRED_BOOLEAN>"
+  _CONTACT_DELIVERY_MODE: "<REQUIRED_DELIVERY_MODE>"
+  _APP_ENV: "<REQUIRED_APP_ENV>"
+  _MIN_INSTANCES: "<REQUIRED_INTEGER>"
+  _IMAGE_TAG: "<REQUIRED_COMMIT_SHA>"
 
 options:
+  dynamicSubstitutions: true
   logging: CLOUD_LOGGING_ONLY
 
 steps:
+  - id: deployment-contract-preflight
+    name: python:3.12-slim
+    entrypoint: python
+    env:
+      - "DEPLOY_PROJECT_ID=$_PROJECT_ID"
+      - "DEPLOY_REGION=$_REGION"
+      - "DEPLOY_ARTIFACT_REPO=$_ARTIFACT_REPO"
+      - "DEPLOY_BACKEND_SERVICE=$_BACKEND_SERVICE"
+      - "DEPLOY_FRONTEND_SERVICE=$_FRONTEND_SERVICE"
+      - "DEPLOY_BACKEND_IMAGE_NAME=$_BACKEND_IMAGE_NAME"
+      - "DEPLOY_FRONTEND_IMAGE_NAME=$_FRONTEND_IMAGE_NAME"
+      - "DEPLOY_BACKEND_URL=$_BACKEND_URL"
+      - "DEPLOY_PUBLIC_SITE_URL=$_PUBLIC_SITE_URL"
+      - "DEPLOY_CORS_ALLOWED_ORIGINS=$_PUBLIC_SITE_URL"
+      - "DEPLOY_PUBLIC_SITE_INDEXING=$_PUBLIC_SITE_INDEXING"
+      - "DEPLOY_PUBLIC_LEGAL_CONFIG_SECRET=$_PUBLIC_LEGAL_CONFIG_SECRET"
+      - "DEPLOY_SMTP_PASSWORD_SECRET=$_SMTP_PASSWORD_SECRET"
+      - "DEPLOY_CONTACT_RATE_LIMIT_PER_MINUTE=$_CONTACT_RATE_LIMIT_PER_MINUTE"
+      - "DEPLOY_CONTACT_RECIPIENT_EMAIL=$_CONTACT_RECIPIENT_EMAIL"
+      - "DEPLOY_CONTACT_FROM_EMAIL=$_CONTACT_FROM_EMAIL"
+      - "DEPLOY_SMTP_HOST=$_SMTP_HOST"
+      - "DEPLOY_SMTP_PORT=$_SMTP_PORT"
+      - "DEPLOY_SMTP_USERNAME=$_SMTP_USERNAME"
+      - "DEPLOY_SMTP_USE_TLS=$_SMTP_USE_TLS"
+      - "DEPLOY_CONTACT_DELIVERY_MODE=$_CONTACT_DELIVERY_MODE"
+      - "DEPLOY_APP_ENV=$_APP_ENV"
+      - "DEPLOY_MIN_INSTANCES=$_MIN_INSTANCES"
+      - "DEPLOY_IMAGE_TAG=$_IMAGE_TAG"
+    args: ["scripts/gcp/deployment_contract.py", "--scope", "production"]
+
+  - id: deployment-contract-tests
+    name: python:3.12-slim
+    entrypoint: python
+    waitFor: ["deployment-contract-preflight"]
+    args:
+      [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "infra/gcp/tests",
+        "-p",
+        "test_deployment*.py",
+      ]
+
+  - id: backend-checks
+    name: python:3.12-slim
+    entrypoint: sh
+    waitFor: ["deployment-contract-preflight"]
+    args:
+      - -c
+      - >-
+        cd backend &&
+        python -m pip install --requirement requirements-dev.lock &&
+        python -m pip install --no-deps --no-build-isolation --editable . &&
+        python -m ruff check . &&
+        python -m ruff format --check . &&
+        python -m pytest &&
+        python -m unittest discover -s ../infra/gcp/tests -p 'test_cloudbuild_yaml.py'
+
+  - id: frontend-checks
+    name: cypress/browsers:node20.11.1-chrome120-ff121
+    entrypoint: sh
+    waitFor: ["deployment-contract-preflight"]
+    args:
+      - -c
+      - >-
+        cd frontend &&
+        npm ci &&
+        npm run lint &&
+        npm run format:check &&
+        npm test
+
   - id: backend-build
     name: gcr.io/cloud-builders/docker
+    waitFor: ["backend-checks", "deployment-contract-tests"]
     args:
-      [
-        "build",
-        "-f",
-        "backend/Dockerfile",
-        "-t",
-        "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_BACKEND_IMAGE_NAME:$_IMAGE_TAG",
-        "backend",
-      ]
-
-  - id: backend-push
-    name: gcr.io/cloud-builders/docker
-    waitFor: ["backend-build"]
-    args:
-      [
-        "push",
-        "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_BACKEND_IMAGE_NAME:$_IMAGE_TAG",
-      ]
-
-  - id: backend-deploy
-    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
-    entrypoint: gcloud
-    waitFor: ["backend-push"]
-    args:
-      [
-        "run",
-        "deploy",
-        "$_BACKEND_SERVICE",
-        "--project=$_PROJECT_ID",
-        "--region=$_REGION",
-        "--platform=managed",
-        "--image=$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_BACKEND_IMAGE_NAME:$_IMAGE_TAG",
-        "--allow-unauthenticated",
-        "--min-instances=$_MIN_INSTANCES",
-        "--set-env-vars=APP_ENV=$_APP_ENV,CORS_ALLOWED_ORIGINS=$_PUBLIC_SITE_URL,CONTACT_DELIVERY_MODE=$_CONTACT_DELIVERY_MODE,CONTACT_RECIPIENT_EMAIL=$_CONTACT_RECIPIENT_EMAIL,CONTACT_FROM_EMAIL=$_CONTACT_FROM_EMAIL,SMTP_HOST=$_SMTP_HOST,SMTP_PORT=$_SMTP_PORT,SMTP_USERNAME=$_SMTP_USERNAME,SMTP_USE_TLS=$_SMTP_USE_TLS,CONTACT_RATE_LIMIT_PER_MINUTE=$_CONTACT_RATE_LIMIT_PER_MINUTE",
-        "--set-secrets=SMTP_PASSWORD=$_SMTP_PASSWORD_SECRET:latest",
-      ]
+      - build
+      - -f
+      - backend/Dockerfile
+      - -t
+      - "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_BACKEND_IMAGE_NAME:$_IMAGE_TAG"
+      - .
 
   - id: frontend-public-legal-config
     name: node:20-bookworm-slim
-    waitFor: ["backend-deploy"]
+    waitFor: ["frontend-checks", "deployment-contract-tests"]
     entrypoint: node
     secretEnv: ["PUBLIC_LEGAL_CONFIG_JSON"]
     args: ["frontend/scripts/write-build-legal-config.cjs"]
@@ -79,48 +124,98 @@ steps:
     waitFor: ["frontend-public-legal-config"]
     env: ["DOCKER_BUILDKIT=1"]
     args:
-      [
-        "build",
-        "-f",
-        "frontend/Dockerfile",
-        "--secret",
-        "id=public_legal_config,src=frontend/.public-legal-config.json",
-        "--build-arg",
-        "API_URL=$_BACKEND_URL",
-        "--build-arg",
-        "PUBLIC_SITE_URL=$_PUBLIC_SITE_URL",
-        "--build-arg",
-        "PUBLIC_SITE_INDEXING=$_PUBLIC_SITE_INDEXING",
-        "-t",
-        "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_FRONTEND_IMAGE_NAME:$_IMAGE_TAG",
-        "frontend",
-      ]
+      - build
+      - -f
+      - frontend/Dockerfile
+      - --secret
+      - id=public_legal_config,src=frontend/.public-legal-config.json
+      - --build-arg
+      - "API_URL=$_BACKEND_URL"
+      - --build-arg
+      - "PUBLIC_SITE_URL=$_PUBLIC_SITE_URL"
+      - --build-arg
+      - "PUBLIC_SITE_INDEXING=$_PUBLIC_SITE_INDEXING"
+      - -t
+      - "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_FRONTEND_IMAGE_NAME:$_IMAGE_TAG"
+      - .
+
+  - id: backend-image-smoke
+    name: gcr.io/cloud-builders/docker
+    entrypoint: sh
+    waitFor: ["backend-build"]
+    env:
+      - "DEPLOY_APP_ENV=$_APP_ENV"
+      - "DEPLOY_CORS_ALLOWED_ORIGINS=$_PUBLIC_SITE_URL"
+      - "DEPLOY_CONTACT_DELIVERY_MODE=$_CONTACT_DELIVERY_MODE"
+      - "DEPLOY_CONTACT_RECIPIENT_EMAIL=$_CONTACT_RECIPIENT_EMAIL"
+      - "DEPLOY_CONTACT_FROM_EMAIL=$_CONTACT_FROM_EMAIL"
+      - "DEPLOY_SMTP_HOST=$_SMTP_HOST"
+      - "DEPLOY_SMTP_PORT=$_SMTP_PORT"
+      - "DEPLOY_SMTP_USERNAME=$_SMTP_USERNAME"
+      - "DEPLOY_SMTP_USE_TLS=$_SMTP_USE_TLS"
+      - "DEPLOY_CONTACT_RATE_LIMIT_PER_MINUTE=$_CONTACT_RATE_LIMIT_PER_MINUTE"
+    args:
+      - scripts/gcp/smoke-backend-image.sh
+      - "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_BACKEND_IMAGE_NAME:$_IMAGE_TAG"
+
+  - id: cloud-run-iam-audit
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: python3
+    waitFor: ["backend-image-smoke", "frontend-build"]
+    args:
+      - scripts/gcp/audit_cloud_run_iam.py
+      - "--project=$_PROJECT_ID"
+      - "--region=$_REGION"
+      - "--service=$_BACKEND_SERVICE"
+      - "--service=$_FRONTEND_SERVICE"
+
+  - id: backend-push
+    name: gcr.io/cloud-builders/docker
+    waitFor: ["cloud-run-iam-audit"]
+    args:
+      - push
+      - "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_BACKEND_IMAGE_NAME:$_IMAGE_TAG"
 
   - id: frontend-push
     name: gcr.io/cloud-builders/docker
-    waitFor: ["frontend-build"]
+    waitFor: ["cloud-run-iam-audit"]
     args:
-      [
-        "push",
-        "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_FRONTEND_IMAGE_NAME:$_IMAGE_TAG",
-      ]
+      - push
+      - "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_FRONTEND_IMAGE_NAME:$_IMAGE_TAG"
+
+  - id: backend-deploy
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: python3
+    waitFor: ["backend-push", "frontend-push"]
+    args:
+      - scripts/gcp/deploy_cloud_run.py
+      - "--project=$_PROJECT_ID"
+      - "--region=$_REGION"
+      - "--service=$_BACKEND_SERVICE"
+      - --
+      - "--project=$_PROJECT_ID"
+      - "--region=$_REGION"
+      - --platform=managed
+      - "--image=$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_BACKEND_IMAGE_NAME:$_IMAGE_TAG"
+      - "--min-instances=$_MIN_INSTANCES"
+      - "--set-env-vars=APP_ENV=$_APP_ENV,CORS_ALLOWED_ORIGINS=$_PUBLIC_SITE_URL,CONTACT_DELIVERY_MODE=$_CONTACT_DELIVERY_MODE,CONTACT_RECIPIENT_EMAIL=$_CONTACT_RECIPIENT_EMAIL,CONTACT_FROM_EMAIL=$_CONTACT_FROM_EMAIL,SMTP_HOST=$_SMTP_HOST,SMTP_PORT=$_SMTP_PORT,SMTP_USERNAME=$_SMTP_USERNAME,SMTP_USE_TLS=$_SMTP_USE_TLS,CONTACT_RATE_LIMIT_PER_MINUTE=$_CONTACT_RATE_LIMIT_PER_MINUTE"
+      - "--set-secrets=SMTP_PASSWORD=$_SMTP_PASSWORD_SECRET:latest"
 
   - id: frontend-deploy
     name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
-    entrypoint: gcloud
-    waitFor: ["frontend-push"]
+    entrypoint: python3
+    waitFor: ["backend-deploy"]
     args:
-      [
-        "run",
-        "deploy",
-        "$_FRONTEND_SERVICE",
-        "--project=$_PROJECT_ID",
-        "--region=$_REGION",
-        "--platform=managed",
-        "--image=$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_FRONTEND_IMAGE_NAME:$_IMAGE_TAG",
-        "--allow-unauthenticated",
-        "--min-instances=$_MIN_INSTANCES",
-      ]
+      - scripts/gcp/deploy_cloud_run.py
+      - "--project=$_PROJECT_ID"
+      - "--region=$_REGION"
+      - "--service=$_FRONTEND_SERVICE"
+      - --
+      - "--project=$_PROJECT_ID"
+      - "--region=$_REGION"
+      - --platform=managed
+      - "--image=$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_FRONTEND_IMAGE_NAME:$_IMAGE_TAG"
+      - "--min-instances=$_MIN_INSTANCES"
 
 images:
   - "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_BACKEND_IMAGE_NAME:$_IMAGE_TAG"

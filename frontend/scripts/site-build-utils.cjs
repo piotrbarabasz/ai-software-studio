@@ -5,7 +5,25 @@ const ts = require('typescript');
 
 const FRONTEND_ROOT = path.resolve(__dirname, '..');
 const PLACEHOLDER_PATTERN = /__PUBLIC_CONFIG_REQUIRED__|<[^>]+>|localhost|\.example(?:\.com)?/i;
-const PRODUCTION_SITE_ORIGIN = 'https://protolume.pl';
+
+function loadProductionContract() {
+  const candidates = [
+    path.join(FRONTEND_ROOT, 'production-contract.json'),
+    path.resolve(FRONTEND_ROOT, '../infra/gcp/production-contract.json'),
+  ];
+  const contractPath = candidates.find((candidate) => fs.existsSync(candidate));
+  if (!contractPath) {
+    throw new Error('Brak infra/gcp/production-contract.json dla produkcyjnego builda.');
+  }
+  const contract = JSON.parse(fs.readFileSync(contractPath, 'utf8'));
+  if (contract.schema_version !== 1 || typeof contract.invariants !== 'object') {
+    throw new Error('Nieobsługiwana wersja kontraktu produkcyjnego.');
+  }
+  return contract.invariants;
+}
+
+const PRODUCTION_CONTRACT = loadProductionContract();
+const PRODUCTION_SITE_ORIGIN = PRODUCTION_CONTRACT.PUBLIC_SITE_URL;
 
 function environmentPath(mode) {
   return path.join(
@@ -62,7 +80,7 @@ function validateProductionSiteConfig(environment) {
     }
   }
 
-  if (environment?.indexingEnabled !== false) {
+  if (String(environment?.indexingEnabled) !== PRODUCTION_CONTRACT.PUBLIC_SITE_INDEXING) {
     errors.push('indexingEnabled');
   }
 
@@ -147,6 +165,7 @@ function validateSeoArtifacts(environment, { production = false } = {}) {
 
 module.exports = {
   FRONTEND_ROOT,
+  PRODUCTION_CONTRACT,
   PRODUCTION_SITE_ORIGIN,
   generatedDirectory,
   loadEnvironment,

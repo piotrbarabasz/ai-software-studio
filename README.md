@@ -18,13 +18,14 @@ Run the frontend and backend independently.
 
 ```bash
 cd backend
-py -3.12 -m pip install -e ".[dev]"
+py -3.12 -m pip install -r requirements-dev.lock
+py -3.12 -m pip install --no-deps --no-build-isolation -e .
 uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
 ```bash
 cd frontend
-npm install
+npm ci
 npm start
 ```
 
@@ -67,7 +68,7 @@ Run the local deployment preflight first:
 ```powershell
 .\scripts\gcp\preflight.ps1 `
   -PublicLegalConfigPath "C:\bezpieczna-lokalizacja\public-legal.json" `
-  -ApiUrl "https://<BACKEND_ORIGIN>" `
-  -PublicSiteUrl "https://<PUBLIC_SITE_URL>" `
-  -EnableIndexing $true
+  -ApiUrl $env:BACKEND_URL `
+  -PublicSiteUrl "https://protolume.pl" `
+  -EnableIndexing $false
 ```

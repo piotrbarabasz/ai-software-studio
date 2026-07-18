@@ -10,11 +10,12 @@ WORKDIR /app
 
 RUN addgroup --system app && adduser --system --ingroup app app
 
-COPY pyproject.toml ./
-COPY app ./app
+COPY backend/pyproject.toml backend/requirements.lock ./
+COPY backend/app ./app
+COPY infra/gcp/production-contract.json ./app/core/production-contract.json
 
-RUN pip install --upgrade pip setuptools wheel \
-    && pip install .
+RUN pip install --requirement requirements.lock \
+    && pip install --no-deps --no-build-isolation .
 
 USER app
 

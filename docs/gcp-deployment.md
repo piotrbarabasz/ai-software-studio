@@ -70,7 +70,7 @@ Use `scripts/gcp/deploy-backend.ps1` or `infra/gcp/cloudbuild.backend.yaml`.
 Required runtime values:
 
 - `APP_ENV=production`
-- `CORS_ALLOWED_ORIGINS=https://<PUBLIC_SITE_URL>`
+- `CORS_ALLOWED_ORIGINS=https://protolume.pl`
 - `CONTACT_DELIVERY_MODE=email`
 - `CONTACT_RECIPIENT_EMAIL`
 - `CONTACT_FROM_EMAIL`
@@ -85,7 +85,7 @@ The backend must listen on Cloud Run `PORT` and expose `GET /health` plus the ex
 
 ## Frontend Deployment
 
-Use `scripts/gcp/deploy-frontend.ps1` or `infra/gcp/cloudbuild.frontend.yaml`. The script requires both `-ApiUrl` and `-PublicSiteUrl`; optionally pass `-EnableIndexing $true` only for production and `-PublicLegalConfigSecret` when the secret uses a non-default name.
+Use `scripts/gcp/deploy-frontend.ps1` or `infra/gcp/cloudbuild.frontend.yaml`. The script requires both `-ApiUrl` and `-PublicSiteUrl`; keep `-EnableIndexing $false` and pass `-PublicLegalConfigSecret` when the secret uses a non-default name.
 
 Pass the deployed backend URL as `API_URL` and the verified public frontend origin as `PUBLIC_SITE_URL`. The Docker build rejects a placeholder, `localhost`, an example domain, or an HTTP origin in production. `PUBLIC_SITE_INDEXING` defaults to `false` for staging and preview.
 
@@ -95,9 +95,9 @@ The production container serves prerendered Angular routes through Nginx on port
 
 ## CORS Update Order
 
-1. Establish the final frontend origin (or use the technical Cloud Run URL only for a test deployment).
-2. Deploy the backend with that exact origin in `CORS_ALLOWED_ORIGINS`.
-3. Build and deploy the frontend with the same origin in `PUBLIC_SITE_URL`.
+1. Keep the production origin fixed at `https://protolume.pl`; technical Cloud Run URLs are not valid production CORS origins.
+2. Build both images and pass the backend container smoke before deploying either service.
+3. Deploy the backend with that exact origin in `CORS_ALLOWED_ORIGINS`, then deploy the frontend with the same `PUBLIC_SITE_URL`.
 
 Production CORS must not use wildcard origins.
 
@@ -123,15 +123,13 @@ Run the local preflight script first:
 ```powershell
 .\scripts\gcp\preflight.ps1 `
   -PublicLegalConfigPath "C:\bezpieczna-lokalizacja\public-legal.json" `
-  -ApiUrl "https://<BACKEND_ORIGIN>" `
-  -PublicSiteUrl "https://<PUBLIC_SITE_URL>" `
-  -EnableIndexing $true
+  -ApiUrl $env:BACKEND_URL `
+  -PublicSiteUrl "https://protolume.pl" `
+  -EnableIndexing $false
 ```
 
 Then confirm the backend and frontend container smoke tests described in `docs/gcp-runbook.md`.
 
 ## Manual Image Tags
 
-Manual `gcloud builds submit` runs do not rely on `SHORT_SHA`.
-The manual Cloud Build files default `_IMAGE_TAG` to `manual-local`, so they remain usable even when no trigger metadata is present.
-If you want a reproducible manual tag, pass `_IMAGE_TAG` explicitly when invoking the build.
+Manual component submissions must pass `_IMAGE_TAG` explicitly as a 7-64 character lowercase hexadecimal commit ID. `manual-local` is rejected before build.

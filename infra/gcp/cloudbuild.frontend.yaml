@@ -1,65 +1,98 @@
+# Explicit manual bootstrap/component pipeline. It is not the routine production trigger.
 substitutions:
-  _PROJECT_ID: "<PROJECT_ID>"
-  _REGION: "europe-central2"
-  _ARTIFACT_REPO: "aisoftware-studio"
-  _SERVICE_NAME: "aisoftware-studio-web"
-  _IMAGE_NAME: "aisoftware-studio-web"
-  _IMAGE_TAG: "manual-local"
-  _MIN_INSTANCES: "0"
-  _API_URL: "https://<BACKEND_CLOUD_RUN_URL>"
-  _PUBLIC_SITE_URL: "https://protolume.pl"
-  _PUBLIC_SITE_INDEXING: "false"
-  _PUBLIC_LEGAL_CONFIG_SECRET: "aisoftware-studio-public-legal-config"
+  _PROJECT_ID: "<REQUIRED_PROJECT_ID>"
+  _REGION: "<REQUIRED_REGION>"
+  _ARTIFACT_REPO: "<REQUIRED_ARTIFACT_REPO>"
+  _SERVICE_NAME: "<REQUIRED_FRONTEND_SERVICE>"
+  _IMAGE_NAME: "<REQUIRED_FRONTEND_IMAGE_NAME>"
+  _IMAGE_TAG: "<REQUIRED_COMMIT_SHA>"
+  _MIN_INSTANCES: "<REQUIRED_INTEGER>"
+  _API_URL: "<REQUIRED_BACKEND_HTTPS_URL>"
+  _PUBLIC_SITE_URL: "<REQUIRED_PUBLIC_SITE_URL>"
+  _PUBLIC_SITE_INDEXING: "<REQUIRED_BOOLEAN>"
+  _PUBLIC_LEGAL_CONFIG_SECRET: "<REQUIRED_SECRET_NAME>"
 
 steps:
-  - id: frontend-public-legal-config
+  - id: manual-frontend-preflight
+    name: python:3.12-slim
+    entrypoint: python
+    env:
+      - "DEPLOY_PROJECT_ID=$_PROJECT_ID"
+      - "DEPLOY_REGION=$_REGION"
+      - "DEPLOY_ARTIFACT_REPO=$_ARTIFACT_REPO"
+      - "DEPLOY_FRONTEND_SERVICE=$_SERVICE_NAME"
+      - "DEPLOY_FRONTEND_IMAGE_NAME=$_IMAGE_NAME"
+      - "DEPLOY_BACKEND_URL=$_API_URL"
+      - "DEPLOY_PUBLIC_SITE_URL=$_PUBLIC_SITE_URL"
+      - "DEPLOY_PUBLIC_SITE_INDEXING=$_PUBLIC_SITE_INDEXING"
+      - "DEPLOY_PUBLIC_LEGAL_CONFIG_SECRET=$_PUBLIC_LEGAL_CONFIG_SECRET"
+      - "DEPLOY_MIN_INSTANCES=$_MIN_INSTANCES"
+      - "DEPLOY_IMAGE_TAG=$_IMAGE_TAG"
+    args: ["scripts/gcp/deployment_contract.py", "--scope", "frontend"]
+
+  - id: manual-frontend-checks
+    name: cypress/browsers:node20.11.1-chrome120-ff121
+    entrypoint: sh
+    waitFor: ["manual-frontend-preflight"]
+    args:
+      - -c
+      - >-
+        cd frontend &&
+        npm ci &&
+        npm run lint &&
+        npm run format:check &&
+        npm test
+
+  - id: manual-frontend-public-legal-config
     name: node:20-bookworm-slim
+    waitFor: ["manual-frontend-checks"]
     entrypoint: node
     secretEnv: ["PUBLIC_LEGAL_CONFIG_JSON"]
     args: ["frontend/scripts/write-build-legal-config.cjs"]
 
-  - name: gcr.io/cloud-builders/docker
-    waitFor: ["frontend-public-legal-config"]
+  - id: manual-frontend-build
+    name: gcr.io/cloud-builders/docker
+    waitFor: ["manual-frontend-public-legal-config"]
     env: ["DOCKER_BUILDKIT=1"]
     args:
-      [
-        "build",
-        "-f",
-        "frontend/Dockerfile",
-        "--secret",
-        "id=public_legal_config,src=frontend/.public-legal-config.json",
-        "--build-arg",
-        "API_URL=$_API_URL",
-        "--build-arg",
-        "PUBLIC_SITE_URL=$_PUBLIC_SITE_URL",
-        "--build-arg",
-        "PUBLIC_SITE_INDEXING=$_PUBLIC_SITE_INDEXING",
-        "-t",
-        "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_IMAGE_NAME:$_IMAGE_TAG",
-        "frontend",
-      ]
+      - build
+      - -f
+      - frontend/Dockerfile
+      - --secret
+      - id=public_legal_config,src=frontend/.public-legal-config.json
+      - --build-arg
+      - "API_URL=$_API_URL"
+      - --build-arg
+      - "PUBLIC_SITE_URL=$_PUBLIC_SITE_URL"
+      - --build-arg
+      - "PUBLIC_SITE_INDEXING=$_PUBLIC_SITE_INDEXING"
+      - -t
+      - "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_IMAGE_NAME:$_IMAGE_TAG"
+      - .
 
-  - name: gcr.io/cloud-builders/docker
+  - id: manual-frontend-push
+    name: gcr.io/cloud-builders/docker
+    waitFor: ["manual-frontend-build"]
     args:
-      [
-        "push",
-        "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_IMAGE_NAME:$_IMAGE_TAG",
-      ]
+      - push
+      - "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_IMAGE_NAME:$_IMAGE_TAG"
 
-  - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
-    entrypoint: gcloud
+  - id: manual-frontend-bootstrap-deploy
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: python3
+    waitFor: ["manual-frontend-push"]
     args:
-      [
-        "run",
-        "deploy",
-        "$_SERVICE_NAME",
-        "--project=$_PROJECT_ID",
-        "--region=$_REGION",
-        "--platform=managed",
-        "--image=$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_IMAGE_NAME:$_IMAGE_TAG",
-        "--allow-unauthenticated",
-        "--min-instances=$_MIN_INSTANCES",
-      ]
+      - scripts/gcp/deploy_cloud_run.py
+      - "--project=$_PROJECT_ID"
+      - "--region=$_REGION"
+      - "--service=$_SERVICE_NAME"
+      - --
+      - "--project=$_PROJECT_ID"
+      - "--region=$_REGION"
+      - --platform=managed
+      - "--image=$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_IMAGE_NAME:$_IMAGE_TAG"
+      - --allow-unauthenticated
+      - "--min-instances=$_MIN_INSTANCES"
 
 images:
   - "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_IMAGE_NAME:$_IMAGE_TAG"
