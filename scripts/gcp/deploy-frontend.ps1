@@ -41,7 +41,7 @@ if ([string]::IsNullOrWhiteSpace($ImageTag)) {
   }
 
   if ([string]::IsNullOrWhiteSpace($ImageTag)) {
-    $ImageTag = 'manual-local'
+    throw 'A commit-derived ImageTag is required; git could not resolve HEAD and manual-local is forbidden.'
   }
 }
 

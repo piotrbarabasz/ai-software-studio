@@ -1,4 +1,6 @@
+import json
 from functools import lru_cache
+from pathlib import Path
 
 from pydantic import EmailStr, Field, SecretStr, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -25,10 +27,12 @@ class Settings(BaseSettings):
 
     @model_validator(mode="after")
     def validate_production_cors(self) -> "Settings":
-        if self.app_env.strip().lower() == "production" and self.allowed_origins != [
-            "https://protolume.pl"
-        ]:
-            raise ValueError("Production CORS_ALLOWED_ORIGINS must be exactly https://protolume.pl")
+        if self.app_env.strip().lower() == "production":
+            expected_origin = _production_contract()["CORS_ALLOWED_ORIGINS"]
+            if self.allowed_origins != [expected_origin]:
+                raise ValueError(
+                    f"Production CORS_ALLOWED_ORIGINS must be exactly {expected_origin}"
+                )
         return self
 
     @property
@@ -39,3 +43,20 @@ class Settings(BaseSettings):
 @lru_cache
 def get_settings() -> Settings:
     return Settings()
+
+
+@lru_cache
+def _production_contract() -> dict[str, str]:
+    local_copy = Path(__file__).with_name("production-contract.json")
+    repository_copy = Path(__file__).resolve().parents[3] / "infra/gcp/production-contract.json"
+    contract_path = local_copy if local_copy.is_file() else repository_copy
+    try:
+        contract = json.loads(contract_path.read_text(encoding="utf-8"))
+        if contract["schema_version"] != 1:
+            raise ValueError("unsupported schema_version")
+        invariants = contract["invariants"]
+        if not isinstance(invariants, dict):
+            raise TypeError("invariants must be an object")
+        return {str(key): str(value) for key, value in invariants.items()}
+    except (OSError, json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
+        raise RuntimeError(f"Cannot load production deployment contract: {exc}") from exc

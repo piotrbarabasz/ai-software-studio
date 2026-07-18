@@ -4,14 +4,14 @@ Use this runbook after the first production deployment of AISoftware Studio.
 
 ## Release Checklist
 
-- Confirm the backend build passed.
-- Confirm the frontend build passed.
+- Confirm deployment contract preflight and its CLI tests passed.
+- Confirm backend Ruff, format, pytest, image build and real-container `/health` smoke passed.
+- Confirm frontend `npm ci`, lint, format, tests, legal checks and production image build passed.
 - Confirm `npm run validate:site:production` passed with the final HTTPS public origin and API URL.
 - Confirm `npm run validate:legal:production` and `npm run validate:artifact:production` passed with the same verified public privacy JSON.
-- Confirm no real secrets or project IDs were committed.
-- Confirm Cloud Build configs use placeholders and substitutions.
+- Confirm no real secrets were committed and secret inputs remain reference names.
 - Confirm Cloud Run min instances remain `0`.
-- Confirm the deployed backend URL is available for CORS.
+- Confirm CORS and the public site URL are both exactly `https://protolume.pl`.
 - Confirm the production trigger used `infra/gcp/cloudbuild.deploy.yaml`.
 - Confirm the PR validation trigger used `infra/gcp/cloudbuild.pr-checks.yaml` and did not deploy.
 
@@ -41,7 +41,7 @@ Use this runbook after the first production deployment of AISoftware Studio.
 ## Trigger Troubleshooting
 
 - Open the Cloud Build logs and confirm the trigger fired on the intended branch.
-- Confirm the production branch is `main`.
+- Confirm the production branch is `master`.
 - Confirm the temporary test branch `002-gcp-deployment` is disabled or deleted after testing.
 - Confirm the PR validation trigger points to `infra/gcp/cloudbuild.pr-checks.yaml` and does not deploy.
 - If a trigger misfires repeatedly, disable it in Cloud Console before changing the build config.
@@ -49,6 +49,7 @@ Use this runbook after the first production deployment of AISoftware Studio.
 ## Common Failures
 
 - Missing `SMTP_PASSWORD` secret binding
+- Trigger drift in `_PUBLIC_SITE_URL`, `_APP_ENV`, `_PUBLIC_SITE_INDEXING`, secret names, or `_IMAGE_TAG`
 - Wrong public frontend origin in `CORS_ALLOWED_ORIGINS` or `PUBLIC_SITE_URL`
 - Missing Cloud Build or Artifact Registry permissions
 - Missing required GCP APIs
@@ -64,7 +65,7 @@ Use this runbook after the first production deployment of AISoftware Studio.
 
 ## CORS Troubleshooting
 
-- Verify the backend `CORS_ALLOWED_ORIGINS` value matches the exact deployed frontend origin.
+- Verify the backend `CORS_ALLOWED_ORIGINS` is exactly `https://protolume.pl`; a technical `run.app` URL is never a production CORS origin.
 - Confirm the backend does not use wildcard origins in production.
 - Redeploy the backend after any frontend URL change.
 
@@ -87,7 +88,26 @@ If the deployment seems broken, re-run the local validation script and the conta
 ```powershell
 .\scripts\gcp\preflight.ps1 `
   -PublicLegalConfigPath "C:\bezpieczna-lokalizacja\public-legal.json" `
-  -ApiUrl "https://<BACKEND_ORIGIN>" `
-  -PublicSiteUrl "https://<PUBLIC_SITE_URL>" `
-  -EnableIndexing $true
+  -ApiUrl $env:BACKEND_URL `
+  -PublicSiteUrl "https://protolume.pl" `
+  -EnableIndexing $false
 ```
+
+Build and smoke the actual backend image from the repository root:
+
+```powershell
+docker build -f backend/Dockerfile -t aisoftware-studio-api:local .
+$env:DEPLOY_APP_ENV = 'production'
+$env:DEPLOY_CORS_ALLOWED_ORIGINS = 'https://protolume.pl'
+$env:DEPLOY_CONTACT_DELIVERY_MODE = 'email'
+$env:DEPLOY_CONTACT_RECIPIENT_EMAIL = 'kontakt@protolume.pl'
+$env:DEPLOY_CONTACT_FROM_EMAIL = 'formularz@protolume.pl'
+$env:DEPLOY_SMTP_HOST = 'smtp.protolume.pl'
+$env:DEPLOY_SMTP_PORT = '587'
+$env:DEPLOY_SMTP_USERNAME = 'formularz@protolume.pl'
+$env:DEPLOY_SMTP_USE_TLS = 'true'
+$env:DEPLOY_CONTACT_RATE_LIMIT_PER_MINUTE = '30'
+bash scripts/gcp/smoke-backend-image.sh aisoftware-studio-api:local
+```
+
+To reproduce the former startup failure, run the image with `APP_ENV=production` and `CORS_ALLOWED_ORIGINS` set to the old frontend `run.app` origin. The process must exit quickly with a `CORS_ALLOWED_ORIGINS` validation error. The smoke command above must instead reach `/health` with HTTP 200.

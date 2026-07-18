@@ -1,0 +1,3 @@
+# Build tooling is explicit so isolated Docker/CI builds do not fetch unbounded latest versions.
+setuptools==80.9.0
+wheel==0.45.1

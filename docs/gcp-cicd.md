@@ -1,145 +1,77 @@
 # GCP CI/CD
 
-This guide covers GitHub-to-GCP continuous deployment for AISoftware Studio using Cloud Build and Cloud Run.
+The production path is the `deploy-prod` Cloud Build trigger on the repository's actual default branch, `master`, using `infra/gcp/cloudbuild.deploy.yaml`. The versioned source of non-secret production invariants is `infra/gcp/production-contract.json`; YAML defaults are intentionally invalid so a trigger with missing substitutions stops at the first preflight step.
 
-## What This Uses
+## Required trigger configuration
 
-- Production branch: `main`
-- Temporary trigger test branch: `002-gcp-deployment`
-- Trigger model: Cloud Build triggers connected to GitHub
-- Production pipeline: `infra/gcp/cloudbuild.deploy.yaml`
-- PR validation: `infra/gcp/cloudbuild.pr-checks.yaml`
-- Manual deployment compatibility: `infra/gcp/cloudbuild.backend.yaml` and `infra/gcp/cloudbuild.frontend.yaml`
-
-GitHub Actions are not part of this feature.
-
-## One-Time GitHub Connection
-
-Before you create any trigger, connect the GitHub repository to Cloud Build in the Google Cloud Console.
-
-Recommended path:
-
-1. Open Google Cloud Console.
-2. Go to Cloud Build, then Triggers.
-3. Select the project `ai-software-studio-501918`.
-4. Click Connect Repository.
-5. Choose GitHub and complete the authorization flow.
-6. Select the repository that contains this codebase.
-7. Choose region `europe-central2`.
-
-Use the console for this step because the GitHub authorization is interactive.
-
-Optional helper scripts can be used only after the repository is already connected.
-
-## Production Trigger
-
-Create a Cloud Build trigger with:
-
-- Name: `deploy-prod`
 - Event: push
-- Branch regex: `^main$`
-- Config file: `infra/gcp/cloudbuild.deploy.yaml`
+- Branch regex: `^master$`
+- Config: `infra/gcp/cloudbuild.deploy.yaml`
+- Image tag: `_IMAGE_TAG=$SHORT_SHA` (the literal built-in reference, resolved by Cloud Build)
 
-Required substitutions for the trigger:
+These substitutions must match contract v1 exactly:
 
-- `_PROJECT_ID=ai-software-studio-501918`
-- `_REGION=europe-central2`
-- `_ARTIFACT_REPO=aisoftware-studio`
-- `_BACKEND_SERVICE=aisoftware-studio-api`
-- `_FRONTEND_SERVICE=aisoftware-studio-web`
-- `_BACKEND_IMAGE_NAME=aisoftware-studio-api`
-- `_FRONTEND_IMAGE_NAME=aisoftware-studio-web`
-- `_BACKEND_URL=https://<BACKEND_CLOUD_RUN_URL>`
-- `_PUBLIC_SITE_URL=https://protolume.pl`
-- `_PUBLIC_SITE_INDEXING=false`
-- `_PUBLIC_LEGAL_CONFIG_SECRET=aisoftware-studio-public-legal-config`
-- `_SMTP_PASSWORD_SECRET=aisoftware-studio-smtp-password`
-- `_CONTACT_RATE_LIMIT_PER_MINUTE=30`
-- `_CONTACT_RECIPIENT_EMAIL=<placeholder>`
-- `_CONTACT_FROM_EMAIL=<placeholder>`
-- `_SMTP_HOST=<placeholder>`
-- `_SMTP_PORT=<placeholder>`
-- `_SMTP_USERNAME=<placeholder>`
-- `_SMTP_USE_TLS=<placeholder>`
-- `_CONTACT_DELIVERY_MODE=email`
-- `_APP_ENV=production`
-- `_MIN_INSTANCES=0`
-- `_IMAGE_TAG=$SHORT_SHA`
+```text
+_PROJECT_ID=ai-software-studio-501918
+_REGION=europe-central2
+_ARTIFACT_REPO=aisoftware-studio
+_BACKEND_SERVICE=aisoftware-studio-api
+_FRONTEND_SERVICE=aisoftware-studio-web
+_BACKEND_IMAGE_NAME=aisoftware-studio-api
+_FRONTEND_IMAGE_NAME=aisoftware-studio-web
+_PUBLIC_SITE_URL=https://protolume.pl
+_PUBLIC_SITE_INDEXING=false
+_PUBLIC_LEGAL_CONFIG_SECRET=aisoftware-studio-public-legal-config
+_SMTP_PASSWORD_SECRET=aisoftware-studio-smtp-password
+_CONTACT_DELIVERY_MODE=email
+_APP_ENV=production
+_MIN_INSTANCES=0
+_IMAGE_TAG=$SHORT_SHA
+```
 
-The production trigger must deploy the backend first and the frontend second. `_PUBLIC_SITE_URL=https://protolume.pl` is the single production frontend origin: it is passed to the frontend Docker build as `PUBLIC_SITE_URL` and to the backend as `CORS_ALLOWED_ORIGINS`. Keep `_PUBLIC_SITE_INDEXING=false` until the explicit final indexing stage. The `www` and `.com` variants redirect only and are intentionally excluded from CORS.
+The trigger must additionally contain real operational values for `_BACKEND_URL`, `_CONTACT_RECIPIENT_EMAIL`, `_CONTACT_FROM_EMAIL`, `_SMTP_HOST`, `_SMTP_PORT`, `_SMTP_USERNAME`, `_SMTP_USE_TLS`, and `_CONTACT_RATE_LIMIT_PER_MINUTE`. They must satisfy the preflight diagnostics: HTTPS backend URL; non-example e-mails and SMTP hostname; port `1..65535`; boolean `true`/`false`; rate limit `1..120`. Do not store `SMTP_PASSWORD` itself in substitutions.
 
-Before enabling that trigger, create a verified JSON version described in [`privacy-configuration.md`](privacy-configuration.md). The frontend build rejects missing values, test data, placeholders and invalid e-mail, then scans the prerendered artifact. PR validation uses only the explicitly separated `config/local-test` file and never deploys it.
+## Read-only drift audit
 
-For the manual domain mapping, certificate, technical URL policy and canonical verification, follow [public-origin-deployment.md](public-origin-deployment.md).
+Run either command; the historical `create-triggers` name is retained for compatibility, but it no longer creates or changes anything:
 
-## Temporary Test Trigger
+```powershell
+.\scripts\gcp\create-triggers.ps1 -ProjectId ai-software-studio-501918
+```
 
-Use a temporary push trigger to test the Cloud Build connection before enabling production.
+```bash
+./scripts/gcp/create-triggers.sh --project-id ai-software-studio-501918
+```
 
-- Name: `deploy-test-002-gcp-deployment`
-- Branch regex: `^002-gcp-deployment$`
-- Config file: `infra/gcp/cloudbuild.deploy.yaml`
+The audit calls the documented `gcloud builds triggers describe` command, compares the branch, filename, fixed substitutions and formats of operational values, and omits actual secret-reference values from errors. There is deliberately no automated `--apply` path because the repository may be connected through different Cloud Build provider generations.
 
-Disable or delete this trigger after the connection test succeeds.
+To repair drift, edit `deploy-prod` in Cloud Console, set the branch/config/substitutions listed above, save, then rerun the audit. This session must not perform that operation.
 
-## PR Validation Trigger
+## Pipeline gates and order
 
-Create a pull request trigger with:
+The combined pipeline performs:
 
-- Name: `pr-checks-main`
-- Base branch regex: `^main$`
-- Config file: `infra/gcp/cloudbuild.pr-checks.yaml`
-- Deployment: none
+1. resolved-value deployment contract preflight;
+2. contract tests, backend Ruff/format/pytest, and frontend `npm ci`/lint/format/tests;
+3. backend and frontend production Docker builds, including legal-config validation;
+4. the backend image's real `CMD` plus HTTP `/health` smoke test;
+5. read-only verification that both existing services grant `roles/run.invoker` to `allUsers`;
+6. both image pushes;
+7. backend deploy, then frontend deploy.
 
-This trigger runs validation only. It must not deploy to Cloud Run.
+Both images and the legal frontend artifact therefore finish before the first service is deployed. A failed deploy retains the original `gcloud` status and attempts to print the newest Ready=False revision plus application logs.
 
-## Manual Deployments
+## IAM bootstrap versus routine deployment
 
-The manual Cloud Build configs remain valid:
+Routine deployment does not mutate IAM. Existing services must already grant `roles/run.invoker` to `allUsers`; otherwise the pipeline stops with the exact bootstrap command. This separates application startup failures from IAM warnings.
 
-- `infra/gcp/cloudbuild.backend.yaml`
-- `infra/gcp/cloudbuild.frontend.yaml`
+For a new installation, `cloudbuild.backend.yaml` and `cloudbuild.frontend.yaml` are explicit manual bootstrap/component pipelines. They run component preflight and tests, require a commit-derived image tag, and retain `--allow-unauthenticated` so the initial services are not accidentally private. After bootstrap, use only the combined routine trigger and its IAM audit.
 
-They default `_IMAGE_TAG` to `manual-local`, so `gcloud builds submit` does not fail when `SHORT_SHA` is unavailable.
-If you want a reproducible manual tag, pass one explicitly through `_IMAGE_TAG`.
+## Secrets and permissions
 
-## Required IAM
+- `_SMTP_PASSWORD_SECRET` and `_PUBLIC_LEGAL_CONFIG_SECRET` are names only.
+- The backend runtime identity needs Secret Manager access to the SMTP password.
+- The Cloud Build identity needs Secret Manager access to the public legal JSON because it is validated and prerendered during the frontend build.
+- Cloud Build also needs Artifact Registry write, Cloud Run deploy, service-account use, IAM-policy read, revision read, and log-entry read permissions. Routine deployment does not need to set service IAM policy.
 
-Cloud Build service account:
-
-- Cloud Run Admin
-- Artifact Registry Writer
-- Service Account User
-
-Runtime Cloud Run service account:
-
-- Secret Manager Secret Accessor on `aisoftware-studio-smtp-password`
-
-Cloud Build service account also needs Secret Manager Secret Accessor on `_PUBLIC_LEGAL_CONFIG_SECRET`, because it prepares the public legal configuration before the frontend Docker build. Granting this role only to the frontend Cloud Run runtime account is insufficient; the static page is already prerendered before Cloud Run starts.
-
-## Verification
-
-1. Push a commit to `main` and confirm the `deploy-prod` trigger starts.
-2. Open the Cloud Build logs and verify backend build, backend deploy, frontend build, frontend deploy, in that order.
-3. Confirm both Cloud Run services are reachable at their URLs.
-4. Confirm the backend uses the frontend origin in `CORS_ALLOWED_ORIGINS`.
-
-## Rollback
-
-Rollback uses the last known-good Cloud Run revision or image tag.
-
-1. Open the service in Cloud Run.
-2. Deploy the previous revision or image tag.
-3. Re-check the backend health endpoint and the frontend URL.
-
-## Disable Or Delete Triggers
-
-If a trigger should stop running, disable it in Cloud Console or delete it from the Triggers page.
-
-Temporary test triggers should be removed after validation.
-
-## Notes
-
-- Keep secret values out of source control.
-- Keep `SMTP_PASSWORD` in Secret Manager only.
-- Do not add Terraform, GitHub Actions, databases, auth, CMS, admin panels, payment, queues, or persistent storage.
+No deployment, trigger update, IAM mutation, secret change, commit, or push is performed by these repository checks.

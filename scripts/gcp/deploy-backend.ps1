@@ -16,15 +16,19 @@ param(
 
   [string]$ContactDeliveryMode = 'email',
 
-  [string]$ContactRecipientEmail = 'owner@example.com',
+  [Parameter(Mandatory = $true)]
+  [string]$ContactRecipientEmail,
 
-  [string]$ContactFromEmail = 'noreply@example.com',
+  [Parameter(Mandatory = $true)]
+  [string]$ContactFromEmail,
 
-  [string]$SmtpHost = 'smtp.example.com',
+  [Parameter(Mandatory = $true)]
+  [string]$SmtpHost,
 
   [string]$SmtpPort = '587',
 
-  [string]$SmtpUsername = 'smtp-user@example.com',
+  [Parameter(Mandatory = $true)]
+  [string]$SmtpUsername,
 
   [string]$SmtpUseTls = 'true',
 
@@ -55,7 +59,7 @@ if ([string]::IsNullOrWhiteSpace($ImageTag)) {
   }
 
   if ([string]::IsNullOrWhiteSpace($ImageTag)) {
-    $ImageTag = 'manual-local'
+    throw 'A commit-derived ImageTag is required; git could not resolve HEAD and manual-local is forbidden.'
   }
 }
 
@@ -67,6 +71,7 @@ $substitutions = @(
   "_IMAGE_NAME=aisoftware-studio-api",
   "_MIN_INSTANCES=0",
   "_APP_ENV=$AppEnv",
+  "_PUBLIC_SITE_URL=$PublicSiteUrl",
   "_CORS_ALLOWED_ORIGINS=$PublicSiteUrl",
   "_CONTACT_DELIVERY_MODE=$ContactDeliveryMode",
   "_CONTACT_RECIPIENT_EMAIL=$ContactRecipientEmail",

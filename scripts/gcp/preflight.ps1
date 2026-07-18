@@ -34,6 +34,15 @@ $backendRoot = (Resolve-Path -LiteralPath $BackendPath).Path
 $frontendRoot = (Resolve-Path -LiteralPath $FrontendPath).Path
 $legalConfigPath = (Resolve-Path -LiteralPath $PublicLegalConfigPath).Path
 
+Invoke-Checked -Label 'Deployment contract CLI tests' -ScriptBlock {
+  Push-Location (Split-Path $backendRoot -Parent)
+  try {
+    & py -3.12 -m unittest discover -s infra/gcp/tests -p 'test_deployment*.py'
+  } finally {
+    Pop-Location
+  }
+}
+
 Invoke-Checked -Label 'Backend: ruff check, ruff format --check, pytest' -ScriptBlock {
   Push-Location $backendRoot
   try {
@@ -53,6 +62,9 @@ Invoke-Checked -Label 'Backend: ruff check, ruff format --check, pytest' -Script
 Invoke-Checked -Label 'Frontend: lint, format check, tests, build' -ScriptBlock {
   Push-Location $frontendRoot
   try {
+    & npm ci
+    if ($LASTEXITCODE -ne 0) { throw 'frontend npm ci failed' }
+
     & npm run lint
     if ($LASTEXITCODE -ne 0) { throw 'frontend npm run lint failed' }
 

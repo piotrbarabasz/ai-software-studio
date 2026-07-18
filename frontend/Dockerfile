@@ -7,10 +7,11 @@ ARG PUBLIC_SITE_INDEXING=false
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY frontend/package*.json ./
 RUN npm ci
 
-COPY . .
+COPY frontend/ .
+COPY infra/gcp/production-contract.json ./production-contract.json
 
 RUN --mount=type=secret,id=public_legal_config,required=true \
     API_URL="$API_URL" PUBLIC_SITE_URL="$PUBLIC_SITE_URL" \
@@ -19,9 +20,9 @@ RUN --mount=type=secret,id=public_legal_config,required=true \
 
 FROM nginx:1.27-alpine
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/generated/nginx-security-headers.conf /etc/nginx/security-headers.conf
-COPY docker-entrypoint.d/40-validate-legal-artifact.sh /docker-entrypoint.d/40-validate-legal-artifact.sh
+COPY frontend/docker-entrypoint.d/40-validate-legal-artifact.sh /docker-entrypoint.d/40-validate-legal-artifact.sh
 
 RUN chmod 755 /docker-entrypoint.d/40-validate-legal-artifact.sh && nginx -t
 
