@@ -7,7 +7,7 @@ substitutions:
   _IMAGE_TAG: "manual-local"
   _MIN_INSTANCES: "0"
   _API_URL: "https://<BACKEND_CLOUD_RUN_URL>"
-  _PUBLIC_SITE_URL: "https://<PUBLIC_SITE_URL>"
+  _PUBLIC_SITE_URL: "https://protolume.pl"
   _PUBLIC_SITE_INDEXING: "false"
   _PUBLIC_LEGAL_CONFIG_SECRET: "aisoftware-studio-public-legal-config"
 

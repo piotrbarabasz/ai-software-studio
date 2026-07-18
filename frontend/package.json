@@ -23,7 +23,7 @@
     "test:legal-config": "node --test scripts/validate-public-legal-config.test.cjs scripts/write-production-legal-config.test.cjs scripts/validate-production-artifact.test.cjs",
     "validate:artifact:production": "node scripts/validate-production-artifact.cjs",
     "validate:static-routes": "node scripts/validate-static-routes.cjs",
-    "test:site-build": "node --test scripts/site-build-utils.test.cjs scripts/generate-nginx-security-headers.test.cjs scripts/validate-site-artifact.test.cjs scripts/write-production-environment.test.cjs",
+    "test:site-build": "node --test scripts/cloudbuild-config.test.cjs scripts/site-build-utils.test.cjs scripts/generate-nginx-security-headers.test.cjs scripts/validate-site-artifact.test.cjs scripts/write-production-environment.test.cjs",
     "test": "npm run prepare:legal:local-test && npm run validate:static-routes && npm run test:legal-config && npm run test:site-build && ng test --watch=false --browsers=ChromeHeadless",
     "lint": "eslint \"src/**/*.ts\"",
     "format": "prettier --write \"src/**/*.{ts,html,scss,json}\" \"scripts/**/*.{cjs,mjs}\"",

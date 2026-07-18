@@ -32,7 +32,7 @@ publicSiteUrl=http://localhost:4200
 indexingEnabled=false
 ```
 
-Production Docker builds receive `API_URL`, `PUBLIC_SITE_URL` and `PUBLIC_SITE_INDEXING` as build arguments. The committed production environment deliberately contains placeholders; `npm run build` rejects placeholders, local origins, example domains and non-HTTPS values before Angular compiles. The same `PUBLIC_SITE_URL` generates canonical URLs, Open Graph URLs, JSON-LD, `robots.txt` and `sitemap.xml`. Indexing defaults to `false`; set it to `true` only for the verified production domain.
+Production Docker builds receive `API_URL`, `PUBLIC_SITE_URL` and `PUBLIC_SITE_INDEXING` as build arguments. The committed production environment deliberately contains placeholders; `npm run build` requires `PUBLIC_SITE_URL=https://protolume.pl`, rejects non-HTTPS or placeholder API URLs, and requires indexing to remain `false` at this migration stage. The same public origin generates canonical URLs, Open Graph URLs, JSON-LD, `robots.txt` and `sitemap.xml`; Nginx and HTML remain `noindex, follow`. `API_URL` may remain a technical Cloud Run URL.
 
 See [`../docs/public-origin-deployment.md`](../docs/public-origin-deployment.md) for the custom-domain, CORS and post-deployment checks.
 See [`../docs/frontend-hosting.md`](../docs/frontend-hosting.md) for gzip, cache, security headers, CSP staging and container smoke tests.

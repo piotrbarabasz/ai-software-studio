@@ -2,6 +2,7 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const {
+  PRODUCTION_SITE_ORIGIN,
   publicPrerenderRoutes,
   validateProductionSiteConfig,
   validateSeoArtifacts,
@@ -10,9 +11,9 @@ const {
 
 const configuredEnvironment = {
   production: true,
-  apiUrl: 'https://www.iana.org',
-  publicSiteUrl: 'https://www.iana.org',
-  indexingEnabled: true,
+  apiUrl: 'https://aisoftware-studio-api-technical.run.app',
+  publicSiteUrl: PRODUCTION_SITE_ORIGIN,
+  indexingEnabled: false,
 };
 
 test('rejects placeholder and localhost production origins', () => {
@@ -27,14 +28,40 @@ test('rejects placeholder and localhost production origins', () => {
   );
 });
 
-test('accepts an HTTPS public origin and API URL without placeholders', () => {
+test('accepts only the Protolume production origin with noindex and a technical API URL', () => {
   assert.deepEqual(validateProductionSiteConfig(configuredEnvironment), []);
+});
+
+test('rejects run.app, redirect-only variants and enabled indexing as production config', () => {
+  for (const publicSiteUrl of [
+    'https://aisoftware-studio-web.run.app',
+    'https://www.protolume.pl',
+    'https://protolume.com',
+    'https://www.protolume.com',
+    'https://untrusted.invalid',
+  ]) {
+    assert.ok(
+      validateProductionSiteConfig({ ...configuredEnvironment, publicSiteUrl }).includes(
+        'publicSiteUrl',
+      ),
+    );
+  }
+
+  assert.deepEqual(
+    validateProductionSiteConfig({ ...configuredEnvironment, indexingEnabled: true }),
+    ['indexingEnabled'],
+  );
 });
 
 test('generates sitemap and robots from every non-404 prerender route', () => {
   writeSeoArtifacts(configuredEnvironment);
 
   assert.deepEqual(validateSeoArtifacts(configuredEnvironment, { production: true }), []);
+  const sitemap = require('node:fs').readFileSync('generated/sitemap.xml', 'utf8');
+  const robots = require('node:fs').readFileSync('generated/robots.txt', 'utf8');
+  assert.match(sitemap, /<loc>https:\/\/protolume\.pl<\/loc>/);
+  assert.match(sitemap, /<loc>https:\/\/protolume\.pl\/kontakt<\/loc>/);
+  assert.match(robots, /^Sitemap: https:\/\/protolume\.pl\/sitemap\.xml$/m);
   assert.deepEqual(publicPrerenderRoutes(), [
     '/',
     '/demo-ai',

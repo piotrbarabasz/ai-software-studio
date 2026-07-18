@@ -1,6 +1,6 @@
 from functools import lru_cache
 
-from pydantic import EmailStr, Field, SecretStr
+from pydantic import EmailStr, Field, SecretStr, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -22,6 +22,14 @@ class Settings(BaseSettings):
         env_file_encoding="utf-8",
         extra="ignore",
     )
+
+    @model_validator(mode="after")
+    def validate_production_cors(self) -> "Settings":
+        if self.app_env.strip().lower() == "production" and self.allowed_origins != [
+            "https://protolume.pl"
+        ]:
+            raise ValueError("Production CORS_ALLOWED_ORIGINS must be exactly https://protolume.pl")
+        return self
 
     @property
     def allowed_origins(self) -> list[str]:

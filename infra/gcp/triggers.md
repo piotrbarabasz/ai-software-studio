@@ -25,8 +25,8 @@ Use these substitutions:
 - `_BACKEND_IMAGE_NAME=aisoftware-studio-api`
 - `_FRONTEND_IMAGE_NAME=aisoftware-studio-web`
 - `_BACKEND_URL=https://<BACKEND_CLOUD_RUN_URL>`
-- `_PUBLIC_SITE_URL=https://<PUBLIC_SITE_URL>`
-- `_PUBLIC_SITE_INDEXING=true`
+- `_PUBLIC_SITE_URL=https://protolume.pl`
+- `_PUBLIC_SITE_INDEXING=false`
 - `_PUBLIC_LEGAL_CONFIG_SECRET=aisoftware-studio-public-legal-config`
 - `_SMTP_PASSWORD_SECRET=aisoftware-studio-smtp-password`
 - `_CONTACT_RATE_LIMIT_PER_MINUTE=30`
@@ -87,6 +87,8 @@ Cloud Build service account also needs Secret Manager Secret Accessor on `_PUBLI
 ## Operator Notes
 
 - Use Cloud Build logs to verify the trigger fired and the deploy steps ran in order.
-- Use the final public origin to verify the frontend, canonical URL, sitemap and robots; use the backend URL for health checks.
+- Keep `https://protolume.pl` as the only public production origin. The `www` and `.com` variants only redirect and must not be added to CORS.
+- Keep indexing disabled until the explicit final migration stage. Verify `noindex, follow` in both HTML and `X-Robots-Tag`.
+- Use `https://protolume.pl` to verify the frontend, canonical URL, sitemap and robots; use the backend URL for health checks.
 - Disable or delete triggers when they are no longer needed.
 - Roll back by redeploying the previous known-good revision or image tag.
