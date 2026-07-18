@@ -8,7 +8,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 
-import { budgetRangeOptions, projectTypeOptions } from '../../core/content/contact-options.pl';
+import {
+  budgetRangeOptions,
+  projectTypeFromQuery,
+  projectTypeOptions,
+  type VisibleProjectType,
+} from '../../core/content/contact-options.pl';
 import { siteContent } from '../../core/content/site.pl';
 import type { ContactPageContent } from '../../core/content/site-content.types';
 import { ContactApiService } from '../../services/contact-api.service';
@@ -82,8 +87,8 @@ export class ContactFormComponent implements OnInit {
     }
 
     this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
-      const requestedProjectType = params.get('projectType');
-      if (!this.form.controls.projectType.dirty && this.isProjectType(requestedProjectType)) {
+      const requestedProjectType = projectTypeFromQuery(params.get('projectType'));
+      if (!this.form.controls.projectType.dirty && requestedProjectType !== null) {
         this.form.controls.projectType.setValue(requestedProjectType, { emitEvent: false });
       }
     });
@@ -160,8 +165,8 @@ export class ContactFormComponent implements OnInit {
     this.submissionSummary = undefined;
   }
 
-  private isProjectType(value: string | null): value is ProjectType {
-    return value !== null && projectTypeOptions.some((option) => option.value === value);
+  private isVisibleProjectType(value: string): value is VisibleProjectType {
+    return projectTypeOptions.some((option) => option.value === value);
   }
 
   private isBudgetRange(value: string): value is BudgetRange {
@@ -174,7 +179,7 @@ export class ContactFormComponent implements OnInit {
       name: raw.name.trim(),
       email: raw.email.trim(),
       company: raw.company.trim() || null,
-      projectType: this.isProjectType(raw.projectType) ? raw.projectType : 'other',
+      projectType: this.isVisibleProjectType(raw.projectType) ? raw.projectType : 'other',
       budgetRange: this.isBudgetRange(raw.budgetRange) ? raw.budgetRange : 'not_sure',
       message: raw.message.trim(),
       consent: true,

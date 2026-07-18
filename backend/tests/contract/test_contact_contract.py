@@ -2,6 +2,7 @@ import re
 import time
 from pathlib import Path
 
+import pytest
 from app.core.brand import public_brand
 from app.core.config import Settings
 from app.main import create_app
@@ -33,6 +34,14 @@ EXPECTED_PROJECT_TYPES = {
     "mvp_prototype",
     "other",
 }
+VISIBLE_PROJECT_TYPES = {
+    "mvp_prototype",
+    "custom_web_app",
+    "backend_api",
+    "business_process_automation",
+    "rag_chatbot_demo",
+    "other",
+}
 
 
 def _frontend_contact_option_values() -> set[str]:
@@ -61,13 +70,27 @@ def test_contact_accepts_valid_payload(
     assert response.json()["status"] == "accepted"
 
 
-def test_contact_accepts_productized_project_type(
+def test_contact_accepts_legacy_project_type(
     client: TestClient,
     valid_contact_payload: dict[str, object],
 ) -> None:
     payload = {**valid_contact_payload, "projectType": "voice_agent_demo"}
 
     response = client.post("/api/contact", json=payload)
+
+    assert response.status_code == 202
+    assert response.json()["status"] == "accepted"
+
+
+@pytest.mark.parametrize("project_type", sorted(VISIBLE_PROJECT_TYPES))
+def test_contact_accepts_every_visible_project_type(
+    client: TestClient,
+    valid_contact_payload: dict[str, object],
+    project_type: str,
+) -> None:
+    response = client.post(
+        "/api/contact", json={**valid_contact_payload, "projectType": project_type}
+    )
 
     assert response.status_code == 202
     assert response.json()["status"] == "accepted"
@@ -119,11 +142,17 @@ def test_contact_rejects_unknown_project_type(
     assert "live_whatsapp_runtime" not in response.text
 
 
-def test_project_type_values_do_not_drift_between_frontend_and_backend() -> None:
+def test_visible_project_types_are_a_supported_subset_of_the_api_contract() -> None:
     backend_values = {project_type.value for project_type in ProjectType}
 
     assert backend_values == EXPECTED_PROJECT_TYPES
-    assert _frontend_contact_option_values() == backend_values
+    assert _frontend_contact_option_values() == VISIBLE_PROJECT_TYPES
+    assert _frontend_contact_option_values() <= backend_values
+
+
+def test_frontend_api_type_preserves_all_backend_project_types() -> None:
+    backend_values = {project_type.value for project_type in ProjectType}
+
     assert _frontend_project_type_union_values() == backend_values
 
 

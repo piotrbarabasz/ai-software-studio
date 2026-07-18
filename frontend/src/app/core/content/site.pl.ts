@@ -706,7 +706,7 @@ export const siteContent = {
       contactCta: {
         label: 'Omów podobne demo',
         path: '/kontakt',
-        queryParams: { projectType: 'ai_automation' },
+        queryParams: { projectType: 'business_process_automation' },
       },
       scenarios: [
         {
@@ -793,7 +793,11 @@ export const siteContent = {
       ],
       demoCta: { label: 'Uruchom demo', path: '/demo-ai' },
       developmentCta: { label: 'Sprawdź zasady pierwszego etapu', path: '/development' },
-      contactCta: { label: 'Opisz problem bez zobowiązania', path: '/kontakt' },
+      contactCta: {
+        label: 'Opisz problem bez zobowiązania',
+        path: '/kontakt',
+        queryParams: { projectType: 'other' },
+      },
       repositoryLink: {
         label: 'Przejrzyj publiczny kod',
         url: publicBrand.links.sourceRepository.url,

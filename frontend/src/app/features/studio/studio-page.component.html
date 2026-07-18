@@ -155,9 +155,12 @@
       <a class="secondary-action" [routerLink]="content.verification.developmentCta.path">{{
         content.verification.developmentCta.label
       }}</a>
-      <a class="primary-action" [routerLink]="content.verification.contactCta.path">{{
-        content.verification.contactCta.label
-      }}</a>
+      <a
+        class="primary-action"
+        [routerLink]="content.verification.contactCta.path"
+        [queryParams]="content.verification.contactCta.queryParams"
+        >{{ content.verification.contactCta.label }}</a
+      >
     </div>
   </section>
 

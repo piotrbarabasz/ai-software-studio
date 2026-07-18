@@ -3,7 +3,7 @@ import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { BehaviorSubject, of, Subject, throwError } from 'rxjs';
 
-import { projectTypeOptions } from '../../core/content/contact-options.pl';
+import { projectTypeFromQuery, projectTypeOptions } from '../../core/content/contact-options.pl';
 import { ContactApiService } from '../../services/contact-api.service';
 import { ContactFormComponent } from './contact-form.component';
 
@@ -59,7 +59,7 @@ describe('ContactFormComponent', () => {
     expect(fixture.nativeElement.ownerDocument.activeElement).toBe(summary);
   }));
 
-  it('preselects a product type from the contact route query param without changing the payload shape', () => {
+  it('preselects a visible category from the contact route query param without changing the payload shape', () => {
     const fixture = TestBed.createComponent(ContactFormComponent);
     fixture.detectChanges();
 
@@ -100,13 +100,21 @@ describe('ContactFormComponent', () => {
     expect(fixture.componentInstance.form.controls.projectType.value).toBe('mvp_prototype');
   });
 
-  it('preselects every project type used by public CTA links', () => {
-    for (const option of projectTypeOptions) {
-      projectTypeParams$.next(convertToParamMap({ projectType: option.value }));
+  it('preselects every category used by public CTA links', () => {
+    const ctaProjectTypes = [
+      'mvp_prototype',
+      'custom_web_app',
+      'backend_api',
+      'business_process_automation',
+      'other',
+    ];
+
+    for (const projectType of ctaProjectTypes) {
+      projectTypeParams$.next(convertToParamMap({ projectType }));
       const fixture = TestBed.createComponent(ContactFormComponent);
       fixture.detectChanges();
 
-      expect(fixture.componentInstance.form.controls.projectType.value).toBe(option.value);
+      expect(fixture.componentInstance.form.controls.projectType.value).toBe(projectType);
       fixture.destroy();
     }
   });
@@ -118,12 +126,10 @@ describe('ContactFormComponent', () => {
     fixture.detectChanges();
 
     expect(fixture.componentInstance.form.controls.projectType.value).toBe('custom_web_app');
-    expect(fixture.nativeElement.textContent).toContain(
-      'Development: aplikacja, API albo integracja',
-    );
+    expect(fixture.nativeElement.textContent).toContain('Aplikacja albo panel');
   });
 
-  it('preselects automation and API categories from allowlisted CTA query params', () => {
+  it('preselects automation and API categories from CTA query params', () => {
     projectTypeParams$.next(convertToParamMap({ projectType: 'business_process_automation' }));
     const fixture = TestBed.createComponent(ContactFormComponent);
     fixture.detectChanges();
@@ -136,13 +142,34 @@ describe('ContactFormComponent', () => {
     expect(fixture.componentInstance.form.controls.projectType.value).toBe('backend_api');
   });
 
-  it('falls back to the default state for an invalid contact query param', () => {
+  it('maps legacy and unsupported contact query params to visible categories', () => {
+    const legacyMappings = {
+      ai_automation: 'business_process_automation',
+      email_automation: 'business_process_automation',
+      voice_agent_demo: 'rag_chatbot_demo',
+      whatsapp_agent_management: 'rag_chatbot_demo',
+      agent_management_panel: 'custom_web_app',
+      dashboard_internal_tool: 'custom_web_app',
+      external_integration: 'backend_api',
+      website_seo: 'other',
+    };
+
+    for (const [legacyProjectType, visibleProjectType] of Object.entries(legacyMappings)) {
+      projectTypeParams$.next(convertToParamMap({ projectType: legacyProjectType }));
+      const fixture = TestBed.createComponent(ContactFormComponent);
+      fixture.detectChanges();
+
+      expect(fixture.componentInstance.form.controls.projectType.value).toBe(visibleProjectType);
+      fixture.destroy();
+    }
+
     projectTypeParams$.next(convertToParamMap({ projectType: 'unknown' }));
 
     const fixture = TestBed.createComponent(ContactFormComponent);
     fixture.detectChanges();
 
-    expect(fixture.componentInstance.form.controls.projectType.value).toBe('');
+    expect(fixture.componentInstance.form.controls.projectType.value).toBe('other');
+    expect(projectTypeFromQuery(null)).toBeNull();
   });
 
   it('submits valid data with consent and optional company', () => {
@@ -172,7 +199,7 @@ describe('ContactFormComponent', () => {
     );
   });
 
-  it('renders productized project type options from the shared contact content', () => {
+  it('renders only the six business project categories from shared contact content', () => {
     const fixture = TestBed.createComponent(ContactFormComponent);
     fixture.detectChanges();
 
@@ -185,22 +212,14 @@ describe('ContactFormComponent', () => {
       '',
       'mvp_prototype',
       'custom_web_app',
+      'backend_api',
       'business_process_automation',
       'rag_chatbot_demo',
-      'backend_api',
-      'ai_automation',
-      'email_automation',
-      'voice_agent_demo',
-      'whatsapp_agent_management',
-      'agent_management_panel',
-      'dashboard_internal_tool',
-      'website_seo',
-      'external_integration',
       'other',
     ]);
     expect(new Set(optionValues).size).toBe(optionValues.length);
     expect(fixture.nativeElement.textContent).toContain('Asystent AI lub RAG');
-    expect(fixture.nativeElement.textContent).toContain('Konsultacja techniczna');
+    expect(fixture.nativeElement.textContent).toContain('Nie wiem / inny temat');
   });
 
   it('uses accessible field semantics without making the budget mandatory', () => {
@@ -241,7 +260,7 @@ describe('ContactFormComponent', () => {
     );
   });
 
-  it('submits a productized project type using the existing payload shape', () => {
+  it('lets the visitor choose the not-sure category using the existing payload shape', () => {
     const fixture = TestBed.createComponent(ContactFormComponent);
     fixture.detectChanges();
     const api = TestBed.inject(ContactApiService) as jasmine.SpyObj<ContactApiService>;
@@ -250,7 +269,7 @@ describe('ContactFormComponent', () => {
       name: 'Anna Nowak',
       email: 'anna@example.com',
       company: 'Firma AI',
-      projectType: 'rag_chatbot_demo',
+      projectType: 'other',
       budgetRange: '10k_25k_pln',
       message: 'Chcemy sprawdzić demo chatbota RAG dla materiałów sprzedażowych.',
       consent: true,
@@ -263,7 +282,7 @@ describe('ContactFormComponent', () => {
       jasmine.objectContaining({
         name: 'Anna Nowak',
         company: 'Firma AI',
-        projectType: 'rag_chatbot_demo',
+        projectType: 'other',
         budgetRange: '10k_25k_pln',
         consent: true,
       }),
@@ -312,7 +331,7 @@ describe('ContactFormComponent', () => {
     fixture.componentInstance.submit();
 
     expect(api.submit).toHaveBeenCalledWith(jasmine.objectContaining({ budgetRange: 'not_sure' }));
-    expect(projectTypeOptions).toHaveSize(14);
+    expect(projectTypeOptions).toHaveSize(6);
   });
 
   it('shows and focuses the success path with a reset action and a home link', fakeAsync(() => {

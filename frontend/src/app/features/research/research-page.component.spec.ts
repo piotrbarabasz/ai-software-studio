@@ -14,7 +14,7 @@ describe('ResearchPageComponent', () => {
     expect(fixture.nativeElement.querySelectorAll('.info-card').length).toBeGreaterThan(0);
     expect(
       fixture.nativeElement.querySelector(
-        '.hero-copy a.primary-action[href="/kontakt?projectType=external_integration"]',
+        '.hero-copy a.primary-action[href="/kontakt?projectType=backend_api"]',
       ),
     ).not.toBeNull();
     expect(fixture.nativeElement.querySelector('.hero-copy .hero-cta-note')).not.toBeNull();

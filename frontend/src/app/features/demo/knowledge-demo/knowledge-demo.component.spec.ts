@@ -68,7 +68,9 @@ describe('KnowledgeDemoComponent', () => {
 
     expect(element.textContent).toContain('Interaktywna symulacja przepływu demo');
     expect(element.textContent).toContain('nie połączenie z produkcyjną bazą wiedzy');
-    expect(element.querySelector('a[href="/kontakt?projectType=ai_automation"]')).not.toBeNull();
+    expect(
+      element.querySelector('a[href="/kontakt?projectType=business_process_automation"]'),
+    ).not.toBeNull();
     const scenarioButton = element.querySelector('.scenario-button') as HTMLButtonElement;
     const result = element.querySelector('#knowledge-demo-result');
     expect(scenarioButton.textContent?.trim().length).toBeGreaterThan(0);
