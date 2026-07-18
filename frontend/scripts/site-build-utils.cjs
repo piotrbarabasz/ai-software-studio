@@ -5,6 +5,7 @@ const ts = require('typescript');
 
 const FRONTEND_ROOT = path.resolve(__dirname, '..');
 const PLACEHOLDER_PATTERN = /__PUBLIC_CONFIG_REQUIRED__|<[^>]+>|localhost|\.example(?:\.com)?/i;
+const PRODUCTION_SITE_ORIGIN = 'https://protolume.pl';
 
 function environmentPath(mode) {
   return path.join(
@@ -35,7 +36,7 @@ function validateProductionSiteConfig(environment) {
   const origin = normalizeOrigin(environment?.publicSiteUrl);
   const apiUrl = typeof environment?.apiUrl === 'string' ? environment.apiUrl : '';
 
-  if (!origin || PLACEHOLDER_PATTERN.test(origin)) {
+  if (!origin || PLACEHOLDER_PATTERN.test(origin) || origin !== PRODUCTION_SITE_ORIGIN) {
     errors.push('publicSiteUrl');
   } else {
     try {
@@ -61,7 +62,7 @@ function validateProductionSiteConfig(environment) {
     }
   }
 
-  if (typeof environment?.indexingEnabled !== 'boolean') {
+  if (environment?.indexingEnabled !== false) {
     errors.push('indexingEnabled');
   }
 
@@ -146,6 +147,7 @@ function validateSeoArtifacts(environment, { production = false } = {}) {
 
 module.exports = {
   FRONTEND_ROOT,
+  PRODUCTION_SITE_ORIGIN,
   generatedDirectory,
   loadEnvironment,
   normalizeOrigin,

@@ -80,6 +80,7 @@ done
 [[ -n "$REPO_NAME" ]] || fail "Missing --repo-name."
 [[ -n "$BACKEND_URL" ]] || fail "Missing --backend-url."
 [[ -n "$PUBLIC_SITE_URL" ]] || fail "Missing --public-site-url."
+[[ "$PUBLIC_SITE_URL" == "https://protolume.pl" ]] || fail "--public-site-url must be exactly https://protolume.pl for the production trigger."
 
 if [[ -z "$REPO_OWNER" ]]; then
   if command -v git >/dev/null 2>&1; then
@@ -134,7 +135,7 @@ create_trigger() {
     --substitutions="$substitutions"
 }
 
-SUBSTITUTIONS="_PROJECT_ID=$PROJECT_ID,_REGION=$REGION,_ARTIFACT_REPO=aisoftware-studio,_BACKEND_SERVICE=aisoftware-studio-api,_FRONTEND_SERVICE=aisoftware-studio-web,_BACKEND_IMAGE_NAME=aisoftware-studio-api,_FRONTEND_IMAGE_NAME=aisoftware-studio-web,_BACKEND_URL=$BACKEND_URL,_PUBLIC_SITE_URL=$PUBLIC_SITE_URL,_PUBLIC_SITE_INDEXING=true,_PUBLIC_LEGAL_CONFIG_SECRET=$PUBLIC_LEGAL_CONFIG_SECRET,_SMTP_PASSWORD_SECRET=$SMTP_PASSWORD_SECRET,_CONTACT_RATE_LIMIT_PER_MINUTE=$CONTACT_RATE_LIMIT_PER_MINUTE,_CONTACT_RECIPIENT_EMAIL=$CONTACT_RECIPIENT_EMAIL,_CONTACT_FROM_EMAIL=$CONTACT_FROM_EMAIL,_SMTP_HOST=$SMTP_HOST,_SMTP_PORT=$SMTP_PORT,_SMTP_USERNAME=$SMTP_USERNAME,_SMTP_USE_TLS=$SMTP_USE_TLS,_CONTACT_DELIVERY_MODE=email,_APP_ENV=production,_MIN_INSTANCES=0,_IMAGE_TAG=\$SHORT_SHA"
+SUBSTITUTIONS="_PROJECT_ID=$PROJECT_ID,_REGION=$REGION,_ARTIFACT_REPO=aisoftware-studio,_BACKEND_SERVICE=aisoftware-studio-api,_FRONTEND_SERVICE=aisoftware-studio-web,_BACKEND_IMAGE_NAME=aisoftware-studio-api,_FRONTEND_IMAGE_NAME=aisoftware-studio-web,_BACKEND_URL=$BACKEND_URL,_PUBLIC_SITE_URL=$PUBLIC_SITE_URL,_PUBLIC_SITE_INDEXING=false,_PUBLIC_LEGAL_CONFIG_SECRET=$PUBLIC_LEGAL_CONFIG_SECRET,_SMTP_PASSWORD_SECRET=$SMTP_PASSWORD_SECRET,_CONTACT_RATE_LIMIT_PER_MINUTE=$CONTACT_RATE_LIMIT_PER_MINUTE,_CONTACT_RECIPIENT_EMAIL=$CONTACT_RECIPIENT_EMAIL,_CONTACT_FROM_EMAIL=$CONTACT_FROM_EMAIL,_SMTP_HOST=$SMTP_HOST,_SMTP_PORT=$SMTP_PORT,_SMTP_USERNAME=$SMTP_USERNAME,_SMTP_USE_TLS=$SMTP_USE_TLS,_CONTACT_DELIVERY_MODE=email,_APP_ENV=production,_MIN_INSTANCES=0,_IMAGE_TAG=\$SHORT_SHA"
 
 PROD_BRANCH_PATTERN="$(normalize_branch_pattern "$BRANCH")"
 
@@ -142,7 +143,7 @@ printf 'Creating production trigger deploy-prod for branch %s\n' "$PROD_BRANCH_P
 create_trigger "deploy-prod" "$PROD_BRANCH_PATTERN" "$SUBSTITUTIONS"
 
 printf 'Creating temporary test trigger deploy-test-002-gcp-deployment for branch ^002-gcp-deployment$\n'
-TEST_SUBSTITUTIONS="${SUBSTITUTIONS/_PUBLIC_SITE_INDEXING=true/_PUBLIC_SITE_INDEXING=false}"
+TEST_SUBSTITUTIONS="$SUBSTITUTIONS"
 create_trigger "deploy-test-002-gcp-deployment" "^002-gcp-deployment$" "$TEST_SUBSTITUTIONS"
 
 cat <<EOF

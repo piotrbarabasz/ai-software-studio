@@ -50,8 +50,8 @@ Required substitutions for the trigger:
 - `_BACKEND_IMAGE_NAME=aisoftware-studio-api`
 - `_FRONTEND_IMAGE_NAME=aisoftware-studio-web`
 - `_BACKEND_URL=https://<BACKEND_CLOUD_RUN_URL>`
-- `_PUBLIC_SITE_URL=https://<PUBLIC_SITE_URL>`
-- `_PUBLIC_SITE_INDEXING=true`
+- `_PUBLIC_SITE_URL=https://protolume.pl`
+- `_PUBLIC_SITE_INDEXING=false`
 - `_PUBLIC_LEGAL_CONFIG_SECRET=aisoftware-studio-public-legal-config`
 - `_SMTP_PASSWORD_SECRET=aisoftware-studio-smtp-password`
 - `_CONTACT_RATE_LIMIT_PER_MINUTE=30`
@@ -66,7 +66,7 @@ Required substitutions for the trigger:
 - `_MIN_INSTANCES=0`
 - `_IMAGE_TAG=$SHORT_SHA`
 
-The production trigger must deploy the backend first and the frontend second. `_PUBLIC_SITE_URL` is the single production frontend URL: it is passed to the frontend Docker build as `PUBLIC_SITE_URL` and to the backend as `CORS_ALLOWED_ORIGINS`. `_PUBLIC_SITE_INDEXING=true` is reserved for the verified production domain; preview builds use `false`.
+The production trigger must deploy the backend first and the frontend second. `_PUBLIC_SITE_URL=https://protolume.pl` is the single production frontend origin: it is passed to the frontend Docker build as `PUBLIC_SITE_URL` and to the backend as `CORS_ALLOWED_ORIGINS`. Keep `_PUBLIC_SITE_INDEXING=false` until the explicit final indexing stage. The `www` and `.com` variants redirect only and are intentionally excluded from CORS.
 
 Before enabling that trigger, create a verified JSON version described in [`privacy-configuration.md`](privacy-configuration.md). The frontend build rejects missing values, test data, placeholders and invalid e-mail, then scans the prerendered artifact. PR validation uses only the explicitly separated `config/local-test` file and never deploys it.
 

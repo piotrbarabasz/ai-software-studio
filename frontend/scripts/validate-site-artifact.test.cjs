@@ -25,23 +25,32 @@ function writeArtifact(root, environment, injectedText = '') {
   fs.writeFileSync(path.join(root, 'robots.txt'), `Sitemap: ${origin}/sitemap.xml`, 'utf8');
 }
 
-test('accepts production metadata generated from PUBLIC_SITE_URL', (context) => {
+test('accepts Protolume production metadata with noindex in every document', (context) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'site-artifact-'));
   context.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const environment = {
-    publicSiteUrl: 'https://site.production.invalid',
-    indexingEnabled: true,
+    publicSiteUrl: 'https://protolume.pl',
+    indexingEnabled: false,
   };
   writeArtifact(root, environment);
 
   assert.deepEqual(validateSiteArtifact(root, environment), []);
+  for (const route of [...publicPrerenderRoutes(), '/404']) {
+    const documentPath =
+      route === '/' ? path.join(root, 'index.html') : path.join(root, route.slice(1), 'index.html');
+    const html = fs.readFileSync(documentPath, 'utf8');
+    const expectedUrl = `https://protolume.pl${route === '/' ? '' : route}`;
+    assert.match(html, new RegExp(`rel="canonical" href="${expectedUrl}"`));
+    assert.match(html, new RegExp(`property="og:url" content="${expectedUrl}"`));
+    assert.match(html, /name="robots" content="noindex, follow"/);
+  }
 });
 
-test('defaults staging documents to noindex and rejects leaked run.app URLs', (context) => {
+test('rejects leaked run.app URLs from a Protolume production artifact', (context) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'site-artifact-'));
   context.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const environment = {
-    publicSiteUrl: 'https://preview.invalid',
+    publicSiteUrl: 'https://protolume.pl',
     indexingEnabled: false,
   };
   writeArtifact(root, environment, '<p>https://old-service.run.app</p>');

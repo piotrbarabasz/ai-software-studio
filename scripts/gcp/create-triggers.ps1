@@ -128,6 +128,9 @@ function New-Trigger {
 }
 
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..\')).Path
+if ($PublicSiteUrl -ne 'https://protolume.pl') {
+  throw 'PublicSiteUrl must be exactly https://protolume.pl for the production trigger.'
+}
 Assert-GCloudRepoConnection -ProjectId $ProjectId -Region $Region -RepoName $RepoName
 
 if ([string]::IsNullOrWhiteSpace($RepoOwner)) {
@@ -154,7 +157,7 @@ $substitutions = @(
   "_FRONTEND_IMAGE_NAME=aisoftware-studio-web",
   "_BACKEND_URL=$BackendUrl",
   "_PUBLIC_SITE_URL=$PublicSiteUrl",
-  "_PUBLIC_SITE_INDEXING=true",
+  "_PUBLIC_SITE_INDEXING=false",
   "_SMTP_PASSWORD_SECRET=$SmtpPasswordSecret",
   "_PUBLIC_LEGAL_CONFIG_SECRET=$PublicLegalConfigSecret",
   "_CONTACT_RATE_LIMIT_PER_MINUTE=$ContactRateLimitPerMinute",
@@ -176,7 +179,7 @@ Write-Host "Creating production trigger deploy-prod for branch $prodBranchPatter
 New-Trigger -Name 'deploy-prod' -BranchPattern $prodBranchPattern -Substitutions $substitutions
 
 Write-Host 'Creating temporary test trigger deploy-test-002-gcp-deployment for branch ^002-gcp-deployment$'
-$testSubstitutions = $substitutions.Replace('_PUBLIC_SITE_INDEXING=true', '_PUBLIC_SITE_INDEXING=false')
+$testSubstitutions = $substitutions
 New-Trigger -Name 'deploy-test-002-gcp-deployment' -BranchPattern '^002-gcp-deployment$' -Substitutions $testSubstitutions
 
 Write-Host 'Create the PR validation trigger in Cloud Console: event pull request, base branch ^master$, config infra/gcp/cloudbuild.pr-checks.yaml, no deploy.'
