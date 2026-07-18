@@ -57,3 +57,36 @@ test('all deployment configs invoke a real preflight before building', () => {
   assert.doesNotMatch(frontend, /CONTACT_RECIPIENT_EMAIL/);
   assert.doesNotMatch(frontend, /CONTACT_FROM_EMAIL/);
 });
+
+test('only the combined SHA pipeline can deploy Cloud Run', () => {
+  const deploy = readConfig('cloudbuild.deploy.yaml');
+  const frontend = readConfig('cloudbuild.frontend.yaml');
+  const backend = readConfig('cloudbuild.backend.yaml');
+  const pullRequest = readConfig('cloudbuild.pr-checks.yaml');
+
+  assert.match(deploy, /backend-deploy/);
+  assert.match(deploy, /frontend-deploy/);
+  assert.match(deploy, /deployment-read-only-smoke/);
+  assert.match(deploy, /smoke_deployment\.py/);
+  assert.doesNotMatch(`${frontend}${backend}${pullRequest}`, /deploy_cloud_run\.py/);
+  assert.doesNotMatch(`${frontend}${backend}${pullRequest}`, /gcloud run deploy/);
+});
+
+test('pull-request preview checks are fixed to noindex and have no secrets', () => {
+  const pullRequest = readConfig('cloudbuild.pr-checks.yaml');
+
+  assert.match(pullRequest, /^  _PUBLIC_SITE_INDEXING: "false"$/m);
+  assert.match(pullRequest, /DEPLOY_PUBLIC_SITE_INDEXING=\$_PUBLIC_SITE_INDEXING/);
+  assert.match(pullRequest, /deployment_contract\.py/);
+  assert.match(pullRequest, /--scope", "preview/);
+  assert.doesNotMatch(pullRequest, /availableSecrets|secretEnv|docker|gcloud/i);
+});
+
+test('generated legal source is excluded from the root Docker build context', () => {
+  const dockerignore = fs.readFileSync(path.join(repositoryRoot, '.dockerignore'), 'utf8');
+
+  assert.match(
+    dockerignore,
+    /^frontend\/src\/app\/core\/legal\/public-legal\.config\.generated\.ts$/m,
+  );
+});

@@ -64,7 +64,7 @@ steps:
   - id: deployment-contract-tests
     name: python:3.12-slim
     entrypoint: python
-    waitFor: ["deployment-contract-preflight"]
+    waitFor: ["public-legal-config-preflight"]
     args:
       [
         "-m",
@@ -76,10 +76,17 @@ steps:
         "test_deployment*.py",
       ]
 
+  - id: public-legal-config-preflight
+    name: node:20-bookworm-slim
+    waitFor: ["deployment-contract-preflight"]
+    entrypoint: node
+    secretEnv: ["PUBLIC_LEGAL_CONFIG_JSON"]
+    args: ["frontend/scripts/write-build-legal-config.cjs"]
+
   - id: backend-checks
     name: python:3.12-slim
     entrypoint: sh
-    waitFor: ["deployment-contract-preflight"]
+    waitFor: ["public-legal-config-preflight"]
     args:
       - -c
       - >-
@@ -94,19 +101,27 @@ steps:
   - id: frontend-checks
     name: cypress/browsers:node-20.11.1-chrome-123.0.6312.58-1-ff-124.0-edge-122.0.2365.92-1@sha256:a73fe736a24ad0ba8913c7e4138a1331eb1d361ad5d63976d05a337129639c7e
     entrypoint: sh
-    waitFor: ["deployment-contract-preflight"]
+    waitFor: ["public-legal-config-preflight"]
     args:
       - -c
       - >-
         cd frontend &&
         npm ci &&
-        npm run lint &&
         npm run format:check &&
-        npm test -- --karma-config=karma.ci.conf.cjs --browsers=ChromeHeadlessCI
+        npm run lint &&
+        npm test -- --karma-config=karma.ci.conf.cjs --browsers=ChromeHeadlessCI &&
+        API_URL="$_BACKEND_URL"
+        PUBLIC_SITE_URL="$_PUBLIC_SITE_URL"
+        PUBLIC_SITE_INDEXING="$_PUBLIC_SITE_INDEXING"
+        PUBLIC_SALES_EMAIL="$_PUBLIC_SALES_EMAIL"
+        PUBLIC_PRIVACY_EMAIL="$_PUBLIC_PRIVACY_EMAIL"
+        PUBLIC_LEGAL_CONFIG_PATH="$$PWD/.public-legal-config.json"
+        npm run build
 
   - id: backend-build
     name: gcr.io/cloud-builders/docker
-    waitFor: ["backend-checks", "deployment-contract-tests"]
+    waitFor:
+      ["backend-checks", "frontend-checks", "deployment-contract-tests"]
     args:
       - build
       - -f
@@ -115,16 +130,10 @@ steps:
       - "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_BACKEND_IMAGE_NAME:$SHORT_SHA"
       - .
 
-  - id: frontend-public-legal-config
-    name: node:20-bookworm-slim
-    waitFor: ["frontend-checks", "deployment-contract-tests"]
-    entrypoint: node
-    secretEnv: ["PUBLIC_LEGAL_CONFIG_JSON"]
-    args: ["frontend/scripts/write-build-legal-config.cjs"]
-
   - id: frontend-build
     name: gcr.io/cloud-builders/docker
-    waitFor: ["frontend-public-legal-config"]
+    waitFor:
+      ["backend-checks", "frontend-checks", "deployment-contract-tests"]
     env: ["DOCKER_BUILDKIT=1"]
     args:
       - build
@@ -224,9 +233,17 @@ steps:
       - "--image=$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_FRONTEND_IMAGE_NAME:$SHORT_SHA"
       - "--min-instances=$_MIN_INSTANCES"
 
-images:
-  - "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_BACKEND_IMAGE_NAME:$SHORT_SHA"
-  - "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_FRONTEND_IMAGE_NAME:$SHORT_SHA"
+  - id: deployment-read-only-smoke
+    name: python:3.12-slim
+    entrypoint: python
+    waitFor: ["frontend-deploy"]
+    args:
+      - scripts/gcp/smoke_deployment.py
+      - "--backend-url=$_BACKEND_URL"
+      - "--site-url=$_PUBLIC_SITE_URL"
+      - --expect-noindex
+      - --attempts=12
+      - --retry-delay-seconds=5
 
 availableSecrets:
   secretManager:

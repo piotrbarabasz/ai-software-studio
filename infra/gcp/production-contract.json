@@ -89,6 +89,9 @@
       "PUBLIC_LEGAL_CONFIG_SECRET",
       "MIN_INSTANCES",
       "IMAGE_TAG"
+    ],
+    "preview": [
+      "PUBLIC_SITE_INDEXING"
     ]
   }
 }

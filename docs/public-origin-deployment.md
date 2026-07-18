@@ -32,8 +32,10 @@ Z końcowego originu sprawdź w przeglądarce i narzędziu HTTP:
 - `/robots.txt` i `/sitemap.xml` zawierają tylko `https://protolume.pl` i komplet tych tras;
 - canonical, `og:url` oraz JSON-LD odwołują się do `https://protolume.pl`;
 - każdy dokument HTML ma `meta robots` ustawione na `noindex, follow`, a odpowiedzi Nginx zawierają `X-Robots-Tag: noindex, follow`;
-- formularz kontaktowy działa z końcowej domeny, a odrzucony origin nie przechodzi CORS;
+- preflight CORS OPTIONS z końcowej domeny przechodzi, a odrzucony origin nie przechodzi CORS;
 - `/health` backendu oraz strona 404 działają bez błędów w konsoli.
+
+Automatyczny smoke wdrożeniowy jest wyłącznie read-only: używa GET i OPTIONS, nigdy POST i nigdy nie wysyła prawdziwego formularza. Ewentualny test dostarczenia wiadomości wymaga osobnej, jawnej decyzji operatora i nie jest częścią pipeline'u.
 
 Przykładowa kontrola canonical (podstaw własny origin lokalnie w terminalu):
 

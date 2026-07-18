@@ -50,11 +50,16 @@ def load_contract(path: Path = DEFAULT_CONTRACT_PATH) -> Contract:
         raise ValueError(f"cannot load deployment contract from {path}: {exc}") from exc
 
     if schema_version != 1:
-        raise ValueError(f"unsupported deployment contract schema_version: {schema_version!r}")
+        raise ValueError(
+            f"unsupported deployment contract schema_version: {schema_version!r}"
+        )
     if not isinstance(invariants, dict) or not all(
-        isinstance(key, str) and isinstance(value, str) for key, value in invariants.items()
+        isinstance(key, str) and isinstance(value, str)
+        for key, value in invariants.items()
     ):
-        raise ValueError("deployment contract invariants must be a string-to-string object")
+        raise ValueError(
+            "deployment contract invariants must be a string-to-string object"
+        )
     if not isinstance(scopes, dict) or not all(
         isinstance(name, str)
         and isinstance(fields, list)
@@ -67,7 +72,9 @@ def load_contract(path: Path = DEFAULT_CONTRACT_PATH) -> Contract:
     ):
         raise ValueError("deployment contract secret_reference_fields must be an array")
     if invariants.get("CORS_ALLOWED_ORIGINS") != invariants.get("PUBLIC_SITE_URL"):
-        raise ValueError("deployment contract CORS_ALLOWED_ORIGINS must equal PUBLIC_SITE_URL")
+        raise ValueError(
+            "deployment contract CORS_ALLOWED_ORIGINS must equal PUBLIC_SITE_URL"
+        )
 
     return Contract(
         schema_version=schema_version,
@@ -106,7 +113,10 @@ def _valid_https_url(value: str, *, origin_only: bool = False) -> bool:
         return False
     if port is not None and not 1 <= port <= 65535:
         return False
-    return not (origin_only and (parsed.path not in {"", "/"} or parsed.query or parsed.fragment))
+    return not (
+        origin_only
+        and (parsed.path not in {"", "/"} or parsed.query or parsed.fragment)
+    )
 
 
 def _integer_in_range(value: str, minimum: int, maximum: int) -> bool:
@@ -161,7 +171,11 @@ def validate_values(
                 _append(errors, field, f"must equal contract v1 value {expected!r}")
 
     project_id = values.get("PROJECT_ID", "")
-    if "PROJECT_ID" in fields and project_id and not PROJECT_ID_PATTERN.fullmatch(project_id):
+    if (
+        "PROJECT_ID" in fields
+        and project_id
+        and not PROJECT_ID_PATTERN.fullmatch(project_id)
+    ):
         _append(errors, "PROJECT_ID", "must be a valid lowercase GCP project ID")
 
     for field in {
@@ -196,7 +210,9 @@ def validate_values(
             "must be a valid HTTPS origin without credentials, query, or fragment",
         )
     has_cors = "CORS_ALLOWED_ORIGINS" in fields and values.get("CORS_ALLOWED_ORIGINS")
-    if has_cors and not _valid_https_url(values["CORS_ALLOWED_ORIGINS"], origin_only=True):
+    if has_cors and not _valid_https_url(
+        values["CORS_ALLOWED_ORIGINS"], origin_only=True
+    ):
         _append(errors, "CORS_ALLOWED_ORIGINS", "must be one valid HTTPS origin")
     if (
         "BACKEND_URL" in fields
@@ -241,7 +257,9 @@ def validate_values(
     } & set(fields):
         value = values.get(field, "")
         if value and not EMAIL_PATTERN.fullmatch(value):
-            _append(errors, field, "must be a syntactically valid non-example email address")
+            _append(
+                errors, field, "must be a syntactically valid non-example email address"
+            )
 
     if "SMTP_HOST" in fields:
         value = values.get("SMTP_HOST", "")
@@ -269,7 +287,9 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--contract", type=Path, default=DEFAULT_CONTRACT_PATH)
     parser.add_argument(
-        "--scope", choices=("production", "backend", "frontend"), default="production"
+        "--scope",
+        choices=("production", "backend", "frontend", "preview"),
+        default="production",
     )
     parser.add_argument("--env-prefix", default="DEPLOY_")
     return parser.parse_args()

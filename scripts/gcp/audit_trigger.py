@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Audit a production Cloud Build trigger without modifying GCP resources."""
+"""Audit a Protolume Cloud Build trigger without modifying GCP resources."""
 
 from __future__ import annotations
 
@@ -16,6 +16,22 @@ from deployment_contract import DEFAULT_CONTRACT_PATH, load_contract, validate_v
 EXPECTED_BRANCH = "^master$"
 EXPECTED_CONFIG = "infra/gcp/cloudbuild.deploy.yaml"
 EXPECTED_TRIGGER_NAME = "deploy-prod"
+PR_CONFIG = "infra/gcp/cloudbuild.pr-checks.yaml"
+PR_TRIGGER_NAME = "pr-checks"
+TRIGGER_CONTRACTS = {
+    "production": {
+        "branch": EXPECTED_BRANCH,
+        "config": EXPECTED_CONFIG,
+        "event": "push",
+        "name": EXPECTED_TRIGGER_NAME,
+    },
+    "pull-request": {
+        "branch": EXPECTED_BRANCH,
+        "config": PR_CONFIG,
+        "event": "pull-request",
+        "name": PR_TRIGGER_NAME,
+    },
+}
 FIELD_TO_SUBSTITUTION = {
     "PROJECT_ID": "_PROJECT_ID",
     "REGION": "_REGION",
@@ -66,6 +82,11 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", required=True)
     parser.add_argument(
+        "--trigger-kind",
+        choices=tuple(TRIGGER_CONTRACTS),
+        default="production",
+    )
+    parser.add_argument(
         "--trigger-location",
         default="global",
         help="Cloud Build trigger location, independent of the Cloud Run deployment region",
@@ -76,16 +97,23 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--contract", type=Path, default=DEFAULT_CONTRACT_PATH)
     args = parser.parse_args()
     if not args.trigger_id and not args.trigger_name:
-        args.trigger_name = "deploy-prod"
+        args.trigger_name = TRIGGER_CONTRACTS[args.trigger_kind]["name"]
     return args
 
 
+def _trigger_event(trigger: dict[str, Any]) -> tuple[str, str]:
+    for source in (trigger.get("github", {}), trigger.get("repositoryEventConfig", {})):
+        push = source.get("push", {})
+        if isinstance(push, dict) and push:
+            return "push", str(push.get("branch", ""))
+        pull_request = source.get("pullRequest", {})
+        if isinstance(pull_request, dict) and pull_request:
+            return "pull-request", str(pull_request.get("branch", ""))
+    return "", ""
+
+
 def _trigger_branch(trigger: dict[str, Any]) -> str:
-    return str(
-        trigger.get("github", {}).get("push", {}).get("branch")
-        or trigger.get("repositoryEventConfig", {}).get("push", {}).get("branch")
-        or ""
-    )
+    return _trigger_event(trigger)[1]
 
 
 def _failure_category(result: subprocess.CompletedProcess[str]) -> str:
@@ -266,6 +294,8 @@ def _audit_substitutions(substitutions: dict[str, Any], contract: Any) -> list[s
 
 def main() -> int:
     args = parse_args()
+    trigger_kind = getattr(args, "trigger_kind", "production")
+    expected = TRIGGER_CONTRACTS[trigger_kind]
     gcloud = shutil.which("gcloud")
     if not gcloud:
         print(
@@ -292,24 +322,29 @@ def main() -> int:
     if trigger.get("disabled") is True:
         errors.append("trigger: expected enabled, found disabled")
     trigger_name = str(trigger.get("name", ""))
-    if trigger_name != EXPECTED_TRIGGER_NAME:
-        errors.append(
-            f"name: expected {EXPECTED_TRIGGER_NAME!r}, found {trigger_name!r}"
-        )
-    branch = _trigger_branch(trigger)
-    if branch != EXPECTED_BRANCH:
-        errors.append(f"branch: expected {EXPECTED_BRANCH!r}, found {branch!r}")
+    if trigger_name != expected["name"]:
+        errors.append(f"name: expected {expected['name']!r}, found {trigger_name!r}")
+    event, branch = _trigger_event(trigger)
+    if event != expected["event"]:
+        errors.append(f"event: expected {expected['event']!r}, found {event!r}")
+    if branch != expected["branch"]:
+        errors.append(f"branch: expected {expected['branch']!r}, found {branch!r}")
     filename = str(trigger.get("filename", ""))
-    if filename != EXPECTED_CONFIG:
-        errors.append(f"config: expected {EXPECTED_CONFIG!r}, found {filename!r}")
+    if filename != expected["config"]:
+        errors.append(f"config: expected {expected['config']!r}, found {filename!r}")
     if not isinstance(trigger.get("substitutions", {}), dict):
         errors.append("substitutions: expected a mapping")
+    elif trigger_kind == "pull-request":
+        if trigger.get("substitutions", {}):
+            errors.append(
+                "substitutions: PR trigger must not override repository-owned preview values"
+            )
     else:
         errors.extend(_audit_substitutions(trigger.get("substitutions", {}), contract))
 
     if errors:
         print(
-            "Production trigger drift detected (read-only audit; no GCP changes made):",
+            f"{trigger_kind} trigger drift detected (read-only audit; no GCP changes made):",
             file=sys.stderr,
         )
         for error in dict.fromkeys(errors):
@@ -319,7 +354,8 @@ def main() -> int:
     identity = trigger.get("id") or trigger.get("name") or "unknown"
     print(
         f"Trigger {identity!r} in location {args.trigger_location!r} matches deployment "
-        f"contract v{contract.schema_version}, branch {EXPECTED_BRANCH}, and {EXPECTED_CONFIG}."
+        f"contract v{contract.schema_version}, branch {expected['branch']}, "
+        f"and {expected['config']}."
     )
     return 0
 

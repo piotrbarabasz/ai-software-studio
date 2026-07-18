@@ -46,16 +46,25 @@ Invoke-Checked -Label 'Deployment contract CLI tests' -ScriptBlock {
   }
 }
 
+Invoke-Checked -Label 'Cloud Build YAML validation' -ScriptBlock {
+  Push-Location (Split-Path $backendRoot -Parent)
+  try {
+    & py -3.12 -m unittest discover -s infra/gcp/tests -p 'test_cloudbuild_yaml.py'
+  } finally {
+    Pop-Location
+  }
+}
+
 Invoke-Checked -Label 'Backend: ruff check, ruff format --check, pytest' -ScriptBlock {
   Push-Location $backendRoot
   try {
-    & ruff check .
+    & python -m ruff check .
     if ($LASTEXITCODE -ne 0) { throw 'backend ruff check failed' }
 
-    & ruff format --check .
+    & python -m ruff format --check .
     if ($LASTEXITCODE -ne 0) { throw 'backend ruff format --check failed' }
 
-    & pytest
+    & python -m pytest
     if ($LASTEXITCODE -ne 0) { throw 'backend pytest failed' }
   } finally {
     Pop-Location
@@ -68,11 +77,11 @@ Invoke-Checked -Label 'Frontend: lint, format check, tests, build' -ScriptBlock 
     & npm ci
     if ($LASTEXITCODE -ne 0) { throw 'frontend npm ci failed' }
 
-    & npm run lint
-    if ($LASTEXITCODE -ne 0) { throw 'frontend npm run lint failed' }
-
     & npm run format:check
     if ($LASTEXITCODE -ne 0) { throw 'frontend npm run format:check failed' }
+
+    & npm run lint
+    if ($LASTEXITCODE -ne 0) { throw 'frontend npm run lint failed' }
 
     & npm test
     if ($LASTEXITCODE -ne 0) { throw 'frontend npm test failed' }

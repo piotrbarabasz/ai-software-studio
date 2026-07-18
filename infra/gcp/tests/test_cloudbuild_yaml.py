@@ -24,6 +24,10 @@ CONFIG_NAMES = (
 SUBSTITUTION_PATTERN = re.compile(
     r"\$(?:\{(?P<braced>_?[A-Z][A-Z0-9_]*)\}|(?P<plain>_?[A-Z][A-Z0-9_]*))"
 )
+CLOUD_BUILD_TEMPLATE_PATTERN = re.compile(
+    r"(?<!\$)\$(?:\{(?P<braced>_?[A-Z][A-Z0-9_]*)\}|(?P<plain>_?[A-Z][A-Z0-9_]*))"
+)
+BUILTIN_SUBSTITUTIONS = {"BUILD_ID", "COMMIT_SHA", "PROJECT_ID", "SHORT_SHA"}
 ARTIFACT_IMAGE_PATTERN = re.compile(
     r"^[a-z][a-z0-9-]*-docker\.pkg\.dev/"
     r"[a-z][a-z0-9-]{4,28}[a-z0-9]/"
@@ -91,10 +95,17 @@ def assert_safe_secret_version(test: unittest.TestCase, version_name: str) -> No
 
 def render_images(config: dict[str, object]) -> list[str]:
     substitutions = resolved_substitutions(config)
-    images = config.get("images", [])
-    if not isinstance(images, list):
+    configured_images = config.get("images", [])
+    if not isinstance(configured_images, list):
         raise AssertionError("images must be an array")
-    return [resolve_value(str(image), substitutions) for image in images]
+    images = [str(image) for image in configured_images]
+    for step in config.get("steps", []):
+        for argument in step.get("args", []):
+            value = str(argument)
+            if "-docker.pkg.dev/" not in value:
+                continue
+            images.append(value.removeprefix("--image="))
+    return [resolve_value(image, substitutions) for image in images]
 
 
 def assert_pinned_frontend_check_image(test: unittest.TestCase, image: str) -> None:
@@ -117,6 +128,18 @@ class CloudBuildYamlTest(unittest.TestCase):
                             dependency == "-" or dependency in known_ids,
                             f"{name}: unknown waitFor dependency {dependency!r}",
                         )
+
+    def test_all_cloud_build_template_variables_are_declared_or_builtin(self) -> None:
+        for name in CONFIG_NAMES:
+            with self.subTest(name=name):
+                config = load_config(name)
+                declared = set(config.get("substitutions", {})) | BUILTIN_SUBSTITUTIONS
+                source = (GCP_ROOT / name).read_text(encoding="utf-8")
+                used = {
+                    match.group("braced") or match.group("plain")
+                    for match in CLOUD_BUILD_TEMPLATE_PATTERN.finditer(source)
+                }
+                self.assertEqual(used - declared, set())
 
     def test_production_preflight_is_first_and_receives_resolved_values(self) -> None:
         config = load_config("cloudbuild.deploy.yaml")
@@ -147,6 +170,49 @@ class CloudBuildYamlTest(unittest.TestCase):
                 )
                 self.assertIn("--karma-config=karma.ci.conf.cjs", command)
                 self.assertIn("--browsers=ChromeHeadlessCI", command)
+
+    def test_frontend_checks_follow_format_lint_test_build_order(self) -> None:
+        expected_build = {
+            "cloudbuild.deploy.yaml": "npm run build",
+            "cloudbuild.frontend.yaml": "npm run build",
+            "cloudbuild.pr-checks.yaml": "npm run build:development",
+        }
+        for config_name, step_id in FRONTEND_CHECK_STEPS.items():
+            with self.subTest(config=config_name):
+                config = load_config(config_name)
+                step = next(step for step in config["steps"] if step["id"] == step_id)
+                command = " ".join(str(argument) for argument in step["args"])
+                commands = (
+                    "npm ci",
+                    "npm run format:check",
+                    "npm run lint",
+                    "npm test",
+                    expected_build[config_name],
+                )
+                positions = [command.index(item) for item in commands]
+                self.assertEqual(positions, sorted(positions))
+
+    def test_public_legal_secret_is_validated_before_production_checks(self) -> None:
+        config = load_config("cloudbuild.deploy.yaml")
+        steps = {step["id"]: step for step in config["steps"]}
+        legal = steps["public-legal-config-preflight"]
+
+        self.assertEqual(legal["waitFor"], ["deployment-contract-preflight"])
+        self.assertEqual(legal["secretEnv"], ["PUBLIC_LEGAL_CONFIG_JSON"])
+        for step_id in (
+            "deployment-contract-tests",
+            "backend-checks",
+            "frontend-checks",
+        ):
+            self.assertIn("public-legal-config-preflight", steps[step_id]["waitFor"])
+        production_source = (GCP_ROOT / "cloudbuild.deploy.yaml").read_text(
+            encoding="utf-8"
+        )
+        self.assertNotIn('secretEnv: ["SMTP_PASSWORD"]', production_source)
+        self.assertIn(
+            "--set-secrets=SMTP_PASSWORD=$_SMTP_PASSWORD_SECRET:latest",
+            production_source,
+        )
 
     def test_legacy_missing_browser_manifest_reference_is_rejected(self) -> None:
         with self.assertRaises(AssertionError):
@@ -216,6 +282,28 @@ class CloudBuildYamlTest(unittest.TestCase):
             with self.subTest(field=field):
                 self.assertEqual(substitutions[f"_{field}"], expected)
 
+    def test_unresolved_production_operator_placeholders_stop_preflight(self) -> None:
+        config = load_config("cloudbuild.deploy.yaml")
+        contract = load_contract()
+        substitutions = config["substitutions"]
+        values = {
+            field: str(substitutions.get(f"_{field}", ""))
+            for field in contract.scopes["production"]
+        }
+        values["CORS_ALLOWED_ORIGINS"] = values["PUBLIC_SITE_URL"]
+        values["IMAGE_TAG"] = "deadbee"
+
+        errors = "\n".join(validate_values(values, contract, "production"))
+        for field in (
+            "CONTACT_RECIPIENT_EMAIL",
+            "CONTACT_FROM_EMAIL",
+            "SMTP_HOST",
+            "SMTP_PORT",
+            "SMTP_USERNAME",
+            "SMTP_USE_TLS",
+        ):
+            self.assertIn(field, errors)
+
     def test_manual_image_tag_sentinel_is_parse_safe_but_contract_invalid(self) -> None:
         contract = load_contract()
         image_only_contract = Contract(
@@ -246,7 +334,8 @@ class CloudBuildYamlTest(unittest.TestCase):
         config = copy.deepcopy(load_config("cloudbuild.deploy.yaml"))
         config["substitutions"]["_IMAGE_TAG"] = "<REQUIRED_COMMIT_SHA>"
         config["images"] = [
-            image.replace("$SHORT_SHA", "$_IMAGE_TAG") for image in config["images"]
+            "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/"
+            "$_BACKEND_IMAGE_NAME:$_IMAGE_TAG"
         ]
 
         rendered = render_images(config)
@@ -268,6 +357,9 @@ class CloudBuildYamlTest(unittest.TestCase):
         before_backend_deploy = ancestors("backend-deploy")
         self.assertTrue(
             {
+                "deployment-contract-preflight",
+                "public-legal-config-preflight",
+                "deployment-contract-tests",
                 "backend-checks",
                 "frontend-checks",
                 "backend-build",
@@ -278,6 +370,63 @@ class CloudBuildYamlTest(unittest.TestCase):
                 "frontend-push",
             }.issubset(before_backend_deploy)
         )
+        for build_step in ("backend-build", "frontend-build"):
+            self.assertTrue(
+                {
+                    "deployment-contract-tests",
+                    "backend-checks",
+                    "frontend-checks",
+                }.issubset(ancestors(build_step))
+            )
+        self.assertIn("backend-deploy", ancestors("frontend-deploy"))
+        self.assertIn("frontend-deploy", ancestors("deployment-read-only-smoke"))
+        self.assertNotIn("images", config)
+
+    def test_post_deploy_smoke_is_read_only_and_checks_noindex(self) -> None:
+        config = load_config("cloudbuild.deploy.yaml")
+        step = next(
+            step
+            for step in config["steps"]
+            if step["id"] == "deployment-read-only-smoke"
+        )
+        arguments = " ".join(str(argument) for argument in step["args"])
+
+        self.assertIn("smoke_deployment.py", arguments)
+        self.assertIn("--expect-noindex", arguments)
+        smoke_source = (SCRIPT_ROOT / "smoke_deployment.py").read_text(encoding="utf-8")
+        self.assertIn('method="GET"', smoke_source)
+        self.assertIn('method="OPTIONS"', smoke_source)
+        self.assertNotIn('method="POST"', smoke_source)
+
+    def test_pr_checks_are_noindex_and_cannot_deploy_or_read_secrets(self) -> None:
+        config = load_config("cloudbuild.pr-checks.yaml")
+        source = (GCP_ROOT / "cloudbuild.pr-checks.yaml").read_text(encoding="utf-8")
+
+        self.assertEqual(config["substitutions"], {"_PUBLIC_SITE_INDEXING": "false"})
+        preview = next(
+            step for step in config["steps"] if step["id"] == "preview-config-preflight"
+        )
+        self.assertEqual(
+            preview["env"], ["DEPLOY_PUBLIC_SITE_INDEXING=$_PUBLIC_SITE_INDEXING"]
+        )
+        self.assertEqual(preview["args"][-2:], ["--scope", "preview"])
+        self.assertNotIn("availableSecrets", config)
+        self.assertNotIn("secretEnv", source)
+        self.assertNotIn("docker", source.lower())
+        self.assertNotIn("deploy_cloud_run.py", source)
+
+    def test_component_configs_publish_images_but_never_deploy_services(self) -> None:
+        for name in ("cloudbuild.backend.yaml", "cloudbuild.frontend.yaml"):
+            with self.subTest(name=name):
+                config = load_config(name)
+                source = (GCP_ROOT / name).read_text(encoding="utf-8")
+                step_ids = {step["id"] for step in config["steps"]}
+                self.assertTrue(any(step_id.endswith("-push") for step_id in step_ids))
+                self.assertFalse(
+                    any(step_id.endswith("-deploy") for step_id in step_ids)
+                )
+                self.assertNotIn("deploy_cloud_run.py", source)
+                self.assertNotIn("gcloud run deploy", source)
 
     def test_routine_deploy_does_not_mutate_iam_or_allow_manual_tag(self) -> None:
         source = (GCP_ROOT / "cloudbuild.deploy.yaml").read_text(encoding="utf-8")

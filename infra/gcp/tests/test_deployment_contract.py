@@ -59,7 +59,26 @@ def run_validator(
     )
 
 
+def run_preview_validator(indexing: str) -> subprocess.CompletedProcess[str]:
+    environment = os.environ.copy()
+    environment["DEPLOY_PUBLIC_SITE_INDEXING"] = indexing
+    return subprocess.run(
+        [sys.executable, str(VALIDATOR), "--scope", "preview"],
+        cwd=REPOSITORY_ROOT,
+        env=environment,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+
 class DeploymentContractCliTest(unittest.TestCase):
+    def test_preview_contract_requires_noindex(self) -> None:
+        self.assertEqual(run_preview_validator("false").returncode, 0)
+        enabled = run_preview_validator("true")
+        self.assertNotEqual(enabled.returncode, 0)
+        self.assertIn("PUBLIC_SITE_INDEXING", enabled.stderr)
+
     def test_valid_resolved_contract_exits_zero(self) -> None:
         result = run_validator()
 
