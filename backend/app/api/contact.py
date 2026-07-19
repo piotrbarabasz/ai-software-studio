@@ -1,3 +1,5 @@
+import hashlib
+
 from fastapi import APIRouter, Request, status
 from fastapi.responses import JSONResponse
 
@@ -18,6 +20,7 @@ router = APIRouter(tags=["contact"])
     status_code=status.HTTP_202_ACCEPTED,
     response_model=ContactInquiryAccepted,
     responses={
+        413: {"model": ErrorResponse},
         422: {"model": ValidationErrorResponse},
         429: {"model": ErrorResponse},
         503: {"model": ErrorResponse},
@@ -30,7 +33,8 @@ def submit_contact(
         return ContactInquiryAccepted()
 
     service: ContactIntakeService = request.app.state.contact_intake
-    client_key = request.client.host if request.client else "unknown"
+    client_address = request.client.host if request.client else "unknown"
+    client_key = hashlib.sha256(client_address.encode("utf-8")).hexdigest()
 
     try:
         service.submit(inquiry, client_key)

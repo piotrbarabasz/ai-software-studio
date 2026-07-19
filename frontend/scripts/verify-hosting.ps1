@@ -53,7 +53,13 @@ try {
   Assert-Matches $htmlHeaders '(?im)^HTTP/\S+ 200\b' 'The home page did not return HTTP 200.'
   Assert-Matches $htmlHeaders '(?im)^Content-Encoding:\s*gzip\s*$' 'HTML was not compressed with gzip.'
   Assert-Matches $htmlHeaders '(?im)^Cache-Control:\s*no-cache, max-age=0, must-revalidate\s*$' 'HTML has an invalid cache policy.'
-  Assert-Matches $htmlHeaders '(?im)^Content-Security-Policy-Report-Only:' 'CSP Report-Only is missing.'
+  Assert-Matches $htmlHeaders '(?im)^Content-Security-Policy:' 'Enforced CSP is missing.'
+  if ($htmlHeaders -match '(?im)^Content-Security-Policy-Report-Only:') {
+    throw 'The obsolete CSP Report-Only header is still present.'
+  }
+  if ($htmlHeaders -match "(?im)^Content-Security-Policy:.*script-src[^;]*'unsafe-inline'") {
+    throw "script-src must not contain 'unsafe-inline'."
+  }
 
   $assetHeaders = Invoke-CurlHeaders -Url "$BaseUrl/$($mainMatch.Groups['path'].Value)" -Headers @('Accept-Encoding: gzip')
   Assert-Matches $assetHeaders '(?im)^Content-Encoding:\s*gzip\s*$' 'JavaScript was not compressed with gzip.'
@@ -66,12 +72,15 @@ try {
   Assert-Matches $notFoundHeaders '(?im)^HTTP/\S+ 404\b' 'An unknown route did not return a real HTTP 404.'
   Assert-Matches $notFoundHeaders '(?im)^Cache-Control:\s*no-store' 'The 404 response does not have no-store.'
   Assert-Matches $notFoundHeaders '(?im)^X-Robots-Tag:\s*noindex, follow\s*$' 'The 404 response does not have noindex.'
+  if (([regex]::Matches($notFoundHeaders, '(?im)^X-Robots-Tag:')).Count -ne 1) {
+    throw 'The 404 response has a duplicated X-Robots-Tag header.'
+  }
 
   $redirectHeaders = Invoke-CurlHeaders -Url "$BaseUrl/demo-w-7-dni"
   Assert-Matches $redirectHeaders '(?im)^HTTP/\S+ 301\b' 'The legacy route did not return HTTP 301.'
   Assert-Matches $redirectHeaders '(?im)^Location:\s*/demo-ai\s*$' 'The legacy redirect is not origin-independent.'
 
-  Write-Host 'Headers, gzip, cache, HSTS and the 404 status are correct.'
+  Write-Host 'Enforced CSP, headers, gzip, cache, HSTS and the 404 status are correct.'
 } finally {
   Remove-Item -LiteralPath $htmlPath -Force -ErrorAction SilentlyContinue
 }

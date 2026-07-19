@@ -1,5 +1,6 @@
+import hashlib
+import logging
 import re
-import time
 from pathlib import Path
 
 import pytest
@@ -68,6 +69,33 @@ def test_contact_accepts_valid_payload(
 
     assert response.status_code == 202
     assert response.json()["status"] == "accepted"
+
+
+def test_contact_outcome_log_omits_ip_and_form_fields(
+    client: TestClient,
+    valid_contact_payload: dict[str, object],
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    caplog.set_level(logging.INFO, logger="aisoftware_studio.contact")
+
+    response = client.post("/api/contact", json=valid_contact_payload)
+
+    assert response.status_code == 202
+    contact_records = [
+        record for record in caplog.records if record.name == "aisoftware_studio.contact"
+    ]
+    assert contact_records
+    forbidden_attributes = {
+        "client_key",
+        "client_address",
+        "project_type",
+        "budget_range",
+        "has_company",
+    }
+    for record in contact_records:
+        assert forbidden_attributes.isdisjoint(record.__dict__)
+        assert str(valid_contact_payload["email"]) not in record.getMessage()
+        assert str(valid_contact_payload["message"]) not in record.getMessage()
 
 
 def test_contact_accepts_legacy_project_type(
@@ -184,7 +212,10 @@ def test_contact_returns_rate_limit_response(
     app = create_app(settings)
     settings.contact_rate_limit_per_minute = 1
     rate_limiter = InMemoryRateLimiter()
-    rate_limiter.attempts["testclient"] = [time.monotonic()]
+    assert rate_limiter.allow(
+        hashlib.sha256(b"testclient").hexdigest(),
+        limit=1,
+    )
     app.state.contact_intake = ContactIntakeService(
         delivery=FailingDelivery(),
         rate_limiter=rate_limiter,

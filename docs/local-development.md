@@ -40,7 +40,7 @@ Development allows `http://localhost:4200` by default. Production deployments mu
 
 ## API Contract
 
-The planning contract is `specs/001-marketing-site-mvp/contracts/openapi.yaml`. FastAPI also exposes live OpenAPI documentation when the backend runs locally.
+The planning contract is `specs/001-marketing-site-mvp/contracts/openapi.yaml`. FastAPI also exposes `/docs`, `/redoc` and `/openapi.json` when the backend runs locally. Those HTTP routes are disabled when `APP_ENV=production`.
 
 ## Validation Results
 
@@ -86,12 +86,12 @@ The MVP is implemented toward WCAG 2.2 AA for the defined scope:
 - No secrets are committed.
 - Runtime configuration is environment-based.
 - CORS defaults to `http://localhost:4200` for development and must be restricted to exact production origins later.
-- Contact input is validated on the backend with Pydantic.
+- Contact input is capped at 16 KiB and validated on the backend with Pydantic (`extra="forbid"` remains active).
 - The company field is optional; all other contact fields and consent are required.
 - Contact delivery uses email notification and no database persistence.
-- Contact validation, accepted, rate-limited, delivery-failed, and health-check events are logged only as non-sensitive operational outcomes.
+- Contact validation, accepted, rate-limited, delivery-failed, and health-check events are logged only as non-sensitive operational outcomes; Uvicorn access logs, IP values and form fields are not logged by the application.
 - Logs must not include request bodies, secrets, user data, email addresses, full contact payloads, environment variables, or full message content.
-- The contact intake service includes an in-memory rate-limit-ready boundary for MVP abuse protection and future replacement.
+- The contact intake service includes a bounded in-memory limiter for best-effort, single-instance abuse protection. TTL cleanup and a hard key cap bound memory, but the counters are neither shared nor globally consistent across Cloud Run instances. Proxy peers may share a bucket because untrusted forwarded IP headers are ignored.
 
 ## API Contract Alignment Review
 

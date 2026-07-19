@@ -83,6 +83,8 @@ Required runtime values:
 
 The backend must listen on Cloud Run `PORT`, expose reachability-only `GET /health`, and expose `GET /ready` for contact-delivery configuration readiness. Neither response contains SMTP fields, addresses, or secrets.
 
+Production disables the public FastAPI `/docs`, `/redoc` and `/openapi.json` routes. Contact request bodies are limited to 16 KiB before Pydantic parsing. The in-memory contact limiter is bounded but remains best-effort per process: Cloud Run scaling creates independent counters, and proxy peers can share a bucket. Do not describe it as a global quota. Application and Uvicorn access logs do not contain client IP addresses or submitted form fields.
+
 ## Frontend Deployment
 
 `infra/gcp/cloudbuild.frontend.yaml` and the historical `scripts/gcp/deploy-frontend.ps1` wrapper only validate, build and publish a component image. They do not deploy Cloud Run. Keep `-EnableIndexing $false`; the public legal JSON is resolved by reference from Secret Manager and is never a trigger substitution.
