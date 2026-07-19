@@ -1,4 +1,4 @@
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 
@@ -13,7 +13,7 @@ describe('public routes', () => {
       imports: [AppComponent],
       providers: [
         provideRouter(routes),
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         { provide: API_CONFIG, useValue: { apiUrl: 'http://api.test' } },
       ],
     }).compileComponents();

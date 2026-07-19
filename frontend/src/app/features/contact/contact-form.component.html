@@ -1,216 +1,239 @@
-<form
-  *ngIf="status !== 'success'"
-  class="contact-form"
-  [formGroup]="form"
-  [attr.aria-busy]="isSubmitting"
-  (ngSubmit)="submit()"
-  novalidate
->
-  <div class="field">
-    <label for="name">Imię i nazwisko <span aria-hidden="true">*</span></label>
-    <input
-      id="name"
-      name="name"
-      type="text"
-      autocomplete="name"
-      formControlName="name"
-      required
-      [attr.aria-invalid]="isInvalid('name')"
-      [attr.aria-describedby]="isInvalid('name') ? 'name-hint name-error' : 'name-hint'"
-    />
-    <p id="name-hint" class="field-hint">Wymagane — wystarczy imię i nazwisko osoby do kontaktu.</p>
-    <p *ngIf="isInvalid('name')" id="name-error" class="field-error">{{ errorFor('name') }}</p>
-  </div>
-
-  <div class="field">
-    <label for="email">E-mail <span aria-hidden="true">*</span></label>
-    <input
-      id="email"
-      name="email"
-      type="email"
-      autocomplete="email"
-      formControlName="email"
-      required
-      [attr.aria-invalid]="isInvalid('email')"
-      [attr.aria-describedby]="isInvalid('email') ? 'email-hint email-error' : 'email-hint'"
-    />
-    <p id="email-hint" class="field-hint">Wymagane — użyj adresu, na który można odpisać.</p>
-    <p *ngIf="isInvalid('email')" id="email-error" class="field-error">{{ errorFor('email') }}</p>
-  </div>
-
-  <div class="field">
-    <label for="company">Firma <span class="optional-label">(opcjonalnie)</span></label>
-    <input
-      id="company"
-      name="company"
-      type="text"
-      autocomplete="organization"
-      formControlName="company"
-      [attr.aria-invalid]="isInvalid('company')"
-      [attr.aria-describedby]="isInvalid('company') ? 'company-error' : null"
-    />
-    <p *ngIf="isInvalid('company')" id="company-error" class="field-error">
-      {{ errorFor('company') }}
-    </p>
-  </div>
-
-  <div class="field">
-    <label for="projectType">Czego dotyczy rozmowa? <span aria-hidden="true">*</span></label>
-    <select
-      id="projectType"
-      name="projectType"
-      formControlName="projectType"
-      required
-      [attr.aria-invalid]="isInvalid('projectType')"
-      [attr.aria-describedby]="
-        isInvalid('projectType') ? 'project-type-hint project-type-error' : 'project-type-hint'
-      "
-    >
-      <option value="">Wybierz najbliższą opcję</option>
-      <option *ngFor="let option of content.projectTypes" [value]="option.value">
-        {{ option.label }}
-      </option>
-    </select>
-    <p id="project-type-hint" class="field-hint">
-      Wybierz opcję najbardziej zbliżoną do Twojego pomysłu.
-    </p>
-    <p *ngIf="isInvalid('projectType')" id="project-type-error" class="field-error">
-      {{ errorFor('projectType') }}
-    </p>
-  </div>
-
-  <div class="field">
-    <label for="budgetRange">Budżet orientacyjny — opcjonalnie</label>
-    <select
-      id="budgetRange"
-      name="budgetRange"
-      formControlName="budgetRange"
-      [attr.aria-invalid]="isInvalid('budgetRange')"
-      aria-describedby="budget-range-hint"
-    >
-      <option value="">Nie wybieram teraz (opcjonalnie)</option>
-      <option *ngFor="let option of content.budgetRanges" [value]="option.value">
-        {{ option.label }}
-      </option>
-    </select>
-    <p id="budget-range-hint" class="field-hint">{{ content.budgetHint }}</p>
-    <p *ngIf="isInvalid('budgetRange')" id="budget-range-error" class="field-error">
-      {{ errorFor('budgetRange') }}
-    </p>
-  </div>
-
-  <div class="field field-full">
-    <label for="message">Wiadomość <span aria-hidden="true">*</span></label>
-    <textarea
-      id="message"
-      name="message"
-      rows="6"
-      maxlength="4000"
-      formControlName="message"
-      required
-      [attr.aria-invalid]="isInvalid('message')"
-      [attr.aria-describedby]="isInvalid('message') ? 'message-hint message-error' : 'message-hint'"
-    ></textarea>
-    <p id="message-hint" class="field-hint">
-      Opisz krótko obecny proces, największy problem i efekt, który chcesz osiągnąć.
-    </p>
-    <p *ngIf="isInvalid('message')" id="message-error" class="field-error">
-      {{ errorFor('message') }}
-    </p>
-  </div>
-
-  <div class="honeypot" aria-hidden="true">
-    <label for="website">Strona internetowa</label>
-    <input
-      id="website"
-      name="website"
-      type="text"
-      tabindex="-1"
-      autocomplete="off"
-      formControlName="website"
-    />
-  </div>
-
-  <div class="consent field-full">
-    <input
-      id="consent"
-      name="consent"
-      type="checkbox"
-      formControlName="consent"
-      required
-      [attr.aria-invalid]="isInvalid('consent')"
-      [attr.aria-describedby]="isInvalid('consent') ? 'consent-error' : null"
-    />
-    <div class="consent-copy">
-      <label for="consent">{{ content.consent }} <span aria-hidden="true">*</span></label>
-      <a class="privacy-link" routerLink="/polityka-prywatnosci">{{ content.consentLinkLabel }}</a>
-      <span aria-hidden="true">{{ content.consentAfterLink }}</span>
+@if (status !== 'success') {
+  <form
+    class="contact-form"
+    [formGroup]="form"
+    [attr.aria-busy]="isSubmitting"
+    (ngSubmit)="submit()"
+    novalidate
+  >
+    <div class="field">
+      <label for="name">Imię i nazwisko <span aria-hidden="true">*</span></label>
+      <input
+        id="name"
+        name="name"
+        type="text"
+        autocomplete="name"
+        formControlName="name"
+        required
+        [attr.aria-invalid]="isInvalid('name')"
+        [attr.aria-describedby]="isInvalid('name') ? 'name-hint name-error' : 'name-hint'"
+      />
+      <p id="name-hint" class="field-hint">
+        Wymagane — wystarczy imię i nazwisko osoby do kontaktu.
+      </p>
+      @if (isInvalid('name')) {
+        <p id="name-error" class="field-error">{{ errorFor('name') }}</p>
+      }
     </div>
-    <p *ngIf="isInvalid('consent')" id="consent-error" class="field-error">
-      {{ errorFor('consent') }}
-    </p>
-  </div>
+    <div class="field">
+      <label for="email">E-mail <span aria-hidden="true">*</span></label>
+      <input
+        id="email"
+        name="email"
+        type="email"
+        autocomplete="email"
+        formControlName="email"
+        required
+        [attr.aria-invalid]="isInvalid('email')"
+        [attr.aria-describedby]="isInvalid('email') ? 'email-hint email-error' : 'email-hint'"
+      />
+      <p id="email-hint" class="field-hint">Wymagane — użyj adresu, na który można odpisać.</p>
+      @if (isInvalid('email')) {
+        <p id="email-error" class="field-error">{{ errorFor('email') }}</p>
+      }
+    </div>
+    <div class="field">
+      <label for="company">Firma <span class="optional-label">(opcjonalnie)</span></label>
+      <input
+        id="company"
+        name="company"
+        type="text"
+        autocomplete="organization"
+        formControlName="company"
+        [attr.aria-invalid]="isInvalid('company')"
+        [attr.aria-describedby]="isInvalid('company') ? 'company-error' : null"
+      />
+      @if (isInvalid('company')) {
+        <p id="company-error" class="field-error">
+          {{ errorFor('company') }}
+        </p>
+      }
+    </div>
+    <div class="field">
+      <label for="projectType">Czego dotyczy rozmowa? <span aria-hidden="true">*</span></label>
+      <select
+        id="projectType"
+        name="projectType"
+        formControlName="projectType"
+        required
+        [attr.aria-invalid]="isInvalid('projectType')"
+        [attr.aria-describedby]="
+          isInvalid('projectType') ? 'project-type-hint project-type-error' : 'project-type-hint'
+        "
+      >
+        <option value="">Wybierz najbliższą opcję</option>
+        @for (option of content.projectTypes; track option) {
+          <option [value]="option.value">
+            {{ option.label }}
+          </option>
+        }
+      </select>
+      <p id="project-type-hint" class="field-hint">
+        Wybierz opcję najbardziej zbliżoną do Twojego pomysłu.
+      </p>
+      @if (isInvalid('projectType')) {
+        <p id="project-type-error" class="field-error">
+          {{ errorFor('projectType') }}
+        </p>
+      }
+    </div>
+    <div class="field">
+      <label for="budgetRange">Budżet orientacyjny — opcjonalnie</label>
+      <select
+        id="budgetRange"
+        name="budgetRange"
+        formControlName="budgetRange"
+        [attr.aria-invalid]="isInvalid('budgetRange')"
+        aria-describedby="budget-range-hint"
+      >
+        <option value="">Nie wybieram teraz (opcjonalnie)</option>
+        @for (option of content.budgetRanges; track option) {
+          <option [value]="option.value">
+            {{ option.label }}
+          </option>
+        }
+      </select>
+      <p id="budget-range-hint" class="field-hint">{{ content.budgetHint }}</p>
+      @if (isInvalid('budgetRange')) {
+        <p id="budget-range-error" class="field-error">
+          {{ errorFor('budgetRange') }}
+        </p>
+      }
+    </div>
+    <div class="field field-full">
+      <label for="message">Wiadomość <span aria-hidden="true">*</span></label>
+      <textarea
+        id="message"
+        name="message"
+        rows="6"
+        maxlength="4000"
+        formControlName="message"
+        required
+        [attr.aria-invalid]="isInvalid('message')"
+        [attr.aria-describedby]="
+          isInvalid('message') ? 'message-hint message-error' : 'message-hint'
+        "
+      ></textarea>
+      <p id="message-hint" class="field-hint">
+        Opisz krótko obecny proces, największy problem i efekt, który chcesz osiągnąć.
+      </p>
+      @if (isInvalid('message')) {
+        <p id="message-error" class="field-error">
+          {{ errorFor('message') }}
+        </p>
+      }
+    </div>
+    <div class="honeypot" aria-hidden="true">
+      <label for="website">Strona internetowa</label>
+      <input
+        id="website"
+        name="website"
+        type="text"
+        tabindex="-1"
+        autocomplete="off"
+        formControlName="website"
+      />
+    </div>
+    <div class="consent field-full">
+      <input
+        id="consent"
+        name="consent"
+        type="checkbox"
+        formControlName="consent"
+        required
+        [attr.aria-invalid]="isInvalid('consent')"
+        [attr.aria-describedby]="isInvalid('consent') ? 'consent-error' : null"
+      />
+      <div class="consent-copy">
+        <label for="consent">{{ content.consent }} <span aria-hidden="true">*</span></label>
+        <a class="privacy-link" routerLink="/polityka-prywatnosci">{{
+          content.consentLinkLabel
+        }}</a>
+        <span aria-hidden="true">{{ content.consentAfterLink }}</span>
+      </div>
+      @if (isInvalid('consent')) {
+        <p id="consent-error" class="field-error">
+          {{ errorFor('consent') }}
+        </p>
+      }
+    </div>
+    @if (status === 'error' && statusMessage) {
+      <div
+        #errorSummary
+        id="contact-form-error-summary"
+        class="form-status error"
+        role="alert"
+        aria-labelledby="contact-form-error-title"
+        tabindex="-1"
+      >
+        <p id="contact-form-error-title"><strong>Formularz wymaga uwagi.</strong></p>
+        <p>{{ statusMessage }}</p>
+      </div>
+    }
+    <p class="form-next-step">{{ content.formNextStep }}</p>
+    <button class="submit-button" type="submit" [disabled]="isSubmitting">
+      {{ isSubmitting ? content.submitting : content.submit }}
+    </button>
+    @if (isSubmitting) {
+      <p class="form-processing" role="status">{{ content.submitting }}</p>
+    }
+  </form>
+}
 
-  <div
-    *ngIf="status === 'error' && statusMessage"
-    #errorSummary
-    id="contact-form-error-summary"
-    class="form-status error"
-    role="alert"
-    aria-labelledby="contact-form-error-title"
+@if (status === 'success') {
+  <section
+    #successMessage
+    class="contact-success"
+    role="status"
+    aria-live="polite"
+    aria-labelledby="contact-success-title"
     tabindex="-1"
   >
-    <p id="contact-form-error-title"><strong>Formularz wymaga uwagi.</strong></p>
+    <h2 id="contact-success-title">{{ content.success.title }}</h2>
     <p>{{ statusMessage }}</p>
-  </div>
-
-  <p class="form-next-step">{{ content.formNextStep }}</p>
-
-  <button class="submit-button" type="submit" [disabled]="isSubmitting">
-    {{ isSubmitting ? content.submitting : content.submit }}
-  </button>
-  <p *ngIf="isSubmitting" class="form-processing" role="status">{{ content.submitting }}</p>
-</form>
-
-<section
-  *ngIf="status === 'success'"
-  #successMessage
-  class="contact-success"
-  role="status"
-  aria-live="polite"
-  aria-labelledby="contact-success-title"
-  tabindex="-1"
->
-  <h2 id="contact-success-title">{{ content.success.title }}</h2>
-  <p>{{ statusMessage }}</p>
-  <div *ngIf="submissionSummary" class="submission-summary">
-    <h3>{{ content.success.summaryTitle }}</h3>
-    <dl>
-      <div>
-        <dt>Kontakt</dt>
-        <dd>{{ submissionSummary.name }}</dd>
+    @if (submissionSummary) {
+      <div class="submission-summary">
+        <h3>{{ content.success.summaryTitle }}</h3>
+        <dl>
+          <div>
+            <dt>Kontakt</dt>
+            <dd>{{ submissionSummary.name }}</dd>
+          </div>
+          <div>
+            <dt>Temat rozmowy</dt>
+            <dd>{{ submissionSummary.projectType }}</dd>
+          </div>
+          <div>
+            <dt>Opis</dt>
+            <dd>{{ submissionSummary.message }}</dd>
+          </div>
+        </dl>
       </div>
-      <div>
-        <dt>Temat rozmowy</dt>
-        <dd>{{ submissionSummary.projectType }}</dd>
-      </div>
-      <div>
-        <dt>Opis</dt>
-        <dd>{{ submissionSummary.message }}</dd>
-      </div>
-    </dl>
-  </div>
-  <p>{{ content.success.nextStep }}</p>
-  <p *ngIf="content.directEmail" class="success-email">
-    {{ content.success.directEmailLead }}
-    <a [href]="'mailto:' + content.directEmail">{{ content.directEmail }}</a>
-  </p>
-  <div class="success-actions">
-    <a class="secondary-action" [routerLink]="content.success.homeCta.path">{{
-      content.success.homeCta.label
-    }}</a>
-    <button type="button" class="submit-button" (click)="resetForAnotherInquiry()">
-      {{ content.success.anotherInquiryLabel }}
-    </button>
-  </div>
-</section>
+    }
+    <p>{{ content.success.nextStep }}</p>
+    @if (content.directEmail) {
+      <p class="success-email">
+        {{ content.success.directEmailLead }}
+        <a [href]="'mailto:' + content.directEmail">{{ content.directEmail }}</a>
+      </p>
+    }
+    <div class="success-actions">
+      <a class="secondary-action" [routerLink]="content.success.homeCta.path">{{
+        content.success.homeCta.label
+      }}</a>
+      <button type="button" class="submit-button" (click)="resetForAnotherInquiry()">
+        {{ content.success.anotherInquiryLabel }}
+      </button>
+    </div>
+  </section>
+}

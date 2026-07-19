@@ -1,5 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { siteContent } from '../../core/content/site.pl';
@@ -8,9 +7,9 @@ import { RevealOnScrollDirective } from '../../shared/reveal/reveal-on-scroll.di
 
 @Component({
   selector: 'app-studio-page',
-  standalone: true,
-  imports: [CommonModule, RevealOnScrollDirective, RouterLink],
+  imports: [RevealOnScrollDirective, RouterLink],
   templateUrl: './studio-page.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './studio-page.component.scss',
 })
 export class StudioPageComponent {

@@ -17,7 +17,9 @@
     <aside class="hero-panel" aria-label="Zakres developmentu">
       <p class="panel-kicker">Zasady pracy</p>
       <ul>
-        <li *ngFor="let item of content.principles">{{ item }}</li>
+        @for (item of content.principles; track item) {
+          <li>{{ item }}</li>
+        }
       </ul>
     </aside>
   </section>
@@ -29,7 +31,9 @@
       <p class="page-lead">{{ content.readiness.lead }}</p>
     </div>
     <ul class="bullet-grid readiness-grid">
-      <li *ngFor="let point of content.readiness.points">{{ point }}</li>
+      @for (point of content.readiness.points; track point) {
+        <li>{{ point }}</li>
+      }
     </ul>
   </section>
 
@@ -39,15 +43,21 @@
       <h2 id="outcomes-title">{{ content.outcomesTitle }}</h2>
     </div>
     <div class="card-grid">
-      <article *ngFor="let outcome of content.outcomes" class="info-card">
-        <h3>{{ outcome.title }}</h3>
-        <p><strong>Punkt wyjścia:</strong> {{ outcome.startingPoint }}</p>
-        <p><strong>Docelowy sposób pracy:</strong> {{ outcome.targetWorkflow }}</p>
-        <ul class="outcome-elements">
-          <li *ngFor="let element of outcome.solutionElements">{{ element }}</li>
-        </ul>
-        <p class="outcome-dependency"><strong>Ważna zależność:</strong> {{ outcome.dependency }}</p>
-      </article>
+      @for (outcome of content.outcomes; track outcome) {
+        <article class="info-card">
+          <h3>{{ outcome.title }}</h3>
+          <p><strong>Punkt wyjścia:</strong> {{ outcome.startingPoint }}</p>
+          <p><strong>Docelowy sposób pracy:</strong> {{ outcome.targetWorkflow }}</p>
+          <ul class="outcome-elements">
+            @for (element of outcome.solutionElements; track element) {
+              <li>{{ element }}</li>
+            }
+          </ul>
+          <p class="outcome-dependency">
+            <strong>Ważna zależność:</strong> {{ outcome.dependency }}
+          </p>
+        </article>
+      }
     </div>
   </section>
 
@@ -62,7 +72,9 @@
       <p class="page-lead">{{ content.preparation.lead }}</p>
     </div>
     <ul class="bullet-grid preparation-grid">
-      <li *ngFor="let item of content.preparation.points">{{ item }}</li>
+      @for (item of content.preparation.points; track item) {
+        <li>{{ item }}</li>
+      }
     </ul>
   </section>
 
@@ -76,13 +88,17 @@
       <article class="scope-card scope-card-included">
         <h3>{{ content.scope.includedTitle }}</h3>
         <ul>
-          <li *ngFor="let item of content.scope.included">{{ item }}</li>
+          @for (item of content.scope.included; track item) {
+            <li>{{ item }}</li>
+          }
         </ul>
       </article>
       <article class="scope-card scope-card-excluded">
         <h3>{{ content.scope.excludedTitle }}</h3>
         <ul>
-          <li *ngFor="let item of content.scope.excluded">{{ item }}</li>
+          @for (item of content.scope.excluded; track item) {
+            <li>{{ item }}</li>
+          }
         </ul>
       </article>
     </div>
@@ -95,13 +111,15 @@
       <h2 id="process-title">{{ content.processTitle }}</h2>
     </div>
     <ol class="process-list">
-      <li *ngFor="let step of content.deliverySteps; let index = index">
-        <span class="step-number">{{ index + 1 }}</span>
-        <div>
-          <h3>{{ step.title }}</h3>
-          <p>{{ step.description }}</p>
-        </div>
-      </li>
+      @for (step of content.deliverySteps; track step; let index = $index) {
+        <li>
+          <span class="step-number">{{ index + 1 }}</span>
+          <div>
+            <h3>{{ step.title }}</h3>
+            <p>{{ step.description }}</p>
+          </div>
+        </li>
+      }
     </ol>
   </section>
 

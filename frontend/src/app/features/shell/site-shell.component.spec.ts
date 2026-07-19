@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { PLATFORM_ID } from '@angular/core';
 import { provideRouter, Router } from '@angular/router';
 
@@ -16,7 +16,7 @@ describe('SiteShellComponent', () => {
       imports: [SiteShellComponent],
       providers: [
         provideRouter(routes),
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         { provide: API_CONFIG, useValue: { apiUrl: 'http://api.test' } },
       ],
     }).compileComponents();
@@ -54,7 +54,7 @@ describe('SiteShellComponent', () => {
       imports: [SiteShellComponent],
       providers: [
         provideRouter(routes),
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         { provide: API_CONFIG, useValue: { apiUrl: 'http://api.test' } },
         { provide: PLATFORM_ID, useValue: 'server' },
       ],
@@ -83,7 +83,7 @@ describe('SiteShellComponent', () => {
       imports: [SiteShellComponent],
       providers: [
         provideRouter(routes),
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         { provide: API_CONFIG, useValue: { apiUrl: 'http://api.test' } },
       ],
     }).compileComponents();
@@ -119,7 +119,7 @@ describe('SiteShellComponent', () => {
       imports: [SiteShellComponent],
       providers: [
         provideRouter(routes),
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         { provide: API_CONFIG, useValue: { apiUrl: 'http://api.test' } },
       ],
     }).compileComponents();
@@ -145,7 +145,7 @@ describe('SiteShellComponent', () => {
       imports: [SiteShellComponent],
       providers: [
         provideRouter(routes),
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         { provide: API_CONFIG, useValue: { apiUrl: 'http://api.test' } },
       ],
     }).compileComponents();
@@ -167,7 +167,7 @@ describe('SiteShellComponent', () => {
       imports: [SiteShellComponent],
       providers: [
         provideRouter(routes),
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         { provide: API_CONFIG, useValue: { apiUrl: 'http://api.test' } },
       ],
     }).compileComponents();
@@ -194,7 +194,7 @@ describe('SiteShellComponent', () => {
       imports: [SiteShellComponent],
       providers: [
         provideRouter(routes),
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         { provide: API_CONFIG, useValue: { apiUrl: 'http://api.test' } },
       ],
     }).compileComponents();
@@ -243,7 +243,7 @@ describe('SiteShellComponent', () => {
       imports: [SiteShellComponent],
       providers: [
         provideRouter(routes),
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         { provide: API_CONFIG, useValue: { apiUrl: 'http://api.test' } },
       ],
     }).compileComponents();
@@ -348,7 +348,7 @@ describe('SiteShellComponent', () => {
       imports: [SiteShellComponent],
       providers: [
         provideRouter(routes),
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         { provide: API_CONFIG, useValue: { apiUrl: 'http://api.test' } },
       ],
     }).compileComponents();

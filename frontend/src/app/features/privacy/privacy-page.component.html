@@ -3,9 +3,11 @@
   <h1>{{ content.title }}</h1>
   <p class="privacy-introduction">{{ content.introduction }}</p>
 
-  <section *ngIf="isDevelopment" class="development-notice" aria-label="Tryb deweloperski">
-    <p>{{ content.developmentNotice }}</p>
-  </section>
+  @if (isDevelopment) {
+    <section class="development-notice" aria-label="Tryb deweloperski">
+      <p>{{ content.developmentNotice }}</p>
+    </section>
+  }
 
   <section aria-labelledby="administrator-title">
     <h2 id="administrator-title">{{ content.administratorTitle }}</h2>
@@ -24,7 +26,9 @@
   <section aria-labelledby="data-scope-title">
     <h2 id="data-scope-title">{{ content.dataScopeTitle }}</h2>
     <ul>
-      <li *ngFor="let item of content.dataScopeItems">{{ item }}</li>
+      @for (item of content.dataScopeItems; track item) {
+        <li>{{ item }}</li>
+      }
     </ul>
   </section>
 
@@ -36,14 +40,18 @@
   <section aria-labelledby="purposes-title">
     <h2 id="purposes-title">{{ content.purposesTitle }}</h2>
     <ul>
-      <li *ngFor="let item of legal.processing.purposes">{{ item }}</li>
+      @for (item of legal.processing.purposes; track item) {
+        <li>{{ item }}</li>
+      }
     </ul>
   </section>
 
   <section aria-labelledby="legal-bases-title">
     <h2 id="legal-bases-title">{{ content.legalBasesTitle }}</h2>
     <ul>
-      <li *ngFor="let item of legal.processing.legalBases">{{ item }}</li>
+      @for (item of legal.processing.legalBases; track item) {
+        <li>{{ item }}</li>
+      }
     </ul>
   </section>
 
@@ -51,29 +59,39 @@
     <h2 id="recipients-title">{{ content.recipientsTitle }}</h2>
     <h3>Odbiorcy danych</h3>
     <ul>
-      <li *ngFor="let item of legal.processing.recipients">{{ item }}</li>
+      @for (item of legal.processing.recipients; track item) {
+        <li>{{ item }}</li>
+      }
     </ul>
     <h3>Dostawcy infrastruktury</h3>
     <ul>
-      <li *ngFor="let item of legal.processing.infrastructureProviders">{{ item }}</li>
+      @for (item of legal.processing.infrastructureProviders; track item) {
+        <li>{{ item }}</li>
+      }
     </ul>
     <h3>Dostawcy poczty</h3>
     <ul>
-      <li *ngFor="let item of legal.processing.emailProviders">{{ item }}</li>
+      @for (item of legal.processing.emailProviders; track item) {
+        <li>{{ item }}</li>
+      }
     </ul>
   </section>
 
   <section aria-labelledby="retention-title">
     <h2 id="retention-title">{{ content.retentionTitle }}</h2>
     <ul>
-      <li *ngFor="let item of legal.processing.retention">{{ item }}</li>
+      @for (item of legal.processing.retention; track item) {
+        <li>{{ item }}</li>
+      }
     </ul>
   </section>
 
   <section aria-labelledby="rights-title">
     <h2 id="rights-title">{{ content.rightsTitle }}</h2>
     <ul>
-      <li *ngFor="let item of legal.processing.dataSubjectRights">{{ item }}</li>
+      @for (item of legal.processing.dataSubjectRights; track item) {
+        <li>{{ item }}</li>
+      }
     </ul>
   </section>
 

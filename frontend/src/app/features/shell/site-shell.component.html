@@ -27,15 +27,16 @@
     aria-label="Główna nawigacja"
   >
     <div class="nav-links">
-      <a
-        *ngFor="let item of navigation"
-        [routerLink]="item.path"
-        routerLinkActive="is-active"
-        #routeLink="routerLinkActive"
-        [attr.aria-current]="routeLink.isActive ? 'page' : null"
-        (click)="closeNavigation()"
-        >{{ item.label }}</a
-      >
+      @for (item of navigation; track item) {
+        <a
+          [routerLink]="item.path"
+          routerLinkActive="is-active"
+          #routeLink="routerLinkActive"
+          [attr.aria-current]="routeLink.isActive ? 'page' : null"
+          (click)="closeNavigation()"
+          >{{ item.label }}</a
+        >
+      }
     </div>
   </nav>
 </header>
@@ -52,18 +53,19 @@
     </p>
   </div>
   <div class="footer-links">
-    <a *ngFor="let item of navigation" [routerLink]="item.path" (click)="closeNavigation()">{{
-      item.label
-    }}</a>
+    @for (item of navigation; track item) {
+      <a [routerLink]="item.path" (click)="closeNavigation()">{{ item.label }}</a>
+    }
     <a routerLink="/rd" (click)="closeNavigation()">R&D</a>
     <a routerLink="/polityka-prywatnosci" (click)="closeNavigation()">Polityka prywatności</a>
-    <a
-      *ngFor="let link of trust.owner.links"
-      [href]="link.url"
-      target="_blank"
-      rel="noopener noreferrer"
-      [attr.aria-label]="link.accessibleName"
-      >{{ link.label }}</a
-    >
+    @for (link of trust.owner.links; track link) {
+      <a
+        [href]="link.url"
+        target="_blank"
+        rel="noopener noreferrer"
+        [attr.aria-label]="link.accessibleName"
+        >{{ link.label }}</a
+      >
+    }
   </div>
 </footer>

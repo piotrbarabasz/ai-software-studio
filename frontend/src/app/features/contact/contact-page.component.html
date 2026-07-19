@@ -4,31 +4,36 @@
     <h1>{{ content.title }}</h1>
     <p class="page-lead">{{ content.lead }}</p>
     <ol class="next-steps" aria-label="Co wydarzy się dalej">
-      <li *ngFor="let step of content.nextSteps; let index = index">
-        <span aria-hidden="true">{{ index + 1 }}</span
-        >{{ step }}
-      </li>
+      @for (step of content.nextSteps; track step; let index = $index) {
+        <li>
+          <span aria-hidden="true">{{ index + 1 }}</span
+          >{{ step }}
+        </li>
+      }
     </ol>
     <div class="contact-assurances">
       <p>{{ content.noSpecificationNeeded }}</p>
       <p>{{ content.firstMessagePurpose }}</p>
       <p>{{ content.noCommitment }}</p>
     </div>
-    <p *ngIf="content.directEmail" class="direct-email">
-      <strong>{{ content.directEmailLabel }}:</strong>
-      <a [href]="'mailto:' + content.directEmail">{{ content.directEmail }}</a>
-    </p>
+    @if (content.directEmail) {
+      <p class="direct-email">
+        <strong>{{ content.directEmailLabel }}:</strong>
+        <a [href]="'mailto:' + content.directEmail">{{ content.directEmail }}</a>
+      </p>
+    }
   </section>
   <section [attr.aria-label]="content.formLabel" appRevealOnScroll>
     <noscript>
       <div class="noscript-contact" role="note">
-        <p *ngIf="content.directEmail; else noPublicEmail">
-          {{ content.noScript.emailLead }}
-          <a [href]="'mailto:' + content.directEmail">{{ content.directEmail }}</a>
-        </p>
-        <ng-template #noPublicEmail>
+        @if (content.directEmail) {
+          <p>
+            {{ content.noScript.emailLead }}
+            <a [href]="'mailto:' + content.directEmail">{{ content.directEmail }}</a>
+          </p>
+        } @else {
           <p>{{ content.noScript.unavailable }}</p>
-        </ng-template>
+        }
       </div>
     </noscript>
     <app-contact-form />

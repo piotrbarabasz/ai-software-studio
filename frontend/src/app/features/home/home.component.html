@@ -20,10 +20,12 @@
     <aside class="hero-proof" [attr.aria-label]="home.hero.proof.label">
       <p>{{ home.hero.proof.label }}</p>
       <ol>
-        <li *ngFor="let step of home.hero.proof.steps; let index = index">
-          <span>{{ index + 1 }}</span
-          >{{ step }}
-        </li>
+        @for (step of home.hero.proof.steps; track step; let index = $index) {
+          <li>
+            <span>{{ index + 1 }}</span
+            >{{ step }}
+          </li>
+        }
       </ol>
     </aside>
   </section>
@@ -34,13 +36,17 @@
       <h2 id="problems-title">{{ home.problemsHeading.title }}</h2>
     </div>
     <div class="problem-grid">
-      <article *ngFor="let group of home.problemGroups" class="problem-card">
-        <h3>{{ group.title }}</h3>
-        <p>{{ group.effect }}</p>
-        <ul>
-          <li *ngFor="let example of group.examples">{{ example }}</li>
-        </ul>
-      </article>
+      @for (group of home.problemGroups; track group) {
+        <article class="problem-card">
+          <h3>{{ group.title }}</h3>
+          <p>{{ group.effect }}</p>
+          <ul>
+            @for (example of group.examples; track example) {
+              <li>{{ example }}</li>
+            }
+          </ul>
+        </article>
+      }
     </div>
   </section>
 
@@ -50,20 +56,24 @@
       <h2 id="paths-title">{{ home.pathsHeading.title }}</h2>
     </div>
     <div class="path-grid">
-      <article *ngFor="let path of home.paths" class="path-card">
-        <p class="card-kicker">{{ path.eyebrow }}</p>
-        <h3>{{ path.title }}</h3>
-        <p>{{ path.lead }}</p>
-        <ul>
-          <li *ngFor="let point of path.points">{{ point }}</li>
-        </ul>
-        <a
-          class="secondary-action"
-          [routerLink]="path.cta.path"
-          [queryParams]="path.cta.queryParams"
-          >{{ path.cta.label }}</a
-        >
-      </article>
+      @for (path of home.paths; track path) {
+        <article class="path-card">
+          <p class="card-kicker">{{ path.eyebrow }}</p>
+          <h3>{{ path.title }}</h3>
+          <p>{{ path.lead }}</p>
+          <ul>
+            @for (point of path.points; track point) {
+              <li>{{ point }}</li>
+            }
+          </ul>
+          <a
+            class="secondary-action"
+            [routerLink]="path.cta.path"
+            [queryParams]="path.cta.queryParams"
+            >{{ path.cta.label }}</a
+          >
+        </article>
+      }
     </div>
   </section>
 
@@ -75,32 +85,36 @@
         <p>{{ home.evidenceTeaser.lead }}</p>
       </div>
       <div class="evidence-teaser-grid">
-        <article *ngFor="let item of trust.evidence.items" class="evidence-teaser-card">
-          <p class="evidence-type">{{ item.typeLabel }}</p>
-          <h3>{{ item.title }}</h3>
-          <p class="evidence-check"><strong>Co można sprawdzić:</strong> {{ item.teaser }}</p>
-          <p class="evidence-boundary">
-            <strong>Czego ten przykład nie potwierdza:</strong> {{ item.limitation }}
-          </p>
-          <div class="evidence-links">
-            <a
-              *ngIf="item.liveLink"
-              [href]="item.liveLink.url"
-              target="_blank"
-              rel="noopener noreferrer"
-              [attr.aria-label]="item.liveLink.accessibleName"
-              >{{ item.liveLink.label }}</a
-            >
-            <a
-              *ngIf="item.repositoryLink"
-              [href]="item.repositoryLink.url"
-              target="_blank"
-              rel="noopener noreferrer"
-              [attr.aria-label]="item.repositoryLink.accessibleName"
-              >{{ item.repositoryLink.label }}</a
-            >
-          </div>
-        </article>
+        @for (item of trust.evidence.items; track item) {
+          <article class="evidence-teaser-card">
+            <p class="evidence-type">{{ item.typeLabel }}</p>
+            <h3>{{ item.title }}</h3>
+            <p class="evidence-check"><strong>Co można sprawdzić:</strong> {{ item.teaser }}</p>
+            <p class="evidence-boundary">
+              <strong>Czego ten przykład nie potwierdza:</strong> {{ item.limitation }}
+            </p>
+            <div class="evidence-links">
+              @if (item.liveLink) {
+                <a
+                  [href]="item.liveLink.url"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  [attr.aria-label]="item.liveLink.accessibleName"
+                  >{{ item.liveLink.label }}</a
+                >
+              }
+              @if (item.repositoryLink) {
+                <a
+                  [href]="item.repositoryLink.url"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  [attr.aria-label]="item.repositoryLink.accessibleName"
+                  >{{ item.repositoryLink.label }}</a
+                >
+              }
+            </div>
+          </article>
+        }
       </div>
       <div class="evidence-teaser-footer">
         <div>

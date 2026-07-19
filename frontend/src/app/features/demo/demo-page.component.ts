@@ -1,5 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { siteContent } from '../../core/content/site.pl';
@@ -8,9 +7,9 @@ import { KnowledgeDemoComponent } from './knowledge-demo/knowledge-demo.componen
 
 @Component({
   selector: 'app-demo-page',
-  standalone: true,
-  imports: [CommonModule, RevealOnScrollDirective, RouterLink, KnowledgeDemoComponent],
+  imports: [RevealOnScrollDirective, RouterLink, KnowledgeDemoComponent],
   templateUrl: './demo-page.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './demo-page.component.scss',
 })
 export class DemoPageComponent {

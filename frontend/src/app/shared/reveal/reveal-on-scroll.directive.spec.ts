@@ -1,12 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { RevealOnScrollDirective } from './reveal-on-scroll.directive';
 
 @Component({
-  standalone: true,
   imports: [RevealOnScrollDirective],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: '<div appRevealOnScroll>Content</div>',
 })
 class HostComponent {}

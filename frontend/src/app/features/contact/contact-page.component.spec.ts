@@ -1,4 +1,4 @@
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { API_CONFIG } from '../../core/api-config';
@@ -10,7 +10,7 @@ describe('ContactPageComponent', () => {
       imports: [ContactPageComponent],
       providers: [
         provideRouter([]),
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         { provide: API_CONFIG, useValue: { apiUrl: 'http://api.test' } },
       ],
     }).compileComponents();

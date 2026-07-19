@@ -1,6 +1,14 @@
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import type { AfterViewInit, OnDestroy } from '@angular/core';
-import { Directive, ElementRef, Inject, PLATFORM_ID, Renderer2, inject } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  Inject,
+  PLATFORM_ID,
+  Renderer2,
+  inject,
+  DOCUMENT,
+} from '@angular/core';
 
 @Directive({
   selector: '[appRevealOnScroll]',

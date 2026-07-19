@@ -8,7 +8,9 @@
     <aside class="hero-panel" aria-label="Zasady współpracy">
       <p class="panel-kicker">Zasady współpracy</p>
       <ul>
-        <li *ngFor="let item of content.principles">{{ item }}</li>
+        @for (item of content.principles; track item) {
+          <li>{{ item }}</li>
+        }
       </ul>
       <p class="hero-cta-note">
         Po wysłaniu opisu ustalimy, czy kolejnym krokiem jest demo czy plan pierwszego etapu.
@@ -29,16 +31,17 @@
       <h2 id="owner-title">{{ trust.ownerSectionTitle }}</h2>
     </div>
     <article class="owner-card" [class.has-image]="trust.owner.image">
-      <img
-        *ngIf="trust.owner.image"
-        class="owner-image"
-        [src]="trust.owner.image.src"
-        [alt]="trust.owner.image.alt"
-        width="160"
-        height="160"
-        loading="lazy"
-        decoding="async"
-      />
+      @if (trust.owner.image) {
+        <img
+          class="owner-image"
+          [src]="trust.owner.image.src"
+          [alt]="trust.owner.image.alt"
+          width="160"
+          height="160"
+          loading="lazy"
+          decoding="async"
+        />
+      }
       <div class="owner-copy">
         <p class="owner-role">{{ trust.owner.role }}</p>
         <h3>{{ trust.owner.name }}</h3>
@@ -48,22 +51,27 @@
         <div class="verified-capabilities">
           <h4>Kompetencje widoczne w repozytorium i konfiguracji wdrożenia</h4>
           <dl>
-            <div *ngFor="let capability of trust.owner.verifiedCapabilities">
-              <dt>{{ capability.label }}</dt>
-              <dd>{{ capability.evidence }}</dd>
-            </div>
+            @for (capability of trust.owner.verifiedCapabilities; track capability) {
+              <div>
+                <dt>{{ capability.label }}</dt>
+                <dd>{{ capability.evidence }}</dd>
+              </div>
+            }
           </dl>
         </div>
-        <div class="external-links" *ngIf="trust.owner.links.length">
-          <a
-            *ngFor="let link of trust.owner.links"
-            [href]="link.url"
-            target="_blank"
-            rel="noopener noreferrer"
-            [attr.aria-label]="link.accessibleName"
-            >{{ link.label }}</a
-          >
-        </div>
+        @if (trust.owner.links.length) {
+          <div class="external-links">
+            @for (link of trust.owner.links; track link) {
+              <a
+                [href]="link.url"
+                target="_blank"
+                rel="noopener noreferrer"
+                [attr.aria-label]="link.accessibleName"
+                >{{ link.label }}</a
+              >
+            }
+          </div>
+        }
       </div>
     </article>
   </section>
@@ -79,48 +87,56 @@
       <p class="page-lead">{{ trust.evidence.lead }}</p>
     </div>
     <div class="evidence-list">
-      <article *ngFor="let item of trust.evidence.items" class="evidence-card">
-        <div class="evidence-summary">
-          <p class="status-badge">{{ item.typeLabel }}</p>
-          <h3>{{ item.title }}</h3>
-          <p><strong>Problem:</strong> {{ item.problem }}</p>
-          <p><strong>Co zostało zbudowane:</strong> {{ item.built }}</p>
-          <h4>Technologie widoczne w kodzie</h4>
-          <ul class="technology-list" aria-label="Technologie użyte w dowodzie pracy">
-            <li *ngFor="let technology of item.technologies">{{ technology }}</li>
-          </ul>
-        </div>
-        <div class="evidence-details">
-          <h4>Co można samodzielnie sprawdzić</h4>
-          <ul class="verification-list">
-            <li *ngFor="let step of item.verification">{{ step }}</li>
-          </ul>
-          <div class="evidence-boundary">
-            <h4>Czego ten przykład nie potwierdza</h4>
-            <p>{{ item.limitation }}</p>
+      @for (item of trust.evidence.items; track item) {
+        <article class="evidence-card">
+          <div class="evidence-summary">
+            <p class="status-badge">{{ item.typeLabel }}</p>
+            <h3>{{ item.title }}</h3>
+            <p><strong>Problem:</strong> {{ item.problem }}</p>
+            <p><strong>Co zostało zbudowane:</strong> {{ item.built }}</p>
+            <h4>Technologie widoczne w kodzie</h4>
+            <ul class="technology-list" aria-label="Technologie użyte w dowodzie pracy">
+              @for (technology of item.technologies; track technology) {
+                <li>{{ technology }}</li>
+              }
+            </ul>
           </div>
-          <div class="external-links">
-            <a
-              *ngIf="item.liveLink"
-              class="secondary-action"
-              [href]="item.liveLink.url"
-              target="_blank"
-              rel="noopener noreferrer"
-              [attr.aria-label]="item.liveLink.accessibleName"
-              >{{ item.liveLink.label }}</a
-            >
-            <a
-              *ngIf="item.repositoryLink"
-              class="secondary-action"
-              [href]="item.repositoryLink.url"
-              target="_blank"
-              rel="noopener noreferrer"
-              [attr.aria-label]="item.repositoryLink.accessibleName"
-              >{{ item.repositoryLink.label }}</a
-            >
+          <div class="evidence-details">
+            <h4>Co można samodzielnie sprawdzić</h4>
+            <ul class="verification-list">
+              @for (step of item.verification; track step) {
+                <li>{{ step }}</li>
+              }
+            </ul>
+            <div class="evidence-boundary">
+              <h4>Czego ten przykład nie potwierdza</h4>
+              <p>{{ item.limitation }}</p>
+            </div>
+            <div class="external-links">
+              @if (item.liveLink) {
+                <a
+                  class="secondary-action"
+                  [href]="item.liveLink.url"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  [attr.aria-label]="item.liveLink.accessibleName"
+                  >{{ item.liveLink.label }}</a
+                >
+              }
+              @if (item.repositoryLink) {
+                <a
+                  class="secondary-action"
+                  [href]="item.repositoryLink.url"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  [attr.aria-label]="item.repositoryLink.accessibleName"
+                  >{{ item.repositoryLink.label }}</a
+                >
+              }
+            </div>
           </div>
-        </div>
-      </article>
+        </article>
+      }
     </div>
   </section>
 
@@ -135,10 +151,12 @@
       <p class="page-lead">{{ content.verification.lead }}</p>
     </div>
     <ol class="verification-steps">
-      <li *ngFor="let step of content.verification.steps; let index = index">
-        <span>{{ index + 1 }}</span>
-        <p>{{ step }}</p>
-      </li>
+      @for (step of content.verification.steps; track step; let index = $index) {
+        <li>
+          <span>{{ index + 1 }}</span>
+          <p>{{ step }}</p>
+        </li>
+      }
     </ol>
     <div class="verification-actions" aria-label="Sposoby weryfikacji">
       <a class="secondary-action" [routerLink]="content.verification.demoCta.path">{{
@@ -175,7 +193,9 @@
       <p class="page-lead">{{ content.collaboration.lead }}</p>
     </div>
     <ul class="bullet-grid">
-      <li *ngFor="let point of content.collaboration.points">{{ point }}</li>
+      @for (point of content.collaboration.points; track point) {
+        <li>{{ point }}</li>
+      }
     </ul>
   </section>
 
@@ -185,9 +205,11 @@
       <h2 id="capabilities-title">Zakres techniczny dobierany do problemu</h2>
     </div>
     <div class="card-grid">
-      <article *ngFor="let capability of content.capabilities" class="info-card">
-        <h3>{{ capability }}</h3>
-      </article>
+      @for (capability of content.capabilities; track capability) {
+        <article class="info-card">
+          <h3>{{ capability }}</h3>
+        </article>
+      }
     </div>
   </section>
 
@@ -197,10 +219,12 @@
       <h2 id="approach-title">Małe iteracje i jasne granice odpowiedzialności</h2>
     </div>
     <ol class="process-list">
-      <li *ngFor="let item of content.engagementModel; let index = index">
-        <span class="step-number">{{ index + 1 }}</span>
-        <p>{{ item }}</p>
-      </li>
+      @for (item of content.engagementModel; track item; let index = $index) {
+        <li>
+          <span class="step-number">{{ index + 1 }}</span>
+          <p>{{ item }}</p>
+        </li>
+      }
     </ol>
   </section>
 </div>

@@ -1,6 +1,5 @@
-import { CommonModule } from '@angular/common';
 import type { HttpErrorResponse } from '@angular/common/http';
-import { Component, DestroyRef, ViewChild, inject } from '@angular/core';
+import { Component, DestroyRef, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
 import type { ElementRef, OnInit } from '@angular/core';
 import type { FormControl } from '@angular/forms';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -42,9 +41,9 @@ interface SubmissionSummary {
 
 @Component({
   selector: 'app-contact-form',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './contact-form.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './contact-form.component.scss',
 })
 export class ContactFormComponent implements OnInit {

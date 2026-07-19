@@ -14,30 +14,33 @@
     <div class="scenario-picker">
       <h3>{{ content.questionsLabel }}</h3>
       <div class="scenario-list">
-        <button
-          *ngFor="let scenario of content.scenarios; trackBy: trackScenario"
-          type="button"
-          class="scenario-button"
-          [class.is-selected]="selectedScenario?.id === scenario.id"
-          [attr.aria-pressed]="selectedScenario?.id === scenario.id"
-          aria-controls="knowledge-demo-result"
-          (click)="selectScenario(scenario)"
-        >
-          {{ scenario.question }}
-        </button>
+        @for (scenario of content.scenarios; track trackScenario($index, scenario)) {
+          <button
+            type="button"
+            class="scenario-button"
+            [class.is-selected]="selectedScenario?.id === scenario.id"
+            [attr.aria-pressed]="selectedScenario?.id === scenario.id"
+            aria-controls="knowledge-demo-result"
+            (click)="selectScenario(scenario)"
+          >
+            {{ scenario.question }}
+          </button>
+        }
       </div>
     </div>
 
     <div id="knowledge-demo-result" class="conversation" aria-live="polite" aria-atomic="true">
-      <ng-container *ngIf="state === 'idle'">
+      @if (state === 'idle') {
         <p class="empty-state">{{ content.emptyStateLabel }}</p>
-      </ng-container>
+      }
 
-      <p *ngIf="state === 'checking'" class="checking-state" role="status">
-        {{ content.checkingLabel }}
-      </p>
+      @if (state === 'checking') {
+        <p class="checking-state" role="status">
+          {{ content.checkingLabel }}
+        </p>
+      }
 
-      <ng-container *ngIf="state === 'result' && selectedScenario">
+      @if (state === 'result' && selectedScenario) {
         <p class="question-history">
           <strong>{{ content.questionLabel }}:</strong> {{ selectedScenario.question }}
         </p>
@@ -47,20 +50,24 @@
           <p class="confidence">
             <strong>{{ content.confidenceLabel }}:</strong> {{ selectedScenario.confidence }}
           </p>
-
-          <div *ngIf="selectedScenario.sources.length" class="sources">
-            <h4>{{ content.sourcesLabel }}</h4>
-            <ul>
-              <li *ngFor="let source of selectedScenario.sources">{{ source }}</li>
-            </ul>
-          </div>
-
-          <div *ngIf="selectedScenario.handoff" class="handoff">
-            <h4>{{ content.handoffLabel }}</h4>
-            <p>{{ selectedScenario.handoff }}</p>
-          </div>
+          @if (selectedScenario.sources.length) {
+            <div class="sources">
+              <h4>{{ content.sourcesLabel }}</h4>
+              <ul>
+                @for (source of selectedScenario.sources; track source) {
+                  <li>{{ source }}</li>
+                }
+              </ul>
+            </div>
+          }
+          @if (selectedScenario.handoff) {
+            <div class="handoff">
+              <h4>{{ content.handoffLabel }}</h4>
+              <p>{{ selectedScenario.handoff }}</p>
+            </div>
+          }
         </article>
-      </ng-container>
+      }
     </div>
   </div>
 
