@@ -24,7 +24,9 @@
       <h2 id="demo-scope-title">{{ content.audienceTitle }}</h2>
     </div>
     <ul class="bullet-grid">
-      <li *ngFor="let problem of content.audienceProblems">{{ problem }}</li>
+      @for (problem of content.audienceProblems; track problem) {
+        <li>{{ problem }}</li>
+      }
     </ul>
   </section>
 
@@ -34,7 +36,9 @@
       <h2 id="demo-process-title">{{ content.processTitle }}</h2>
     </div>
     <ol class="ordered-grid">
-      <li *ngFor="let step of content.flowSteps">{{ step }}</li>
+      @for (step of content.flowSteps; track step) {
+        <li>{{ step }}</li>
+      }
     </ol>
   </section>
 
@@ -66,13 +70,17 @@
       <article class="compare-card">
         <h3>{{ content.comparison.demo.title }}</h3>
         <ul>
-          <li *ngFor="let item of content.comparison.demo.points">{{ item }}</li>
+          @for (item of content.comparison.demo.points; track item) {
+            <li>{{ item }}</li>
+          }
         </ul>
       </article>
       <article class="compare-card">
         <h3>{{ content.comparison.production.title }}</h3>
         <ul>
-          <li *ngFor="let item of content.comparison.production.points">{{ item }}</li>
+          @for (item of content.comparison.production.points; track item) {
+            <li>{{ item }}</li>
+          }
         </ul>
       </article>
     </div>

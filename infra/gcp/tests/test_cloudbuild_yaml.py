@@ -39,9 +39,9 @@ SECRET_VERSION_PATTERN = re.compile(
     r"secrets/[A-Za-z0-9_-]{1,255}/versions/(?:latest|[1-9][0-9]*)$"
 )
 FRONTEND_CHECK_IMAGE = (
-    "cypress/browsers:node-20.11.1-chrome-123.0.6312.58-1-ff-124.0-"
-    "edge-122.0.2365.92-1@sha256:"
-    "a73fe736a24ad0ba8913c7e4138a1331eb1d361ad5d63976d05a337129639c7e"
+    "cypress/browsers:node-24.15.0-chrome-148.0.7778.178-1-ff-151.0.2-"
+    "edge-148.0.3967.83-1@sha256:"
+    "605b5e51f42ae27cee8be859562ed4e281ccee69a74b7929bb899a4234835a40"
 )
 LEGACY_FRONTEND_CHECK_IMAGE = "cypress/browsers:node20.11.1-chrome120-ff121"
 FRONTEND_CHECK_STEPS = {

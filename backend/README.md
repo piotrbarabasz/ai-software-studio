@@ -71,6 +71,10 @@ Review the generated diff, reinstall from `requirements-dev.lock`, run all backe
 
 ## Contact Delivery
 
-`POST /api/contact` validates the inquiry, applies a rate-limit-ready boundary, and sends an SMTP notification using the configured `From`; `Reply-To` is the validated address supplied by the user. The MVP does not persist inquiries in a database.
+`POST /api/contact` validates the inquiry, rejects bodies larger than 16 KiB before schema parsing, applies a bounded in-memory rate limiter, and sends an SMTP notification using the configured `From`; `Reply-To` is the validated address supplied by the user. The MVP does not persist inquiries in a database.
+
+Interactive Swagger, ReDoc and the HTTP OpenAPI document remain available in `development` and `test`. Production sets all three public routes to `404`; programmatic schema generation remains available to tests. Production API responses also receive `no-store`, a JSON-safe CSP, HSTS, `nosniff`, frame, referrer and permissions headers.
+
+The limiter is deliberately best-effort and local to one process/Cloud Run instance. It keeps at most 10,000 hashed peer keys, expires inactive keys after five minutes, cleans periodically and evicts the oldest key at capacity. It is not a global cross-instance quota. The application does not trust caller-supplied `X-Forwarded-For`; behind Cloud Run or an additional Firebase/load-balancer proxy, multiple clients can therefore share a limiter bucket. Uvicorn access logging is disabled, and application outcome logs contain neither IP addresses nor form fields.
 
 Failed email delivery returns a clear `503` response and logs a non-sensitive operational event without full message bodies, secrets, email addresses, contact payloads, or environment variables.

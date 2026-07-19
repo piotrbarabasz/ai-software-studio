@@ -1,5 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { siteContent } from '../../core/content/site.pl';
 import {
@@ -14,9 +13,9 @@ if (environment.production && publicLegalConfigMode !== 'production') {
 
 @Component({
   selector: 'app-privacy-page',
-  standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './privacy-page.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './privacy-page.component.scss',
 })
 export class PrivacyPageComponent {

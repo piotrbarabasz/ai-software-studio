@@ -23,16 +23,20 @@
       <h2 id="directions-title">Eksperymenty prowadzone z jasno określoną granicą</h2>
     </div>
     <div class="card-grid">
-      <article *ngFor="let direction of content.directions" class="info-card">
-        <p class="panel-kicker" *ngIf="direction.status">
-          {{ content.statusLabels[direction.status] }}
-        </p>
-        <h3>{{ direction.area }}</h3>
-        <p>{{ direction.problem }}</p>
-        <p><strong>Cel:</strong> {{ direction.goal }}</p>
-        <p><strong>Możliwe zastosowanie:</strong> {{ direction.potentialBusinessUse }}</p>
-        <p>{{ direction.claimBoundary }}</p>
-      </article>
+      @for (direction of content.directions; track direction) {
+        <article class="info-card">
+          @if (direction.status) {
+            <p class="panel-kicker">
+              {{ content.statusLabels[direction.status] }}
+            </p>
+          }
+          <h3>{{ direction.area }}</h3>
+          <p>{{ direction.problem }}</p>
+          <p><strong>Cel:</strong> {{ direction.goal }}</p>
+          <p><strong>Możliwe zastosowanie:</strong> {{ direction.potentialBusinessUse }}</p>
+          <p>{{ direction.claimBoundary }}</p>
+        </article>
+      }
     </div>
   </section>
   <section

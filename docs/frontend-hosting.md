@@ -17,9 +17,11 @@ Formularz wysyła dane bezpośrednio do osobnej usługi API. Nginx frontendu nie
 
 Zachowane są `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy` i `X-Frame-Options`. HSTS (`max-age=31536000`, bez `includeSubDomains` i `preload`) jest dodawany tylko wtedy, gdy zaufana warstwa HTTPS przekazuje `X-Forwarded-Proto: https`; lokalne HTTP nie dostaje HSTS.
 
-Build generuje `Content-Security-Policy-Report-Only` z dokładnym originem `API_URL` w `connect-src`. Polityka ogranicza pozostałe zasoby do bieżącego originu, blokuje obiekty i ramki oraz używa `frame-ancestors 'none'`. Pozostaje w trybie raportowym, ponieważ prerenderowany JSON-LD jest skryptem inline, a Angular umieszcza część stylów komponentów inline. Przed przełączeniem na wymuszanie trzeba wdrożyć stabilne hashe/nonces dla JSON-LD i ponownie sprawdzić nawigację klientową; `style-src` świadomie dopuszcza obecnie `'unsafe-inline'`.
+Build generuje wymuszany `Content-Security-Policy` z dokładnym originem `API_URL` w `connect-src`. Inline-critical CSS jest wyłączony, dlatego dokument nie korzysta z asynchronicznego `onload`; główny arkusz jest zwykłym zasobem same-origin. Po prerenderingu generator oblicza SHA-256 każdego bloku JSON-LD i wpisuje wszystkie wymagane hashe do `script-src`. Test artefaktu odrzuca inne skrypty inline, inline event handlery, brakujące hashe, `unsafe-inline` w `script-src` oraz nieistniejący endpoint raportowania.
 
-Nie skonfigurowano endpointu raportów CSP, więc naruszenia są widoczne w narzędziach przeglądarki. Nie dodano GA/GTM ani identyfikatora analityki: przy obecnej konfiguracji nie są pobierane zewnętrzne skrypty i nie są ustawiane cookies analityczne.
+`style-src 'self' 'unsafe-inline'` jest jedynym wyjątkiem inline. Angular SSR umieszcza w każdym prerenderowanym dokumencie style komponentów w tagach `<style ng-app-id="ng">`; statyczny nonce nie zapewniałby ochrony, a globalny zestaw hashy stylów byłby kruchy przy runtime'owym wstrzykiwaniu stylów komponentów. Skrypty nie mają takiego wyjątku. Polityka została najpierw sprawdzona w dotychczasowym trybie Report-Only: wykryte zależności stanowiły `onload` arkusza oraz niehashowany JSON-LD; obie zostały usunięte przed włączeniem egzekwowania.
+
+Nie skonfigurowano `report-uri` ani `report-to`, ponieważ aplikacja nie ma rzeczywistego odbiornika raportów CSP. Nie dodano GA/GTM ani identyfikatora analityki: przy obecnej konfiguracji nie są pobierane zewnętrzne skrypty i nie są ustawiane cookies analityczne.
 
 ## Test kontenera
 
@@ -29,7 +31,7 @@ Po lokalnym zbudowaniu i uruchomieniu kontenera wykonaj:
 frontend/scripts/verify-hosting.ps1 -BaseUrl http://127.0.0.1:8080
 ```
 
-Skrypt używa `curl.exe` i sprawdza gzip dla HTML i głównego chunka JS, cache HTML i hashowanego assetu, CSP, warunkowy HSTS oraz prawdziwy status 404 z `no-store` i `noindex`.
+Skrypt używa `curl.exe` i sprawdza gzip dla HTML i głównego chunka JS, cache HTML i hashowanego assetu, wymuszany CSP bez `unsafe-inline` w `script-src`, warunkowy HSTS oraz prawdziwy status 404 z `no-store` i pojedynczym `X-Robots-Tag: noindex, follow`.
 
 Ręczna kontrola kompresji:
 

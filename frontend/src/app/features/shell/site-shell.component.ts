@@ -1,5 +1,14 @@
-import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { Component, DestroyRef, HostListener, PLATFORM_ID, ViewChild, inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import {
+  Component,
+  DestroyRef,
+  HostListener,
+  PLATFORM_ID,
+  ViewChild,
+  inject,
+  DOCUMENT,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import type { ElementRef, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Meta, Title } from '@angular/platform-browser';
@@ -13,9 +22,9 @@ import { absoluteSiteUrl, siteSeo, siteSocialImageUrl } from '../../core/seo/sit
 
 @Component({
   selector: 'app-site-shell',
-  standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, RouterOutlet],
+  imports: [RouterLink, RouterLinkActive, RouterOutlet],
   templateUrl: './site-shell.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './site-shell.component.scss',
 })
 export class SiteShellComponent implements OnInit {

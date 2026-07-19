@@ -1,5 +1,4 @@
-import { CommonModule, DOCUMENT } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, DOCUMENT, ChangeDetectionStrategy } from '@angular/core';
 import type { OnDestroy } from '@angular/core';
 import { inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
@@ -13,9 +12,9 @@ type DemoViewState = 'idle' | 'checking' | 'result';
 
 @Component({
   selector: 'app-knowledge-demo',
-  standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [RouterLink],
   templateUrl: './knowledge-demo.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './knowledge-demo.component.scss',
 })
 export class KnowledgeDemoComponent implements OnDestroy {

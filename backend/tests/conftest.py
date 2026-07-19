@@ -33,6 +33,23 @@ def settings() -> Settings:
 
 
 @pytest.fixture
+def production_settings() -> Settings:
+    return Settings(
+        app_env="production",
+        cors_allowed_origins="https://protolume.pl",
+        contact_delivery_mode="email",
+        contact_recipient_email="recipient@fixtures.protolume.pl",
+        contact_from_email="sender@fixtures.protolume.pl",
+        smtp_host="smtp.fixtures.protolume.pl",
+        smtp_port=587,
+        smtp_username="smtp-user",
+        smtp_password="smtp-password",
+        smtp_use_tls=True,
+        contact_rate_limit_per_minute=5,
+    )
+
+
+@pytest.fixture
 def client(settings: Settings) -> Generator[TestClient, None, None]:
     app = create_app(settings)
     app.state.contact_intake = ContactIntakeService(

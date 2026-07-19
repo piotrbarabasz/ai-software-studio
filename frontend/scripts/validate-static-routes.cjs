@@ -53,7 +53,7 @@ for (const header of [
   'Permissions-Policy',
   'X-Frame-Options',
   'Strict-Transport-Security',
-  'Content-Security-Policy-Report-Only',
+  'Content-Security-Policy',
 ]) {
   if (!securityHeaders.includes(header)) {
     errors.push(`Nginx is missing security header: ${header}`);
@@ -62,6 +62,22 @@ for (const header of [
 
 if (!securityHeaders.includes('__CSP_CONNECT_SRC__')) {
   errors.push('CSP does not have a build-time API origin placeholder');
+}
+
+if (!securityHeaders.includes('__CSP_SCRIPT_HASHES__')) {
+  errors.push('CSP does not have build-time hashes for prerendered inline scripts');
+}
+
+if (securityHeaders.includes('Content-Security-Policy-Report-Only')) {
+  errors.push('CSP is not enforced');
+}
+
+if (/script-src[^;]*'unsafe-inline'/.test(securityHeaders)) {
+  errors.push("script-src must not contain 'unsafe-inline'");
+}
+
+if ((nginx.match(/add_header X-Robots-Tag/g) ?? []).length > 0) {
+  errors.push('Nginx route configuration duplicates the generated X-Robots-Tag header');
 }
 
 if (errors.length > 0) {
