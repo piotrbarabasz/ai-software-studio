@@ -114,20 +114,61 @@ def assert_pinned_frontend_check_image(test: unittest.TestCase, image: str) -> N
     test.assertIsNotNone(match)
 
 
+def assert_ordered_wait_for_dependencies(
+    test: unittest.TestCase, steps: list[object], config_name: str
+) -> None:
+    previously_defined_ids: set[str] = set()
+    for index, step in enumerate(steps):
+        test.assertIsInstance(step, dict, f"{config_name}: step #{index} is not a mapping")
+        step_id = step.get("id")
+        test.assertIsInstance(
+            step_id, str, f"{config_name}: step #{index} has no string id"
+        )
+        test.assertTrue(step_id.strip(), f"{config_name}: step #{index} has an empty id")
+        test.assertNotIn(
+            step_id,
+            previously_defined_ids,
+            f"{config_name}: duplicate step id {step_id!r}",
+        )
+
+        wait_for = step.get("waitFor", [])
+        test.assertIsInstance(
+            wait_for, list, f"{config_name}: step {step_id!r} has a non-list waitFor"
+        )
+        for dependency in wait_for:
+            test.assertIsInstance(
+                dependency,
+                str,
+                f"{config_name}: step {step_id!r} has a non-string waitFor dependency",
+            )
+            test.assertTrue(
+                dependency == "-" or dependency in previously_defined_ids,
+                f"{config_name}: waitFor dependency {dependency!r} for step "
+                f"{step_id!r} has not been defined earlier",
+            )
+
+        previously_defined_ids.add(step_id)
+
+
 class CloudBuildYamlTest(unittest.TestCase):
-    def test_all_cloud_build_files_parse_and_wait_for_known_steps(self) -> None:
+    def test_all_cloud_build_files_parse_and_wait_for_prior_steps(self) -> None:
         for name in CONFIG_NAMES:
             with self.subTest(name=name):
                 config = load_config(name)
                 steps = config.get("steps")
                 self.assertIsInstance(steps, list)
-                known_ids = {step.get("id") for step in steps if isinstance(step, dict)}
-                for step in steps:
-                    for dependency in step.get("waitFor", []):
-                        self.assertTrue(
-                            dependency == "-" or dependency in known_ids,
-                            f"{name}: unknown waitFor dependency {dependency!r}",
-                        )
+                assert_ordered_wait_for_dependencies(self, steps, name)
+
+    def test_wait_for_rejects_a_step_defined_later(self) -> None:
+        steps: list[object] = [
+            {"id": "first", "waitFor": ["second"]},
+            {"id": "second"},
+        ]
+
+        with self.assertRaisesRegex(AssertionError, "has not been defined earlier"):
+            assert_ordered_wait_for_dependencies(
+                self, steps, "forward-reference.yaml"
+            )
 
     def test_all_cloud_build_template_variables_are_declared_or_builtin(self) -> None:
         for name in CONFIG_NAMES:
