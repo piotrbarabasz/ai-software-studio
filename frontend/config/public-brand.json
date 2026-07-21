@@ -19,7 +19,7 @@
   },
   "assets": {
     "faviconPath": "/assets/favicon.svg",
-    "socialPreviewPath": "/assets/protolume-social-preview.png",
-    "socialPreviewType": "image/png"
+    "socialPreviewPath": "/assets/protolume-social-preview.svg",
+    "socialPreviewType": "image/svg+xml"
   }
 }
