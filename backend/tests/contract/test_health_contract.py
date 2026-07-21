@@ -5,11 +5,11 @@ from app.main import create_app
 from fastapi.testclient import TestClient
 
 
-def test_health_returns_reachability_only_response(client: TestClient) -> None:
+def test_health_returns_status_and_build_sha(client: TestClient) -> None:
     response = client.get("/health")
 
     assert response.status_code == 200
-    assert response.json() == {"status": "ok", "service": "marketing-api"}
+    assert response.json() == {"status": "ok", "buildSha": "unknown"}
 
 
 def test_health_logging_is_non_sensitive(client: TestClient, caplog) -> None:

@@ -374,8 +374,8 @@ const routeMetadata = [
   },
   {
     path: '/development',
-    label: 'Development',
-    title: brandTitle('Development aplikacji, API i automatyzacji'),
+    label: 'Wdrożenia',
+    title: brandTitle('Wdrożenia aplikacji, API i automatyzacji'),
     description: brandDescription(
       'Planowanie i realizacja aplikacji, API, integracji oraz automatyzacji w potwierdzonym zakresie.',
     ),
@@ -649,7 +649,7 @@ export const siteContent = {
         },
       },
       {
-        eyebrow: 'Development',
+        eyebrow: 'Wdrożenia',
         title: 'Zaplanuj pierwszy etap',
         lead: 'Dla potwierdzonej potrzeby, użytkowników i rezultatu rozwiązania.',
         points: [
@@ -658,7 +658,7 @@ export const siteContent = {
           'wycena po potwierdzeniu zakresu',
         ],
         cta: {
-          label: 'Zobacz zakres developmentu',
+          label: 'Zobacz zakres wdrożenia',
           path: '/development',
           queryParams: undefined,
         },
@@ -896,7 +896,7 @@ export const siteContent = {
   },
   development: {
     path: '/development',
-    eyebrow: 'Development',
+    eyebrow: 'Wdrożenia',
     title: 'Aplikacje, API, integracje i automatyzacje z jasno ustalonym pierwszym etapem',
     lead: 'Gdy potrzeba, użytkownicy i rezultat są potwierdzone, można od razu zaplanować pierwszy etap. Demo przydaje się tylko wtedy, gdy wcześniej trzeba sprawdzić ryzykowne założenie.',
     heroNextStep: 'Po wysłaniu opisu sprawdzimy, czy można przejść do planowania pierwszego etapu.',
@@ -906,7 +906,7 @@ export const siteContent = {
       'integracje, bezpieczeństwo i utrzymanie są planowane zgodnie z potrzebami etapu',
     ],
     readiness: {
-      title: 'Kiedy development ma sens',
+      title: 'Kiedy wdrożenie ma sens',
       lead: 'Rozpoczęcie prac jest zasadne, gdy zespół potrafi wspólnie potwierdzić podstawy pierwszego etapu. Jeśli brakuje tych odpowiedzi, najpierw potrzebna jest walidacja.',
       points: [
         'istnieje potwierdzona potrzeba biznesowa',
@@ -1023,9 +1023,9 @@ export const siteContent = {
     ],
     closingCta: {
       title: 'Planujesz aplikację, API, integrację albo automatyzację?',
-      lead: 'Opisz obecną sytuację, użytkowników i oczekiwany rezultat. Jeśli zakres jest gotowy, przejdziemy do planowania developmentu; jeśli nie, najpierw określimy właściwą walidację.',
+      lead: 'Opisz obecną sytuację, użytkowników i oczekiwany rezultat. Jeśli zakres jest gotowy, przejdziemy do planowania wdrożenia; jeśli nie, najpierw określimy właściwą walidację.',
       primaryCta: {
-        label: 'Opisz potrzebę developmentu',
+        label: 'Opisz potrzebę wdrożenia',
         path: '/kontakt',
         queryParams: { projectType: 'custom_web_app' },
       },
@@ -1050,7 +1050,7 @@ export const siteContent = {
     lead: 'Wystarczy krótko opisać obecną pracę, problem i oczekiwany efekt. Nie potrzebujesz gotowej specyfikacji technicznej.',
     nextSteps: [
       'Otrzymuję opis sytuacji i sprawdzam, jakie informacje są potrzebne do dalszej rozmowy.',
-      'Na jego podstawie wskazuję właściwą ścieżkę: demo, walidację, plan prac albo development.',
+      'Na jego podstawie wskażę właściwą ścieżkę: demo, walidację, plan prac albo wdrożenie.',
       'Dalsze ustalenia odbywają się przed rozpoczęciem jakiejkolwiek płatnej realizacji.',
     ],
     noSpecificationNeeded: 'Nie musisz mieć gotowej specyfikacji technicznej.',
@@ -1087,7 +1087,7 @@ export const siteContent = {
       title: 'Wiadomość została odebrana',
       summaryTitle: 'Wysłany opis',
       nextStep:
-        'Na podstawie opisu wskażemy właściwą ścieżkę: demo, walidację, plan prac albo development.',
+        'Na podstawie opisu wskażemy właściwą ścieżkę: demo, walidację, plan prac albo wdrożenie.',
       homeCta: { label: 'Wróć na stronę główną', path: '/' },
       anotherInquiryLabel: 'Wyślij kolejne zapytanie',
       directEmailLead: 'Jeśli wolisz, możesz również skontaktować się bezpośrednio:',

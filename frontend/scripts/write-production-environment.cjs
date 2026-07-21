@@ -9,6 +9,7 @@ function productionEnvironment(source = process.env) {
     source.PUBLIC_SALES_EMAIL ?? '__PUBLIC_CONFIG_REQUIRED__:publicSalesEmail';
   const publicPrivacyEmail =
     source.PUBLIC_PRIVACY_EMAIL ?? '__PUBLIC_CONFIG_REQUIRED__:publicPrivacyEmail';
+  const buildSha = source.PUBLIC_BUILD_SHA || 'unknown';
   if (!['true', 'false'].includes(rawIndexingEnabled)) {
     throw new Error('PUBLIC_SITE_INDEXING musi mieć wartość true albo false.');
   }
@@ -20,6 +21,7 @@ function productionEnvironment(source = process.env) {
     indexingEnabled: rawIndexingEnabled === 'true',
     publicSalesEmail,
     publicPrivacyEmail,
+    buildSha,
   };
 }
 
@@ -28,6 +30,16 @@ function writeProductionEnvironment(source = process.env) {
   fs.writeFileSync(
     outputPath,
     `export const environment = ${JSON.stringify(productionEnvironment(source), null, 2)} as const;\n`,
+    'utf8',
+  );
+  const indexPath = path.resolve(__dirname, '../src/index.html');
+  const index = fs.readFileSync(indexPath, 'utf8');
+  fs.writeFileSync(
+    indexPath,
+    index.replace(
+      /(<meta name="protolume-build-sha" content=")[^"]*(">)/,
+      `$1${productionEnvironment(source).buildSha}$2`,
+    ),
     'utf8',
   );
 }

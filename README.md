@@ -1,6 +1,6 @@
 # Protolume
 
-Publiczna, polskojęzyczna strona Protolume — dema AI, aplikacje i automatyzacje dla firm, prowadzone przez Piotra Barabasza.
+Publiczna, polskojęzyczna strona Protolume — studio wdrożeń AI i automatyzacji, prowadzone przez Piotra Barabasza.
 
 ## Repository Structure
 

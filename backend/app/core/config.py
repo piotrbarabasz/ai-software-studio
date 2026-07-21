@@ -10,6 +10,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     app_env: Literal["development", "test", "production"] = "development"
+    app_build_sha: str = "unknown"
     cors_allowed_origins: str = "http://localhost:4200"
     contact_delivery_mode: Literal["email"] | None = None
     contact_recipient_email: EmailStr | None = None

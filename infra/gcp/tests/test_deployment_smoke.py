@@ -38,7 +38,7 @@ class FakeDeployment:
 
         if parsed.netloc == "api.run.app":
             if path == "/health":
-                body = json.dumps({"status": "ok", "service": "marketing-api"}).encode()
+                body = json.dumps({"status": "ok", "buildSha": "abc1234"}).encode()
             elif path == "/ready":
                 body = json.dumps(
                     {"status": "ready", "service": "marketing-api"}
@@ -58,7 +58,13 @@ class FakeDeployment:
             body = (
                 '<html><head><link rel="canonical" href="'
                 + canonical
-                + '"><meta name="robots" content="noindex, follow"></head></html>'
+                + '"><meta name="robots" content="noindex, follow">'
+                + ('<meta name="protolume-build-sha" content="abc1234">' if path == "/" else '')
+                + ('<nav id="primary-navigation"><a href="/demo-ai">Demo</a><a href="/development">Wdrozenia</a><a href="/kontakt?projectType=mvp_prototype">Opisz proces</a></nav><h1>Sprawdź w 7 dni, czy AI usprawni konkretny proces</h1>' if path == "/" else '')
+                + ('<h1>Demo</h1><section class="interactive-demo">demo</section><a href="/kontakt">Kontakt</a>' if path == "/demo-ai" else '')
+                + ('<h1>Kontakt</h1><form><input name="name"><input name="email"><select name="projectType"></select><textarea name="message"></textarea><input name="consent"></form>' if path == "/kontakt" else '')
+                + ('<h1>Polityka prywatnosci</h1><a href="mailto:privacy@protolume.pl">kontakt</a>' if path == "/polityka-prywatnosci" else '')
+                + '</body></html>'
             ).encode()
             headers = {"x-robots-tag": "noindex, follow"}
         elif path == smoke.NOT_FOUND_PATH:
@@ -143,6 +149,70 @@ class DeploymentSmokeTest(unittest.TestCase):
             "public route /studio: X-Robots-Tag is not noindex, follow", errors
         )
         self.assertNotIn("<html>", "\n".join(errors))
+
+    def test_missing_h1_is_reported(self) -> None:
+        deployment = FakeDeployment()
+
+        def without_h1(request, timeout):
+            response = deployment(request, timeout)
+            if urlsplit(request.full_url).path == "/":
+                start = response.body.find(b"<h1>")
+                end = response.body.find(b"</h1>", start)
+                body = response.body[:start] + response.body[end + len(b"</h1>") :]
+                return smoke.Response(response.status, response.headers, body)
+            return response
+
+        errors = smoke.run_checks("https://api.run.app", "https://protolume.pl", expect_noindex=True, timeout_seconds=2, request=without_h1)
+        self.assertIn("public route /: expected an h1 element, received none", errors)
+
+    def test_missing_form_is_reported(self) -> None:
+        deployment = FakeDeployment()
+
+        def without_form(request, timeout):
+            response = deployment(request, timeout)
+            if urlsplit(request.full_url).path == "/kontakt":
+                return smoke.Response(response.status, response.headers, response.body.replace(b"<form>", b"<div>").replace(b"</form>", b"</div>"))
+            return response
+
+        errors = smoke.run_checks("https://api.run.app", "https://protolume.pl", expect_noindex=True, timeout_seconds=2, request=without_form)
+        self.assertIn("public route /kontakt: expected a form, received none", errors)
+
+    def test_mismatched_build_sha_is_reported(self) -> None:
+        deployment = FakeDeployment()
+
+        def different_sha(request, timeout):
+            response = deployment(request, timeout)
+            if urlsplit(request.full_url).path == "/":
+                return smoke.Response(response.status, response.headers, response.body.replace(b"abc1234", b"def5678"))
+            return response
+
+        errors = smoke.run_checks("https://api.run.app", "https://protolume.pl", expect_noindex=True, timeout_seconds=2, request=different_sha)
+        self.assertTrue(any("does not match" in error for error in errors))
+
+    def test_invalid_noindex_is_reported(self) -> None:
+        deployment = FakeDeployment()
+
+        def indexed(request, timeout):
+            response = deployment(request, timeout)
+            if urlsplit(request.full_url).path == "/":
+                return smoke.Response(response.status, {"x-robots-tag": "index, follow"}, response.body.replace(b"noindex, follow", b"index, follow"))
+            return response
+
+        errors = smoke.run_checks("https://api.run.app", "https://protolume.pl", expect_noindex=True, timeout_seconds=2, request=indexed)
+        self.assertTrue(any("public route /: HTML robots metadata" in error for error in errors))
+
+    def test_retry_succeeds_after_transient_failure(self) -> None:
+        attempts = 0
+        sleeps: list[float] = []
+
+        def check():
+            nonlocal attempts
+            attempts += 1
+            return ["transient"] if attempts == 1 else []
+
+        self.assertEqual(smoke.run_with_retries(check, 2, 0.25, sleeps.append), [])
+        self.assertEqual(attempts, 2)
+        self.assertEqual(sleeps, [0.25])
 
     def test_urls_must_be_https_origins(self) -> None:
         for backend_url, site_url in (
