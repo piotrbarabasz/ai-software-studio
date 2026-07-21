@@ -40,11 +40,13 @@ export interface PublicBrandConfiguration {
 
 const publicOrigin = environment.publicSiteUrl.replace(/\/$/, '');
 
-export const publicBrand = {
+const visualIdentity: PublicBrandVisualIdentity = {
+  logos: {},
+  themeColor: '#7C5CFF',
+};
+
+export const publicBrand: PublicBrandConfiguration = {
   ...publicBrandManifest,
   publicOrigin,
-  visualIdentity: {
-    logos: {},
-    themeColor: '#7C5CFF',
-  },
-} as const satisfies PublicBrandConfiguration;
+  visualIdentity,
+};
