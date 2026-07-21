@@ -218,6 +218,14 @@ export interface HomePageContent {
   readonly trustTeaser: HomeTrustTeaser;
   readonly evidenceTeaser: HomeEvidenceTeaser;
   readonly closingCta: HomeClosingCta;
+  readonly trustStrip: readonly [
+    HomeTrustStripItem,
+    HomeTrustStripItem,
+    HomeTrustStripItem,
+    HomeTrustStripItem,
+  ];
+  readonly useCases: readonly [HomeUseCase, HomeUseCase, HomeUseCase];
+  readonly sevenDayResults: HomeSevenDayResults;
 }
 
 export interface HomeSectionHeading {
@@ -235,14 +243,53 @@ export interface HomeCta {
 export interface HomeHero {
   readonly eyebrow: string;
   readonly title: string;
+  readonly titleBeforeHighlight: string;
+  readonly highlightedTitlePart: string;
+  readonly titleAfterHighlight: string;
   readonly audience: string;
   readonly lead: string;
   readonly primaryCta: HomeCta;
   readonly secondaryCta: HomeCta;
+  readonly supportingNote: string;
+  readonly processDiagram: readonly [string, string, string, string];
   readonly proof: {
     readonly label: string;
     readonly steps: readonly [string, string, string];
   };
+}
+
+export interface HomeTrustStripItem {
+  readonly id: string;
+  readonly title: string;
+  readonly description?: string;
+}
+
+export interface HomeUseCase {
+  readonly id: string;
+  readonly title: string;
+  readonly problem: string;
+  readonly outcome: string;
+  readonly cta?: HomeCta;
+  readonly visualKind?: 'knowledge-assistant' | 'message-workflow' | 'process-panel';
+}
+
+export interface HomeSevenDayResult {
+  readonly id: string;
+  readonly title: string;
+  readonly description: string;
+  readonly order?: number;
+}
+
+export interface HomeSevenDayResults {
+  readonly eyebrow: string;
+  readonly title: string;
+  readonly lead: string;
+  readonly items: readonly [
+    HomeSevenDayResult,
+    HomeSevenDayResult,
+    HomeSevenDayResult,
+    HomeSevenDayResult,
+  ];
 }
 
 export interface HomeProblemGroup {
@@ -401,6 +448,10 @@ export interface StudioPageContent {
 
 export interface FooterContent {
   readonly summary: string;
+  readonly offerLinks: readonly NavigationItem[];
+  readonly studioLinks: readonly (NavigationItem | ExternalLink)[];
+  readonly informationLinks: readonly NavigationItem[];
+  readonly copyright: string;
 }
 
 export interface ContactPageContent {

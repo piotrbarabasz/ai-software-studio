@@ -1,16 +1,41 @@
 :root {
   color-scheme: light;
-  --color-bg: #f7f8f4;
-  --color-surface: #ffffff;
-  --color-ink: #17201b;
-  --color-muted: #5f6f66;
-  --color-line: #d8ded6;
-  --color-primary: #006c5b;
-  --color-primary-strong: #00483e;
-  --color-accent: #c56a14;
-  --color-accent-soft: #f4dfc4;
-  --color-focus: #0b63ce;
-  --shadow-soft: 0 16px 40px rgba(23, 32, 27, 0.08);
+  --brand-50: #f5f3ff;
+  --brand-100: #ede9fe;
+  --brand-200: #ddd6fe;
+  --brand-400: #a78bfa;
+  --brand-500: #7c5cff;
+  --brand-600: #6847f5;
+  --brand-700: #5434d6;
+  --brand-800: #4329a8;
+  --ink-700: #3b4252;
+  --ink-800: #242936;
+  --ink-900: #171b26;
+  --ink-950: #10131c;
+  --surface: #ffffff;
+  --surface-soft: #f8f8fc;
+  --surface-brand: #f5f3ff;
+  --border: #e5e7ef;
+  --text: #171b26;
+  --text-muted: #646b7a;
+  --focus: #5434d6;
+  --success: #166534;
+  --warning: #92400e;
+  --error: #b91c1c;
+  --brand-gradient: linear-gradient(135deg, #7c5cff 0%, #6847f5 55%, #4338ca 100%);
+
+  /* Compatibility aliases for existing component styles. */
+  --color-bg: var(--surface-soft);
+  --color-surface: var(--surface);
+  --color-ink: var(--text);
+  --color-muted: var(--text-muted);
+  --color-line: var(--border);
+  --color-primary: var(--brand-500);
+  --color-primary-strong: var(--brand-600);
+  --color-accent: var(--brand-700);
+  --color-accent-soft: var(--brand-100);
+  --color-focus: var(--focus);
+  --shadow-soft: 0 16px 40px rgba(16, 19, 28, 0.08);
   --radius-panel: 18px;
   --radius-control: 10px;
   --space-section: clamp(2.75rem, 6vw, 5.5rem);
@@ -82,6 +107,19 @@ button {
 .reset-button,
 .submit-button {
   max-width: 100%;
+}
+
+.gradient-text {
+  color: var(--brand-700);
+}
+
+@supports ((background-clip: text) or (-webkit-background-clip: text)) {
+  .gradient-text {
+    background: var(--brand-gradient);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 }
 
 :focus-visible {

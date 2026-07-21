@@ -1,0 +1,26 @@
+@if (linkToHome) {
+  <a class="logo-link" routerLink="/" [attr.aria-label]="effectiveLabel">
+    <ng-container *ngTemplateOutlet="logoContent" />
+  </a>
+} @else {
+  <ng-container *ngTemplateOutlet="logoContent" />
+}
+
+<ng-template #logoContent>
+  @if (assetPath) {
+    <img
+      class="logo-image"
+      [src]="assetPath"
+      [alt]="linkToHome ? '' : accessibleLabel"
+      [attr.fetchpriority]="priority ? 'high' : null"
+    />
+  } @else {
+    <span
+      class="logo-fallback"
+      [class.logo-fallback-symbol]="variant === 'symbol'"
+      [attr.aria-hidden]="linkToHome || !accessibleLabel ? 'true' : null"
+      [attr.aria-label]="!linkToHome && accessibleLabel ? accessibleLabel : null"
+      >{{ fallbackText }}</span
+    >
+  }
+</ng-template>

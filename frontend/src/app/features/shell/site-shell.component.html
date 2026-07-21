@@ -1,23 +1,26 @@
 <a class="skip-link" href="#main-content" (click)="focusMainContent($event)">Przejdź do treści</a>
 
 <header class="site-header" [class.is-enhanced]="isNavigationEnhanced">
-  <a class="brand" routerLink="/" (click)="closeNavigation()" [attr.aria-label]="brand.name">
-    <img class="brand-mark" [src]="brand.assets.faviconPath" alt="" />
-    <span>{{ brand.name }}</span>
-  </a>
-
+  <app-protolume-logo
+    class="brand"
+    variant="horizontal"
+    theme="dark"
+    [linkToHome]="true"
+    accessibleLabel="Protolume — strona główna"
+    (click)="closeNavigation()"
+  />
   <button
     #menuToggle
     type="button"
     class="menu-toggle"
     aria-controls="primary-navigation"
+    [attr.aria-label]="isMobileNavigationOpen ? 'Zamknij menu główne' : 'Otwórz menu główne'"
     [attr.aria-expanded]="isNavigationEnhanced && isMobileViewport ? isMobileNavigationOpen : null"
     (click)="toggleNavigation()"
   >
     <span aria-hidden="true">{{ isMobileNavigationOpen ? '×' : '☰' }}</span>
     <span>{{ isMobileNavigationOpen ? 'Zamknij menu' : 'Menu' }}</span>
   </button>
-
   <nav
     #primaryNavigation
     id="primary-navigation"
@@ -31,6 +34,7 @@
         <a
           [routerLink]="item.path"
           routerLinkActive="is-active"
+          [routerLinkActiveOptions]="{ exact: true }"
           #routeLink="routerLinkActive"
           [attr.aria-current]="routeLink.isActive ? 'page' : null"
           (click)="closeNavigation()"
@@ -38,6 +42,13 @@
         >
       }
     </div>
+    <a
+      class="primary-cta"
+      routerLink="/kontakt"
+      [queryParams]="{ projectType: 'mvp_prototype' }"
+      (click)="closeNavigation()"
+      >Opisz proces</a
+    >
   </nav>
 </header>
 
@@ -46,26 +57,39 @@
 </main>
 
 <footer class="site-footer">
-  <div class="footer-intro">
-    <p>© {{ brand.name }} — {{ footer.summary }}</p>
-    <p>
-      <strong>{{ trust.owner.name }}</strong> — {{ trust.owner.role }}
-    </p>
+  <div class="footer-column footer-brand">
+    <app-protolume-logo variant="horizontal" theme="light" [linkToHome]="true" />
+    <p>{{ footer.summary }}</p>
   </div>
-  <div class="footer-links">
-    @for (item of navigation; track item) {
+  <div class="footer-column">
+    <h2>Oferta</h2>
+    @for (item of footer.offerLinks; track item.path) {
       <a [routerLink]="item.path" (click)="closeNavigation()">{{ item.label }}</a>
     }
-    <a routerLink="/rd" (click)="closeNavigation()">R&D</a>
-    <a routerLink="/polityka-prywatnosci" (click)="closeNavigation()">Polityka prywatności</a>
-    @for (link of trust.owner.links; track link) {
-      <a
-        [href]="link.url"
-        target="_blank"
-        rel="noopener noreferrer"
-        [attr.aria-label]="link.accessibleName"
-        >{{ link.label }}</a
-      >
+  </div>
+  <div class="footer-column">
+    <h2>Studio</h2>
+    @for (item of footer.studioLinks; track item.label) {
+      @if ('url' in item) {
+        <a
+          [href]="item.url"
+          target="_blank"
+          rel="noopener noreferrer"
+          [attr.aria-label]="item.accessibleName"
+          >{{ item.label }}</a
+        >
+      } @else {
+        <a [routerLink]="item.path" (click)="closeNavigation()">{{ item.label }}</a>
+      }
     }
+  </div>
+  <div class="footer-column">
+    <h2>Informacje</h2>
+    @for (item of footer.informationLinks; track item.path) {
+      <a [routerLink]="item.path" (click)="closeNavigation()">{{ item.label }}</a>
+    }
+  </div>
+  <div class="footer-bottom">
+    <p>© {{ currentYear }} {{ brand.name }} — {{ footer.copyright }}</p>
   </div>
 </footer>

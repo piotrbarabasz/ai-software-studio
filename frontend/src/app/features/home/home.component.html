@@ -2,8 +2,11 @@
   <section class="hero section-shell" aria-labelledby="hero-title">
     <div class="hero-copy">
       <p class="eyebrow">{{ home.hero.eyebrow }}</p>
-      <h1 id="hero-title">{{ home.hero.title }}</h1>
-      <p class="hero-audience">{{ home.hero.audience }}</p>
+      <h1 id="hero-title">
+        {{ home.hero.titleBeforeHighlight
+        }}<span class="gradient-text">{{ home.hero.highlightedTitlePart }}</span
+        >{{ home.hero.titleAfterHighlight }}
+      </h1>
       <p class="hero-lead">{{ home.hero.lead }}</p>
       <div class="hero-actions" aria-label="Główne akcje">
         <a
@@ -16,38 +19,74 @@
           home.hero.secondaryCta.label
         }}</a>
       </div>
+      <p class="hero-supporting-note">{{ home.hero.supportingNote }}</p>
     </div>
-    <aside class="hero-proof" [attr.aria-label]="home.hero.proof.label">
-      <p>{{ home.hero.proof.label }}</p>
+    <aside class="hero-process" aria-label="Proces od obecnego stanu do decyzji">
       <ol>
-        @for (step of home.hero.proof.steps; track step; let index = $index) {
+        @for (step of home.hero.processDiagram; track step; let index = $index) {
           <li>
-            <span>{{ index + 1 }}</span
-            >{{ step }}
+            <span class="process-node" aria-hidden="true">{{ index + 1 }}</span>
+            <span>{{ step }}</span>
           </li>
         }
       </ol>
     </aside>
   </section>
 
-  <section class="section-shell" aria-labelledby="problems-title">
+  <section class="trust-strip section-shell" aria-labelledby="trust-strip-title">
+    <h2 id="trust-strip-title" class="visually-hidden">Dlaczego warto zacząć od sprawdzenia</h2>
+    <ul>
+      @for (item of home.trustStrip; track item.id) {
+        <li>
+          <span class="trust-icon" aria-hidden="true"></span>
+          <span>{{ item.title }}</span>
+        </li>
+      }
+    </ul>
+  </section>
+
+  <section class="use-cases section-shell" aria-labelledby="use-cases-title">
     <div class="section-heading">
-      <p class="eyebrow">{{ home.problemsHeading.eyebrow }}</p>
-      <h2 id="problems-title">{{ home.problemsHeading.title }}</h2>
+      <p class="eyebrow">Przykładowe procesy</p>
+      <h2 id="use-cases-title">Gdzie AI i automatyzacja mogą odciążyć zespół</h2>
     </div>
-    <div class="problem-grid">
-      @for (group of home.problemGroups; track group) {
-        <article class="problem-card">
-          <h3>{{ group.title }}</h3>
-          <p>{{ group.effect }}</p>
-          <ul>
-            @for (example of group.examples; track example) {
-              <li>{{ example }}</li>
-            }
-          </ul>
+    <div class="use-case-grid">
+      @for (useCase of home.useCases; track useCase.id) {
+        <article class="use-case-card" [attr.data-visual-kind]="useCase.visualKind">
+          <h3>{{ useCase.title }}</h3>
+          <div>
+            <h4>Problem</h4>
+            <p>{{ useCase.problem }}</p>
+          </div>
+          <div>
+            <h4>Docelowa zmiana</h4>
+            <p>{{ useCase.outcome }}</p>
+          </div>
+          @if (useCase.cta) {
+            <a class="secondary-action" [routerLink]="useCase.cta.path">{{ useCase.cta.label }}</a>
+          }
         </article>
       }
     </div>
+  </section>
+
+  <section class="seven-day-results section-shell" aria-labelledby="seven-day-results-title">
+    <div class="section-heading">
+      <p class="eyebrow">{{ home.sevenDayResults.eyebrow }}</p>
+      <h2 id="seven-day-results-title">{{ home.sevenDayResults.title }}</h2>
+      <p class="section-lead">{{ home.sevenDayResults.lead }}</p>
+    </div>
+    <ol>
+      @for (result of home.sevenDayResults.items; track result.id) {
+        <li>
+          <span class="result-node" aria-hidden="true">{{ result.order }}</span>
+          <div>
+            <h3>{{ result.title }}</h3>
+            <p>{{ result.description }}</p>
+          </div>
+        </li>
+      }
+    </ol>
   </section>
 
   <section class="paths section-shell" aria-labelledby="paths-title">

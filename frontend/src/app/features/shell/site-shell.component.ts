@@ -19,10 +19,11 @@ import { filter } from 'rxjs';
 import { siteContent } from '../../core/content/site.pl';
 import { publicBrand } from '../../core/brand/public-brand.config';
 import { absoluteSiteUrl, siteSeo, siteSocialImageUrl } from '../../core/seo/site-seo.config';
+import { ProtolumeLogoComponent } from '../../shared/brand/protolume-logo/protolume-logo.component';
 
 @Component({
   selector: 'app-site-shell',
-  imports: [RouterLink, RouterLinkActive, RouterOutlet],
+  imports: [ProtolumeLogoComponent, RouterLink, RouterLinkActive, RouterOutlet],
   templateUrl: './site-shell.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './site-shell.component.scss',
@@ -47,6 +48,7 @@ export class SiteShellComponent implements OnInit {
   readonly footer = siteContent.footer;
   readonly trust = siteContent.trust;
   readonly brand = publicBrand;
+  readonly currentYear = new Date().getFullYear();
 
   ngOnInit(): void {
     if (this.isBrowser) {
