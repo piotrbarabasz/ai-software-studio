@@ -75,6 +75,10 @@ describe('HomeComponent', () => {
     expect(element.querySelectorAll('.use-case-card')).toHaveSize(3);
     expect(element.querySelectorAll('.use-case-card h3')).toHaveSize(3);
     expect(element.querySelectorAll('.use-case-card h4')).toHaveSize(6);
+    expect(element.querySelector('.use-case-card a[href="/demo-ai"]')?.textContent).toContain(
+      'Zobacz demo asystenta',
+    );
+    expect(element.querySelectorAll('.use-case-card a')).toHaveSize(1);
     expect(element.querySelectorAll('.problem-card')).toHaveSize(0);
     expect(element.querySelectorAll('.seven-day-results > ol > li')).toHaveSize(4);
     expect(element.querySelector('.seven-day-results')?.textContent).toContain(

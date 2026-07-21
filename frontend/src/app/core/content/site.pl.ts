@@ -674,6 +674,7 @@ export const siteContent = {
         problem: 'Pracownicy lub klienci wielokrotnie pytają o te same informacje.',
         outcome:
           'Odpowiedź na podstawie zatwierdzonych materiałów albo przekazanie sprawy człowiekowi.',
+        cta: { label: 'Zobacz demo asystenta', path: '/demo-ai' },
         visualKind: 'knowledge-assistant',
       },
       {
