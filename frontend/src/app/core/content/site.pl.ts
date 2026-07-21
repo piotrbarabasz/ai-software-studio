@@ -6,6 +6,7 @@ import type {
   HomeUseCase,
   DemoExamplePageContent,
   SiteContent,
+  SolutionsPageContent,
 } from './site-content.types';
 import { environment } from '../../../environments/environment';
 
@@ -57,7 +58,7 @@ export const researchDirections = [
   },
 ] satisfies readonly ResearchDirection[];
 
-const solutionsContent = {
+const solutionsContent: SolutionsPageContent = {
   path: '/rozwiazania',
   eyebrow: 'Rozwiązania',
   title: 'Trzy sposoby na uporządkowanie konkretnego procesu',
@@ -174,7 +175,7 @@ const solutionsContent = {
       queryParams: { projectType: 'mvp_prototype' },
     },
   },
-} as const;
+};
 
 const routeMetadata = [
   {
