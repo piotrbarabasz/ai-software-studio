@@ -9,7 +9,8 @@ const { validateSiteArtifact } = require('./validate-site-artifact.cjs');
 const publicBrandManifest = require('../config/public-brand.json');
 
 const socialPreviewName = path.basename(publicBrandManifest.assets.socialPreviewPath);
-const socialPreviewFixture = '<svg viewBox="0 0 1200 630"><rect width="1200" height="630"/></svg>';
+const socialPreviewFixture =
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630"><defs><linearGradient id="brandGradient"><stop offset="0" stop-color="#7c5cff"/></linearGradient></defs><rect width="1200" height="630" fill="url(#brandGradient)"/></svg>';
 
 test('public component styles do not reintroduce legacy green or orange colors', () => {
   const sourceRoot = path.resolve(__dirname, '../src');
@@ -164,6 +165,27 @@ test('rejects invalid social preview SVG variants', (context) => {
     assert.ok(
       validateSiteArtifact(root, environment).some((error) => error.includes(expected)),
       name,
+    );
+  }
+});
+
+test('rejects resource URLs but accepts local SVG references', (context) => {
+  const cases = [
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630"><image href="data:image/png;base64,abc"/></svg>',
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630"><use href="https://evil.test/file.svg#icon"/></svg>',
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630"><style>@import url("https://evil.test/style.css");</style></svg>',
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630"><rect style="fill:url(https://evil.test/a.svg)"/></svg>',
+  ];
+  for (const content of cases) {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'site-artifact-resource-'));
+    context.after(() => fs.rmSync(root, { recursive: true, force: true }));
+    const environment = { publicSiteUrl: 'https://protolume.pl', indexingEnabled: false };
+    writeArtifact(root, environment);
+    fs.writeFileSync(path.join(root, 'assets', socialPreviewName), content, 'utf8');
+    assert.ok(
+      validateSiteArtifact(root, environment).some((error) =>
+        error.includes('forbidden embedded or external resource'),
+      ),
     );
   }
 });
