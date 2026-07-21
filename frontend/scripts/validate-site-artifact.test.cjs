@@ -45,6 +45,7 @@ test('public component styles do not reintroduce legacy green or orange colors',
 
 function writeArtifact(root, environment, injectedText = '') {
   const origin = environment.publicSiteUrl;
+  const buildSha = environment.buildSha ?? 'abc1234';
   fs.mkdirSync(path.join(root, 'assets'), { recursive: true });
   for (const asset of [
     'favicon.svg',
@@ -71,7 +72,7 @@ function writeArtifact(root, environment, injectedText = '') {
       .join('');
     fs.writeFileSync(
       path.join(directory, 'index.html'),
-      `<title>Strona | Protolume</title><meta name="description" content="Opis Protolume"><link rel="canonical" href="${url}"><meta property="og:url" content="${url}"><meta property="og:title" content="Strona | Protolume"><meta property="og:description" content="Opis Protolume"><meta property="og:image" content="${origin}${publicBrandManifest.assets.socialPreviewPath}"><meta property="og:image:type" content="${publicBrandManifest.assets.socialPreviewType}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Strona | Protolume"><meta name="twitter:description" content="Opis Protolume"><meta name="twitter:image" content="${origin}${publicBrandManifest.assets.socialPreviewPath}"><meta name="robots" content="${robots}"><script type="application/ld+json">{"website":"${origin}#website","service":"${origin}#professional-service","name":"Protolume"}</script><body><a class="skip-link" href="#main-content">Skip</a><nav id="primary-navigation">${navigation}</nav><main id="main-content" tabindex="-1">Protolume${injectedText}</main></body>`,
+      `<title>Strona | Protolume</title><meta name="description" content="Opis Protolume"><link rel="canonical" href="${url}"><meta property="og:url" content="${url}"><meta property="og:title" content="Strona | Protolume"><meta property="og:description" content="Opis Protolume"><meta property="og:image" content="${origin}${publicBrandManifest.assets.socialPreviewPath}"><meta property="og:image:type" content="${publicBrandManifest.assets.socialPreviewType}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Strona | Protolume"><meta name="twitter:description" content="Opis Protolume"><meta name="twitter:image" content="${origin}${publicBrandManifest.assets.socialPreviewPath}"><meta name="robots" content="${robots}">${route === '/' ? `<meta name="protolume-build-sha" content="${buildSha}" />` : ''}<script type="application/ld+json">{"website":"${origin}#website","service":"${origin}#professional-service","name":"Protolume"}</script><body><a class="skip-link" href="#main-content">Skip</a><nav id="primary-navigation">${navigation}</nav><main id="main-content" tabindex="-1">Protolume${injectedText}</main></body>`,
       'utf8',
     );
   }
@@ -85,6 +86,7 @@ test('accepts Protolume production metadata with noindex in every document', (co
   const environment = {
     publicSiteUrl: 'https://protolume.pl',
     indexingEnabled: false,
+    buildSha: 'abc1234',
   };
   writeArtifact(root, environment);
 
@@ -120,7 +122,11 @@ test('rejects a production artifact without the favicon', (context) => {
 test('accepts the configured social preview SVG', (context) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'site-artifact-'));
   context.after(() => fs.rmSync(root, { recursive: true, force: true }));
-  const environment = { publicSiteUrl: 'https://protolume.pl', indexingEnabled: false };
+  const environment = {
+    publicSiteUrl: 'https://protolume.pl',
+    indexingEnabled: false,
+    buildSha: 'abc1234',
+  };
   writeArtifact(root, environment);
   assert.deepEqual(validateSiteArtifact(root, environment), []);
 });
@@ -206,6 +212,38 @@ test('rejects mismatched social preview metadata', (context) => {
       error.includes('social preview metadata'),
     ),
   );
+});
+
+test('validates the homepage build SHA against the environment', (context) => {
+  const cases = [
+    ['unknown', 'protolume-build-sha meta tag must match environment.buildSha'],
+    ['missing', 'protolume-build-sha meta tag must match environment.buildSha'],
+    ['duplicate', 'protolume-build-sha meta tag must match environment.buildSha'],
+  ];
+  for (const [name, expected] of cases) {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), `site-artifact-sha-${name}-`));
+    context.after(() => fs.rmSync(root, { recursive: true, force: true }));
+    const environment = {
+      publicSiteUrl: 'https://protolume.pl',
+      indexingEnabled: false,
+      buildSha: 'abc1234',
+    };
+    writeArtifact(root, environment);
+    const htmlPath = path.join(root, 'index.html');
+    let html = fs.readFileSync(htmlPath, 'utf8');
+    if (name === 'unknown') html = html.replace('content="abc1234"', 'content="unknown"');
+    if (name === 'missing') html = html.replace(/<meta name="protolume-build-sha"[^>]*>/, '');
+    if (name === 'duplicate')
+      html = html.replace(
+        '</body>',
+        '<meta name="protolume-build-sha" content="abc1234" /></body>',
+      );
+    fs.writeFileSync(htmlPath, html, 'utf8');
+    assert.ok(
+      validateSiteArtifact(root, environment).some((error) => error.includes(expected)),
+      name,
+    );
+  }
 });
 
 test('rejects leaked run.app URLs from a Protolume production artifact', (context) => {
