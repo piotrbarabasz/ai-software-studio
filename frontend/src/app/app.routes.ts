@@ -17,6 +17,11 @@ function lazyComponentFor(route: PublicRouteMetadata): NonNullable<Route['loadCo
         import('./features/demo/demo-page.component').then(
           ({ DemoPageComponent }) => DemoPageComponent,
         );
+    case 'demo-example':
+      return () =>
+        import('./features/demo-example/demo-example-page.component').then(
+          ({ DemoExamplePageComponent }) => DemoExamplePageComponent,
+        );
     case 'development':
       return () =>
         import('./features/development/development-page.component').then(

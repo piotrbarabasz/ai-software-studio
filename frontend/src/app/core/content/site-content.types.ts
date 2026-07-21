@@ -24,14 +24,21 @@ export type ProductRoutePathFor<TProductId extends ProductId> =
   (typeof productRoutePaths)[TProductId];
 
 export type StaticRoutePath =
-  '/' | '/demo-ai' | '/development' | '/studio' | '/rd' | '/kontakt' | '/polityka-prywatnosci';
+  | '/'
+  | '/demo-ai'
+  | '/przyklad-demo'
+  | '/development'
+  | '/studio'
+  | '/rd'
+  | '/kontakt'
+  | '/polityka-prywatnosci';
 
 export type LegacyRoutePath = '/demo-w-7-dni' | '/produkty' | ProductRoutePath;
 
 export type PublicRoutePath = StaticRoutePath;
 
 export type PublicRouteKind =
-  'home' | 'demo' | 'development' | 'studio' | 'research' | 'contact' | 'privacy';
+  'home' | 'demo' | 'demo-example' | 'development' | 'studio' | 'research' | 'contact' | 'privacy';
 
 interface RouteMetadataBase {
   readonly label: string;
@@ -49,6 +56,13 @@ export interface HomeRouteMetadata extends RouteMetadataBase {
 export interface DemoRouteMetadata extends RouteMetadataBase {
   readonly kind: 'demo';
   readonly path: '/demo-ai';
+  readonly productId?: never;
+  readonly contactContext?: never;
+}
+
+export interface DemoExampleRouteMetadata extends RouteMetadataBase {
+  readonly kind: 'demo-example';
+  readonly path: '/przyklad-demo';
   readonly productId?: never;
   readonly contactContext?: never;
 }
@@ -335,6 +349,35 @@ export interface DemoPageContent {
   readonly codeLink: ExternalLink;
 }
 
+export interface DemoExamplePageContent {
+  readonly path: '/przyklad-demo';
+  readonly eyebrow: string;
+  readonly title: string;
+  readonly fictionalNotice: string;
+  readonly lead: string;
+  readonly processTitle: string;
+  readonly currentProcess: {
+    readonly roles: readonly string[];
+    readonly manualSteps: readonly string[];
+    readonly timeLosses: readonly string[];
+    readonly dataSources: readonly string[];
+  };
+  readonly demoScope: {
+    readonly items: readonly string[];
+    readonly successCriterion: string;
+  };
+  readonly flow: readonly [string, string, string, string, string];
+  readonly outcome: {
+    readonly items: readonly string[];
+    readonly recommendation: string;
+  };
+  readonly risks: readonly string[];
+  readonly outOfScope: readonly string[];
+  readonly nextStage: readonly string[];
+  readonly primaryCta: HomeCta;
+  readonly demoCta: HomeCta;
+}
+
 export type KnowledgeDemoScenarioStatus = 'answered' | 'handoff';
 
 export interface KnowledgeDemoScenario {
@@ -531,6 +574,7 @@ export interface SiteContent {
   readonly trust: TrustContent;
   readonly home: HomePageContent;
   readonly demo: DemoPageContent;
+  readonly demoExample: DemoExamplePageContent;
   readonly development: DevelopmentPageContent;
   readonly studio: StudioPageContent;
   readonly research: ResearchPageContent;
@@ -542,6 +586,7 @@ export interface SiteContent {
 export type PublicRouteMetadata =
   | HomeRouteMetadata
   | DemoRouteMetadata
+  | DemoExampleRouteMetadata
   | DevelopmentRouteMetadata
   | StudioRouteMetadata
   | ResearchRouteMetadata

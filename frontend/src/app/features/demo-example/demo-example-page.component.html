@@ -1,0 +1,161 @@
+<div class="demo-example-page">
+  <section class="hero section-shell" aria-labelledby="demo-example-title" appRevealOnScroll>
+    <div class="hero-copy">
+      <p class="eyebrow">{{ content.eyebrow }}</p>
+      <p class="fictional-notice" role="note">{{ content.fictionalNotice }}</p>
+      <h1 id="demo-example-title">{{ content.title }}</h1>
+      <p class="page-lead">{{ content.lead }}</p>
+      <div class="hero-actions" aria-label="Działania dla przykładu demo">
+        <a
+          class="primary-action"
+          [routerLink]="content.primaryCta.path"
+          [queryParams]="content.primaryCta.queryParams"
+          >{{ content.primaryCta.label }}</a
+        >
+        <a class="secondary-action" [routerLink]="content.demoCta.path">{{
+          content.demoCta.label
+        }}</a>
+      </div>
+    </div>
+  </section>
+
+  <section
+    class="content-section section-shell"
+    aria-labelledby="current-process-title"
+    appRevealOnScroll
+  >
+    <div class="section-heading">
+      <p class="eyebrow">Punkt wyjścia</p>
+      <h2 id="current-process-title">{{ content.processTitle }}</h2>
+    </div>
+    <div class="four-column-grid">
+      <article>
+        <h3>Role</h3>
+        <ul>
+          @for (item of content.currentProcess.roles; track item) {
+            <li>{{ item }}</li>
+          }
+        </ul>
+      </article>
+      <article>
+        <h3>Ręczne kroki</h3>
+        <ul>
+          @for (item of content.currentProcess.manualSteps; track item) {
+            <li>{{ item }}</li>
+          }
+        </ul>
+      </article>
+      <article>
+        <h3>Utrata czasu</h3>
+        <ul>
+          @for (item of content.currentProcess.timeLosses; track item) {
+            <li>{{ item }}</li>
+          }
+        </ul>
+      </article>
+      <article>
+        <h3>Źródła danych</h3>
+        <ul>
+          @for (item of content.currentProcess.dataSources; track item) {
+            <li>{{ item }}</li>
+          }
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="content-section section-shell" aria-labelledby="scope-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">Zakres</p>
+      <h2 id="scope-title">Zakres siedmiodniowego demo</h2>
+    </div>
+    <ul class="feature-list">
+      @for (item of content.demoScope.items; track item) {
+        <li>{{ item }}</li>
+      }
+    </ul>
+    <p class="criterion">
+      <strong>Kryterium sukcesu:</strong> {{ content.demoScope.successCriterion }}
+    </p>
+  </section>
+
+  <section class="content-section section-shell" aria-labelledby="flow-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">Widoczny przepływ</p>
+      <h2 id="flow-title">Wiadomość od rozpoznania do decyzji</h2>
+    </div>
+    <ol class="flow" aria-label="Przepływ obsługi zapytania produktowego">
+      @for (step of content.flow; track step; let index = $index) {
+        <li>
+          <span class="flow-number" aria-hidden="true">{{ index + 1 }}</span
+          ><span>{{ step }}</span>
+        </li>
+      }
+    </ol>
+    <p class="flow-text">{{ content.flow.join(' → ') }}</p>
+  </section>
+
+  <section class="content-section section-shell" aria-labelledby="outcome-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">Rezultat demonstracyjny</p>
+      <h2 id="outcome-title">Co powstało</h2>
+    </div>
+    <ul class="feature-list">
+      @for (item of content.outcome.items; track item) {
+        <li>{{ item }}</li>
+      }
+    </ul>
+    <p class="recommendation">
+      <strong>Przykładowa rekomendacja:</strong> {{ content.outcome.recommendation }}. To nie jest
+      decyzja klienta.
+    </p>
+  </section>
+
+  <section class="split-section section-shell">
+    <article aria-labelledby="risks-title">
+      <h2 id="risks-title">Ryzyka i zależności</h2>
+      <ul class="feature-list">
+        @for (item of content.risks; track item) {
+          <li>{{ item }}</li>
+        }
+      </ul>
+    </article>
+    <article aria-labelledby="out-of-scope-title">
+      <h2 id="out-of-scope-title">Poza zakresem</h2>
+      <ul class="feature-list">
+        @for (item of content.outOfScope; track item) {
+          <li>{{ item }}</li>
+        }
+      </ul>
+    </article>
+  </section>
+
+  <section class="content-section section-shell" aria-labelledby="next-stage-title">
+    <div class="section-heading">
+      <p class="eyebrow">Dalsza ścieżka</p>
+      <h2 id="next-stage-title">Kolejny etap</h2>
+    </div>
+    <ol class="next-stage">
+      @for (item of content.nextStage; track item; let index = $index) {
+        <li>
+          <span aria-hidden="true">{{ index + 1 }}</span
+          >{{ item }}
+        </li>
+      }
+    </ol>
+  </section>
+
+  <section class="closing-cta section-shell" aria-labelledby="closing-title">
+    <h2 id="closing-title">Sprawdź podobny proces w swojej firmie</h2>
+    <div class="hero-actions">
+      <a
+        class="primary-action"
+        [routerLink]="content.primaryCta.path"
+        [queryParams]="content.primaryCta.queryParams"
+        >{{ content.primaryCta.label }}</a
+      ><a class="secondary-action" [routerLink]="content.demoCta.path">{{
+        content.demoCta.label
+      }}</a>
+    </div>
+  </section>
+</div>

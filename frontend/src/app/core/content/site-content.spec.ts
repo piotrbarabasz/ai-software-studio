@@ -6,15 +6,23 @@ describe('Site content model', () => {
   it('defines metadata and content for the public pages', () => {
     const publicPaths = siteContent.routes
       .filter((route) =>
-        ['home', 'demo', 'development', 'studio', 'research', 'contact', 'privacy'].includes(
-          route.kind,
-        ),
+        [
+          'home',
+          'demo',
+          'demo-example',
+          'development',
+          'studio',
+          'research',
+          'contact',
+          'privacy',
+        ].includes(route.kind),
       )
       .map((route) => route.path);
 
     expect(publicPaths).toEqual([
       '/',
       '/demo-ai',
+      '/przyklad-demo',
       '/development',
       '/studio',
       '/rd',
@@ -139,6 +147,7 @@ describe('Site content model', () => {
       pages: {
         home: siteContent.home,
         demo: siteContent.demo,
+        demoExample: siteContent.demoExample,
         development: siteContent.development,
         studio: siteContent.studio,
         contact: siteContent.contact,

@@ -1,5 +1,6 @@
 /
 /demo-ai
+/przyklad-demo
 /development
 /studio
 /rd

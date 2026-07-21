@@ -25,6 +25,7 @@ describe('public routes', () => {
     const expectedComponents: Readonly<Record<string, string>> = {
       '/': 'app-home',
       '/demo-ai': 'app-demo-page',
+      '/przyklad-demo': 'app-demo-example-page',
       '/development': 'app-development-page',
       '/studio': 'app-studio-page',
       '/rd': 'app-research-page',

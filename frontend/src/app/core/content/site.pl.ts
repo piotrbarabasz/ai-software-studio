@@ -6,6 +6,7 @@ import type {
   PublicRouteMetadata,
   ResearchDirection,
   HomeUseCase,
+  DemoExamplePageContent,
   SiteContent,
 } from './site-content.types';
 import { productRoutePaths } from './site-content.types';
@@ -371,6 +372,15 @@ const routeMetadata = [
       'Zakres, proces i rezultat demo AI w 7 dni dla jednego scenariusza biznesowego.',
     ),
     kind: 'demo',
+  },
+  {
+    path: '/przyklad-demo',
+    label: 'Przykład demo',
+    title: brandTitle('Przykładowy rezultat demo w 7 dni'),
+    description: brandDescription(
+      'Fikcyjny przykład ograniczonego demo obsługi zapytań produktowych, z zakresem, ryzykami i rekomendacją kolejnego kroku.',
+    ),
+    kind: 'demo-example',
   },
   {
     path: '/development',
@@ -837,6 +847,82 @@ export const siteContent = {
       accessibleName: `Publiczny kod interaktywnego demo ${publicBrand.name} w serwisie GitHub`,
     },
   },
+  demoExample: {
+    path: '/przyklad-demo',
+    eyebrow: 'Przykładowy rezultat',
+    title: 'Od zapytania produktowego do odpowiedzi z kontrolą człowieka',
+    fictionalNotice:
+      'To fikcyjny scenariusz demonstracyjny. Nie jest case study klienta ani obietnicą gotowego wdrożenia produkcyjnego.',
+    lead: 'Przykład pokazuje, co można sprawdzić po etapie Demo w 7 dni dla powtarzalnych zapytań produktowych obsługiwanych przez e-mail.',
+    processTitle: 'Obecny proces',
+    currentProcess: {
+      roles: ['Osoba obsługująca skrzynkę', 'Ekspert produktowy', 'Osoba zatwierdzająca odpowiedź'],
+      manualSteps: [
+        'ręczne czytanie wiadomości i rozpoznanie tematu',
+        'szukanie informacji w dokumentach',
+        'kopiowanie danych do odpowiedzi',
+        'przekazanie trudniejszych pytań właściwej osobie',
+      ],
+      timeLosses: [
+        'przerzucanie informacji między skrzynką i dokumentami',
+        'brak jednego widoku statusu sprawy',
+      ],
+      dataSources: [
+        'e-maile produktowe',
+        'instrukcje i dokumentacja',
+        'wewnętrzna lista osób odpowiedzialnych',
+      ],
+    },
+    demoScope: {
+      items: [
+        'jeden przepływ od wiadomości do propozycji odpowiedzi',
+        'ograniczony, przykładowy zestaw dokumentów i danych',
+        'najważniejsze ekrany: klasyfikacja, źródła, odpowiedź i przekazanie',
+        'kontrola człowieka przed wysłaniem lub handoffem',
+      ],
+      successCriterion:
+        'Osoba obsługująca może prześledzić sprawę, sprawdzić źródło informacji i podjąć decyzję o odpowiedzi albo przekazaniu.',
+    },
+    flow: ['E-mail', 'Klasyfikacja', 'Wiedza', 'Propozycja odpowiedzi', 'Akceptacja albo handoff'],
+    outcome: {
+      items: [
+        'klikalny lub działający przepływ do wspólnego przeglądu',
+        'lista założeń i danych potrzebnych do dalszej oceny',
+        'lista ryzyk oraz zależności technicznych i organizacyjnych',
+      ],
+      recommendation: 'Rozwijać po doprecyzowaniu danych i zasad zatwierdzania',
+    },
+    risks: [
+      'jakość i aktualność dokumentów',
+      'dane osobowe w wiadomościach i materiałach źródłowych',
+      'integracja ze skrzynką pocztową',
+      'błędna klasyfikacja lub niepełna odpowiedź',
+      'koszt modeli przy większej liczbie spraw',
+      'odpowiedzialność człowieka za zatwierdzenie odpowiedzi',
+    ],
+    outOfScope: [
+      'produkcyjna integracja poczty',
+      'logowanie i role',
+      'globalny monitoring',
+      'SLA',
+      'pełne bezpieczeństwo produkcyjne',
+      'automatyczne wysyłanie odpowiedzi bez zatwierdzenia',
+    ],
+    nextStage: [
+      'warsztat danych',
+      'integracja sandbox',
+      'role i uprawnienia',
+      'testy jakości',
+      'monitoring',
+      'pilotaż',
+    ],
+    primaryCta: {
+      label: 'Opisz podobny proces',
+      path: '/kontakt',
+      queryParams: { projectType: 'business_process_automation' },
+    },
+    demoCta: { label: 'Zobacz zakres Demo w 7 dni', path: '/demo-ai' },
+  } satisfies DemoExamplePageContent,
   studio: {
     path: '/studio',
     eyebrow: 'Studio',

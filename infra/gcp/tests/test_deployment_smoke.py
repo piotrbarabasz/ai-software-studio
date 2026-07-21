@@ -62,6 +62,7 @@ class FakeDeployment:
                 + ('<meta name="protolume-build-sha" content="abc1234">' if path == "/" else '')
                 + ('<nav id="primary-navigation"><a href="/demo-ai">Demo</a><a href="/development">Wdrozenia</a><a href="/kontakt?projectType=mvp_prototype">Opisz proces</a></nav><h1>Sprawdź w 7 dni, czy AI usprawni konkretny proces</h1>' if path == "/" else '')
                 + ('<h1>Demo</h1><section class="interactive-demo">demo</section><a href="/kontakt">Kontakt</a>' if path == "/demo-ai" else '')
+                + ('<h1>Przykładowy rezultat</h1><p>To fikcyjny scenariusz demonstracyjny.</p><h2>Poza zakresem</h2><a href="/kontakt">Kontakt</a><a href="/demo-ai">Demo</a>' if path == "/przyklad-demo" else '')
                 + ('<h1>Kontakt</h1><form><input name="name"><input name="email"><select name="projectType"></select><textarea name="message"></textarea><input name="consent"></form>' if path == "/kontakt" else '')
                 + ('<h1>Polityka prywatnosci</h1><a href="mailto:privacy@protolume.pl">kontakt</a>' if path == "/polityka-prywatnosci" else '')
                 + '</body></html>'

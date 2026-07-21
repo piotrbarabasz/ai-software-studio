@@ -19,6 +19,7 @@ from urllib.parse import urlsplit
 PUBLIC_ROUTES = (
     "/",
     "/demo-ai",
+    "/przyklad-demo",
     "/development",
     "/studio",
     "/rd",
@@ -269,6 +270,19 @@ def _check_public_routes(
                 errors.append("public route /demo-ai: expected interactive demo marker or text")
             if not any(href.startswith("/kontakt") for href in parser.hrefs):
                 errors.append("public route /demo-ai: expected contact handoff link, received none")
+        elif path == "/przyklad-demo":
+            heading_text = " ".join(text for tag, text in parser.headings if tag == "h1")
+            if not heading_text:
+                errors.append("public route /przyklad-demo: expected an h1 element, received none")
+            page_text = response.body.decode("utf-8").lower()
+            if "fikcyjny" not in page_text or "demonstracyjny" not in page_text:
+                errors.append("public route /przyklad-demo: expected an explicitly fictional demonstration notice")
+            if "poza zakresem" not in page_text:
+                errors.append("public route /przyklad-demo: expected an out-of-scope section")
+            if not any(href.startswith("/kontakt") for href in parser.hrefs):
+                errors.append("public route /przyklad-demo: expected a contact CTA, received none")
+            if not any(href.split("?", 1)[0].split("#", 1)[0] == "/demo-ai" for href in parser.hrefs):
+                errors.append("public route /przyklad-demo: expected a link to /demo-ai, received none")
         elif path == "/kontakt":
             if not parser.has_form:
                 errors.append("public route /kontakt: expected a form, received none")
