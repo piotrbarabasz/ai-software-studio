@@ -5,6 +5,7 @@ import type {
   ProductId,
   PublicRouteMetadata,
   ResearchDirection,
+  HomeUseCase,
   SiteContent,
 } from './site-content.types';
 import { productRoutePaths } from './site-content.types';
@@ -434,6 +435,32 @@ const primaryNavigation = [
   { label: 'Kontakt', path: '/kontakt' },
 ] as const;
 
+const homeUseCases: readonly HomeUseCase[] = [
+  {
+    id: 'knowledge-assistant',
+    title: 'Asystent wiedzy',
+    problem: 'Pracownicy lub klienci wielokrotnie pytają o te same informacje.',
+    outcome:
+      'Odpowiedź na podstawie zatwierdzonych materiałów albo przekazanie sprawy człowiekowi.',
+    cta: { label: 'Zobacz demo asystenta', path: '/demo-ai' },
+    visualKind: 'knowledge-assistant',
+  },
+  {
+    id: 'message-and-document-workflow',
+    title: 'Obsługa wiadomości i dokumentów',
+    problem: 'Zespół ręcznie odczytuje wiadomości, kopiuje dane i przekazuje sprawy dalej.',
+    outcome: 'Klasyfikacja, zebranie danych i przypisanie kolejnego kroku.',
+    visualKind: 'message-workflow',
+  },
+  {
+    id: 'process-panel',
+    title: 'Panel procesu',
+    problem: 'Statusy i decyzje są rozproszone między e-mailem, komunikatorami i arkuszami.',
+    outcome: 'Jeden widok spraw, statusów i odpowiedzialności.',
+    visualKind: 'process-panel',
+  },
+];
+
 export const siteContent = {
   routes: routeMetadata,
   legacyRedirects,
@@ -667,31 +694,7 @@ export const siteContent = {
       { id: 'ai-cost-boundaries', title: 'Kontrola kosztu i granic AI' },
       { id: 'public-code', title: 'Publicznie widoczny kod wybranych elementów' },
     ],
-    useCases: [
-      {
-        id: 'knowledge-assistant',
-        title: 'Asystent wiedzy',
-        problem: 'Pracownicy lub klienci wielokrotnie pytają o te same informacje.',
-        outcome:
-          'Odpowiedź na podstawie zatwierdzonych materiałów albo przekazanie sprawy człowiekowi.',
-        cta: { label: 'Zobacz demo asystenta', path: '/demo-ai' },
-        visualKind: 'knowledge-assistant',
-      },
-      {
-        id: 'message-and-document-workflow',
-        title: 'Obsługa wiadomości i dokumentów',
-        problem: 'Zespół ręcznie odczytuje wiadomości, kopiuje dane i przekazuje sprawy dalej.',
-        outcome: 'Klasyfikacja, zebranie danych i przypisanie kolejnego kroku.',
-        visualKind: 'message-workflow',
-      },
-      {
-        id: 'process-panel',
-        title: 'Panel procesu',
-        problem: 'Statusy i decyzje są rozproszone między e-mailem, komunikatorami i arkuszami.',
-        outcome: 'Jeden widok spraw, statusów i odpowiedzialności.',
-        visualKind: 'process-panel',
-      },
-    ],
+    useCases: homeUseCases,
     sevenDayResults: {
       eyebrow: 'Rezultat demo',
       title: 'Co dokładnie powstaje w siedem dni?',

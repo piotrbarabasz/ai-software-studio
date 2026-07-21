@@ -270,7 +270,7 @@ export interface HomeUseCase {
   readonly problem: string;
   readonly outcome: string;
   readonly cta?: HomeCta;
-  readonly visualKind?: 'knowledge-assistant' | 'message-workflow' | 'process-panel';
+  readonly visualKind: 'knowledge-assistant' | 'message-workflow' | 'process-panel';
 }
 
 export interface HomeSevenDayResult {
