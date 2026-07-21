@@ -81,6 +81,7 @@ test('generates sitemap and robots from every non-404 prerender route', () => {
     '/',
     '/demo-ai',
     '/przyklad-demo',
+    '/rozwiazania',
     '/development',
     '/studio',
     '/rd',

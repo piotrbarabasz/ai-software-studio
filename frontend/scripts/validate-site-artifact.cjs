@@ -11,7 +11,13 @@ const publicBrandManifest = require('../config/public-brand.json');
 const DEFAULT_ARTIFACT_ROOT = path.resolve(__dirname, '../dist/aisoftware-studio/browser');
 const PUBLIC_BRAND_NAME = 'Protolume';
 const RETIRED_PUBLIC_BRAND_PATTERN = /AISoftware Studio|AI Software Studio/i;
-const PRIMARY_NAVIGATION_ROUTES = ['/demo-ai', '/development', '/studio', '/kontakt'];
+const PRIMARY_NAVIGATION_ROUTES = [
+  '/rozwiazania',
+  '/demo-ai',
+  '/development',
+  '/studio',
+  '/kontakt',
+];
 const REQUIRED_BRAND_ASSETS = [
   'favicon.svg',
   'protolume-logo-horizontal-dark.svg',
@@ -222,6 +228,26 @@ function validateSiteArtifact(artifactRoot, environment) {
         );
         if (!activeLinkPattern.test(primaryNavigation)) {
           errors.push(`${route}: active primary navigation link must have aria-current="page"`);
+        }
+      }
+    }
+    if (route === '/rozwiazania') {
+      for (const fragment of [
+        '#asystent-wiedzy',
+        '#automatyzacja-wiadomosci-i-dokumentow',
+        '#panel-operacyjny',
+      ]) {
+        if (!new RegExp(`<a\\b[^>]*\\bhref=["']${fragment}["']`, 'i').test(html)) {
+          errors.push(`${route}: missing native anchor link to ${fragment}`);
+        }
+      }
+      for (const projectType of [
+        'rag_chatbot_demo',
+        'business_process_automation',
+        'custom_web_app',
+      ]) {
+        if (!html.includes(`/kontakt?projectType=${projectType}`)) {
+          errors.push(`${route}: missing contact CTA with projectType=${projectType}`);
         }
       }
     }

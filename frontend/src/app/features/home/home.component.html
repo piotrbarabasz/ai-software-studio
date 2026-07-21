@@ -64,7 +64,13 @@
             <p>{{ useCase.outcome }}</p>
           </div>
           @if (useCase.cta) {
-            <a class="secondary-action" [routerLink]="useCase.cta.path">{{ useCase.cta.label }}</a>
+            <a
+              class="secondary-action"
+              [routerLink]="useCase.cta.path"
+              [queryParams]="useCase.cta.queryParams"
+              [fragment]="useCase.cta.fragment"
+              >{{ useCase.cta.label }}</a
+            >
           }
         </article>
       }

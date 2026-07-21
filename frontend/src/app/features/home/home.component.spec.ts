@@ -80,10 +80,15 @@ describe('HomeComponent', () => {
     expect(element.querySelectorAll('[data-visual-kind="message-workflow"]')).toHaveSize(1);
     expect(element.querySelectorAll('[data-visual-kind="process-panel"]')).toHaveSize(1);
     expect(element.querySelectorAll('.use-case-card h4')).toHaveSize(6);
-    expect(element.querySelector('.use-case-card a[href="/demo-ai"]')?.textContent).toContain(
-      'Zobacz demo asystenta',
+    const useCaseLinks = Array.from(
+      element.querySelectorAll<HTMLAnchorElement>('.use-case-card a'),
     );
-    expect(element.querySelectorAll('.use-case-card a')).toHaveSize(1);
+    expect(useCaseLinks).toHaveSize(3);
+    expect(useCaseLinks.map((link) => link.getAttribute('href'))).toEqual([
+      '/rozwiazania#asystent-wiedzy',
+      '/rozwiazania#automatyzacja-wiadomosci-i-dokumentow',
+      '/rozwiazania#panel-operacyjny',
+    ]);
     expect(element.querySelectorAll('.problem-card')).toHaveSize(0);
     expect(element.querySelectorAll('.seven-day-results > ol > li')).toHaveSize(4);
     expect(element.querySelector('.seven-day-results')?.textContent).toContain(

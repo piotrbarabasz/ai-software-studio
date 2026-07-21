@@ -20,6 +20,7 @@ PUBLIC_ROUTES = (
     "/",
     "/demo-ai",
     "/przyklad-demo",
+    "/rozwiazania",
     "/development",
     "/studio",
     "/rd",
@@ -259,9 +260,14 @@ def _check_public_routes(
                     errors.append(f"public route /: h1 must contain {phrase!r}")
             if not parser.has_primary_navigation:
                 errors.append("public route /: expected primary navigation, received none")
-            for href in ("/demo-ai", "/development", "/kontakt"):
+            for href in ("/rozwiazania", "/demo-ai", "/development", "/kontakt"):
                 if not any(href == candidate.split("?", 1)[0].split("#", 1)[0] for candidate in parser.hrefs):
                     errors.append(f"public route /: expected link to {href}, received none")
+            if not any(
+                href.split("?", 1)[0].split("#", 1)[0] == "/rozwiazania"
+                for href in parser.hrefs
+            ):
+                errors.append("public route /: expected link to /rozwiazania, received none")
             if not any("projectType=mvp_prototype" in href and href.startswith("/kontakt?") for href in parser.hrefs):
                 errors.append("public route /: expected primary contact CTA with projectType=mvp_prototype")
         elif path == "/demo-ai":
@@ -284,6 +290,23 @@ def _check_public_routes(
                 errors.append("public route /przyklad-demo: expected a contact CTA, received none")
             if not any(href.split("?", 1)[0].split("#", 1)[0] == "/demo-ai" for href in parser.hrefs):
                 errors.append("public route /przyklad-demo: expected a link to /demo-ai, received none")
+        elif path == "/rozwiazania":
+            for fragment in (
+                "#asystent-wiedzy",
+                "#automatyzacja-wiadomosci-i-dokumentow",
+                "#panel-operacyjny",
+            ):
+                if fragment not in parser.hrefs:
+                    errors.append(f"public route /rozwiazania: expected anchor {fragment}, received none")
+            for project_type in (
+                "rag_chatbot_demo",
+                "business_process_automation",
+                "custom_web_app",
+            ):
+                if not any(f"/kontakt?projectType={project_type}" in href for href in parser.hrefs):
+                    errors.append(
+                        f"public route /rozwiazania: expected contact CTA projectType={project_type}, received none"
+                    )
         elif path == "/kontakt":
             if not parser.has_form:
                 errors.append("public route /kontakt: expected a form, received none")

@@ -26,6 +26,7 @@ describe('public routes', () => {
       '/': 'app-home',
       '/demo-ai': 'app-demo-page',
       '/przyklad-demo': 'app-demo-example-page',
+      '/rozwiazania': 'app-solutions-page',
       '/development': 'app-development-page',
       '/studio': 'app-studio-page',
       '/rd': 'app-research-page',
@@ -106,13 +107,19 @@ describe('public routes', () => {
     await fixture.ngZone!.run(() => router.navigateByUrl('/produkty/asystent-wiedzy-rag'));
     fixture.detectChanges();
     await fixture.whenStable();
-    expect(router.url).toBe('/development');
+    expect(router.url).toBe('/rozwiazania');
   });
 
   it('uses the content navigation without duplicate primary items', () => {
     const navigationPaths = siteContent.navigation.map((item) => item.path);
 
     expect(new Set(navigationPaths).size).toBe(navigationPaths.length);
-    expect(navigationPaths).toEqual(['/demo-ai', '/development', '/studio', '/kontakt']);
+    expect(navigationPaths).toEqual([
+      '/rozwiazania',
+      '/demo-ai',
+      '/development',
+      '/studio',
+      '/kontakt',
+    ]);
   });
 });

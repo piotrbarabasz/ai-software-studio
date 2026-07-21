@@ -7,38 +7,39 @@ export interface SelectOption<TValue extends string> {
 
 export type ResearchDirectionStatus = 'experiment' | 'prototype' | 'validated-internally';
 
-export const productRoutePaths = {
-  rag_chatbot_demo: '/produkty/asystent-wiedzy-rag',
-  website_seo: '/produkty/strony-seo',
-  voice_agent_demo: '/produkty/voice-agent',
-  whatsapp_agent_management: '/produkty/whatsapp-ai',
-  email_automation: '/produkty/automatyzacja-email',
-  agent_management_panel: '/produkty/panel-agentow',
-} as const;
-
-export type ProductId = keyof typeof productRoutePaths;
-
-export type ProductRoutePath = (typeof productRoutePaths)[ProductId];
-
-export type ProductRoutePathFor<TProductId extends ProductId> =
-  (typeof productRoutePaths)[TProductId];
-
 export type StaticRoutePath =
   | '/'
   | '/demo-ai'
   | '/przyklad-demo'
+  | '/rozwiazania'
   | '/development'
   | '/studio'
   | '/rd'
   | '/kontakt'
   | '/polityka-prywatnosci';
 
-export type LegacyRoutePath = '/demo-w-7-dni' | '/produkty' | ProductRoutePath;
+export type LegacyRoutePath =
+  | '/demo-w-7-dni'
+  | '/produkty'
+  | '/produkty/asystent-wiedzy-rag'
+  | '/produkty/strony-seo'
+  | '/produkty/voice-agent'
+  | '/produkty/whatsapp-ai'
+  | '/produkty/automatyzacja-email'
+  | '/produkty/panel-agentow';
 
 export type PublicRoutePath = StaticRoutePath;
 
 export type PublicRouteKind =
-  'home' | 'demo' | 'demo-example' | 'development' | 'studio' | 'research' | 'contact' | 'privacy';
+  | 'home'
+  | 'demo'
+  | 'demo-example'
+  | 'solutions'
+  | 'development'
+  | 'studio'
+  | 'research'
+  | 'contact'
+  | 'privacy';
 
 interface RouteMetadataBase {
   readonly label: string;
@@ -63,6 +64,13 @@ export interface DemoRouteMetadata extends RouteMetadataBase {
 export interface DemoExampleRouteMetadata extends RouteMetadataBase {
   readonly kind: 'demo-example';
   readonly path: '/przyklad-demo';
+  readonly productId?: never;
+  readonly contactContext?: never;
+}
+
+export interface SolutionsRouteMetadata extends RouteMetadataBase {
+  readonly kind: 'solutions';
+  readonly path: '/rozwiazania';
   readonly productId?: never;
   readonly contactContext?: never;
 }
@@ -106,9 +114,6 @@ export interface NavigationItem {
   readonly label: string;
   readonly path: PublicRoutePath;
 }
-
-export type ProductApplications =
-  readonly [string, string, string] | readonly [string, string, string, string];
 
 export interface ExternalLink {
   readonly label: string;
@@ -198,29 +203,6 @@ export interface ResearchDirection {
   readonly claimBoundary: string;
 }
 
-export interface ProductCatalogEntry<TProductId extends ProductId = ProductId> {
-  readonly id: TProductId;
-  readonly path: ProductRoutePathFor<TProductId>;
-  readonly title: string;
-  readonly routeLabel: string;
-  readonly valueProposition: string;
-  readonly problem: string;
-  readonly audience: string;
-  readonly applications: ProductApplications;
-  readonly demoScope: string;
-  readonly outOfScope: readonly string[];
-  readonly visualKind: 'rag' | 'websiteSeo' | 'voice' | 'whatsapp' | 'email' | 'panel';
-  readonly ctaLabel: string;
-  readonly categoryId?: 'customer-sales' | 'operations-automation' | 'applications-control';
-  readonly businessProblem?: string;
-  readonly value?: string;
-  readonly exampleUseCases?: readonly string[];
-  readonly demoBoundaries?: readonly string[];
-  readonly productionScope?: readonly string[];
-  readonly developmentPath?: string;
-  readonly contactIntent?: ProjectType;
-}
-
 export interface HomePageContent {
   readonly path: StaticRoutePath;
   readonly hero: HomeHero;
@@ -252,6 +234,7 @@ export interface HomeCta {
   readonly label: string;
   readonly path: PublicRoutePath;
   readonly queryParams?: Readonly<Record<string, string>>;
+  readonly fragment?: string;
 }
 
 export interface HomeHero {
@@ -285,6 +268,31 @@ export interface HomeUseCase {
   readonly outcome: string;
   readonly cta?: HomeCta;
   readonly visualKind: 'knowledge-assistant' | 'message-workflow' | 'process-panel';
+}
+
+export interface SolutionOffer {
+  readonly id: 'asystent-wiedzy' | 'automatyzacja-wiadomosci-i-dokumentow' | 'panel-operacyjny';
+  readonly title: string;
+  readonly summary: string;
+  readonly problem: string;
+  readonly audience: string;
+  readonly capabilities: readonly string[];
+  readonly requiredInputs: readonly string[];
+  readonly demoScope: string;
+  readonly productionScope: readonly string[];
+  readonly primaryCta: HomeCta;
+  readonly optionalSecondaryCta?: HomeCta;
+}
+
+export interface SolutionsPageContent {
+  readonly path: '/rozwiazania';
+  readonly eyebrow: string;
+  readonly title: string;
+  readonly lead: string;
+  readonly scopeNotice: string;
+  readonly quickLinksLabel: string;
+  readonly solutions: readonly [SolutionOffer, SolutionOffer, SolutionOffer];
+  readonly closingCta: HomeClosingCta;
 }
 
 export interface HomeSevenDayResult {
@@ -570,11 +578,11 @@ export interface SiteContent {
   readonly legacyRedirects: readonly LegacyRedirect[];
   readonly navigation: readonly NavigationItem[];
   readonly footer: FooterContent;
-  readonly products: readonly ProductCatalogEntry[];
   readonly trust: TrustContent;
   readonly home: HomePageContent;
   readonly demo: DemoPageContent;
   readonly demoExample: DemoExamplePageContent;
+  readonly solutions: SolutionsPageContent;
   readonly development: DevelopmentPageContent;
   readonly studio: StudioPageContent;
   readonly research: ResearchPageContent;
@@ -587,6 +595,7 @@ export type PublicRouteMetadata =
   | HomeRouteMetadata
   | DemoRouteMetadata
   | DemoExampleRouteMetadata
+  | SolutionsRouteMetadata
   | DevelopmentRouteMetadata
   | StudioRouteMetadata
   | ResearchRouteMetadata
