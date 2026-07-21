@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { PLATFORM_ID } from '@angular/core';
 import type { ComponentFixture } from '@angular/core/testing';
 
@@ -18,7 +19,10 @@ describe('ProtolumeLogoComponent', () => {
   let fixture: ComponentFixture<ProtolumeLogoComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({ imports: [ProtolumeLogoComponent] }).compileComponents();
+    await TestBed.configureTestingModule({
+      imports: [ProtolumeLogoComponent],
+      providers: [provideRouter([])],
+    }).compileComponents();
     fixture = TestBed.createComponent(ProtolumeLogoComponent);
     fixture.detectChanges();
   });

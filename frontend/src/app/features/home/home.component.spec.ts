@@ -31,11 +31,13 @@ describe('HomeComponent', () => {
       'Nie potrzebujesz gotowej specyfikacji technicznej.',
     );
     expect(element.querySelectorAll('.hero-process li')).toHaveSize(4);
+    const processItems = Array.from(element.querySelectorAll('.hero-process li'));
     expect(
-      Array.from(element.querySelectorAll('.hero-process li')).map((item) =>
-        item.textContent?.replace(/\s+/g, ' ').trim(),
-      ),
-    ).toEqual(['1 Obecny proces', '2 Demo', '3 Wnioski', '4 Decyzja']);
+      processItems.map((item) => item.querySelector('.process-node')?.textContent?.trim()),
+    ).toEqual(['1', '2', '3', '4']);
+    expect(
+      processItems.map((item) => item.querySelector('span:last-child')?.textContent?.trim()),
+    ).toEqual(['Obecny proces', 'Demo', 'Wnioski', 'Decyzja']);
     expect(element.querySelectorAll('[innerHTML]')).toHaveSize(0);
   });
 

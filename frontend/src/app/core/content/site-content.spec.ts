@@ -34,7 +34,8 @@ describe('Site content model', () => {
     expect(siteContent.home.hero.titleAfterHighlight).toContain('Twojej firmie');
     expect(siteContent.home.hero.audience).toContain('ręcznie przenoszą informacje');
     expect(siteContent.home.hero.audience).toContain('bez gotowej specyfikacji');
-    expect(siteContent.home.hero.lead).toContain('nie wdrożenie produkcyjne');
+    expect(siteContent.home.hero.lead).toContain('działające demo jednego przepływu');
+    expect(siteContent.home.hero.lead).toContain('najlepszy kolejny krok');
     expect(siteContent.home.hero.primaryCta.label).toBe('Opisz proces do sprawdzenia');
     expect(siteContent.home.closingCta.primaryCta.label).toBe(
       siteContent.home.hero.primaryCta.label,
