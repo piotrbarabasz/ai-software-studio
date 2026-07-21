@@ -10,6 +10,7 @@ describe('Site content model', () => {
           'home',
           'demo',
           'demo-example',
+          'solutions',
           'development',
           'studio',
           'research',
@@ -23,6 +24,7 @@ describe('Site content model', () => {
       '/',
       '/demo-ai',
       '/przyklad-demo',
+      '/rozwiazania',
       '/development',
       '/studio',
       '/rd',
@@ -32,6 +34,21 @@ describe('Site content model', () => {
     expect(siteContent.development.path).toBe('/development');
     expect(siteContent.research.path).toBe('/rd');
     expect(siteContent.research.directions.length).toBeGreaterThan(0);
+    expect(siteContent.solutions.solutions).toHaveSize(3);
+    expect(new Set(siteContent.solutions.solutions.map((solution) => solution.id)).size).toBe(3);
+    expect(
+      siteContent.solutions.solutions.every(
+        (solution) =>
+          solution.problem &&
+          solution.audience &&
+          solution.capabilities.length > 0 &&
+          solution.requiredInputs.length > 0 &&
+          solution.demoScope &&
+          solution.productionScope.length > 0 &&
+          solution.primaryCta.path === '/kontakt' &&
+          solution.primaryCta.queryParams?.['projectType'],
+      ),
+    ).toBeTrue();
     expect(siteContent.privacy.dataScopeItems[0]).toContain('Formularz zbiera');
     expect(siteContent.privacy.transmissionDescription).toContain('API formularza');
   });
@@ -108,8 +125,26 @@ describe('Site content model', () => {
       jasmine.objectContaining({ from: '/demo-w-7-dni', to: '/demo-ai' }),
     );
     expect(siteContent.legacyRedirects).toContain(
-      jasmine.objectContaining({ from: '/produkty', to: '/development' }),
+      jasmine.objectContaining({ from: '/produkty', to: '/rozwiazania' }),
     );
+    expect(siteContent.legacyRedirects).toEqual(
+      jasmine.arrayContaining([
+        { from: '/produkty/asystent-wiedzy-rag', to: '/rozwiazania' },
+        { from: '/produkty/strony-seo', to: '/rozwiazania' },
+        { from: '/produkty/voice-agent', to: '/rozwiazania' },
+        { from: '/produkty/whatsapp-ai', to: '/rozwiazania' },
+        { from: '/produkty/automatyzacja-email', to: '/rozwiazania' },
+        { from: '/produkty/panel-agentow', to: '/rozwiazania' },
+      ]),
+    );
+  });
+
+  it('does not expose the retired six-product catalog as current public content', () => {
+    const publicText = JSON.stringify({
+      routes: siteContent.routes,
+      solutions: siteContent.solutions,
+    });
+    expect(publicText).not.toMatch(/Voice agent|WhatsApp demo|Strona i SEO|Panel agentów/i);
   });
 
   it('keeps public titles, descriptions and canonical URLs unique', () => {
@@ -148,6 +183,7 @@ describe('Site content model', () => {
         home: siteContent.home,
         demo: siteContent.demo,
         demoExample: siteContent.demoExample,
+        solutions: siteContent.solutions,
         development: siteContent.development,
         studio: siteContent.studio,
         contact: siteContent.contact,
@@ -159,6 +195,7 @@ describe('Site content model', () => {
     expect(publicText).not.toMatch(/AI Software Studio/i);
     expect(publicText).not.toMatch(/\bfixt\b/i);
     expect(siteContent.navigation.map((item) => item.label)).toEqual([
+      'Rozwiązania',
       'Demo w 7 dni',
       'Wdrożenia',
       'O Protolume',

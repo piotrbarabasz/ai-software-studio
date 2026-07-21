@@ -1,0 +1,91 @@
+<div class="solutions-page">
+  <section class="solutions-hero section-shell" appRevealOnScroll>
+    <p class="eyebrow">{{ content.eyebrow }}</p>
+    <h1>{{ content.title }}</h1>
+    <p class="page-lead">{{ content.lead }}</p>
+    <p class="scope-notice">{{ content.scopeNotice }}</p>
+    <nav class="quick-links" aria-label="{{ content.quickLinksLabel }}">
+      @for (solution of content.solutions; track solution.id) {
+        <a [href]="'#' + solution.id">{{ solution.title }}</a>
+      }
+    </nav>
+  </section>
+
+  <div class="solutions-list">
+    @for (solution of content.solutions; track solution.id) {
+      <article class="solution-card section-shell" [id]="solution.id" appRevealOnScroll>
+        <div class="solution-heading">
+          <p class="eyebrow">{{ solution.id }}</p>
+          <h2>{{ solution.title }}</h2>
+          <p class="solution-summary">{{ solution.summary }}</p>
+        </div>
+        <div class="solution-grid">
+          <section>
+            <h3>Problem</h3>
+            <p>{{ solution.problem }}</p>
+          </section>
+          <section>
+            <h3>Dla kogo</h3>
+            <p>{{ solution.audience }}</p>
+          </section>
+          <section>
+            <h3>Co może robić</h3>
+            <ul>
+              @for (capability of solution.capabilities; track capability) {
+                <li>{{ capability }}</li>
+              }
+            </ul>
+          </section>
+          <section>
+            <h3>Co jest potrzebne na start</h3>
+            <ul>
+              @for (input of solution.requiredInputs; track input) {
+                <li>{{ input }}</li>
+              }
+            </ul>
+          </section>
+          <section>
+            <h3>Co możemy pokazać w demo</h3>
+            <p>{{ solution.demoScope }}</p>
+          </section>
+          <section>
+            <h3>Co obejmuje pełne wdrożenie</h3>
+            <ul>
+              @for (item of solution.productionScope; track item) {
+                <li>{{ item }}</li>
+              }
+            </ul>
+          </section>
+        </div>
+        <div class="solution-actions">
+          <a
+            class="primary-action"
+            [routerLink]="solution.primaryCta.path"
+            [queryParams]="solution.primaryCta.queryParams"
+            >{{ solution.primaryCta.label }}</a
+          >
+          @if (solution.optionalSecondaryCta) {
+            <a
+              class="secondary-action"
+              [routerLink]="solution.optionalSecondaryCta.path"
+              [queryParams]="solution.optionalSecondaryCta.queryParams"
+              >{{ solution.optionalSecondaryCta.label }}</a
+            >
+          }
+        </div>
+      </article>
+    }
+  </div>
+
+  <section class="solutions-closing section-shell" aria-labelledby="solutions-closing-title">
+    <p class="eyebrow">Następny krok</p>
+    <h2 id="solutions-closing-title">{{ content.closingCta.title }}</h2>
+    <p class="page-lead">{{ content.closingCta.lead }}</p>
+    <a
+      class="primary-action"
+      [routerLink]="content.closingCta.primaryCta.path"
+      [queryParams]="content.closingCta.primaryCta.queryParams"
+      >{{ content.closingCta.primaryCta.label }}</a
+    >
+  </section>
+</div>

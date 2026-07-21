@@ -51,6 +51,7 @@ describe('SiteShellComponent', () => {
         href: link.getAttribute('href'),
       })),
     ).toEqual([
+      { label: 'Rozwiązania', href: '/rozwiazania' },
       { label: 'Demo w 7 dni', href: '/demo-ai' },
       { label: 'Wdrożenia', href: '/development' },
       { label: 'O Protolume', href: '/studio' },

@@ -57,7 +57,7 @@ function writeArtifact(root, environment, injectedText = '') {
     fs.writeFileSync(path.join(root, 'assets', asset), '<svg></svg>', 'utf8');
   }
   fs.writeFileSync(path.join(root, 'assets', socialPreviewName), socialPreviewFixture, 'utf8');
-  const primaryRoutes = ['/demo-ai', '/development', '/studio', '/kontakt'];
+  const primaryRoutes = ['/rozwiazania', '/demo-ai', '/development', '/studio', '/kontakt'];
   for (const route of [...publicPrerenderRoutes(), '/404']) {
     const directory = route === '/' ? root : path.join(root, route.slice(1));
     fs.mkdirSync(directory, { recursive: true });
@@ -72,7 +72,7 @@ function writeArtifact(root, environment, injectedText = '') {
       .join('');
     fs.writeFileSync(
       path.join(directory, 'index.html'),
-      `<title>Strona | Protolume</title><meta name="description" content="Opis Protolume"><link rel="canonical" href="${url}"><meta property="og:url" content="${url}"><meta property="og:title" content="Strona | Protolume"><meta property="og:description" content="Opis Protolume"><meta property="og:image" content="${origin}${publicBrandManifest.assets.socialPreviewPath}"><meta property="og:image:type" content="${publicBrandManifest.assets.socialPreviewType}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Strona | Protolume"><meta name="twitter:description" content="Opis Protolume"><meta name="twitter:image" content="${origin}${publicBrandManifest.assets.socialPreviewPath}"><meta name="robots" content="${robots}">${route === '/' ? `<meta name="protolume-build-sha" content="${buildSha}" />` : ''}<script type="application/ld+json">{"website":"${origin}#website","service":"${origin}#professional-service","name":"Protolume"}</script><body><a class="skip-link" href="#main-content">Skip</a><nav id="primary-navigation">${navigation}</nav><main id="main-content" tabindex="-1">Protolume${injectedText}</main></body>`,
+      `<title>Strona | Protolume</title><meta name="description" content="Opis Protolume"><link rel="canonical" href="${url}"><meta property="og:url" content="${url}"><meta property="og:title" content="Strona | Protolume"><meta property="og:description" content="Opis Protolume"><meta property="og:image" content="${origin}${publicBrandManifest.assets.socialPreviewPath}"><meta property="og:image:type" content="${publicBrandManifest.assets.socialPreviewType}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Strona | Protolume"><meta name="twitter:description" content="Opis Protolume"><meta name="twitter:image" content="${origin}${publicBrandManifest.assets.socialPreviewPath}"><meta name="robots" content="${robots}">${route === '/' ? `<meta name="protolume-build-sha" content="${buildSha}" />` : ''}<script type="application/ld+json">{"website":"${origin}#website","service":"${origin}#professional-service","name":"Protolume"}</script><body><a class="skip-link" href="#main-content">Skip</a><nav id="primary-navigation">${navigation}</nav><main id="main-content" tabindex="-1">Protolume${route === '/rozwiazania' ? '<h1>Rozwiązania</h1><a href="#asystent-wiedzy">Asystent</a><a href="#automatyzacja-wiadomosci-i-dokumentow">Automatyzacja</a><a href="#panel-operacyjny">Panel</a><a href="/kontakt?projectType=rag_chatbot_demo">Kontakt</a><a href="/kontakt?projectType=business_process_automation">Kontakt</a><a href="/kontakt?projectType=custom_web_app">Kontakt</a>' : ''}${injectedText}</main></body>`,
       'utf8',
     );
   }

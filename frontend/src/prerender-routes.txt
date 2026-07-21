@@ -1,6 +1,7 @@
 /
 /demo-ai
 /przyklad-demo
+/rozwiazania
 /development
 /studio
 /rd

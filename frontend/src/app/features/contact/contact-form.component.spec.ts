@@ -119,6 +119,29 @@ describe('ContactFormComponent', () => {
     }
   });
 
+  it('preselects all three /rozwiazania CTA project types', () => {
+    const solutionProjectTypes = [
+      'rag_chatbot_demo',
+      'business_process_automation',
+      'custom_web_app',
+    ] as const;
+
+    for (const projectType of solutionProjectTypes) {
+      projectTypeParams$.next(convertToParamMap({ projectType }));
+      const fixture = TestBed.createComponent(ContactFormComponent);
+      fixture.detectChanges();
+      expect(fixture.componentInstance.form.controls.projectType.value).toBe(projectType);
+      fixture.destroy();
+    }
+  });
+
+  it('starts with an empty project type when the query has no projectType', () => {
+    projectTypeParams$.next(convertToParamMap({}));
+    const fixture = TestBed.createComponent(ContactFormComponent);
+    fixture.detectChanges();
+    expect(fixture.componentInstance.form.controls.projectType.value).toBe('');
+  });
+
   it('preselects the development category from the Development CTA query param', () => {
     projectTypeParams$.next(convertToParamMap({ projectType: 'custom_web_app' }));
 
