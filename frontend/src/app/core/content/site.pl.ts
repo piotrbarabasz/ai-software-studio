@@ -427,17 +427,31 @@ const legacyRedirects = [
 const contactNoCommitment =
   'Wysłanie formularza nie jest zamówieniem, akceptacją wyceny ani automatycznym rozpoczęciem płatnej realizacji.';
 
+const primaryNavigation = [
+  { label: 'Demo w 7 dni', path: '/demo-ai' },
+  { label: 'Wdrożenia', path: '/development' },
+  { label: 'O Protolume', path: '/studio' },
+  { label: 'Kontakt', path: '/kontakt' },
+] as const;
+
 export const siteContent = {
   routes: routeMetadata,
   legacyRedirects,
-  navigation: [
-    { label: 'Demo w 7 dni', path: '/demo-ai' },
-    { label: 'Development', path: '/development' },
-    { label: 'Studio', path: '/studio' },
-    { label: 'Kontakt', path: '/kontakt' },
-  ],
+  navigation: primaryNavigation,
   footer: {
-    summary: publicBrand.descriptor,
+    summary:
+      'Studio wdrożeń AI i automatyzacji. Od działającego demo jednego procesu do jasno zaplanowanego pierwszego etapu.',
+    offerLinks: primaryNavigation.slice(0, 2),
+    studioLinks: [
+      primaryNavigation[2],
+      { label: 'R&D Lab', path: '/rd' },
+      publicBrand.links.githubProfile,
+    ],
+    informationLinks: [
+      primaryNavigation[3],
+      { label: 'Polityka prywatności', path: '/polityka-prywatnosci' },
+    ],
+    copyright: 'Wszelkie prawa zastrzeżone.',
   },
   products,
   trust: {
@@ -540,17 +554,22 @@ export const siteContent = {
   home: {
     path: '/',
     hero: {
-      eyebrow: `${publicBrand.name} — ${publicBrand.descriptor}`,
-      title: 'Sprawdź w 7 dni, czy AI lub automatyzacja usprawni Twój proces.',
+      titleBeforeHighlight: 'Sprawdź w 7 dni, czy AI usprawni ',
+      highlightedTitlePart: 'konkretny proces',
+      titleAfterHighlight: ' w Twojej firmie.',
+      supportingNote: 'Nie potrzebujesz gotowej specyfikacji technicznej.',
+      processDiagram: ['Obecny proces', 'Demo', 'Wnioski', 'Decyzja'],
+      eyebrow: 'Protolume — studio wdrożeń AI i automatyzacji',
+      title: 'Sprawdź w 7 dni, czy AI usprawni konkretny proces w Twojej firmie.',
       audience:
         'Dla zespołów, które ręcznie przenoszą informacje, pilnują statusów lub odpowiadają na powtarzalne pytania. Wystarczy opis obecnej pracy — bez gotowej specyfikacji.',
-      lead: 'W siedem dni powstaje widoczny przepływ jednego scenariusza, lista założeń i rekomendacja dalszego kroku. To etap decyzyjny, nie wdrożenie produkcyjne.',
+      lead: 'Budujemy działające demo jednego przepływu, sprawdzamy dane i ryzyka, a następnie wskazujemy najlepszy kolejny krok.',
       primaryCta: {
         label: 'Opisz proces do sprawdzenia',
         path: '/kontakt',
         queryParams: { projectType: 'mvp_prototype' },
       },
-      secondaryCta: { label: 'Uruchom przykładowe demo', path: '/demo-ai' },
+      secondaryCta: { label: 'Zobacz przykładowe demo', path: '/demo-ai' },
       proof: {
         label: 'Co dostajesz po siedmiu dniach',
         steps: [
@@ -641,6 +660,71 @@ export const siteContent = {
         path: '/kontakt',
         queryParams: { projectType: 'mvp_prototype' },
       },
+    },
+    trustStrip: [
+      { id: 'direct-technical-contact', title: 'Bezpośredni kontakt techniczny' },
+      { id: 'demo-before-investment', title: 'Demo przed większą inwestycją' },
+      { id: 'ai-cost-boundaries', title: 'Kontrola kosztu i granic AI' },
+      { id: 'public-code', title: 'Publicznie widoczny kod wybranych elementów' },
+    ],
+    useCases: [
+      {
+        id: 'knowledge-assistant',
+        title: 'Asystent wiedzy',
+        problem: 'Pracownicy lub klienci wielokrotnie pytają o te same informacje.',
+        outcome:
+          'Odpowiedź na podstawie zatwierdzonych materiałów albo przekazanie sprawy człowiekowi.',
+        visualKind: 'knowledge-assistant',
+      },
+      {
+        id: 'message-and-document-workflow',
+        title: 'Obsługa wiadomości i dokumentów',
+        problem: 'Zespół ręcznie odczytuje wiadomości, kopiuje dane i przekazuje sprawy dalej.',
+        outcome: 'Klasyfikacja, zebranie danych i przypisanie kolejnego kroku.',
+        visualKind: 'message-workflow',
+      },
+      {
+        id: 'process-panel',
+        title: 'Panel procesu',
+        problem: 'Statusy i decyzje są rozproszone między e-mailem, komunikatorami i arkuszami.',
+        outcome: 'Jeden widok spraw, statusów i odpowiedzialności.',
+        visualKind: 'process-panel',
+      },
+    ],
+    sevenDayResults: {
+      eyebrow: 'Rezultat demo',
+      title: 'Co dokładnie powstaje w siedem dni?',
+      lead: 'Po siedmiu dniach otrzymujesz nie tylko widok rozwiązania, ale także informacje potrzebne do decyzji o dalszym rozwoju.',
+      items: [
+        {
+          id: 'visible-flow',
+          title: 'Widoczny przepływ',
+          description:
+            'Ekrany lub działający scenariusz, który można pokazać zespołowi i wspólnie ocenić.',
+          order: 1,
+        },
+        {
+          id: 'key-assumption-test',
+          title: 'Test kluczowego założenia',
+          description:
+            'Sprawdzenie, czy dane, logika i sposób działania pozwalają osiągnąć zakładany rezultat.',
+          order: 2,
+        },
+        {
+          id: 'risks-and-dependencies',
+          title: 'Lista ryzyk i zależności',
+          description:
+            'Integracje, dane, bezpieczeństwo, udział człowieka oraz przewidywane koszty działania.',
+          order: 3,
+        },
+        {
+          id: 'decision-recommendation',
+          title: 'Rekomendacja decyzji',
+          description:
+            'Rozwijać, doprecyzować, zmienić kierunek albo zatrzymać pomysł przed większą inwestycją.',
+          order: 4,
+        },
+      ],
     },
   },
   demo: {

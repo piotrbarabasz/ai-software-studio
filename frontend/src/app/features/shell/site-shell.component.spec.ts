@@ -26,19 +26,43 @@ describe('SiteShellComponent', () => {
 
     expect(element.querySelector('.skip-link')).not.toBeNull();
     expect(element.querySelectorAll('.nav-links a').length).toBe(siteContent.navigation.length);
-    expect(element.querySelector('.footer-links a[href="/rd"]')).not.toBeNull();
-    expect(element.querySelector('.brand')?.getAttribute('aria-label')).toBe(publicBrand.name);
-    expect(element.querySelector('.brand-mark')?.getAttribute('src')).toBe(
-      publicBrand.assets.faviconPath,
+    expect(element.querySelectorAll('.site-footer .footer-column')).toHaveSize(4);
+    expect(element.querySelector('.site-footer .footer-brand .logo-fallback')).not.toBeNull();
+    expect(element.querySelector('.site-footer h2')?.textContent).toBe('Oferta');
+    expect(element.querySelector('.site-footer a[href="/demo-ai"]')).not.toBeNull();
+    expect(element.querySelector('.site-footer a[href="/development"]')).not.toBeNull();
+    expect(element.querySelector('.site-footer a[href="/studio"]')).not.toBeNull();
+    expect(element.querySelector('.site-footer a[href="/rd"]')?.textContent?.trim()).toBe(
+      'R&D Lab',
     );
-    expect(element.querySelector('.site-footer')?.textContent).toContain(`© ${publicBrand.name}`);
-    expect(element.querySelector('.site-footer')?.textContent).toContain('Piotr Barabasz');
-    expect(element.querySelector('.site-footer')?.textContent).toContain(
-      'Właściciel i odpowiedzialny partner techniczny',
-    );
-    expect(element.querySelector('.site-footer')?.textContent).toContain(publicBrand.descriptor);
     expect(element.querySelector('.site-footer a[href="/kontakt"]')).not.toBeNull();
     expect(element.querySelector('.site-footer a[href="/polityka-prywatnosci"]')).not.toBeNull();
+    expect(element.querySelector('.brand .logo-link')?.getAttribute('aria-label')).toBe(
+      'Protolume — strona główna',
+    );
+    expect(element.querySelector('.brand .logo-fallback')).not.toBeNull();
+    expect(element.querySelector('.brand .logo-image')).toBeNull();
+    expect(
+      Array.from(element.querySelectorAll('.nav-links a')).map((link) => ({
+        label: link.textContent?.trim(),
+        href: link.getAttribute('href'),
+      })),
+    ).toEqual([
+      { label: 'Demo w 7 dni', href: '/demo-ai' },
+      { label: 'Wdrożenia', href: '/development' },
+      { label: 'O Protolume', href: '/studio' },
+      { label: 'Kontakt', href: '/kontakt' },
+    ]);
+    expect(element.querySelectorAll('.primary-cta')).toHaveSize(1);
+    expect(element.querySelector('.primary-cta')?.textContent?.trim()).toBe('Opisz proces');
+    expect(element.querySelector('.primary-cta')?.getAttribute('href')).toBe(
+      '/kontakt?projectType=mvp_prototype',
+    );
+    expect(element.querySelector('.site-footer')?.textContent).toContain(
+      `© ${new Date().getFullYear()}`,
+    );
+    expect(element.querySelector('.site-footer')?.textContent).toContain(publicBrand.name);
+    expect(element.querySelector('.site-footer')?.textContent).toContain('Studio wdrożeń AI');
     expect(element.querySelector('.site-footer a[href^="mailto:"]')).toBeNull();
     const githubLink = element.querySelector(
       '.site-footer a[href="https://github.com/piotrbarabasz"]',
@@ -46,6 +70,9 @@ describe('SiteShellComponent', () => {
     expect(githubLink?.getAttribute('target')).toBe('_blank');
     expect(githubLink?.getAttribute('rel')).toContain('noopener');
     expect(githubLink?.getAttribute('rel')).toContain('noreferrer');
+    expect(
+      element.querySelectorAll('.site-footer a[href]').every((link) => link.getAttribute('href')),
+    ).toBeTrue();
     expect(element.querySelectorAll('#main-content').length).toBe(1);
   });
 

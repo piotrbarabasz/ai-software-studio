@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
-  <title id="title">Protolume</title>
-  <rect width="64" height="64" rx="14" fill="#26312d" />
-  <path d="M18 49V15h16c10 0 16 5.8 16 14.2 0 8.7-6.1 14.4-16 14.4H27V49H18Zm9-14h6.1c4.7 0 7.7-2.1 7.7-5.8 0-3.6-3-5.6-7.7-5.6H27V35Z" fill="#f7f8f4" />
-  <circle cx="42.5" cy="19.5" r="4.5" fill="#9daa78" />
-</svg>

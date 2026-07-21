@@ -29,7 +29,9 @@ describe('Site content model', () => {
   });
 
   it('keeps homepage content focused on a defined audience and two decision paths', () => {
-    expect(siteContent.home.hero.title).toContain('AI lub automatyzacja');
+    expect(siteContent.home.hero.titleBeforeHighlight).toContain('AI usprawni');
+    expect(siteContent.home.hero.highlightedTitlePart).toBe('konkretny proces');
+    expect(siteContent.home.hero.titleAfterHighlight).toContain('Twojej firmie');
     expect(siteContent.home.hero.audience).toContain('ręcznie przenoszą informacje');
     expect(siteContent.home.hero.audience).toContain('bez gotowej specyfikacji');
     expect(siteContent.home.hero.lead).toContain('nie wdrożenie produkcyjne');
@@ -37,7 +39,7 @@ describe('Site content model', () => {
     expect(siteContent.home.closingCta.primaryCta.label).toBe(
       siteContent.home.hero.primaryCta.label,
     );
-    expect(siteContent.home.hero.secondaryCta.label).toBe('Uruchom przykładowe demo');
+    expect(siteContent.home.hero.secondaryCta.label).toBe('Zobacz przykładowe demo');
     expect(siteContent.home.hero.secondaryCta.path).toBe('/demo-ai');
     expect(siteContent.home.paths.length).toBe(2);
     expect(siteContent.home.paths.map((path) => path.cta.path)).toEqual([
@@ -45,6 +47,13 @@ describe('Site content model', () => {
       '/development',
     ]);
     expect(siteContent.home.problemGroups.length).toBe(3);
+    expect(siteContent.home.hero.processDiagram).toHaveSize(4);
+    expect(siteContent.home.trustStrip).toHaveSize(4);
+    expect(siteContent.home.useCases).toHaveSize(3);
+    expect(siteContent.home.sevenDayResults.items).toHaveSize(4);
+    expect(siteContent.home.hero.primaryCta.path).toBe('/kontakt');
+    expect(siteContent.home.hero.primaryCta.queryParams?.['projectType']).toBe('mvp_prototype');
+    expect(JSON.stringify(siteContent.home)).not.toContain('innerHTML');
     expect('demonstration' in siteContent.home).toBeFalse();
     expect('outcome' in siteContent.home).toBeFalse();
   });
@@ -155,7 +164,7 @@ describe('Site content model', () => {
     expect(siteContent.demo.codeLink.url).toBe(
       'https://github.com/piotrbarabasz/ai-software-studio',
     );
-    expect(siteContent.footer.summary).toContain('Dema AI');
+    expect(siteContent.footer.summary).toContain('Studio wdrożeń AI');
   });
 
   it('offers four low-risk ways to verify the work before cooperation', () => {
