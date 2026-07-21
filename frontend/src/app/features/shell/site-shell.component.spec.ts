@@ -68,12 +68,7 @@ describe('SiteShellComponent', () => {
     expect(element.querySelector('.site-footer')?.textContent).toContain(publicBrand.name);
     expect(element.querySelector('.site-footer')?.textContent).toContain('Studio wdrożeń AI');
     expect(element.querySelector('.site-footer a[href^="mailto:"]')).toBeNull();
-    const githubLink = element.querySelector(
-      '.site-footer a[href="https://github.com/piotrbarabasz"]',
-    );
-    expect(githubLink?.getAttribute('target')).toBe('_blank');
-    expect(githubLink?.getAttribute('rel')).toContain('noopener');
-    expect(githubLink?.getAttribute('rel')).toContain('noreferrer');
+    expect(element.querySelector('.site-footer a[href*="github.com"]')).toBeNull();
     const footerLinks = Array.from(
       element.querySelectorAll<HTMLAnchorElement>('.site-footer a[href]'),
     );

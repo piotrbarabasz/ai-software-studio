@@ -34,20 +34,17 @@ describe('StudioPageComponent', () => {
 
     expect(element.textContent).toContain('Piotr Barabasz');
     expect(element.textContent).toContain('Właściciel i odpowiedzialny partner techniczny');
-    expect(element.querySelectorAll('.verified-capabilities dt')).toHaveSize(3);
-    expect(element.textContent).toContain('Angular i TypeScript');
-    expect(element.textContent).toContain('FastAPI i Python');
-    expect(element.textContent).toContain('Docker, Cloud Build i Cloud Run');
-    expect(element.querySelector('a[href="https://github.com/piotrbarabasz"]')).not.toBeNull();
-    expect(
-      element.querySelector('a[href="https://github.com/piotrbarabasz/ai-software-studio"]'),
-    ).not.toBeNull();
+    expect(element.querySelectorAll('.verified-capabilities dt')).toHaveSize(4);
+    expect(element.textContent).toContain('4+ lata doświadczenia w tworzeniu oprogramowania');
+    expect(element.textContent).toContain('Politechnika Wrocławska');
+    expect(element.textContent).toContain('zespołach międzynarodowych');
+    expect(element.textContent).toContain('Odpowiedzialność end-to-end');
+    expect(element.querySelector('a[href*="github.com"]')).toBeNull();
     expect(element.querySelectorAll('.evidence-card').length).toBe(2);
     expect(element.querySelectorAll('.verification-list').length).toBe(2);
     expect(element.querySelectorAll('.evidence-boundary')).toHaveSize(2);
     expect(element.textContent).toContain('Asystent wiedzy z obsługą pytań poza zakresem');
-    expect(element.textContent).toContain('Wielostronicowy frontend Angular');
-    expect(element.textContent).toContain('Cloud Run');
+    expect(element.textContent).toContain('Otwórz działającą stronę');
     expect(element.textContent).toContain('Projekt własny');
     expect(element.textContent).toContain('nie case study klienta');
     expect(element.querySelector('.owner-image')).toBeNull();

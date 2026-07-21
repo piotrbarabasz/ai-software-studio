@@ -45,13 +45,7 @@ describe('DemoPageComponent', () => {
     expect(element.querySelector('a[href="/demo-ai#interactive-demo"]')?.textContent).toContain(
       'Uruchom przykładowe demo',
     );
-    const codeLink = element.querySelector<HTMLAnchorElement>(
-      'a[href="https://github.com/piotrbarabasz/ai-software-studio"]',
-    );
-    expect(codeLink?.textContent).toContain('Zobacz kod tego demo');
-    expect(codeLink?.getAttribute('target')).toBe('_blank');
-    expect(codeLink?.getAttribute('rel')).toContain('noopener');
-    expect(codeLink?.getAttribute('rel')).toContain('noreferrer');
+    expect(element.querySelector('a[href*="github.com"]')).toBeNull();
   });
 
   it('does not render duplicate HTML ids', async () => {

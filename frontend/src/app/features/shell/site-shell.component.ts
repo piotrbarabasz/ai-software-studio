@@ -214,7 +214,6 @@ export class SiteShellComponent implements OnInit {
         '@type': 'Person',
         name: owner.name,
         jobTitle: owner.role,
-        sameAs: owner.links.map((link) => link.url),
       },
       {
         '@id': `${siteSeo.origin}#professional-service`,

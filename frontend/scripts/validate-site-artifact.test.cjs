@@ -43,6 +43,28 @@ test('public component styles do not reintroduce legacy green or orange colors',
   }
 });
 
+test('public prerendered HTML does not expose development repositories', (context) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'site-artifact-public-copy-'));
+  context.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const environment = { publicSiteUrl: 'https://protolume.pl', indexingEnabled: true };
+  writeArtifact(root, environment);
+
+  const publicHtml = fs
+    .readdirSync(root, { recursive: true })
+    .filter((entry) => String(entry).endsWith('.html'))
+    .map((entry) => fs.readFileSync(path.join(root, String(entry)), 'utf8'))
+    .join('\n');
+
+  for (const forbidden of [
+    /github\.com/i,
+    /GitHub/i,
+    /publiczny kod/i,
+    /publiczne repozytorium/i,
+  ]) {
+    assert.doesNotMatch(publicHtml, forbidden);
+  }
+});
+
 function writeArtifact(root, environment, injectedText = '') {
   const origin = environment.publicSiteUrl;
   const buildSha = environment.buildSha ?? 'abc1234';

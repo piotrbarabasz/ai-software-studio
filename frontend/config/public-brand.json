@@ -5,18 +5,6 @@
     "name": "Piotr Barabasz",
     "role": "Właściciel i odpowiedzialny partner techniczny"
   },
-  "links": {
-    "githubProfile": {
-      "label": "GitHub",
-      "url": "https://github.com/piotrbarabasz",
-      "accessibleName": "Profil Piotra Barabasza w serwisie GitHub"
-    },
-    "sourceRepository": {
-      "label": "Przejrzyj publiczny kod",
-      "url": "https://github.com/piotrbarabasz/ai-software-studio",
-      "accessibleName": "Publiczne repozytorium kodu Protolume w serwisie GitHub"
-    }
-  },
   "assets": {
     "faviconPath": "/assets/favicon.svg",
     "socialPreviewPath": "/assets/protolume-social-preview.svg",

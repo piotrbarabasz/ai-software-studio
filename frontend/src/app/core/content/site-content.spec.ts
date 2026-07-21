@@ -207,14 +207,14 @@ describe('Site content model', () => {
   it('defines two verifiable work-evidence items without client claims', () => {
     expect(siteContent.trust.owner.name).toBe('Piotr Barabasz');
     expect(siteContent.trust.owner.role).toContain('odpowiedzialny partner techniczny');
-    expect(siteContent.trust.owner.verifiedCapabilities).toHaveSize(3);
+    expect(siteContent.trust.owner.verifiedCapabilities).toHaveSize(4);
     expect(siteContent.trust.owner.verifiedCapabilities.map((item) => item.label)).toEqual([
-      'Angular i TypeScript',
-      'FastAPI i Python',
-      'Docker, Cloud Build i Cloud Run',
+      '4+ lata doświadczenia w tworzeniu oprogramowania',
+      'Politechnika Wrocławska — zaufana sztuczna inteligencja',
+      'Doświadczenie w zespołach międzynarodowych',
+      'Odpowiedzialność end-to-end',
     ]);
-    expect(siteContent.trust.owner.links).toHaveSize(1);
-    expect(siteContent.trust.owner.links[0].url).toBe('https://github.com/piotrbarabasz');
+    expect(siteContent.trust.owner.privacyNotice).toContain('kod klienta pozostają prywatne');
     expect('image' in siteContent.trust.owner).toBeFalse();
     expect(siteContent.trust.evidence.items.map((item) => item.id)).toEqual([
       'knowledge-demo',
@@ -225,27 +225,20 @@ describe('Site content model', () => {
       expect(item.teaser.length).toBeGreaterThan(0);
       expect(item.problem.length).toBeGreaterThan(0);
       expect(item.built.length).toBeGreaterThan(0);
-      expect(item.technologies.length).toBeGreaterThan(0);
       expect(item.verification.length).toBeGreaterThan(0);
       expect(item.limitation.length).toBeGreaterThan(0);
       expect(item.liveLink?.url.length).toBeGreaterThan(0);
-      expect(item.repositoryLink?.url).toBe('https://github.com/piotrbarabasz/ai-software-studio');
     });
     expect(siteContent.trust.evidence.items[0].limitation).toContain('stałych');
     expect(siteContent.trust.evidence.items[0].limitation).toContain('Nie potwierdza');
     expect(siteContent.trust.evidence.items[1].limitation).toContain('nie case study klienta');
-    expect(siteContent.trust.evidence.items[1].built).toContain('FastAPI');
-    expect(siteContent.trust.evidence.items[1].built).toContain('Cloud Run');
-    expect(siteContent.demo.codeLink.url).toBe(
-      'https://github.com/piotrbarabasz/ai-software-studio',
-    );
     expect(siteContent.footer.summary).toContain('Studio wdrożeń AI');
   });
 
   it('offers four low-risk ways to verify the work before cooperation', () => {
     expect(siteContent.studio.verification.steps).toHaveSize(4);
     expect(siteContent.studio.verification.steps.join(' ')).toContain('interaktywne demo');
-    expect(siteContent.studio.verification.steps.join(' ')).toContain('publiczny kod');
+    expect(siteContent.studio.verification.steps.join(' ')).toContain('kryteria odbioru');
     expect(siteContent.studio.verification.steps.join(' ')).toContain('ograniczony pierwszy etap');
     expect(siteContent.studio.verification.steps[3]).toBe(siteContent.contact.noCommitment);
     expect(siteContent.studio.verification.demoCta.path).toBe('/demo-ai');

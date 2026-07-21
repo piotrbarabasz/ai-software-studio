@@ -149,15 +149,6 @@
                   >{{ item.liveLink.label }}</a
                 >
               }
-              @if (item.repositoryLink) {
-                <a
-                  [href]="item.repositoryLink.url"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  [attr.aria-label]="item.repositoryLink.accessibleName"
-                  >{{ item.repositoryLink.label }}</a
-                >
-              }
             </div>
           </article>
         }
@@ -168,13 +159,6 @@
           <p class="trust-statement">{{ home.trustTeaser.statement }}</p>
         </div>
         <div class="evidence-links">
-          <a
-            [href]="home.trustTeaser.github.url"
-            target="_blank"
-            rel="noopener noreferrer"
-            [attr.aria-label]="home.trustTeaser.github.accessibleName"
-            >{{ home.trustTeaser.github.label }}</a
-          >
           <a class="secondary-action" [routerLink]="home.trustTeaser.cta.path">{{
             home.trustTeaser.cta.label
           }}</a>

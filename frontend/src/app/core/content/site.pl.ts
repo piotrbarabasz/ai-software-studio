@@ -334,11 +334,7 @@ export const siteContent = {
       navigationLink('/demo-ai'),
       navigationLink('/development'),
     ],
-    studioLinks: [
-      navigationLink('/studio'),
-      { label: 'R&D Lab', path: '/rd' },
-      publicBrand.links.githubProfile,
-    ],
+    studioLinks: [navigationLink('/studio'), { label: 'R&D Lab', path: '/rd' }],
     informationLinks: [
       navigationLink('/kontakt'),
       { label: 'Polityka prywatności', path: '/polityka-prywatnosci' },
@@ -352,21 +348,28 @@ export const siteContent = {
       name: publicBrand.owner.name,
       role: publicBrand.owner.role,
       bio: 'Prowadzę analizę, kontakt i realizację po jednej stronie odpowiedzialności. Pomagam zamieniać konkretny problem w sprawdzalne demo albo świadomie zaplanowane wdrożenie.',
+      privacyNotice:
+        'Materiały, dane i kod klienta pozostają prywatne. Publicznie prezentowane są wyłącznie własne demonstracje Protolume albo materiały udostępnione za wyraźną zgodą klienta.',
       verifiedCapabilities: [
         {
-          label: 'Angular i TypeScript',
+          label: '4+ lata doświadczenia w tworzeniu oprogramowania',
           evidence:
-            'Publiczne repozytorium zawiera frontend z routingiem, prerenderingiem, formularzami i testami komponentów.',
+            'Doświadczenie komercyjne obejmuje analizę, implementację oraz dostarczanie działających rozwiązań.',
         },
         {
-          label: 'FastAPI i Python',
+          label: 'Politechnika Wrocławska — zaufana sztuczna inteligencja',
           evidence:
-            'Kod backendu pokazuje API formularza, walidację danych, endpoint health oraz testy jednostkowe, integracyjne i kontraktowe.',
+            'Ukończony program studiów magisterskich w obszarze zaufanej sztucznej inteligencji; praca dyplomowa jest ukończona i oczekuje na obronę. Wcześniej ukończone studia inżynierskie na kierunku Mechatronika.',
         },
         {
-          label: 'Docker, Cloud Build i Cloud Run',
+          label: 'Doświadczenie w zespołach międzynarodowych',
           evidence:
-            'Repozytorium zawiera obrazy kontenerów, konfigurację buildów oraz skrypty wdrożeniowe dla usług Cloud Run.',
+            'Praca w międzynarodowych i interdyscyplinarnych zespołach, w tym współpraca z zespołem z Londynu oraz interesariuszami biznesowymi i technicznymi.',
+        },
+        {
+          label: 'Odpowiedzialność end-to-end',
+          evidence:
+            'Bezpośredni kontakt, analiza procesu, decyzje techniczne, realizacja, testy i odbiór ustalonego zakresu pozostają po jednej stronie odpowiedzialności.',
         },
       ],
       accountability: {
@@ -374,12 +377,11 @@ export const siteContent = {
         detail:
           'Od pierwszej rozmowy do kolejnych decyzji pracujesz bezpośrednio z osobą odpowiedzialną za techniczny kierunek i wykonanie prac.',
       },
-      links: [publicBrand.links.githubProfile],
     },
     evidence: {
       eyebrow: 'Co działa naprawdę',
       title: 'Dwa dowody pracy, które możesz sprawdzić samodzielnie',
-      lead: 'Pokazujemy działające elementy i kod, a przy każdym zaznaczamy granice tego, co faktycznie potwierdza.',
+      lead: 'Pokazujemy działające elementy, przykładowy rezultat i granice tego, co faktycznie potwierdzają.',
       items: [
         {
           id: 'knowledge-demo',
@@ -391,11 +393,10 @@ export const siteContent = {
             'Jak szybko ocenić sposób rozmowy z asystentem wiedzy i obsługę pytań bez odpowiedzi?',
           built:
             'Interaktywna symulacja z trzema pytaniami, odpowiedziami ze wskazaniem przykładowych źródeł oraz przekazaniem sprawy do człowieka, gdy brakuje danych.',
-          technologies: ['Angular', 'stan komponentu', 'szablony i dostępne kontrolki'],
           verification: [
             'Uruchom demo i wybierz jedno z trzech przykładowych pytań.',
             'Sprawdź odpowiedź ze źródłami oraz scenariusz przekazania sprawy do człowieka.',
-            'Kod komponentu i testów jest dostępny w publicznym repozytorium.',
+            'Możesz samodzielnie uruchomić symulację i sprawdzić zachowanie dla pytań w zakresie i poza zakresem.',
           ],
           limitation:
             'Symulacja korzysta ze stałych pytań i odpowiedzi. Nie potwierdza jakości odpowiedzi na danych firmy, integracji z bazą wiedzy ani gotowości produkcyjnej.',
@@ -404,28 +405,21 @@ export const siteContent = {
             url: '/demo-ai',
             accessibleName: `Uruchom interaktywne demo asystenta wiedzy ${publicBrand.name}`,
           },
-          repositoryLink: {
-            label: 'Zobacz kod demonstracji',
-            url: publicBrand.links.sourceRepository.url,
-            accessibleName: `Publiczne repozytorium demonstracji asystenta wiedzy ${publicBrand.name}`,
-          },
         },
         {
           id: 'studio-application',
 
           typeLabel: 'Projekt własny',
           title: `${publicBrand.name} jako działająca aplikacja`,
-          teaser:
-            'Zobacz wielostronicową aplikację, formularz obsługiwany przez API i publiczny kod projektu.',
+          teaser: 'Sprawdź działającą stronę, formularz kontaktowy i opis procesu realizacji.',
           problem:
             'Jak połączyć wielostronicową ofertę, interaktywne demo i działający formularz w jednej aplikacji?',
           built:
-            'Wielostronicowy frontend Angular z routingiem i prerenderingiem, formularzem kontaktowym obsługiwanym przez API FastAPI oraz konfiguracją wdrożenia obu usług w GCP Cloud Run.',
-          technologies: ['Angular', 'Angular Router', 'prerendering', 'FastAPI', 'Cloud Run'],
+            'Działająca wielostronicowa aplikacja z formularzem kontaktowym, interaktywnym demo i jasno opisanym procesem realizacji.',
           verification: [
             'Przejdź między publicznymi trasami i uruchom interaktywne demo.',
-            'Sprawdź w repozytorium frontend, API formularza, endpoint /health i testy.',
-            'Porównaj działającą aplikację z konfiguracją buildów i wdrożeń Cloud Run.',
+            'Sprawdź działający formularz kontaktowy i opis kolejnych etapów współpracy.',
+            'Porównaj zakres demo z opisem kryteriów odbioru i zależności.',
           ],
           limitation:
             'To projekt własny, a nie case study klienta. Nie potwierdza wyników biznesowych ani efektów wdrożeń u klientów.',
@@ -433,11 +427,6 @@ export const siteContent = {
             label: 'Otwórz działającą stronę',
             url: '/',
             accessibleName: `Otwórz działającą stronę ${publicBrand.name}`,
-          },
-          repositoryLink: {
-            label: 'Zobacz kod aplikacji i wdrożenia',
-            url: publicBrand.links.sourceRepository.url,
-            accessibleName: `Publiczne repozytorium aplikacji i konfiguracji wdrożenia ${publicBrand.name}`,
           },
         },
       ],
@@ -535,12 +524,6 @@ export const siteContent = {
     trustTeaser: {
       statement: 'Projekt prowadzony bezpośrednio przez Piotra Barabasza',
       cta: { label: 'Poznaj osobę odpowiedzialną', path: '/studio' },
-
-      github: {
-        label: 'GitHub',
-        url: 'https://github.com/piotrbarabasz',
-        accessibleName: 'Profil Piotra Barabasza w serwisie GitHub',
-      },
     },
     evidenceTeaser: {
       eyebrow: 'Krótki dowód pracy',
@@ -701,11 +684,6 @@ export const siteContent = {
         },
       ],
     },
-    codeLink: {
-      label: 'Zobacz kod tego demo',
-      url: publicBrand.links.sourceRepository.url,
-      accessibleName: `Publiczny kod interaktywnego demo ${publicBrand.name} w serwisie GitHub`,
-    },
   },
   demoExample: {
     path: '/przyklad-demo',
@@ -794,13 +772,13 @@ export const siteContent = {
       'kontakt, analiza i wykonanie pozostają po jednej stronie odpowiedzialności',
       'przed rozpoczęciem wspólnie ustalamy zakres i kryteria odbioru',
       'decyzje i ograniczenia są widoczne na kolejnych punktach kontrolnych',
-      'technologie są dobierane do problemu i warunków utrzymania',
+      'sposób realizacji jest dobierany do problemu i warunków utrzymania',
     ],
     capabilities: [
-      'interfejsy i panele w Angularze',
-      'backendy i API w FastAPI',
-      'formularze, walidacja i testy',
-      'kontenery i konfiguracja Cloud Run',
+      'analiza procesu i uporządkowanie wymagań',
+      'działające demo lub pierwszy etap rozwiązania',
+      'formularze, walidacja i testy odbiorowe',
+      'dokumentacja, bezpieczeństwo i utrzymanie zgodnie z zakresem',
     ],
     collaboration: {
       title: 'Z kim i w jaki sposób będziesz współpracować?',
@@ -815,7 +793,7 @@ export const siteContent = {
       'jeden scenariusz i rezultat, który można wspólnie ocenić',
       'krótkie przeglądy zamiast długiego okresu pracy bez informacji zwrotnej',
       'wycena po potwierdzeniu tego, co ma wejść do realizacji',
-      'przy planowaniu produkcji ustalamy stack, testy, dokumentację, bezpieczeństwo i utrzymanie',
+      'przy planowaniu produkcji ustalamy sposób realizacji, testy, dokumentację, bezpieczeństwo i utrzymanie',
     ],
     verification: {
       eyebrow: 'Przed współpracą',
@@ -824,7 +802,7 @@ export const siteContent = {
       lead: 'Nie musisz opierać decyzji wyłącznie na opisie oferty. Zacznij od elementu, który możesz sprawdzić samodzielnie.',
       steps: [
         'Uruchom interaktywne demo i sprawdź zachowanie dla odpowiedzi oraz pytania poza zakresem.',
-        'Przejrzyj publiczny kod frontendu, backendu, testów i konfiguracji wdrożenia.',
+        'Przejrzyj zakres demo, opis procesu realizacji i kryteria odbioru.',
         'Omów ograniczony pierwszy etap z zakresem i kryteriami odbioru ustalonymi przed realizacją.',
         contactNoCommitment,
       ],
@@ -834,11 +812,6 @@ export const siteContent = {
         label: 'Opisz problem bez zobowiązania',
         path: '/kontakt',
         queryParams: { projectType: 'other' },
-      },
-      repositoryLink: {
-        label: 'Przejrzyj publiczny kod',
-        url: publicBrand.links.sourceRepository.url,
-        accessibleName: publicBrand.links.sourceRepository.accessibleName,
       },
     },
     ctaLabel: 'Opisz planowane wdrożenie',

@@ -135,9 +135,9 @@ export interface OwnerProfile {
   readonly name: string;
   readonly role: string;
   readonly bio: string;
+  readonly privacyNotice: string;
   readonly verifiedCapabilities: readonly OwnerCapability[];
   readonly accountability: OwnerAccountability;
-  readonly links: readonly ExternalLink[];
   readonly image?: {
     readonly src: string;
     readonly alt: string;
@@ -153,11 +153,9 @@ export interface WorkEvidence {
   readonly teaser: string;
   readonly problem: string;
   readonly built: string;
-  readonly technologies: readonly string[];
   readonly verification: readonly string[];
   readonly limitation: string;
   readonly liveLink?: ExternalLink;
-  readonly repositoryLink?: ExternalLink;
 }
 
 export interface WorkEvidenceContent {
@@ -177,7 +175,6 @@ export interface TrustContent {
 export interface HomeTrustTeaser {
   readonly statement: string;
   readonly cta: HomeCta;
-  readonly github: ExternalLink;
 }
 
 export interface HomeEvidenceTeaser {
@@ -354,7 +351,6 @@ export interface DemoPageContent {
   readonly interactiveCtaLabel: string;
   readonly ctaLabel: string;
   readonly interactiveDemo: KnowledgeDemoContent;
-  readonly codeLink: ExternalLink;
 }
 
 export interface DemoExamplePageContent {
@@ -492,7 +488,6 @@ export interface StudioPageContent {
     readonly demoCta: HomeCta;
     readonly developmentCta: HomeCta;
     readonly contactCta: HomeCta;
-    readonly repositoryLink: ExternalLink;
   };
   readonly ctaLabel: string;
 }
@@ -500,7 +495,7 @@ export interface StudioPageContent {
 export interface FooterContent {
   readonly summary: string;
   readonly offerLinks: readonly NavigationItem[];
-  readonly studioLinks: readonly (NavigationItem | ExternalLink)[];
+  readonly studioLinks: readonly NavigationItem[];
   readonly informationLinks: readonly NavigationItem[];
   readonly copyright: string;
 }
