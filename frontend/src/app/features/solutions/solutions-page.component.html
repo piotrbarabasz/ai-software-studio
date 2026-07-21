@@ -64,12 +64,12 @@
             [queryParams]="solution.primaryCta.queryParams"
             >{{ solution.primaryCta.label }}</a
           >
-          @if (solution.optionalSecondaryCta) {
+          @if (solution.optionalSecondaryCta; as secondaryCta) {
             <a
               class="secondary-action"
-              [routerLink]="solution.optionalSecondaryCta.path"
-              [queryParams]="solution.optionalSecondaryCta.queryParams"
-              >{{ solution.optionalSecondaryCta.label }}</a
+              [routerLink]="secondaryCta.path"
+              [queryParams]="secondaryCta.queryParams"
+              >{{ secondaryCta.label }}</a
             >
           }
         </div>
