@@ -202,6 +202,27 @@ class DeploymentSmokeTest(unittest.TestCase):
         errors = smoke.run_checks("https://api.run.app", "https://protolume.pl", expect_noindex=True, timeout_seconds=2, request=indexed)
         self.assertTrue(any("public route /: HTML robots metadata" in error for error in errors))
 
+    def test_indexing_true_allows_an_absent_x_robots_header(self) -> None:
+        deployment = FakeDeployment()
+
+        def indexed_without_header(request, timeout):
+            response = deployment(request, timeout)
+            if urlsplit(request.full_url).netloc == "protolume.pl" and response.status == 200:
+                headers = dict(response.headers)
+                headers.pop("x-robots-tag", None)
+                body = response.body.replace(b"noindex, follow", b"index, follow")
+                return smoke.Response(response.status, headers, body)
+            return response
+
+        errors = smoke.run_checks(
+            "https://api.run.app",
+            "https://protolume.pl",
+            expect_noindex=False,
+            timeout_seconds=2,
+            request=indexed_without_header,
+        )
+        self.assertEqual(errors, [])
+
     def test_retry_succeeds_after_transient_failure(self) -> None:
         attempts = 0
         sleeps: list[float] = []
