@@ -35,7 +35,14 @@ function validateSocialPreviewAsset(assetPath, mimeType) {
     errors.push('social preview SVG must use viewBox 0 0 1200 630');
   if (/<script\b|\bon[a-z]+\s*=/i.test(svg))
     errors.push('social preview SVG contains script or event handler');
-  if (/<foreignObject\b|data:image|base64|https?:\/\//i.test(svg))
+  const externalResourceAttribute =
+    /\b(?:href|xlink:href|src)\s*=\s*["']\s*(?:https?:|\/\/|data:)/i;
+  const externalCssResource = /(?:url\s*\(\s*["']?\s*(?:https?:|\/\/|data:)|@import\b)/i;
+  if (
+    /<foreignObject\b|<image\b|data:image|base64/i.test(svg) ||
+    externalResourceAttribute.test(svg) ||
+    externalCssResource.test(svg)
+  )
     errors.push('social preview SVG contains a forbidden embedded or external resource');
   if (/^\s*<svg\b[^>]*>\s*<\/svg>\s*$/i.test(svg))
     errors.push('social preview SVG is an empty placeholder');
