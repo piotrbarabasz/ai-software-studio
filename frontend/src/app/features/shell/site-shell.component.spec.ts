@@ -94,7 +94,7 @@ describe('SiteShellComponent', () => {
     const header = element.querySelector('.site-header') as HTMLElement;
     const toggle = element.querySelector('.menu-toggle') as HTMLButtonElement;
     const navigation = element.querySelector('#primary-navigation') as HTMLElement;
-    const links = Array.from(navigation.querySelectorAll<HTMLAnchorElement>('a[href]'));
+    const links = Array.from(navigation.querySelectorAll<HTMLAnchorElement>('.nav-links a[href]'));
 
     expect(fixture.componentInstance.isNavigationEnhanced).toBeFalse();
     expect(header.classList).not.toContain('is-enhanced');
