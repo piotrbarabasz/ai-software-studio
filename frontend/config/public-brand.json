@@ -18,7 +18,7 @@
     }
   },
   "assets": {
-    "faviconPath": "/assets/protolume-favicon.svg",
+    "faviconPath": "/assets/favicon.svg",
     "socialPreviewPath": "/assets/protolume-social-preview.png",
     "socialPreviewType": "image/png"
   }

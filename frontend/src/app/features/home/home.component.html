@@ -54,6 +54,7 @@
       @for (useCase of home.useCases; track useCase.id) {
         <article class="use-case-card" [attr.data-visual-kind]="useCase.visualKind">
           <h3>{{ useCase.title }}</h3>
+          <app-use-case-visual [visualKind]="useCase.visualKind" />
           <div>
             <h4>Problem</h4>
             <p>{{ useCase.problem }}</p>

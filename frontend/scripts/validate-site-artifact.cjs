@@ -11,6 +11,13 @@ const DEFAULT_ARTIFACT_ROOT = path.resolve(__dirname, '../dist/aisoftware-studio
 const PUBLIC_BRAND_NAME = 'Protolume';
 const RETIRED_PUBLIC_BRAND_PATTERN = /AISoftware Studio|AI Software Studio/i;
 const PRIMARY_NAVIGATION_ROUTES = ['/demo-ai', '/development', '/studio', '/kontakt'];
+const REQUIRED_BRAND_ASSETS = [
+  'favicon.svg',
+  'protolume-logo-horizontal-dark.svg',
+  'protolume-logo-horizontal-light.svg',
+  'protolume-symbol.svg',
+  'protolume-symbol-mono.svg',
+];
 
 function extractAttribute(html, tagName, identifyingAttribute, identifyingValue, resultAttribute) {
   const tags = html.match(new RegExp(`<${tagName}\\b[^>]*>`, 'gi')) ?? [];
@@ -33,6 +40,11 @@ function validateSiteArtifact(artifactRoot, environment) {
   const root = path.resolve(artifactRoot);
   const origin = normalizeOrigin(environment.publicSiteUrl);
   const errors = [];
+  for (const asset of REQUIRED_BRAND_ASSETS) {
+    if (!fs.existsSync(path.join(root, 'assets', asset))) {
+      errors.push(`missing brand asset in production artifact: /assets/${asset}`);
+    }
+  }
   const routes = [...publicPrerenderRoutes(), '/404'];
 
   for (const route of routes) {

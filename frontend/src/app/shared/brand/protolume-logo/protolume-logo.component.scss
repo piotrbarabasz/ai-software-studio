@@ -22,6 +22,15 @@
   height: 2.5rem;
 }
 
+.logo-image {
+  aspect-ratio: 957 / 190;
+  object-fit: contain;
+}
+
+:host([variant='symbol']) .logo-image {
+  aspect-ratio: 385 / 375;
+}
+
 .logo-fallback {
   color: var(--color-ink);
   font-size: 1rem;

@@ -27,7 +27,9 @@ describe('SiteShellComponent', () => {
     expect(element.querySelector('.skip-link')).not.toBeNull();
     expect(element.querySelectorAll('.nav-links a').length).toBe(siteContent.navigation.length);
     expect(element.querySelectorAll('.site-footer .footer-column')).toHaveSize(4);
-    expect(element.querySelector('.site-footer .footer-brand .logo-fallback')).not.toBeNull();
+    expect(element.querySelector('.site-footer .footer-brand img')?.getAttribute('src')).toBe(
+      '/assets/protolume-logo-horizontal-light.svg',
+    );
     expect(element.querySelector('.site-footer h2')?.textContent).toBe('Oferta');
     expect(element.querySelector('.site-footer a[href="/demo-ai"]')).not.toBeNull();
     expect(element.querySelector('.site-footer a[href="/development"]')).not.toBeNull();
@@ -40,8 +42,9 @@ describe('SiteShellComponent', () => {
     expect(element.querySelector('.brand .logo-link')?.getAttribute('aria-label')).toBe(
       'Protolume — strona główna',
     );
-    expect(element.querySelector('.brand .logo-fallback')).not.toBeNull();
-    expect(element.querySelector('.brand .logo-image')).toBeNull();
+    expect(element.querySelector('.brand .logo-image')?.getAttribute('src')).toBe(
+      '/assets/protolume-logo-horizontal-dark.svg',
+    );
     expect(
       Array.from(element.querySelectorAll('.nav-links a')).map((link) => ({
         label: link.textContent?.trim(),
@@ -140,6 +143,22 @@ describe('SiteShellComponent', () => {
     fixture.detectChanges();
     expect(toggle.getAttribute('aria-expanded')).toBe('false');
     expect(fixture.nativeElement.ownerDocument.activeElement).toBe(toggle);
+  });
+
+  it('keeps the primary CTA at a touch-friendly size', async () => {
+    await TestBed.configureTestingModule({
+      imports: [SiteShellComponent],
+      providers: [
+        provideRouter(routes),
+        provideHttpClient(withXhr()),
+        { provide: API_CONFIG, useValue: { apiUrl: 'http://api.test' } },
+      ],
+    }).compileComponents();
+    const fixture = TestBed.createComponent(SiteShellComponent);
+    fixture.detectChanges();
+
+    const cta = fixture.nativeElement.querySelector('.primary-cta') as HTMLAnchorElement;
+    expect(getComputedStyle(cta).minHeight).toBe('44px');
   });
 
   it('does not trap Tab focus inside the open mobile navigation panel', async () => {

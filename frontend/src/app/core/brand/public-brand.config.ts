@@ -41,7 +41,12 @@ export interface PublicBrandConfiguration {
 const publicOrigin = environment.publicSiteUrl.replace(/\/$/, '');
 
 const visualIdentity: PublicBrandVisualIdentity = {
-  logos: {},
+  logos: {
+    horizontalDark: '/assets/protolume-logo-horizontal-dark.svg',
+    horizontalLight: '/assets/protolume-logo-horizontal-light.svg',
+    symbol: '/assets/protolume-symbol.svg',
+    symbolMono: '/assets/protolume-symbol-mono.svg',
+  },
   themeColor: '#7C5CFF',
 };
 

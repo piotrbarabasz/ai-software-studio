@@ -7,8 +7,49 @@ const test = require('node:test');
 const { publicPrerenderRoutes } = require('./site-build-utils.cjs');
 const { validateSiteArtifact } = require('./validate-site-artifact.cjs');
 
+test('public component styles do not reintroduce legacy green or orange colors', () => {
+  const sourceRoot = path.resolve(__dirname, '../src');
+  const legacyPatterns = [
+    /#17201b/i,
+    /#223027/i,
+    /rgba?\(197\s*,\s*106\s*,\s*20/i,
+    /#eef2ec/i,
+    /#eef7f4/i,
+  ];
+  const files = [];
+  const visit = (directory) => {
+    for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+      const entryPath = path.join(directory, entry.name);
+      if (entry.isDirectory()) visit(entryPath);
+      else if (/\.(scss|css|html)$/.test(entry.name)) files.push(entryPath);
+    }
+  };
+  visit(sourceRoot);
+
+  for (const file of files) {
+    const content = fs.readFileSync(file, 'utf8');
+    for (const pattern of legacyPatterns) {
+      assert.doesNotMatch(
+        content,
+        pattern,
+        `${path.relative(sourceRoot, file)} reintroduced ${pattern}`,
+      );
+    }
+  }
+});
+
 function writeArtifact(root, environment, injectedText = '') {
   const origin = environment.publicSiteUrl;
+  fs.mkdirSync(path.join(root, 'assets'), { recursive: true });
+  for (const asset of [
+    'favicon.svg',
+    'protolume-logo-horizontal-dark.svg',
+    'protolume-logo-horizontal-light.svg',
+    'protolume-symbol.svg',
+    'protolume-symbol-mono.svg',
+  ]) {
+    fs.writeFileSync(path.join(root, 'assets', asset), '<svg></svg>', 'utf8');
+  }
   const primaryRoutes = ['/demo-ai', '/development', '/studio', '/kontakt'];
   for (const route of [...publicPrerenderRoutes(), '/404']) {
     const directory = route === '/' ? root : path.join(root, route.slice(1));
@@ -51,6 +92,23 @@ test('accepts Protolume production metadata with noindex in every document', (co
     assert.match(html, new RegExp(`property="og:url" content="${expectedUrl}"`));
     assert.match(html, /name="robots" content="noindex, follow"/);
   }
+});
+
+test('rejects a production artifact without the favicon', (context) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'site-artifact-'));
+  context.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const environment = {
+    publicSiteUrl: 'https://protolume.pl',
+    indexingEnabled: false,
+  };
+  writeArtifact(root, environment);
+  fs.rmSync(path.join(root, 'assets', 'favicon.svg'));
+
+  assert.ok(
+    validateSiteArtifact(root, environment).includes(
+      'missing brand asset in production artifact: /assets/favicon.svg',
+    ),
+  );
 });
 
 test('rejects leaked run.app URLs from a Protolume production artifact', (context) => {

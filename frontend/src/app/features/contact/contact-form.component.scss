@@ -54,9 +54,9 @@ select,
 textarea {
   width: 100%;
   min-height: 44px;
-  border: 1px solid #b9c3ba;
+  border: 1px solid var(--color-line);
   border-radius: var(--radius-control);
-  background: #ffffff;
+  background: var(--surface);
   color: var(--color-ink);
   padding: 0.75rem 0.85rem;
 }
@@ -76,12 +76,12 @@ textarea {
 }
 
 [aria-invalid='true'] {
-  border-color: #b3261e;
+  border-color: var(--error);
 }
 
 .field-error {
   margin: 0;
-  color: #9d1c15;
+  color: var(--error-text);
   font-size: 0.9rem;
   font-weight: 700;
   line-height: 1.4;
@@ -93,7 +93,7 @@ textarea {
   padding: 0.9rem;
   border: 1px solid var(--color-line);
   border-radius: var(--radius-control);
-  background: #fbfaf7;
+  background: var(--surface-soft);
 }
 
 .consent input {
@@ -146,13 +146,13 @@ textarea {
 }
 
 .form-status.success {
-  background: #e3f4ec;
-  color: #07553f;
+  background: var(--success-surface);
+  color: var(--success-text);
 }
 
 .form-status.error {
-  background: #ffe9e5;
-  color: #8c1d18;
+  background: var(--error-surface);
+  color: var(--error-text);
 }
 
 .submit-button {
@@ -160,7 +160,7 @@ textarea {
   border: 0;
   border-radius: 6px;
   background: var(--color-primary);
-  color: #ffffff;
+  color: var(--text-on-dark);
   cursor: pointer;
   font-weight: 850;
 }
@@ -248,7 +248,7 @@ textarea {
   min-height: 3.1rem;
   border: 1px solid var(--color-line);
   border-radius: var(--radius-control);
-  background: #ffffff;
+  background: var(--surface);
   color: var(--color-primary-strong);
   font-weight: 850;
   padding: 0.65rem 1rem;

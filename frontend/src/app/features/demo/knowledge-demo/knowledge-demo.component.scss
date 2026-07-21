@@ -28,7 +28,7 @@
   width: fit-content;
   margin: 0;
   border-radius: 999px;
-  background: #eef2ec;
+  background: var(--surface-brand);
   color: var(--color-primary-strong);
   font-size: 0.8rem;
   font-weight: 800;
@@ -89,7 +89,7 @@
 
 .scenario-button {
   border: 1px solid var(--color-line);
-  background: #ffffff;
+  background: var(--surface);
   color: var(--color-ink);
   cursor: pointer;
   padding: 0.75rem;
@@ -99,12 +99,12 @@
 .scenario-button:hover,
 .scenario-button.is-selected {
   border-color: var(--color-primary);
-  background: #eef7f4;
+  background: var(--brand-50);
 }
 
 .conversation {
   min-height: 13.5rem;
-  background: linear-gradient(180deg, #fafcfb, #ffffff);
+  background: var(--surface-soft);
 }
 
 .checking-state {
@@ -140,7 +140,7 @@
 
 .handoff {
   border-color: var(--color-accent);
-  background: #fff9f2;
+  background: var(--surface-brand);
   padding-block: 0.75rem;
   padding-right: 0.75rem;
 }
@@ -157,7 +157,7 @@
   align-items: center;
   justify-content: center;
   border: 1px solid var(--color-line);
-  background: #ffffff;
+  background: var(--surface);
   color: var(--color-primary-strong);
   padding: 0.7rem 1rem;
   text-decoration: none;
@@ -175,7 +175,7 @@
 .contact-cta {
   border-color: var(--color-primary);
   background: var(--color-primary);
-  color: #ffffff;
+  color: var(--text-on-dark);
 }
 
 .is-compact .demo-intro h2 {
