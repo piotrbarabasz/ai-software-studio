@@ -435,7 +435,7 @@ const primaryNavigation = [
   { label: 'Kontakt', path: '/kontakt' },
 ] as const;
 
-const homeUseCases: readonly HomeUseCase[] = [
+const homeUseCases: readonly [HomeUseCase, HomeUseCase, HomeUseCase] = [
   {
     id: 'knowledge-assistant',
     title: 'Asystent wiedzy',
