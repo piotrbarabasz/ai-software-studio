@@ -466,7 +466,7 @@ class CloudBuildYamlTest(unittest.TestCase):
         self.assertIn("frontend-deploy", ancestors("deployment-read-only-smoke"))
         self.assertNotIn("images", config)
 
-    def test_post_deploy_smoke_is_read_only_and_checks_noindex(self) -> None:
+    def test_post_deploy_smoke_is_read_only_and_checks_indexing(self) -> None:
         config = load_config("cloudbuild.deploy.yaml")
         step = next(
             step
@@ -476,7 +476,7 @@ class CloudBuildYamlTest(unittest.TestCase):
         arguments = " ".join(str(argument) for argument in step["args"])
 
         self.assertIn("smoke_deployment.py", arguments)
-        self.assertIn("--expect-noindex", arguments)
+        self.assertNotIn("--expect-noindex", arguments)
         smoke_source = (SCRIPT_ROOT / "smoke_deployment.py").read_text(encoding="utf-8")
         self.assertIn('method="GET"', smoke_source)
         self.assertIn('method="OPTIONS"', smoke_source)

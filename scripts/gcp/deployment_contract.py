@@ -19,6 +19,7 @@ PLACEHOLDER_PATTERN = re.compile(
     r"\b(?:placeholder|changeme|todo|tbd|required)\b",
     re.IGNORECASE,
 )
+PRODUCTION_SITE_ORIGIN = "https://protolume.pl"
 PROJECT_ID_PATTERN = re.compile(r"^[a-z][a-z0-9-]{4,28}[a-z0-9]$")
 RESOURCE_NAME_PATTERN = re.compile(r"^[a-z][a-z0-9-]{0,62}$")
 SECRET_NAME_PATTERN = re.compile(r"^[A-Za-z0-9_-]{1,255}$")
@@ -159,6 +160,8 @@ def validate_values(
             )
 
     for field, expected in contract.invariants.items():
+        if scope != "production" and field == "PUBLIC_SITE_INDEXING":
+            continue
         if field in fields and values.get(field) != expected:
             if field in contract.secret_reference_fields:
                 _append(
@@ -225,6 +228,20 @@ def validate_values(
         value = values.get(field, "")
         if value and value not in {"true", "false"}:
             _append(errors, field, "must be exactly 'true' or 'false'")
+
+    if (
+        "PUBLIC_SITE_INDEXING" in fields
+        and values.get("PUBLIC_SITE_INDEXING") == "true"
+        and values.get("PUBLIC_SITE_URL") != PRODUCTION_SITE_ORIGIN
+    ):
+        _append(
+            errors,
+            "PUBLIC_SITE_INDEXING",
+            "may be true only for the production origin https://protolume.pl",
+        )
+
+    if scope == "preview" and values.get("PUBLIC_SITE_INDEXING") != "false":
+        _append(errors, "PUBLIC_SITE_INDEXING", "preview scope must remain false")
 
     if (
         "SMTP_PORT" in fields

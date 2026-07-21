@@ -199,7 +199,7 @@ def _check_public_routes(
     site_origin: str,
     request: RequestFunction,
     timeout: float,
-    expect_noindex: bool,
+    expect_noindex: bool = False,
 ) -> tuple[list[str], str | None]:
     errors: list[str] = []
     frontend_build_sha: str | None = None
