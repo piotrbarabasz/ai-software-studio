@@ -266,15 +266,22 @@ def validate_values(
         if value and not HOSTNAME_PATTERN.fullmatch(value):
             _append(errors, "SMTP_HOST", "must be a valid non-local DNS hostname")
 
-    if "IMAGE_TAG" in fields:
-        value = values.get("IMAGE_TAG", "")
+    for field in {"IMAGE_TAG", "APP_BUILD_SHA"} & set(fields):
+        value = values.get(field, "")
         if value and not IMAGE_TAG_PATTERN.fullmatch(value):
             _append(
                 errors,
-                "IMAGE_TAG",
+                field,
                 "must be a 7-64 character lowercase hexadecimal commit ID; "
                 "manual-local is forbidden",
             )
+
+    if "APP_BUILD_SHA" in values and values["APP_BUILD_SHA"] and not IMAGE_TAG_PATTERN.fullmatch(values["APP_BUILD_SHA"]):
+        _append(
+            errors,
+            "APP_BUILD_SHA",
+            "must be a 7-64 character lowercase hexadecimal commit ID",
+        )
 
     return list(dict.fromkeys(errors))
 

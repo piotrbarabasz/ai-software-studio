@@ -17,6 +17,7 @@ const REQUIRED_BRAND_ASSETS = [
   'protolume-logo-horizontal-light.svg',
   'protolume-symbol.svg',
   'protolume-symbol-mono.svg',
+  'protolume-social-preview.png',
 ];
 
 function extractAttribute(html, tagName, identifyingAttribute, identifyingValue, resultAttribute) {

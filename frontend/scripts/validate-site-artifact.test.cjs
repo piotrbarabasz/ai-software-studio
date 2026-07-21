@@ -50,6 +50,11 @@ function writeArtifact(root, environment, injectedText = '') {
   ]) {
     fs.writeFileSync(path.join(root, 'assets', asset), '<svg></svg>', 'utf8');
   }
+  fs.writeFileSync(
+    path.join(root, 'assets', 'protolume-social-preview.png'),
+    Buffer.from([0x89, 0x50, 0x4e, 0x47]),
+    'binary',
+  );
   const primaryRoutes = ['/demo-ai', '/development', '/studio', '/kontakt'];
   for (const route of [...publicPrerenderRoutes(), '/404']) {
     const directory = route === '/' ? root : path.join(root, route.slice(1));

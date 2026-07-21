@@ -206,6 +206,38 @@ class CloudBuildYamlTest(unittest.TestCase):
         self.assertIn('PUBLIC_BUILD_SHA="$SHORT_SHA"', frontend_checks)
         self.assertIn("APP_BUILD_SHA=$SHORT_SHA", backend_deploy)
 
+    def test_production_frontend_build_args_pair_each_public_argument(self) -> None:
+        config = load_config("cloudbuild.deploy.yaml")
+        args = config["steps"]
+        frontend_args = next(step["args"] for step in args if step["id"] == "frontend-build")
+        expected_values = {
+            'API_URL=$_BACKEND_URL',
+            'PUBLIC_SITE_URL=$_PUBLIC_SITE_URL',
+            'PUBLIC_SITE_INDEXING=$_PUBLIC_SITE_INDEXING',
+            'PUBLIC_SALES_EMAIL=$_PUBLIC_SALES_EMAIL',
+            'PUBLIC_PRIVACY_EMAIL=$_PUBLIC_PRIVACY_EMAIL',
+            'PUBLIC_BUILD_SHA=$SHORT_SHA',
+        }
+        positions = [index for index, value in enumerate(frontend_args) if value in expected_values]
+        self.assertEqual(len(positions), len(expected_values))
+        for index in positions:
+            self.assertGreater(index, 0)
+            self.assertEqual(frontend_args[index - 1], "--build-arg")
+        self.assertEqual(frontend_args.count("."), 1)
+        self.assertEqual(frontend_args[-1], ".")
+        self.assertEqual(
+            next(value for value in frontend_args if "FRONTEND_IMAGE_NAME" in value).rsplit(":", 1)[-1],
+            "$SHORT_SHA",
+        )
+
+    def test_manual_frontend_passes_image_tag_as_public_build_sha(self) -> None:
+        config = load_config("cloudbuild.frontend.yaml")
+        steps = {step["id"]: step for step in config["steps"]}
+        checks = " ".join(str(value) for value in steps["manual-frontend-checks"]["args"])
+        build_args = steps["manual-frontend-build"]["args"]
+        self.assertIn('PUBLIC_BUILD_SHA="$_IMAGE_TAG"', checks)
+        self.assertIn("PUBLIC_BUILD_SHA=$_IMAGE_TAG", build_args)
+
     def test_all_frontend_check_steps_use_the_exact_pinned_browser_image(self) -> None:
         for config_name, step_id in FRONTEND_CHECK_STEPS.items():
             with self.subTest(config=config_name, step=step_id):

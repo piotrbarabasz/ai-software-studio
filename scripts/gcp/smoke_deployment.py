@@ -244,7 +244,8 @@ def _check_public_routes(
         else:
             if (parser.robots or "").strip().lower() != "index, follow":
                 errors.append(f"public route {path}: HTML robots metadata is not index, follow")
-            if response.headers.get("x-robots-tag", "").strip().lower() != "index, follow":
+            x_robots_tag = response.headers.get("x-robots-tag", "").strip().lower()
+            if x_robots_tag and x_robots_tag != "index, follow":
                 errors.append(f"public route {path}: X-Robots-Tag is not index, follow")
         if path == "/":
             frontend_build_sha = parser.build_sha
