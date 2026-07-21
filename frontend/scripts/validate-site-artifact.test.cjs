@@ -6,6 +6,10 @@ const test = require('node:test');
 
 const { publicPrerenderRoutes } = require('./site-build-utils.cjs');
 const { validateSiteArtifact } = require('./validate-site-artifact.cjs');
+const publicBrandManifest = require('../config/public-brand.json');
+
+const socialPreviewName = path.basename(publicBrandManifest.assets.socialPreviewPath);
+const socialPreviewFixture = '<svg viewBox="0 0 1200 630"><rect width="1200" height="630"/></svg>';
 
 test('public component styles do not reintroduce legacy green or orange colors', () => {
   const sourceRoot = path.resolve(__dirname, '../src');
@@ -50,11 +54,7 @@ function writeArtifact(root, environment, injectedText = '') {
   ]) {
     fs.writeFileSync(path.join(root, 'assets', asset), '<svg></svg>', 'utf8');
   }
-  fs.writeFileSync(
-    path.join(root, 'assets', 'protolume-social-preview.png'),
-    Buffer.from([0x89, 0x50, 0x4e, 0x47]),
-    'binary',
-  );
+  fs.writeFileSync(path.join(root, 'assets', socialPreviewName), socialPreviewFixture, 'utf8');
   const primaryRoutes = ['/demo-ai', '/development', '/studio', '/kontakt'];
   for (const route of [...publicPrerenderRoutes(), '/404']) {
     const directory = route === '/' ? root : path.join(root, route.slice(1));
@@ -70,7 +70,7 @@ function writeArtifact(root, environment, injectedText = '') {
       .join('');
     fs.writeFileSync(
       path.join(directory, 'index.html'),
-      `<title>Strona | Protolume</title><meta name="description" content="Opis Protolume"><link rel="canonical" href="${url}"><meta property="og:url" content="${url}"><meta property="og:title" content="Strona | Protolume"><meta property="og:description" content="Opis Protolume"><meta property="og:image" content="${origin}/assets/protolume-social-preview.png"><meta property="og:image:type" content="image/png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Strona | Protolume"><meta name="twitter:description" content="Opis Protolume"><meta name="twitter:image" content="${origin}/assets/protolume-social-preview.png"><meta name="robots" content="${robots}"><script type="application/ld+json">{"website":"${origin}#website","service":"${origin}#professional-service","name":"Protolume"}</script><body><a class="skip-link" href="#main-content">Skip</a><nav id="primary-navigation">${navigation}</nav><main id="main-content" tabindex="-1">Protolume${injectedText}</main></body>`,
+      `<title>Strona | Protolume</title><meta name="description" content="Opis Protolume"><link rel="canonical" href="${url}"><meta property="og:url" content="${url}"><meta property="og:title" content="Strona | Protolume"><meta property="og:description" content="Opis Protolume"><meta property="og:image" content="${origin}${publicBrandManifest.assets.socialPreviewPath}"><meta property="og:image:type" content="${publicBrandManifest.assets.socialPreviewType}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Strona | Protolume"><meta name="twitter:description" content="Opis Protolume"><meta name="twitter:image" content="${origin}${publicBrandManifest.assets.socialPreviewPath}"><meta name="robots" content="${robots}"><script type="application/ld+json">{"website":"${origin}#website","service":"${origin}#professional-service","name":"Protolume"}</script><body><a class="skip-link" href="#main-content">Skip</a><nav id="primary-navigation">${navigation}</nav><main id="main-content" tabindex="-1">Protolume${injectedText}</main></body>`,
       'utf8',
     );
   }
@@ -112,6 +112,76 @@ test('rejects a production artifact without the favicon', (context) => {
   assert.ok(
     validateSiteArtifact(root, environment).includes(
       'missing brand asset in production artifact: /assets/favicon.svg',
+    ),
+  );
+});
+
+test('accepts the configured social preview SVG', (context) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'site-artifact-'));
+  context.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const environment = { publicSiteUrl: 'https://protolume.pl', indexingEnabled: false };
+  writeArtifact(root, environment);
+  assert.deepEqual(validateSiteArtifact(root, environment), []);
+});
+
+test('rejects invalid social preview SVG variants', (context) => {
+  const cases = [
+    [
+      'missing',
+      null,
+      `missing brand asset in production artifact: ${publicBrandManifest.assets.socialPreviewPath}`,
+    ],
+    ['empty', '<svg></svg>', 'social preview SVG is an empty placeholder'],
+    [
+      'viewBox',
+      '<svg viewBox="0 0 10 10"><rect/></svg>',
+      'social preview SVG must use viewBox 0 0 1200 630',
+    ],
+    [
+      'script',
+      '<svg viewBox="0 0 1200 630"><script/></svg>',
+      'social preview SVG contains script or event handler',
+    ],
+    [
+      'handler',
+      '<svg viewBox="0 0 1200 630" onclick="x"><rect/></svg>',
+      'social preview SVG contains script or event handler',
+    ],
+    [
+      'external',
+      '<svg viewBox="0 0 1200 630"><image href="https://evil.test/a"/></svg>',
+      'social preview SVG contains a forbidden embedded or external resource',
+    ],
+  ];
+  for (const [name, content, expected] of cases) {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), `site-artifact-${name}-`));
+    context.after(() => fs.rmSync(root, { recursive: true, force: true }));
+    const environment = { publicSiteUrl: 'https://protolume.pl', indexingEnabled: false };
+    writeArtifact(root, environment);
+    const asset = path.join(root, 'assets', socialPreviewName);
+    if (content === null) fs.rmSync(asset);
+    else fs.writeFileSync(asset, content, 'utf8');
+    assert.ok(
+      validateSiteArtifact(root, environment).some((error) => error.includes(expected)),
+      name,
+    );
+  }
+});
+
+test('rejects mismatched social preview metadata', (context) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'site-artifact-'));
+  context.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const environment = { publicSiteUrl: 'https://protolume.pl', indexingEnabled: false };
+  writeArtifact(root, environment);
+  const htmlPath = path.join(root, 'index.html');
+  const html = fs
+    .readFileSync(htmlPath, 'utf8')
+    .replaceAll(publicBrandManifest.assets.socialPreviewPath, '/assets/wrong.svg')
+    .replaceAll(publicBrandManifest.assets.socialPreviewType, 'image/jpeg');
+  fs.writeFileSync(htmlPath, html, 'utf8');
+  assert.ok(
+    validateSiteArtifact(root, environment).some((error) =>
+      error.includes('social preview metadata'),
     ),
   );
 });

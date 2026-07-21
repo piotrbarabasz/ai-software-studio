@@ -6,6 +6,7 @@ const {
   normalizeOrigin,
   publicPrerenderRoutes,
 } = require('./site-build-utils.cjs');
+const publicBrandManifest = require('../config/public-brand.json');
 
 const DEFAULT_ARTIFACT_ROOT = path.resolve(__dirname, '../dist/aisoftware-studio/browser');
 const PUBLIC_BRAND_NAME = 'Protolume';
@@ -17,8 +18,29 @@ const REQUIRED_BRAND_ASSETS = [
   'protolume-logo-horizontal-light.svg',
   'protolume-symbol.svg',
   'protolume-symbol-mono.svg',
-  'protolume-social-preview.png',
 ];
+const socialPreviewPath = publicBrandManifest.assets.socialPreviewPath;
+const socialPreviewType = publicBrandManifest.assets.socialPreviewType;
+const socialPreviewName = path.basename(socialPreviewPath);
+REQUIRED_BRAND_ASSETS.push(socialPreviewName);
+
+function validateSocialPreviewAsset(assetPath, mimeType) {
+  const errors = [];
+  if (mimeType !== 'image/svg+xml') {
+    return errors;
+  }
+  const svg = fs.readFileSync(assetPath, 'utf8');
+  if (!/<svg\b/i.test(svg)) errors.push('social preview SVG is missing an svg element');
+  if (!/\bviewBox=["']0 0 1200 630["']/i.test(svg))
+    errors.push('social preview SVG must use viewBox 0 0 1200 630');
+  if (/<script\b|\bon[a-z]+\s*=/i.test(svg))
+    errors.push('social preview SVG contains script or event handler');
+  if (/<foreignObject\b|data:image|base64|https?:\/\//i.test(svg))
+    errors.push('social preview SVG contains a forbidden embedded or external resource');
+  if (/^\s*<svg\b[^>]*>\s*<\/svg>\s*$/i.test(svg))
+    errors.push('social preview SVG is an empty placeholder');
+  return errors;
+}
 
 function extractAttribute(html, tagName, identifyingAttribute, identifyingValue, resultAttribute) {
   const tags = html.match(new RegExp(`<${tagName}\\b[^>]*>`, 'gi')) ?? [];
@@ -45,6 +67,10 @@ function validateSiteArtifact(artifactRoot, environment) {
     if (!fs.existsSync(path.join(root, 'assets', asset))) {
       errors.push(`missing brand asset in production artifact: /assets/${asset}`);
     }
+  }
+  const socialPreviewAsset = path.join(root, 'assets', socialPreviewName);
+  if (fs.existsSync(socialPreviewAsset)) {
+    errors.push(...validateSocialPreviewAsset(socialPreviewAsset, socialPreviewType));
   }
   const routes = [...publicPrerenderRoutes(), '/404'];
 
@@ -121,14 +147,16 @@ function validateSiteArtifact(artifactRoot, environment) {
     ) {
       errors.push(`${route}: titles and descriptions must identify ${PUBLIC_BRAND_NAME}`);
     }
-    const socialPreviewUrl = `${origin}/assets/protolume-social-preview.png`;
+    const socialPreviewUrl = `${origin}${socialPreviewPath}`;
     if (
       openGraphImage !== socialPreviewUrl ||
       twitterImage !== socialPreviewUrl ||
-      openGraphImageType !== 'image/png' ||
+      openGraphImageType !== socialPreviewType ||
       twitterCard !== 'summary_large_image'
     ) {
-      errors.push(`${route}: social preview metadata must use the Protolume PNG`);
+      errors.push(
+        `${route}: social preview metadata must use ${socialPreviewPath} (${socialPreviewType})`,
+      );
     }
     if (!html.includes(`${origin}#website`) || !html.includes(`${origin}#professional-service`)) {
       errors.push(`${route}: structured data does not match PUBLIC_SITE_URL`);

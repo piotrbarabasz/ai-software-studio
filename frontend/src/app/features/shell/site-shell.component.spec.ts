@@ -354,7 +354,7 @@ describe('SiteShellComponent', () => {
       siteSocialImageUrl,
     );
     expect(document.querySelector('meta[property="og:image:type"]')?.getAttribute('content')).toBe(
-      'image/png',
+      publicBrand.assets.socialPreviewType,
     );
     expect(document.querySelector('meta[name="twitter:image"]')?.getAttribute('content')).toBe(
       siteSocialImageUrl,
