@@ -70,9 +70,10 @@ describe('SiteShellComponent', () => {
     expect(githubLink?.getAttribute('target')).toBe('_blank');
     expect(githubLink?.getAttribute('rel')).toContain('noopener');
     expect(githubLink?.getAttribute('rel')).toContain('noreferrer');
-    expect(
-      element.querySelectorAll('.site-footer a[href]').every((link) => link.getAttribute('href')),
-    ).toBeTrue();
+    const footerLinks = Array.from(
+      element.querySelectorAll<HTMLAnchorElement>('.site-footer a[href]'),
+    );
+    expect(footerLinks.every((link) => Boolean(link.getAttribute('href')))).toBeTrue();
     expect(element.querySelectorAll('#main-content').length).toBe(1);
   });
 
