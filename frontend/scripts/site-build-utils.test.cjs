@@ -80,6 +80,7 @@ test('generates sitemap and robots from every non-404 prerender route', () => {
   assert.deepEqual(publicPrerenderRoutes(), [
     '/',
     '/demo-ai',
+    '/przyklad-demo',
     '/development',
     '/studio',
     '/rd',

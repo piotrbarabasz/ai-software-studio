@@ -246,12 +246,12 @@
 .primary-action {
   border: 1px solid var(--color-primary);
   background: var(--color-primary);
-  color: #fff;
+  color: var(--text-on-dark);
   padding: 0.85rem 1.2rem;
 }
 .secondary-action {
   border: 1px solid var(--color-line);
-  background: #fff;
+  background: var(--surface);
   color: var(--color-primary-strong);
   padding: 0.75rem 1rem;
 }
@@ -358,23 +358,23 @@
   display: grid;
   gap: 1rem;
   padding: clamp(1.5rem, 3vw, 2.5rem);
-  background: #17201b;
-  color: #fff;
+  background: var(--surface-dark);
+  color: var(--text-on-dark);
 }
 .evidence-teaser p {
   max-width: 60ch;
-  color: #d8ded6;
+  color: var(--text-muted-on-dark);
 }
 .evidence-teaser .eyebrow {
   color: var(--color-accent-soft);
 }
 .evidence-teaser .trust-statement {
-  color: #ffffff;
+  color: var(--text-on-dark);
   font-weight: 700;
 }
 .evidence-teaser .evidence-check strong,
 .evidence-teaser .evidence-boundary strong {
-  color: #ffffff;
+  color: var(--text-on-dark);
 }
 .evidence-teaser .evidence-boundary {
   border-left: 3px solid var(--color-accent);
@@ -391,7 +391,7 @@
   align-content: start;
   gap: 0.85rem;
   padding: clamp(1.25rem, 2vw, 1.75rem);
-  background: #223027;
+  background: var(--surface-dark-soft);
   box-shadow: none;
 }
 .evidence-teaser-card h3 {
@@ -401,7 +401,7 @@
 .evidence-type {
   width: fit-content;
   margin: 0;
-  border: 1px solid rgba(216, 222, 214, 0.45);
+  border: 1px solid var(--border-on-dark);
   border-radius: 999px;
   color: var(--color-accent-soft) !important;
   font-size: 0.8rem;
@@ -422,13 +422,11 @@
   align-items: end;
   justify-content: space-between;
   gap: 1rem;
-  border-top: 1px solid rgba(216, 222, 214, 0.25);
+  border-top: 1px solid var(--border-on-dark);
   padding-top: 1rem;
 }
 .contact-card {
-  background:
-    radial-gradient(circle at top right, rgba(197, 106, 20, 0.1), transparent 36%),
-    var(--color-surface);
+  background: var(--surface-brand);
 }
 @media (max-width: 760px) {
   .hero,

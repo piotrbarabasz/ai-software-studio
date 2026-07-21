@@ -6,15 +6,23 @@ describe('Site content model', () => {
   it('defines metadata and content for the public pages', () => {
     const publicPaths = siteContent.routes
       .filter((route) =>
-        ['home', 'demo', 'development', 'studio', 'research', 'contact', 'privacy'].includes(
-          route.kind,
-        ),
+        [
+          'home',
+          'demo',
+          'demo-example',
+          'development',
+          'studio',
+          'research',
+          'contact',
+          'privacy',
+        ].includes(route.kind),
       )
       .map((route) => route.path);
 
     expect(publicPaths).toEqual([
       '/',
       '/demo-ai',
+      '/przyklad-demo',
       '/development',
       '/studio',
       '/rd',
@@ -128,6 +136,35 @@ describe('Site content model', () => {
     expect(siteContent.routes.find((route) => route.kind === 'development')?.description).toContain(
       'aplikacji, API, integracji',
     );
+  });
+
+  it('keeps public copy aligned with the Protolume naming contract', () => {
+    const publicText = JSON.stringify({
+      brand: publicBrand,
+      navigation: siteContent.navigation,
+      routes: siteContent.routes,
+      footer: siteContent.footer,
+      pages: {
+        home: siteContent.home,
+        demo: siteContent.demo,
+        demoExample: siteContent.demoExample,
+        development: siteContent.development,
+        studio: siteContent.studio,
+        contact: siteContent.contact,
+        privacy: siteContent.privacy,
+      },
+    });
+
+    expect(publicText).not.toContain('Dema AI');
+    expect(publicText).not.toMatch(/AI Software Studio/i);
+    expect(publicText).not.toMatch(/\bfixt\b/i);
+    expect(siteContent.navigation.map((item) => item.label)).toEqual([
+      'Demo w 7 dni',
+      'Wdrożenia',
+      'O Protolume',
+      'Kontakt',
+    ]);
+    expect(publicBrand.descriptor).toBe('Studio wdrożeń AI i automatyzacji');
   });
 
   it('defines two verifiable work-evidence items without client claims', () => {

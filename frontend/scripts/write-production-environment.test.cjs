@@ -41,3 +41,9 @@ test('writes distinct public sales and privacy addresses', () => {
   assert.equal(environment.publicSalesEmail, 'sales@contact.test');
   assert.equal(environment.publicPrivacyEmail, 'privacy@contact.test');
 });
+
+test('uses a safe build SHA fallback and accepts the deployment SHA', () => {
+  assert.equal(productionEnvironment({}).buildSha, 'unknown');
+  assert.equal(productionEnvironment({ PUBLIC_BUILD_SHA: 'abc1234' }).buildSha, 'abc1234');
+  assert.doesNotMatch(productionEnvironment({}).buildSha, /__PUBLIC_CONFIG_REQUIRED__/);
+});

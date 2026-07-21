@@ -1,6 +1,6 @@
 {
   "name": "Protolume",
-  "descriptor": "Dema AI, aplikacje i automatyzacje dla firm",
+  "descriptor": "Studio wdrożeń AI i automatyzacji",
   "owner": {
     "name": "Piotr Barabasz",
     "role": "Właściciel i odpowiedzialny partner techniczny"
@@ -18,7 +18,7 @@
     }
   },
   "assets": {
-    "faviconPath": "/assets/protolume-favicon.svg",
+    "faviconPath": "/assets/favicon.svg",
     "socialPreviewPath": "/assets/protolume-social-preview.png",
     "socialPreviewType": "image/png"
   }

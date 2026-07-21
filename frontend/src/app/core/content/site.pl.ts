@@ -6,6 +6,7 @@ import type {
   PublicRouteMetadata,
   ResearchDirection,
   HomeUseCase,
+  DemoExamplePageContent,
   SiteContent,
 } from './site-content.types';
 import { productRoutePaths } from './site-content.types';
@@ -373,9 +374,18 @@ const routeMetadata = [
     kind: 'demo',
   },
   {
+    path: '/przyklad-demo',
+    label: 'Przykład demo',
+    title: brandTitle('Przykładowy rezultat demo w 7 dni'),
+    description: brandDescription(
+      'Fikcyjny przykład ograniczonego demo obsługi zapytań produktowych, z zakresem, ryzykami i rekomendacją kolejnego kroku.',
+    ),
+    kind: 'demo-example',
+  },
+  {
     path: '/development',
-    label: 'Development',
-    title: brandTitle('Development aplikacji, API i automatyzacji'),
+    label: 'Wdrożenia',
+    title: brandTitle('Wdrożenia aplikacji, API i automatyzacji'),
     description: brandDescription(
       'Planowanie i realizacja aplikacji, API, integracji oraz automatyzacji w potwierdzonym zakresie.',
     ),
@@ -649,7 +659,7 @@ export const siteContent = {
         },
       },
       {
-        eyebrow: 'Development',
+        eyebrow: 'Wdrożenia',
         title: 'Zaplanuj pierwszy etap',
         lead: 'Dla potwierdzonej potrzeby, użytkowników i rezultatu rozwiązania.',
         points: [
@@ -658,7 +668,7 @@ export const siteContent = {
           'wycena po potwierdzeniu zakresu',
         ],
         cta: {
-          label: 'Zobacz zakres developmentu',
+          label: 'Zobacz zakres wdrożenia',
           path: '/development',
           queryParams: undefined,
         },
@@ -837,6 +847,82 @@ export const siteContent = {
       accessibleName: `Publiczny kod interaktywnego demo ${publicBrand.name} w serwisie GitHub`,
     },
   },
+  demoExample: {
+    path: '/przyklad-demo',
+    eyebrow: 'Przykładowy rezultat',
+    title: 'Od zapytania produktowego do odpowiedzi z kontrolą człowieka',
+    fictionalNotice:
+      'To fikcyjny scenariusz demonstracyjny. Nie jest case study klienta ani obietnicą gotowego wdrożenia produkcyjnego.',
+    lead: 'Przykład pokazuje, co można sprawdzić po etapie Demo w 7 dni dla powtarzalnych zapytań produktowych obsługiwanych przez e-mail.',
+    processTitle: 'Obecny proces',
+    currentProcess: {
+      roles: ['Osoba obsługująca skrzynkę', 'Ekspert produktowy', 'Osoba zatwierdzająca odpowiedź'],
+      manualSteps: [
+        'ręczne czytanie wiadomości i rozpoznanie tematu',
+        'szukanie informacji w dokumentach',
+        'kopiowanie danych do odpowiedzi',
+        'przekazanie trudniejszych pytań właściwej osobie',
+      ],
+      timeLosses: [
+        'przerzucanie informacji między skrzynką i dokumentami',
+        'brak jednego widoku statusu sprawy',
+      ],
+      dataSources: [
+        'e-maile produktowe',
+        'instrukcje i dokumentacja',
+        'wewnętrzna lista osób odpowiedzialnych',
+      ],
+    },
+    demoScope: {
+      items: [
+        'jeden przepływ od wiadomości do propozycji odpowiedzi',
+        'ograniczony, przykładowy zestaw dokumentów i danych',
+        'najważniejsze ekrany: klasyfikacja, źródła, odpowiedź i przekazanie',
+        'kontrola człowieka przed wysłaniem lub handoffem',
+      ],
+      successCriterion:
+        'Osoba obsługująca może prześledzić sprawę, sprawdzić źródło informacji i podjąć decyzję o odpowiedzi albo przekazaniu.',
+    },
+    flow: ['E-mail', 'Klasyfikacja', 'Wiedza', 'Propozycja odpowiedzi', 'Akceptacja albo handoff'],
+    outcome: {
+      items: [
+        'klikalny lub działający przepływ do wspólnego przeglądu',
+        'lista założeń i danych potrzebnych do dalszej oceny',
+        'lista ryzyk oraz zależności technicznych i organizacyjnych',
+      ],
+      recommendation: 'Rozwijać po doprecyzowaniu danych i zasad zatwierdzania',
+    },
+    risks: [
+      'jakość i aktualność dokumentów',
+      'dane osobowe w wiadomościach i materiałach źródłowych',
+      'integracja ze skrzynką pocztową',
+      'błędna klasyfikacja lub niepełna odpowiedź',
+      'koszt modeli przy większej liczbie spraw',
+      'odpowiedzialność człowieka za zatwierdzenie odpowiedzi',
+    ],
+    outOfScope: [
+      'produkcyjna integracja poczty',
+      'logowanie i role',
+      'globalny monitoring',
+      'SLA',
+      'pełne bezpieczeństwo produkcyjne',
+      'automatyczne wysyłanie odpowiedzi bez zatwierdzenia',
+    ],
+    nextStage: [
+      'warsztat danych',
+      'integracja sandbox',
+      'role i uprawnienia',
+      'testy jakości',
+      'monitoring',
+      'pilotaż',
+    ],
+    primaryCta: {
+      label: 'Opisz podobny proces',
+      path: '/kontakt',
+      queryParams: { projectType: 'business_process_automation' },
+    },
+    demoCta: { label: 'Zobacz zakres Demo w 7 dni', path: '/demo-ai' },
+  } satisfies DemoExamplePageContent,
   studio: {
     path: '/studio',
     eyebrow: 'Studio',
@@ -896,7 +982,7 @@ export const siteContent = {
   },
   development: {
     path: '/development',
-    eyebrow: 'Development',
+    eyebrow: 'Wdrożenia',
     title: 'Aplikacje, API, integracje i automatyzacje z jasno ustalonym pierwszym etapem',
     lead: 'Gdy potrzeba, użytkownicy i rezultat są potwierdzone, można od razu zaplanować pierwszy etap. Demo przydaje się tylko wtedy, gdy wcześniej trzeba sprawdzić ryzykowne założenie.',
     heroNextStep: 'Po wysłaniu opisu sprawdzimy, czy można przejść do planowania pierwszego etapu.',
@@ -906,7 +992,7 @@ export const siteContent = {
       'integracje, bezpieczeństwo i utrzymanie są planowane zgodnie z potrzebami etapu',
     ],
     readiness: {
-      title: 'Kiedy development ma sens',
+      title: 'Kiedy wdrożenie ma sens',
       lead: 'Rozpoczęcie prac jest zasadne, gdy zespół potrafi wspólnie potwierdzić podstawy pierwszego etapu. Jeśli brakuje tych odpowiedzi, najpierw potrzebna jest walidacja.',
       points: [
         'istnieje potwierdzona potrzeba biznesowa',
@@ -1023,9 +1109,9 @@ export const siteContent = {
     ],
     closingCta: {
       title: 'Planujesz aplikację, API, integrację albo automatyzację?',
-      lead: 'Opisz obecną sytuację, użytkowników i oczekiwany rezultat. Jeśli zakres jest gotowy, przejdziemy do planowania developmentu; jeśli nie, najpierw określimy właściwą walidację.',
+      lead: 'Opisz obecną sytuację, użytkowników i oczekiwany rezultat. Jeśli zakres jest gotowy, przejdziemy do planowania wdrożenia; jeśli nie, najpierw określimy właściwą walidację.',
       primaryCta: {
-        label: 'Opisz potrzebę developmentu',
+        label: 'Opisz potrzebę wdrożenia',
         path: '/kontakt',
         queryParams: { projectType: 'custom_web_app' },
       },
@@ -1050,7 +1136,7 @@ export const siteContent = {
     lead: 'Wystarczy krótko opisać obecną pracę, problem i oczekiwany efekt. Nie potrzebujesz gotowej specyfikacji technicznej.',
     nextSteps: [
       'Otrzymuję opis sytuacji i sprawdzam, jakie informacje są potrzebne do dalszej rozmowy.',
-      'Na jego podstawie wskazuję właściwą ścieżkę: demo, walidację, plan prac albo development.',
+      'Na jego podstawie wskażę właściwą ścieżkę: demo, walidację, plan prac albo wdrożenie.',
       'Dalsze ustalenia odbywają się przed rozpoczęciem jakiejkolwiek płatnej realizacji.',
     ],
     noSpecificationNeeded: 'Nie musisz mieć gotowej specyfikacji technicznej.',
@@ -1087,7 +1173,7 @@ export const siteContent = {
       title: 'Wiadomość została odebrana',
       summaryTitle: 'Wysłany opis',
       nextStep:
-        'Na podstawie opisu wskażemy właściwą ścieżkę: demo, walidację, plan prac albo development.',
+        'Na podstawie opisu wskażemy właściwą ścieżkę: demo, walidację, plan prac albo wdrożenie.',
       homeCta: { label: 'Wróć na stronę główną', path: '/' },
       anotherInquiryLabel: 'Wyślij kolejne zapytanie',
       directEmailLead: 'Jeśli wolisz, możesz również skontaktować się bezpośrednio:',

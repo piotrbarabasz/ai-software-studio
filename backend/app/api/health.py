@@ -12,7 +12,7 @@ router = APIRouter(tags=["health"])
 
 class HealthResponse(BaseModel):
     status: Literal["ok"] = "ok"
-    service: Literal["marketing-api"] = "marketing-api"
+    buildSha: str
 
 
 class ReadinessResponse(BaseModel):
@@ -21,12 +21,12 @@ class ReadinessResponse(BaseModel):
 
 
 @router.get("/health", response_model=HealthResponse)
-def get_health() -> HealthResponse:
+def get_health(request: Request) -> HealthResponse:
     logger.info(
         "health.checked",
         extra={"event": "health_checked", "service": "marketing-api", "status": "ok"},
     )
-    return HealthResponse()
+    return HealthResponse(buildSha=request.app.state.settings.app_build_sha)
 
 
 @router.get(

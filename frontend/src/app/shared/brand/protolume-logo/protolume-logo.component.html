@@ -12,6 +12,8 @@
       class="logo-image"
       [src]="assetPath"
       [alt]="linkToHome ? '' : accessibleLabel"
+      [attr.width]="variant === 'symbol' ? 385 : 957"
+      [attr.height]="variant === 'symbol' ? 375 : 190"
       [attr.fetchpriority]="priority ? 'high' : null"
     />
   } @else {

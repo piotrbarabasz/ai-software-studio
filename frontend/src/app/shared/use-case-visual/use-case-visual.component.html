@@ -1,0 +1,37 @@
+<div class="use-case-visual" aria-hidden="true">
+  @switch (visualKind) {
+    @case ('knowledge-assistant') {
+      <div class="visual-flow knowledge-flow">
+        <span class="visual-node">Dokumenty</span>
+        <span class="visual-connector"></span>
+        <span class="visual-node visual-node-accent">Szukaj</span>
+        <span class="visual-connector"></span>
+        <span class="visual-node visual-node-result">Odpowiedź + źródło</span>
+      </div>
+      <div class="visual-handoff">Brak danych <span>→ człowiek</span></div>
+    }
+    @case ('message-workflow') {
+      <div class="visual-flow message-flow">
+        <span class="visual-node">E-mail / dokument</span>
+        <span class="visual-connector"></span>
+        <span class="visual-node visual-node-accent">Klasyfikacja</span>
+        <span class="visual-connector"></span>
+        <span class="visual-node">Dane</span>
+        <span class="visual-connector"></span>
+        <span class="visual-node visual-node-result">Przekazanie</span>
+      </div>
+    }
+    @case ('process-panel') {
+      <div class="panel-visual">
+        <div class="panel-statuses"><span></span><span></span><span></span></div>
+        <div class="panel-main">
+          <span class="panel-title"></span>
+          <span class="panel-line"></span>
+          <span class="panel-line panel-line-short"></span>
+          <div class="panel-next-step"><span></span><span></span></div>
+        </div>
+        <div class="panel-owner"><span></span><span></span></div>
+      </div>
+    }
+  }
+</div>

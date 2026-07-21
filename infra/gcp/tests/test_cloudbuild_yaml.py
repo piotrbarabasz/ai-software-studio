@@ -194,6 +194,17 @@ class CloudBuildYamlTest(unittest.TestCase):
         self.assertIn("DEPLOY_PUBLIC_SALES_EMAIL=$_PUBLIC_SALES_EMAIL", environment)
         self.assertIn("DEPLOY_PUBLIC_PRIVACY_EMAIL=$_PUBLIC_PRIVACY_EMAIL", environment)
         self.assertIn("DEPLOY_IMAGE_TAG=$SHORT_SHA", environment)
+        self.assertIn("DEPLOY_APP_BUILD_SHA=$SHORT_SHA", environment)
+
+    def test_deploy_passes_short_sha_to_backend_and_frontend(self) -> None:
+        config = load_config("cloudbuild.deploy.yaml")
+        steps = {step["id"]: step for step in config["steps"]}
+        frontend_build = " ".join(str(arg) for arg in steps["frontend-build"]["args"])
+        frontend_checks = " ".join(str(arg) for arg in steps["frontend-checks"]["args"])
+        backend_deploy = " ".join(str(arg) for arg in steps["backend-deploy"]["args"])
+        self.assertIn("PUBLIC_BUILD_SHA=$SHORT_SHA", frontend_build)
+        self.assertIn('PUBLIC_BUILD_SHA="$SHORT_SHA"', frontend_checks)
+        self.assertIn("APP_BUILD_SHA=$SHORT_SHA", backend_deploy)
 
     def test_all_frontend_check_steps_use_the_exact_pinned_browser_image(self) -> None:
         for config_name, step_id in FRONTEND_CHECK_STEPS.items():

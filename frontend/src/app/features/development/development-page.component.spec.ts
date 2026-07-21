@@ -22,13 +22,13 @@ describe('DevelopmentPageComponent', () => {
       fixture.nativeElement.querySelectorAll('h2') as NodeListOf<HTMLElement>,
       (heading) => heading.textContent?.trim(),
     );
-    expect(headings.indexOf('Kiedy development ma sens')).toBeLessThan(
+    expect(headings.indexOf('Kiedy wdrożenie ma sens')).toBeLessThan(
       headings.indexOf('Od rozproszonej pracy do konkretnego rezultatu'),
     );
     expect(
       fixture.nativeElement.querySelector('a[href="/kontakt?projectType=custom_web_app"]')
         ?.textContent,
-    ).toContain('Opisz potrzebę developmentu');
+    ).toContain('Opisz potrzebę wdrożenia');
     expect(fixture.nativeElement.textContent).toContain(
       'Planujesz aplikację, API, integrację albo automatyzację?',
     );

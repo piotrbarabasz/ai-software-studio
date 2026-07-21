@@ -15,13 +15,22 @@
   --surface: #ffffff;
   --surface-soft: #f8f8fc;
   --surface-brand: #f5f3ff;
+  --surface-dark: #171b26;
+  --surface-dark-soft: #242936;
   --border: #e5e7ef;
   --text: #171b26;
   --text-muted: #646b7a;
+  --text-on-dark: #ffffff;
+  --text-muted-on-dark: #d9dce5;
+  --border-on-dark: rgba(255, 255, 255, 0.24);
   --focus: #5434d6;
   --success: #166534;
+  --success-surface: #e3f4ec;
+  --success-text: #07553f;
   --warning: #92400e;
   --error: #b91c1c;
+  --error-surface: #ffe9e5;
+  --error-text: #8c1d18;
   --brand-gradient: linear-gradient(135deg, #7c5cff 0%, #6847f5 55%, #4338ca 100%);
 
   /* Compatibility aliases for existing component styles. */
