@@ -35,6 +35,7 @@
 }
 
 .brand {
+  --logo-height: 3rem;
   display: inline-flex;
   align-items: center;
   gap: 0.65rem;
@@ -196,6 +197,10 @@
 }
 
 @media (max-width: 920px) {
+  .brand {
+    --logo-height: 2.75rem;
+  }
+
   .site-header {
     align-items: flex-start;
     flex-wrap: wrap;
@@ -244,6 +249,7 @@
 
 @media (max-width: 560px) {
   .brand {
+    --logo-height: 2.5rem;
     font-size: 0.98rem;
   }
 

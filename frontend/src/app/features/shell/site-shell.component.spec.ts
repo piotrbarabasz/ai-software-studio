@@ -45,6 +45,11 @@ describe('SiteShellComponent', () => {
     expect(element.querySelector('.brand .logo-image')?.getAttribute('src')).toBe(
       '/assets/protolume-logo-horizontal-dark.svg',
     );
+    expect(element.querySelector('.brand .logo-fallback')).toBeNull();
+    expect(element.querySelector('.site-footer .logo-image')?.getAttribute('src')).toBe(
+      '/assets/protolume-logo-horizontal-light.svg',
+    );
+    expect(element.querySelector('.site-footer .logo-fallback')).toBeNull();
     expect(
       Array.from(element.querySelectorAll('.nav-links a')).map((link) => ({
         label: link.textContent?.trim(),
