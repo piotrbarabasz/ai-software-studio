@@ -23,6 +23,16 @@ const socialPreviewPath = publicBrandManifest.assets.socialPreviewPath;
 const socialPreviewType = publicBrandManifest.assets.socialPreviewType;
 const socialPreviewName = path.basename(socialPreviewPath);
 REQUIRED_BRAND_ASSETS.push(socialPreviewName);
+const BUILD_SHA_PATTERN = /^[0-9a-f]{7,64}$/;
+
+function buildShaMetaValues(html) {
+  return (html.match(/<meta\b[^>]*>/gi) ?? [])
+    .filter(
+      (tag) =>
+        tag.match(/\bname\s*=\s*(["'])(.*?)\1/i)?.[2]?.toLowerCase() === 'protolume-build-sha',
+    )
+    .map((tag) => tag.match(/\bcontent\s*=\s*(["'])(.*?)\1/i)?.[2] ?? null);
+}
 
 function validateSocialPreviewAsset(assetPath, mimeType) {
   const errors = [];
@@ -126,6 +136,18 @@ function validateSiteArtifact(artifactRoot, environment) {
     const primaryNavigation = html.match(
       /<nav\b(?=[^>]*\bid=["']primary-navigation["'])[^>]*>[\s\S]*?<\/nav>/i,
     )?.[0];
+
+    if (route === '/') {
+      const buildShaValues = buildShaMetaValues(html);
+      const expectedBuildSha = environment.buildSha;
+      if (!BUILD_SHA_PATTERN.test(expectedBuildSha ?? '')) {
+        errors.push('public route /: environment.buildSha must be a deployed SHA');
+      } else if (buildShaValues.length !== 1 || buildShaValues[0] !== expectedBuildSha) {
+        errors.push(
+          'public route /: protolume-build-sha meta tag must match environment.buildSha exactly once',
+        );
+      }
+    }
 
     if (canonical !== expectedUrl) {
       errors.push(`${route}: canonical does not match PUBLIC_SITE_URL`);
