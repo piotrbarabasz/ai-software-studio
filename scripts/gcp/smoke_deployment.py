@@ -29,6 +29,8 @@ PUBLIC_ROUTES = (
 )
 NOT_FOUND_PATH = "/__protolume_read_only_smoke_missing__"
 MAX_RESPONSE_BYTES = 2_000_000
+BUILD_SHA_PATTERN = re.compile(r"^[0-9a-f]{7,64}$")
+PLACEHOLDER_BUILD_SHAS = {"unknown", "local", "test"}
 
 
 @dataclass(frozen=True)
@@ -50,41 +52,58 @@ class SeoMetadataParser(HTMLParser):
         self.has_form = False
         self.has_primary_navigation = False
         self.has_interactive_demo = False
+        self.use_case_card_count = 0
+        self._visible_text_parts: list[str] = []
         self._text_stack: list[str] = []
+        self._ignored_text_depth = 0
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        tag_name = tag.lower()
         attributes = {name.lower(): value or "" for name, value in attrs}
         if (
-            tag.lower() == "link"
+            tag_name == "link"
             and "canonical" in attributes.get("rel", "").lower().split()
         ):
             self.canonical = attributes.get("href")
-        if tag.lower() == "meta" and attributes.get("name", "").lower() == "robots":
+        if tag_name == "meta" and attributes.get("name", "").lower() == "robots":
             self.robots = attributes.get("content")
-        if tag.lower() == "meta" and attributes.get("name", "").lower() == "protolume-build-sha":
+        if tag_name == "meta" and attributes.get("name", "").lower() == "protolume-build-sha":
             self.build_sha = attributes.get("content")
         if "href" in attributes:
             self.hrefs.append(attributes["href"])
-        if tag.lower() == "form":
+        if tag_name == "form":
             self.has_form = True
-        if tag.lower() == "nav":
+        if tag_name == "nav":
             self.has_primary_navigation = self.has_primary_navigation or "primary-navigation" in attributes.get("id", "")
         classes = set(attributes.get("class", "").split())
         if "interactive-demo" in classes:
             self.has_interactive_demo = True
-        if tag.lower() in {"h1", "h2", "h3"}:
+        if "use-case-card" in classes:
+            self.use_case_card_count += 1
+        if tag_name in {"script", "style"}:
+            self._ignored_text_depth += 1
+        if tag_name in {"h1", "h2", "h3"}:
             self._text_stack.append("")
         name = attributes.get("name")
         if name:
             self.form_names.add(name)
 
     def handle_endtag(self, tag: str) -> None:
-        if tag.lower() in {"h1", "h2", "h3"} and self._text_stack:
+        tag_name = tag.lower()
+        if tag_name in {"script", "style"} and self._ignored_text_depth > 0:
+            self._ignored_text_depth -= 1
+        if tag_name in {"h1", "h2", "h3"} and self._text_stack:
             self.headings.append((tag.lower(), re.sub(r"\s+", " ", self._text_stack.pop()).strip()))
 
     def handle_data(self, data: str) -> None:
-        if self._text_stack:
+        if self._ignored_text_depth == 0:
+            self._visible_text_parts.append(data)
+        if self._text_stack and self._ignored_text_depth == 0:
             self._text_stack[-1] += data
+
+    @property
+    def visible_text(self) -> str:
+        return re.sub(r"\s+", " ", "".join(self._visible_text_parts)).strip()
 
 
 RequestFunction = Callable[[urllib.request.Request, float], Response]
@@ -103,8 +122,17 @@ def _origin(value: str, field: str) -> str:
     ):
         raise ValueError(
             f"{field} must be an HTTPS origin without path, query, or fragment"
-        )
+    )
     return value.rstrip("/")
+
+
+def _build_sha(value: str) -> str:
+    candidate = value.strip()
+    if candidate in PLACEHOLDER_BUILD_SHAS or not BUILD_SHA_PATTERN.fullmatch(candidate):
+        raise argparse.ArgumentTypeError(
+            "--expected-build-sha must be 7-64 lowercase hexadecimal characters and not a placeholder"
+        )
+    return candidate
 
 
 def _request(request: urllib.request.Request, timeout_seconds: float) -> Response:
@@ -137,6 +165,7 @@ def _check_api(
     site_origin: str,
     request: RequestFunction,
     timeout: float,
+    expected_build_sha: str | None = None,
 ) -> tuple[list[str], str | None]:
     errors: list[str] = []
     build_sha: str | None = None
@@ -158,10 +187,19 @@ def _check_api(
             errors.append(f"API {path}: readiness state is not {expected_state!r}")
         if path == "/health":
             candidate = payload.get("buildSha") if isinstance(payload, dict) else None
-            if not isinstance(candidate, str) or not candidate.strip() or candidate in {"unknown", "local", "test"} or "__" in candidate:
+            if (
+                not isinstance(candidate, str)
+                or not candidate.strip()
+                or candidate in PLACEHOLDER_BUILD_SHAS
+                or "__" in candidate
+            ):
                 errors.append("API /health: buildSha must be a non-placeholder deployed SHA")
             else:
                 build_sha = candidate
+                if expected_build_sha and candidate != expected_build_sha:
+                    errors.append(
+                        "API /health: buildSha does not match the expected build SHA"
+                    )
 
     preflight = urllib.request.Request(
         f"{backend_origin}/api/contact",
@@ -200,6 +238,7 @@ def _check_public_routes(
     request: RequestFunction,
     timeout: float,
     expect_noindex: bool = False,
+    expected_build_sha: str | None = None,
 ) -> tuple[list[str], str | None]:
     errors: list[str] = []
     frontend_build_sha: str | None = None
@@ -250,8 +289,19 @@ def _check_public_routes(
                 errors.append(f"public route {path}: X-Robots-Tag is not index, follow")
         if path == "/":
             frontend_build_sha = parser.build_sha
-            if not isinstance(frontend_build_sha, str) or not frontend_build_sha.strip() or frontend_build_sha in {"unknown", "local", "test"} or "__" in frontend_build_sha:
-                errors.append("public route /: protolume-build-sha meta tag must be a non-placeholder deployed SHA")
+            if (
+                not isinstance(frontend_build_sha, str)
+                or not frontend_build_sha.strip()
+                or frontend_build_sha in PLACEHOLDER_BUILD_SHAS
+                or "__" in frontend_build_sha
+            ):
+                errors.append(
+                    "public route /: protolume-build-sha meta tag must be a non-placeholder deployed SHA"
+                )
+            elif expected_build_sha and frontend_build_sha != expected_build_sha:
+                errors.append(
+                    "public route /: protolume-build-sha meta tag does not match the expected build SHA"
+                )
             h1 = " ".join(text for tag, text in parser.headings if tag == "h1")
             if not h1:
                 errors.append("public route /: expected an h1 element, received none")
@@ -260,6 +310,10 @@ def _check_public_routes(
                     errors.append(f"public route /: h1 must contain {phrase!r}")
             if not parser.has_primary_navigation:
                 errors.append("public route /: expected primary navigation, received none")
+            if parser.use_case_card_count != 5:
+                errors.append(
+                    f"public route /: expected 5 solution cards, received {parser.use_case_card_count}"
+                )
             for href in ("/rozwiazania", "/demo-ai", "/development", "/kontakt"):
                 if not any(href == candidate.split("?", 1)[0].split("#", 1)[0] for candidate in parser.hrefs):
                     errors.append(f"public route /: expected link to {href}, received none")
@@ -270,10 +324,36 @@ def _check_public_routes(
                 errors.append("public route /: expected link to /rozwiazania, received none")
             if not any("projectType=mvp_prototype" in href and href.startswith("/kontakt?") for href in parser.hrefs):
                 errors.append("public route /: expected primary contact CTA with projectType=mvp_prototype")
+            visible_text = parser.visible_text.casefold()
+            for phrase in ("Rozwiązania", "Wdrożenia", "O Protolume"):
+                if phrase.casefold() not in visible_text:
+                    errors.append(f"public route /: visible copy is missing {phrase!r}")
+            for title in (
+                "Asystent wiedzy",
+                "Obsługa wiadomości i dokumentów",
+                "Panel procesu",
+                "System agentowy do realizacji zadań",
+                "Integracje kanałów i komunikatorów",
+            ):
+                if title.casefold() not in visible_text:
+                    errors.append(f"public route /: visible copy is missing {title!r}")
+            for forbidden_text in (
+                "Development",
+                "Zobacz kod demonstracji",
+                "Zobacz kod aplikacji i wdrożenia",
+            ):
+                if forbidden_text.casefold() in visible_text:
+                    errors.append(
+                        f"public route /: visible copy must not contain {forbidden_text!r}"
+                    )
+            if any("github.com" in href.lower() for href in parser.hrefs):
+                errors.append(
+                    "public route /: github.com links are not allowed on the homepage"
+                )
         elif path == "/demo-ai":
             if not any(tag in {"h1", "h2"} for tag, _ in parser.headings):
                 errors.append("public route /demo-ai: expected a heading, received none")
-            if not parser.has_interactive_demo and "demo" not in response.body.decode("utf-8").lower():
+            if not parser.has_interactive_demo and "demo" not in parser.visible_text.casefold():
                 errors.append("public route /demo-ai: expected interactive demo marker or text")
             if not any(href.startswith("/kontakt") for href in parser.hrefs):
                 errors.append("public route /demo-ai: expected contact handoff link, received none")
@@ -281,9 +361,11 @@ def _check_public_routes(
             heading_text = " ".join(text for tag, text in parser.headings if tag == "h1")
             if not heading_text:
                 errors.append("public route /przyklad-demo: expected an h1 element, received none")
-            page_text = response.body.decode("utf-8").lower()
+            page_text = parser.visible_text.casefold()
             if "fikcyjny" not in page_text or "demonstracyjny" not in page_text:
-                errors.append("public route /przyklad-demo: expected an explicitly fictional demonstration notice")
+                errors.append(
+                    "public route /przyklad-demo: expected an explicitly fictional demonstration notice"
+                )
             if "poza zakresem" not in page_text:
                 errors.append("public route /przyklad-demo: expected an out-of-scope section")
             if not any(href.startswith("/kontakt") for href in parser.hrefs):
@@ -400,20 +482,33 @@ def run_checks(
     site_url: str,
     *,
     expect_noindex: bool,
+    expected_build_sha: str | None = None,
     timeout_seconds: float,
     request: RequestFunction = _request,
 ) -> list[str]:
     backend_origin = _origin(backend_url, "backend URL")
     site_origin = _origin(site_url, "site URL")
-    api_errors, backend_build_sha = _check_api(backend_origin, site_origin, request, timeout_seconds)
+    api_errors, backend_build_sha = _check_api(
+        backend_origin,
+        site_origin,
+        request,
+        timeout_seconds,
+        expected_build_sha,
+    )
     public_errors, frontend_build_sha = _check_public_routes(
-            site_origin,
-            request,
-            timeout_seconds,
-            expect_noindex,
-        )
+        site_origin,
+        request,
+        timeout_seconds,
+        expect_noindex,
+        expected_build_sha,
+    )
     provenance_errors: list[str] = []
-    if backend_build_sha and frontend_build_sha and backend_build_sha != frontend_build_sha:
+    if expected_build_sha:
+        if backend_build_sha and frontend_build_sha and backend_build_sha != frontend_build_sha:
+            provenance_errors.append(
+                f"release provenance: frontend SHA {frontend_build_sha!r} does not match /health SHA {backend_build_sha!r}"
+            )
+    elif backend_build_sha and frontend_build_sha and backend_build_sha != frontend_build_sha:
         provenance_errors.append(
             f"release provenance: frontend SHA {frontend_build_sha!r} does not match /health SHA {backend_build_sha!r}"
         )
@@ -446,6 +541,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--backend-url", required=True)
     parser.add_argument("--site-url", required=True)
+    parser.add_argument("--expected-build-sha", type=_build_sha)
     parser.add_argument("--expect-noindex", action="store_true")
     parser.add_argument("--attempts", type=int, default=1)
     parser.add_argument("--retry-delay-seconds", type=float, default=0)
@@ -466,6 +562,7 @@ def main() -> int:
                 args.backend_url,
                 args.site_url,
                 expect_noindex=args.expect_noindex,
+                expected_build_sha=args.expected_build_sha,
                 timeout_seconds=args.timeout_seconds,
             ),
             args.attempts,

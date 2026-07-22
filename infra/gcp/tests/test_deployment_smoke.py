@@ -24,10 +24,80 @@ def load_script():
 
 smoke = load_script()
 
+EXPECTED_BUILD_SHA = "abc1234"
+HOME_USE_CASES = (
+    ("Asystent wiedzy", "asystent-wiedzy"),
+    ("Obsługa wiadomości i dokumentów", "automatyzacja-wiadomosci-i-dokumentow"),
+    ("Panel procesu", "panel-operacyjny"),
+    ("System agentowy do realizacji zadań", "system-agentowy"),
+    ("Integracje kanałów i komunikatorów", "integracje-kanalow"),
+)
+
+
+def homepage_html(
+    build_sha: str = EXPECTED_BUILD_SHA,
+    *,
+    include_legacy_copy: bool = False,
+) -> str:
+    nav = (
+        '<nav id="primary-navigation">'
+        '<a href="/rozwiazania">Rozwiązania</a>'
+        '<a href="/demo-ai">Demo w 7 dni</a>'
+        '<a href="/development">Wdrożenia</a>'
+        '<a href="/studio">O Protolume</a>'
+        '<a href="/kontakt?projectType=mvp_prototype">Opisz proces do sprawdzenia</a>'
+        "</nav>"
+    )
+    use_case_cards = "".join(
+        (
+            f'<article class="use-case-card">'
+            f"<h3>{title}</h3>"
+            f"<p>{title} wspiera konkretny proces.</p>"
+            f'<a href="/rozwiazania#{slug}">Poznaj rozwiązanie</a>'
+            "</article>"
+        )
+        for title, slug in HOME_USE_CASES
+    )
+    legacy_copy = ""
+    if include_legacy_copy:
+        legacy_copy = (
+            '<p>Development</p>'
+            '<a href="https://github.com/piotrbarabasz/ai-software-studio">'
+            "Zobacz kod demonstracji"
+            "</a>"
+            '<a href="https://github.com/piotrbarabasz/ai-software-studio/releases">'
+            "Zobacz kod aplikacji i wdrożenia"
+            "</a>"
+        )
+    return (
+        '<html><head><link rel="canonical" href="https://protolume.pl">'
+        '<meta name="robots" content="noindex, follow">'
+        f'<meta name="protolume-build-sha" content="{build_sha}"></head>'
+        "<body>"
+        f"{nav}"
+        "<h1>Sprawdź w 7 dni, czy AI usprawni konkretny proces</h1>"
+        '<p>Budujemy działające demo jednego przepływu, nie pełną transformację całej firmy.</p>'
+        '<section class="hero-proofs">'
+        '<p>Rozwiązania</p><p>Wdrożenia</p><p>O Protolume</p>'
+        "</section>"
+        '<section class="use-cases">'
+        f"{use_case_cards}"
+        "</section>"
+        f"{legacy_copy}"
+        "</body></html>"
+    )
+
 
 class FakeDeployment:
-    def __init__(self) -> None:
+    def __init__(
+        self,
+        *,
+        homepage: str | None = None,
+        backend_sha: str = EXPECTED_BUILD_SHA,
+    ) -> None:
         self.requests: list[urllib.request.Request] = []
+        self.homepage = homepage or homepage_html(backend_sha)
+        self.backend_sha = backend_sha
 
     def __call__(self, request: urllib.request.Request, timeout: float):
         self.requests.append(request)
@@ -38,7 +108,7 @@ class FakeDeployment:
 
         if parsed.netloc == "api.run.app":
             if path == "/health":
-                body = json.dumps({"status": "ok", "buildSha": "abc1234"}).encode()
+                body = json.dumps({"status": "ok", "buildSha": self.backend_sha}).encode()
             elif path == "/ready":
                 body = json.dumps(
                     {"status": "ready", "service": "marketing-api"}
@@ -55,20 +125,23 @@ class FakeDeployment:
 
         if path in smoke.PUBLIC_ROUTES:
             canonical = "https://protolume.pl" if path == "/" else request.full_url
-            body = (
-                '<html><head><link rel="canonical" href="'
-                + canonical
-                + '"><meta name="robots" content="noindex, follow">'
-                + ('<meta name="protolume-build-sha" content="abc1234">' if path == "/" else '')
-                + ('<nav id="primary-navigation"><a href="/rozwiazania">Rozwiazania</a><a href="/demo-ai">Demo</a><a href="/development">Wdrozenia</a><a href="/studio">Studio</a><a href="/kontakt?projectType=mvp_prototype">Opisz proces</a></nav><h1>Sprawdź w 7 dni, czy AI usprawni konkretny proces</h1>' if path == "/" else '')
-                + ('<h1>Demo</h1><section class="interactive-demo">demo</section><a href="/kontakt">Kontakt</a>' if path == "/demo-ai" else '')
-                + ('<h1>Przykładowy rezultat</h1><p>To fikcyjny scenariusz demonstracyjny.</p><h2>Poza zakresem</h2><a href="/kontakt">Kontakt</a><a href="/demo-ai">Demo</a>' if path == "/przyklad-demo" else '')
-                + ('<h1>Rozwiązania</h1><p>Asystent wiedzy i automatyzacja procesu.</p><a href="#asystent-wiedzy">Asystent</a><a href="#automatyzacja-wiadomosci-i-dokumentow">Automatyzacja</a><a href="#panel-operacyjny">Panel</a><a href="#system-agentowy">Agenci</a><a href="#integracje-kanalow">Kanały</a><a href="/kontakt?projectType=rag_chatbot_demo">Kontakt</a><a href="/kontakt?projectType=business_process_automation">Kontakt</a><a href="/kontakt?projectType=custom_web_app">Kontakt</a><a href="/kontakt?projectType=backend_api">Kontakt</a>' if path == "/rozwiazania" else '')
-                + ('<a href="/rozwiazania">Rozwiązania</a>' if path == "/" else '')
-                + ('<h1>Kontakt</h1><form><input name="name"><input name="email"><select name="projectType"></select><textarea name="message"></textarea><input name="consent"></form>' if path == "/kontakt" else '')
-                + ('<h1>Polityka prywatnosci</h1><a href="mailto:privacy@protolume.pl">kontakt</a>' if path == "/polityka-prywatnosci" else '')
-                + '</body></html>'
-            ).encode()
+            if path == "/":
+                body = self.homepage.replace(
+                    '<link rel="canonical" href="https://protolume.pl">',
+                    f'<link rel="canonical" href="{canonical}">',
+                ).encode()
+            else:
+                body = (
+                    '<html><head><link rel="canonical" href="'
+                    + canonical
+                    + '"><meta name="robots" content="noindex, follow">'
+                    + ('<h1>Demo</h1><section class="interactive-demo">demo</section><a href="/kontakt">Kontakt</a>' if path == "/demo-ai" else '')
+                    + ('<h1>Przyk?adowy rezultat</h1><p>To fikcyjny scenariusz demonstracyjny.</p><h2>Poza zakresem</h2><a href="/kontakt">Kontakt</a><a href="/demo-ai">Demo</a>' if path == "/przyklad-demo" else '')
+                    + ('<h1>Rozwi?zania</h1><p>Asystent wiedzy i automatyzacja procesu.</p><a href="#asystent-wiedzy">Asystent</a><a href="#automatyzacja-wiadomosci-i-dokumentow">Automatyzacja</a><a href="#panel-operacyjny">Panel</a><a href="#system-agentowy">Agenci</a><a href="#integracje-kanalow">Kana?y</a><a href="/kontakt?projectType=rag_chatbot_demo">Kontakt</a><a href="/kontakt?projectType=business_process_automation">Kontakt</a><a href="/kontakt?projectType=custom_web_app">Kontakt</a><a href="/kontakt?projectType=backend_api">Kontakt</a>' if path == "/rozwiazania" else '')
+                    + ('<h1>Kontakt</h1><form><input name="name"><input name="email"><select name="projectType"></select><textarea name="message"></textarea><input name="consent"></form>' if path == "/kontakt" else '')
+                    + ('<h1>Polityka prywatnosci</h1><a href="mailto:privacy@protolume.pl">kontakt</a>' if path == "/polityka-prywatnosci" else '')
+                    + '</body></html>'
+                ).encode()
             headers = {"x-robots-tag": "noindex, follow"}
         elif path == smoke.NOT_FOUND_PATH:
             status, body = 404, b"not found"
@@ -111,6 +184,7 @@ class DeploymentSmokeTest(unittest.TestCase):
             "https://api.run.app",
             "https://protolume.pl",
             expect_noindex=True,
+            expected_build_sha=EXPECTED_BUILD_SHA,
             timeout_seconds=2,
             request=deployment,
         )
@@ -203,6 +277,119 @@ class DeploymentSmokeTest(unittest.TestCase):
 
         errors = smoke.run_checks("https://api.run.app", "https://protolume.pl", expect_noindex=True, timeout_seconds=2, request=indexed)
         self.assertTrue(any("public route /: HTML robots metadata" in error for error in errors))
+
+    def test_expected_build_sha_accepts_the_current_release(self) -> None:
+        deployment = FakeDeployment()
+
+        errors = smoke.run_checks(
+            "https://api.run.app",
+            "https://protolume.pl",
+            expect_noindex=True,
+            expected_build_sha=EXPECTED_BUILD_SHA,
+            timeout_seconds=2,
+            request=deployment,
+        )
+
+        self.assertEqual(errors, [])
+
+    def test_expected_build_sha_rejects_a_mismatched_frontend_sha(self) -> None:
+        deployment = FakeDeployment()
+
+        def wrong_frontend(request: urllib.request.Request, timeout: float):
+            response = deployment(request, timeout)
+            if urlsplit(request.full_url).path == "/":
+                return smoke.Response(
+                    response.status,
+                    response.headers,
+                    response.body.replace(EXPECTED_BUILD_SHA.encode(), b"def5678"),
+                )
+            return response
+
+        errors = smoke.run_checks(
+            "https://api.run.app",
+            "https://protolume.pl",
+            expect_noindex=True,
+            expected_build_sha=EXPECTED_BUILD_SHA,
+            timeout_seconds=2,
+            request=wrong_frontend,
+        )
+
+        self.assertIn(
+            "public route /: protolume-build-sha meta tag does not match the expected build SHA",
+            errors,
+        )
+
+    def test_expected_build_sha_rejects_a_mismatched_backend_sha(self) -> None:
+        deployment = FakeDeployment(backend_sha="def5678")
+
+        errors = smoke.run_checks(
+            "https://api.run.app",
+            "https://protolume.pl",
+            expect_noindex=True,
+            expected_build_sha=EXPECTED_BUILD_SHA,
+            timeout_seconds=2,
+            request=deployment,
+        )
+
+        self.assertIn(
+            "API /health: buildSha does not match the expected build SHA",
+            errors,
+        )
+
+    def test_expected_build_sha_rejects_an_old_release_with_a_matching_sha(self) -> None:
+        deployment = FakeDeployment(
+            homepage=homepage_html("def5678"),
+            backend_sha="def5678",
+        )
+
+        errors = smoke.run_checks(
+            "https://api.run.app",
+            "https://protolume.pl",
+            expect_noindex=True,
+            expected_build_sha=EXPECTED_BUILD_SHA,
+            timeout_seconds=2,
+            request=deployment,
+        )
+
+        self.assertTrue(
+            any(
+                "does not match the expected build SHA" in error
+                for error in errors
+            )
+        )
+
+    def test_expected_build_sha_is_optional_outside_cloud_build(self) -> None:
+        deployment = FakeDeployment()
+
+        errors = smoke.run_checks(
+            "https://api.run.app",
+            "https://protolume.pl",
+            expect_noindex=True,
+            timeout_seconds=2,
+            request=deployment,
+        )
+
+        self.assertEqual(errors, [])
+
+    def test_invalid_expected_build_sha_is_rejected_by_argparse(self) -> None:
+        argv = [
+            "smoke_deployment.py",
+            "--backend-url=https://api.run.app",
+            "--site-url=https://protolume.pl",
+            "--expected-build-sha=unknown",
+        ]
+        with self.assertRaises(SystemExit) as excinfo:
+            with unittest.mock.patch.object(sys, "argv", argv):
+                smoke.parse_args()
+        self.assertEqual(excinfo.exception.code, 2)
+
+    def test_html_parser_normalizes_visible_text_and_ignores_script_and_style(self) -> None:
+        parser = smoke.SeoMetadataParser()
+        parser.feed(
+            "<html><head><style>.x{color:red}</style><script>ignored()</script></head><body><h1>  Hello\nworld </h1><p> Foo <span>bar</span> </p></body></html>"
+        )
+
+        self.assertEqual(parser.visible_text, "Hello world Foo bar")
 
     def test_indexing_true_allows_an_absent_x_robots_header(self) -> None:
         deployment = FakeDeployment()
