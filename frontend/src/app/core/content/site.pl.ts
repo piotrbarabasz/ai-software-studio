@@ -61,7 +61,7 @@ export const researchDirections = [
 const solutionsContent: SolutionsPageContent = {
   path: '/rozwiazania',
   eyebrow: 'Rozwiązania',
-  title: 'Trzy sposoby na uporządkowanie konkretnego procesu',
+  title: 'Pięć sposobów na uporządkowanie konkretnego procesu',
   lead: 'Nie sprzedajemy jednego gotowego systemu z półki. Dobieramy ograniczony zakres do problemu firmy, sprawdzamy go w demo, a następnie planujemy właściwe wdrożenie.',
   scopeNotice:
     'Poniższe opisy pokazują możliwy kierunek rozwiązania. Finalny zakres zależy od procesu, danych, integracji i wymaganych zabezpieczeń.',
@@ -165,6 +165,77 @@ const solutionsContent: SolutionsPageContent = {
         queryParams: { projectType: 'custom_web_app' },
       },
     },
+    {
+      id: 'system-agentowy',
+      title: 'System agentowy do realizacji zadań',
+      summary:
+        'Koordynuje kilka wyspecjalizowanych kroków lub agentów, zachowując kontrolę człowieka nad ważnymi decyzjami.',
+      problem:
+        'Złożone zadanie wymaga zebrania informacji, wykonania kilku operacji, sprawdzenia wyniku i przekazania decyzji między osobami lub systemami.',
+      audience:
+        'Dla zespołów, które chcą uporządkować wieloetapową pracę, a nie tylko wygenerować pojedynczą odpowiedź AI.',
+      capabilities: [
+        'podział zadania na kontrolowane etapy',
+        'przekazywanie wyniku między wyspecjalizowanymi agentami',
+        'wywoływanie uzgodnionych narzędzi lub API',
+        'weryfikacja wyniku przed kolejnym krokiem',
+        'zatwierdzenie człowieka w krytycznym punkcie',
+      ],
+      requiredInputs: [
+        'opis procesu i jego etapów',
+        'reguły decyzji oraz obsługi wyjątków',
+        'lista narzędzi lub systemów',
+        'miejsca wymagające zatwierdzenia człowieka',
+      ],
+      demoScope:
+        'Demo może pokazać jeden ograniczony przebieg zadania, role agentów, przekazywanie wyników oraz punkt kontroli człowieka.',
+      productionScope: [
+        'bezpieczne integracje i uprawnienia',
+        'limity kosztów oraz liczby operacji',
+        'monitoring, audyt i ponowienia',
+        'obsługa błędów i zatrzymanie procesu',
+      ],
+      primaryCta: {
+        label: 'Porozmawiaj o systemie agentowym',
+        path: '/kontakt',
+        queryParams: { projectType: 'business_process_automation' },
+      },
+    },
+    {
+      id: 'integracje-kanalow',
+      title: 'Integracje kanałów i komunikatorów',
+      summary:
+        'Łączy WhatsApp, e-mail, formularze i CRM z jednym kontrolowanym procesem obsługi spraw.',
+      problem:
+        'Wiadomości trafiają z wielu kanałów, a pracownicy ręcznie kopiują dane, zmieniają statusy i przekazują sprawy do innych narzędzi.',
+      audience: 'Dla zespołów obsługujących klientów lub operacje przez kilka kanałów komunikacji.',
+      capabilities: [
+        'odbieranie zdarzeń z wybranych kanałów',
+        'rozpoznanie rodzaju sprawy',
+        'przekazanie danych do właściwego procesu',
+        'aktualizacja statusu w CRM lub panelu',
+        'eskalacja do człowieka',
+      ],
+      requiredInputs: [
+        'lista kanałów i systemów',
+        'przykładowe wiadomości',
+        'zasady routingu i odpowiedzialności',
+        'dostępność API dostawców',
+      ],
+      demoScope:
+        'Demo może pokazać symulowany przepływ wiadomości z WhatsAppa, e-maila albo formularza do procesu i panelu statusów, bez wysyłania prawdziwych wiadomości.',
+      productionScope: [
+        'oficjalne API dostawców',
+        'zgody, szablony wiadomości i limity',
+        'audyt komunikacji',
+        'bezpieczeństwo danych oraz monitoring integracji',
+      ],
+      primaryCta: {
+        label: 'Porozmawiaj o integracjach',
+        path: '/kontakt',
+        queryParams: { projectType: 'backend_api' },
+      },
+    },
   ],
   closingCta: {
     title: 'Nie wiesz, który kierunek pasuje do procesu?',
@@ -211,7 +282,7 @@ const routeMetadata = [
     label: 'Rozwiązania',
     title: brandTitle('Rozwiązania AI i automatyzacji'),
     description: brandDescription(
-      'Asystent wiedzy, automatyzacja wiadomości i dokumentów oraz panel operacyjny procesu — trzy kierunki wdrożeń Protolume.',
+      'Asystent wiedzy, automatyzacja wiadomości i dokumentów, panel operacyjny procesu oraz dwa kolejne kierunki wdrożeń Protolume.',
     ),
     kind: 'solutions',
   },
@@ -288,7 +359,7 @@ const primaryNavigation = [
 const navigationLink = (path: (typeof primaryNavigation)[number]['path']) =>
   primaryNavigation.find((item) => item.path === path)!;
 
-const homeUseCases: readonly [HomeUseCase, HomeUseCase, HomeUseCase] = [
+const homeUseCases: readonly HomeUseCase[] = [
   {
     id: 'knowledge-assistant',
     title: 'Asystent wiedzy',
@@ -317,6 +388,23 @@ const homeUseCases: readonly [HomeUseCase, HomeUseCase, HomeUseCase] = [
     outcome: 'Jeden widok spraw, statusów i odpowiedzialności.',
     cta: { label: 'Poznaj rozwiązanie', path: '/rozwiazania', fragment: 'panel-operacyjny' },
     visualKind: 'process-panel',
+  },
+  {
+    id: 'agent-system',
+    title: 'System agentowy do realizacji zadań',
+    problem:
+      'Złożone zadanie wymaga zebrania informacji i wykonania kilku kontrolowanych operacji.',
+    outcome: 'Przekazywanie wyników między etapami z punktem decyzji człowieka.',
+    cta: { label: 'Poznaj rozwiązanie', path: '/rozwiazania', fragment: 'system-agentowy' },
+    visualKind: 'agent-system',
+  },
+  {
+    id: 'channel-integrations',
+    title: 'Integracje kanałów i komunikatorów',
+    problem: 'Wiadomości z wielu kanałów wymagają ręcznego kopiowania danych i zmiany statusów.',
+    outcome: 'Kontrolowany przepływ wiadomości, statusów i eskalacji do człowieka.',
+    cta: { label: 'Poznaj rozwiązanie', path: '/rozwiazania', fragment: 'integracje-kanalow' },
+    visualKind: 'channel-integrations',
   },
 ];
 

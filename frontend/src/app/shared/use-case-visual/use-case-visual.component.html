@@ -33,5 +33,25 @@
         <div class="panel-owner"><span></span><span></span></div>
       </div>
     }
+    @case ('agent-system') {
+      <div class="visual-flow agent-flow">
+        <span class="visual-node">Zadanie</span>
+        <span class="visual-connector"></span>
+        <span class="visual-node visual-node-accent">Etapy</span>
+        <span class="visual-connector"></span>
+        <span class="visual-node visual-node-result">Kontrola</span>
+      </div>
+      <div class="visual-handoff">Decyzja <span>→ człowiek</span></div>
+    }
+    @case ('channel-integrations') {
+      <div class="visual-flow channel-flow">
+        <span class="visual-node">Kanały</span>
+        <span class="visual-connector"></span>
+        <span class="visual-node visual-node-accent">Routing</span>
+        <span class="visual-connector"></span>
+        <span class="visual-node visual-node-result">Proces</span>
+      </div>
+      <div class="visual-handoff">Status <span>→ panel</span></div>
+    }
   }
 </div>

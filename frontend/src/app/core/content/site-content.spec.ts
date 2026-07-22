@@ -34,8 +34,8 @@ describe('Site content model', () => {
     expect(siteContent.development.path).toBe('/development');
     expect(siteContent.research.path).toBe('/rd');
     expect(siteContent.research.directions.length).toBeGreaterThan(0);
-    expect(siteContent.solutions.solutions).toHaveSize(3);
-    expect(new Set(siteContent.solutions.solutions.map((solution) => solution.id)).size).toBe(3);
+    expect(siteContent.solutions.solutions).toHaveSize(5);
+    expect(new Set(siteContent.solutions.solutions.map((solution) => solution.id)).size).toBe(5);
     expect(
       siteContent.solutions.solutions.every(
         (solution) =>
@@ -75,7 +75,7 @@ describe('Site content model', () => {
     expect(siteContent.home.problemGroups.length).toBe(3);
     expect(siteContent.home.hero.processDiagram).toHaveSize(4);
     expect(siteContent.home.trustStrip).toHaveSize(4);
-    expect(siteContent.home.useCases).toHaveSize(3);
+    expect(siteContent.home.useCases).toHaveSize(5);
     expect(siteContent.home.sevenDayResults.items).toHaveSize(4);
     expect(siteContent.home.hero.primaryCta.path).toBe('/kontakt');
     expect(siteContent.home.hero.primaryCta.queryParams?.['projectType']).toBe('mvp_prototype');

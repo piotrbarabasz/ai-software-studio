@@ -1,0 +1,53 @@
+<div class="carousel-controls">
+  <button
+    type="button"
+    class="carousel-button"
+    [disabled]="currentIndex === 0"
+    aria-label="Poprzednie rozwiązania"
+    (click)="move(-1)"
+  >
+    <span aria-hidden="true">←</span>
+  </button>
+  <p class="carousel-status" aria-live="polite">{{ statusLabel }}</p>
+  <button
+    type="button"
+    class="carousel-button"
+    [disabled]="currentIndex >= lastIndex"
+    aria-label="Następne rozwiązania"
+    (click)="move(1)"
+  >
+    <span aria-hidden="true">→</span>
+  </button>
+</div>
+<div
+  #viewport
+  class="solution-carousel"
+  tabindex="0"
+  (scroll)="onScroll()"
+  (keydown)="onKeydown($event)"
+  aria-label="Karuzela rozwiązań"
+>
+  @for (useCase of items; track useCase.id) {
+    <article class="use-case-card" [attr.data-visual-kind]="useCase.visualKind">
+      <h3>{{ useCase.title }}</h3>
+      <app-use-case-visual [visualKind]="useCase.visualKind" />
+      <div>
+        <h4>Problem</h4>
+        <p>{{ useCase.problem }}</p>
+      </div>
+      <div>
+        <h4>Docelowa zmiana</h4>
+        <p>{{ useCase.outcome }}</p>
+      </div>
+      @if (useCase.cta) {
+        <a
+          class="secondary-action"
+          [routerLink]="useCase.cta.path"
+          [queryParams]="useCase.cta.queryParams"
+          [fragment]="useCase.cta.fragment"
+          >{{ useCase.cta.label }}</a
+        >
+      }
+    </article>
+  }
+</div>
