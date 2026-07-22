@@ -178,10 +178,19 @@ steps:
       - scripts/gcp/smoke-backend-image.sh
       - "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_BACKEND_IMAGE_NAME:$SHORT_SHA"
 
+  - id: frontend-image-smoke
+    name: gcr.io/cloud-builders/docker
+    entrypoint: sh
+    waitFor: ["frontend-build"]
+    args:
+      - scripts/gcp/smoke-frontend-image.sh
+      - "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_FRONTEND_IMAGE_NAME:$SHORT_SHA"
+      - "$SHORT_SHA"
+
   - id: cloud-run-iam-audit
     name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
     entrypoint: python3
-    waitFor: ["backend-image-smoke", "frontend-build"]
+    waitFor: ["backend-image-smoke", "frontend-image-smoke"]
     args:
       - scripts/gcp/audit_cloud_run_iam.py
       - "--project=$_PROJECT_ID"

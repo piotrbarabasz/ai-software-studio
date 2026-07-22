@@ -6,6 +6,7 @@ const { generatedDirectory, loadEnvironment } = require('./site-build-utils.cjs'
 
 const TEMPLATE_PATH = path.resolve(__dirname, '../nginx-security-headers.conf');
 const OUTPUT_PATH = path.join(generatedDirectory(), 'nginx-security-headers.conf');
+const NOINDEX_OUTPUT_PATH = path.join(generatedDirectory(), 'nginx-security-headers-noindex.conf');
 const DEFAULT_ARTIFACT_ROOT = path.resolve(__dirname, '../dist/aisoftware-studio/browser');
 
 function listHtmlFiles(root) {
@@ -54,15 +55,20 @@ function collectInlineScriptHashes(artifactRoot = DEFAULT_ARTIFACT_ROOT) {
   return [...hashes].sort();
 }
 
-function renderSecurityHeaders(environment, template, inlineScriptHashes) {
+function renderSecurityHeaders(environment, template, inlineScriptHashes, robotsHeader) {
   const apiOrigin = new URL(environment.apiUrl).origin;
-  const robotsHeader = environment.indexingEnabled ? '' : 'noindex, follow';
+  const resolvedRobotsHeader =
+    typeof robotsHeader === 'string'
+      ? robotsHeader
+      : environment.indexingEnabled
+        ? ''
+        : 'noindex, follow';
   const scriptHashes = inlineScriptHashes.join(' ');
 
   return template
     .replaceAll('__CSP_CONNECT_SRC__', apiOrigin)
     .replaceAll('__CSP_SCRIPT_HASHES__', scriptHashes)
-    .replaceAll('__ROBOTS_HEADER__', robotsHeader);
+    .replaceAll('__ROBOTS_HEADER__', resolvedRobotsHeader);
 }
 
 function writeSecurityHeaders(
@@ -70,18 +76,25 @@ function writeSecurityHeaders(
   artifactRoot = DEFAULT_ARTIFACT_ROOT,
 ) {
   const template = fs.readFileSync(TEMPLATE_PATH, 'utf8');
-  const rendered = renderSecurityHeaders(
+  const inlineScriptHashes = collectInlineScriptHashes(artifactRoot);
+  const rendered = renderSecurityHeaders(environment, template, inlineScriptHashes);
+  const noindexRendered = renderSecurityHeaders(
     environment,
     template,
-    collectInlineScriptHashes(artifactRoot),
+    inlineScriptHashes,
+    'noindex, follow',
   );
 
   if (/__[A-Z0-9_]+__/.test(rendered)) {
     throw new Error('Wygenerowane nagłówki Nginx nadal zawierają placeholder.');
   }
+  if (/__[A-Z0-9_]+__/.test(noindexRendered)) {
+    throw new Error('Wygenerowane nagłówki Nginx nadal zawierają placeholder.');
+  }
 
   fs.mkdirSync(path.dirname(OUTPUT_PATH), { recursive: true });
   fs.writeFileSync(OUTPUT_PATH, rendered, 'utf8');
+  fs.writeFileSync(NOINDEX_OUTPUT_PATH, noindexRendered, 'utf8');
 }
 
 if (require.main === module) {
