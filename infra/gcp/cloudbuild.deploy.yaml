@@ -245,6 +245,7 @@ steps:
       - scripts/gcp/smoke_deployment.py
       - "--backend-url=$_BACKEND_URL"
       - "--site-url=$_PUBLIC_SITE_URL"
+      - "--expected-build-sha=$SHORT_SHA"
       - --attempts=12
       - --retry-delay-seconds=5
 

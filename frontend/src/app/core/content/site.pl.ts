@@ -297,7 +297,7 @@ const routeMetadata = [
   },
   {
     path: '/studio',
-    label: 'Studio',
+    label: 'O Protolume',
     title: brandTitle(publicBrand.owner.name),
     description: brandDescription(
       `Poznaj sposób współpracy z ${publicBrand.owner.name} oraz sprawdzalne przykłady pracy.`,
@@ -608,15 +608,15 @@ export const siteContent = {
         },
       },
     ],
-    studioEyebrow: 'Studio',
+    studioEyebrow: 'O Protolume',
     trustTeaser: {
       statement: 'Projekt prowadzony bezpośrednio przez Piotra Barabasza',
       cta: { label: 'Poznaj osobę odpowiedzialną', path: '/studio' },
     },
     evidenceTeaser: {
-      eyebrow: 'Krótki dowód pracy',
-      title: 'Sprawdź działające elementy i kod',
-      lead: 'Możesz samodzielnie otworzyć demonstrację i repozytorium projektu.',
+      eyebrow: 'Sprawdzalne przykłady',
+      title: 'Sprawdź działające elementy i jasno opisane granice',
+      lead: 'Uruchom demonstrację, przejrzyj przykładowy rezultat i zobacz, co każdy materiał faktycznie potwierdza.',
     },
     closingCta: {
       title: 'Opisz proces, który dziś zabiera czas.',
@@ -631,7 +631,7 @@ export const siteContent = {
       { id: 'direct-technical-contact', title: 'Bezpośredni kontakt techniczny' },
       { id: 'demo-before-investment', title: 'Demo przed większą inwestycją' },
       { id: 'ai-cost-boundaries', title: 'Kontrola kosztu i granic AI' },
-      { id: 'public-code', title: 'Publicznie widoczny kod wybranych elementów' },
+      { id: 'client-confidentiality', title: 'Prywatność danych i kodu klienta' },
     ],
     useCases: homeUseCases,
     sevenDayResults: {
@@ -853,7 +853,7 @@ export const siteContent = {
   } satisfies DemoExamplePageContent,
   studio: {
     path: '/studio',
-    eyebrow: 'Studio',
+    eyebrow: 'O Protolume',
     title: 'Jedna odpowiedzialna osoba od analizy do realizacji',
     lead: 'Bezpośrednio współpracujesz z Piotrem Barabaszem — od pierwszej rozmowy przez decyzje techniczne po odbiór ustalonego zakresu.',
     principles: [

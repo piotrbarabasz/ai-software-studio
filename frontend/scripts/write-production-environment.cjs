@@ -2,6 +2,10 @@ const fs = require('node:fs');
 const path = require('node:path');
 const BUILD_SHA_PATTERN = /^[0-9a-f]{7,64}$/;
 
+function quote(value) {
+  return `'${String(value).replaceAll('\\', '\\\\').replaceAll("'", "\\'")}'`;
+}
+
 function replaceBuildShaMeta(html, buildSha) {
   const metaTags = html.match(/<meta\b[^>]*>/gi) ?? [];
   const matchingTags = metaTags.filter((tag) => {
@@ -70,11 +74,19 @@ function productionEnvironment(source = process.env) {
 function writeProductionEnvironment(source = process.env) {
   const outputPath = path.resolve(__dirname, '../src/environments/environment.prod.ts');
   const environment = productionEnvironment(source);
-  fs.writeFileSync(
-    outputPath,
-    `export const environment = ${JSON.stringify(environment, null, 2)} as const;\n`,
-    'utf8',
-  );
+  const moduleSource = [
+    'export const environment = {',
+    `  production: ${environment.production},`,
+    `  apiUrl: ${quote(environment.apiUrl)},`,
+    `  publicSiteUrl: ${quote(environment.publicSiteUrl)},`,
+    `  indexingEnabled: ${environment.indexingEnabled},`,
+    `  publicSalesEmail: ${quote(environment.publicSalesEmail)},`,
+    `  publicPrivacyEmail: ${quote(environment.publicPrivacyEmail)},`,
+    `  buildSha: ${quote(environment.buildSha)},`,
+    '} as const;',
+    '',
+  ].join('\n');
+  fs.writeFileSync(outputPath, moduleSource, 'utf8');
   const indexPath = path.resolve(__dirname, '../src/index.html');
   const index = fs.readFileSync(indexPath, 'utf8');
   const updatedIndex = replaceBuildShaMeta(index, environment.buildSha);

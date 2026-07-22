@@ -30,6 +30,13 @@ const socialPreviewType = publicBrandManifest.assets.socialPreviewType;
 const socialPreviewName = path.basename(socialPreviewPath);
 REQUIRED_BRAND_ASSETS.push(socialPreviewName);
 const BUILD_SHA_PATTERN = /^[0-9a-f]{7,64}$/;
+const FORBIDDEN_COPY_PHRASES = [
+  'publiczny kod',
+  'publicznie widoczny kod',
+  'repozytorium projektu',
+  'zobacz kod demonstracji',
+  'zobacz kod aplikacji i wdrożenia',
+];
 
 function buildShaMetaValues(html) {
   return (html.match(/<meta\b[^>]*>/gi) ?? [])
@@ -80,6 +87,48 @@ function routeDocumentPath(root, route) {
   return route === '/'
     ? path.join(root, 'index.html')
     : path.join(root, route.slice(1), 'index.html');
+}
+
+function collectHtmlFiles(root) {
+  const htmlFiles = [];
+  const pendingDirectories = [root];
+  while (pendingDirectories.length > 0) {
+    const directory = pendingDirectories.pop();
+    for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+      const entryPath = path.join(directory, entry.name);
+      if (entry.isDirectory()) {
+        pendingDirectories.push(entryPath);
+      } else if (entry.isFile() && entry.name.toLowerCase().endsWith('.html')) {
+        htmlFiles.push(entryPath);
+      }
+    }
+  }
+  return htmlFiles;
+}
+
+function visibleTextFromHtml(html) {
+  return html
+    .replace(/<script\b[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style\b[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function validatePublicCopy(html, documentLabel) {
+  const errors = [];
+  const visibleText = visibleTextFromHtml(html).toLowerCase();
+  if (/<[^>]+\bhref=["'][^"']*github\.com[^"']*["']/i.test(html)) {
+    errors.push(`${documentLabel}: github.com links are not allowed in the public artifact`);
+  }
+  for (const phrase of FORBIDDEN_COPY_PHRASES) {
+    if (visibleText.includes(phrase)) {
+      errors.push(`${documentLabel}: public copy must not contain ${phrase}`);
+    }
+  }
+  return errors;
 }
 
 function validateSiteArtifact(artifactRoot, environment) {
@@ -263,6 +312,12 @@ function validateSiteArtifact(artifactRoot, environment) {
     ) {
       errors.push(`${route}: prerendered document is missing the focusable main target`);
     }
+  }
+
+  for (const documentPath of collectHtmlFiles(root)) {
+    const html = fs.readFileSync(documentPath, 'utf8');
+    const relativePath = path.relative(root, documentPath) || path.basename(documentPath);
+    errors.push(...validatePublicCopy(html, relativePath));
   }
 
   for (const artifactName of ['sitemap.xml', 'robots.txt']) {

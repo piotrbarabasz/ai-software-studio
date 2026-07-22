@@ -45,6 +45,9 @@ describe('SolutionsPageComponent', () => {
       '/kontakt?projectType=business_process_automation',
       '/kontakt?projectType=backend_api',
     ]);
+    expect(fixture.nativeElement.querySelectorAll('img[src^="http"], img[src^="//"]')).toHaveSize(
+      0,
+    );
   });
 
   it('keeps the optional secondary CTA only on the knowledge assistant', () => {
@@ -75,5 +78,11 @@ describe('SolutionsPageComponent', () => {
       .filter((path) => Boolean(path));
 
     expect(secondaryPaths).toEqual(['/demo-ai']);
+  });
+
+  it('does not render duplicate ids', () => {
+    const element = fixture.nativeElement as HTMLElement;
+    const ids = Array.from(element.querySelectorAll<HTMLElement>('[id]'), (item) => item.id);
+    expect(new Set(ids).size).toBe(ids.length);
   });
 });

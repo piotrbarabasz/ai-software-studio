@@ -35,6 +35,11 @@ describe('ProtolumeLogoComponent', () => {
     expect(image?.getAttribute('height')).toBe('190');
   });
 
+  it('does not rely on inline sizing styles for the logo image', () => {
+    const image = fixture.nativeElement.querySelector('img');
+    expect(image?.hasAttribute('style')).toBeFalse();
+  });
+
   it('renders a text fallback when no logo asset is configured', () => {
     const logos = publicBrand.visualIdentity.logos;
     const configured = logos.horizontalDark;

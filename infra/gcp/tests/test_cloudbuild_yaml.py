@@ -476,6 +476,7 @@ class CloudBuildYamlTest(unittest.TestCase):
         arguments = " ".join(str(argument) for argument in step["args"])
 
         self.assertIn("smoke_deployment.py", arguments)
+        self.assertIn("--expected-build-sha=$SHORT_SHA", arguments)
         self.assertNotIn("--expect-noindex", arguments)
         smoke_source = (SCRIPT_ROOT / "smoke_deployment.py").read_text(encoding="utf-8")
         self.assertIn('method="GET"', smoke_source)

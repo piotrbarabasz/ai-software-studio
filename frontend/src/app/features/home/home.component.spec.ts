@@ -69,7 +69,7 @@ describe('HomeComponent', () => {
       'Bezpośredni kontakt techniczny',
     );
     expect(element.querySelector('.trust-strip')?.textContent).toContain(
-      'Publicznie widoczny kod wybranych elementów',
+      'Prywatność danych i kodu klienta',
     );
     expect(element.querySelectorAll('.use-cases h2')).toHaveSize(1);
     expect(element.querySelectorAll('.use-case-card')).toHaveSize(5);
@@ -99,6 +99,22 @@ describe('HomeComponent', () => {
     expect(element.querySelector('.seven-day-results')?.textContent).toContain(
       'Po siedmiu dniach otrzymujesz',
     );
+
+    const visualKinds = Array.from(
+      element.querySelectorAll<HTMLElement>('.use-case-card'),
+      (card) => card.getAttribute('data-visual-kind'),
+    );
+    expect(visualKinds).toEqual([
+      'knowledge-assistant',
+      'message-workflow',
+      'process-panel',
+      'agent-system',
+      'channel-integrations',
+    ]);
+    expect(element.querySelectorAll('img[src^="http"], img[src^="//"]')).toHaveSize(0);
+
+    const ids = Array.from(element.querySelectorAll<HTMLElement>('[id]'), (item) => item.id);
+    expect(new Set(ids).size).toBe(ids.length);
 
     const resultsList = element.querySelector('.seven-day-results > ol');
     const pathsSection = element.querySelector('.paths');
