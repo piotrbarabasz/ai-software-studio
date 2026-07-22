@@ -194,6 +194,10 @@ describe('Site content model', () => {
     expect(publicText).not.toContain('Dema AI');
     expect(publicText).not.toMatch(/AI Software Studio/i);
     expect(publicText).not.toMatch(/\bfixt\b/i);
+    expect(publicText).not.toContain('repozytorium');
+    expect(publicText).not.toContain('public-code');
+    expect(publicText).not.toContain('publicznie widoczny kod');
+    expect(publicText).not.toContain('github.com');
     expect(siteContent.navigation.map((item) => item.label)).toEqual([
       'Rozwiązania',
       'Demo w 7 dni',
@@ -201,6 +205,26 @@ describe('Site content model', () => {
       'O Protolume',
       'Kontakt',
     ]);
+    expect(siteContent.routes.find((route) => route.path === '/studio')?.label).toBe('O Protolume');
+    expect(siteContent.home.studioEyebrow).toBe('O Protolume');
+    expect(siteContent.home.evidenceTeaser).toEqual(
+      jasmine.objectContaining({
+        eyebrow: 'Sprawdzalne przykłady',
+        title: 'Sprawdź działające elementy i jasno opisane granice',
+      }),
+    );
+    expect(siteContent.home.evidenceTeaser.lead).toContain(
+      'Uruchom demonstrację, przejrzyj przykładowy rezultat',
+    );
+    expect(siteContent.home.trustStrip.map((item) => item.id)).toEqual([
+      'direct-technical-contact',
+      'demo-before-investment',
+      'ai-cost-boundaries',
+      'client-confidentiality',
+    ]);
+    expect(siteContent.home.trustStrip.map((item) => item.title)).toContain(
+      'Prywatność danych i kodu klienta',
+    );
     expect(publicBrand.descriptor).toBe('Studio wdrożeń AI i automatyzacji');
   });
 
@@ -216,6 +240,9 @@ describe('Site content model', () => {
     ]);
     expect(siteContent.trust.owner.privacyNotice).toContain('kod klienta pozostają prywatne');
     expect('image' in siteContent.trust.owner).toBeFalse();
+    expect(siteContent.trust.evidence.items.map((item) => item.id as string)).not.toContain(
+      'public-code',
+    );
     expect(siteContent.trust.evidence.items.map((item) => item.id)).toEqual([
       'knowledge-demo',
       'studio-application',
@@ -233,6 +260,7 @@ describe('Site content model', () => {
     expect(siteContent.trust.evidence.items[0].limitation).toContain('Nie potwierdza');
     expect(siteContent.trust.evidence.items[1].limitation).toContain('nie case study klienta');
     expect(siteContent.footer.summary).toContain('Studio wdrożeń AI');
+    expect(siteContent.footer.summary).toContain('Od działającego demo jednego procesu');
   });
 
   it('offers four low-risk ways to verify the work before cooperation', () => {

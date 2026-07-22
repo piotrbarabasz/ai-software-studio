@@ -69,7 +69,7 @@ describe('HomeComponent', () => {
       'Bezpośredni kontakt techniczny',
     );
     expect(element.querySelector('.trust-strip')?.textContent).toContain(
-      'Publicznie widoczny kod wybranych elementów',
+      'Prywatność danych i kodu klienta',
     );
     expect(element.querySelectorAll('.use-cases h2')).toHaveSize(1);
     expect(element.querySelectorAll('.use-case-card')).toHaveSize(5);

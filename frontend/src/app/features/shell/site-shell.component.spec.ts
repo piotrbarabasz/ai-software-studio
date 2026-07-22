@@ -30,7 +30,9 @@ describe('SiteShellComponent', () => {
     expect(element.querySelector('.site-footer .footer-brand img')?.getAttribute('src')).toBe(
       '/assets/protolume-logo-horizontal-light.svg',
     );
-    expect(element.querySelector('.site-footer h2')?.textContent).toBe('Oferta');
+    expect(
+      Array.from(element.querySelectorAll('.site-footer h2')).map((item) => item.textContent),
+    ).toEqual(['Oferta', 'O Protolume', 'Informacje']);
     expect(element.querySelector('.site-footer a[href="/demo-ai"]')).not.toBeNull();
     expect(element.querySelector('.site-footer a[href="/development"]')).not.toBeNull();
     expect(element.querySelector('.site-footer a[href="/studio"]')).not.toBeNull();
