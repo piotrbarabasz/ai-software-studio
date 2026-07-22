@@ -370,11 +370,24 @@ describe('SiteShellComponent', () => {
     const types = structuredData['@graph'].map((item) => item['@type']);
     expect(types).toContain('Person');
     expect(types).toContain('ProfessionalService');
+    expect(types).toContain('Organization');
     expect(types).toContain('WebSite');
     expect(types).toContain('BreadcrumbList');
     expect(JSON.stringify(structuredData)).not.toContain('aggregateRating');
     expect(JSON.stringify(structuredData)).not.toContain('PostalAddress');
     expect(JSON.stringify(structuredData)).not.toContain('telephone');
+
+    await fixture.ngZone!.run(() => router.navigateByUrl('/rozwiazania'));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const solutionsStructuredData = JSON.parse(
+      document.querySelector('#site-structured-data')?.textContent ?? '{}',
+    ) as { '@graph': Array<Record<string, unknown>> };
+    const itemList = solutionsStructuredData['@graph'].find((item) => item['@type'] === 'ItemList');
+    expect(itemList).toBeDefined();
+    expect(itemList?.['itemListElement']).toHaveSize(5);
+    expect(JSON.stringify(solutionsStructuredData)).not.toContain('aggregateRating');
+    expect(JSON.stringify(solutionsStructuredData)).not.toContain('run.app');
 
     await fixture.ngZone!.run(() => router.navigateByUrl('/missing'));
     fixture.detectChanges();

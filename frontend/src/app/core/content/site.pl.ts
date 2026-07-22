@@ -253,9 +253,9 @@ const routeMetadata = [
     path: '/',
     label: 'Start',
 
-    title: brandTitle('Demo AI w 7 dni dla firm'),
+    title: brandTitle('AI i automatyzacje dla firm | Demo w 7 dni'),
     description: brandDescription(
-      'Sprawdź w 7 dni jeden proces z użyciem AI lub automatyzacji i wybierz właściwy następny krok.',
+      'Sprawdź w 7 dni jeden proces z użyciem AI lub automatyzacji dla firm i wybierz właściwy następny krok.',
     ),
     kind: 'home',
   },
@@ -282,7 +282,7 @@ const routeMetadata = [
     label: 'Rozwiązania',
     title: brandTitle('Rozwiązania AI i automatyzacji'),
     description: brandDescription(
-      'Asystent wiedzy, automatyzacja wiadomości i dokumentów, panel operacyjny procesu oraz dwa kolejne kierunki wdrożeń Protolume.',
+      'Asystent wiedzy, automatyzacja wiadomości i dokumentów, panel operacyjny procesu, system agentowy oraz integracje kanałów Protolume.',
     ),
     kind: 'solutions',
   },
