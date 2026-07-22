@@ -47,6 +47,11 @@ describe('SiteShellComponent', () => {
     expect(element.querySelector('.brand .logo-image')?.getAttribute('src')).toBe(
       '/assets/protolume-logo-horizontal-dark.svg',
     );
+    const logoHeight = getComputedStyle(element.querySelector('.brand') as HTMLElement)
+      .getPropertyValue('--logo-height')
+      .trim();
+    expect(logoHeight).toMatch(/^(2\.5rem|2\.75rem|3rem)$/);
+    expect(element.querySelector('.brand .logo-image')?.hasAttribute('style')).toBeFalse();
     expect(element.querySelector('.brand .logo-fallback')).toBeNull();
     expect(element.querySelector('.site-footer .logo-image')?.getAttribute('src')).toBe(
       '/assets/protolume-logo-horizontal-light.svg',
@@ -81,6 +86,16 @@ describe('SiteShellComponent', () => {
     );
     expect(footerLinks.every((link) => Boolean(link.getAttribute('href')))).toBeTrue();
     expect(element.querySelectorAll('#main-content').length).toBe(1);
+
+    const buttons = Array.from(element.querySelectorAll<HTMLButtonElement>('button'));
+    expect(buttons).not.toHaveSize(0);
+    buttons.forEach((button) => {
+      const label = button.getAttribute('aria-label') ?? button.textContent?.trim();
+      expect(label).withContext(button.outerHTML).toBeTruthy();
+    });
+
+    const ids = Array.from(element.querySelectorAll<HTMLElement>('[id]'), (item) => item.id);
+    expect(new Set(ids).size).toBe(ids.length);
   });
 
   it('keeps the server-rendered navigation available without JavaScript or inert', async () => {

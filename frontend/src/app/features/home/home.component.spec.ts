@@ -100,6 +100,22 @@ describe('HomeComponent', () => {
       'Po siedmiu dniach otrzymujesz',
     );
 
+    const visualKinds = Array.from(
+      element.querySelectorAll<HTMLElement>('.use-case-card'),
+      (card) => card.getAttribute('data-visual-kind'),
+    );
+    expect(visualKinds).toEqual([
+      'knowledge-assistant',
+      'message-workflow',
+      'process-panel',
+      'agent-system',
+      'channel-integrations',
+    ]);
+    expect(element.querySelectorAll('img[src^="http"], img[src^="//"]')).toHaveSize(0);
+
+    const ids = Array.from(element.querySelectorAll<HTMLElement>('[id]'), (item) => item.id);
+    expect(new Set(ids).size).toBe(ids.length);
+
     const resultsList = element.querySelector('.seven-day-results > ol');
     const pathsSection = element.querySelector('.paths');
     expect(resultsList).not.toBeNull();
