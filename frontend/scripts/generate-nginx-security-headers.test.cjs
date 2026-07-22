@@ -17,6 +17,10 @@ const template = [
   'add_header X-Robots-Tag "__ROBOTS_HEADER__" always;',
 ].join('\n');
 
+function stripRobotsHeader(rendered) {
+  return rendered.replace(/add_header X-Robots-Tag ".*?" always;\n?/, '');
+}
+
 test('restricts CSP connections to the configured API origin', () => {
   const rendered = renderSecurityHeaders(
     {
@@ -43,6 +47,42 @@ test('adds a noindex response header for staging by default', () => {
   );
 
   assert.match(rendered, /X-Robots-Tag "noindex, follow"/);
+});
+
+test('leaves the production standard header file indexable while the 404 variant is noindex', () => {
+  const environment = {
+    apiUrl: 'https://api.site.invalid',
+    indexingEnabled: true,
+  };
+  const rendered = renderSecurityHeaders(environment, template, ["'sha256-inline-json-ld'"]);
+  const noindexRendered = renderSecurityHeaders(
+    environment,
+    template,
+    ["'sha256-inline-json-ld'"],
+    'noindex, follow',
+  );
+
+  assert.match(rendered, /X-Robots-Tag ""/);
+  assert.match(noindexRendered, /X-Robots-Tag "noindex, follow"/);
+  assert.equal(stripRobotsHeader(rendered), stripRobotsHeader(noindexRendered));
+});
+
+test('preview standard header file keeps noindex while the dedicated 404 variant also stays noindex', () => {
+  const environment = {
+    apiUrl: 'https://api.preview.invalid',
+    indexingEnabled: false,
+  };
+  const rendered = renderSecurityHeaders(environment, template, ["'sha256-inline-json-ld'"]);
+  const noindexRendered = renderSecurityHeaders(
+    environment,
+    template,
+    ["'sha256-inline-json-ld'"],
+    'noindex, follow',
+  );
+
+  assert.match(rendered, /X-Robots-Tag "noindex, follow"/);
+  assert.match(noindexRendered, /X-Robots-Tag "noindex, follow"/);
+  assert.equal(stripRobotsHeader(rendered), stripRobotsHeader(noindexRendered));
 });
 
 test('collects unique hashes for prerendered JSON-LD', () => {

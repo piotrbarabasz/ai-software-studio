@@ -28,6 +28,7 @@ FROM nginx:1.27-alpine
 
 COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/generated/nginx-security-headers.conf /etc/nginx/security-headers.conf
+COPY --from=build /app/generated/nginx-security-headers-noindex.conf /etc/nginx/security-headers-noindex.conf
 COPY frontend/docker-entrypoint.d/40-validate-legal-artifact.sh /docker-entrypoint.d/40-validate-legal-artifact.sh
 
 RUN chmod 755 /docker-entrypoint.d/40-validate-legal-artifact.sh && nginx -t

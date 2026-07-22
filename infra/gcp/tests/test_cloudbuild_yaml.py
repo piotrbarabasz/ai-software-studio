@@ -200,9 +200,14 @@ class CloudBuildYamlTest(unittest.TestCase):
         config = load_config("cloudbuild.deploy.yaml")
         steps = {step["id"]: step for step in config["steps"]}
         frontend_build = " ".join(str(arg) for arg in steps["frontend-build"]["args"])
+        frontend_image_smoke = " ".join(
+            str(arg) for arg in steps["frontend-image-smoke"]["args"]
+        )
         frontend_checks = " ".join(str(arg) for arg in steps["frontend-checks"]["args"])
         backend_deploy = " ".join(str(arg) for arg in steps["backend-deploy"]["args"])
         self.assertIn("PUBLIC_BUILD_SHA=$SHORT_SHA", frontend_build)
+        self.assertIn("smoke-frontend-image.sh", frontend_image_smoke)
+        self.assertIn("$SHORT_SHA", frontend_image_smoke)
         self.assertIn('PUBLIC_BUILD_SHA="$SHORT_SHA"', frontend_checks)
         self.assertIn("APP_BUILD_SHA=$SHORT_SHA", backend_deploy)
 
@@ -449,10 +454,15 @@ class CloudBuildYamlTest(unittest.TestCase):
                 "backend-build",
                 "frontend-build",
                 "backend-image-smoke",
+                "frontend-image-smoke",
                 "cloud-run-iam-audit",
                 "backend-push",
                 "frontend-push",
             }.issubset(before_backend_deploy)
+        )
+        self.assertEqual(
+            steps["cloud-run-iam-audit"]["waitFor"],
+            ["backend-image-smoke", "frontend-image-smoke"],
         )
         for build_step in ("backend-build", "frontend-build"):
             self.assertTrue(
