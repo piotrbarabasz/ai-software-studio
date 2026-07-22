@@ -74,6 +74,8 @@ test('generates sitemap and robots from every non-404 prerender route', () => {
   assert.match(sitemap, /<loc>https:\/\/protolume\.pl<\/loc>/);
   assert.match(sitemap, /<loc>https:\/\/protolume\.pl\/kontakt<\/loc>/);
   assert.match(robots, /^Sitemap: https:\/\/protolume\.pl\/sitemap\.xml$/m);
+  assert.match(robots, /^Allow: \/$/m);
+  assert.doesNotMatch(robots, /^Disallow: \/$/m);
   assert.deepEqual(publicPrerenderRoutes(), [
     '/',
     '/demo-ai',

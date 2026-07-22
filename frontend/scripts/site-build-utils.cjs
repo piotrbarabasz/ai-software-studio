@@ -175,6 +175,12 @@ function validateSeoArtifacts(environment, { production = false } = {}) {
   if (!robots.includes(`Sitemap: ${origin}/sitemap.xml`)) {
     errors.push('robots sitemap URL does not match publicSiteUrl');
   }
+  if (!/^Allow:\s*\/$/m.test(robots)) {
+    errors.push('robots.txt must allow crawling with Allow: /');
+  }
+  if (/^Disallow:\s*\/$/m.test(robots)) {
+    errors.push('robots.txt must not disallow / in production');
+  }
 
   return errors;
 }
