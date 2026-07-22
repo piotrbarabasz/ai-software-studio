@@ -13,7 +13,7 @@ const configuredEnvironment = {
   production: true,
   apiUrl: 'https://aisoftware-studio-api-technical.run.app',
   publicSiteUrl: PRODUCTION_SITE_ORIGIN,
-  indexingEnabled: false,
+  indexingEnabled: true,
   publicSalesEmail: 'kontakt@protolume.pl',
   publicPrivacyEmail: 'kontakt@protolume.pl',
 };
@@ -24,7 +24,7 @@ test('rejects placeholder and localhost production origins', () => {
       production: true,
       apiUrl: 'http://localhost:8000',
       publicSiteUrl: '__PUBLIC_CONFIG_REQUIRED__:publicSiteUrl',
-      indexingEnabled: false,
+      indexingEnabled: true,
       publicSalesEmail: 'kontakt@protolume.pl',
       publicPrivacyEmail: 'kontakt@protolume.pl',
     }),
@@ -32,7 +32,7 @@ test('rejects placeholder and localhost production origins', () => {
   );
 });
 
-test('accepts only the Protolume production origin with noindex and a technical API URL', () => {
+test('accepts only the Protolume production origin with indexing and a technical API URL', () => {
   assert.deepEqual(validateProductionSiteConfig(configuredEnvironment), []);
 });
 
@@ -62,10 +62,7 @@ test('rejects run.app, redirect-only variants and enabled indexing as production
     );
   }
 
-  assert.deepEqual(
-    validateProductionSiteConfig({ ...configuredEnvironment, indexingEnabled: true }),
-    ['indexingEnabled'],
-  );
+  assert.deepEqual(validateProductionSiteConfig(configuredEnvironment), []);
 });
 
 test('generates sitemap and robots from every non-404 prerender route', () => {

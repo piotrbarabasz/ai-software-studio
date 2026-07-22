@@ -22,7 +22,7 @@ def valid_environment() -> dict[str, str]:
         "BACKEND_URL": "https://aisoftware-studio-api-175725977490.europe-central2.run.app",
         "PUBLIC_SITE_URL": "https://protolume.pl",
         "CORS_ALLOWED_ORIGINS": "https://protolume.pl",
-        "PUBLIC_SITE_INDEXING": "false",
+        "PUBLIC_SITE_INDEXING": "true",
         "PUBLIC_SALES_EMAIL": "kontakt@protolume.pl",
         "PUBLIC_PRIVACY_EMAIL": "kontakt@protolume.pl",
         "PUBLIC_LEGAL_CONFIG_SECRET": "aisoftware-studio-public-legal-config",
@@ -84,6 +84,18 @@ class DeploymentContractCliTest(unittest.TestCase):
 
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("validated", result.stdout)
+
+    def test_indexing_is_restricted_to_the_production_origin(self) -> None:
+        result = run_validator(
+            {
+                "PUBLIC_SITE_URL": "https://other-public-site.example",
+                "CORS_ALLOWED_ORIGINS": "https://other-public-site.example",
+                "PUBLIC_SITE_INDEXING": "true",
+            }
+        )
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("PUBLIC_SITE_INDEXING", result.stderr)
 
     def test_old_run_app_origin_is_rejected_with_both_field_names(self) -> None:
         old_origin = "https://aisoftware-studio-web-old.europe-central2.run.app"

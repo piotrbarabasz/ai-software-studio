@@ -62,16 +62,24 @@ test('defaults staging and preview builds to noindex', () => {
   );
 });
 
-test('enables indexing only through an explicit true value', () => {
+test('enables indexing only for the production origin', () => {
   assert.equal(
     productionEnvironment({
-      API_URL: 'https://api.production.invalid',
-      PUBLIC_SITE_URL: 'https://production.invalid',
+      API_URL: 'https://aisoftware-studio-api.example',
+      PUBLIC_SITE_URL: 'https://protolume.pl',
       PUBLIC_SITE_INDEXING: 'true',
-      PUBLIC_SALES_EMAIL: 'sales@production.invalid',
-      PUBLIC_PRIVACY_EMAIL: 'privacy@production.invalid',
+      PUBLIC_SALES_EMAIL: 'sales@protolume.pl',
+      PUBLIC_PRIVACY_EMAIL: 'privacy@protolume.pl',
     }).indexingEnabled,
     true,
+  );
+  assert.throws(
+    () =>
+      productionEnvironment({
+        PUBLIC_SITE_URL: 'https://production.invalid',
+        PUBLIC_SITE_INDEXING: 'true',
+      }),
+    /PUBLIC_SITE_INDEXING/,
   );
   assert.throws(
     () => productionEnvironment({ PUBLIC_SITE_INDEXING: 'yes' }),

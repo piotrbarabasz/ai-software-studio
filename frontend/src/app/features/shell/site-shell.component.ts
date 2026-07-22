@@ -208,17 +208,25 @@ export class SiteShellComponent implements OnInit {
     const owner = siteContent.trust.owner;
 
     const route = siteContent.routes.find((item) => item.path === canonicalPath);
+    const organizationId = `${siteSeo.origin}#organization`;
     const graph: Record<string, unknown>[] = [
       {
         '@id': `${siteSeo.origin}#person`,
         '@type': 'Person',
         name: owner.name,
         jobTitle: owner.role,
-        sameAs: owner.links.map((link) => link.url),
       },
       {
         '@id': `${siteSeo.origin}#professional-service`,
         '@type': 'ProfessionalService',
+        name: siteSeo.name,
+        url: siteSeo.origin,
+        description: siteSeo.organizationDescription,
+        founder: { '@id': `${siteSeo.origin}#person` },
+      },
+      {
+        '@id': organizationId,
+        '@type': 'Organization',
         name: siteSeo.name,
         url: siteSeo.origin,
         description: siteSeo.organizationDescription,
@@ -230,9 +238,30 @@ export class SiteShellComponent implements OnInit {
         name: siteSeo.name,
         url: siteSeo.origin,
         inLanguage: 'pl-PL',
-        publisher: { '@id': `${siteSeo.origin}#professional-service` },
+        publisher: { '@id': organizationId },
       },
     ];
+
+    if (canonicalPath === '/rozwiazania') {
+      graph.push({
+        '@id': `${siteSeo.origin}/rozwiazania#solutions`,
+        '@type': 'ItemList',
+        name: 'Rozwiązania Protolume',
+        url: absoluteSiteUrl('/rozwiazania'),
+        itemListElement: siteContent.solutions.solutions.map((solution, index) => ({
+          '@type': 'ListItem',
+          position: index + 1,
+          name: solution.title,
+          item: {
+            '@type': 'Service',
+            name: solution.title,
+            description: solution.summary,
+            url: `${absoluteSiteUrl('/rozwiazania')}#${solution.id}`,
+            provider: { '@id': organizationId },
+          },
+        })),
+      });
+    }
 
     if (route && route.path !== '/') {
       graph.push({

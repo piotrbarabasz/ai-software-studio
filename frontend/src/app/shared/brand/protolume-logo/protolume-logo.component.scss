@@ -19,7 +19,7 @@
   display: block;
   width: auto;
   max-width: 100%;
-  height: 2.5rem;
+  height: var(--logo-height, 2.5rem);
 }
 
 .logo-image {
@@ -29,6 +29,7 @@
 
 :host([variant='symbol']) .logo-image {
   aspect-ratio: 385 / 375;
+  height: 2.5rem;
 }
 
 .logo-fallback {

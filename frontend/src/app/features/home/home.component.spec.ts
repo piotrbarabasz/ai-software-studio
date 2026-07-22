@@ -72,22 +72,24 @@ describe('HomeComponent', () => {
       'Publicznie widoczny kod wybranych elementów',
     );
     expect(element.querySelectorAll('.use-cases h2')).toHaveSize(1);
-    expect(element.querySelectorAll('.use-case-card')).toHaveSize(3);
-    expect(element.querySelectorAll('.use-case-card h3')).toHaveSize(3);
-    expect(element.querySelectorAll('app-use-case-visual')).toHaveSize(3);
-    expect(element.querySelectorAll('.use-case-card [aria-hidden="true"]')).toHaveSize(3);
+    expect(element.querySelectorAll('.use-case-card')).toHaveSize(5);
+    expect(element.querySelectorAll('.use-case-card h3')).toHaveSize(5);
+    expect(element.querySelectorAll('app-use-case-visual')).toHaveSize(5);
+    expect(element.querySelectorAll('.use-case-card [aria-hidden="true"]')).toHaveSize(5);
     expect(element.querySelectorAll('[data-visual-kind="knowledge-assistant"]')).toHaveSize(1);
     expect(element.querySelectorAll('[data-visual-kind="message-workflow"]')).toHaveSize(1);
     expect(element.querySelectorAll('[data-visual-kind="process-panel"]')).toHaveSize(1);
-    expect(element.querySelectorAll('.use-case-card h4')).toHaveSize(6);
+    expect(element.querySelectorAll('.use-case-card h4')).toHaveSize(10);
     const useCaseLinks = Array.from(
       element.querySelectorAll<HTMLAnchorElement>('.use-case-card a'),
     );
-    expect(useCaseLinks).toHaveSize(3);
+    expect(useCaseLinks).toHaveSize(5);
     expect(useCaseLinks.map((link) => link.getAttribute('href'))).toEqual([
       '/rozwiazania#asystent-wiedzy',
       '/rozwiazania#automatyzacja-wiadomosci-i-dokumentow',
       '/rozwiazania#panel-operacyjny',
+      '/rozwiazania#system-agentowy',
+      '/rozwiazania#integracje-kanalow',
     ]);
     expect(element.querySelectorAll('.problem-card')).toHaveSize(0);
     expect(element.querySelectorAll('.seven-day-results > ol > li')).toHaveSize(4);

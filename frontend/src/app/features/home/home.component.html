@@ -50,31 +50,7 @@
       <p class="eyebrow">Przykładowe procesy</p>
       <h2 id="use-cases-title">Gdzie AI i automatyzacja mogą odciążyć zespół</h2>
     </div>
-    <div class="use-case-grid">
-      @for (useCase of home.useCases; track useCase.id) {
-        <article class="use-case-card" [attr.data-visual-kind]="useCase.visualKind">
-          <h3>{{ useCase.title }}</h3>
-          <app-use-case-visual [visualKind]="useCase.visualKind" />
-          <div>
-            <h4>Problem</h4>
-            <p>{{ useCase.problem }}</p>
-          </div>
-          <div>
-            <h4>Docelowa zmiana</h4>
-            <p>{{ useCase.outcome }}</p>
-          </div>
-          @if (useCase.cta) {
-            <a
-              class="secondary-action"
-              [routerLink]="useCase.cta.path"
-              [queryParams]="useCase.cta.queryParams"
-              [fragment]="useCase.cta.fragment"
-              >{{ useCase.cta.label }}</a
-            >
-          }
-        </article>
-      }
-    </div>
+    <app-solution-carousel [items]="home.useCases" />
   </section>
 
   <section class="seven-day-results section-shell" aria-labelledby="seven-day-results-title">
@@ -149,15 +125,6 @@
                   >{{ item.liveLink.label }}</a
                 >
               }
-              @if (item.repositoryLink) {
-                <a
-                  [href]="item.repositoryLink.url"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  [attr.aria-label]="item.repositoryLink.accessibleName"
-                  >{{ item.repositoryLink.label }}</a
-                >
-              }
             </div>
           </article>
         }
@@ -168,13 +135,6 @@
           <p class="trust-statement">{{ home.trustTeaser.statement }}</p>
         </div>
         <div class="evidence-links">
-          <a
-            [href]="home.trustTeaser.github.url"
-            target="_blank"
-            rel="noopener noreferrer"
-            [attr.aria-label]="home.trustTeaser.github.accessibleName"
-            >{{ home.trustTeaser.github.label }}</a
-          >
           <a class="secondary-action" [routerLink]="home.trustTeaser.cta.path">{{
             home.trustTeaser.cta.label
           }}</a>

@@ -199,7 +199,7 @@ def _check_public_routes(
     site_origin: str,
     request: RequestFunction,
     timeout: float,
-    expect_noindex: bool,
+    expect_noindex: bool = False,
 ) -> tuple[list[str], str | None]:
     errors: list[str] = []
     frontend_build_sha: str | None = None
@@ -295,6 +295,8 @@ def _check_public_routes(
                 "#asystent-wiedzy",
                 "#automatyzacja-wiadomosci-i-dokumentow",
                 "#panel-operacyjny",
+                "#system-agentowy",
+                "#integracje-kanalow",
             ):
                 if fragment not in parser.hrefs:
                     errors.append(f"public route /rozwiazania: expected anchor {fragment}, received none")
@@ -302,6 +304,7 @@ def _check_public_routes(
                 "rag_chatbot_demo",
                 "business_process_automation",
                 "custom_web_app",
+                "backend_api",
             ):
                 if not any(f"/kontakt?projectType={project_type}" in href for href in parser.hrefs):
                     errors.append(

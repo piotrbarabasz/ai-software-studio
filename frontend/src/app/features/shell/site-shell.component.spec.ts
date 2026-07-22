@@ -45,6 +45,11 @@ describe('SiteShellComponent', () => {
     expect(element.querySelector('.brand .logo-image')?.getAttribute('src')).toBe(
       '/assets/protolume-logo-horizontal-dark.svg',
     );
+    expect(element.querySelector('.brand .logo-fallback')).toBeNull();
+    expect(element.querySelector('.site-footer .logo-image')?.getAttribute('src')).toBe(
+      '/assets/protolume-logo-horizontal-light.svg',
+    );
+    expect(element.querySelector('.site-footer .logo-fallback')).toBeNull();
     expect(
       Array.from(element.querySelectorAll('.nav-links a')).map((link) => ({
         label: link.textContent?.trim(),
@@ -68,12 +73,7 @@ describe('SiteShellComponent', () => {
     expect(element.querySelector('.site-footer')?.textContent).toContain(publicBrand.name);
     expect(element.querySelector('.site-footer')?.textContent).toContain('Studio wdrożeń AI');
     expect(element.querySelector('.site-footer a[href^="mailto:"]')).toBeNull();
-    const githubLink = element.querySelector(
-      '.site-footer a[href="https://github.com/piotrbarabasz"]',
-    );
-    expect(githubLink?.getAttribute('target')).toBe('_blank');
-    expect(githubLink?.getAttribute('rel')).toContain('noopener');
-    expect(githubLink?.getAttribute('rel')).toContain('noreferrer');
+    expect(element.querySelector('.site-footer a[href*="github.com"]')).toBeNull();
     const footerLinks = Array.from(
       element.querySelectorAll<HTMLAnchorElement>('.site-footer a[href]'),
     );
@@ -370,11 +370,24 @@ describe('SiteShellComponent', () => {
     const types = structuredData['@graph'].map((item) => item['@type']);
     expect(types).toContain('Person');
     expect(types).toContain('ProfessionalService');
+    expect(types).toContain('Organization');
     expect(types).toContain('WebSite');
     expect(types).toContain('BreadcrumbList');
     expect(JSON.stringify(structuredData)).not.toContain('aggregateRating');
     expect(JSON.stringify(structuredData)).not.toContain('PostalAddress');
     expect(JSON.stringify(structuredData)).not.toContain('telephone');
+
+    await fixture.ngZone!.run(() => router.navigateByUrl('/rozwiazania'));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const solutionsStructuredData = JSON.parse(
+      document.querySelector('#site-structured-data')?.textContent ?? '{}',
+    ) as { '@graph': Array<Record<string, unknown>> };
+    const itemList = solutionsStructuredData['@graph'].find((item) => item['@type'] === 'ItemList');
+    expect(itemList).toBeDefined();
+    expect(itemList?.['itemListElement']).toHaveSize(5);
+    expect(JSON.stringify(solutionsStructuredData)).not.toContain('aggregateRating');
+    expect(JSON.stringify(solutionsStructuredData)).not.toContain('run.app');
 
     await fixture.ngZone!.run(() => router.navigateByUrl('/missing'));
     fixture.detectChanges();

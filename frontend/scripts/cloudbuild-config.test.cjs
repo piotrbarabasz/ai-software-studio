@@ -22,7 +22,7 @@ test('production contract owns the frontend origin, CORS and indexing invariants
   assert.equal(contract.schema_version, 1);
   assert.equal(contract.invariants.PUBLIC_SITE_URL, 'https://protolume.pl');
   assert.equal(contract.invariants.CORS_ALLOWED_ORIGINS, 'https://protolume.pl');
-  assert.equal(contract.invariants.PUBLIC_SITE_INDEXING, 'false');
+  assert.equal(contract.invariants.PUBLIC_SITE_INDEXING, 'true');
   assert.equal(contract.invariants.PUBLIC_SALES_EMAIL, 'kontakt@protolume.pl');
   assert.equal(contract.invariants.PUBLIC_PRIVACY_EMAIL, 'kontakt@protolume.pl');
   assert.equal(
@@ -30,7 +30,8 @@ test('production contract owns the frontend origin, CORS and indexing invariants
     'https://aisoftware-studio-api-175725977490.europe-central2.run.app',
   );
   assert.match(deploy, /^  _PUBLIC_SITE_URL: "https:\/\/protolume\.pl"$/m);
-  assert.match(deploy, /^  _PUBLIC_SITE_INDEXING: "false"$/m);
+  assert.match(deploy, /^  _PUBLIC_SITE_INDEXING: "true"$/m);
+  assert.doesNotMatch(deploy, /--expect-noindex/);
   assert.match(deploy, /^  _PUBLIC_SALES_EMAIL: "kontakt@protolume\.pl"$/m);
   assert.match(deploy, /^  _PUBLIC_PRIVACY_EMAIL: "kontakt@protolume\.pl"$/m);
   assert.match(deploy, /DEPLOY_CORS_ALLOWED_ORIGINS=\$_PUBLIC_SITE_URL/);

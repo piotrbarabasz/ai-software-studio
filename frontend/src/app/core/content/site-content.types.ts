@@ -135,9 +135,9 @@ export interface OwnerProfile {
   readonly name: string;
   readonly role: string;
   readonly bio: string;
+  readonly privacyNotice: string;
   readonly verifiedCapabilities: readonly OwnerCapability[];
   readonly accountability: OwnerAccountability;
-  readonly links: readonly ExternalLink[];
   readonly image?: {
     readonly src: string;
     readonly alt: string;
@@ -153,11 +153,9 @@ export interface WorkEvidence {
   readonly teaser: string;
   readonly problem: string;
   readonly built: string;
-  readonly technologies: readonly string[];
   readonly verification: readonly string[];
   readonly limitation: string;
   readonly liveLink?: ExternalLink;
-  readonly repositoryLink?: ExternalLink;
 }
 
 export interface WorkEvidenceContent {
@@ -177,7 +175,6 @@ export interface TrustContent {
 export interface HomeTrustTeaser {
   readonly statement: string;
   readonly cta: HomeCta;
-  readonly github: ExternalLink;
 }
 
 export interface HomeEvidenceTeaser {
@@ -220,7 +217,7 @@ export interface HomePageContent {
     HomeTrustStripItem,
     HomeTrustStripItem,
   ];
-  readonly useCases: readonly [HomeUseCase, HomeUseCase, HomeUseCase];
+  readonly useCases: readonly HomeUseCase[];
   readonly sevenDayResults: HomeSevenDayResults;
 }
 
@@ -267,11 +264,21 @@ export interface HomeUseCase {
   readonly problem: string;
   readonly outcome: string;
   readonly cta?: HomeCta;
-  readonly visualKind: 'knowledge-assistant' | 'message-workflow' | 'process-panel';
+  readonly visualKind:
+    | 'knowledge-assistant'
+    | 'message-workflow'
+    | 'process-panel'
+    | 'agent-system'
+    | 'channel-integrations';
 }
 
 export interface SolutionOffer {
-  readonly id: 'asystent-wiedzy' | 'automatyzacja-wiadomosci-i-dokumentow' | 'panel-operacyjny';
+  readonly id:
+    | 'asystent-wiedzy'
+    | 'automatyzacja-wiadomosci-i-dokumentow'
+    | 'panel-operacyjny'
+    | 'system-agentowy'
+    | 'integracje-kanalow';
   readonly title: string;
   readonly summary: string;
   readonly problem: string;
@@ -291,7 +298,7 @@ export interface SolutionsPageContent {
   readonly lead: string;
   readonly scopeNotice: string;
   readonly quickLinksLabel: string;
-  readonly solutions: readonly [SolutionOffer, SolutionOffer, SolutionOffer];
+  readonly solutions: readonly SolutionOffer[];
   readonly closingCta: HomeClosingCta;
 }
 
@@ -354,7 +361,6 @@ export interface DemoPageContent {
   readonly interactiveCtaLabel: string;
   readonly ctaLabel: string;
   readonly interactiveDemo: KnowledgeDemoContent;
-  readonly codeLink: ExternalLink;
 }
 
 export interface DemoExamplePageContent {
@@ -492,7 +498,6 @@ export interface StudioPageContent {
     readonly demoCta: HomeCta;
     readonly developmentCta: HomeCta;
     readonly contactCta: HomeCta;
-    readonly repositoryLink: ExternalLink;
   };
   readonly ctaLabel: string;
 }
@@ -500,7 +505,7 @@ export interface StudioPageContent {
 export interface FooterContent {
   readonly summary: string;
   readonly offerLinks: readonly NavigationItem[];
-  readonly studioLinks: readonly (NavigationItem | ExternalLink)[];
+  readonly studioLinks: readonly NavigationItem[];
   readonly informationLinks: readonly NavigationItem[];
   readonly copyright: string;
 }

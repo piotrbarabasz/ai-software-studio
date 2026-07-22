@@ -52,6 +52,9 @@ function productionEnvironment(source = process.env) {
   if (!['true', 'false'].includes(rawIndexingEnabled)) {
     throw new Error('PUBLIC_SITE_INDEXING musi mieć wartość true albo false.');
   }
+  if (rawIndexingEnabled === 'true' && publicSiteUrl !== 'https://protolume.pl') {
+    throw new Error('PUBLIC_SITE_INDEXING=true jest dozwolone wyłącznie dla https://protolume.pl.');
+  }
 
   return {
     production: true,
