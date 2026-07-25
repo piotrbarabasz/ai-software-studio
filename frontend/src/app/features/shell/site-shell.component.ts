@@ -263,6 +263,38 @@ export class SiteShellComponent implements OnInit {
       });
     }
 
+    if (canonicalPath === '/demo-ai') {
+      graph.push({
+        '@id': `${siteSeo.origin}/demo-ai#service`,
+        '@type': 'Service',
+        name: siteContent.demo.title,
+        description: siteContent.demo.lead,
+        url: absoluteSiteUrl('/demo-ai'),
+        inLanguage: 'pl-PL',
+        provider: { '@id': organizationId },
+        serviceType: 'Demo AI w 7 dni',
+      });
+    }
+
+    if (canonicalPath === '/przyklad-demo') {
+      graph.push({
+        '@id': `${siteSeo.origin}/przyklad-demo#creative-work`,
+        '@type': 'CreativeWork',
+        name: siteContent.demoExample.title,
+        description: `${siteContent.demoExample.fictionalNotice} ${siteContent.demoExample.decisionSummary.note}`,
+        url: absoluteSiteUrl('/przyklad-demo'),
+        inLanguage: 'pl-PL',
+        author: { '@id': `${siteSeo.origin}#person` },
+        publisher: { '@id': organizationId },
+        isPartOf: { '@id': `${siteSeo.origin}#website` },
+        about: {
+          '@type': 'Thing',
+          name: 'Demo AI w 7 dni',
+        },
+        genre: 'Przykładowy materiał demonstracyjny',
+      });
+    }
+
     if (route && route.path !== '/') {
       graph.push({
         '@type': 'BreadcrumbList',

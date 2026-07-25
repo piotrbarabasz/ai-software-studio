@@ -31,6 +31,13 @@ NOT_FOUND_PATH = "/__protolume_read_only_smoke_missing__"
 MAX_RESPONSE_BYTES = 2_000_000
 BUILD_SHA_PATTERN = re.compile(r"^[0-9a-f]{7,64}$")
 PLACEHOLDER_BUILD_SHAS = {"unknown", "local", "test"}
+PRIMARY_NAVIGATION_LINKS = (
+    ("/rozwiazania", "Rozwiązania"),
+    ("/demo-ai", "Demo w 7 dni"),
+    ("/development", "Wdrożenia"),
+    ("/studio", "O Protolume"),
+    ("/kontakt", "Kontakt"),
+)
 
 
 @dataclass(frozen=True)
@@ -48,18 +55,25 @@ class SeoMetadataParser(HTMLParser):
         self.build_sha: str | None = None
         self.headings: list[tuple[str, str]] = []
         self.hrefs: list[str] = []
+        self.primary_navigation_links: list[tuple[str, str]] = []
+        self.primary_navigation_count = 0
+        self.has_footer = False
         self.form_names: set[str] = set()
         self.has_form = False
-        self.has_primary_navigation = False
         self.has_interactive_demo = False
         self.use_case_card_count = 0
         self._visible_text_parts: list[str] = []
         self._text_stack: list[str] = []
         self._ignored_text_depth = 0
+        self._nav_stack: list[bool] = []
+        self._primary_navigation_depth = 0
+        self._current_navigation_href: str | None = None
+        self._current_navigation_text_parts: list[str] = []
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         tag_name = tag.lower()
         attributes = {name.lower(): value or "" for name, value in attrs}
+        is_primary_navigation = tag_name == "nav" and attributes.get("id") == "primary-navigation"
         if (
             tag_name == "link"
             and "canonical" in attributes.get("rel", "").lower().split()
@@ -73,8 +87,14 @@ class SeoMetadataParser(HTMLParser):
             self.hrefs.append(attributes["href"])
         if tag_name == "form":
             self.has_form = True
-        if tag_name == "nav":
-            self.has_primary_navigation = self.has_primary_navigation or "primary-navigation" in attributes.get("id", "")
+        if tag_name == "footer":
+            self.has_footer = True
+        if is_primary_navigation:
+            self._nav_stack.append(True)
+            self.primary_navigation_count += 1
+            self._primary_navigation_depth += 1
+        elif tag_name == "nav":
+            self._nav_stack.append(False)
         classes = set(attributes.get("class", "").split())
         if "interactive-demo" in classes:
             self.has_interactive_demo = True
@@ -87,6 +107,9 @@ class SeoMetadataParser(HTMLParser):
         name = attributes.get("name")
         if name:
             self.form_names.add(name)
+        if tag_name == "a" and self._primary_navigation_depth > 0:
+            self._current_navigation_href = attributes.get("href")
+            self._current_navigation_text_parts = []
 
     def handle_endtag(self, tag: str) -> None:
         tag_name = tag.lower()
@@ -94,12 +117,24 @@ class SeoMetadataParser(HTMLParser):
             self._ignored_text_depth -= 1
         if tag_name in {"h1", "h2", "h3"} and self._text_stack:
             self.headings.append((tag.lower(), re.sub(r"\s+", " ", self._text_stack.pop()).strip()))
+        if tag_name == "a" and self._current_navigation_href is not None and self._primary_navigation_depth > 0:
+            text = re.sub(r"\s+", " ", "".join(self._current_navigation_text_parts)).strip()
+            href = self._current_navigation_href.strip()
+            self.primary_navigation_links.append((href, text))
+            self._current_navigation_href = None
+            self._current_navigation_text_parts = []
+        if tag_name == "nav" and self._nav_stack:
+            was_primary_navigation = self._nav_stack.pop()
+            if was_primary_navigation and self._primary_navigation_depth > 0:
+                self._primary_navigation_depth -= 1
 
     def handle_data(self, data: str) -> None:
         if self._ignored_text_depth == 0:
             self._visible_text_parts.append(data)
         if self._text_stack and self._ignored_text_depth == 0:
             self._text_stack[-1] += data
+        if self._current_navigation_href is not None and self._primary_navigation_depth > 0 and self._ignored_text_depth == 0:
+            self._current_navigation_text_parts.append(data)
 
     @property
     def visible_text(self) -> str:
@@ -124,6 +159,10 @@ def _origin(value: str, field: str) -> str:
             f"{field} must be an HTTPS origin without path, query, or fragment"
     )
     return value.rstrip("/")
+
+
+def _normalized_path(value: str) -> str:
+    return value.split("?", 1)[0].split("#", 1)[0]
 
 
 def _build_sha(value: str) -> str:
@@ -242,6 +281,7 @@ def _check_public_routes(
 ) -> tuple[list[str], str | None]:
     errors: list[str] = []
     frontend_build_sha: str | None = None
+    expected_navigation = list(PRIMARY_NAVIGATION_LINKS)
     for path in PUBLIC_ROUTES:
         try:
             response = _get(site_origin, path, request, timeout)
@@ -269,6 +309,21 @@ def _check_public_routes(
             errors.append(
                 f"public route {path}: canonical URL does not match the public origin"
             )
+        if parser.primary_navigation_count != 1:
+            errors.append(
+                f"public route {path}: expected exactly one primary navigation, received {parser.primary_navigation_count}"
+            )
+        actual_navigation = [
+            (_normalized_path(href), text) for href, text in parser.primary_navigation_links
+        ]
+        if actual_navigation != expected_navigation:
+            errors.append(
+                f"public route {path}: primary navigation links or labels do not match the shared shell"
+            )
+        if not parser.has_footer:
+            errors.append(f"public route {path}: expected a shared footer, received none")
+        if any("github.com" in href.lower() for href in parser.hrefs):
+            errors.append(f"public route {path}: public links must not point to github.com")
         if expect_noindex:
             if (parser.robots or "").strip().lower() != "noindex, follow":
                 errors.append(
@@ -283,47 +338,54 @@ def _check_public_routes(
                 )
         else:
             if (parser.robots or "").strip().lower() != "index, follow":
-                errors.append(f"public route {path}: HTML robots metadata is not index, follow")
+                errors.append(
+                    f"public route {path}: HTML robots metadata is not index, follow"
+                )
             x_robots_tag = response.headers.get("x-robots-tag", "").strip().lower()
             if x_robots_tag and x_robots_tag != "index, follow":
                 errors.append(f"public route {path}: X-Robots-Tag is not index, follow")
+        route_build_sha = parser.build_sha
+        if (
+            not isinstance(route_build_sha, str)
+            or not route_build_sha.strip()
+            or route_build_sha in PLACEHOLDER_BUILD_SHAS
+            or "__" in route_build_sha
+        ):
+            errors.append(
+                f"public route {path}: protolume-build-sha meta tag must be a non-placeholder deployed SHA"
+            )
+        elif expected_build_sha and route_build_sha != expected_build_sha:
+            errors.append(
+                f"public route {path}: protolume-build-sha meta tag does not match the expected build SHA"
+            )
+        elif frontend_build_sha is None:
+            frontend_build_sha = route_build_sha
+        elif route_build_sha != frontend_build_sha:
+            errors.append(
+                f"public route {path}: protolume-build-sha meta tag does not match the shared build SHA"
+            )
         if path == "/":
-            frontend_build_sha = parser.build_sha
-            if (
-                not isinstance(frontend_build_sha, str)
-                or not frontend_build_sha.strip()
-                or frontend_build_sha in PLACEHOLDER_BUILD_SHAS
-                or "__" in frontend_build_sha
-            ):
-                errors.append(
-                    "public route /: protolume-build-sha meta tag must be a non-placeholder deployed SHA"
-                )
-            elif expected_build_sha and frontend_build_sha != expected_build_sha:
-                errors.append(
-                    "public route /: protolume-build-sha meta tag does not match the expected build SHA"
-                )
             h1 = " ".join(text for tag, text in parser.headings if tag == "h1")
             if not h1:
                 errors.append("public route /: expected an h1 element, received none")
             for phrase in ("Sprawdź w 7 dni", "konkretny proces"):
                 if phrase.lower() not in h1.lower():
                     errors.append(f"public route /: h1 must contain {phrase!r}")
-            if not parser.has_primary_navigation:
-                errors.append("public route /: expected primary navigation, received none")
             if parser.use_case_card_count != 5:
                 errors.append(
                     f"public route /: expected 5 solution cards, received {parser.use_case_card_count}"
                 )
-            for href in ("/rozwiazania", "/demo-ai", "/development", "/kontakt"):
-                if not any(href == candidate.split("?", 1)[0].split("#", 1)[0] for candidate in parser.hrefs):
-                    errors.append(f"public route /: expected link to {href}, received none")
             if not any(
-                href.split("?", 1)[0].split("#", 1)[0] == "/rozwiazania"
+                _normalized_path(href) == "/przyklad-demo" for href in parser.hrefs
+            ):
+                errors.append("public route /: expected link to /przyklad-demo, received none")
+            if not any(
+                href.startswith("/kontakt?") and "projectType=mvp_prototype" in href
                 for href in parser.hrefs
             ):
-                errors.append("public route /: expected link to /rozwiazania, received none")
-            if not any("projectType=mvp_prototype" in href and href.startswith("/kontakt?") for href in parser.hrefs):
-                errors.append("public route /: expected primary contact CTA with projectType=mvp_prototype")
+                errors.append(
+                    "public route /: expected primary contact CTA with projectType=mvp_prototype"
+                )
             visible_text = parser.visible_text.casefold()
             for phrase in ("Rozwiązania", "Wdrożenia", "O Protolume"):
                 if phrase.casefold() not in visible_text:
@@ -346,17 +408,15 @@ def _check_public_routes(
                     errors.append(
                         f"public route /: visible copy must not contain {forbidden_text!r}"
                     )
-            if any("github.com" in href.lower() for href in parser.hrefs):
-                errors.append(
-                    "public route /: github.com links are not allowed on the homepage"
-                )
         elif path == "/demo-ai":
             if not any(tag in {"h1", "h2"} for tag, _ in parser.headings):
                 errors.append("public route /demo-ai: expected a heading, received none")
             if not parser.has_interactive_demo and "demo" not in parser.visible_text.casefold():
                 errors.append("public route /demo-ai: expected interactive demo marker or text")
-            if not any(href.startswith("/kontakt") for href in parser.hrefs):
-                errors.append("public route /demo-ai: expected contact handoff link, received none")
+            if not any(
+                _normalized_path(href) == "/przyklad-demo" for href in parser.hrefs
+            ):
+                errors.append("public route /demo-ai: expected a link to /przyklad-demo, received none")
         elif path == "/przyklad-demo":
             heading_text = " ".join(text for tag, text in parser.headings if tag == "h1")
             if not heading_text:
@@ -366,11 +426,15 @@ def _check_public_routes(
                 errors.append(
                     "public route /przyklad-demo: expected an explicitly fictional demonstration notice"
                 )
-            if "poza zakresem" not in page_text:
-                errors.append("public route /przyklad-demo: expected an out-of-scope section")
-            if not any(href.startswith("/kontakt") for href in parser.hrefs):
+            if "warunkowe go" not in page_text:
+                errors.append("public route /przyklad-demo: expected the conditional GO decision")
+            if "przykładowe kryteria do uzgodnienia z klientem" not in page_text:
+                errors.append("public route /przyklad-demo: expected acceptance criteria section")
+            if "rejestr ryzyk" not in page_text:
+                errors.append("public route /przyklad-demo: expected a risk register section")
+            if not any(_normalized_path(href) == "/kontakt" for href in parser.hrefs):
                 errors.append("public route /przyklad-demo: expected a contact CTA, received none")
-            if not any(href.split("?", 1)[0].split("#", 1)[0] == "/demo-ai" for href in parser.hrefs):
+            if not any(_normalized_path(href) == "/demo-ai" for href in parser.hrefs):
                 errors.append("public route /przyklad-demo: expected a link to /demo-ai, received none")
         elif path == "/rozwiazania":
             for fragment in (
@@ -403,8 +467,9 @@ def _check_public_routes(
                 errors.append("public route /polityka-prywatnosci: expected a heading, received none")
             if not any(href.lower().startswith("mailto:") and href[7:].strip() for href in parser.hrefs):
                 errors.append("public route /polityka-prywatnosci: expected configured privacy contact, received none")
+    if frontend_build_sha is None:
+        errors.append("public routes: no valid build SHA was discovered")
     return errors, frontend_build_sha
-
 
 def _check_not_found(
     site_origin: str,

@@ -2,7 +2,12 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { siteContent } from '../../core/content/site.pl';
-import type { TrustContent } from '../../core/content/site-content.types';
+import type {
+  ExternalLink,
+  InternalLink,
+  TrustContent,
+  WorkEvidenceLink,
+} from '../../core/content/site-content.types';
 import { RevealOnScrollDirective } from '../../shared/reveal/reveal-on-scroll.directive';
 
 @Component({
@@ -15,4 +20,12 @@ import { RevealOnScrollDirective } from '../../shared/reveal/reveal-on-scroll.di
 export class StudioPageComponent {
   readonly content = siteContent.studio;
   readonly trust: TrustContent = siteContent.trust;
+
+  protected isInternalWorkEvidenceLink(link: WorkEvidenceLink | undefined): link is InternalLink {
+    return link?.kind === 'internal';
+  }
+
+  protected isExternalWorkEvidenceLink(link: WorkEvidenceLink | undefined): link is ExternalLink {
+    return link?.kind === 'external';
+  }
 }

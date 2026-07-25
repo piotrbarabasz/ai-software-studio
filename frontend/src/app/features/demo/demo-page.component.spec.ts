@@ -41,7 +41,8 @@ describe('DemoPageComponent', () => {
       element.querySelector('.hero-actions a.secondary-action[href="/demo-ai#interactive-demo"]'),
     ).not.toBeNull();
     expect(element.textContent).toContain('Co otrzymujesz po siedmiu dniach');
-    expect(element.textContent).toContain('jakie dane lub integracje będą potrzebne');
+    expect(element.textContent).toContain('jakie informacje otrzyma');
+    expect(element.querySelector('.demo-outcome a[href="/przyklad-demo"]')).not.toBeNull();
     expect(element.querySelector('a[href="/demo-ai#interactive-demo"]')?.textContent).toContain(
       'Uruchom przykładowe demo',
     );

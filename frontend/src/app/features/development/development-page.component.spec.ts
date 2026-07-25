@@ -12,7 +12,7 @@ describe('DevelopmentPageComponent', () => {
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelectorAll('h1').length).toBe(1);
     expect(fixture.nativeElement.textContent).toContain(
-      'Gdy potrzeba, użytkownicy i rezultat są potwierdzone',
+      'Najpierw potwierdzamy użytkowników, dane i rezultat pierwszego etapu',
     );
     expect(fixture.nativeElement.querySelectorAll('.info-card').length).toBe(3);
     expect(fixture.nativeElement.textContent).toContain('Panel operacyjny');
@@ -46,8 +46,8 @@ describe('DevelopmentPageComponent', () => {
     expect(fixture.nativeElement.querySelectorAll('.readiness-grid li').length).toBe(5);
     expect(fixture.nativeElement.querySelectorAll('.preparation-grid li').length).toBe(8);
     expect(fixture.nativeElement.querySelectorAll('.scope-card').length).toBe(2);
-    expect(fixture.nativeElement.textContent).toContain('Nie wchodzą automatycznie w wycenę');
-    expect(fixture.nativeElement.textContent).toContain('zmienić wycenę i harmonogram');
+    expect(fixture.nativeElement.textContent).toContain('Pierwszy etap i rzeczy wyceniane osobno');
+    expect(fixture.nativeElement.textContent).toContain('Wycena zależy od potwierdzonego zakresu');
     expect(fixture.nativeElement.textContent).toContain('bezpieczeństwo oraz dostęp do danych');
     expect(fixture.nativeElement.textContent).toContain('integracje i odpowiedzialności stron');
     expect(fixture.nativeElement.querySelectorAll('.process-list li')).toHaveSize(5);

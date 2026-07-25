@@ -5,4 +5,5 @@ export const environment = {
   indexingEnabled: false,
   publicSalesEmail: '__PUBLIC_CONFIG_REQUIRED__:publicSalesEmail',
   publicPrivacyEmail: '__PUBLIC_CONFIG_REQUIRED__:publicPrivacyEmail',
+  buildSha: 'unknown',
 } as const;

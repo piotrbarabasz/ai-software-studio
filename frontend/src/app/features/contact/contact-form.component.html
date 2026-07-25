@@ -87,6 +87,34 @@
         </p>
       }
     </div>
+    <div class="field field-full">
+      <label for="message">Opisz proces w 3 zdaniach <span aria-hidden="true">*</span></label>
+      <textarea
+        id="message"
+        name="message"
+        rows="6"
+        maxlength="4000"
+        formControlName="message"
+        required
+        [attr.aria-invalid]="isInvalid('message')"
+        [attr.aria-describedby]="
+          isInvalid('message') ? 'message-hint message-error' : 'message-hint'
+        "
+      ></textarea>
+      <div id="message-hint" class="field-hint message-hint">
+        <p>{{ content.firstMessagePurpose }}</p>
+        <ul class="message-guidance" aria-label="Pomoc do opisu procesu">
+          <li>Kto wykonuje tę pracę?</li>
+          <li>Co jest dziś wykonywane ręcznie?</li>
+          <li>Jaki rezultat powinien się zmienić?</li>
+        </ul>
+      </div>
+      @if (isInvalid('message')) {
+        <p id="message-error" class="field-error">
+          {{ errorFor('message') }}
+        </p>
+      }
+    </div>
     <div class="field">
       <label for="budgetRange">Budżet orientacyjny — opcjonalnie</label>
       <select
@@ -107,29 +135,6 @@
       @if (isInvalid('budgetRange')) {
         <p id="budget-range-error" class="field-error">
           {{ errorFor('budgetRange') }}
-        </p>
-      }
-    </div>
-    <div class="field field-full">
-      <label for="message">Wiadomość <span aria-hidden="true">*</span></label>
-      <textarea
-        id="message"
-        name="message"
-        rows="6"
-        maxlength="4000"
-        formControlName="message"
-        required
-        [attr.aria-invalid]="isInvalid('message')"
-        [attr.aria-describedby]="
-          isInvalid('message') ? 'message-hint message-error' : 'message-hint'
-        "
-      ></textarea>
-      <p id="message-hint" class="field-hint">
-        Opisz krótko obecny proces, największy problem i efekt, który chcesz osiągnąć.
-      </p>
-      @if (isInvalid('message')) {
-        <p id="message-error" class="field-error">
-          {{ errorFor('message') }}
         </p>
       }
     </div>
@@ -167,6 +172,7 @@
         </p>
       }
     </div>
+    <p class="form-legal-note">{{ content.noCommitment }}</p>
     @if (status === 'error' && statusMessage) {
       <div
         #errorSummary

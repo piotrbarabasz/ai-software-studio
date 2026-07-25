@@ -40,10 +40,11 @@ describe('StudioPageComponent', () => {
     expect(element.textContent).toContain('zespołach międzynarodowych');
     expect(element.textContent).toContain('Odpowiedzialność end-to-end');
     expect(element.querySelector('a[href*="github.com"]')).toBeNull();
-    expect(element.querySelectorAll('.evidence-card').length).toBe(2);
-    expect(element.querySelectorAll('.verification-list').length).toBe(2);
-    expect(element.querySelectorAll('.evidence-boundary')).toHaveSize(2);
+    expect(element.querySelectorAll('.evidence-card').length).toBe(3);
+    expect(element.querySelectorAll('.verification-list').length).toBe(3);
+    expect(element.querySelectorAll('.evidence-boundary')).toHaveSize(3);
     expect(element.textContent).toContain('Asystent wiedzy z obsługą pytań poza zakresem');
+    expect(element.textContent).toContain('Raport decyzyjny po Demo w 7 dni');
     expect(element.textContent).toContain('Otwórz działającą stronę');
     expect(element.textContent).toContain('Projekt własny');
     expect(element.textContent).toContain('nie case study klienta');
@@ -51,10 +52,12 @@ describe('StudioPageComponent', () => {
     expect(element.querySelector('a[href*="linkedin.com"]')).toBeNull();
     expect(element.textContent).not.toMatch(/referencje|nasi klienci|opinie klient/i);
 
-    expect(element.querySelectorAll('.verification-steps li')).toHaveSize(4);
+    expect(element.querySelectorAll('.verification-steps li')).toHaveSize(5);
     expect(element.textContent).toContain('Jak możesz zweryfikować sposób pracy przed współpracą');
+    expect(element.textContent).toContain('Przejrzyj przykładowy raport');
     expect(element.textContent).toContain('nie jest zamówieniem');
     expect(element.querySelector('.verification-actions a[href="/demo-ai"]')).not.toBeNull();
+    expect(element.querySelector('.verification-actions a[href="/przyklad-demo"]')).not.toBeNull();
     expect(element.querySelector('.verification-actions a[href="/development"]')).not.toBeNull();
     expect(
       element.querySelector('.verification-actions a[href="/kontakt?projectType=other"]'),

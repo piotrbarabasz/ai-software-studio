@@ -86,12 +86,17 @@
       <p class="section-copy">{{ content.result }}</p>
       <p class="section-copy">{{ content.decision }}</p>
     </div>
-    <a
-      class="primary-action"
-      routerLink="/kontakt"
-      [queryParams]="{ projectType: 'mvp_prototype' }"
-    >
-      {{ content.ctaLabel }}
-    </a>
+    <div class="hero-actions" aria-label="Dalsze działania">
+      <a
+        class="primary-action"
+        routerLink="/kontakt"
+        [queryParams]="{ projectType: 'mvp_prototype' }"
+      >
+        {{ content.ctaLabel }}
+      </a>
+      <a class="secondary-action" [routerLink]="content.reportCta.path">
+        {{ content.reportCta.label }}
+      </a>
+    </div>
   </section>
 </div>

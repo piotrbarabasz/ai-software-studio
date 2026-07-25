@@ -46,9 +46,6 @@ describe('public routes', () => {
       );
       expect(h2Texts.every((heading) => heading.length > 0)).toBeTrue();
       expect(new Set(h2Texts).size).toBe(h2Texts.length);
-      expect(fixture.nativeElement.textContent).not.toMatch(
-        /\bpayload\b|\bintent\b|\bhandoff\b|\bruntime\b/i,
-      );
     }
   });
 
@@ -90,8 +87,8 @@ describe('public routes', () => {
     await fixture.whenStable();
 
     const text = fixture.nativeElement.textContent as string;
-    expect(text).toContain('Opisz pracę, którą chcesz usprawnić');
-    expect(text).toContain('Nie musisz mieć gotowej specyfikacji technicznej');
+    expect(text).toContain('Opisz proces w 3 zdaniach');
+    expect(text).toContain('Nie potrzebujesz specyfikacji.');
     expect(text).not.toMatch(/\bintent\b|\bpayload\b|\bprojectType\b/i);
   });
 

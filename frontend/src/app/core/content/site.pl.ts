@@ -1,4 +1,4 @@
-import { budgetRangeOptions, projectTypeOptions } from './contact-options.pl';
+﻿import { budgetRangeOptions, projectTypeOptions } from './contact-options.pl';
 import { publicBrand } from '../brand/public-brand.config';
 import type {
   PublicRouteMetadata,
@@ -26,7 +26,8 @@ export const researchDirections = [
     goal: 'Sprawdzić, jak monitorować koszt, jakość i zachowanie modeli w praktyce.',
     potentialBusinessUse: 'Tańsze i bardziej przewidywalne wdrożenia dla klientów.',
     status: 'experiment',
-    claimBoundary: 'Nie oznacza gotowej produkcji dla każdego modelu lub każdego klienta.',
+    claimBoundary:
+      'Zastosowanie produkcyjne wymaga dodatkowej walidacji na danych, modelach i warunkach konkretnego klienta.',
   },
   {
     id: 'rag-evaluation',
@@ -36,7 +37,8 @@ export const researchDirections = [
     goal: 'Wypracować wzorce oceny odpowiedzi oraz jakości indeksów wiedzy.',
     potentialBusinessUse: 'Lepsze asystenty wiedzy i mniejsze ryzyko błędnych odpowiedzi.',
     status: 'prototype',
-    claimBoundary: 'Nie jest to dowód jakości dla dowolnej bazy wiedzy bez dodatkowych testów.',
+    claimBoundary:
+      'Zastosowanie produkcyjne wymaga dodatkowych testów jakości dla konkretnej bazy wiedzy i procesu.',
   },
   {
     id: 'messenger-orchestration',
@@ -45,7 +47,8 @@ export const researchDirections = [
     goal: 'Sprawdzić, jak zarządzać zadaniami i zatwierdzeniami przez komunikatory.',
     potentialBusinessUse: 'Szybsze decyzje operacyjne i prostsza współpraca zespołowa.',
     status: 'validated-internally',
-    claimBoundary: 'Nie jest to obietnica pełnej automatyzacji bez udziału człowieka.',
+    claimBoundary:
+      'Zastosowanie produkcyjne wymaga doprecyzowania punktów zatwierdzania i roli człowieka w procesie.',
   },
   {
     id: 'response-evaluation',
@@ -54,7 +57,8 @@ export const researchDirections = [
     goal: 'Uprościć walidację odpowiedzi i proponować lepsze wzorce orkiestracji.',
     potentialBusinessUse: 'Szybsze iteracje i niższy koszt eksperymentów klienta.',
     status: 'experiment',
-    claimBoundary: 'Nie zastępuje pełnej weryfikacji biznesowej ani testów produkcyjnych.',
+    claimBoundary:
+      'Zastosowanie produkcyjne wymaga pełnej weryfikacji biznesowej oraz testów produkcyjnych.',
   },
 ] satisfies readonly ResearchDirection[];
 
@@ -270,10 +274,10 @@ const routeMetadata = [
   },
   {
     path: '/przyklad-demo',
-    label: 'Przykład demo',
-    title: brandTitle('Przykładowy rezultat demo w 7 dni'),
+    label: 'Przykładowy raport',
+    title: brandTitle('Przykładowy raport z Demo AI w 7 dni'),
     description: brandDescription(
-      'Fikcyjny przykład ograniczonego demo obsługi zapytań produktowych, z zakresem, ryzykami i rekomendacją kolejnego kroku.',
+      'Fikcyjny raport z Demo AI w 7 dni: zakres, scenariusze testowe, ryzyka, kryteria odbioru i rekomendacja. Nie case study klienta.',
     ),
     kind: 'demo-example',
   },
@@ -420,6 +424,7 @@ export const siteContent = {
     offerLinks: [
       navigationLink('/rozwiazania'),
       navigationLink('/demo-ai'),
+      { label: 'Przykładowy raport', path: '/przyklad-demo' },
       navigationLink('/development'),
     ],
     studioLinks: [navigationLink('/studio'), { label: 'R&D Lab', path: '/rd' }],
@@ -468,7 +473,7 @@ export const siteContent = {
     },
     evidence: {
       eyebrow: 'Co działa naprawdę',
-      title: 'Dwa dowody pracy, które możesz sprawdzić samodzielnie',
+      title: 'Trzy dowody pracy, które możesz sprawdzić samodzielnie',
       lead: 'Pokazujemy działające elementy, przykładowy rezultat i granice tego, co faktycznie potwierdzają.',
       items: [
         {
@@ -487,16 +492,38 @@ export const siteContent = {
             'Możesz samodzielnie uruchomić symulację i sprawdzić zachowanie dla pytań w zakresie i poza zakresem.',
           ],
           limitation:
-            'Symulacja korzysta ze stałych pytań i odpowiedzi. Nie potwierdza jakości odpowiedzi na danych firmy, integracji z bazą wiedzy ani gotowości produkcyjnej.',
+            'To demo korzysta ze stałych pytań i odpowiedzi. Wymaga dodatkowej walidacji na danych firmy, integracji z bazą wiedzy i gotowości produkcyjnej.',
           liveLink: {
+            kind: 'internal',
             label: 'Uruchom interaktywne demo',
-            url: '/demo-ai',
-            accessibleName: `Uruchom interaktywne demo asystenta wiedzy ${publicBrand.name}`,
+            path: '/demo-ai',
+          },
+        },
+        {
+          id: 'demo-report',
+          typeLabel: 'Przykładowy raport',
+          title: 'Raport decyzyjny po Demo w 7 dni',
+          teaser:
+            'Sprawdź zakres, scenariusze testowe, ryzyka, kryteria odbioru i rekomendację w jednym raporcie.',
+          problem:
+            'Jak pokazać interesariuszom, co dokładnie otrzymują po etapie demo i czego to jeszcze nie potwierdza?',
+          built:
+            'Fikcyjny raport demonstracyjny po siedmiu dniach z decyzją, zakresem, trzema scenariuszami testowymi, rejestrem ryzyk, przykładowymi kryteriami odbioru i planem pierwszego etapu.',
+          verification: [
+            'Przejrzyj sekcję streszczenia decyzji i porównaj ją z zakresem demo.',
+            'Sprawdź trzy scenariusze testowe, w tym sytuację poza zakresem i handoff.',
+            'Oceń przykładowe kryteria odbioru, rejestr ryzyk i plan pierwszego etapu.',
+          ],
+          limitation:
+            'To fikcyjny materiał demonstracyjny, a nie wynik projektu klienta. Wymaga dodatkowej walidacji danych i kryteriów dla konkretnej firmy.',
+          liveLink: {
+            kind: 'internal',
+            label: 'Zobacz przykładowy raport',
+            path: '/przyklad-demo',
           },
         },
         {
           id: 'studio-application',
-
           typeLabel: 'Projekt własny',
           title: `${publicBrand.name} jako działająca aplikacja`,
           teaser: 'Sprawdź działającą stronę, formularz kontaktowy i opis procesu realizacji.',
@@ -512,9 +539,9 @@ export const siteContent = {
           limitation:
             'To projekt własny, a nie case study klienta. Nie potwierdza wyników biznesowych ani efektów wdrożeń u klientów.',
           liveLink: {
+            kind: 'internal',
             label: 'Otwórz działającą stronę',
-            url: '/',
-            accessibleName: `Otwórz działającą stronę ${publicBrand.name}`,
+            path: '/',
           },
         },
       ],
@@ -535,7 +562,7 @@ export const siteContent = {
         'Dla zespołów, które ręcznie przenoszą informacje, pilnują statusów lub odpowiadają na powtarzalne pytania. Wystarczy opis obecnej pracy — bez gotowej specyfikacji.',
       lead: 'Budujemy działające demo jednego przepływu, sprawdzamy dane i ryzyka, a następnie wskazujemy najlepszy kolejny krok.',
       primaryCta: {
-        label: 'Opisz proces do sprawdzenia',
+        label: 'Opisz proces w 3 zdaniach',
         path: '/kontakt',
         queryParams: { projectType: 'mvp_prototype' },
       },
@@ -622,7 +649,7 @@ export const siteContent = {
       title: 'Opisz proces, który dziś zabiera czas.',
       lead: 'Napisz, kto wykonuje pracę, gdzie pojawiają się ręczne kroki i jaki rezultat ma się zmienić. Ustalimy właściwy następny krok.',
       primaryCta: {
-        label: 'Opisz proces do sprawdzenia',
+        label: 'Opisz proces w 3 zdaniach',
         path: '/kontakt',
         queryParams: { projectType: 'mvp_prototype' },
       },
@@ -638,6 +665,7 @@ export const siteContent = {
       eyebrow: 'Rezultat demo',
       title: 'Co dokładnie powstaje w siedem dni?',
       lead: 'Po siedmiu dniach otrzymujesz nie tylko widok rozwiązania, ale także informacje potrzebne do decyzji o dalszym rozwoju.',
+      reportCta: { label: 'Zobacz przykładowy raport', path: '/przyklad-demo' },
       items: [
         {
           id: 'visible-flow',
@@ -674,7 +702,7 @@ export const siteContent = {
     path: '/demo-ai',
     eyebrow: 'Demo i sprawdzenie wykonalności',
     title: 'Zobacz jeden scenariusz swojej firmy w działającym demo',
-    lead: 'W siedem dni powstaje działający lub klikalny przepływ jednego scenariusza, opis założeń oraz rekomendacja dalszej ścieżki.',
+    lead: 'W siedem dni pokazujemy, co użytkownik zobaczy, jaką decyzję może podjąć i jakie informacje otrzyma. Potem porównujesz to z pełnym systemem produkcyjnym.',
     audienceTitle: 'Dla zespołów, które chcą sprawdzić jedną sytuację przed większą inwestycją',
     audienceProblems: [
       'powtarzalne pytania klientów lub zespołu',
@@ -687,17 +715,16 @@ export const siteContent = {
       'ustalenie danych, użytkowników i założeń',
       'projekt widocznego przepływu',
       'budowa klikalnego lub działającego demo',
-
-      'prezentacja ograniczeń i rekomendacji dalszej ścieżki',
+      'prezentacja informacji potrzebnych do decyzji o kolejnym kroku',
     ],
     comparison: {
       title: 'Demo a system produkcyjny',
       demo: {
         title: 'Demo w siedem dni',
         points: [
-          'jeden ograniczony scenariusz',
-          'klikalny lub działający przepływ',
-          'materiał ułatwiający wybór dalszego kierunku',
+          'widok jednego scenariusza',
+          'decyzja o kolejnym kroku',
+          'informacje o danych, źródłach i ograniczeniach',
         ],
       },
       production: {
@@ -712,10 +739,11 @@ export const siteContent = {
     resultEyebrow: 'Po przeglądzie demo',
     resultTitle: 'Co otrzymujesz po siedmiu dniach',
     result:
-      'Po przeglądzie otrzymujesz zapis ustaleń: co zadziałało, jakie dane lub integracje będą potrzebne i jakie ryzyka pozostają.',
+      'Najpierw widać działający przebieg, potem zestaw informacji potrzebnych do decyzji o kolejnym kroku.',
     decision:
-      'Na tej podstawie wybierasz plan pierwszego etapu, kolejną walidację albo zatrzymanie tematu.',
+      'Na tej podstawie możesz przejść do walidacji, przygotować pierwszy etap albo zatrzymać temat przed większą inwestycją.',
     interactiveCtaLabel: 'Uruchom przykładowe demo',
+    reportCta: { label: 'Zobacz przykładowy raport', path: '/przyklad-demo' },
     ctaLabel: 'Omów sytuację do sprawdzenia',
     interactiveDemo: {
       heading: 'Sprawdź przykładowy przepływ asystenta wiedzy',
@@ -751,7 +779,7 @@ export const siteContent = {
           id: 'demo-boundary',
           question: 'Czy demo obejmuje gotową integrację z wszystkimi systemami firmy?',
           answer:
-            'Nie. Demo sprawdza ograniczony scenariusz i sposób działania. Produkcyjne integracje, bezpieczeństwo oraz monitoring są planowane osobno po walidacji.',
+            'Demo sprawdza ograniczony scenariusz i sposób działania. Produkcyjne integracje, bezpieczeństwo oraz monitoring są planowane osobno po walidacji.',
           sources: [
             'Przykładowy zakres demo: „Granice rozwiązania”, punkt 3',
             'Przykładowy dokument: „Demo a system produkcyjny”, sekcja 2',
@@ -776,11 +804,25 @@ export const siteContent = {
   demoExample: {
     path: '/przyklad-demo',
     eyebrow: 'Przykładowy rezultat',
-    title: 'Od zapytania produktowego do odpowiedzi z kontrolą człowieka',
+    title: 'Raport po 7 dniach: obsługa zapytań produktowych przez e-mail',
     fictionalNotice:
       'To fikcyjny scenariusz demonstracyjny. Nie jest case study klienta ani obietnicą gotowego wdrożenia produkcyjnego.',
-    lead: 'Przykład pokazuje, co można sprawdzić po etapie Demo w 7 dni dla powtarzalnych zapytań produktowych obsługiwanych przez e-mail.',
-    processTitle: 'Obecny proces',
+    lead: 'Poniżej pokazujemy, jak może wyglądać raport przekazywany po walidacji ograniczonego demo dla powtarzalnych zapytań produktowych obsługiwanych przez e-mail. To skrócony przykład tego, co po siedmiu dniach można przekazać do decyzji.',
+    decisionSummary: {
+      status: 'Warunkowe GO do kolejnego etapu',
+      answer:
+        'Operator widzi źródło odpowiedzi, szkic i punkt zatwierdzenia, więc może przejść od wiadomości do decyzji o wysłaniu albo handoffie.',
+      unknowns: [
+        'Nie wiadomo jeszcze, jak zachowują się dokumenty i skrzynki w produkcyjnym wolumenie.',
+        'Nie wiadomo, jakie zasady odpowiedzialności i zatwierdzania obowiązują w docelowym zespole.',
+      ],
+      nextStep:
+        'Warto przejść do uzgodnienia danych, sandboxa integracji i zasad akceptacji przed szerszym pilotażem.',
+      note: 'Granica tego dowodu: to fikcyjny scenariusz demonstracyjny, nie case study klienta i nie potwierdzenie efektu produkcyjnego. Wymaga doprecyzowania danych oraz kryteriów dla konkretnej firmy.',
+    },
+    validationQuestion:
+      'Czy operator może od wiadomości dojść do propozycji odpowiedzi, sprawdzić źródło i podjąć decyzję o wysłaniu albo handoffie?',
+    processTitle: 'Obecny punkt wyjścia',
     currentProcess: {
       roles: ['Osoba obsługująca skrzynkę', 'Ekspert produktowy', 'Osoba zatwierdzająca odpowiedź'],
       manualSteps: [
@@ -798,46 +840,129 @@ export const siteContent = {
         'instrukcje i dokumentacja',
         'wewnętrzna lista osób odpowiedzialnych',
       ],
-    },
-    demoScope: {
-      items: [
-        'jeden przepływ od wiadomości do propozycji odpowiedzi',
-        'ograniczony, przykładowy zestaw dokumentów i danych',
-        'najważniejsze ekrany: klasyfikacja, źródła, odpowiedź i przekazanie',
-
-        'kontrola człowieka przed wysłaniem lub handoffem',
+      assumptions: [
+        'skrzynka zawiera powtarzalne pytania produktowe',
+        'operator ma dostęp do materiałów źródłowych',
+        'istnieje osoba zatwierdzająca wysyłkę lub handoff',
       ],
-      successCriterion:
-        'Osoba obsługująca może prześledzić sprawę, sprawdzić źródło informacji i podjąć decyzję o odpowiedzi albo przekazaniu.',
     },
-    flow: ['E-mail', 'Klasyfikacja', 'Wiedza', 'Propozycja odpowiedzi', 'Akceptacja albo handoff'],
-    outcome: {
-      items: [
-        'klikalny lub działający przepływ do wspólnego przeglądu',
-        'lista założeń i danych potrzebnych do dalszej oceny',
-        'lista ryzyk oraz zależności technicznych i organizacyjnych',
+    scope: {
+      includedTitle: 'Zakres demo i elementy poza zakresem',
+      included: [
+        'jedna propozycja odpowiedzi i widoczny punkt akceptacji',
+        'przykładowy zestaw dokumentów i danych dla jednego procesu',
+        'kontrola człowieka przed wysłaniem albo handoffem',
       ],
-      recommendation: 'Rozwijać po doprecyzowaniu danych i zasad zatwierdzania',
+      excludedTitle: 'Co nadal wymaga walidacji',
+      excluded: [
+        'produkcyjna integracja poczty i automatyczna wysyłka',
+        'pełny system uprawnień, audytu i monitoringu',
+        'generalizacja na wszystkie linie produktowe bez walidacji',
+        'obietnica wyniku biznesowego bez danych konkretnej firmy',
+      ],
     },
-    risks: [
-      'jakość i aktualność dokumentów',
-      'dane osobowe w wiadomościach i materiałach źródłowych',
-      'integracja ze skrzynką pocztową',
-      'błędna klasyfikacja lub niepełna odpowiedź',
-      'koszt modeli przy większej liczbie spraw',
-      'odpowiedzialność człowieka za zatwierdzenie odpowiedzi',
+    scenarios: [
+      {
+        id: 'full-answer',
+        title: 'Pytanie z pełną odpowiedzią w materiałach',
+        input: 'Zapytanie o parametry produktu opisane w aktualnej instrukcji i cenniku.',
+        expectedBehavior:
+          'System wskazuje źródło, przygotowuje propozycję odpowiedzi i daje operatorowi możliwość zatwierdzenia.',
+        demoBehavior:
+          'W demonstracji operator widzi dokument źródłowy, szkic odpowiedzi i ekran zatwierdzenia przed wysłaniem.',
+        status: 'spełnione w demonstracji',
+      },
+      {
+        id: 'approval-needed',
+        title: 'Pytanie wymagające zatwierdzenia',
+        input:
+          'Zapytanie z niejednoznacznym wariantem, gdzie materiał sugeruje odpowiedź, ale potrzebna jest kontrola.',
+        expectedBehavior:
+          'System oznacza odpowiedź jako wymagającą zatwierdzenia i zatrzymuje wysyłkę do czasu decyzji człowieka.',
+        demoBehavior:
+          'W demonstracji operator widzi propozycję, źródło i przycisk przekazania do akceptacji bez automatycznej wysyłki.',
+        status: 'spełnione w demonstracji',
+      },
+      {
+        id: 'handoff-needed',
+        title: 'Pytanie poza zakresem wymagające handoffu',
+        input:
+          'Zapytanie o nieudokumentowany wariant produktu lub warunek, którego nie ma w materiałach.',
+        expectedBehavior:
+          'System nie udaje pewności, tylko przekazuje sprawę do handoffu z informacją o braku danych.',
+        demoBehavior:
+          'W demonstracji pytanie trafia do handoffu z wyjaśnieniem, że nie ma podstaw do odpowiedzi automatycznej.',
+        status: 'wymaga dalszej walidacji',
+      },
     ],
-    outOfScope: [
-      'produkcyjna integracja poczty',
-      'logowanie i role',
-      'globalny monitoring',
-      'SLA',
-      'pełne bezpieczeństwo produkcyjne',
-      'automatyczne wysyłanie odpowiedzi bez zatwierdzenia',
+    acceptanceCriteriaTitle: 'Przykładowe kryteria do uzgodnienia z klientem',
+    acceptanceCriteria: [
+      'operator widzi źródło odpowiedzi',
+      'odpowiedź nie jest wysyłana bez zatwierdzenia',
+      'pytanie bez danych trafia do handoffu',
+      'status sprawy jest widoczny na każdym etapie',
     ],
-    nextStage: [
+    riskRegisterTitle: 'Rejestr ryzyk',
+    riskRegister: [
+      {
+        name: 'Jakość dokumentów',
+        meaning:
+          'Nieaktualne lub niejednoznaczne materiały mogą prowadzić do błędnych propozycji odpowiedzi.',
+        mitigation: 'Wybrać zatwierdzony zestaw źródeł i ustalić właściciela dokumentów.',
+        verificationMoment: 'Przed podłączeniem szerszego zestawu materiałów.',
+      },
+      {
+        name: 'Dane osobowe',
+        meaning: 'Wiadomości mogą zawierać dane wrażliwe lub identyfikujące klienta.',
+        mitigation: 'Uzgodnić maskowanie, zasady retencji i ograniczony dostęp do treści.',
+        verificationMoment: 'Przed testami na realnych wiadomościach.',
+      },
+      {
+        name: 'Integracja poczty',
+        meaning: 'Błędna konfiguracja może skutkować brakiem pobrania lub wysyłki wiadomości.',
+        mitigation: 'Najpierw uruchomić sandbox i sprawdzić scenariusze odbioru, kolejki i błędów.',
+        verificationMoment: 'Przed jakąkolwiek integracją produkcyjną.',
+      },
+      {
+        name: 'Błędna klasyfikacja',
+        meaning:
+          'Zapytanie może zostać przypisane do złego typu odpowiedzi albo do złego handoffu.',
+        mitigation: 'Zdefiniować reguły klasyfikacji i zestaw pytań granicznych do testów.',
+        verificationMoment: 'W testach jakości i w pilotażu.',
+      },
+      {
+        name: 'Koszt modeli',
+        meaning: 'Przy większej liczbie spraw koszt przetwarzania może być wyższy niż zakładano.',
+        mitigation: 'Limitować liczbę wywołań, monitorować zużycie i ustalić progi eskalacji.',
+        verificationMoment: 'W sandboxie i po pierwszym tygodniu pilotażu.',
+      },
+      {
+        name: 'Odpowiedzialność człowieka',
+        meaning: 'Bez jasnego zatwierdzenia nie wolno sugerować, że AI ponosi decyzję za zespół.',
+        mitigation: 'Wprowadzić widoczny etap akceptacji i jasno opisać, kto zatwierdza wysyłkę.',
+        verificationMoment: 'Przed startem pilotażu i przed odbiorem etapu.',
+      },
+    ],
+    recommendation: {
+      decision: 'Warunkowe GO',
+      rationale:
+        'Demonstrowany przepływ pokazuje wartość operacyjną i pozwala ocenić, gdzie operator potrzebuje źródła, akceptacji i handoffu. To wystarcza, aby przejść do kolejnej walidacji, ale nie do deklaracji efektu produkcyjnego.',
+      conditions: [
+        'ustalenie danych wejściowych i zasad ich jakości',
+        'sandbox integracji poczty oraz kontroli dostępu',
+        'jasny model odpowiedzialności i zatwierdzania',
+      ],
+      missingInformation: [
+        'jakie materiały mają być źródłem prawdy',
+        'jakie role mogą zatwierdzać odpowiedź',
+        'jakie wolumeny i limity kosztowe są docelowe',
+      ],
+      note: 'Granica tego dowodu: to fikcyjny scenariusz demonstracyjny, nie case study klienta i nie potwierdzenie efektu produkcyjnego. Wymaga doprecyzowania danych oraz kryteriów dla konkretnej firmy.',
+    },
+    firstStageTitle: 'Plan pierwszego etapu',
+    firstStagePlan: [
       'warsztat danych',
-      'integracja sandbox',
+      'sandbox integracji',
       'role i uprawnienia',
       'testy jakości',
       'monitoring',
@@ -845,11 +970,11 @@ export const siteContent = {
     ],
     primaryCta: {
       label: 'Opisz podobny proces',
-
       path: '/kontakt',
       queryParams: { projectType: 'business_process_automation' },
     },
     demoCta: { label: 'Zobacz zakres Demo w 7 dni', path: '/demo-ai' },
+    printLabel: 'Drukuj lub zapisz jako PDF',
   } satisfies DemoExamplePageContent,
   studio: {
     path: '/studio',
@@ -890,11 +1015,13 @@ export const siteContent = {
       lead: 'Nie musisz opierać decyzji wyłącznie na opisie oferty. Zacznij od elementu, który możesz sprawdzić samodzielnie.',
       steps: [
         'Uruchom interaktywne demo i sprawdź zachowanie dla odpowiedzi oraz pytania poza zakresem.',
+        'Przejrzyj przykładowy raport po siedmiu dniach i sprawdź kryteria, ryzyka oraz rekomendację.',
         'Przejrzyj zakres demo, opis procesu realizacji i kryteria odbioru.',
         'Omów ograniczony pierwszy etap z zakresem i kryteriami odbioru ustalonymi przed realizacją.',
         contactNoCommitment,
       ],
       demoCta: { label: 'Uruchom demo', path: '/demo-ai' },
+      reportCta: { label: 'Przejrzyj przykładowy raport', path: '/przyklad-demo' },
       developmentCta: { label: 'Sprawdź zasady pierwszego etapu', path: '/development' },
       contactCta: {
         label: 'Opisz problem bez zobowiązania',
@@ -908,7 +1035,7 @@ export const siteContent = {
     path: '/development',
     eyebrow: 'Wdrożenia',
     title: 'Aplikacje, API, integracje i automatyzacje z jasno ustalonym pierwszym etapem',
-    lead: 'Gdy potrzeba, użytkownicy i rezultat są potwierdzone, można od razu zaplanować pierwszy etap. Demo przydaje się tylko wtedy, gdy wcześniej trzeba sprawdzić ryzykowne założenie.',
+    lead: 'Najpierw potwierdzamy użytkowników, dane i rezultat pierwszego etapu. Jeśli te odpowiedzi są jasne, można przejść do planowania wdrożenia.',
     heroNextStep: 'Po wysłaniu opisu sprawdzimy, czy można przejść do planowania pierwszego etapu.',
     principles: [
       'przed startem ustalamy pierwszy etap, odpowiedzialności i kryteria odbioru',
@@ -917,7 +1044,7 @@ export const siteContent = {
     ],
     readiness: {
       title: 'Kiedy wdrożenie ma sens',
-      lead: 'Rozpoczęcie prac jest zasadne, gdy zespół potrafi wspólnie potwierdzić podstawy pierwszego etapu. Jeśli brakuje tych odpowiedzi, najpierw potrzebna jest walidacja.',
+      lead: 'Najpierw potwierdzamy użytkowników, dane i rezultat pierwszego etapu. Jeśli te odpowiedzi są jasne, można przejść do planowania wdrożenia.',
       points: [
         'istnieje potwierdzona potrzeba biznesowa',
         'znani są użytkownicy rozwiązania',
@@ -985,14 +1112,14 @@ export const siteContent = {
       ],
     },
     scope: {
-      title: 'Co może wejść do pierwszego etapu — i co nie dzieje się automatycznie',
-      lead: 'Dobieramy elementy do potwierdzonego celu, zamiast sprzedawać z góry pełny zestaw funkcji.',
-      includedTitle: 'Przykładowe elementy realizacji',
+      title: 'Pierwszy etap i rzeczy wyceniane osobno',
+      lead: 'Najpierw pokazujemy rezultat pierwszego etapu, potem elementy realizacji, a dopiero na końcu zależności i rzeczy wyceniane osobno.',
+      includedTitle: 'Rezultat i elementy realizacji',
       included: [
+        'rezultat pierwszego etapu możliwy do pokazania użytkownikom',
         'interfejs, panel lub punkt wejścia dla użytkownika',
         'backend, dane lub API potrzebne do działania',
         'integracja z uzgodnionym systemem',
-        'automatyzacja, obsługa wyjątków i przekazanie sprawy',
         'testy, dokumentacja i monitoring uzgodnione dla etapu',
       ],
       excludedTitle: 'Nie wchodzą automatycznie w wycenę',
@@ -1003,7 +1130,7 @@ export const siteContent = {
         'utrzymanie, rozwój i dyżury po odbiorze',
       ],
       pricingNote:
-        'Wycena powstaje po potwierdzeniu zakresu. Budżet w formularzu jest orientacyjny; zmiana zakresu może zmienić wycenę i harmonogram.',
+        'Wycena zależy od potwierdzonego zakresu. Budżet w formularzu jest orientacyjny; zmiana zakresu może zmienić wycenę i harmonogram.',
     },
     processTitle: 'Od diagnozy do odbioru i kolejnego etapu',
     deliverySteps: [
@@ -1015,7 +1142,7 @@ export const siteContent = {
       {
         title: 'Zakres pierwszego etapu',
         description:
-          'Uzgadniamy elementy realizacji, zależności, kryteria odbioru, dokumentację oraz to, czego wycena nie obejmuje.',
+          'Uzgadniamy rezultat pierwszego etapu, elementy realizacji, zależności, kryteria odbioru i dokumentację.',
       },
       {
         title: 'Implementacja z punktami kontrolnymi',
@@ -1058,16 +1185,16 @@ export const siteContent = {
   contact: {
     path: '/kontakt',
     eyebrow: 'Kontakt',
-    title: 'Opisz pracę, którą chcesz usprawnić',
-    lead: 'Wystarczy krótko opisać obecną pracę, problem i oczekiwany efekt. Nie potrzebujesz gotowej specyfikacji technicznej.',
+    title: 'Opisz proces w 3 zdaniach',
+    lead: 'Wystarczą trzy krótkie zdania. Napisz, kto pracuje, co jest dziś robione ręcznie i co ma się zmienić.',
     nextSteps: [
       'Otrzymuję opis sytuacji i sprawdzam, jakie informacje są potrzebne do dalszej rozmowy.',
       'Na jego podstawie wskażę właściwą ścieżkę: demo, walidację, plan prac albo wdrożenie.',
       'Dalsze ustalenia odbywają się przed rozpoczęciem jakiejkolwiek płatnej realizacji.',
     ],
-    noSpecificationNeeded: 'Nie musisz mieć gotowej specyfikacji technicznej.',
+    noSpecificationNeeded: 'Nie potrzebujesz specyfikacji.',
     firstMessagePurpose:
-      'Wiadomość może być niepełna: opisz obecną pracę, problem i efekt, który chcesz osiągnąć.',
+      'Wystarczą 3 zdania: kto wykonuje pracę, co dzieje się ręcznie i jaki efekt ma się zmienić.',
     noCommitment: contactNoCommitment,
     directEmail: environment.publicSalesEmail,
     directEmailLabel: 'Bezpośredni kontakt e-mail',
@@ -1078,15 +1205,14 @@ export const siteContent = {
         'Formularz wymaga JavaScriptu. Publiczny alternatywny adres kontaktowy nie jest obecnie skonfigurowany — wróć po włączeniu JavaScriptu.',
     },
     formLabel: 'Formularz kontaktowy',
-    formNextStep:
-      'Po wysłaniu opisu potwierdzimy jego przyjęcie i na jego podstawie ustalimy właściwy kolejny krok.',
+    formNextStep: 'Po wysłaniu opisu potwierdzimy jego przyjęcie i wskażemy właściwy kolejny krok.',
     budgetHint:
-      'Budżet jest opcjonalny. Możesz wybrać „Jeszcze nie wiem” albo zostawić pole puste.',
+      'Budżet jest opcjonalny. Jeśli jeszcze go nie znasz, zostaw pole puste albo wybierz „Jeszcze nie wiem”.',
     consent: 'Wyrażam zgodę na kontakt w sprawie tego zapytania zgodnie z',
     consentLinkLabel: 'polityką prywatności',
 
     consentAfterLink: '.',
-    submit: 'Wyślij opis projektu',
+    submit: 'Wyślij krótki opis',
     submitting: 'Wysyłanie...',
     messages: {
       success: 'Dziękuję. Wiadomość została przyjęta.',

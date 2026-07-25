@@ -91,11 +91,15 @@
               }
             </ul>
             <div class="evidence-boundary">
-              <h4>Czego ten przykład nie potwierdza</h4>
+              <h4>Co nadal wymaga walidacji</h4>
               <p>{{ item.limitation }}</p>
             </div>
             <div class="external-links">
-              @if (item.liveLink) {
+              @if (isInternalWorkEvidenceLink(item.liveLink)) {
+                <a class="secondary-action" [routerLink]="item.liveLink.path">{{
+                  item.liveLink.label
+                }}</a>
+              } @else if (isExternalWorkEvidenceLink(item.liveLink)) {
                 <a
                   class="secondary-action"
                   [href]="item.liveLink.url"
@@ -133,6 +137,9 @@
     <div class="verification-actions" aria-label="Sposoby weryfikacji">
       <a class="secondary-action" [routerLink]="content.verification.demoCta.path">{{
         content.verification.demoCta.label
+      }}</a>
+      <a class="secondary-action" [routerLink]="content.verification.reportCta.path">{{
+        content.verification.reportCta.label
       }}</a>
       <a class="secondary-action" [routerLink]="content.verification.developmentCta.path">{{
         content.verification.developmentCta.label

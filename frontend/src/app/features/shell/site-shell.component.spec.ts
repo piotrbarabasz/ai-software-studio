@@ -7,7 +7,7 @@ import { routes } from '../../app.routes';
 import { API_CONFIG } from '../../core/api-config';
 import { siteContent } from '../../core/content/site.pl';
 import { publicBrand } from '../../core/brand/public-brand.config';
-import { absoluteSiteUrl, siteSocialImageUrl } from '../../core/seo/site-seo.config';
+import { absoluteSiteUrl, siteSeo, siteSocialImageUrl } from '../../core/seo/site-seo.config';
 import { SiteShellComponent } from './site-shell.component';
 
 describe('SiteShellComponent', () => {
@@ -34,6 +34,7 @@ describe('SiteShellComponent', () => {
       Array.from(element.querySelectorAll('.site-footer h2')).map((item) => item.textContent),
     ).toEqual(['Oferta', 'O Protolume', 'Informacje']);
     expect(element.querySelector('.site-footer a[href="/demo-ai"]')).not.toBeNull();
+    expect(element.querySelector('.site-footer a[href="/przyklad-demo"]')).not.toBeNull();
     expect(element.querySelector('.site-footer a[href="/development"]')).not.toBeNull();
     expect(element.querySelector('.site-footer a[href="/studio"]')).not.toBeNull();
     expect(element.querySelector('.site-footer a[href="/rd"]')?.textContent?.trim()).toBe(
@@ -393,6 +394,40 @@ describe('SiteShellComponent', () => {
     expect(JSON.stringify(structuredData)).not.toContain('aggregateRating');
     expect(JSON.stringify(structuredData)).not.toContain('PostalAddress');
     expect(JSON.stringify(structuredData)).not.toContain('telephone');
+
+    await fixture.ngZone!.run(() => router.navigateByUrl('/demo-ai'));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const demoStructuredData = JSON.parse(
+      document.querySelector('#site-structured-data')?.textContent ?? '{}',
+    ) as { '@graph': Array<Record<string, unknown>> };
+    const service = demoStructuredData['@graph'].find((item) => item['@type'] === 'Service');
+    expect(service).toBeDefined();
+    expect(service?.['name']).toBe(siteContent.demo.title);
+    expect(service?.['url']).toBe(absoluteSiteUrl('/demo-ai'));
+    expect(service?.['inLanguage']).toBe('pl-PL');
+    expect(JSON.stringify(demoStructuredData)).not.toContain('AggregateRating');
+    expect(JSON.stringify(demoStructuredData)).not.toContain('Review');
+
+    await fixture.ngZone!.run(() => router.navigateByUrl('/przyklad-demo'));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const reportStructuredData = JSON.parse(
+      document.querySelector('#site-structured-data')?.textContent ?? '{}',
+    ) as { '@graph': Array<Record<string, unknown>> };
+    const creativeWork = reportStructuredData['@graph'].find(
+      (item) => item['@type'] === 'CreativeWork',
+    );
+    expect(creativeWork).toBeDefined();
+    expect(creativeWork?.['name']).toBe(siteContent.demoExample.title);
+    expect(creativeWork?.['url']).toBe(absoluteSiteUrl('/przyklad-demo'));
+    expect(creativeWork?.['inLanguage']).toBe('pl-PL');
+    expect(creativeWork?.['publisher']).toEqual({ '@id': `${siteSeo.origin}#organization` });
+    expect(creativeWork?.['author']).toEqual({ '@id': `${siteSeo.origin}#person` });
+    expect(String(creativeWork?.['description'] ?? '')).toContain('fikcyjny');
+    expect(String(creativeWork?.['description'] ?? '')).toContain('nie case study klienta');
+    expect(JSON.stringify(reportStructuredData)).not.toContain('AggregateRating');
+    expect(JSON.stringify(reportStructuredData)).not.toContain('Review');
 
     await fixture.ngZone!.run(() => router.navigateByUrl('/rozwiazania'));
     fixture.detectChanges();
