@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import contextlib
+import io
 import importlib.util
 import json
 import sys
@@ -688,8 +690,9 @@ class DeploymentSmokeTest(unittest.TestCase):
             "--expected-build-sha=unknown",
         ]
         with self.assertRaises(SystemExit) as excinfo:
-            with unittest.mock.patch.object(sys, "argv", argv):
-                smoke.parse_args()
+            with contextlib.redirect_stderr(io.StringIO()):
+                with unittest.mock.patch.object(sys, "argv", argv):
+                    smoke.parse_args()
         self.assertEqual(excinfo.exception.code, 2)
 
     def test_html_parser_normalizes_visible_text_and_ignores_script_and_style(self) -> None:
