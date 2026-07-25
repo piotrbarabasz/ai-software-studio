@@ -1,6 +1,8 @@
 const fs = require('node:fs');
 const path = require('node:path');
+const contract = require('../../infra/gcp/production-contract.json');
 const BUILD_SHA_PATTERN = /^[0-9a-f]{7,64}$/;
+const PRODUCTION_SITE_URL = contract.invariants.PUBLIC_SITE_URL;
 
 function quote(value) {
   return `'${String(value).replaceAll('\\', '\\\\').replaceAll("'", "\\'")}'`;
@@ -42,7 +44,8 @@ function replaceBuildShaMeta(html, buildSha) {
 function productionEnvironment(source = process.env) {
   const apiUrl = source.API_URL ?? '__PUBLIC_CONFIG_REQUIRED__:apiUrl';
   const publicSiteUrl = source.PUBLIC_SITE_URL ?? '__PUBLIC_CONFIG_REQUIRED__:publicSiteUrl';
-  const rawIndexingEnabled = source.PUBLIC_SITE_INDEXING ?? 'false';
+  const rawIndexingEnabled =
+    source.PUBLIC_SITE_INDEXING ?? (publicSiteUrl === PRODUCTION_SITE_URL ? 'true' : 'false');
   const publicSalesEmail =
     source.PUBLIC_SALES_EMAIL ?? '__PUBLIC_CONFIG_REQUIRED__:publicSalesEmail';
   const publicPrivacyEmail =
@@ -55,6 +58,9 @@ function productionEnvironment(source = process.env) {
   }
   if (!['true', 'false'].includes(rawIndexingEnabled)) {
     throw new Error('PUBLIC_SITE_INDEXING musi mieć wartość true albo false.');
+  }
+  if (publicSiteUrl === PRODUCTION_SITE_URL && rawIndexingEnabled !== 'true') {
+    throw new Error('PUBLIC_SITE_INDEXING=true jest wymagane dla https://protolume.pl.');
   }
   if (rawIndexingEnabled === 'true' && publicSiteUrl !== 'https://protolume.pl') {
     throw new Error('PUBLIC_SITE_INDEXING=true jest dozwolone wyłącznie dla https://protolume.pl.');

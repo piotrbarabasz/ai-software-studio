@@ -87,9 +87,9 @@ Production disables the public FastAPI `/docs`, `/redoc` and `/openapi.json` rou
 
 ## Frontend Deployment
 
-`infra/gcp/cloudbuild.frontend.yaml` and the historical `scripts/gcp/deploy-frontend.ps1` wrapper only validate, build and publish a component image. They do not deploy Cloud Run. Keep `-EnableIndexing $false`; the public legal JSON is resolved by reference from Secret Manager and is never a trigger substitution.
+`infra/gcp/cloudbuild.frontend.yaml` and the historical `scripts/gcp/deploy-frontend.ps1` wrapper only validate, build and publish a component image. They do not deploy Cloud Run. Keep `-EnableIndexing $true` for the production origin; the public legal JSON is resolved by reference from Secret Manager and is never a trigger substitution.
 
-Pass the deployed backend URL as `API_URL`, the verified public frontend origin as `PUBLIC_SITE_URL`, and the approved public addresses as `PUBLIC_SALES_EMAIL` and `PUBLIC_PRIVACY_EMAIL`. The Docker build rejects a placeholder, `localhost`, an example domain, invalid/mismatched contact addresses, or an HTTP origin in production. `PUBLIC_SITE_INDEXING` remains `false`.
+Pass the deployed backend URL as `API_URL`, the verified public frontend origin as `PUBLIC_SITE_URL`, and the approved public addresses as `PUBLIC_SALES_EMAIL` and `PUBLIC_PRIVACY_EMAIL`. The Docker build rejects a placeholder, `localhost`, an example domain, invalid/mismatched contact addresses, or an HTTP origin in production. `PUBLIC_SITE_INDEXING` remains `true`, while preview and PR builds stay `noindex, follow`.
 
 Before the frontend production build, prepare the verified JSON described in [`privacy-configuration.md`](privacy-configuration.md). Do not edit a TypeScript fallback: no production fallback exists. Cloud Build passes JSON as a BuildKit secret and the Docker build fails on a missing field, empty value, placeholder, test data, invalid e-mail, missing prerendered route, or forbidden artifact content.
 
@@ -123,11 +123,13 @@ Follow [public-origin-deployment.md](public-origin-deployment.md) before publish
 Run the local preflight script first:
 
 ```powershell
+$buildSha = (git rev-parse HEAD).Trim()
 .\scripts\gcp\preflight.ps1 `
   -PublicLegalConfigPath "C:\bezpieczna-lokalizacja\public-legal.json" `
   -ApiUrl $env:BACKEND_URL `
   -PublicSiteUrl "https://protolume.pl" `
-  -EnableIndexing $false
+  -EnableIndexing $true `
+  -BuildSha $buildSha
 ```
 
 Then build both images and confirm the backend container smoke described in `docs/gcp-runbook.md`. The combined Cloud Build pipeline performs the same gates before its first deploy.

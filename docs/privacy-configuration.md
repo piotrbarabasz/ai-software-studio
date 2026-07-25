@@ -98,10 +98,11 @@ Remove-Item Env:PUBLIC_LEGAL_CONFIG_PATH
 Pełny produkcyjny build i kontrola prerenderowanego artefaktu:
 
 ```powershell
+$env:PUBLIC_BUILD_SHA = (git rev-parse HEAD).Trim()
 $env:PUBLIC_LEGAL_CONFIG_PATH = (Resolve-Path "C:\bezpieczna-lokalizacja\public-legal.json").Path
 $env:API_URL = $env:BACKEND_URL
 $env:PUBLIC_SITE_URL = "https://protolume.pl"
-$env:PUBLIC_SITE_INDEXING = "false"
+$env:PUBLIC_SITE_INDEXING = "true"
 $env:PUBLIC_SALES_EMAIL = "kontakt@protolume.pl"
 $env:PUBLIC_PRIVACY_EMAIL = "kontakt@protolume.pl"
 npm run build
@@ -112,6 +113,7 @@ Remove-Item Env:PUBLIC_SITE_URL
 Remove-Item Env:PUBLIC_SITE_INDEXING
 Remove-Item Env:PUBLIC_SALES_EMAIL
 Remove-Item Env:PUBLIC_PRIVACY_EMAIL
+Remove-Item Env:PUBLIC_BUILD_SHA
 ```
 
 Build sprawdza ponownie JSON, generuje moduł, prerenderuje stronę, skanuje cały artefakt pod kątem znanych zabronionych wartości i potwierdza, że każda wartość z JSON znajduje się w `polityka-prywatnosci/index.html`. Tworzy też marker `.legal-config-validated`; entrypoint Nginx wymaga markera i ponownie skanuje politykę przy starcie kontenera.

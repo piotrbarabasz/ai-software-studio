@@ -26,7 +26,7 @@ It verifies:
 2. The home page and every route in `frontend/src/prerender-routes.txt` except `/404` return HTTP 200.
 3. An unknown route returns a real HTTP 404 with `X-Robots-Tag: noindex, follow`.
 4. `robots.txt` and `sitemap.xml` use only `https://protolume.pl` and list all public routes.
-5. Every public page has the exact Protolume canonical and `noindex, follow` in HTML and headers.
+5. Every public page has the exact Protolume canonical and `index, follow` in HTML and headers. The 404 route still stays `noindex, follow`.
 6. CORS preflight OPTIONS for `/api/contact` allows exactly the origin `https://protolume.pl` and POST. No contact payload is sent.
 
 Review `/polityka-prywatnosci` separately against the approved public JSON. Do not turn deployment smoke into a real form submission.
@@ -56,8 +56,7 @@ gcloud run deploy aisoftware-studio-web `
 
 python scripts/gcp/smoke_deployment.py `
   --backend-url https://aisoftware-studio-api-175725977490.europe-central2.run.app `
-  --site-url https://protolume.pl `
-  --expect-noindex
+  --site-url https://protolume.pl
 ```
 
 Changing only `--image` preserves the service's existing environment and Secret Manager binding. If the bad trigger is firing repeatedly, disable it manually before rollback. A known-good existing Cloud Run revision may instead be restored with `gcloud run services update-traffic`; always restore and verify both services as one release pair.
@@ -116,11 +115,13 @@ Use the backend URL for health checks and the final public origin for browser va
 If the deployment seems broken, re-run the local validation script and the container smoke tests before changing production settings:
 
 ```powershell
+$buildSha = (git rev-parse HEAD).Trim()
 .\scripts\gcp\preflight.ps1 `
   -PublicLegalConfigPath "C:\bezpieczna-lokalizacja\public-legal.json" `
   -ApiUrl $env:BACKEND_URL `
   -PublicSiteUrl "https://protolume.pl" `
-  -EnableIndexing $false
+  -EnableIndexing $true `
+  -BuildSha $buildSha
 ```
 
 Build and smoke the actual backend image from the repository root:

@@ -62,6 +62,18 @@ test('defaults staging and preview builds to noindex', () => {
   );
 });
 
+test('defaults the production origin to indexing when no explicit flag is supplied', () => {
+  assert.equal(
+    productionEnvironment({
+      API_URL: 'https://aisoftware-studio-api.example',
+      PUBLIC_SITE_URL: 'https://protolume.pl',
+      PUBLIC_SALES_EMAIL: 'sales@protolume.pl',
+      PUBLIC_PRIVACY_EMAIL: 'privacy@protolume.pl',
+    }).indexingEnabled,
+    true,
+  );
+});
+
 test('enables indexing only for the production origin', () => {
   assert.equal(
     productionEnvironment({
@@ -83,6 +95,15 @@ test('enables indexing only for the production origin', () => {
   );
   assert.throws(
     () => productionEnvironment({ PUBLIC_SITE_INDEXING: 'yes' }),
+    /PUBLIC_SITE_INDEXING/,
+  );
+  assert.throws(
+    () =>
+      productionEnvironment({
+        API_URL: 'https://aisoftware-studio-api.example',
+        PUBLIC_SITE_URL: 'https://protolume.pl',
+        PUBLIC_SITE_INDEXING: 'false',
+      }),
     /PUBLIC_SITE_INDEXING/,
   );
 });

@@ -7,4 +7,4 @@
 - Adding or changing an environment variable requires updating `Settings`, `infra/gcp/production-contract.json`, every applicable Cloud Build file, validator tests, smoke inputs, and deployment documentation.
 - Never put secret values, unresolved placeholders, localhost, or example domains in production configuration. Keep secrets as Secret Manager reference names only.
 - Do not finish deployment-affecting work without backend lint/format/tests, frontend lint/tests/build, contract CLI tests, Cloud Build YAML validation, backend Docker build, real container `/health` smoke, and syntax checks for changed scripts.
-- Deployment work is done only when both images build before the first deploy, the resolved production contract passes, `PUBLIC_SITE_INDEXING=false`, CORS is exactly the contract origin, and the final diff contains no secrets or weakened gates.
+- Deployment work is done only when both images build before the first deploy, the resolved production contract passes, `PUBLIC_SITE_INDEXING=true`, CORS is exactly the contract origin, and the final diff contains no secrets or weakened gates. The true 404 route remains `noindex, follow`.

@@ -155,7 +155,7 @@ The combined pipeline order is:
 5. Smoke the backend image locally through `/health` and `/ready`, audit existing Cloud Run public IAM, then push both images explicitly.
 6. Deploy the backend only after both pushes succeed.
 7. Deploy the frontend only after the backend deploy succeeds.
-8. Run `scripts/gcp/smoke_deployment.py` with GET and CORS OPTIONS only. It checks API health/readiness, the home page and all public routes, a real 404, robots, sitemap, canonical URLs, `noindex, follow`, and CORS from `https://protolume.pl`. It never sends the contact form.
+8. Run `scripts/gcp/smoke_deployment.py` with GET and CORS OPTIONS only. It checks API health/readiness, the home page and all public routes, a real 404, robots, sitemap, canonical URLs, `index, follow` on public pages, and CORS from `https://protolume.pl`. The real 404 still returns `noindex, follow`. It never sends the contact form.
 
 The production YAML has no top-level post-step `images` push, so a publish cannot be deferred until after deployment. Routine deployment does not mutate IAM.
 

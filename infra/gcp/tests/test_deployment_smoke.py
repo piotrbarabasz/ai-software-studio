@@ -509,6 +509,33 @@ class DeploymentSmokeTest(unittest.TestCase):
         )
         self.assertNotIn("<html>", "\n".join(errors))
 
+    def test_404_stays_noindex_in_indexable_mode(self) -> None:
+        deployment = FakeDeployment(robots_tag="index, follow")
+
+        def indexed_404(request: urllib.request.Request, timeout: float):
+            response = deployment(request, timeout)
+            if urlsplit(request.full_url).path == smoke.NOT_FOUND_PATH:
+                return smoke.Response(
+                    response.status,
+                    {"x-robots-tag": "index, follow"},
+                    response.body,
+                )
+            return response
+
+        errors = smoke.run_checks(
+            "https://api.run.app",
+            "https://protolume.pl",
+            expect_noindex=False,
+            expected_build_sha=EXPECTED_BUILD_SHA,
+            timeout_seconds=2,
+            request=indexed_404,
+        )
+
+        self.assertIn(
+            "public 404: X-Robots-Tag is not noindex, follow",
+            errors,
+        )
+
     def test_missing_h1_is_reported(self) -> None:
         deployment = FakeDeployment()
 

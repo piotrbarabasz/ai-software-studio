@@ -23,6 +23,9 @@ import { ProtolumeLogoComponent } from '../../shared/brand/protolume-logo/protol
 
 @Component({
   selector: 'app-site-shell',
+  host: {
+    '[class.is-report-route]': 'isReportRoute',
+  },
   imports: [ProtolumeLogoComponent, RouterLink, RouterLinkActive, RouterOutlet],
   templateUrl: './site-shell.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
@@ -36,6 +39,9 @@ export class SiteShellComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private currentRouteUrl = this.router.url;
+  private currentRouteKind = this.resolveRouteKind(
+    this.getDeepestRoute(this.router.routerState.snapshot.root),
+  );
 
   @ViewChild('menuToggle') private readonly menuToggle?: ElementRef<HTMLButtonElement>;
   @ViewChild('primaryNavigation') private readonly primaryNavigation?: ElementRef<HTMLElement>;
@@ -49,6 +55,10 @@ export class SiteShellComponent implements OnInit {
   readonly trust = siteContent.trust;
   readonly brand = publicBrand;
   readonly currentYear = new Date().getFullYear();
+
+  get isReportRoute(): boolean {
+    return this.currentRouteKind === 'demo-example';
+  }
 
   ngOnInit(): void {
     if (this.isBrowser) {
@@ -125,6 +135,7 @@ export class SiteShellComponent implements OnInit {
 
   private syncRouteMetadata(): void {
     const route = this.getDeepestRoute(this.router.routerState.snapshot.root);
+    this.currentRouteKind = this.resolveRouteKind(route);
     const title = this.resolveTitle(route) ?? siteContent.routes[0].title;
     const description = this.resolveDescription(route) ?? siteContent.routes[0].description;
     const canonicalPath = this.resolveCanonicalPath(route) ?? '/';
@@ -179,6 +190,11 @@ export class SiteShellComponent implements OnInit {
   private resolveCanonicalPath(route: ActivatedRouteSnapshot): string | undefined {
     const canonicalPath = route.data['canonicalPath'];
     return typeof canonicalPath === 'string' ? canonicalPath : undefined;
+  }
+
+  private resolveRouteKind(route: ActivatedRouteSnapshot): string | undefined {
+    const routeKind = route.data['routeKind'];
+    return typeof routeKind === 'string' ? routeKind : undefined;
   }
 
   private setCanonical(canonicalPath: string): void {

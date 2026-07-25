@@ -66,9 +66,11 @@ Production deployment to Google Cloud Platform is documented separately:
 Run the local deployment preflight first:
 
 ```powershell
+$buildSha = (git rev-parse HEAD).Trim()
 .\scripts\gcp\preflight.ps1 `
   -PublicLegalConfigPath "C:\bezpieczna-lokalizacja\public-legal.json" `
   -ApiUrl $env:BACKEND_URL `
   -PublicSiteUrl "https://protolume.pl" `
-  -EnableIndexing $false
+  -EnableIndexing $true `
+  -BuildSha $buildSha
 ```

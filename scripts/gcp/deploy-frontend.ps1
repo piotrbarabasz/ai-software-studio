@@ -15,7 +15,7 @@ param(
   [Parameter(Mandatory = $true)]
   [string]$PublicSiteUrl,
 
-  [bool]$EnableIndexing = $false,
+  [string]$EnableIndexing = $null,
 
   [string]$PublicSalesEmail = 'kontakt@protolume.pl',
 
@@ -31,6 +31,23 @@ Set-StrictMode -Version Latest
 
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..\')).Path
 $configPath = Join-Path $repoRoot 'infra/gcp/cloudbuild.frontend.yaml'
+$contractPath = Join-Path $repoRoot 'infra/gcp/production-contract.json'
+$contract = Get-Content -LiteralPath $contractPath -Raw | ConvertFrom-Json
+$expectedPublicSiteUrl = [string]$contract.invariants.PUBLIC_SITE_URL
+$expectedPublicSiteIndexing = [string]$contract.invariants.PUBLIC_SITE_INDEXING
+
+if ($PublicSiteUrl.TrimEnd('/') -ne $expectedPublicSiteUrl) {
+  throw "PublicSiteUrl must match the production contract origin $expectedPublicSiteUrl."
+}
+
+if ([string]::IsNullOrWhiteSpace($EnableIndexing)) {
+  $EnableIndexing = $expectedPublicSiteIndexing
+} elseif ($EnableIndexing.Trim().ToLowerInvariant() -notin @('true', 'false')) {
+  throw "EnableIndexing must be true or false."
+} elseif ($EnableIndexing.Trim().ToLowerInvariant() -ne $expectedPublicSiteIndexing) {
+  throw "EnableIndexing must match production-contract.json for $expectedPublicSiteUrl."
+}
+
 $workingTree = (& git -C $repoRoot status --porcelain)
 if ($LASTEXITCODE -ne 0) {
   throw 'Git status failed; component image source cannot be verified.'
@@ -72,7 +89,7 @@ $substitutions = @(
   "_MIN_INSTANCES=0",
   "_API_URL=$ApiUrl",
   "_PUBLIC_SITE_URL=$PublicSiteUrl",
-  "_PUBLIC_SITE_INDEXING=$($EnableIndexing.ToString().ToLowerInvariant())",
+  "_PUBLIC_SITE_INDEXING=$($EnableIndexing.Trim().ToLowerInvariant())",
   "_PUBLIC_SALES_EMAIL=$PublicSalesEmail",
   "_PUBLIC_PRIVACY_EMAIL=$PublicPrivacyEmail",
   "_PUBLIC_LEGAL_CONFIG_SECRET=$PublicLegalConfigSecret",

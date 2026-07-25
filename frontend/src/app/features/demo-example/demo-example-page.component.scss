@@ -238,16 +238,25 @@
 
 .four-column-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: 1rem;
 }
 
 .four-column-grid article {
   min-width: 0;
+  grid-column: span 4;
   padding: 1.15rem;
   border: 1px solid var(--color-line);
   border-radius: var(--radius-panel);
   background: var(--surface);
+}
+
+.four-column-grid article:nth-child(4) {
+  grid-column: 1 / span 6;
+}
+
+.four-column-grid article:nth-child(5) {
+  grid-column: 7 / span 6;
 }
 
 .four-column-grid h3 {
@@ -359,7 +368,7 @@
 
 .plan-list {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.75rem;
   padding: 0;
   list-style: none;
@@ -416,17 +425,18 @@ ul {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .four-column-grid article,
+  .four-column-grid article:nth-child(4),
+  .four-column-grid article:nth-child(5) {
+    grid-column: auto;
+  }
+
   .plan-list {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 620px) {
-  .four-column-grid,
-  .plan-list {
-    grid-template-columns: 1fr;
-  }
-
   .hero-actions,
   .hero-actions > * {
     width: 100%;
@@ -435,82 +445,15 @@ ul {
   .status-pill {
     font-size: 0.72rem;
   }
-}
 
-@media print {
-  :host {
-    display: block;
+  .four-column-grid article,
+  .four-column-grid article:nth-child(4),
+  .four-column-grid article:nth-child(5) {
+    grid-column: auto;
   }
 
-  .demo-example-page {
-    gap: 0.75rem;
-    padding: 0;
-  }
-
-  .report-hero,
-  .scope-grid,
-  .scenario-grid,
-  .risk-grid,
-  .recommendation-grid,
-  .four-column-grid {
-    break-inside: auto;
-  }
-
-  .hero-copy,
-  .summary-card,
-  .scope-card,
-  .scenario-card,
-  .risk-card,
-  .recommendation-card,
-  .closing-cta,
-  .question-card,
-  .criteria-list li,
-  .plan-list li {
-    box-shadow: none;
-  }
-
-  .hero-copy,
-  .summary-card,
-  .scope-card,
-  .scenario-card,
-  .risk-card,
-  .recommendation-card,
-  .closing-cta,
-  .question-card,
-  .criteria-list li,
-  .plan-list li {
-    break-inside: avoid;
-    page-break-inside: avoid;
-  }
-
-  .hero-copy::after,
-  .hero-actions,
-  .print-action {
-    display: none !important;
-  }
-
-  .hero-copy,
-  .summary-card,
-  .scope-card--value,
-  .recommendation-card--main {
-    background: #fff !important;
-  }
-
-  .status-pill,
-  .scenario-status {
-    border: 1px solid var(--color-line);
-    background: #fff;
-    color: var(--color-ink);
-  }
-
-  .section-heading h2,
-  .hero h1 {
-    orphans: 3;
-    widows: 3;
-  }
-
-  .section-shell {
-    max-width: none;
-    padding-inline: 0;
+  .four-column-grid,
+  .plan-list {
+    grid-template-columns: 1fr;
   }
 }

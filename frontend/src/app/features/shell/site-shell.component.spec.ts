@@ -87,6 +87,8 @@ describe('SiteShellComponent', () => {
     );
     expect(footerLinks.every((link) => Boolean(link.getAttribute('href')))).toBeTrue();
     expect(element.querySelectorAll('#main-content').length).toBe(1);
+    expect(fixture.componentInstance.isReportRoute).toBeFalse();
+    expect(fixture.nativeElement.classList.contains('is-report-route')).toBeFalse();
 
     const buttons = Array.from(element.querySelectorAll<HTMLButtonElement>('button'));
     expect(buttons).not.toHaveSize(0);
@@ -412,6 +414,8 @@ describe('SiteShellComponent', () => {
     await fixture.ngZone!.run(() => router.navigateByUrl('/przyklad-demo'));
     fixture.detectChanges();
     await fixture.whenStable();
+    expect(fixture.componentInstance.isReportRoute).toBeTrue();
+    expect(fixture.nativeElement.classList.contains('is-report-route')).toBeTrue();
     const reportStructuredData = JSON.parse(
       document.querySelector('#site-structured-data')?.textContent ?? '{}',
     ) as { '@graph': Array<Record<string, unknown>> };
@@ -444,6 +448,8 @@ describe('SiteShellComponent', () => {
     await fixture.ngZone!.run(() => router.navigateByUrl('/missing'));
     fixture.detectChanges();
     await fixture.whenStable();
+    expect(fixture.componentInstance.isReportRoute).toBeFalse();
+    expect(fixture.nativeElement.classList.contains('is-report-route')).toBeFalse();
 
     expect(document.querySelector('meta[name="robots"]')?.getAttribute('content')).toBe(
       'noindex, follow',

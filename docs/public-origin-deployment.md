@@ -7,7 +7,7 @@ Jedynym produkcyjnym originem aplikacji jest `https://protolume.pl`. `PUBLIC_SIT
 Uzupełnij zweryfikowane wartości:
 
 - `PUBLIC_SITE_URL=https://protolume.pl` — jedyny produkcyjny origin;
-- `PUBLIC_SITE_INDEXING=false` — obecny etap migracji pozostaje `noindex, follow`;
+- `PUBLIC_SITE_INDEXING=true` — publiczna produkcja ma `index, follow`;
 - `API_URL` — origin HTTPS API; może pozostać technicznym adresem Cloud Run `run.app`;
 - `CORS_ALLOWED_ORIGINS=https://protolume.pl` — bez wariantów `www`, `.com` i bez dodatkowych originów;
 - publiczną konfigurację prawną zgodnie z [privacy-configuration.md](privacy-configuration.md).
@@ -18,7 +18,7 @@ Uzupełnij zweryfikowane wartości:
 
 1. Najpierw wybierz docelowy origin i skonfiguruj mapowanie domeny do usługi Cloud Run albo do warstwy proxy/load balancera użytej przed nią. Ta operacja wymaga dostępu do DNS oraz GCP i nie jest automatyzowana przez repozytorium.
 2. Zakończ wymagane wpisy DNS wskazane przez GCP. Sprawdź w konsoli, że certyfikat TLS ma stan aktywny dla właściwego hosta.
-3. Ustaw `_PUBLIC_SITE_URL=https://protolume.pl`. Pipeline wykorzystuje go jednocześnie jako `PUBLIC_SITE_URL` dla frontendu i `CORS_ALLOWED_ORIGINS` backendu. Utrzymaj `_PUBLIC_SITE_INDEXING=false` do osobnego, końcowego etapu migracji.
+3. Ustaw `_PUBLIC_SITE_URL=https://protolume.pl`. Pipeline wykorzystuje go jednocześnie jako `PUBLIC_SITE_URL` dla frontendu i `CORS_ALLOWED_ORIGINS` backendu. Utrzymaj `_PUBLIC_SITE_INDEXING=true` zgodnie z kontraktem produkcyjnym.
 4. Zbuduj nowy obraz po każdej zmianie originu. Canonical, Open Graph URL, JSON-LD, sitemap i robots są wbudowywane podczas kompilacji.
 5. Po przełączeniu domeny zdecyduj na warstwie domeny/proxy, czy techniczny URL Cloud Run ma być ograniczony, przekierowany, czy pozostać wyłącznie do kontroli technicznych. Nie dodawaj przekierowania w Nginx bez potwierdzonego docelowego hosta — mogłoby ono utworzyć pętlę lub prowadzić pod niezweryfikowany adres.
 
@@ -31,7 +31,8 @@ Z końcowego originu sprawdź w przeglądarce i narzędziu HTTP:
 - `/<publiczna-trasa>` dla `/`, `/demo-ai`, `/development`, `/studio`, `/rd`, `/kontakt` i `/polityka-prywatnosci` — bezpośrednie wejście zwraca właściwy prerenderowany dokument;
 - `/robots.txt` i `/sitemap.xml` zawierają tylko `https://protolume.pl` i komplet tych tras;
 - canonical, `og:url` oraz JSON-LD odwołują się do `https://protolume.pl`;
-- każdy dokument HTML ma `meta robots` ustawione na `noindex, follow`, a odpowiedzi Nginx zawierają `X-Robots-Tag: noindex, follow`;
+- każdy dokument HTML ma `meta robots` ustawione na `index, follow`, a odpowiedzi Nginx zawierają `X-Robots-Tag: index, follow`;
+- prawdziwy dokument 404 nadal ma `meta robots` oraz `X-Robots-Tag: noindex, follow`;
 - preflight CORS OPTIONS z końcowej domeny przechodzi, a odrzucony origin nie przechodzi CORS;
 - `/health` backendu oraz strona 404 działają bez błędów w konsoli.
 

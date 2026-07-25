@@ -17,4 +17,4 @@ This directory contains the production deployment artifacts for Protolume.
 - Production defaults are the non-secret contract invariants; only real SMTP/e-mail environment values remain trigger inputs. Manual component YAMLs use parse-safe sentinels that deliberately fail `scripts/gcp/deployment_contract.py`.
 - `cloudbuild.deploy.yaml` is the only configuration allowed to deploy Cloud Run. Both component images are built and pushed before its first deploy step.
 - Do not commit real secrets, service account keys, or private project values.
-- Contract v1 fixes the production project, deployment region `europe-central2`, service/image names, backend URL, sole public origin, indexing `false`, secret reference names, delivery settings and min instances `0`.
+- Contract v1 fixes the production project, deployment region `europe-central2`, service/image names, backend URL, sole public origin, indexing `true`, secret reference names, delivery settings and min instances `0`. Preview builds remain `noindex, follow`.
