@@ -18,5 +18,7 @@ describe('ResearchPageComponent', () => {
       ),
     ).not.toBeNull();
     expect(fixture.nativeElement.querySelector('.hero-copy .hero-cta-note')).not.toBeNull();
+    expect(fixture.nativeElement.textContent).toContain('Potencjalna wartość');
+    expect(fixture.nativeElement.textContent).toContain('Granica zastosowania');
   });
 });

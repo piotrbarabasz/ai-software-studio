@@ -18,17 +18,24 @@ describe('ContactPageComponent', () => {
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelectorAll('h1').length).toBe(1);
     expect(fixture.nativeElement.querySelector('app-contact-form')).not.toBeNull();
-    expect(fixture.nativeElement.textContent).toContain('Opisz pracę, którą chcesz usprawnić');
+    expect(fixture.nativeElement.textContent).toContain('Opisz proces w 3 zdaniach');
     expect(fixture.nativeElement.textContent).toContain(
-      'Nie musisz mieć gotowej specyfikacji technicznej',
+      'Wystarczą trzy krótkie zdania. Napisz, kto pracuje, co jest dziś robione ręcznie i co ma się zmienić.',
     );
+    expect(fixture.nativeElement.textContent).toContain('Nie potrzebujesz specyfikacji.');
     expect(fixture.nativeElement.textContent).toContain(
-      'Wiadomość może być niepełna: opisz obecną pracę, problem i efekt',
+      'Wystarczą 3 zdania: kto wykonuje pracę, co dzieje się ręcznie i jaki efekt ma się zmienić.',
     );
     expect(fixture.nativeElement.textContent).toContain(
       'Wysłanie formularza nie jest zamówieniem, akceptacją wyceny',
     );
     expect(fixture.nativeElement.querySelectorAll('.next-steps li')).toHaveSize(3);
+    expect(fixture.nativeElement.querySelector('.contact-intro')?.textContent).not.toContain(
+      'Wysłanie formularza nie jest zamówieniem',
+    );
+    expect(fixture.nativeElement.querySelector('.contact-form')?.textContent).toContain(
+      'Wysłanie formularza nie jest zamówieniem',
+    );
     expect(fixture.nativeElement.querySelector('.direct-email a')?.getAttribute('href')).toBe(
       'mailto:sales@contact.test',
     );

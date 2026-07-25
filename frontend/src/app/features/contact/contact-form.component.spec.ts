@@ -87,7 +87,11 @@ describe('ContactFormComponent', () => {
 
     expect(text).toContain('Czego dotyczy rozmowa?');
     expect(text).toContain('Wybierz opcję najbardziej zbliżoną do Twojego pomysłu.');
-    expect(text).toContain('Wyślij opis projektu');
+    expect(text).toContain('Opisz proces w 3 zdaniach');
+    expect(text).toContain('Kto wykonuje tę pracę?');
+    expect(text).toContain('Co jest dziś wykonywane ręcznie?');
+    expect(text).toContain('Jaki rezultat powinien się zmienić?');
+    expect(text).toContain('Wyślij krótki opis');
     expect(text).not.toMatch(/\bintent\b|\bpayload\b|\bprojectType\b/i);
   });
 
@@ -259,6 +263,11 @@ describe('ContactFormComponent', () => {
     expect(element.querySelector('#message')?.getAttribute('aria-describedby')).toBe(
       'message-hint',
     );
+    expect(
+      (element.querySelector('#message') as Node).compareDocumentPosition(
+        element.querySelector('#budgetRange') as Node,
+      ) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
     expect((element.querySelector('#name') as HTMLInputElement).name).toBe('name');
     expect((element.querySelector('#email') as HTMLInputElement).name).toBe('email');
     expect((element.querySelector('#company') as HTMLInputElement).name).toBe('company');
@@ -280,6 +289,9 @@ describe('ContactFormComponent', () => {
     ).toBeGreaterThanOrEqual(44);
     expect(element.querySelector('.form-next-step')?.textContent?.trim()).toBe(
       fixture.componentInstance.content.formNextStep,
+    );
+    expect(element.querySelector('.form-legal-note')?.textContent?.trim()).toBe(
+      fixture.componentInstance.content.noCommitment,
     );
   });
 
@@ -335,7 +347,10 @@ describe('ContactFormComponent', () => {
     expect(fixture.componentInstance.form.controls.budgetRange.valid).toBeTrue();
     expect(fixture.nativeElement.textContent).toContain('Budżet orientacyjny');
     expect(fixture.nativeElement.textContent).toContain('Jeszcze nie wiem');
-    expect(fixture.nativeElement.textContent).toContain('Opisz krótko obecny proces');
+    expect(fixture.nativeElement.textContent).toContain('Opisz proces w 3 zdaniach');
+    expect(fixture.nativeElement.textContent).toContain('Kto wykonuje tę pracę?');
+    expect(fixture.nativeElement.textContent).toContain('Co jest dziś wykonywane ręcznie?');
+    expect(fixture.nativeElement.textContent).toContain('Jaki rezultat powinien się zmienić?');
     expect(fixture.nativeElement.querySelector('#message')?.getAttribute('aria-describedby')).toBe(
       'message-hint',
     );

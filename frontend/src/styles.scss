@@ -226,3 +226,60 @@ button {
     transform: none;
   }
 }
+
+@page {
+  size: A4;
+  margin: 14mm;
+}
+
+@media print {
+  html,
+  body {
+    background: #ffffff;
+    color: #10131c;
+  }
+
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .site-header,
+  .site-footer,
+  button,
+  .print-action {
+    display: none !important;
+  }
+
+  .section-shell {
+    max-width: none;
+    padding-inline: 0;
+  }
+
+  .section-shell,
+  .report-hero,
+  .content-section,
+  .closing-cta {
+    break-inside: auto;
+    page-break-inside: auto;
+  }
+
+  article,
+  section,
+  .hero-copy,
+  .summary-card,
+  .scope-card,
+  .scenario-card,
+  .risk-card,
+  .recommendation-card,
+  .question-card,
+  .plan-list li,
+  .criteria-list li {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  a[href] {
+    text-decoration: none;
+  }
+}

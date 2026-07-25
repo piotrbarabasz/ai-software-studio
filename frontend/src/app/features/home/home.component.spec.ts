@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+﻿import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
 import { HomeComponent } from './home.component';
@@ -52,7 +52,7 @@ describe('HomeComponent', () => {
     expect(actions?.querySelector('a:last-child')).toHaveClass('secondary-action');
     expect(
       element.querySelector('a[href="/kontakt?projectType=mvp_prototype"]')?.textContent,
-    ).toContain('Opisz proces do sprawdzenia');
+    ).toContain('Opisz proces w 3 zdaniach');
     expect(element.querySelector('a[href="/demo-ai"]')?.textContent).toContain(
       'Zobacz przykładowe demo',
     );
@@ -93,6 +93,7 @@ describe('HomeComponent', () => {
     ]);
     expect(element.querySelectorAll('.problem-card')).toHaveSize(0);
     expect(element.querySelectorAll('.seven-day-results > ol > li')).toHaveSize(4);
+    expect(element.querySelector('.seven-day-results a[href="/przyklad-demo"]')).not.toBeNull();
     expect(element.querySelector('.seven-day-results')?.textContent).toContain(
       'Co dokładnie powstaje w siedem dni?',
     );
@@ -112,6 +113,17 @@ describe('HomeComponent', () => {
       'channel-integrations',
     ]);
     expect(element.querySelectorAll('img[src^="http"], img[src^="//"]')).toHaveSize(0);
+    expect(element.querySelectorAll('.evidence-teaser-card')).toHaveSize(3);
+    expect(
+      Array.from(
+        element.querySelectorAll<HTMLAnchorElement>('.evidence-teaser-card .evidence-links a'),
+        (link) => link.getAttribute('href'),
+      ),
+    ).toEqual(['/demo-ai', '/przyklad-demo', '/']);
+    expect(
+      element.querySelector('.evidence-teaser-card .evidence-links a[target="_blank"]'),
+    ).toBeNull();
+    expect(element.querySelector('.evidence-links a[target="_blank"]')).toBeNull();
 
     const ids = Array.from(element.querySelectorAll<HTMLElement>('[id]'), (item) => item.id);
     expect(new Set(ids).size).toBe(ids.length);

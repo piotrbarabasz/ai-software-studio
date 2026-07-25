@@ -1,8 +1,13 @@
 <div class="demo-example-page">
-  <section class="hero section-shell" aria-labelledby="demo-example-title" appRevealOnScroll>
+  <section
+    class="hero section-shell report-hero"
+    aria-labelledby="demo-example-title"
+    appRevealOnScroll
+  >
     <div class="hero-copy">
       <p class="eyebrow">{{ content.eyebrow }}</p>
       <p class="fictional-notice" role="note">{{ content.fictionalNotice }}</p>
+      <p class="status-pill">{{ content.decisionSummary.status }}</p>
       <h1 id="demo-example-title">{{ content.title }}</h1>
       <p class="page-lead">{{ content.lead }}</p>
       <div class="hero-actions" aria-label="Działania dla przykładu demo">
@@ -10,13 +15,47 @@
           class="primary-action"
           [routerLink]="content.primaryCta.path"
           [queryParams]="content.primaryCta.queryParams"
-          >{{ content.primaryCta.label }}</a
         >
-        <a class="secondary-action" [routerLink]="content.demoCta.path">{{
-          content.demoCta.label
-        }}</a>
+          {{ content.primaryCta.label }}
+        </a>
+        <a class="secondary-action" [routerLink]="content.demoCta.path">
+          {{ content.demoCta.label }}
+        </a>
+        <button type="button" class="print-action" (click)="printReport()">
+          {{ content.printLabel }}
+        </button>
       </div>
     </div>
+
+    <aside class="summary-card" aria-labelledby="decision-summary-title">
+      <p class="eyebrow">Streszczenie decyzji</p>
+      <h2 id="decision-summary-title">{{ content.decisionSummary.status }}</h2>
+      <p class="summary-answer">{{ content.decisionSummary.answer }}</p>
+      <div class="summary-block">
+        <h3>Czego nadal nie wiadomo</h3>
+        <ul>
+          @for (item of content.decisionSummary.unknowns; track item) {
+            <li>{{ item }}</li>
+          }
+        </ul>
+      </div>
+      <p class="summary-next-step">
+        <strong>Rekomendowany kolejny krok:</strong> {{ content.decisionSummary.nextStep }}
+      </p>
+      <p class="summary-note" role="note">{{ content.decisionSummary.note }}</p>
+    </aside>
+  </section>
+
+  <section
+    class="content-section section-shell"
+    aria-labelledby="validation-question-title"
+    appRevealOnScroll
+  >
+    <div class="section-heading">
+      <p class="eyebrow">Pytanie walidacyjne</p>
+      <h2 id="validation-question-title">Jedno pytanie, które miało odpowiedzieć demo</h2>
+    </div>
+    <p class="question-card">{{ content.validationQuestion }}</p>
   </section>
 
   <section
@@ -46,7 +85,15 @@
         </ul>
       </article>
       <article>
-        <h3>Utrata czasu</h3>
+        <h3>Źródła danych</h3>
+        <ul>
+          @for (item of content.currentProcess.dataSources; track item) {
+            <li>{{ item }}</li>
+          }
+        </ul>
+      </article>
+      <article>
+        <h3>Główne miejsca utraty czasu</h3>
         <ul>
           @for (item of content.currentProcess.timeLosses; track item) {
             <li>{{ item }}</li>
@@ -54,9 +101,9 @@
         </ul>
       </article>
       <article>
-        <h3>Źródła danych</h3>
+        <h3>Założenia wejściowe</h3>
         <ul>
-          @for (item of content.currentProcess.dataSources; track item) {
+          @for (item of content.currentProcess.assumptions; track item) {
             <li>{{ item }}</li>
           }
         </ul>
@@ -66,96 +113,168 @@
 
   <section class="content-section section-shell" aria-labelledby="scope-title" appRevealOnScroll>
     <div class="section-heading">
-      <p class="eyebrow">Zakres</p>
-      <h2 id="scope-title">Zakres siedmiodniowego demo</h2>
+      <p class="eyebrow">Zakres demo</p>
+      <h2 id="scope-title">{{ content.scope.includedTitle }}</h2>
+      <p class="section-copy">
+        Najpierw pokazano, jaką wartość i rezultat da się zobaczyć w ograniczonym demo. Dopiero
+        potem pokazano, czego to demo nie obejmuje.
+      </p>
     </div>
-    <ul class="feature-list">
-      @for (item of content.demoScope.items; track item) {
+    <div class="scope-grid">
+      <article class="scope-card scope-card--value">
+        <h3>Najpierw wartość i rezultat</h3>
+        <ul class="feature-list">
+          @for (item of content.scope.included; track item) {
+            <li>{{ item }}</li>
+          }
+        </ul>
+      </article>
+      <article class="scope-card scope-card--limit">
+        <h3>{{ content.scope.excludedTitle }}</h3>
+        <ul class="feature-list">
+          @for (item of content.scope.excluded; track item) {
+            <li>{{ item }}</li>
+          }
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section
+    class="content-section section-shell"
+    aria-labelledby="scenarios-title"
+    appRevealOnScroll
+  >
+    <div class="section-heading">
+      <p class="eyebrow">Scenariusze testowe</p>
+      <h2 id="scenarios-title">Co pokazano w demonstracji</h2>
+    </div>
+    <div class="scenario-grid">
+      @for (scenario of content.scenarios; track scenario.id) {
+        <article class="scenario-card">
+          <div class="scenario-card__header">
+            <h3>{{ scenario.title }}</h3>
+            <p class="scenario-status">{{ scenario.status }}</p>
+          </div>
+          <dl class="scenario-facts">
+            <div>
+              <dt>Wejście</dt>
+              <dd>{{ scenario.input }}</dd>
+            </div>
+            <div>
+              <dt>Oczekiwane zachowanie</dt>
+              <dd>{{ scenario.expectedBehavior }}</dd>
+            </div>
+            <div>
+              <dt>Zachowanie pokazane w demo</dt>
+              <dd>{{ scenario.demoBehavior }}</dd>
+            </div>
+          </dl>
+        </article>
+      }
+    </div>
+  </section>
+
+  <section class="content-section section-shell" aria-labelledby="criteria-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">Przykładowe kryteria do uzgodnienia z klientem</p>
+      <h2 id="criteria-title">{{ content.acceptanceCriteriaTitle }}</h2>
+    </div>
+    <ul class="criteria-list">
+      @for (item of content.acceptanceCriteria; track item) {
         <li>{{ item }}</li>
       }
     </ul>
-    <p class="criterion">
-      <strong>Kryterium sukcesu:</strong> {{ content.demoScope.successCriterion }}
-    </p>
   </section>
 
-  <section class="content-section section-shell" aria-labelledby="flow-title" appRevealOnScroll>
+  <section class="content-section section-shell" aria-labelledby="risks-title" appRevealOnScroll>
     <div class="section-heading">
-      <p class="eyebrow">Widoczny przepływ</p>
-      <h2 id="flow-title">Wiadomość od rozpoznania do decyzji</h2>
+      <p class="eyebrow">{{ content.riskRegisterTitle }}</p>
+      <h2 id="risks-title">{{ content.riskRegisterTitle }}</h2>
     </div>
-    <ol class="flow" aria-label="Przepływ obsługi zapytania produktowego">
-      @for (step of content.flow; track step; let index = $index) {
-        <li>
-          <span class="flow-number" aria-hidden="true">{{ index + 1 }}</span
-          ><span>{{ step }}</span>
-        </li>
+    <div class="risk-grid">
+      @for (risk of content.riskRegister; track risk.name) {
+        <article class="risk-card">
+          <h3>{{ risk.name }}</h3>
+          <p><strong>Znaczenie:</strong> {{ risk.meaning }}</p>
+          <p><strong>Proponowane ograniczenie ryzyka:</strong> {{ risk.mitigation }}</p>
+          <p><strong>Weryfikacja:</strong> {{ risk.verificationMoment }}</p>
+        </article>
       }
-    </ol>
-    <p class="flow-text">{{ content.flow.join(' → ') }}</p>
-  </section>
-
-  <section class="content-section section-shell" aria-labelledby="outcome-title" appRevealOnScroll>
-    <div class="section-heading">
-      <p class="eyebrow">Rezultat demonstracyjny</p>
-      <h2 id="outcome-title">Co powstało</h2>
     </div>
-    <ul class="feature-list">
-      @for (item of content.outcome.items; track item) {
-        <li>{{ item }}</li>
-      }
-    </ul>
-    <p class="recommendation">
-      <strong>Przykładowa rekomendacja:</strong> {{ content.outcome.recommendation }}. To nie jest
-      decyzja klienta.
-    </p>
   </section>
 
-  <section class="split-section section-shell">
-    <article aria-labelledby="risks-title">
-      <h2 id="risks-title">Ryzyka i zależności</h2>
-      <ul class="feature-list">
-        @for (item of content.risks; track item) {
-          <li>{{ item }}</li>
-        }
-      </ul>
-    </article>
-    <article aria-labelledby="out-of-scope-title">
-      <h2 id="out-of-scope-title">Poza zakresem</h2>
-      <ul class="feature-list">
-        @for (item of content.outOfScope; track item) {
-          <li>{{ item }}</li>
-        }
-      </ul>
-    </article>
-  </section>
-
-  <section class="content-section section-shell" aria-labelledby="next-stage-title">
+  <section
+    class="content-section section-shell"
+    aria-labelledby="recommendation-title"
+    appRevealOnScroll
+  >
     <div class="section-heading">
-      <p class="eyebrow">Dalsza ścieżka</p>
-      <h2 id="next-stage-title">Kolejny etap</h2>
+      <p class="eyebrow">Rekomendacja</p>
+      <h2 id="recommendation-title">{{ content.recommendation.decision }}</h2>
     </div>
-    <ol class="next-stage">
-      @for (item of content.nextStage; track item; let index = $index) {
+    <div class="recommendation-grid">
+      <article class="recommendation-card recommendation-card--main">
+        <p class="status-pill">{{ content.recommendation.decision }}</p>
+        <p>{{ content.recommendation.rationale }}</p>
+        <p class="recommendation-note" role="note">{{ content.recommendation.note }}</p>
+      </article>
+      <article class="recommendation-card">
+        <h3>Warunki rozpoczęcia kolejnego etapu</h3>
+        <ul>
+          @for (item of content.recommendation.conditions; track item) {
+            <li>{{ item }}</li>
+          }
+        </ul>
+      </article>
+      <article class="recommendation-card">
+        <h3>Lista brakujących informacji</h3>
+        <ul>
+          @for (item of content.recommendation.missingInformation; track item) {
+            <li>{{ item }}</li>
+          }
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="content-section section-shell" aria-labelledby="plan-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">Plan pierwszego etapu</p>
+      <h2 id="plan-title">{{ content.firstStageTitle }}</h2>
+    </div>
+    <ol class="plan-list">
+      @for (item of content.firstStagePlan; track item; let index = $index) {
         <li>
-          <span aria-hidden="true">{{ index + 1 }}</span
-          >{{ item }}
+          <span aria-hidden="true">{{ index + 1 }}</span>
+          <span>{{ item }}</span>
         </li>
       }
     </ol>
   </section>
 
   <section class="closing-cta section-shell" aria-labelledby="closing-title">
-    <h2 id="closing-title">Sprawdź podobny proces w swojej firmie</h2>
-    <div class="hero-actions">
+    <div class="closing-copy">
+      <p class="eyebrow">Wersja do zapisania jako PDF</p>
+      <h2 id="closing-title">Przekaż raport dalej albo zachowaj go w pliku</h2>
+      <p class="section-copy">
+        Użyj drukowania systemowego, aby zapisać ten raport jako PDF bez dodatkowych narzędzi.
+      </p>
+    </div>
+    <div class="hero-actions report-actions">
+      <button type="button" class="print-action" (click)="printReport()">
+        {{ content.printLabel }}
+      </button>
       <a
         class="primary-action"
         [routerLink]="content.primaryCta.path"
         [queryParams]="content.primaryCta.queryParams"
-        >{{ content.primaryCta.label }}</a
-      ><a class="secondary-action" [routerLink]="content.demoCta.path">{{
-        content.demoCta.label
-      }}</a>
+      >
+        {{ content.primaryCta.label }}
+      </a>
+      <a class="secondary-action" [routerLink]="content.demoCta.path">
+        {{ content.demoCta.label }}
+      </a>
     </div>
   </section>
 </div>

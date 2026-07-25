@@ -31,7 +31,7 @@ describe('KnowledgeDemoComponent', () => {
     tick(250);
     fixture.detectChanges();
 
-    expect(element.textContent).toContain('Nie. Demo sprawdza ograniczony scenariusz');
+    expect(element.textContent).toContain('Demo sprawdza ograniczony scenariusz');
     expect(element.textContent).toContain('Wykorzystane źródła');
     expect(element.querySelectorAll('.sources li').length).toBe(2);
     expect(question.getAttribute('aria-pressed')).toBe('true');

@@ -70,6 +70,9 @@
         </li>
       }
     </ol>
+    <a class="primary-action" [routerLink]="home.sevenDayResults.reportCta.path">
+      {{ home.sevenDayResults.reportCta.label }}
+    </a>
   </section>
 
   <section class="paths section-shell" aria-labelledby="paths-title">
@@ -113,10 +116,18 @@
             <h3>{{ item.title }}</h3>
             <p class="evidence-check"><strong>Co można sprawdzić:</strong> {{ item.teaser }}</p>
             <p class="evidence-boundary">
-              <strong>Czego ten przykład nie potwierdza:</strong> {{ item.limitation }}
+              <strong>Granica tego dowodu:</strong> {{ item.limitation }}
             </p>
             <div class="evidence-links">
-              @if (item.liveLink) {
+              @if (isInternalWorkEvidenceLink(item.liveLink)) {
+                <a
+                  class="secondary-action"
+                  [routerLink]="item.liveLink.path"
+                  [queryParams]="item.liveLink.queryParams"
+                  [fragment]="item.liveLink.fragment"
+                  >{{ item.liveLink.label }}</a
+                >
+              } @else if (isExternalWorkEvidenceLink(item.liveLink)) {
                 <a
                   [href]="item.liveLink.url"
                   target="_blank"

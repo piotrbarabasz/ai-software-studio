@@ -115,11 +115,22 @@ export interface NavigationItem {
   readonly path: PublicRoutePath;
 }
 
+export interface InternalLink {
+  readonly kind: 'internal';
+  readonly label: string;
+  readonly path: PublicRoutePath;
+  readonly queryParams?: Readonly<Record<string, string>>;
+  readonly fragment?: string;
+}
+
 export interface ExternalLink {
+  readonly kind: 'external';
   readonly label: string;
   readonly url: string;
   readonly accessibleName: string;
 }
+
+export type WorkEvidenceLink = InternalLink | ExternalLink;
 
 export interface OwnerAccountability {
   readonly statement: string;
@@ -144,7 +155,7 @@ export interface OwnerProfile {
   };
 }
 
-export type WorkEvidenceId = 'knowledge-demo' | 'studio-application';
+export type WorkEvidenceId = 'knowledge-demo' | 'demo-report' | 'studio-application';
 
 export interface WorkEvidence {
   readonly id: WorkEvidenceId;
@@ -155,14 +166,14 @@ export interface WorkEvidence {
   readonly built: string;
   readonly verification: readonly string[];
   readonly limitation: string;
-  readonly liveLink?: ExternalLink;
+  readonly liveLink?: WorkEvidenceLink;
 }
 
 export interface WorkEvidenceContent {
   readonly eyebrow: string;
   readonly title: string;
   readonly lead: string;
-  readonly items: readonly [WorkEvidence, WorkEvidence];
+  readonly items: readonly [WorkEvidence, WorkEvidence, WorkEvidence, ...WorkEvidence[]];
 }
 
 export interface TrustContent {
@@ -313,6 +324,7 @@ export interface HomeSevenDayResults {
   readonly eyebrow: string;
   readonly title: string;
   readonly lead: string;
+  readonly reportCta: HomeCta;
   readonly items: readonly [
     HomeSevenDayResult,
     HomeSevenDayResult,
@@ -359,6 +371,7 @@ export interface DemoPageContent {
   readonly result: string;
   readonly decision: string;
   readonly interactiveCtaLabel: string;
+  readonly reportCta: HomeCta;
   readonly ctaLabel: string;
   readonly interactiveDemo: KnowledgeDemoContent;
 }
@@ -369,27 +382,75 @@ export interface DemoExamplePageContent {
   readonly title: string;
   readonly fictionalNotice: string;
   readonly lead: string;
+  readonly decisionSummary: {
+    readonly status: 'Warunkowe GO do kolejnego etapu';
+    readonly answer: string;
+    readonly unknowns: readonly [string, string];
+    readonly nextStep: string;
+    readonly note: string;
+  };
+  readonly validationQuestion: string;
   readonly processTitle: string;
   readonly currentProcess: {
     readonly roles: readonly string[];
     readonly manualSteps: readonly string[];
     readonly timeLosses: readonly string[];
     readonly dataSources: readonly string[];
+    readonly assumptions: readonly string[];
   };
-  readonly demoScope: {
-    readonly items: readonly string[];
-    readonly successCriterion: string;
+  readonly scope: {
+    readonly includedTitle: string;
+    readonly included: readonly [string, string, string];
+    readonly excludedTitle: string;
+    readonly excluded: readonly [string, string, string, string];
   };
-  readonly flow: readonly [string, string, string, string, string];
-  readonly outcome: {
-    readonly items: readonly string[];
-    readonly recommendation: string;
+  readonly scenarios: readonly [
+    {
+      readonly id: string;
+      readonly title: string;
+      readonly input: string;
+      readonly expectedBehavior: string;
+      readonly demoBehavior: string;
+      readonly status: 'spełnione w demonstracji' | 'wymaga dalszej walidacji';
+    },
+    {
+      readonly id: string;
+      readonly title: string;
+      readonly input: string;
+      readonly expectedBehavior: string;
+      readonly demoBehavior: string;
+      readonly status: 'spełnione w demonstracji' | 'wymaga dalszej walidacji';
+    },
+    {
+      readonly id: string;
+      readonly title: string;
+      readonly input: string;
+      readonly expectedBehavior: string;
+      readonly demoBehavior: string;
+      readonly status: 'spełnione w demonstracji' | 'wymaga dalszej walidacji';
+    },
+  ];
+  readonly acceptanceCriteriaTitle: 'Przykładowe kryteria do uzgodnienia z klientem';
+  readonly acceptanceCriteria: readonly [string, string, string, string];
+  readonly riskRegisterTitle: string;
+  readonly riskRegister: readonly {
+    readonly name: string;
+    readonly meaning: string;
+    readonly mitigation: string;
+    readonly verificationMoment: string;
+  }[];
+  readonly recommendation: {
+    readonly decision: 'Warunkowe GO';
+    readonly rationale: string;
+    readonly conditions: readonly [string, string, string];
+    readonly missingInformation: readonly [string, string, string];
+    readonly note: string;
   };
-  readonly risks: readonly string[];
-  readonly outOfScope: readonly string[];
-  readonly nextStage: readonly string[];
+  readonly firstStageTitle: string;
+  readonly firstStagePlan: readonly [string, string, string, string, string, string];
   readonly primaryCta: HomeCta;
   readonly demoCta: HomeCta;
+  readonly printLabel: string;
 }
 
 export type KnowledgeDemoScenarioStatus = 'answered' | 'handoff';
@@ -494,8 +555,9 @@ export interface StudioPageContent {
     readonly eyebrow: string;
     readonly title: string;
     readonly lead: string;
-    readonly steps: readonly [string, string, string, string];
+    readonly steps: readonly [string, string, string, string, string];
     readonly demoCta: HomeCta;
+    readonly reportCta: HomeCta;
     readonly developmentCta: HomeCta;
     readonly contactCta: HomeCta;
   };

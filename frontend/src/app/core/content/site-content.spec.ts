@@ -1,4 +1,4 @@
-import { siteContent } from './site.pl';
+﻿import { siteContent } from './site.pl';
 import { absoluteSiteUrl, siteSeo } from '../seo/site-seo.config';
 import { publicBrand } from '../brand/public-brand.config';
 
@@ -61,7 +61,7 @@ describe('Site content model', () => {
     expect(siteContent.home.hero.audience).toContain('bez gotowej specyfikacji');
     expect(siteContent.home.hero.lead).toContain('działające demo jednego przepływu');
     expect(siteContent.home.hero.lead).toContain('najlepszy kolejny krok');
-    expect(siteContent.home.hero.primaryCta.label).toBe('Opisz proces do sprawdzenia');
+    expect(siteContent.home.hero.primaryCta.label).toBe('Opisz proces w 3 zdaniach');
     expect(siteContent.home.closingCta.primaryCta.label).toBe(
       siteContent.home.hero.primaryCta.label,
     );
@@ -85,7 +85,7 @@ describe('Site content model', () => {
   });
 
   it('defines Development as a scoped path that does not require a demo in every case', () => {
-    expect(siteContent.development.lead).toContain('można od razu zaplanować pierwszy etap');
+    expect(siteContent.development.lead).toContain('można przejść do planowania wdrożenia');
     expect(siteContent.development.readiness.points).toContain(
       'istnieje potwierdzona potrzeba biznesowa',
     );
@@ -106,10 +106,8 @@ describe('Site content model', () => {
   });
 
   it('keeps contact guidance low-pressure and explicit about the next step', () => {
-    expect(siteContent.contact.noSpecificationNeeded).toContain(
-      'Nie musisz mieć gotowej specyfikacji',
-    );
-    expect(siteContent.contact.firstMessagePurpose).toContain('Wiadomość może być niepełna');
+    expect(siteContent.contact.noSpecificationNeeded).toBe('Nie potrzebujesz specyfikacji.');
+    expect(siteContent.contact.firstMessagePurpose).toContain('Wystarczą 3 zdania');
     expect(siteContent.contact.noCommitment).toContain('nie jest zamówieniem');
     expect(siteContent.contact.noScript.unavailable).toContain(
       'Publiczny alternatywny adres kontaktowy nie jest obecnie skonfigurowany',
@@ -144,7 +142,7 @@ describe('Site content model', () => {
       routes: siteContent.routes,
       solutions: siteContent.solutions,
     });
-    expect(publicText).not.toMatch(/Voice agent|WhatsApp demo|Strona i SEO|Panel agentów/i);
+    expect(publicText).not.toMatch(/Voice agent|WhatsApp demo|Strona i SEO|Panel agentĂłw/i);
   });
 
   it('keeps public titles, descriptions and canonical URLs unique', () => {
@@ -162,6 +160,18 @@ describe('Site content model', () => {
     expect(
       siteContent.routes.every((route) => route.description.includes(publicBrand.name)),
     ).toBeTrue();
+    expect(siteContent.routes.find((route) => route.path === '/przyklad-demo')?.label).toBe(
+      'Przykładowy raport',
+    );
+    expect(siteContent.routes.find((route) => route.path === '/przyklad-demo')?.title).toBe(
+      'Przykładowy raport z Demo AI w 7 dni | Protolume',
+    );
+    expect(
+      siteContent.routes.find((route) => route.path === '/przyklad-demo')?.description,
+    ).toContain('zakres, scenariusze testowe, ryzyka, kryteria odbioru i rekomendacja');
+    expect(
+      siteContent.routes.find((route) => route.path === '/przyklad-demo')?.description,
+    ).toContain('Nie case study klienta');
     expect(siteContent.routes.find((route) => route.kind === 'home')?.description).toContain(
       '7 dni',
     );
@@ -228,7 +238,7 @@ describe('Site content model', () => {
     expect(publicBrand.descriptor).toBe('Studio wdrożeń AI i automatyzacji');
   });
 
-  it('defines two verifiable work-evidence items without client claims', () => {
+  it('defines three verifiable work-evidence items without client claims', () => {
     expect(siteContent.trust.owner.name).toBe('Piotr Barabasz');
     expect(siteContent.trust.owner.role).toContain('odpowiedzialny partner techniczny');
     expect(siteContent.trust.owner.verifiedCapabilities).toHaveSize(4);
@@ -245,6 +255,7 @@ describe('Site content model', () => {
     );
     expect(siteContent.trust.evidence.items.map((item) => item.id)).toEqual([
       'knowledge-demo',
+      'demo-report',
       'studio-application',
     ]);
     siteContent.trust.evidence.items.forEach((item) => {
@@ -254,22 +265,69 @@ describe('Site content model', () => {
       expect(item.built.length).toBeGreaterThan(0);
       expect(item.verification.length).toBeGreaterThan(0);
       expect(item.limitation.length).toBeGreaterThan(0);
-      expect(item.liveLink?.url.length).toBeGreaterThan(0);
+      const liveLink = item.liveLink;
+      expect(liveLink).toBeDefined();
+      if (!liveLink) {
+        return;
+      }
+      expect(liveLink.kind).toBe('internal');
+      expect(liveLink.path).toBeTruthy();
     });
-    expect(siteContent.trust.evidence.items[0].limitation).toContain('stałych');
-    expect(siteContent.trust.evidence.items[0].limitation).toContain('Nie potwierdza');
-    expect(siteContent.trust.evidence.items[1].limitation).toContain('nie case study klienta');
+    expect(siteContent.trust.evidence.items[0].liveLink).toEqual(
+      jasmine.objectContaining({ kind: 'internal', path: '/demo-ai' }),
+    );
+    expect(siteContent.trust.evidence.items[1].liveLink).toEqual(
+      jasmine.objectContaining({ kind: 'internal', path: '/przyklad-demo' }),
+    );
+    expect(siteContent.trust.evidence.items[2].liveLink).toEqual(
+      jasmine.objectContaining({ kind: 'internal', path: '/' }),
+    );
+    expect(siteContent.trust.evidence.items[0].limitation).toContain('stałych pytań i odpowiedzi');
+    expect(siteContent.trust.evidence.items[0].limitation).toContain('Wymaga dodatkowej walidacji');
+    expect(siteContent.trust.evidence.items[1].limitation).toContain(
+      'fikcyjny materiał demonstracyjny',
+    );
+    expect(siteContent.trust.evidence.items[1].limitation).toContain('Wymaga dodatkowej walidacji');
     expect(siteContent.footer.summary).toContain('Studio wdrożeń AI');
     expect(siteContent.footer.summary).toContain('Od działającego demo jednego procesu');
+    expect(siteContent.footer.offerLinks.map((item) => item.path)).toContain('/przyklad-demo');
   });
 
-  it('offers four low-risk ways to verify the work before cooperation', () => {
-    expect(siteContent.studio.verification.steps).toHaveSize(4);
+  it('keeps the key public boundaries visible without overstating outcomes', () => {
+    expect(siteContent.trust.evidence.items[1].limitation).toContain(
+      'fikcyjny materiał demonstracyjny',
+    );
+    expect(siteContent.trust.evidence.items[1].limitation).toContain('Wymaga dodatkowej walidacji');
+    expect(siteContent.demo.interactiveDemo.disclaimer).toContain(
+      'nie połączenie z produkcyjną bazą wiedzy',
+    );
+    expect(siteContent.demo.interactiveDemo.disclaimer).toContain(
+      'przykład doświadczenia użytkownika',
+    );
+    expect(siteContent.demoExample.fictionalNotice).toContain(
+      'To fikcyjny scenariusz demonstracyjny',
+    );
+    expect(siteContent.demoExample.decisionSummary.answer).toContain('punkt zatwierdzenia');
+    expect(siteContent.demoExample.scenarios[1].demoBehavior).toContain(
+      'bez automatycznej wysyłki',
+    );
+    expect(siteContent.demoExample.acceptanceCriteria).toContain(
+      'odpowiedź nie jest wysyłana bez zatwierdzenia',
+    );
+    expect(siteContent.development.scope.pricingNote).toContain(
+      'Wycena zależy od potwierdzonego zakresu',
+    );
+  });
+
+  it('offers five low-risk ways to verify the work before cooperation', () => {
+    expect(siteContent.studio.verification.steps).toHaveSize(5);
     expect(siteContent.studio.verification.steps.join(' ')).toContain('interaktywne demo');
+    expect(siteContent.studio.verification.steps.join(' ')).toContain('przykładowy raport');
     expect(siteContent.studio.verification.steps.join(' ')).toContain('kryteria odbioru');
     expect(siteContent.studio.verification.steps.join(' ')).toContain('ograniczony pierwszy etap');
-    expect(siteContent.studio.verification.steps[3]).toBe(siteContent.contact.noCommitment);
+    expect(siteContent.studio.verification.steps[4]).toBe(siteContent.contact.noCommitment);
     expect(siteContent.studio.verification.demoCta.path).toBe('/demo-ai');
+    expect(siteContent.studio.verification.reportCta.path).toBe('/przyklad-demo');
     expect(siteContent.studio.verification.developmentCta.path).toBe('/development');
     expect(siteContent.studio.verification.contactCta).toEqual(
       jasmine.objectContaining({
