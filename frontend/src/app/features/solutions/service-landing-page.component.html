@@ -1,0 +1,165 @@
+<div class="service-landing-page">
+  <section class="hero section-shell" aria-labelledby="service-title" appRevealOnScroll>
+    <p class="eyebrow">{{ content.eyebrow }}</p>
+    <h1 id="service-title">{{ content.title }}</h1>
+    <p class="hero-result">{{ content.hero.result }}</p>
+    <p class="hero-lead">{{ content.hero.lead }}</p>
+    <div class="hero-actions" aria-label="Główne akcje">
+      <a
+        class="primary-action"
+        [routerLink]="content.hero.primaryCta.path"
+        [queryParams]="content.hero.primaryCta.queryParams"
+      >
+        {{ content.hero.primaryCta.label }}
+      </a>
+      <a class="secondary-action" [routerLink]="content.hero.secondaryCta.path">
+        {{ content.hero.secondaryCta.label }}
+      </a>
+    </div>
+    <p class="service-note">{{ content.description }}</p>
+  </section>
+
+  <section class="section-shell" aria-labelledby="problem-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">Problem</p>
+      <h2 id="problem-title">{{ content.problemTitle }}</h2>
+    </div>
+    <ul class="bullet-list">
+      @for (problem of content.problems; track problem) {
+        <li>{{ problem }}</li>
+      }
+    </ul>
+  </section>
+
+  <section class="section-shell" aria-labelledby="flow-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">Jak działa rozwiązanie</p>
+      <h2 id="flow-title">{{ content.flowTitle }}</h2>
+      <p class="section-lead">{{ content.flowLead }}</p>
+    </div>
+    <ol class="flow-list">
+      @for (step of content.flowSteps; track step.id) {
+        <li class="flow-step" [class.is-handoff]="step.handoff">
+          <span class="flow-step-index" aria-hidden="true">{{ $index + 1 }}</span>
+          <div>
+            <h3>{{ step.title }}</h3>
+            <p>{{ step.description }}</p>
+          </div>
+        </li>
+      }
+    </ol>
+  </section>
+
+  <section class="section-shell" aria-labelledby="demo-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">Demo</p>
+      <h2 id="demo-title">{{ content.demoTitle }}</h2>
+      <p class="section-lead">{{ content.demoLead }}</p>
+    </div>
+    <div class="demo-grid">
+      <article>
+        <h3>Zakres</h3>
+        <ul class="bullet-list">
+          @for (item of content.demoScope; track item) {
+            <li>{{ item }}</li>
+          }
+        </ul>
+      </article>
+      <article>
+        <h3>Kryteria</h3>
+        <ul class="bullet-list">
+          @for (item of content.demoCriteria; track item) {
+            <li>{{ item }}</li>
+          }
+        </ul>
+      </article>
+      <article>
+        <h3>Dane wejściowe</h3>
+        <ul class="bullet-list">
+          @for (item of content.demoInputs; track item) {
+            <li>{{ item }}</li>
+          }
+        </ul>
+      </article>
+      <article>
+        <h3>Ograniczenia</h3>
+        <ul class="bullet-list">
+          @for (item of content.demoLimitations; track item) {
+            <li>{{ item }}</li>
+          }
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="section-shell" aria-labelledby="integrations-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">Integracje</p>
+      <h2 id="integrations-title">{{ content.integrationsTitle }}</h2>
+      <p class="section-lead">{{ content.integrationsLead }}</p>
+    </div>
+    <ul class="bullet-list">
+      @for (item of content.integrations; track item) {
+        <li>{{ item }}</li>
+      }
+    </ul>
+  </section>
+
+  <section class="section-shell" aria-labelledby="security-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">Bezpieczeństwo i prywatność</p>
+      <h2 id="security-title">{{ content.securityTitle }}</h2>
+    </div>
+    <ul class="bullet-list">
+      @for (item of content.securityPoints; track item) {
+        <li>{{ item }}</li>
+      }
+    </ul>
+  </section>
+
+  <section class="section-shell" aria-labelledby="faq-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">FAQ</p>
+      <h2 id="faq-title">{{ content.faqTitle }}</h2>
+    </div>
+    <div class="faq-list">
+      @for (item of content.faqs; track item.question) {
+        <details>
+          <summary>{{ item.question }}</summary>
+          <p>{{ item.answer }}</p>
+        </details>
+      }
+    </div>
+  </section>
+
+  <section class="section-shell closing" aria-labelledby="closing-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">Następny krok</p>
+      <h2 id="closing-title">{{ content.closingTitle }}</h2>
+      <p class="section-lead">{{ content.closingLead }}</p>
+    </div>
+    <div class="closing-links" aria-label="Powiązane linki">
+      <a
+        class="primary-action"
+        [routerLink]="content.primaryCta.path"
+        [queryParams]="content.primaryCta.queryParams"
+      >
+        {{ content.primaryCta.label }}
+      </a>
+      @for (link of content.relatedLinks; track link.path) {
+        <a
+          class="secondary-action"
+          [routerLink]="link.path"
+          [queryParams]="link.queryParams"
+          [fragment]="link.fragment"
+        >
+          {{ link.label }}
+        </a>
+      }
+    </div>
+    <p class="hub-link">
+      Wróć do
+      <a [href]="'/rozwiazania' + content.hubAnchor">huba rozwiązań</a>.
+    </p>
+  </section>
+</div>

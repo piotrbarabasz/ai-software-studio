@@ -8,11 +8,12 @@ import type {
   TrustContent,
   WorkEvidenceLink,
 } from '../../core/content/site-content.types';
+import { BusinessFlowSectionComponent } from './business-flow-section.component';
 import { SolutionCarouselComponent } from '../../shared/solution-carousel/solution-carousel.component';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, SolutionCarouselComponent],
+  imports: [RouterLink, SolutionCarouselComponent, BusinessFlowSectionComponent],
   templateUrl: './home.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './home.component.scss',

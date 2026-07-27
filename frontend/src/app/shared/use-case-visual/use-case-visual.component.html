@@ -1,12 +1,404 @@
 <div class="use-case-visual" aria-hidden="true">
   <div class="visual-flow" [class]="flowClass">
-    @for (label of flowLabels; track label; let last = $last; let index = $index) {
-      <span
-        class="visual-node"
-        [class.visual-node-accent]="index === 1"
-        [class.visual-node-result]="index === flowLabels.length - 1"
-        >{{ label }}</span
-      >
+    @for (stage of stages; track $index; let last = $last) {
+      <span class="visual-stage" [attr.data-icon]="stage.icon" [attr.data-tone]="stage.tone">
+        <span
+          class="visual-stage-panel"
+          [class.is-ai]="stage.tone === 'ai'"
+          [class.is-result]="stage.tone === 'result'"
+        >
+          <svg class="visual-stage-icon" viewBox="0 0 64 64" focusable="false">
+            @switch (stage.icon) {
+              @case ('document') {
+                <path
+                  d="M18 10h20l8 8v36H18z"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linejoin="round"
+                  stroke-width="3.5"
+                />
+                <path
+                  d="M38 10v10h10"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linejoin="round"
+                  stroke-width="3.5"
+                />
+                <path
+                  d="M24 27h16M24 35h14M24 43h11"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-width="3.5"
+                />
+              }
+              @case ('search') {
+                <circle
+                  cx="28"
+                  cy="28"
+                  r="13"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3.5"
+                />
+                <path
+                  d="M38 38l10 10"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-width="5"
+                />
+                <path
+                  d="M20 28h16M28 20v16"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-width="3"
+                />
+              }
+              @case ('spark') {
+                <path
+                  d="M32 10l4.8 11.2L48 26l-11.2 4.8L32 42l-4.8-11.2L16 26l11.2-4.8z"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linejoin="round"
+                  stroke-width="3.5"
+                />
+                <path
+                  d="M48 15l2 4.8L55 22l-5 2.2L48 29l-2-4.8L41 22l5-2.2z"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linejoin="round"
+                  stroke-width="3"
+                />
+              }
+              @case ('person') {
+                <circle
+                  cx="32"
+                  cy="22"
+                  r="8"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3.5"
+                />
+                <path
+                  d="M18 48c3.5-8.5 10-13 14-13s10.5 4.5 14 13"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-width="3.5"
+                />
+              }
+              @case ('message') {
+                <path
+                  d="M14 16h36a4 4 0 0 1 4 4v18a4 4 0 0 1-4 4H28l-10 8v-8h-4a4 4 0 0 1-4-4V20a4 4 0 0 1 4-4z"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linejoin="round"
+                  stroke-width="3.5"
+                />
+                <path
+                  d="M22 26h20M22 33h14"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-width="3.5"
+                />
+              }
+              @case ('filter') {
+                <path
+                  d="M14 16h36l-13 14v14l-10 4V30z"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linejoin="round"
+                  stroke-width="3.5"
+                />
+                <path
+                  d="M32 18v28"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-width="3"
+                />
+              }
+              @case ('workflow') {
+                <circle
+                  cx="16"
+                  cy="20"
+                  r="5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3.5"
+                />
+                <circle
+                  cx="48"
+                  cy="20"
+                  r="5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3.5"
+                />
+                <circle
+                  cx="32"
+                  cy="44"
+                  r="5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3.5"
+                />
+                <path
+                  d="M20.5 20h22.5M19 24.5l9.5 13M45 24.5l-9.5 13"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-width="3.2"
+                />
+              }
+              @case ('check') {
+                <circle
+                  cx="32"
+                  cy="32"
+                  r="17"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3.5"
+                />
+                <path
+                  d="M24 32.5l5.5 5.5L40 27.5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="4"
+                />
+              }
+              @case ('dashboard') {
+                <rect
+                  x="12"
+                  y="14"
+                  width="40"
+                  height="36"
+                  rx="6"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3.5"
+                />
+                <path
+                  d="M22 24h20M22 32h11M22 40h15"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-width="3.5"
+                />
+              }
+              @case ('status') {
+                <path
+                  d="M18 18h28M18 32h28M18 46h28"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-width="3.5"
+                />
+                <circle cx="16" cy="18" r="3.5" fill="currentColor" />
+                <circle cx="16" cy="32" r="3.5" fill="currentColor" />
+                <circle cx="16" cy="46" r="3.5" fill="currentColor" />
+              }
+              @case ('owner') {
+                <circle
+                  cx="24"
+                  cy="24"
+                  r="7"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3.5"
+                />
+                <path
+                  d="M14 48c2.5-6.5 7.5-10 10-10s7.5 3.5 10 10"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-width="3.5"
+                />
+                <path
+                  d="M39 22l10 10-10 10"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="3.5"
+                />
+              }
+              @case ('task') {
+                <path
+                  d="M18 14h16l8 8v28H18z"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linejoin="round"
+                  stroke-width="3.5"
+                />
+                <path
+                  d="M34 14v10h10"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linejoin="round"
+                  stroke-width="3.5"
+                />
+                <path
+                  d="M24 30h16M24 38h11"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-width="3.5"
+                />
+              }
+              @case ('agents') {
+                <circle
+                  cx="16"
+                  cy="22"
+                  r="5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3.2"
+                />
+                <circle
+                  cx="32"
+                  cy="42"
+                  r="5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3.2"
+                />
+                <circle
+                  cx="48"
+                  cy="22"
+                  r="5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3.2"
+                />
+                <path
+                  d="M20.5 22h11M43.5 22h-11M19 26l10 12M45 26L35 38"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-width="3"
+                />
+              }
+              @case ('control') {
+                <path
+                  d="M18 22h28M18 32h28M18 42h28"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-width="3.2"
+                />
+                <circle cx="28" cy="22" r="4.5" fill="currentColor" />
+                <circle cx="40" cy="32" r="4.5" fill="currentColor" />
+                <circle cx="24" cy="42" r="4.5" fill="currentColor" />
+              }
+              @case ('mail') {
+                <rect
+                  x="14"
+                  y="18"
+                  width="36"
+                  height="28"
+                  rx="5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3.5"
+                />
+                <path
+                  d="M16 22l16 13 16-13"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="3.5"
+                />
+              }
+              @case ('bridge') {
+                <circle
+                  cx="18"
+                  cy="32"
+                  r="5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3.5"
+                />
+                <circle
+                  cx="46"
+                  cy="32"
+                  r="5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3.5"
+                />
+                <path
+                  d="M23 32h7M34 32h7"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-width="3.5"
+                />
+                <path
+                  d="M30 24l4 8-4 8"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="3.2"
+                />
+              }
+              @case ('crm') {
+                <rect
+                  x="16"
+                  y="16"
+                  width="32"
+                  height="32"
+                  rx="6"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3.5"
+                />
+                <path
+                  d="M20 26h24M20 34h24M20 42h16"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-width="3.5"
+                />
+              }
+              @case ('worker') {
+                <circle
+                  cx="32"
+                  cy="23"
+                  r="7"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3.5"
+                />
+                <path
+                  d="M20 48c2.5-6 7.5-10 12-10s9.5 4 12 10"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-width="3.5"
+                />
+                <rect
+                  x="24"
+                  y="31"
+                  width="16"
+                  height="10"
+                  rx="3"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3.2"
+                />
+              }
+            }
+          </svg>
+        </span>
+      </span>
       @if (!last) {
         <span class="visual-connector"></span>
       }

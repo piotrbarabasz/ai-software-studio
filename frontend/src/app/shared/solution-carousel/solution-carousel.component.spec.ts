@@ -63,9 +63,9 @@ describe('SolutionCarouselComponent', () => {
     } as DOMRectReadOnly;
   }
 
-  function createFixture() {
+  function createFixture(items = siteContent.home.useCases) {
     const fixture = TestBed.createComponent(SolutionCarouselComponent);
-    fixture.componentInstance.items = siteContent.home.useCases;
+    fixture.componentInstance.items = items;
     fixture.detectChanges();
     const element = fixture.nativeElement as HTMLElement;
     const viewport = element.querySelector('.solution-carousel') as HTMLElement;
@@ -127,7 +127,89 @@ describe('SolutionCarouselComponent', () => {
   it('keeps all five cards and their fragment links in the DOM', () => {
     const element = createFixture().element;
     expect(element.querySelectorAll('.use-case-card')).toHaveSize(5);
-    expect(element.querySelectorAll('a[href^="/rozwiazania#"]')).toHaveSize(5);
+    expect(element.querySelectorAll('a[href^="/rozwiazania/"]')).toHaveSize(5);
+  });
+
+  it('renders decorative pictograms for every use case without textual nodes or external assets', () => {
+    const fixture = createFixture();
+    const expectedIcons: Record<string, readonly string[]> = {
+      'knowledge-assistant': ['document', 'search', 'spark', 'person'],
+      'message-workflow': ['message', 'filter', 'workflow', 'check'],
+      'process-panel': ['dashboard', 'status', 'owner', 'check'],
+      'agent-system': ['task', 'agents', 'control', 'check'],
+      'channel-integrations': ['mail', 'bridge', 'crm', 'worker'],
+    };
+
+    for (const card of Array.from(fixture.element.querySelectorAll('.use-case-card'))) {
+      const kind = card.getAttribute('data-visual-kind');
+      expect(kind).toBeTruthy();
+      const visual = card.querySelector('app-use-case-visual') as HTMLElement;
+      const wrapper = visual?.querySelector('[aria-hidden="true"]');
+      expect(wrapper).not.toBeNull();
+      expect(wrapper?.textContent?.trim()).toBe('');
+      expect(wrapper?.querySelectorAll('.visual-stage')).toHaveSize(4);
+      expect(wrapper?.querySelectorAll('.visual-node')).toHaveSize(0);
+      expect(wrapper?.querySelectorAll('.visual-connector')).toHaveSize(3);
+      expect(wrapper?.querySelectorAll('.visual-stage svg')).toHaveSize(4);
+      expect(wrapper?.querySelectorAll('img, video, iframe, object, embed, use')).toHaveSize(0);
+      expect(
+        Array.from(wrapper?.querySelectorAll('.visual-stage') ?? []).map((node) =>
+          node.getAttribute('data-icon'),
+        ),
+      ).toEqual(expectedIcons[kind as keyof typeof expectedIcons]);
+    }
+  });
+
+  it('loops next from the last visible view back to the beginning', () => {
+    const fixture = createFixture();
+    applyGeometry(fixture, {
+      viewportWidth: 1000,
+      cardWidth: 320,
+      gap: 16,
+      scrollLeft: 672,
+    });
+
+    expect(fixture.fixture.componentInstance.visibleCount).toBe(3);
+    expect(fixture.fixture.componentInstance.lastIndex).toBe(2);
+    expect(fixture.fixture.componentInstance.currentIndex).toBe(2);
+    expect(fixture.fixture.componentInstance.statusLabel).toContain('3–5 z 5');
+
+    fixture.fixture.componentInstance.move(1);
+    fixture.fixture.detectChanges();
+
+    expect(fixture.fixture.componentInstance.currentIndex).toBe(0);
+    expect(fixture.fixture.componentInstance.statusLabel).toContain('1–3 z 5');
+    const call = fixture.scrollToSpy.calls.mostRecent().args[0] as unknown as {
+      left?: number;
+      behavior?: string;
+    };
+    expect(call.left).toBe(0);
+    expect(call.behavior).toBe('smooth');
+  });
+
+  it('loops previous from the beginning to the last valid view', () => {
+    const fixture = createFixture();
+    applyGeometry(fixture, {
+      viewportWidth: 1000,
+      cardWidth: 320,
+      gap: 16,
+      scrollLeft: 0,
+    });
+
+    expect(fixture.fixture.componentInstance.visibleCount).toBe(3);
+    expect(fixture.fixture.componentInstance.lastIndex).toBe(2);
+
+    fixture.fixture.componentInstance.move(-1);
+    fixture.fixture.detectChanges();
+
+    expect(fixture.fixture.componentInstance.currentIndex).toBe(2);
+    expect(fixture.fixture.componentInstance.statusLabel).toContain('3–5 z 5');
+    const call = fixture.scrollToSpy.calls.mostRecent().args[0] as unknown as {
+      left?: number;
+      behavior?: string;
+    };
+    expect(call.left).toBe(672);
+    expect(call.behavior).toBe('smooth');
   });
 
   it('reports three visible cards on desktop and keeps the last index at 2', () => {
@@ -143,6 +225,11 @@ describe('SolutionCarouselComponent', () => {
     expect(fixture.fixture.componentInstance.lastIndex).toBe(2);
     expect(fixture.fixture.componentInstance.currentIndex).toBe(0);
     expect(fixture.element.querySelector('.carousel-status')?.textContent).toContain('1–3 z 5');
+    expect(
+      Array.from(fixture.element.querySelectorAll('.carousel-button')).map(
+        (button) => (button as HTMLButtonElement).disabled,
+      ),
+    ).toEqual([false, false]);
   });
 
   it('reports two visible cards on tablet and keeps the last index at 3', () => {
@@ -157,7 +244,7 @@ describe('SolutionCarouselComponent', () => {
     expect(fixture.fixture.componentInstance.visibleCount).toBe(2);
     expect(fixture.fixture.componentInstance.lastIndex).toBe(3);
     expect(fixture.fixture.componentInstance.currentIndex).toBe(1);
-    expect(fixture.element.querySelector('.carousel-status')?.textContent).toContain('2–4 z 5');
+    expect(fixture.element.querySelector('.carousel-status')?.textContent).toContain('2–3 z 5');
   });
 
   it('reports one visible card on mobile and keeps the last index at 4', () => {
@@ -173,6 +260,47 @@ describe('SolutionCarouselComponent', () => {
     expect(fixture.fixture.componentInstance.lastIndex).toBe(4);
     expect(fixture.fixture.componentInstance.currentIndex).toBe(4);
     expect(fixture.element.querySelector('.carousel-status')?.textContent).toContain('5–5 z 5');
+  });
+
+  it('supports two cards without disabling the controls', () => {
+    const fixture = createFixture(siteContent.home.useCases.slice(0, 2));
+    applyGeometry(fixture, {
+      viewportWidth: 1000,
+      cardWidth: 320,
+      gap: 16,
+      scrollLeft: 0,
+    });
+
+    expect(fixture.fixture.componentInstance.visibleCount).toBe(2);
+    expect(fixture.fixture.componentInstance.lastIndex).toBe(0);
+    expect(fixture.element.querySelectorAll('.carousel-button')).toHaveSize(2);
+    expect(
+      Array.from(fixture.element.querySelectorAll('.carousel-button')).map(
+        (button) => (button as HTMLButtonElement).disabled,
+      ),
+    ).toEqual([false, false]);
+    fixture.fixture.componentInstance.move(1);
+    fixture.fixture.detectChanges();
+    expect(fixture.fixture.componentInstance.currentIndex).toBe(0);
+    expect(fixture.fixture.componentInstance.statusLabel).toContain('1–2 z 2');
+  });
+
+  it('hides controls for a single card and keeps the status stable', () => {
+    const fixture = createFixture(siteContent.home.useCases.slice(0, 1));
+    applyGeometry(fixture, {
+      viewportWidth: 320,
+      cardWidth: 320,
+      gap: 16,
+      scrollLeft: 0,
+    });
+
+    expect(fixture.fixture.componentInstance.visibleCount).toBe(1);
+    expect(fixture.fixture.componentInstance.lastIndex).toBe(0);
+    expect(fixture.element.querySelectorAll('.carousel-button')).toHaveSize(0);
+    expect(fixture.fixture.componentInstance.statusLabel).toContain('1–1 z 1');
+    fixture.fixture.componentInstance.move(1);
+    fixture.fixture.detectChanges();
+    expect(fixture.fixture.componentInstance.currentIndex).toBe(0);
   });
 
   it('uses the gap when calculating visible cards', () => {
@@ -207,9 +335,6 @@ describe('SolutionCarouselComponent', () => {
     expect(fixture.fixture.componentInstance.lastIndex).toBe(2);
     expect(fixture.fixture.componentInstance.currentIndex).toBe(2);
     expect(fixture.element.querySelector('.carousel-status')?.textContent).toContain('3–5 z 5');
-    expect(
-      (fixture.element.querySelectorAll('.carousel-button')[1] as HTMLButtonElement).disabled,
-    ).toBeTrue();
     const clampCall = fixture.scrollToSpy.calls.mostRecent().args[0] as unknown as {
       left?: number;
       behavior?: string;
@@ -236,6 +361,27 @@ describe('SolutionCarouselComponent', () => {
 
     expect(fixture.fixture.componentInstance.visibleCount).toBe(1);
     expect(fixture.element.querySelector('.carousel-status')?.textContent).toContain('2–2 z 5');
+  });
+
+  it('synchronizes the next click after a manual scroll', () => {
+    const fixture = createFixture();
+    applyGeometry(fixture, {
+      viewportWidth: 1000,
+      cardWidth: 320,
+      gap: 16,
+      scrollLeft: 336,
+    });
+
+    fixture.geometry.scrollLeft = 672;
+    fixture.fixture.componentInstance.onScroll();
+    fixture.fixture.detectChanges();
+
+    expect(fixture.fixture.componentInstance.currentIndex).toBe(2);
+    fixture.fixture.componentInstance.move(1);
+    fixture.fixture.detectChanges();
+
+    expect(fixture.fixture.componentInstance.currentIndex).toBe(0);
+    expect(fixture.fixture.componentInstance.statusLabel).toContain('1–3 z 5');
   });
 
   it('disconnects ResizeObserver on destroy', () => {
@@ -280,6 +426,39 @@ describe('SolutionCarouselComponent', () => {
     expect(viewportCall.behavior).toBe('smooth');
   });
 
+  it('loops keyboard navigation from the start and the end', () => {
+    const fixture = createFixture();
+    applyGeometry(fixture, {
+      viewportWidth: 1000,
+      cardWidth: 320,
+      gap: 16,
+      scrollLeft: 0,
+    });
+
+    fixture.viewport.focus();
+    fixture.viewport.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'ArrowLeft',
+        bubbles: true,
+        cancelable: true,
+      }),
+    );
+    expect(fixture.fixture.componentInstance.currentIndex).toBe(2);
+
+    fixture.geometry.scrollLeft = 672;
+    fixture.fixture.componentInstance.onScroll();
+    fixture.fixture.detectChanges();
+    fixture.viewport.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'ArrowRight',
+        bubbles: true,
+        cancelable: true,
+      }),
+    );
+
+    expect(fixture.fixture.componentInstance.currentIndex).toBe(0);
+  });
+
   it('does not intercept ArrowRight from CTA links inside a card', () => {
     const fixture = createFixture();
     applyGeometry(fixture, {
@@ -309,16 +488,17 @@ describe('SolutionCarouselComponent', () => {
       viewportWidth: 1000,
       cardWidth: 320,
       gap: 16,
-      scrollLeft: 0,
+      scrollLeft: 672,
     });
 
     fixture.fixture.componentInstance.move(1);
+    fixture.fixture.detectChanges();
 
     const reducedMotionCall = fixture.scrollToSpy.calls.mostRecent().args[0] as unknown as {
       left?: number;
       behavior?: string;
     };
-    expect(reducedMotionCall.left).toBe(336);
+    expect(reducedMotionCall.left).toBe(0);
     expect(reducedMotionCall.behavior).toBe('auto');
   });
 
@@ -329,16 +509,17 @@ describe('SolutionCarouselComponent', () => {
       viewportWidth: 1000,
       cardWidth: 320,
       gap: 16,
-      scrollLeft: 0,
+      scrollLeft: 672,
     });
 
     fixture.fixture.componentInstance.move(1);
+    fixture.fixture.detectChanges();
 
     const smoothCall = fixture.scrollToSpy.calls.mostRecent().args[0] as unknown as {
       left?: number;
       behavior?: string;
     };
-    expect(smoothCall.left).toBe(336);
+    expect(smoothCall.left).toBe(0);
     expect(smoothCall.behavior).toBe('smooth');
   });
 

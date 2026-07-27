@@ -13,20 +13,23 @@ import urllib.request
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from html.parser import HTMLParser
+from pathlib import Path
 from typing import Callable, Mapping
 from urllib.parse import urlsplit
 
-PUBLIC_ROUTES = (
-    "/",
-    "/demo-ai",
-    "/przyklad-demo",
-    "/rozwiazania",
-    "/development",
-    "/studio",
-    "/rd",
-    "/kontakt",
-    "/polityka-prywatnosci",
-)
+REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
+PUBLIC_ROUTES_PATH = REPOSITORY_ROOT / "frontend" / "src" / "prerender-routes.txt"
+
+
+def _public_routes() -> tuple[str, ...]:
+    routes = (
+        line.strip()
+        for line in PUBLIC_ROUTES_PATH.read_text(encoding="utf-8").splitlines()
+    )
+    return tuple(route for route in routes if route and route != "/404")
+
+
+PUBLIC_ROUTES = _public_routes()
 NOT_FOUND_PATH = "/__protolume_read_only_smoke_missing__"
 MAX_RESPONSE_BYTES = 2_000_000
 BUILD_SHA_PATTERN = re.compile(r"^[0-9a-f]{7,64}$")

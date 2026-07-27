@@ -174,6 +174,36 @@ def route_html(
             '<a href="/kontakt?projectType=custom_web_app">Kontakt</a>'
             '<a href="/kontakt?projectType=backend_api">Kontakt</a>'
         )
+    elif path == "/rozwiazania/chatbot-ai-dla-firm":
+        body = (
+            '<h1>Chatbot AI dla firm</h1>'
+            '<p>Pomoc w odpowiedziach na powtarzalne pytania i przekierowaniu spraw.</p>'
+            '<a href="/kontakt">Kontakt</a>'
+        )
+    elif path == "/rozwiazania/voice-ai-dla-firm":
+        body = (
+            '<h1>Voice AI dla firm</h1>'
+            '<p>Kwalifikacja po??cze? i przekazanie do cz?owieka, gdy jest to potrzebne.</p>'
+            '<a href="/kontakt">Kontakt</a>'
+        )
+    elif path == "/rozwiazania/automatyzacja-procesow":
+        body = (
+            '<h1>Automatyzacja proces?w</h1>'
+            '<p>Mniej r?cznego przepisywania i mniej pomini?tych krok?w.</p>'
+            '<a href="/kontakt">Kontakt</a>'
+        )
+    elif path == "/rozwiazania/integracje-whatsapp-crm":
+        body = (
+            '<h1>Integracje WhatsApp i CRM</h1>'
+            '<p>Porz?dkowanie wiadomo?ci i zapisywanie wyniku w systemie.</p>'
+            '<a href="/kontakt">Kontakt</a>'
+        )
+    elif path == "/rozwiazania/systemy-agentowe":
+        body = (
+            '<h1>Systemy agentowe</h1>'
+            '<p>Koordynacja wielu krok?w z jasnym momentem kontroli cz?owieka.</p>'
+            '<a href="/kontakt">Kontakt</a>'
+        )
     elif path == "/development":
         body = (
             '<h1>Wdro?enia</h1>'

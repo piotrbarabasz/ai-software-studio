@@ -11,6 +11,7 @@ describe('Site content model', () => {
           'demo',
           'demo-example',
           'solutions',
+          'service-landing',
           'development',
           'studio',
           'research',
@@ -25,6 +26,11 @@ describe('Site content model', () => {
       '/demo-ai',
       '/przyklad-demo',
       '/rozwiazania',
+      '/rozwiazania/chatbot-ai-dla-firm',
+      '/rozwiazania/voice-ai-dla-firm',
+      '/rozwiazania/automatyzacja-procesow',
+      '/rozwiazania/integracje-whatsapp-crm',
+      '/rozwiazania/systemy-agentowe',
       '/development',
       '/studio',
       '/rd',
@@ -34,6 +40,10 @@ describe('Site content model', () => {
     expect(siteContent.development.path).toBe('/development');
     expect(siteContent.research.path).toBe('/rd');
     expect(siteContent.research.directions.length).toBeGreaterThan(0);
+    expect(siteContent.serviceLandingPages).toHaveSize(5);
+    expect(
+      siteContent.serviceLandingPages.every((page) => page.path.startsWith('/rozwiazania/')),
+    ).toBeTrue();
     expect(siteContent.solutions.solutions).toHaveSize(5);
     expect(new Set(siteContent.solutions.solutions.map((solution) => solution.id)).size).toBe(5);
     expect(
@@ -58,9 +68,8 @@ describe('Site content model', () => {
     expect(siteContent.home.hero.highlightedTitlePart).toBe('konkretny proces');
     expect(siteContent.home.hero.titleAfterHighlight).toContain('Twojej firmie');
     expect(siteContent.home.hero.audience).toContain('ręcznie przenoszą informacje');
-    expect(siteContent.home.hero.audience).toContain('bez gotowej specyfikacji');
-    expect(siteContent.home.hero.lead).toContain('działające demo jednego przepływu');
-    expect(siteContent.home.hero.lead).toContain('najlepszy kolejny krok');
+    expect(siteContent.home.hero.lead).toContain('demo jednego procesu w siedem dni');
+    expect(siteContent.home.hero.lead).toContain('następny krok');
     expect(siteContent.home.hero.primaryCta.label).toBe('Opisz proces w 3 zdaniach');
     expect(siteContent.home.closingCta.primaryCta.label).toBe(
       siteContent.home.hero.primaryCta.label,
@@ -70,12 +79,29 @@ describe('Site content model', () => {
     expect(siteContent.home.paths.length).toBe(2);
     expect(siteContent.home.paths.map((path) => path.cta.path)).toEqual([
       '/demo-ai',
-      '/development',
+      '/przyklad-demo',
     ]);
     expect(siteContent.home.problemGroups.length).toBe(3);
     expect(siteContent.home.hero.processDiagram).toHaveSize(4);
     expect(siteContent.home.trustStrip).toHaveSize(4);
     expect(siteContent.home.useCases).toHaveSize(5);
+    expect(siteContent.home.useCases.every((item) => Boolean(item.cta))).toBeTrue();
+    expect(siteContent.home.useCases.map((item) => item.cta!.path)).toEqual([
+      '/rozwiazania/chatbot-ai-dla-firm',
+      '/rozwiazania/voice-ai-dla-firm',
+      '/rozwiazania/automatyzacja-procesow',
+      '/rozwiazania/systemy-agentowe',
+      '/rozwiazania/integracje-whatsapp-crm',
+    ]);
+    expect(siteContent.home.businessFlow.steps).toHaveSize(6);
+    expect(siteContent.home.businessFlow.results).toEqual([
+      'Mniej ręcznego przepisywania.',
+      'Szybsza odpowiedź.',
+      'Mniej zagubionych zapytań.',
+      'Jasny moment przekazania sprawy człowiekowi.',
+    ]);
+    expect(siteContent.home.businessFlow.cta.path).toBe('/kontakt');
+    expect(siteContent.home.businessFlow.cta.queryParams?.['projectType']).toBe('backend_api');
     expect(siteContent.home.sevenDayResults.items).toHaveSize(4);
     expect(siteContent.home.hero.primaryCta.path).toBe('/kontakt');
     expect(siteContent.home.hero.primaryCta.queryParams?.['projectType']).toBe('mvp_prototype');
@@ -133,6 +159,11 @@ describe('Site content model', () => {
         { from: '/produkty/whatsapp-ai', to: '/rozwiazania' },
         { from: '/produkty/automatyzacja-email', to: '/rozwiazania' },
         { from: '/produkty/panel-agentow', to: '/rozwiazania' },
+        { from: '/chatbot-ai-dla-firm', to: '/rozwiazania/chatbot-ai-dla-firm' },
+        { from: '/voice-ai-dla-firm', to: '/rozwiazania/voice-ai-dla-firm' },
+        { from: '/automatyzacja-procesow', to: '/rozwiazania/automatyzacja-procesow' },
+        { from: '/integracje-whatsapp-crm', to: '/rozwiazania/integracje-whatsapp-crm' },
+        { from: '/systemy-agentowe', to: '/rozwiazania/systemy-agentowe' },
       ]),
     );
   });
@@ -223,18 +254,13 @@ describe('Site content model', () => {
         title: 'Sprawdź działające elementy i jasno opisane granice',
       }),
     );
-    expect(siteContent.home.evidenceTeaser.lead).toContain(
-      'Uruchom demonstrację, przejrzyj przykładowy rezultat',
-    );
     expect(siteContent.home.trustStrip.map((item) => item.id)).toEqual([
       'direct-technical-contact',
       'demo-before-investment',
       'ai-cost-boundaries',
       'client-confidentiality',
     ]);
-    expect(siteContent.home.trustStrip.map((item) => item.title)).toContain(
-      'Prywatność danych i kodu klienta',
-    );
+    expect(siteContent.home.trustStrip.map((item) => item.title)).toContain('Prywatność danych');
     expect(publicBrand.descriptor).toBe('Studio wdrożeń AI i automatyzacji');
   });
 

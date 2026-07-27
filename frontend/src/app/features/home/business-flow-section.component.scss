@@ -1,0 +1,117 @@
+:host {
+  display: block;
+}
+
+.business-flow {
+  display: grid;
+  gap: 1.25rem;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  border: 1px solid var(--color-line);
+  border-radius: 18px;
+  background: linear-gradient(180deg, var(--surface-brand), var(--color-surface));
+  box-shadow: var(--shadow-soft);
+}
+
+.business-flow-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.business-flow-card {
+  display: grid;
+  gap: 0.85rem;
+  align-content: start;
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid var(--color-line);
+  border-radius: 16px;
+  background: var(--color-surface);
+}
+
+.business-flow-card.is-human {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-primary) 18%, transparent);
+}
+
+.business-flow-icon {
+  display: grid;
+  width: 3rem;
+  height: 3rem;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 38%, var(--color-line));
+  border-radius: 999px;
+  color: var(--color-primary-strong);
+  background: color-mix(in srgb, var(--surface-brand) 70%, white);
+}
+
+.business-flow-card.is-human .business-flow-icon {
+  background: var(--color-primary);
+  color: var(--text-on-dark);
+}
+
+.business-flow-icon svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.business-flow-copy {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.business-flow-kicker {
+  margin: 0;
+  color: var(--color-accent);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.business-flow-copy h3,
+.business-flow-copy p,
+.business-flow-results li {
+  margin: 0;
+}
+
+.business-flow-copy h3 {
+  font-size: 1.05rem;
+  line-height: 1.15;
+}
+
+.business-flow-copy p {
+  color: var(--color-muted);
+  font-size: 0.98rem;
+}
+
+.business-flow-results {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.business-flow-results li {
+  padding: 0.55rem 0.85rem;
+  border: 1px solid var(--brand-200);
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-weight: 700;
+}
+
+@media (max-width: 760px) {
+  .business-flow-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .business-flow-results li {
+    width: 100%;
+  }
+}

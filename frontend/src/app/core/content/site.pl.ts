@@ -8,6 +8,7 @@ import type {
   SiteContent,
   SolutionsPageContent,
 } from './site-content.types';
+import { serviceLandingPages, serviceLandingRouteMetadata } from './service-pages.pl';
 import { environment } from '../../../environments/environment';
 
 function brandTitle(title: string): string {
@@ -290,6 +291,7 @@ const routeMetadata = [
     ),
     kind: 'solutions',
   },
+  ...serviceLandingRouteMetadata,
   {
     path: '/development',
     label: 'Wdrożenia',
@@ -347,6 +349,11 @@ const legacyRedirects = [
   { from: '/produkty/whatsapp-ai', to: '/rozwiazania' },
   { from: '/produkty/automatyzacja-email', to: '/rozwiazania' },
   { from: '/produkty/panel-agentow', to: '/rozwiazania' },
+  { from: '/chatbot-ai-dla-firm', to: '/rozwiazania/chatbot-ai-dla-firm' },
+  { from: '/voice-ai-dla-firm', to: '/rozwiazania/voice-ai-dla-firm' },
+  { from: '/automatyzacja-procesow', to: '/rozwiazania/automatyzacja-procesow' },
+  { from: '/integracje-whatsapp-crm', to: '/rozwiazania/integracje-whatsapp-crm' },
+  { from: '/systemy-agentowe', to: '/rozwiazania/systemy-agentowe' },
 ] as const;
 
 const contactNoCommitment =
@@ -366,48 +373,45 @@ const navigationLink = (path: (typeof primaryNavigation)[number]['path']) =>
 const homeUseCases: readonly HomeUseCase[] = [
   {
     id: 'knowledge-assistant',
-    title: 'Asystent wiedzy',
-    problem: 'Pracownicy lub klienci wielokrotnie pytają o te same informacje.',
-    outcome:
-      'Odpowiedź na podstawie zatwierdzonych materiałów albo przekazanie sprawy człowiekowi.',
-    cta: { label: 'Poznaj rozwiązanie', path: '/rozwiazania', fragment: 'asystent-wiedzy' },
+    title: 'Chatbot AI dla firm',
+    problem: 'Pracownicy i klienci pytają o to samo.',
+    outcome: 'Odpowiedź bierze się z materiałów albo trafia do człowieka.',
+    cta: { label: 'Poznaj rozwiązanie', path: '/rozwiazania/chatbot-ai-dla-firm' },
     visualKind: 'knowledge-assistant',
   },
   {
     id: 'message-and-document-workflow',
-    title: 'Obsługa wiadomości i dokumentów',
-    problem: 'Zespół ręcznie odczytuje wiadomości, kopiuje dane i przekazuje sprawy dalej.',
-    outcome: 'Klasyfikacja, zebranie danych i przypisanie kolejnego kroku.',
+    title: 'Voice AI dla firm',
+    problem: 'Zespół odbiera podobne telefony.',
+    outcome: 'System zbiera informacje i wskazuje kolejny krok.',
     cta: {
       label: 'Poznaj rozwiązanie',
-      path: '/rozwiazania',
-      fragment: 'automatyzacja-wiadomosci-i-dokumentow',
+      path: '/rozwiazania/voice-ai-dla-firm',
     },
     visualKind: 'message-workflow',
   },
   {
     id: 'process-panel',
-    title: 'Panel procesu',
-    problem: 'Statusy i decyzje są rozproszone między e-mailem, komunikatorami i arkuszami.',
-    outcome: 'Jeden widok spraw, statusów i odpowiedzialności.',
-    cta: { label: 'Poznaj rozwiązanie', path: '/rozwiazania', fragment: 'panel-operacyjny' },
+    title: 'Automatyzacja procesów',
+    problem: 'Zespół ręcznie przepisuje dane i statusy.',
+    outcome: 'System klasyfikuje sprawę i zapisuje wynik.',
+    cta: { label: 'Poznaj rozwiązanie', path: '/rozwiazania/automatyzacja-procesow' },
     visualKind: 'process-panel',
   },
   {
     id: 'agent-system',
-    title: 'System agentowy do realizacji zadań',
-    problem:
-      'Złożone zadanie wymaga zebrania informacji i wykonania kilku kontrolowanych operacji.',
-    outcome: 'Przekazywanie wyników między etapami z punktem decyzji człowieka.',
-    cta: { label: 'Poznaj rozwiązanie', path: '/rozwiazania', fragment: 'system-agentowy' },
+    title: 'Systemy agentowe',
+    problem: 'Złożone zadanie wymaga kilku kontrolowanych kroków.',
+    outcome: 'Etapy przekazują wynik, a człowiek zatwierdza decyzję.',
+    cta: { label: 'Poznaj rozwiązanie', path: '/rozwiazania/systemy-agentowe' },
     visualKind: 'agent-system',
   },
   {
     id: 'channel-integrations',
-    title: 'Integracje kanałów i komunikatorów',
-    problem: 'Wiadomości z wielu kanałów wymagają ręcznego kopiowania danych i zmiany statusów.',
-    outcome: 'Kontrolowany przepływ wiadomości, statusów i eskalacji do człowieka.',
-    cta: { label: 'Poznaj rozwiązanie', path: '/rozwiazania', fragment: 'integracje-kanalow' },
+    title: 'Integracje WhatsApp i CRM',
+    problem: 'Wiadomości z wielu kanałów wymagają ręcznej obsługi.',
+    outcome: 'Przepływ wiadomości i statusów ma jeden kontrolowany tor.',
+    cta: { label: 'Poznaj rozwiązanie', path: '/rozwiazania/integracje-whatsapp-crm' },
     visualKind: 'channel-integrations',
   },
 ];
@@ -434,15 +438,15 @@ export const siteContent = {
     ],
     copyright: 'Wszelkie prawa zastrzeżone.',
   },
+  serviceLandingPages,
   trust: {
     ownerSectionTitle: `Kto prowadzi ${publicBrand.name}?`,
     ownerSectionEyebrow: 'Osoba odpowiedzialna',
     owner: {
       name: publicBrand.owner.name,
       role: publicBrand.owner.role,
-      bio: 'Prowadzę analizę, kontakt i realizację po jednej stronie odpowiedzialności. Pomagam zamieniać konkretny problem w sprawdzalne demo albo świadomie zaplanowane wdrożenie.',
-      privacyNotice:
-        'Materiały, dane i kod klienta pozostają prywatne. Publicznie prezentowane są wyłącznie własne demonstracje Protolume albo materiały udostępnione za wyraźną zgodą klienta.',
+      bio: 'Prowadzę analizę, kontakt i realizację po jednej stronie, bez przekazywania sprawy dalej.',
+      privacyNotice: 'Materiały, dane i kod klienta pozostają prywatne.',
       verifiedCapabilities: [
         {
           label: '4+ lata doświadczenia w tworzeniu oprogramowania',
@@ -466,9 +470,9 @@ export const siteContent = {
         },
       ],
       accountability: {
-        statement: 'Analiza, kontakt i realizacja pozostają po jednej stronie odpowiedzialności.',
+        statement: 'Jedna osoba prowadzi projekt od rozmowy do odbioru.',
         detail:
-          'Od pierwszej rozmowy do kolejnych decyzji pracujesz bezpośrednio z osobą odpowiedzialną za techniczny kierunek i wykonanie prac.',
+          'Od pierwszej rozmowy do decyzji pracujesz bezpośrednio z osobą odpowiedzialną, która zna cały zakres.',
       },
     },
     evidence: {
@@ -553,14 +557,13 @@ export const siteContent = {
       titleBeforeHighlight: 'Sprawdź w 7 dni, czy AI usprawni ',
       highlightedTitlePart: 'konkretny proces',
       titleAfterHighlight: ' w Twojej firmie.',
-      supportingNote: 'Nie potrzebujesz gotowej specyfikacji technicznej.',
+      supportingNote: 'Bez gotowej specyfikacji.',
       processDiagram: ['Obecny proces', 'Demo', 'Wnioski', 'Decyzja'],
       eyebrow: 'Protolume — studio wdrożeń AI i automatyzacji',
       title: 'Sprawdź w 7 dni, czy AI usprawni konkretny proces w Twojej firmie.',
-
       audience:
-        'Dla zespołów, które ręcznie przenoszą informacje, pilnują statusów lub odpowiadają na powtarzalne pytania. Wystarczy opis obecnej pracy — bez gotowej specyfikacji.',
-      lead: 'Budujemy działające demo jednego przepływu, sprawdzamy dane i ryzyka, a następnie wskazujemy najlepszy kolejny krok.',
+        'Dla zespołów, które ręcznie przenoszą informacje, pilnują statusów lub odpowiadają na powtarzalne pytania.',
+      lead: 'Budujemy demo jednego procesu w siedem dni. Potem pokazujemy ryzyka, ograniczenia i następny krok dla zespołu w praktyce.',
       primaryCta: {
         label: 'Opisz proces w 3 zdaniach',
         path: '/kontakt',
@@ -598,39 +601,34 @@ export const siteContent = {
         examples: ['panel operacyjny', 'dashboard statusów', 'wewnętrzna aplikacja'],
       },
     ],
-
     pathsHeading: {
-      eyebrow: 'Dwie ścieżki',
-      title: 'Wybierz krok odpowiedni do poziomu pewności',
+      eyebrow: 'Przykłady',
+      title: 'Co klient może zobaczyć',
     },
     paths: [
       {
-        eyebrow: 'Demo w 7 dni',
-        title: 'Sprawdź jeden scenariusz',
-        lead: 'Dla pomysłu, który trzeba zobaczyć i ocenić przed większą decyzją.',
+        eyebrow: 'Interaktywne demo',
+        title: 'Jeden proces w działaniu',
+        lead: 'Przykład pokazuje jeden przepływ bez produkcyjnych danych i bez presji na decyzję.',
         points: [
-          'jeden przepływ i kluczowe ekrany',
-          'założenia, potrzebne dane i ograniczenia',
-          'rekomendacja: rozwijać, doprecyzować albo zatrzymać',
+          'symulacja jednego przepływu',
+          'widoczny status i handoff',
+          'do rozmowy o kolejnym kroku',
         ],
         cta: {
-          label: 'Zobacz zakres demo',
+          label: 'Uruchom demo',
           path: '/demo-ai',
           queryParams: undefined,
         },
       },
       {
-        eyebrow: 'Wdrożenia',
-        title: 'Zaplanuj pierwszy etap',
-        lead: 'Dla potwierdzonej potrzeby, użytkowników i rezultatu rozwiązania.',
-        points: [
-          'aplikacja, API, integracja lub automatyzacja',
-          'bezpieczeństwo, testy i kryteria odbioru',
-          'wycena po potwierdzeniu zakresu',
-        ],
+        eyebrow: 'Przykładowy raport',
+        title: 'Co powstaje po siedmiu dniach',
+        lead: 'Materiał demonstracyjny pokazuje zakres, ryzyka i rekomendację oraz kolejny krok.',
+        points: ['zakres i wynik demo', 'ryzyka i granice rozwiązania', 'materiał demonstracyjny'],
         cta: {
-          label: 'Zobacz zakres wdrożenia',
-          path: '/development',
+          label: 'Otwórz raport',
+          path: '/przyklad-demo',
           queryParams: undefined,
         },
       },
@@ -646,8 +644,8 @@ export const siteContent = {
       lead: 'Uruchom demonstrację, przejrzyj przykładowy rezultat i zobacz, co każdy materiał faktycznie potwierdza.',
     },
     closingCta: {
-      title: 'Opisz proces, który dziś zabiera czas.',
-      lead: 'Napisz, kto wykonuje pracę, gdzie pojawiają się ręczne kroki i jaki rezultat ma się zmienić. Ustalimy właściwy następny krok.',
+      title: 'Jedna osoba prowadzi projekt',
+      lead: 'Analiza, kontakt i realizacja pozostają po jednej stronie odpowiedzialności.',
       primaryCta: {
         label: 'Opisz proces w 3 zdaniach',
         path: '/kontakt',
@@ -655,44 +653,100 @@ export const siteContent = {
       },
     },
     trustStrip: [
-      { id: 'direct-technical-contact', title: 'Bezpośredni kontakt techniczny' },
-      { id: 'demo-before-investment', title: 'Demo przed większą inwestycją' },
-      { id: 'ai-cost-boundaries', title: 'Kontrola kosztu i granic AI' },
-      { id: 'client-confidentiality', title: 'Prywatność danych i kodu klienta' },
+      { id: 'direct-technical-contact', title: 'Demo przed inwestycją' },
+      { id: 'demo-before-investment', title: 'Jasny koszt' },
+      { id: 'ai-cost-boundaries', title: 'Zidentyfikowane ryzyka' },
+      { id: 'client-confidentiality', title: 'Prywatność danych' },
     ],
     useCases: homeUseCases,
+    businessFlow: {
+      eyebrow: 'Jak rozwiązania współpracują',
+      title: 'Jedna ścieżka od kontaktu do uporządkowanego wyniku',
+      lead: 'Klient pisze lub dzwoni, system zbiera informacje, kwalifikuje sprawę i przekazuje człowiekowi gotowy kontekst.',
+      results: [
+        'Mniej ręcznego przepisywania.',
+        'Szybsza odpowiedź.',
+        'Mniej zagubionych zapytań.',
+        'Jasny moment przekazania sprawy człowiekowi.',
+      ],
+      cta: {
+        label: 'Sprawdź taki proces na swoim przykładzie',
+        path: '/kontakt',
+        queryParams: { projectType: 'backend_api' },
+      },
+      steps: [
+        {
+          id: 'customer-contact',
+          kind: 'contact',
+          kicker: 'Wejście',
+          title: 'Klient pisze lub dzwoni',
+          description: 'Jedno wejście bez ręcznego przepisywania informacji.',
+        },
+        {
+          id: 'data-collection',
+          kind: 'collect',
+          kicker: 'Zbieranie',
+          title: 'System zbiera najważniejsze informacje',
+          description: 'Porządkuje dane potrzebne do dalszej obsługi sprawy.',
+        },
+        {
+          id: 'qualification',
+          kind: 'qualify',
+          kicker: 'AI',
+          title: 'Kwalifikuje sprawę',
+          description: 'Wskazuje typ sprawy, priorytet i brakujące elementy.',
+        },
+        {
+          id: 'next-step',
+          kind: 'suggest',
+          kicker: 'AI',
+          title: 'Proponuje termin lub kolejny krok',
+          description: 'Podpowiada najprostszy następny ruch bez pełnej autonomii.',
+        },
+        {
+          id: 'system-save',
+          kind: 'save',
+          kicker: 'System',
+          title: 'Zapisuje dane w systemie',
+          description: 'Przekazuje uporządkowany wynik do CRM lub innego narzędzia.',
+        },
+        {
+          id: 'human-handoff',
+          kind: 'handoff',
+          kicker: 'Człowiek',
+          title: 'Pracownik otrzymuje uporządkowany wynik',
+          description: 'Człowiek przejmuje sprawę z kompletem kontekstu i odpowiedzialności.',
+        },
+      ],
+    },
     sevenDayResults: {
-      eyebrow: 'Rezultat demo',
-      title: 'Co dokładnie powstaje w siedem dni?',
-      lead: 'Po siedmiu dniach otrzymujesz nie tylko widok rozwiązania, ale także informacje potrzebne do decyzji o dalszym rozwoju.',
+      eyebrow: 'Jak wygląda siedem dni',
+      title: 'Cztery kroki do decyzji',
+      lead: 'Od opisu do rekomendacji bez zbędnej dokumentacji.',
       reportCta: { label: 'Zobacz przykładowy raport', path: '/przyklad-demo' },
       items: [
         {
           id: 'visible-flow',
-          title: 'Widoczny przepływ',
-          description:
-            'Ekrany lub działający scenariusz, który można pokazać zespołowi i wspólnie ocenić.',
+          title: 'Opis procesu',
+          description: 'Ustalamy jeden proces, dane i granice zakresu.',
           order: 1,
         },
         {
           id: 'key-assumption-test',
-          title: 'Test kluczowego założenia',
-          description:
-            'Sprawdzenie, czy dane, logika i sposób działania pozwalają osiągnąć zakładany rezultat.',
+          title: 'Walidacja',
+          description: 'Sprawdzamy założenia, ryzyka i brakujące informacje.',
           order: 2,
         },
         {
           id: 'risks-and-dependencies',
-          title: 'Lista ryzyk i zależności',
-          description:
-            'Integracje, dane, bezpieczeństwo, udział człowieka oraz przewidywane koszty działania.',
+          title: 'Działające demo',
+          description: 'Pokazujemy jeden scenariusz do oceny przez zespół.',
           order: 3,
         },
         {
           id: 'decision-recommendation',
-          title: 'Rekomendacja decyzji',
-          description:
-            'Rozwijać, doprecyzować, zmienić kierunek albo zatrzymać pomysł przed większą inwestycją.',
+          title: 'Rekomendacja',
+          description: 'Wskazujemy rozwijać, doprecyzować albo zatrzymać.',
           order: 4,
         },
       ],

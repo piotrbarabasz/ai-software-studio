@@ -22,6 +22,7 @@ describe('SolutionsPageComponent', () => {
     const element = fixture.nativeElement as HTMLElement;
     expect(element.querySelectorAll('article[id]').length).toBe(5);
     expect(element.querySelectorAll('h1').length).toBe(1);
+    expect(element.querySelectorAll('.landing-links a')).toHaveSize(5);
     expect(element.textContent).toContain('Asystent wiedzy');
     expect(element.textContent).toContain('Automatyzacja wiadomości i dokumentów');
     expect(element.textContent).toContain('Panel operacyjny procesu');

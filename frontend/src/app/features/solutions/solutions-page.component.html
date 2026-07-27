@@ -4,6 +4,11 @@
     <h1>{{ content.title }}</h1>
     <p class="page-lead">{{ content.lead }}</p>
     <p class="scope-notice">{{ content.scopeNotice }}</p>
+    <div class="landing-links" aria-label="Strony usług">
+      @for (page of landingPages; track page.path) {
+        <a [routerLink]="page.path">{{ page.title }}</a>
+      }
+    </div>
     <nav class="quick-links" aria-label="{{ content.quickLinksLabel }}">
       @for (solution of content.solutions; track solution.id) {
         <a [href]="'#' + solution.id">{{ solution.title }}</a>

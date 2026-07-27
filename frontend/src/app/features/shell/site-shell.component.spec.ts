@@ -369,6 +369,15 @@ describe('SiteShellComponent', () => {
       if (route.path === '/polityka-prywatnosci') {
         expect(document.querySelector('main article.privacy-page')).not.toBeNull();
       }
+      if (route.kind === 'service-landing') {
+        const routeStructuredData = JSON.parse(
+          document.querySelector('#site-structured-data')?.textContent ?? '{}',
+        ) as { '@graph': Array<Record<string, unknown>> };
+        const service = routeStructuredData['@graph'].find((item) => item['@type'] === 'Service');
+        expect(service).toBeDefined();
+        expect(service?.['url']).toBe(absoluteSiteUrl(route.path));
+        expect(service?.['provider']).toEqual({ '@id': `${siteSeo.origin}#professional-service` });
+      }
     }
 
     expect(document.querySelector('meta[property="og:image"]')?.getAttribute('content')).toBe(
@@ -388,14 +397,47 @@ describe('SiteShellComponent', () => {
       document.querySelector('#site-structured-data')?.textContent ?? '{}',
     ) as { '@graph': Array<Record<string, unknown>> };
     const types = structuredData['@graph'].map((item) => item['@type']);
-    expect(types).toContain('Person');
-    expect(types).toContain('ProfessionalService');
-    expect(types).toContain('Organization');
-    expect(types).toContain('WebSite');
-    expect(types).toContain('BreadcrumbList');
+    const mainService = structuredData['@graph'].find(
+      (item) => item['@id'] === `${siteSeo.origin}#professional-service`,
+    );
+    const founder = structuredData['@graph'].find(
+      (item) => item['@id'] === `${siteSeo.origin}#founder`,
+    );
+    const website = structuredData['@graph'].find(
+      (item) => item['@id'] === `${siteSeo.origin}#website`,
+    );
+
+    expect(types.filter((type) => type === 'ProfessionalService')).toHaveSize(1);
+    expect(types.filter((type) => type === 'Person')).toHaveSize(1);
+    expect(types.filter((type) => type === 'WebSite')).toHaveSize(1);
+    expect(types.filter((type) => type === 'BreadcrumbList')).toHaveSize(1);
+    expect(types).not.toContain('Organization');
+    expect(mainService).toBeDefined();
+    expect(founder).toBeDefined();
+    expect(website).toBeDefined();
+    expect(mainService?.['name']).toBe(publicBrand.name);
+    expect(mainService?.['url']).toBe(siteSeo.origin);
+    expect(mainService?.['logo']).toBe(
+      absoluteSiteUrl(publicBrand.visualIdentity.logos.horizontalDark ?? ''),
+    );
+    expect(mainService?.['founder']).toEqual({ '@id': `${siteSeo.origin}#founder` });
+    expect(mainService?.['contactPoint']).toEqual(
+      jasmine.objectContaining({
+        '@type': 'ContactPoint',
+        contactType: 'sales',
+        url: absoluteSiteUrl('/kontakt'),
+      }),
+    );
+    expect(mainService?.['sameAs']).toBeUndefined();
+    expect(founder?.['name']).toBe(siteContent.trust.owner.name);
+    expect(founder?.['jobTitle']).toBe(siteContent.trust.owner.role);
+    expect(website?.['url']).toBe(siteSeo.origin);
+    expect(website?.['publisher']).toEqual({ '@id': `${siteSeo.origin}#professional-service` });
     expect(JSON.stringify(structuredData)).not.toContain('aggregateRating');
     expect(JSON.stringify(structuredData)).not.toContain('PostalAddress');
     expect(JSON.stringify(structuredData)).not.toContain('telephone');
+    expect(JSON.stringify(structuredData)).not.toContain('run.app');
+    expect(JSON.stringify(structuredData)).not.toContain('github.com');
 
     await fixture.ngZone!.run(() => router.navigateByUrl('/demo-ai'));
     fixture.detectChanges();
@@ -403,13 +445,15 @@ describe('SiteShellComponent', () => {
     const demoStructuredData = JSON.parse(
       document.querySelector('#site-structured-data')?.textContent ?? '{}',
     ) as { '@graph': Array<Record<string, unknown>> };
-    const service = demoStructuredData['@graph'].find((item) => item['@type'] === 'Service');
-    expect(service).toBeDefined();
-    expect(service?.['name']).toBe(siteContent.demo.title);
-    expect(service?.['url']).toBe(absoluteSiteUrl('/demo-ai'));
-    expect(service?.['inLanguage']).toBe('pl-PL');
+    const demoService = demoStructuredData['@graph'].find((item) => item['@type'] === 'Service');
+    expect(demoService).toBeDefined();
+    expect(demoService?.['name']).toBe(siteContent.demo.title);
+    expect(demoService?.['url']).toBe(absoluteSiteUrl('/demo-ai'));
+    expect(demoService?.['inLanguage']).toBe('pl-PL');
+    expect(demoService?.['provider']).toEqual({ '@id': `${siteSeo.origin}#professional-service` });
     expect(JSON.stringify(demoStructuredData)).not.toContain('AggregateRating');
     expect(JSON.stringify(demoStructuredData)).not.toContain('Review');
+    expect(JSON.stringify(demoStructuredData)).not.toContain('run.app');
 
     await fixture.ngZone!.run(() => router.navigateByUrl('/przyklad-demo'));
     fixture.detectChanges();
@@ -426,12 +470,13 @@ describe('SiteShellComponent', () => {
     expect(creativeWork?.['name']).toBe(siteContent.demoExample.title);
     expect(creativeWork?.['url']).toBe(absoluteSiteUrl('/przyklad-demo'));
     expect(creativeWork?.['inLanguage']).toBe('pl-PL');
-    expect(creativeWork?.['publisher']).toEqual({ '@id': `${siteSeo.origin}#organization` });
-    expect(creativeWork?.['author']).toEqual({ '@id': `${siteSeo.origin}#person` });
-    expect(String(creativeWork?.['description'] ?? '')).toContain('fikcyjny');
-    expect(String(creativeWork?.['description'] ?? '')).toContain('nie case study klienta');
+    expect(creativeWork?.['publisher']).toEqual({
+      '@id': `${siteSeo.origin}#professional-service`,
+    });
+    expect(creativeWork?.['author']).toEqual({ '@id': `${siteSeo.origin}#founder` });
     expect(JSON.stringify(reportStructuredData)).not.toContain('AggregateRating');
     expect(JSON.stringify(reportStructuredData)).not.toContain('Review');
+    expect(JSON.stringify(reportStructuredData)).not.toContain('run.app');
 
     await fixture.ngZone!.run(() => router.navigateByUrl('/rozwiazania'));
     fixture.detectChanges();
@@ -442,6 +487,15 @@ describe('SiteShellComponent', () => {
     const itemList = solutionsStructuredData['@graph'].find((item) => item['@type'] === 'ItemList');
     expect(itemList).toBeDefined();
     expect(itemList?.['itemListElement']).toHaveSize(5);
+    const itemListElements = itemList?.['itemListElement'];
+    expect(Array.isArray(itemListElements)).toBeTrue();
+    if (Array.isArray(itemListElements)) {
+      for (const item of itemListElements) {
+        expect((item as { item?: Record<string, unknown> }).item?.['provider']).toEqual({
+          '@id': `${siteSeo.origin}#professional-service`,
+        });
+      }
+    }
     expect(JSON.stringify(solutionsStructuredData)).not.toContain('aggregateRating');
     expect(JSON.stringify(solutionsStructuredData)).not.toContain('run.app');
 

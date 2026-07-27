@@ -2,6 +2,11 @@
 /demo-ai
 /przyklad-demo
 /rozwiazania
+/rozwiazania/chatbot-ai-dla-firm
+/rozwiazania/voice-ai-dla-firm
+/rozwiazania/automatyzacja-procesow
+/rozwiazania/integracje-whatsapp-crm
+/rozwiazania/systemy-agentowe
 /development
 /studio
 /rd

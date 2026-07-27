@@ -1,4 +1,4 @@
-﻿import { TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
 import { HomeComponent } from './home.component';
@@ -11,42 +11,24 @@ describe('HomeComponent', () => {
     }).compileComponents();
   });
 
-  it('renders the structured hero copy and process diagram', () => {
+  function createFixture(): HTMLElement {
     const fixture = TestBed.createComponent(HomeComponent);
     fixture.detectChanges();
-    const element: HTMLElement = fixture.nativeElement;
+    return fixture.nativeElement as HTMLElement;
+  }
 
-    expect(element.querySelector('.eyebrow')?.textContent?.trim()).toBe(
-      'Protolume — studio wdrożeń AI i automatyzacji',
-    );
+  it('renders the shortened hero and both CTAs', () => {
+    const element = createFixture();
+    const actions = element.querySelector('.hero-actions');
+
     expect(element.querySelectorAll('h1')).toHaveSize(1);
     expect(element.querySelector('h1')?.textContent).toContain(
       'Sprawdź w 7 dni, czy AI usprawni konkretny proces w Twojej firmie.',
     );
-    expect(element.querySelector('.gradient-text')?.textContent?.trim()).toBe('konkretny proces');
     expect(element.querySelector('.hero-lead')?.textContent).toContain(
-      'Budujemy działające demo jednego przepływu',
+      'Budujemy demo jednego procesu w siedem dni.',
     );
-    expect(element.querySelector('.hero-supporting-note')?.textContent).toContain(
-      'Nie potrzebujesz gotowej specyfikacji technicznej.',
-    );
-    expect(element.querySelectorAll('.hero-process li')).toHaveSize(4);
-    const processItems = Array.from(element.querySelectorAll('.hero-process li'));
-    expect(
-      processItems.map((item) => item.querySelector('.process-node')?.textContent?.trim()),
-    ).toEqual(['1', '2', '3', '4']);
-    expect(
-      processItems.map((item) => item.querySelector('span:last-child')?.textContent?.trim()),
-    ).toEqual(['Obecny proces', 'Demo', 'Wnioski', 'Decyzja']);
-    expect(element.querySelectorAll('[innerHTML]')).toHaveSize(0);
-  });
-
-  it('renders both hero CTAs with the configured routes', () => {
-    const fixture = TestBed.createComponent(HomeComponent);
-    fixture.detectChanges();
-    const element: HTMLElement = fixture.nativeElement;
-    const actions = element.querySelector('.hero-actions');
-
+    expect(element.querySelector('.hero-supporting-note')).toBeNull();
     expect(actions?.querySelectorAll('a')).toHaveSize(2);
     expect(actions?.querySelector('a:first-child')).toHaveClass('primary-action');
     expect(actions?.querySelector('a:last-child')).toHaveClass('secondary-action');
@@ -58,86 +40,75 @@ describe('HomeComponent', () => {
     );
   });
 
-  it('renders trust strip, use cases and seven-day results in order', () => {
-    const fixture = TestBed.createComponent(HomeComponent);
-    fixture.detectChanges();
-    const element: HTMLElement = fixture.nativeElement;
+  it('renders the shortened homepage structure and core links', () => {
+    const element = createFixture();
 
-    expect(element.querySelectorAll('.home-page > section')).toHaveSize(7);
+    expect(element.querySelectorAll('.home-page > section')).toHaveSize(6);
     expect(element.querySelectorAll('.trust-strip li')).toHaveSize(4);
-    expect(element.querySelector('.trust-strip')?.textContent).toContain(
-      'Bezpośredni kontakt techniczny',
-    );
-    expect(element.querySelector('.trust-strip')?.textContent).toContain(
-      'Prywatność danych i kodu klienta',
-    );
+    expect(element.querySelector('.trust-strip')?.textContent).toContain('Demo przed inwestycją');
+    expect(element.querySelector('.trust-strip')?.textContent).toContain('Prywatność danych');
+
     expect(element.querySelectorAll('.use-cases h2')).toHaveSize(1);
     expect(element.querySelectorAll('.use-case-card')).toHaveSize(5);
     expect(element.querySelectorAll('.use-case-card h3')).toHaveSize(5);
+    expect(element.querySelectorAll('.use-case-card h4')).toHaveSize(10);
     expect(element.querySelectorAll('app-use-case-visual')).toHaveSize(5);
     expect(element.querySelectorAll('.use-case-card [aria-hidden="true"]')).toHaveSize(5);
+    expect(element.querySelectorAll('.use-case-card a')).toHaveSize(5);
     expect(element.querySelectorAll('[data-visual-kind="knowledge-assistant"]')).toHaveSize(1);
     expect(element.querySelectorAll('[data-visual-kind="message-workflow"]')).toHaveSize(1);
     expect(element.querySelectorAll('[data-visual-kind="process-panel"]')).toHaveSize(1);
-    expect(element.querySelectorAll('.use-case-card h4')).toHaveSize(10);
-    const useCaseLinks = Array.from(
-      element.querySelectorAll<HTMLAnchorElement>('.use-case-card a'),
-    );
-    expect(useCaseLinks).toHaveSize(5);
-    expect(useCaseLinks.map((link) => link.getAttribute('href'))).toEqual([
-      '/rozwiazania#asystent-wiedzy',
-      '/rozwiazania#automatyzacja-wiadomosci-i-dokumentow',
-      '/rozwiazania#panel-operacyjny',
-      '/rozwiazania#system-agentowy',
-      '/rozwiazania#integracje-kanalow',
+    expect(element.querySelectorAll('[data-visual-kind="agent-system"]')).toHaveSize(1);
+    expect(element.querySelectorAll('[data-visual-kind="channel-integrations"]')).toHaveSize(1);
+    expect(
+      Array.from(element.querySelectorAll<HTMLAnchorElement>('.use-case-card a'), (link) =>
+        link.getAttribute('href'),
+      ),
+    ).toEqual([
+      '/rozwiazania/chatbot-ai-dla-firm',
+      '/rozwiazania/voice-ai-dla-firm',
+      '/rozwiazania/automatyzacja-procesow',
+      '/rozwiazania/systemy-agentowe',
+      '/rozwiazania/integracje-whatsapp-crm',
     ]);
     expect(element.querySelectorAll('.problem-card')).toHaveSize(0);
+    expect(element.querySelectorAll('.evidence-teaser-card')).toHaveSize(0);
+
+    expect(element.querySelector('.seven-day-results h2')?.textContent).toContain(
+      'Cztery kroki do decyzji',
+    );
     expect(element.querySelectorAll('.seven-day-results > ol > li')).toHaveSize(4);
-    expect(element.querySelector('.seven-day-results a[href="/przyklad-demo"]')).not.toBeNull();
-    expect(element.querySelector('.seven-day-results')?.textContent).toContain(
-      'Co dokładnie powstaje w siedem dni?',
+    expect(element.querySelectorAll('.paths .path-card')).toHaveSize(2);
+    expect(element.querySelector('.paths')?.textContent).toContain('Co klient może zobaczyć');
+    expect(element.querySelector('.paths a[href="/demo-ai"]')).not.toBeNull();
+    expect(element.querySelector('.paths a[href="/przyklad-demo"]')).not.toBeNull();
+    expect(element.querySelector('.contact-card')?.textContent).toContain(
+      'Prowadzę analizę, kontakt i realizację po jednej stronie, bez przekazywania sprawy dalej.',
     );
-    expect(element.querySelector('.seven-day-results')?.textContent).toContain(
-      'Po siedmiu dniach otrzymujesz',
+    expect(element.querySelector('.contact-card')?.textContent).toContain(
+      'Materiały, dane i kod klienta pozostają prywatne.',
     );
+    expect(
+      element.querySelector('.contact-card a[href="/kontakt?projectType=mvp_prototype"]'),
+    ).not.toBeNull();
 
-    const visualKinds = Array.from(
-      element.querySelectorAll<HTMLElement>('.use-case-card'),
-      (card) => card.getAttribute('data-visual-kind'),
-    );
-    expect(visualKinds).toEqual([
-      'knowledge-assistant',
-      'message-workflow',
-      'process-panel',
-      'agent-system',
-      'channel-integrations',
-    ]);
     expect(element.querySelectorAll('img[src^="http"], img[src^="//"]')).toHaveSize(0);
-    expect(element.querySelectorAll('.evidence-teaser-card')).toHaveSize(3);
-    expect(
-      Array.from(
-        element.querySelectorAll<HTMLAnchorElement>('.evidence-teaser-card .evidence-links a'),
-        (link) => link.getAttribute('href'),
-      ),
-    ).toEqual(['/demo-ai', '/przyklad-demo', '/']);
-    expect(
-      element.querySelector('.evidence-teaser-card .evidence-links a[target="_blank"]'),
-    ).toBeNull();
-    expect(element.querySelector('.evidence-links a[target="_blank"]')).toBeNull();
-
-    const ids = Array.from(element.querySelectorAll<HTMLElement>('[id]'), (item) => item.id);
-    expect(new Set(ids).size).toBe(ids.length);
-
-    const resultsList = element.querySelector('.seven-day-results > ol');
-    const pathsSection = element.querySelector('.paths');
-    expect(resultsList).not.toBeNull();
-    expect(pathsSection).not.toBeNull();
-    if (resultsList && pathsSection) {
-      expect(
-        resultsList.compareDocumentPosition(pathsSection) & Node.DOCUMENT_POSITION_FOLLOWING,
-      ).toBeTruthy();
-    }
-    expect(element.querySelectorAll('.path-card')).toHaveSize(2);
     expect(element.querySelector('app-knowledge-demo')).toBeNull();
+    expect(element.querySelectorAll('.business-flow-card')).toHaveSize(6);
+    expect(element.querySelector('.business-flow')?.textContent).toContain(
+      'Jasny moment przekazania sprawy człowiekowi.',
+    );
+    expect(
+      element.querySelector('.business-flow a[href="/kontakt?projectType=backend_api"]'),
+    ).not.toBeNull();
+  });
+
+  it('keeps the business flow section free of unsupported statistics', () => {
+    const element = createFixture();
+
+    const flowText = element.querySelector('.business-flow')?.textContent ?? '';
+    expect(flowText).not.toContain('%');
+    expect(flowText).not.toContain('procent');
+    expect(flowText).not.toContain('statystyka');
   });
 });

@@ -224,29 +224,32 @@ export class SiteShellComponent implements OnInit {
     const owner = siteContent.trust.owner;
 
     const route = siteContent.routes.find((item) => item.path === canonicalPath);
-    const organizationId = `${siteSeo.origin}#organization`;
+    const serviceId = `${siteSeo.origin}#professional-service`;
     const graph: Record<string, unknown>[] = [
       {
-        '@id': `${siteSeo.origin}#person`,
+        '@id': `${siteSeo.origin}#founder`,
         '@type': 'Person',
         name: owner.name,
         jobTitle: owner.role,
       },
       {
-        '@id': `${siteSeo.origin}#professional-service`,
+        '@id': serviceId,
         '@type': 'ProfessionalService',
         name: siteSeo.name,
         url: siteSeo.origin,
         description: siteSeo.organizationDescription,
-        founder: { '@id': `${siteSeo.origin}#person` },
-      },
-      {
-        '@id': organizationId,
-        '@type': 'Organization',
-        name: siteSeo.name,
-        url: siteSeo.origin,
-        description: siteSeo.organizationDescription,
-        founder: { '@id': `${siteSeo.origin}#person` },
+        logo: absoluteSiteUrl(
+          publicBrand.visualIdentity.logos.horizontalDark ??
+            publicBrand.visualIdentity.logos.symbol ??
+            '/assets/protolume-logo-horizontal-dark.svg',
+        ),
+        founder: { '@id': `${siteSeo.origin}#founder` },
+        contactPoint: {
+          '@type': 'ContactPoint',
+          contactType: 'sales',
+          url: absoluteSiteUrl('/kontakt'),
+          availableLanguage: 'pl-PL',
+        },
       },
       {
         '@id': `${siteSeo.origin}#website`,
@@ -254,7 +257,7 @@ export class SiteShellComponent implements OnInit {
         name: siteSeo.name,
         url: siteSeo.origin,
         inLanguage: 'pl-PL',
-        publisher: { '@id': organizationId },
+        publisher: { '@id': serviceId },
       },
     ];
 
@@ -273,7 +276,7 @@ export class SiteShellComponent implements OnInit {
             name: solution.title,
             description: solution.summary,
             url: `${absoluteSiteUrl('/rozwiazania')}#${solution.id}`,
-            provider: { '@id': organizationId },
+            provider: { '@id': serviceId },
           },
         })),
       });
@@ -287,8 +290,24 @@ export class SiteShellComponent implements OnInit {
         description: siteContent.demo.lead,
         url: absoluteSiteUrl('/demo-ai'),
         inLanguage: 'pl-PL',
-        provider: { '@id': organizationId },
+        provider: { '@id': serviceId },
         serviceType: 'Demo AI w 7 dni',
+      });
+    }
+
+    const serviceLandingPage = siteContent.serviceLandingPages.find(
+      (item) => item.path === canonicalPath,
+    );
+    if (serviceLandingPage) {
+      graph.push({
+        '@id': `${siteSeo.origin}${serviceLandingPage.path}#service`,
+        '@type': 'Service',
+        name: serviceLandingPage.title,
+        description: serviceLandingPage.description,
+        url: absoluteSiteUrl(serviceLandingPage.path),
+        inLanguage: 'pl-PL',
+        provider: { '@id': serviceId },
+        serviceType: serviceLandingPage.serviceType,
       });
     }
 
@@ -300,8 +319,8 @@ export class SiteShellComponent implements OnInit {
         description: `${siteContent.demoExample.fictionalNotice} ${siteContent.demoExample.decisionSummary.note}`,
         url: absoluteSiteUrl('/przyklad-demo'),
         inLanguage: 'pl-PL',
-        author: { '@id': `${siteSeo.origin}#person` },
-        publisher: { '@id': organizationId },
+        author: { '@id': `${siteSeo.origin}#founder` },
+        publisher: { '@id': serviceId },
         isPartOf: { '@id': `${siteSeo.origin}#website` },
         about: {
           '@type': 'Thing',

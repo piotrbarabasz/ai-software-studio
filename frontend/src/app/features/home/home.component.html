@@ -19,18 +19,7 @@
           home.hero.secondaryCta.label
         }}</a>
       </div>
-      <p class="hero-supporting-note">{{ home.hero.supportingNote }}</p>
     </div>
-    <aside class="hero-process" aria-label="Proces od obecnego stanu do decyzji">
-      <ol>
-        @for (step of home.hero.processDiagram; track step; let index = $index) {
-          <li>
-            <span class="process-node" aria-hidden="true">{{ index + 1 }}</span>
-            <span>{{ step }}</span>
-          </li>
-        }
-      </ol>
-    </aside>
   </section>
 
   <section class="trust-strip section-shell" aria-labelledby="trust-strip-title">
@@ -47,11 +36,16 @@
 
   <section class="use-cases section-shell" aria-labelledby="use-cases-title">
     <div class="section-heading">
-      <p class="eyebrow">Przykładowe procesy</p>
-      <h2 id="use-cases-title">Gdzie AI i automatyzacja mogą odciążyć zespół</h2>
+      <p class="eyebrow">Przykłady procesów</p>
+      <h2 id="use-cases-title">Gdzie możemy pomóc</h2>
+      <p class="section-lead">
+        Pięć skróconych kart pokazuje, gdzie AI i automatyzacja mogą zdjąć ręczną pracę z zespołu.
+      </p>
     </div>
     <app-solution-carousel [items]="home.useCases" />
   </section>
+
+  <app-business-flow-section [flow]="home.businessFlow" />
 
   <section class="seven-day-results section-shell" aria-labelledby="seven-day-results-title">
     <div class="section-heading">
@@ -79,6 +73,9 @@
     <div class="section-heading">
       <p class="eyebrow">{{ home.pathsHeading.eyebrow }}</p>
       <h2 id="paths-title">{{ home.pathsHeading.title }}</h2>
+      <p class="section-lead">
+        Dwa krótkie przykłady pokazują, co można zobaczyć przed większą decyzją.
+      </p>
     </div>
     <div class="path-grid">
       @for (path of home.paths; track path) {
@@ -102,61 +99,12 @@
     </div>
   </section>
 
-  <section class="studio section-shell" aria-labelledby="evidence-title">
-    <div class="evidence-teaser">
-      <div>
-        <p class="eyebrow">{{ home.evidenceTeaser.eyebrow }}</p>
-        <h2 id="evidence-title">{{ home.evidenceTeaser.title }}</h2>
-        <p>{{ home.evidenceTeaser.lead }}</p>
-      </div>
-      <div class="evidence-teaser-grid">
-        @for (item of trust.evidence.items; track item) {
-          <article class="evidence-teaser-card">
-            <p class="evidence-type">{{ item.typeLabel }}</p>
-            <h3>{{ item.title }}</h3>
-            <p class="evidence-check"><strong>Co można sprawdzić:</strong> {{ item.teaser }}</p>
-            <p class="evidence-boundary">
-              <strong>Granica tego dowodu:</strong> {{ item.limitation }}
-            </p>
-            <div class="evidence-links">
-              @if (isInternalWorkEvidenceLink(item.liveLink)) {
-                <a
-                  class="secondary-action"
-                  [routerLink]="item.liveLink.path"
-                  [queryParams]="item.liveLink.queryParams"
-                  [fragment]="item.liveLink.fragment"
-                  >{{ item.liveLink.label }}</a
-                >
-              } @else if (isExternalWorkEvidenceLink(item.liveLink)) {
-                <a
-                  [href]="item.liveLink.url"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  [attr.aria-label]="item.liveLink.accessibleName"
-                  >{{ item.liveLink.label }}</a
-                >
-              }
-            </div>
-          </article>
-        }
-      </div>
-      <div class="evidence-teaser-footer">
-        <div>
-          <p class="eyebrow">{{ home.studioEyebrow }}</p>
-          <p class="trust-statement">{{ home.trustTeaser.statement }}</p>
-        </div>
-        <div class="evidence-links">
-          <a class="secondary-action" [routerLink]="home.trustTeaser.cta.path">{{
-            home.trustTeaser.cta.label
-          }}</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <section class="contact-card section-shell" aria-labelledby="contact-title">
-    <h2 id="contact-title">{{ home.closingCta.title }}</h2>
-    <p>{{ home.closingCta.lead }}</p>
+    <p class="eyebrow">{{ trust.ownerSectionEyebrow }}</p>
+    <h2 id="contact-title">{{ trust.ownerSectionTitle }}</h2>
+    <p>{{ trust.owner.bio }}</p>
+    <p>{{ trust.owner.privacyNotice }}</p>
+    <p>{{ trust.owner.accountability.statement }}</p>
     <a
       class="primary-action"
       [routerLink]="home.closingCta.primaryCta.path"

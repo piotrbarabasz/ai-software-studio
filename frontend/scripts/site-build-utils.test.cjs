@@ -98,6 +98,7 @@ test('generates sitemap and robots from every non-404 prerender route', () => {
   const robots = require('node:fs').readFileSync('generated/robots.txt', 'utf8');
   assert.match(sitemap, /<loc>https:\/\/protolume\.pl<\/loc>/);
   assert.match(sitemap, /<loc>https:\/\/protolume\.pl\/przyklad-demo<\/loc>/);
+  assert.match(sitemap, /<loc>https:\/\/protolume\.pl\/rozwiazania\/chatbot-ai-dla-firm<\/loc>/);
   assert.match(sitemap, /<loc>https:\/\/protolume\.pl\/kontakt<\/loc>/);
   assert.match(robots, /^Sitemap: https:\/\/protolume\.pl\/sitemap\.xml$/m);
   assert.match(robots, /^Allow: \/$/m);
@@ -107,6 +108,11 @@ test('generates sitemap and robots from every non-404 prerender route', () => {
     '/demo-ai',
     '/przyklad-demo',
     '/rozwiazania',
+    '/rozwiazania/chatbot-ai-dla-firm',
+    '/rozwiazania/voice-ai-dla-firm',
+    '/rozwiazania/automatyzacja-procesow',
+    '/rozwiazania/integracje-whatsapp-crm',
+    '/rozwiazania/systemy-agentowe',
     '/development',
     '/studio',
     '/rd',

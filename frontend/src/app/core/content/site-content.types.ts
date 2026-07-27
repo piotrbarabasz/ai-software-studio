@@ -12,6 +12,11 @@ export type StaticRoutePath =
   | '/demo-ai'
   | '/przyklad-demo'
   | '/rozwiazania'
+  | '/rozwiazania/chatbot-ai-dla-firm'
+  | '/rozwiazania/voice-ai-dla-firm'
+  | '/rozwiazania/automatyzacja-procesow'
+  | '/rozwiazania/integracje-whatsapp-crm'
+  | '/rozwiazania/systemy-agentowe'
   | '/development'
   | '/studio'
   | '/rd'
@@ -26,7 +31,12 @@ export type LegacyRoutePath =
   | '/produkty/voice-agent'
   | '/produkty/whatsapp-ai'
   | '/produkty/automatyzacja-email'
-  | '/produkty/panel-agentow';
+  | '/produkty/panel-agentow'
+  | '/chatbot-ai-dla-firm'
+  | '/voice-ai-dla-firm'
+  | '/automatyzacja-procesow'
+  | '/integracje-whatsapp-crm'
+  | '/systemy-agentowe';
 
 export type PublicRoutePath = StaticRoutePath;
 
@@ -35,6 +45,7 @@ export type PublicRouteKind =
   | 'demo'
   | 'demo-example'
   | 'solutions'
+  | 'service-landing'
   | 'development'
   | 'studio'
   | 'research'
@@ -71,6 +82,18 @@ export interface DemoExampleRouteMetadata extends RouteMetadataBase {
 export interface SolutionsRouteMetadata extends RouteMetadataBase {
   readonly kind: 'solutions';
   readonly path: '/rozwiazania';
+  readonly productId?: never;
+  readonly contactContext?: never;
+}
+
+export interface ServiceLandingRouteMetadata extends RouteMetadataBase {
+  readonly kind: 'service-landing';
+  readonly path:
+    | '/rozwiazania/chatbot-ai-dla-firm'
+    | '/rozwiazania/voice-ai-dla-firm'
+    | '/rozwiazania/automatyzacja-procesow'
+    | '/rozwiazania/integracje-whatsapp-crm'
+    | '/rozwiazania/systemy-agentowe';
   readonly productId?: never;
   readonly contactContext?: never;
 }
@@ -229,6 +252,7 @@ export interface HomePageContent {
     HomeTrustStripItem,
   ];
   readonly useCases: readonly HomeUseCase[];
+  readonly businessFlow: HomeBusinessFlow;
   readonly sevenDayResults: HomeSevenDayResults;
 }
 
@@ -302,6 +326,77 @@ export interface SolutionOffer {
   readonly optionalSecondaryCta?: HomeCta;
 }
 
+export type ServiceLandingSlug =
+  | 'chatbot-ai-dla-firm'
+  | 'voice-ai-dla-firm'
+  | 'automatyzacja-procesow'
+  | 'integracje-whatsapp-crm'
+  | 'systemy-agentowe';
+
+export type ServiceLandingPath = `/rozwiazania/${ServiceLandingSlug}`;
+
+export interface ServiceLandingPageFlowStep {
+  readonly id: string;
+  readonly title: string;
+  readonly description: string;
+  readonly handoff?: boolean;
+}
+
+export interface ServiceLandingPageFaqItem {
+  readonly question: string;
+  readonly answer: string;
+}
+
+export interface ServiceLandingPageContent {
+  readonly path: ServiceLandingPath;
+  readonly slug: ServiceLandingSlug;
+  readonly eyebrow: string;
+  readonly title: string;
+  readonly description: string;
+  readonly hero: {
+    readonly result: string;
+    readonly lead: string;
+    readonly primaryCta: HomeCta;
+    readonly secondaryCta: HomeCta;
+  };
+  readonly problemTitle: string;
+  readonly problems: readonly [string, string, string, string, string];
+  readonly flowTitle: string;
+  readonly flowLead: string;
+  readonly flowSteps: readonly [
+    ServiceLandingPageFlowStep,
+    ServiceLandingPageFlowStep,
+    ServiceLandingPageFlowStep,
+    ServiceLandingPageFlowStep,
+    ServiceLandingPageFlowStep,
+  ];
+  readonly demoTitle: string;
+  readonly demoLead: string;
+  readonly demoScope: readonly [string, string, string, string];
+  readonly demoCriteria: readonly [string, string, string];
+  readonly demoInputs: readonly [string, string, string];
+  readonly demoLimitations: readonly [string, string, string];
+  readonly integrationsTitle: string;
+  readonly integrationsLead: string;
+  readonly integrations: readonly [string, string, string];
+  readonly securityTitle: string;
+  readonly securityPoints: readonly [string, string, string];
+  readonly faqTitle: string;
+  readonly faqs: readonly [
+    ServiceLandingPageFaqItem,
+    ServiceLandingPageFaqItem,
+    ServiceLandingPageFaqItem,
+    ServiceLandingPageFaqItem,
+    ServiceLandingPageFaqItem,
+  ];
+  readonly closingTitle: string;
+  readonly closingLead: string;
+  readonly primaryCta: HomeCta;
+  readonly relatedLinks: readonly [HomeCta, HomeCta, HomeCta];
+  readonly serviceType: string;
+  readonly hubAnchor: string;
+}
+
 export interface SolutionsPageContent {
   readonly path: '/rozwiazania';
   readonly eyebrow: string;
@@ -330,6 +425,30 @@ export interface HomeSevenDayResults {
     HomeSevenDayResult,
     HomeSevenDayResult,
     HomeSevenDayResult,
+  ];
+}
+
+export interface HomeBusinessFlowStep {
+  readonly id: string;
+  readonly kind: 'contact' | 'collect' | 'qualify' | 'suggest' | 'save' | 'handoff';
+  readonly kicker: string;
+  readonly title: string;
+  readonly description: string;
+}
+
+export interface HomeBusinessFlow {
+  readonly eyebrow: string;
+  readonly title: string;
+  readonly lead: string;
+  readonly results: readonly [string, string, string, string];
+  readonly cta: HomeCta;
+  readonly steps: readonly [
+    HomeBusinessFlowStep,
+    HomeBusinessFlowStep,
+    HomeBusinessFlowStep,
+    HomeBusinessFlowStep,
+    HomeBusinessFlowStep,
+    HomeBusinessFlowStep,
   ];
 }
 
@@ -650,6 +769,7 @@ export interface SiteContent {
   readonly demo: DemoPageContent;
   readonly demoExample: DemoExamplePageContent;
   readonly solutions: SolutionsPageContent;
+  readonly serviceLandingPages: readonly ServiceLandingPageContent[];
   readonly development: DevelopmentPageContent;
   readonly studio: StudioPageContent;
   readonly research: ResearchPageContent;
@@ -663,6 +783,7 @@ export type PublicRouteMetadata =
   | DemoRouteMetadata
   | DemoExampleRouteMetadata
   | SolutionsRouteMetadata
+  | ServiceLandingRouteMetadata
   | DevelopmentRouteMetadata
   | StudioRouteMetadata
   | ResearchRouteMetadata

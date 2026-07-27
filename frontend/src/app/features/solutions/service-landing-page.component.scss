@@ -1,0 +1,120 @@
+.service-landing-page {
+  display: grid;
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+}
+
+.hero,
+.closing {
+  display: grid;
+  gap: 1rem;
+}
+
+.hero-result {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-foreground);
+  max-width: 52rem;
+}
+
+.hero-lead,
+.service-note,
+.section-lead,
+.bullet-list,
+.faq-list p,
+.flow-step p {
+  max-width: 56rem;
+}
+
+.hero-actions,
+.closing-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.section-heading {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.bullet-list {
+  display: grid;
+  gap: 0.75rem;
+  padding-left: 1.25rem;
+}
+
+.flow-list {
+  display: grid;
+  gap: 0.75rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.flow-step {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.875rem;
+  padding: 1rem 1.125rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(124, 92, 255, 0.16);
+}
+
+.flow-step.is-handoff {
+  background: linear-gradient(135deg, rgba(124, 92, 255, 0.14), rgba(255, 255, 255, 0.92));
+}
+
+.flow-step-index {
+  align-self: start;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  display: inline-grid;
+  place-items: center;
+  font-weight: 700;
+  background: rgba(124, 92, 255, 0.16);
+  color: var(--color-accent);
+}
+
+.demo-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+}
+
+.demo-grid article,
+.faq-list details {
+  padding: 1rem 1.125rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(26, 30, 46, 0.08);
+}
+
+.faq-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.faq-list summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.hub-link {
+  font-size: 0.9375rem;
+}
+
+@media (max-width: 767px) {
+  .hero-actions,
+  .closing-links {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-actions > a,
+  .closing-links > a {
+    width: 100%;
+  }
+}

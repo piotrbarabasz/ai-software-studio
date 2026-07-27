@@ -1,23 +1,25 @@
 <div class="carousel-controls">
-  <button
-    type="button"
-    class="carousel-button"
-    [disabled]="currentIndex === 0"
-    aria-label="Poprzednie rozwiązania"
-    (click)="move(-1)"
-  >
-    <span aria-hidden="true">←</span>
-  </button>
+  @if (hasMultipleItems) {
+    <button
+      type="button"
+      class="carousel-button"
+      aria-label="Poprzednie rozwiązania"
+      (click)="move(-1)"
+    >
+      <span aria-hidden="true">←</span>
+    </button>
+  }
   <p class="carousel-status" aria-live="polite" aria-atomic="true">{{ statusLabel }}</p>
-  <button
-    type="button"
-    class="carousel-button"
-    [disabled]="currentIndex >= lastIndex"
-    aria-label="Następne rozwiązania"
-    (click)="move(1)"
-  >
-    <span aria-hidden="true">→</span>
-  </button>
+  @if (hasMultipleItems) {
+    <button
+      type="button"
+      class="carousel-button"
+      aria-label="Następne rozwiązania"
+      (click)="move(1)"
+    >
+      <span aria-hidden="true">→</span>
+    </button>
+  }
 </div>
 <div
   #viewport

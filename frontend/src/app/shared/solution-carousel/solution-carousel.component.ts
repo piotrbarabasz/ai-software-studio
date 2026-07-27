@@ -56,22 +56,25 @@ export class SolutionCarouselComponent implements AfterViewInit, OnDestroy {
     return Math.max(0, this.items.length - this.visibleCount);
   }
 
+  get hasMultipleItems(): boolean {
+    return this.items.length > 1;
+  }
+
   get statusLabel(): string {
-    const extraPreview = this.visibleCount === 2 ? 1 : 0;
-    const end = Math.min(this.items.length, this.currentIndex + this.visibleCount + extraPreview);
-    return `Wyświetlane rozwiązania ${this.currentIndex + 1}–${end} z ${this.items.length}`;
+    const total = this.items.length;
+    if (total === 0) {
+      return 'Brak rozwiązań';
+    }
+    const end = Math.min(total, this.currentIndex + this.visibleCount);
+    return `Wyświetlane rozwiązania ${this.currentIndex + 1}–${end} z ${total}`;
   }
 
   move(direction: -1 | 1): void {
-    const nextIndex = Math.min(this.lastIndex, Math.max(0, this.currentIndex + direction));
-    if (nextIndex === this.currentIndex) return;
-    this.currentIndex = nextIndex;
-    const viewport = this.viewport?.nativeElement;
-    if (!viewport) return;
-    viewport.scrollTo({
-      left: nextIndex * this.step,
-      behavior: this.prefersReducedMotion() ? 'auto' : 'smooth',
-    });
+    if (!this.hasMultipleItems) {
+      return;
+    }
+    const nextIndex = this.resolveLoopedIndex(this.currentIndex + direction);
+    this.scrollToIndex(nextIndex, this.prefersReducedMotion() ? 'auto' : 'smooth');
   }
 
   onScroll(): void {
@@ -108,22 +111,47 @@ export class SolutionCarouselComponent implements AfterViewInit, OnDestroy {
     const cardWidth = cardRect?.width || card.offsetWidth;
     const viewportWidth = viewportRect?.width || viewport.clientWidth;
     this.step = cardWidth + gap;
-    this.visibleCount = this.step
+    const computedVisibleCount = this.step
       ? Math.max(1, Math.floor((viewportWidth + gap + 0.5) / this.step))
       : 1;
-    const nextLastIndex = Math.max(0, this.items.length - this.visibleCount);
-    const nextIndex = this.step
-      ? Math.min(nextLastIndex, Math.round(viewport.scrollLeft / this.step))
-      : 0;
-    const shouldClampScroll =
-      this.step > 0 && Math.round(viewport.scrollLeft / this.step) > nextLastIndex;
+    this.visibleCount =
+      this.items.length > 0
+        ? Math.min(this.items.length, computedVisibleCount)
+        : computedVisibleCount;
+    const nextLastIndex = this.lastIndex;
+    const measuredIndex = this.step ? Math.round(viewport.scrollLeft / this.step) : 0;
+    const nextIndex = Math.max(0, Math.min(nextLastIndex, measuredIndex));
+    const shouldClampScroll = this.step > 0 && measuredIndex > nextLastIndex;
     this.currentIndex = nextIndex;
     if (shouldClampScroll) {
-      viewport.scrollTo({
-        left: nextIndex * this.step,
-        behavior: 'auto',
-      });
+      this.scrollToIndex(nextIndex, 'auto');
     }
+  }
+
+  private resolveLoopedIndex(candidateIndex: number): number {
+    const lastIndex = this.lastIndex;
+    if (lastIndex === 0) {
+      return 0;
+    }
+    if (candidateIndex > lastIndex) {
+      return 0;
+    }
+    if (candidateIndex < 0) {
+      return lastIndex;
+    }
+    return candidateIndex;
+  }
+
+  private scrollToIndex(index: number, behavior: ScrollBehavior): void {
+    const viewport = this.viewport?.nativeElement;
+    this.currentIndex = index;
+    if (!viewport || this.step <= 0) {
+      return;
+    }
+    viewport.scrollTo({
+      left: index * this.step,
+      behavior,
+    });
   }
 
   private prefersReducedMotion(): boolean {

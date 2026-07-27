@@ -27,6 +27,11 @@ describe('public routes', () => {
       '/demo-ai': 'app-demo-page',
       '/przyklad-demo': 'app-demo-example-page',
       '/rozwiazania': 'app-solutions-page',
+      '/rozwiazania/chatbot-ai-dla-firm': 'app-service-landing-page',
+      '/rozwiazania/voice-ai-dla-firm': 'app-service-landing-page',
+      '/rozwiazania/automatyzacja-procesow': 'app-service-landing-page',
+      '/rozwiazania/integracje-whatsapp-crm': 'app-service-landing-page',
+      '/rozwiazania/systemy-agentowe': 'app-service-landing-page',
       '/development': 'app-development-page',
       '/studio': 'app-studio-page',
       '/rd': 'app-research-page',
@@ -105,6 +110,11 @@ describe('public routes', () => {
     fixture.detectChanges();
     await fixture.whenStable();
     expect(router.url).toBe('/rozwiazania');
+
+    await fixture.ngZone!.run(() => router.navigateByUrl('/voice-ai-dla-firm'));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(router.url).toBe('/rozwiazania/voice-ai-dla-firm');
   });
 
   it('uses the content navigation without duplicate primary items', () => {
