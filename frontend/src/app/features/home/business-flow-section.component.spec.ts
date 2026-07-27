@@ -79,10 +79,24 @@ describe('BusinessFlowSectionComponent', () => {
   it('keeps the flow readable on common viewport widths without overflow', () => {
     const element = render();
     const flow = element.querySelector('.business-flow') as HTMLElement;
+    const cta = element.querySelector('.business-flow > .primary-action') as HTMLAnchorElement;
+    const results = Array.from(
+      element.querySelectorAll('.business-flow-results li'),
+    ) as HTMLElement[];
 
     for (const width of [320, 390, 768, 1024, 1440]) {
       Object.assign(flow.style, { width: `${width}px` });
       expect(flow.scrollWidth).toBeLessThanOrEqual(flow.clientWidth);
+      expect(cta.scrollWidth).toBeLessThanOrEqual(cta.clientWidth);
+      expect(cta.getBoundingClientRect().right).toBeLessThanOrEqual(
+        flow.getBoundingClientRect().right + 0.5,
+      );
+      for (const result of results) {
+        expect(result.scrollWidth).toBeLessThanOrEqual(result.clientWidth);
+        expect(result.getBoundingClientRect().right).toBeLessThanOrEqual(
+          flow.getBoundingClientRect().right + 0.5,
+        );
+      }
     }
   });
 });
