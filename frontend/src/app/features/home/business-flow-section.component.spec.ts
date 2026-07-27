@@ -76,26 +76,33 @@ describe('BusinessFlowSectionComponent', () => {
     expect(fixture.nativeElement.querySelector('svg')).not.toBeNull();
   });
 
-  it('keeps the flow readable on common viewport widths without overflow', () => {
+  it('keeps the flow inside narrow and wide container widths', () => {
     const element = render();
     const flow = element.querySelector('.business-flow') as HTMLElement;
     const cta = element.querySelector('.business-flow > .primary-action') as HTMLAnchorElement;
-    const results = Array.from(
-      element.querySelectorAll('.business-flow-results li'),
+    const children = Array.from(
+      element.querySelectorAll(
+        '.business-flow-grid, .business-flow-card, .business-flow-results, .business-flow-results li, .primary-action',
+      ),
     ) as HTMLElement[];
 
     for (const width of [320, 390, 768, 1024, 1440]) {
       Object.assign(flow.style, { width: `${width}px` });
-      expect(flow.scrollWidth).toBeLessThanOrEqual(flow.clientWidth);
+      void flow.offsetWidth;
+
       expect(cta.scrollWidth).toBeLessThanOrEqual(cta.clientWidth);
+      const flowRect = flow.getBoundingClientRect();
       expect(cta.getBoundingClientRect().right).toBeLessThanOrEqual(
-        flow.getBoundingClientRect().right + 0.5,
+        flowRect.left + flow.clientLeft + flow.clientWidth + 0.5,
       );
-      for (const result of results) {
-        expect(result.scrollWidth).toBeLessThanOrEqual(result.clientWidth);
-        expect(result.getBoundingClientRect().right).toBeLessThanOrEqual(
-          flow.getBoundingClientRect().right + 0.5,
+
+      for (const child of children) {
+        const childRect = child.getBoundingClientRect();
+        expect(childRect.left).toBeGreaterThanOrEqual(flowRect.left - 0.5);
+        expect(childRect.right).toBeLessThanOrEqual(
+          flowRect.left + flow.clientLeft + flow.clientWidth + 0.5,
         );
+        expect(child.scrollWidth).toBeLessThanOrEqual(child.clientWidth);
       }
     }
   });
