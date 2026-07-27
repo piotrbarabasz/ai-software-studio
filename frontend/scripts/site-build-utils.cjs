@@ -6,18 +6,26 @@ const ts = require('typescript');
 const FRONTEND_ROOT = path.resolve(__dirname, '..');
 const PLACEHOLDER_PATTERN = /__PUBLIC_CONFIG_REQUIRED__|<[^>]+>|localhost|\.example(?:\.com)?/i;
 
-function loadProductionContract() {
-  const candidates = [
+function productionContractCandidates() {
+  return [
     path.join(FRONTEND_ROOT, 'production-contract.json'),
     path.resolve(FRONTEND_ROOT, '../infra/gcp/production-contract.json'),
   ];
+}
+
+function loadProductionContract(candidates = productionContractCandidates()) {
   const contractPath = candidates.find((candidate) => fs.existsSync(candidate));
   if (!contractPath) {
     throw new Error('Brak infra/gcp/production-contract.json dla produkcyjnego builda.');
   }
   const contract = JSON.parse(fs.readFileSync(contractPath, 'utf8'));
-  if (contract.schema_version !== 1 || typeof contract.invariants !== 'object') {
-    throw new Error('Nieobsługiwana wersja kontraktu produkcyjnego.');
+  if (
+    contract.schema_version !== 1 ||
+    typeof contract.invariants !== 'object' ||
+    contract.invariants === null ||
+    Array.isArray(contract.invariants)
+  ) {
+    throw new Error('NieobsĹ‚ugiwana wersja kontraktu produkcyjnego.');
   }
   return contract.invariants;
 }
@@ -191,6 +199,7 @@ module.exports = {
   PRODUCTION_SITE_ORIGIN,
   generatedDirectory,
   loadEnvironment,
+  loadProductionContract,
   normalizeOrigin,
   publicPrerenderRoutes,
   validateProductionSiteConfig,

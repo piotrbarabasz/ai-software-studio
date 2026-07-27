@@ -1,8 +1,10 @@
 const fs = require('node:fs');
 const path = require('node:path');
-const contract = require('../../infra/gcp/production-contract.json');
+
+const { PRODUCTION_SITE_ORIGIN } = require('./site-build-utils.cjs');
+
 const BUILD_SHA_PATTERN = /^[0-9a-f]{7,64}$/;
-const PRODUCTION_SITE_URL = contract.invariants.PUBLIC_SITE_URL;
+const PRODUCTION_SITE_URL = PRODUCTION_SITE_ORIGIN;
 
 function quote(value) {
   return `'${String(value).replaceAll('\\', '\\\\').replaceAll("'", "\\'")}'`;

@@ -91,3 +91,24 @@ test('generated legal source is excluded from the root Docker build context', ()
     /^frontend\/src\/app\/core\/legal\/public-legal\.config\.generated\.ts$/m,
   );
 });
+
+test('frontend Dockerfile stages the production contract for the shared loader only in the build stage', () => {
+  const dockerfile = fs
+    .readFileSync(path.join(repositoryRoot, 'frontend/Dockerfile'), 'utf8')
+    .replaceAll('\r\n', '\n');
+
+  assert.ok(
+    dockerfile.includes('COPY infra/gcp/production-contract.json ./production-contract.json'),
+  );
+  assert.ok(
+    dockerfile.includes(
+      'COPY frontend/package*.json ./\nRUN npm ci\n\nCOPY frontend/ .\nCOPY infra/gcp/production-contract.json ./production-contract.json\n\nRUN --mount=type=secret,id=public_legal_config,required=true',
+    ),
+  );
+  assert.ok(
+    dockerfile.indexOf('COPY infra/gcp/production-contract.json ./production-contract.json') <
+      dockerfile.indexOf('RUN --mount=type=secret,id=public_legal_config,required=true'),
+  );
+  const nginxStage = dockerfile.slice(dockerfile.indexOf('FROM nginx:1.27-alpine'));
+  assert.doesNotMatch(nginxStage, /production-contract\.json/);
+});
