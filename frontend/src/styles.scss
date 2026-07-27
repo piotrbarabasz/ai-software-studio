@@ -156,6 +156,17 @@ button {
   padding-inline: clamp(1rem, 5vw, 4.5rem);
 }
 
+.section-panel {
+  display: grid;
+  gap: var(--space-content);
+  min-width: 0;
+  padding: clamp(1.25rem, 3vw, 2.5rem);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-soft);
+}
+
 .eyebrow,
 .section-kicker {
   margin: 0 0 0.75rem;
@@ -198,6 +209,10 @@ button {
 @media (max-width: 480px) {
   .section-shell {
     padding-inline: 1rem;
+  }
+
+  .section-panel {
+    padding: 1rem;
   }
 
   .eyebrow,

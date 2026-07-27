@@ -296,6 +296,7 @@ export interface HomeTrustStripItem {
 export interface HomeUseCase {
   readonly id: string;
   readonly title: string;
+  readonly summary?: string;
   readonly problem: string;
   readonly outcome: string;
   readonly cta?: HomeCta;
@@ -443,8 +444,6 @@ export interface HomeBusinessFlow {
   readonly results: readonly [string, string, string, string];
   readonly cta: HomeCta;
   readonly steps: readonly [
-    HomeBusinessFlowStep,
-    HomeBusinessFlowStep,
     HomeBusinessFlowStep,
     HomeBusinessFlowStep,
     HomeBusinessFlowStep,

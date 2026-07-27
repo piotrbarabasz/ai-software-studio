@@ -3,32 +3,25 @@
 }
 
 .business-flow {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 1.25rem;
   min-width: 0;
-  max-width: 100%;
-  padding: clamp(1.5rem, 4vw, 3rem);
-  border: 1px solid var(--color-line);
-  border-radius: 18px;
-  background: linear-gradient(180deg, var(--surface-brand), var(--color-surface));
-  box-shadow: var(--shadow-soft);
 }
 
-.business-flow > .section-heading,
-.business-flow > .business-flow-grid,
-.business-flow > .business-flow-results,
-.business-flow > .primary-action {
+.business-flow-panel {
+  display: grid;
+  gap: 1.25rem;
+  min-width: 0;
+}
+
+.business-flow-panel > .section-heading,
+.business-flow-panel > .business-flow-grid,
+.business-flow-panel > .business-flow-results,
+.business-flow-panel > .primary-action {
   min-inline-size: 0;
   max-inline-size: 100%;
 }
 
-.business-flow > .section-heading {
-  inline-size: 100%;
-}
-
-.business-flow > .section-heading h2,
-.business-flow > .section-heading p {
+.business-flow-panel > .section-heading h2,
+.business-flow-panel > .section-heading p {
   min-inline-size: 0;
   max-inline-size: 100%;
   overflow-wrap: anywhere;
@@ -136,7 +129,7 @@
   overflow-wrap: anywhere;
 }
 
-.business-flow > .primary-action {
+.business-flow-panel > .primary-action {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -168,7 +161,7 @@
 }
 
 @media (max-width: 480px) {
-  .business-flow > .primary-action {
+  .business-flow-panel > .primary-action {
     inline-size: 100%;
   }
 }

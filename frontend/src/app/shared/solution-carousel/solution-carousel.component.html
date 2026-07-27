@@ -33,14 +33,7 @@
     <article class="use-case-card" [attr.data-visual-kind]="useCase.visualKind">
       <h3>{{ useCase.title }}</h3>
       <app-use-case-visual [visualKind]="useCase.visualKind" />
-      <div>
-        <h4>Problem</h4>
-        <p>{{ useCase.problem }}</p>
-      </div>
-      <div>
-        <h4>Docelowa zmiana</h4>
-        <p>{{ useCase.outcome }}</p>
-      </div>
+      <p class="use-case-summary">{{ useCase.summary ?? (useCase.problem + ' ' + useCase.outcome) }}</p>
       @if (useCase.cta) {
         <a
           class="secondary-action"

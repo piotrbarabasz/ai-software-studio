@@ -16,15 +16,16 @@ describe('ContactPageComponent', () => {
     }).compileComponents();
     const fixture = TestBed.createComponent(ContactPageComponent);
     fixture.detectChanges();
-    expect(fixture.nativeElement.querySelectorAll('h1').length).toBe(1);
+
+    expect(fixture.nativeElement.querySelectorAll('h1')).toHaveSize(1);
     expect(fixture.nativeElement.querySelector('app-contact-form')).not.toBeNull();
     expect(fixture.nativeElement.textContent).toContain('Opisz proces w 3 zdaniach');
     expect(fixture.nativeElement.textContent).toContain(
-      'Wystarczą trzy krótkie zdania. Napisz, kto pracuje, co jest dziś robione ręcznie i co ma się zmienić.',
+      'Wystarczą trzy krótkie zdania: kto pracuje, co jest dziś robione ręcznie i co ma się zmienić.',
     );
     expect(fixture.nativeElement.textContent).toContain('Nie potrzebujesz specyfikacji.');
     expect(fixture.nativeElement.textContent).toContain(
-      'Wystarczą 3 zdania: kto wykonuje pracę, co dzieje się ręcznie i jaki efekt ma się zmienić.',
+      'Wystarczą 3 zdania: kto wykonuje pracę, co jest robione ręcznie i jaki efekt ma się zmienić.',
     );
     expect(fixture.nativeElement.textContent).toContain(
       'Wysłanie formularza nie jest zamówieniem, akceptacją wyceny',

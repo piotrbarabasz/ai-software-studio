@@ -62,14 +62,7 @@
 .use-case-card h3 {
   font-size: 1.35rem;
 }
-.use-case-card h4 {
-  margin-bottom: 0.3rem;
-  color: var(--color-primary-strong);
-  font-size: 0.78rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-.use-case-card p {
+.use-case-summary {
   color: var(--color-muted);
 }
 @media (max-width: 1023px) {

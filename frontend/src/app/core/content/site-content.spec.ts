@@ -69,8 +69,8 @@ describe('Site content model', () => {
     expect(siteContent.home.hero.titleAfterHighlight).toContain('Twojej firmie');
     expect(siteContent.home.hero.audience).toContain('ręcznie przenoszą informacje');
     expect(siteContent.home.hero.lead).toContain('demo jednego procesu w siedem dni');
-    expect(siteContent.home.hero.lead).toContain('następny krok');
-    expect(siteContent.home.hero.primaryCta.label).toBe('Opisz proces w 3 zdaniach');
+    expect(siteContent.home.hero.lead).toContain('kolejny krok');
+    expect(siteContent.home.hero.primaryCta.label).toBe('Opisz proces');
     expect(siteContent.home.closingCta.primaryCta.label).toBe(
       siteContent.home.hero.primaryCta.label,
     );
@@ -93,12 +93,12 @@ describe('Site content model', () => {
       '/rozwiazania/systemy-agentowe',
       '/rozwiazania/integracje-whatsapp-crm',
     ]);
-    expect(siteContent.home.businessFlow.steps).toHaveSize(6);
+    expect(siteContent.home.businessFlow.steps).toHaveSize(4);
     expect(siteContent.home.businessFlow.results).toEqual([
-      'Mniej ręcznego przepisywania.',
+      'Mniej przepisywania.',
       'Szybsza odpowiedź.',
-      'Mniej zagubionych zapytań.',
-      'Jasny moment przekazania sprawy człowiekowi.',
+      'Mniej zagubionych spraw.',
+      'Jasny handoff.',
     ]);
     expect(siteContent.home.businessFlow.cta.path).toBe('/kontakt');
     expect(siteContent.home.businessFlow.cta.queryParams?.['projectType']).toBe('backend_api');
@@ -111,15 +111,11 @@ describe('Site content model', () => {
   });
 
   it('defines Development as a scoped path that does not require a demo in every case', () => {
-    expect(siteContent.development.lead).toContain('można przejść do planowania wdrożenia');
-    expect(siteContent.development.readiness.points).toContain(
-      'istnieje potwierdzona potrzeba biznesowa',
-    );
+    expect(siteContent.development.lead).toContain('Potem można planować wdrożenie');
+    expect(siteContent.development.readiness.points).toContain('potwierdzona potrzeba biznesowa');
     expect(siteContent.development.preparation.points).toContain('kryteria odbioru');
     expect(siteContent.development.preparation.points).toContain('elementy wyłączone z wyceny');
-    expect(siteContent.development.scope.excluded).toContain(
-      'nowe wymagania poza potwierdzonym zakresem',
-    );
+    expect(siteContent.development.scope.excluded).toContain('nowe wymagania poza zakresem');
     expect(siteContent.development.scope.pricingNote).toContain(
       'Budżet w formularzu jest orientacyjny',
     );
@@ -260,7 +256,7 @@ describe('Site content model', () => {
       'ai-cost-boundaries',
       'client-confidentiality',
     ]);
-    expect(siteContent.home.trustStrip.map((item) => item.title)).toContain('Prywatność danych');
+    expect(siteContent.home.trustStrip.map((item) => item.title)).toContain('Prywatność');
     expect(publicBrand.descriptor).toBe('Studio wdrożeń AI i automatyzacji');
   });
 
@@ -274,7 +270,7 @@ describe('Site content model', () => {
       'Doświadczenie w zespołach międzynarodowych',
       'Odpowiedzialność end-to-end',
     ]);
-    expect(siteContent.trust.owner.privacyNotice).toContain('kod klienta pozostają prywatne');
+    expect(siteContent.trust.owner.privacyNotice).toContain('Dane i kod pozostają prywatne');
     expect('image' in siteContent.trust.owner).toBeFalse();
     expect(siteContent.trust.evidence.items.map((item) => item.id as string)).not.toContain(
       'public-code',
@@ -347,10 +343,10 @@ describe('Site content model', () => {
 
   it('offers five low-risk ways to verify the work before cooperation', () => {
     expect(siteContent.studio.verification.steps).toHaveSize(5);
-    expect(siteContent.studio.verification.steps.join(' ')).toContain('interaktywne demo');
+    expect(siteContent.studio.verification.steps.join(' ')).toContain('Uruchom demo');
     expect(siteContent.studio.verification.steps.join(' ')).toContain('przykładowy raport');
     expect(siteContent.studio.verification.steps.join(' ')).toContain('kryteria odbioru');
-    expect(siteContent.studio.verification.steps.join(' ')).toContain('ograniczony pierwszy etap');
+    expect(siteContent.studio.verification.steps.join(' ')).toContain('pierwszy etap');
     expect(siteContent.studio.verification.steps[4]).toBe(siteContent.contact.noCommitment);
     expect(siteContent.studio.verification.demoCta.path).toBe('/demo-ai');
     expect(siteContent.studio.verification.reportCta.path).toBe('/przyklad-demo');

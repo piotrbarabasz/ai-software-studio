@@ -59,11 +59,12 @@
 }
 
 .solution-card {
+  scroll-margin-top: 6rem;
+}
+
+.solution-card > .section-panel {
   display: grid;
   gap: var(--space-content);
-  padding-block: var(--space-section);
-  border-block: 1px solid var(--border);
-  scroll-margin-top: 6rem;
 }
 
 .solution-summary {

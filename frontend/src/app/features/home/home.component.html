@@ -1,6 +1,6 @@
 <div class="home-page">
   <section class="hero section-shell" aria-labelledby="hero-title">
-    <div class="hero-copy">
+    <div class="section-panel hero-copy">
       <p class="eyebrow">{{ home.hero.eyebrow }}</p>
       <h1 id="hero-title">
         {{ home.hero.titleBeforeHighlight
@@ -13,103 +13,108 @@
           class="primary-action"
           [routerLink]="home.hero.primaryCta.path"
           [queryParams]="home.hero.primaryCta.queryParams"
-          >{{ home.hero.primaryCta.label }}</a
         >
-        <a class="secondary-action" [routerLink]="home.hero.secondaryCta.path">{{
-          home.hero.secondaryCta.label
-        }}</a>
+          {{ home.hero.primaryCta.label }}
+        </a>
+        <a class="secondary-action" [routerLink]="home.hero.secondaryCta.path">
+          {{ home.hero.secondaryCta.label }}
+        </a>
       </div>
     </div>
   </section>
 
   <section class="trust-strip section-shell" aria-labelledby="trust-strip-title">
-    <h2 id="trust-strip-title" class="visually-hidden">Dlaczego warto zacząć od sprawdzenia</h2>
-    <ul>
-      @for (item of home.trustStrip; track item.id) {
-        <li>
-          <span class="trust-icon" aria-hidden="true"></span>
-          <span>{{ item.title }}</span>
-        </li>
-      }
-    </ul>
+    <div class="section-panel trust-strip-panel">
+      <h2 id="trust-strip-title" class="visually-hidden">Dlaczego warto zacząć od sprawdzenia</h2>
+      <ul>
+        @for (item of home.trustStrip; track item.id) {
+          <li>
+            <span class="trust-icon" aria-hidden="true"></span>
+            <span>{{ item.title }}</span>
+          </li>
+        }
+      </ul>
+    </div>
   </section>
 
   <section class="use-cases section-shell" aria-labelledby="use-cases-title">
-    <div class="section-heading">
-      <p class="eyebrow">Przykłady procesów</p>
-      <h2 id="use-cases-title">Gdzie możemy pomóc</h2>
-      <p class="section-lead">
-        Pięć skróconych kart pokazuje, gdzie AI i automatyzacja mogą zdjąć ręczną pracę z zespołu.
-      </p>
+    <div class="section-panel use-cases-panel">
+      <div class="section-heading">
+        <p class="eyebrow">Przykłady procesów</p>
+        <h2 id="use-cases-title">Gdzie możemy pomóc</h2>
+        <p class="section-lead">
+          Pięć skróconych kart pokazuje, gdzie AI i automatyzacja mogą zdjąć ręczną pracę z zespołu.
+        </p>
+      </div>
+      <app-solution-carousel [items]="home.useCases" />
     </div>
-    <app-solution-carousel [items]="home.useCases" />
   </section>
 
   <app-business-flow-section [flow]="home.businessFlow" />
 
   <section class="seven-day-results section-shell" aria-labelledby="seven-day-results-title">
-    <div class="section-heading">
-      <p class="eyebrow">{{ home.sevenDayResults.eyebrow }}</p>
-      <h2 id="seven-day-results-title">{{ home.sevenDayResults.title }}</h2>
-      <p class="section-lead">{{ home.sevenDayResults.lead }}</p>
+    <div class="section-panel seven-day-results-panel">
+      <div class="section-heading">
+        <p class="eyebrow">{{ home.sevenDayResults.eyebrow }}</p>
+        <h2 id="seven-day-results-title">{{ home.sevenDayResults.title }}</h2>
+        <p class="section-lead">{{ home.sevenDayResults.lead }}</p>
+      </div>
+      <ol>
+        @for (result of home.sevenDayResults.items; track result.id) {
+          <li>
+            <span class="result-node" aria-hidden="true">{{ result.order }}</span>
+            <div>
+              <h3>{{ result.title }}</h3>
+              <p>{{ result.description }}</p>
+            </div>
+          </li>
+        }
+      </ol>
+      <a class="primary-action" [routerLink]="home.sevenDayResults.reportCta.path">
+        {{ home.sevenDayResults.reportCta.label }}
+      </a>
     </div>
-    <ol>
-      @for (result of home.sevenDayResults.items; track result.id) {
-        <li>
-          <span class="result-node" aria-hidden="true">{{ result.order }}</span>
-          <div>
-            <h3>{{ result.title }}</h3>
-            <p>{{ result.description }}</p>
-          </div>
-        </li>
-      }
-    </ol>
-    <a class="primary-action" [routerLink]="home.sevenDayResults.reportCta.path">
-      {{ home.sevenDayResults.reportCta.label }}
-    </a>
   </section>
 
   <section class="paths section-shell" aria-labelledby="paths-title">
-    <div class="section-heading">
-      <p class="eyebrow">{{ home.pathsHeading.eyebrow }}</p>
-      <h2 id="paths-title">{{ home.pathsHeading.title }}</h2>
-      <p class="section-lead">
-        Dwa krótkie przykłady pokazują, co można zobaczyć przed większą decyzją.
-      </p>
-    </div>
-    <div class="path-grid">
-      @for (path of home.paths; track path) {
+    <div class="section-panel paths-panel">
+      <div class="section-heading">
+        <p class="eyebrow">{{ home.pathsHeading.eyebrow }}</p>
+        <h2 id="paths-title">{{ home.pathsHeading.title }}</h2>
+      </div>
+      <div class="path-grid">
+        @for (path of home.paths; track path) {
         <article class="path-card">
           <p class="card-kicker">{{ path.eyebrow }}</p>
           <h3>{{ path.title }}</h3>
           <p>{{ path.lead }}</p>
-          <ul>
-            @for (point of path.points; track point) {
-              <li>{{ point }}</li>
-            }
-          </ul>
           <a
             class="secondary-action"
             [routerLink]="path.cta.path"
-            [queryParams]="path.cta.queryParams"
-            >{{ path.cta.label }}</a
-          >
-        </article>
-      }
+              [queryParams]="path.cta.queryParams"
+            >
+              {{ path.cta.label }}
+            </a>
+          </article>
+        }
+      </div>
     </div>
   </section>
 
   <section class="contact-card section-shell" aria-labelledby="contact-title">
-    <p class="eyebrow">{{ trust.ownerSectionEyebrow }}</p>
-    <h2 id="contact-title">{{ trust.ownerSectionTitle }}</h2>
-    <p>{{ trust.owner.bio }}</p>
-    <p>{{ trust.owner.privacyNotice }}</p>
-    <p>{{ trust.owner.accountability.statement }}</p>
-    <a
-      class="primary-action"
-      [routerLink]="home.closingCta.primaryCta.path"
-      [queryParams]="home.closingCta.primaryCta.queryParams"
-      >{{ home.closingCta.primaryCta.label }}</a
-    >
+    <div class="section-panel contact-card-panel">
+      <p class="eyebrow">{{ trust.ownerSectionEyebrow }}</p>
+      <h2 id="contact-title">{{ trust.ownerSectionTitle }}</h2>
+      <p>{{ trust.owner.bio }}</p>
+      <p>{{ trust.owner.privacyNotice }}</p>
+      <p>{{ trust.owner.accountability.statement }}</p>
+      <a
+        class="primary-action"
+        [routerLink]="home.closingCta.primaryCta.path"
+        [queryParams]="home.closingCta.primaryCta.queryParams"
+      >
+        {{ home.closingCta.primaryCta.label }}
+      </a>
+    </div>
   </section>
 </div>

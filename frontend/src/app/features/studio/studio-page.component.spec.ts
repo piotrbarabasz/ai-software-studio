@@ -11,15 +11,14 @@ describe('StudioPageComponent', () => {
     }).compileComponents();
     const fixture = TestBed.createComponent(StudioPageComponent);
     fixture.detectChanges();
-    expect(fixture.nativeElement.querySelectorAll('h1').length).toBe(1);
+
+    expect(fixture.nativeElement.querySelectorAll('h1')).toHaveSize(1);
     expect(
       fixture.nativeElement.querySelector('a[href="/kontakt?projectType=custom_web_app"]'),
     ).not.toBeNull();
     expect(fixture.nativeElement.querySelector('.hero-panel .hero-cta-note')).not.toBeNull();
-    expect(fixture.nativeElement.textContent).toContain(
-      'Z kim i w jaki sposób będziesz współpracować?',
-    );
-    expect(fixture.nativeElement.textContent).toContain('Protolume jest prowadzone samodzielnie');
+    expect(fixture.nativeElement.textContent).toContain('Jak wygląda współpraca?');
+    expect(fixture.nativeElement.textContent).toContain('prowadzi jedna osoba');
     expect(fixture.nativeElement.textContent).not.toMatch(/TODO|placeholder|tu będzie/i);
   });
 
@@ -40,8 +39,8 @@ describe('StudioPageComponent', () => {
     expect(element.textContent).toContain('zespołach międzynarodowych');
     expect(element.textContent).toContain('Odpowiedzialność end-to-end');
     expect(element.querySelector('a[href*="github.com"]')).toBeNull();
-    expect(element.querySelectorAll('.evidence-card').length).toBe(3);
-    expect(element.querySelectorAll('.verification-list').length).toBe(3);
+    expect(element.querySelectorAll('.evidence-card')).toHaveSize(3);
+    expect(element.querySelectorAll('.verification-list')).toHaveSize(3);
     expect(element.querySelectorAll('.evidence-boundary')).toHaveSize(3);
     expect(element.textContent).toContain('Asystent wiedzy z obsługą pytań poza zakresem');
     expect(element.textContent).toContain('Raport decyzyjny po Demo w 7 dni');
@@ -53,7 +52,7 @@ describe('StudioPageComponent', () => {
     expect(element.textContent).not.toMatch(/referencje|nasi klienci|opinie klient/i);
 
     expect(element.querySelectorAll('.verification-steps li')).toHaveSize(5);
-    expect(element.textContent).toContain('Jak możesz zweryfikować sposób pracy przed współpracą');
+    expect(element.textContent).toContain('Jak możesz zweryfikować sposób pracy');
     expect(element.textContent).toContain('Przejrzyj przykładowy raport');
     expect(element.textContent).toContain('nie jest zamówieniem');
     expect(element.querySelector('.verification-actions a[href="/demo-ai"]')).not.toBeNull();

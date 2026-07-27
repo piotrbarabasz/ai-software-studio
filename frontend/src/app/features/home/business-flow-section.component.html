@@ -1,148 +1,114 @@
 <section class="business-flow section-shell" aria-labelledby="business-flow-title">
-  <div class="section-heading">
-    <p class="eyebrow">{{ flow.eyebrow }}</p>
-    <h2 id="business-flow-title">{{ flow.title }}</h2>
-    <p class="section-lead">{{ flow.lead }}</p>
+  <div class="section-panel business-flow-panel">
+    <div class="section-heading">
+      <p class="eyebrow">{{ flow.eyebrow }}</p>
+      <h2 id="business-flow-title">{{ flow.title }}</h2>
+      <p class="section-lead">{{ flow.lead }}</p>
+    </div>
+
+    <ol class="business-flow-grid" aria-label="Scenariusz współpracy">
+      @for (step of flow.steps; track step.id) {
+        <li
+          class="business-flow-card"
+          [attr.data-step-kind]="step.kind"
+          [class.is-human]="step.kind === 'handoff'"
+        >
+          <div class="business-flow-icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" focusable="false">
+              @switch (step.kind) {
+                @case ('contact') {
+                  <path
+                    d="M10 16h28a4 4 0 0 1 4 4v11a4 4 0 0 1-4 4H26l-8 7v-7h-8a4 4 0 0 1-4-4V20a4 4 0 0 1 4-4z"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linejoin="round"
+                    stroke-width="3"
+                  />
+                  <path
+                    d="M17 25h14M17 31h9"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-width="3"
+                  />
+                }
+                @case ('collect') {
+                  <path
+                    d="M14 11h16l6 6v20a4 4 0 0 1-4 4H14a4 4 0 0 1-4-4V15a4 4 0 0 1 4-4z"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linejoin="round"
+                    stroke-width="3"
+                  />
+                  <path
+                    d="M20 20h10M20 27h14M20 34h8"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-width="3"
+                  />
+                }
+                @case ('qualify') {
+                  <path
+                    d="M12 13h24l-9 11v9l-6 3v-12z"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linejoin="round"
+                    stroke-width="3"
+                  />
+                  <path
+                    d="M28 28l2.5 2.5L35 26"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="3"
+                  />
+                }
+                @case ('handoff') {
+                  <circle
+                    cx="18"
+                    cy="19"
+                    r="5"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                  />
+                  <path
+                    d="M10 36c2.2-5.5 6.2-8 8-8s5.8 2.5 8 8"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-width="3"
+                  />
+                  <path
+                    d="M27 21h12M35 16l4 5-4 5"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="3"
+                  />
+                }
+              }
+            </svg>
+          </div>
+          <div class="business-flow-copy">
+            <p class="business-flow-kicker">{{ step.kicker }}</p>
+            <h3>{{ step.title }}</h3>
+          </div>
+        </li>
+      }
+    </ol>
+
+    <ul class="business-flow-results" aria-label="Efekt biznesowy">
+      @for (result of flow.results; track result) {
+        <li>{{ result }}</li>
+      }
+    </ul>
+
+    <a class="primary-action" [routerLink]="flow.cta.path" [queryParams]="flow.cta.queryParams">
+      {{ flow.cta.label }}
+    </a>
   </div>
-
-  <ol class="business-flow-grid" aria-label="Scenariusz współpracy">
-    @for (step of flow.steps; track step.id) {
-      <li
-        class="business-flow-card"
-        [attr.data-step-kind]="step.kind"
-        [class.is-human]="step.kind === 'handoff'"
-      >
-        <div class="business-flow-icon" aria-hidden="true">
-          <svg viewBox="0 0 48 48" focusable="false">
-            @switch (step.kind) {
-              @case ('contact') {
-                <path
-                  d="M10 16h28a4 4 0 0 1 4 4v11a4 4 0 0 1-4 4H26l-8 7v-7h-8a4 4 0 0 1-4-4V20a4 4 0 0 1 4-4z"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-linejoin="round"
-                  stroke-width="3"
-                />
-                <path
-                  d="M17 25h14M17 31h9"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-width="3"
-                />
-              }
-              @case ('collect') {
-                <path
-                  d="M14 11h16l6 6v20a4 4 0 0 1-4 4H14a4 4 0 0 1-4-4V15a4 4 0 0 1 4-4z"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-linejoin="round"
-                  stroke-width="3"
-                />
-                <path
-                  d="M20 20h10M20 27h14M20 34h8"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-width="3"
-                />
-              }
-              @case ('qualify') {
-                <path
-                  d="M12 13h24l-9 11v9l-6 3v-12z"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-linejoin="round"
-                  stroke-width="3"
-                />
-                <path
-                  d="M28 28l2.5 2.5L35 26"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="3"
-                />
-              }
-              @case ('suggest') {
-                <rect
-                  x="11"
-                  y="14"
-                  width="26"
-                  height="20"
-                  rx="4"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="3"
-                />
-                <path
-                  d="M17 12v6M31 12v6M17 22h10"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-width="3"
-                />
-                <path
-                  d="M28 27h5"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-width="3"
-                />
-              }
-              @case ('save') {
-                <path
-                  d="M12 14h24l4 5v15a4 4 0 0 1-4 4H12a4 4 0 0 1-4-4V18a4 4 0 0 1 4-4z"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-linejoin="round"
-                  stroke-width="3"
-                />
-                <path
-                  d="M12 22h28M16 31h8"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-width="3"
-                />
-              }
-              @case ('handoff') {
-                <circle cx="18" cy="19" r="5" fill="none" stroke="currentColor" stroke-width="3" />
-                <path
-                  d="M10 36c2.2-5.5 6.2-8 8-8s5.8 2.5 8 8"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-width="3"
-                />
-                <path
-                  d="M27 21h12M35 16l4 5-4 5"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="3"
-                />
-              }
-            }
-          </svg>
-        </div>
-        <div class="business-flow-copy">
-          <p class="business-flow-kicker">{{ step.kicker }}</p>
-          <h3>{{ step.title }}</h3>
-          <p>{{ step.description }}</p>
-        </div>
-      </li>
-    }
-  </ol>
-
-  <ul class="business-flow-results" aria-label="Efekt biznesowy">
-    @for (result of flow.results; track result) {
-      <li>{{ result }}</li>
-    }
-  </ul>
-
-  <a class="primary-action" [routerLink]="flow.cta.path" [queryParams]="flow.cta.queryParams">
-    {{ flow.cta.label }}
-  </a>
 </section>

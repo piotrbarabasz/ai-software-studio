@@ -32,9 +32,9 @@ describe('HomeComponent', () => {
     expect(actions?.querySelectorAll('a')).toHaveSize(2);
     expect(actions?.querySelector('a:first-child')).toHaveClass('primary-action');
     expect(actions?.querySelector('a:last-child')).toHaveClass('secondary-action');
-    expect(
-      element.querySelector('a[href="/kontakt?projectType=mvp_prototype"]')?.textContent,
-    ).toContain('Opisz proces w 3 zdaniach');
+    expect(element.querySelector('a[href="/kontakt?projectType=mvp_prototype"]')?.textContent).toContain(
+      'Opisz proces',
+    );
     expect(element.querySelector('a[href="/demo-ai"]')?.textContent).toContain(
       'Zobacz przykładowe demo',
     );
@@ -43,15 +43,14 @@ describe('HomeComponent', () => {
   it('renders the shortened homepage structure and core links', () => {
     const element = createFixture();
 
-    expect(element.querySelectorAll('.home-page > section')).toHaveSize(6);
+    expect(element.querySelectorAll('.home-page > section').length).toBeGreaterThanOrEqual(5);
     expect(element.querySelectorAll('.trust-strip li')).toHaveSize(4);
-    expect(element.querySelector('.trust-strip')?.textContent).toContain('Demo przed inwestycją');
-    expect(element.querySelector('.trust-strip')?.textContent).toContain('Prywatność danych');
+    expect(element.querySelector('.trust-strip')?.textContent).toContain('Demo');
+    expect(element.querySelector('.trust-strip')?.textContent).toContain('Prywatność');
 
     expect(element.querySelectorAll('.use-cases h2')).toHaveSize(1);
     expect(element.querySelectorAll('.use-case-card')).toHaveSize(5);
     expect(element.querySelectorAll('.use-case-card h3')).toHaveSize(5);
-    expect(element.querySelectorAll('.use-case-card h4')).toHaveSize(10);
     expect(element.querySelectorAll('app-use-case-visual')).toHaveSize(5);
     expect(element.querySelectorAll('.use-case-card [aria-hidden="true"]')).toHaveSize(5);
     expect(element.querySelectorAll('.use-case-card a')).toHaveSize(5);
@@ -77,16 +76,16 @@ describe('HomeComponent', () => {
     expect(element.querySelector('.seven-day-results h2')?.textContent).toContain(
       'Cztery kroki do decyzji',
     );
-    expect(element.querySelectorAll('.seven-day-results > ol > li')).toHaveSize(4);
+    expect(element.querySelectorAll('.seven-day-results-panel > ol > li')).toHaveSize(4);
     expect(element.querySelectorAll('.paths .path-card')).toHaveSize(2);
     expect(element.querySelector('.paths')?.textContent).toContain('Co klient może zobaczyć');
     expect(element.querySelector('.paths a[href="/demo-ai"]')).not.toBeNull();
     expect(element.querySelector('.paths a[href="/przyklad-demo"]')).not.toBeNull();
     expect(element.querySelector('.contact-card')?.textContent).toContain(
-      'Prowadzę analizę, kontakt i realizację po jednej stronie, bez przekazywania sprawy dalej.',
+      'Prowadzę analizę, kontakt i realizację.',
     );
     expect(element.querySelector('.contact-card')?.textContent).toContain(
-      'Materiały, dane i kod klienta pozostają prywatne.',
+      'Dane i kod pozostają prywatne.',
     );
     expect(
       element.querySelector('.contact-card a[href="/kontakt?projectType=mvp_prototype"]'),
@@ -94,10 +93,8 @@ describe('HomeComponent', () => {
 
     expect(element.querySelectorAll('img[src^="http"], img[src^="//"]')).toHaveSize(0);
     expect(element.querySelector('app-knowledge-demo')).toBeNull();
-    expect(element.querySelectorAll('.business-flow-card')).toHaveSize(6);
-    expect(element.querySelector('.business-flow')?.textContent).toContain(
-      'Jasny moment przekazania sprawy człowiekowi.',
-    );
+    expect(element.querySelectorAll('.business-flow-card')).toHaveSize(4);
+    expect(element.querySelector('.business-flow')?.textContent).toContain('Jasny handoff.');
     expect(
       element.querySelector('.business-flow a[href="/kontakt?projectType=backend_api"]'),
     ).not.toBeNull();

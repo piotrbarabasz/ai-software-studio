@@ -20,16 +20,12 @@
 .hero-process,
 .evidence-teaser,
 .evidence-teaser-card,
-.contact-card {
+.contact-card-panel {
   min-width: 0;
-  border: 1px solid var(--color-line);
-  border-radius: 18px;
-  background: var(--color-surface);
-  box-shadow: var(--shadow-soft);
 }
 .hero-copy {
-  padding: clamp(1.5rem, 3vw, 2.75rem);
-  background: var(--color-surface);
+  display: grid;
+  gap: 1rem;
 }
 .hero h1 {
   max-width: 17ch;
@@ -90,6 +86,13 @@
 .trust-strip {
   padding-block: 0;
 }
+.trust-strip-panel {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
 .trust-strip ul {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -123,13 +126,16 @@
   display: grid;
   gap: 1.25rem;
 }
+.use-cases-panel {
+  padding-bottom: clamp(1rem, 2vw, 1.5rem);
+}
 .seven-day-results {
   display: grid;
   gap: 1.25rem;
-  padding: clamp(1.5rem, 4vw, 3rem);
-  border: 1px solid var(--brand-200);
-  border-radius: 18px;
+}
+.seven-day-results-panel {
   background: var(--surface-brand);
+  border-color: var(--brand-200);
 }
 .seven-day-results > ol {
   display: grid;
@@ -183,7 +189,7 @@
 .problem-card p,
 .path-card p,
 .evidence-teaser p,
-.contact-card p {
+.contact-card-panel p {
   color: var(--color-muted);
   font-size: clamp(1rem, 1.3vw, 1.1rem);
 }
@@ -227,8 +233,8 @@
 }
 .section-heading h2,
 .evidence-teaser h2,
-.contact-card h2,
-.contact-card h3 {
+.contact-card-panel h2,
+.contact-card-panel h3 {
   max-width: 19ch;
   margin: 0;
   font-size: clamp(2rem, 4vw, 3.6rem);
@@ -240,8 +246,7 @@
   margin-top: 1.25rem;
 }
 .problem-card,
-.path-card,
-.contact-card {
+.path-card {
   display: grid;
   gap: 0.9rem;
   padding: clamp(1.25rem, 3vw, 2rem);
@@ -264,7 +269,7 @@
 .problem-card p,
 .path-card p,
 .evidence-teaser p,
-.contact-card p {
+.contact-card-panel p {
   margin: 0;
 }
 .problem-card ul,
@@ -390,7 +395,7 @@
   border-top: 1px solid var(--border-on-dark);
   padding-top: 1rem;
 }
-.contact-card {
+.contact-card-panel {
   background: var(--surface-brand);
 }
 @media (max-width: 760px) {
@@ -407,7 +412,7 @@
   .hero-actions a,
   .path-card .secondary-action,
   .evidence-teaser-footer .secondary-action,
-  .contact-card .primary-action {
+  .contact-card-panel .primary-action {
     width: 100%;
   }
   .evidence-teaser-footer {
@@ -418,7 +423,7 @@
   .hero-process,
   .evidence-teaser,
   .evidence-teaser-card,
-  .contact-card {
+  .contact-card-panel {
     border-radius: 14px;
   }
 
