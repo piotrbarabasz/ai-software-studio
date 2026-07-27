@@ -18,13 +18,19 @@ const GLOBAL_FORBIDDEN_PATTERNS = [
   { label: 'LEGAL_REQUIRED', pattern: /LEGAL_REQUIRED/i },
 ];
 
+// Privacy-specific placeholder checks apply only to the main privacy content.
+// Shared shell copy, footer links, and structured data can legitimately contain
+// public-facing words such as "przykładowy" without being a configuration placeholder.
 const PRIVACY_FORBIDDEN_PATTERNS = [
-  ...GLOBAL_FORBIDDEN_PATTERNS,
   { label: 'example', pattern: /\bexample\b/i },
   { label: 'sample/dummy/fixture', pattern: /\b(?:sample|dummy|fixture|configured)\b/i },
-  { label: 'przykładowa wartość', pattern: /\bprzyk(?:ład|ladow)/i },
+  { label: 'przykładowa wartość', pattern: /\bprzyk(?:\u0142|l)adowa\s+warto(?:\u015B\u0107|sc)/i },
   { label: 'placeholder', pattern: /\bplaceholder\b/i },
-  { label: 'testowa wartość', pattern: /\btestow(?:a|y|e|ego|ej|emu|ym|ych|ymi|ą)\b/i },
+  { label: 'testowa wartość', pattern: /\btestow(?:a|y|e|ego|ej|emu|ym|ych|ymi|\u0105)/i },
+  {
+    label: 'Konfiguracja demonstracyjna dla środowiska deweloperskiego',
+    pattern: /Konfiguracja demonstracyjna dla \u015Brodowiska deweloperskiego/i,
+  },
 ];
 
 function listTextFiles(root) {
@@ -47,6 +53,11 @@ function escapeHtml(value) {
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#39;');
+}
+
+function extractMainContent(html) {
+  const match = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i);
+  return match?.[1] ?? null;
 }
 
 function configuredValues(configuration) {
@@ -80,8 +91,13 @@ function scanProductionArtifact(artifactRoot, configuration) {
   }
 
   const privacyDocument = fs.readFileSync(privacyPath, 'utf8');
+  const privacyMainContent = extractMainContent(privacyDocument);
+  if (privacyMainContent == null) {
+    throw new Error(`Brak głównej treści w prerenderowanej polityce prywatności: ${privacyPath}`);
+  }
+
   for (const forbidden of PRIVACY_FORBIDDEN_PATTERNS) {
-    if (forbidden.pattern.test(privacyDocument)) {
+    if (forbidden.pattern.test(privacyMainContent)) {
       violations.push(`${PRIVACY_DOCUMENT}: ${forbidden.label}`);
     }
   }
