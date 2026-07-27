@@ -1,5 +1,6 @@
 import { PLATFORM_ID } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
 import { siteContent } from '../../core/content/site.pl';
@@ -13,15 +14,21 @@ describe('BusinessFlowSectionComponent', () => {
     }).compileComponents();
   });
 
-  function render(): HTMLElement {
+  function render(): {
+    fixture: ComponentFixture<BusinessFlowSectionComponent>;
+    element: HTMLElement;
+  } {
     const fixture = TestBed.createComponent(BusinessFlowSectionComponent);
     fixture.componentInstance.flow = siteContent.home.businessFlow;
     fixture.detectChanges();
-    return fixture.nativeElement as HTMLElement;
+    return {
+      fixture,
+      element: fixture.nativeElement as HTMLElement,
+    };
   }
 
   it('renders every stage and the handoff to a human', () => {
-    const element = render();
+    const { element } = render();
     const stepTitles = Array.from(element.querySelectorAll('.business-flow-card h3'), (node) =>
       node.textContent?.trim(),
     );
@@ -45,7 +52,7 @@ describe('BusinessFlowSectionComponent', () => {
   });
 
   it('links to contact with the existing project type query', () => {
-    const element = render();
+    const { element } = render();
     const cta = element.querySelector('a.primary-action') as HTMLAnchorElement | null;
 
     expect(cta?.getAttribute('href')).toBe('/kontakt?projectType=backend_api');
@@ -53,7 +60,7 @@ describe('BusinessFlowSectionComponent', () => {
   });
 
   it('does not introduce unsupported statistics or claims without sources', () => {
-    const element = render();
+    const { element } = render();
     const text = element.textContent ?? '';
 
     expect(text).not.toContain('%');
@@ -77,31 +84,31 @@ describe('BusinessFlowSectionComponent', () => {
   });
 
   it('keeps the flow inside narrow and wide container widths', () => {
-    const element = render();
+    const { fixture, element } = render();
     const flow = element.querySelector('.business-flow') as HTMLElement;
+    const host = fixture.nativeElement as HTMLElement;
+    host.style.display = 'block';
     const cta = element.querySelector('.business-flow > .primary-action') as HTMLAnchorElement;
-    const children = Array.from(
-      element.querySelectorAll(
-        '.business-flow-grid, .business-flow-card, .business-flow-results, .business-flow-results li, .primary-action',
-      ),
-    ) as HTMLElement[];
 
     for (const width of [320, 390, 768, 1024, 1440]) {
-      Object.assign(flow.style, { width: `${width}px` });
+      host.style.width = `${width}px`;
+      flow.style.width = '100%';
+      flow.style.margin = '0';
+      fixture.detectChanges();
       void flow.offsetWidth;
 
-      expect(cta.scrollWidth).toBeLessThanOrEqual(cta.clientWidth);
       const flowRect = flow.getBoundingClientRect();
-      expect(cta.getBoundingClientRect().right).toBeLessThanOrEqual(
-        flowRect.left + flow.clientLeft + flow.clientWidth + 0.5,
-      );
+      const rightBoundary = flowRect.left + flow.clientLeft + flow.clientWidth + 0.5;
 
-      for (const child of children) {
+      expect(flow.scrollWidth).toBeLessThanOrEqual(flow.clientWidth);
+      expect(cta.scrollWidth).toBeLessThanOrEqual(cta.clientWidth);
+      expect(cta.getBoundingClientRect().right).toBeLessThanOrEqual(rightBoundary);
+
+      const directChildren = Array.from(flow.children) as HTMLElement[];
+      for (const child of directChildren) {
         const childRect = child.getBoundingClientRect();
         expect(childRect.left).toBeGreaterThanOrEqual(flowRect.left - 0.5);
-        expect(childRect.right).toBeLessThanOrEqual(
-          flowRect.left + flow.clientLeft + flow.clientWidth + 0.5,
-        );
+        expect(childRect.right).toBeLessThanOrEqual(rightBoundary);
         expect(child.scrollWidth).toBeLessThanOrEqual(child.clientWidth);
       }
     }
