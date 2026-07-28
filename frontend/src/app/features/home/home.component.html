@@ -84,13 +84,13 @@
       </div>
       <div class="path-grid">
         @for (path of home.paths; track path) {
-        <article class="path-card">
-          <p class="card-kicker">{{ path.eyebrow }}</p>
-          <h3>{{ path.title }}</h3>
-          <p>{{ path.lead }}</p>
-          <a
-            class="secondary-action"
-            [routerLink]="path.cta.path"
+          <article class="path-card">
+            <p class="card-kicker">{{ path.eyebrow }}</p>
+            <h3>{{ path.title }}</h3>
+            <p>{{ path.lead }}</p>
+            <a
+              class="secondary-action"
+              [routerLink]="path.cta.path"
               [queryParams]="path.cta.queryParams"
             >
               {{ path.cta.label }}

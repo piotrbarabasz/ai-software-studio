@@ -32,9 +32,9 @@ describe('HomeComponent', () => {
     expect(actions?.querySelectorAll('a')).toHaveSize(2);
     expect(actions?.querySelector('a:first-child')).toHaveClass('primary-action');
     expect(actions?.querySelector('a:last-child')).toHaveClass('secondary-action');
-    expect(element.querySelector('a[href="/kontakt?projectType=mvp_prototype"]')?.textContent).toContain(
-      'Opisz proces',
-    );
+    expect(
+      element.querySelector('a[href="/kontakt?projectType=mvp_prototype"]')?.textContent,
+    ).toContain('Opisz proces');
     expect(element.querySelector('a[href="/demo-ai"]')?.textContent).toContain(
       'Zobacz przykładowe demo',
     );
