@@ -12,21 +12,24 @@
 
   <div class="demo-layout">
     <div class="scenario-picker">
-      <h3>{{ content.questionsLabel }}</h3>
+      <h3>Wybierz obszar</h3>
       <div class="scenario-list">
-        @for (scenario of content.scenarios; track trackScenario($index, scenario)) {
+        @for (category of content.categories; track trackCategory($index, category)) {
           <button
             type="button"
-            class="scenario-button"
-            [class.is-selected]="selectedScenario?.id === scenario.id"
-            [attr.aria-pressed]="selectedScenario?.id === scenario.id"
+            class="category-button scenario-button"
+            [class.is-selected]="selectedCategoryId === category.id"
+            [attr.aria-pressed]="selectedCategoryId === category.id"
             aria-controls="knowledge-demo-result"
-            (click)="selectScenario(scenario)"
+            (click)="selectCategory(category.id)"
           >
-            {{ scenario.question }}
+            {{ category.label }}
           </button>
         }
       </div>
+      @if (selectedCategoryId) {
+        <p class="question-history">{{ selectedCategory?.description }}</p>
+      }
     </div>
 
     <div id="knowledge-demo-result" class="conversation" aria-live="polite" aria-atomic="true">
@@ -40,11 +43,14 @@
         </p>
       }
 
-      @if (state === 'result' && selectedScenario) {
-        <p class="question-history">
-          <strong>{{ content.questionLabel }}:</strong> {{ selectedScenario.question }}
+      @if ((state === 'result' || state === 'fallback') && displayedQuestion) {
+        <p class="message message-user">
+          <strong>{{ content.questionLabel }}:</strong> {{ displayedQuestion }}
         </p>
-        <article class="answer-card">
+      }
+
+      @if (state === 'result' && selectedScenario) {
+        <article class="message message-assistant answer-card">
           <h3>{{ content.answerLabel }}</h3>
           <p>{{ selectedScenario.answer }}</p>
           <p class="confidence">
@@ -66,6 +72,44 @@
               <p>{{ selectedScenario.handoff }}</p>
             </div>
           }
+          @if (selectedScenario.productionNote) {
+            <div class="handoff">
+              <h4>Ograniczenie wdrożeniowe</h4>
+              <p>{{ selectedScenario.productionNote }}</p>
+            </div>
+          }
+          @if (selectedScenario.nextStep) {
+            <div class="demo-actions">
+              <a
+                class="contact-cta"
+                [routerLink]="selectedScenario.nextStep.path"
+                [queryParams]="selectedScenario.nextStep.queryParams"
+                >{{ selectedScenario.nextStep.label }}</a
+              >
+            </div>
+          }
+        </article>
+      }
+
+      @if (state === 'fallback') {
+        <article class="message message-assistant answer-card">
+          <h3>{{ content.fallbackHeading }}</h3>
+          <p>{{ content.fallbackBody }}</p>
+          <div class="demo-actions">
+            <a
+              class="contact-cta"
+              [routerLink]="content.fallbackCta.path"
+              [queryParams]="content.fallbackCta.queryParams"
+              >{{ content.fallbackCta.label }}</a
+            >
+            <button
+              type="button"
+              class="reset-button"
+              (click)="selectCategory(selectedCategoryId ?? content.categories[0].id)"
+            >
+              {{ content.fallbackResetLabel }}
+            </button>
+          </div>
         </article>
       }
     </div>
@@ -79,7 +123,44 @@
       class="contact-cta"
       [routerLink]="content.contactCta.path"
       [queryParams]="content.contactCta.queryParams"
+      [hidden]="state === 'fallback'"
       >{{ content.contactCta.label }}</a
     >
   </div>
+
+  <div class="question-list">
+    <h3>{{ content.questionsLabel }}</h3>
+    <div class="scenario-list">
+      @for (scenario of visibleScenarios; track trackScenario($index, scenario)) {
+        <button
+          type="button"
+          class="question-button scenario-button"
+          [class.is-selected]="selectedScenario?.id === scenario.id"
+          [attr.aria-pressed]="selectedScenario?.id === scenario.id"
+          aria-controls="knowledge-demo-result"
+          (click)="selectScenario(scenario)"
+        >
+          {{ scenario.question }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <form class="custom-question-form" (submit)="submitCustomQuestion($event)">
+    <label for="custom-question">{{ content.customQuestionLabel }}</label>
+    <input
+      id="custom-question"
+      name="customQuestion"
+      type="text"
+      autocomplete="off"
+      [attr.maxlength]="content.customQuestionMaxLength"
+      [placeholder]="content.customQuestionPlaceholder"
+      [value]="customQuestion"
+      (input)="updateCustomQuestion($event)"
+    />
+    <p class="section-copy">{{ content.customQuestionHelp }}</p>
+    <button type="submit" class="primary-action" [disabled]="!customQuestion.trim()">
+      {{ content.customQuestionSubmitLabel }}
+    </button>
+  </form>
 </section>

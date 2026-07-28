@@ -573,14 +573,25 @@ export interface DemoExamplePageContent {
 
 export type KnowledgeDemoScenarioStatus = 'answered' | 'handoff';
 
+export interface KnowledgeDemoCategory {
+  readonly id: string;
+  readonly label: string;
+  readonly description: string;
+}
+
 export interface KnowledgeDemoScenario {
   readonly id: string;
+  readonly categoryId: string;
   readonly question: string;
+  readonly aliases: readonly string[];
+  readonly keywords: readonly string[];
   readonly answer: string;
   readonly sources: readonly string[];
   readonly confidence: string;
   readonly status: KnowledgeDemoScenarioStatus;
   readonly handoff?: string;
+  readonly productionNote?: string;
+  readonly nextStep?: HomeCta;
 }
 
 export interface KnowledgeDemoContent {
@@ -597,11 +608,17 @@ export interface KnowledgeDemoContent {
   readonly handoffLabel: string;
   readonly resetLabel: string;
   readonly contactCta: HomeCta;
-  readonly scenarios: readonly [
-    KnowledgeDemoScenario,
-    KnowledgeDemoScenario,
-    KnowledgeDemoScenario,
-  ];
+  readonly categories: readonly KnowledgeDemoCategory[];
+  readonly scenarios: readonly KnowledgeDemoScenario[];
+  readonly customQuestionLabel: string;
+  readonly customQuestionPlaceholder: string;
+  readonly customQuestionSubmitLabel: string;
+  readonly customQuestionHelp: string;
+  readonly customQuestionMaxLength: number;
+  readonly fallbackHeading: string;
+  readonly fallbackBody: string;
+  readonly fallbackCta: HomeCta;
+  readonly fallbackResetLabel: string;
 }
 
 export interface DevelopmentOutcome {

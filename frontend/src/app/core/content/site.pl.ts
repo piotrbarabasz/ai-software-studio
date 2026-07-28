@@ -789,49 +789,280 @@ export const siteContent = {
       questionLabel: 'Pytanie',
       answerLabel: 'Odpowiedź asystenta',
       sourcesLabel: 'Wykorzystane źródła',
-
       confidenceLabel: 'Poziom pewności',
       handoffLabel: 'Przekazanie do pracownika',
       resetLabel: 'Rozpocznij ponownie',
       contactCta: {
-        label: 'Omów podobne demo',
+        label: 'Umów bezpłatną prezentację',
         path: '/kontakt',
-        queryParams: { projectType: 'business_process_automation' },
+        queryParams: { projectType: 'rag_chatbot_demo' },
       },
-      scenarios: [
+      categories: [
         {
-          id: 'first-contact',
-          question: 'Jak rozpocząć rozmowę o demonstracji jednego procesu?',
-          answer:
-            'Wystarczy opisać jeden proces i jego użytkowników. Gotowa specyfikacja nie jest wymagana — pierwsza rozmowa służy ustaleniu, czy warto zacząć od demo.',
-          sources: ['Przykładowa procedura demo: „Pierwszy kontakt”, kroki 1–2'],
-          confidence: 'Wysoka — odpowiedź wynika bezpośrednio z przykładowej procedury.',
-          status: 'answered',
+          id: 'oferta',
+          label: 'Oferta i sprzedaż',
+          description:
+            'Sprawdź odpowiedzi na pytania o zakres, koszt i sposób uruchomienia rozwiązania.',
         },
         {
-          id: 'demo-boundary',
-          question: 'Czy demo obejmuje gotową integrację z wszystkimi systemami firmy?',
-          answer:
-            'Demo sprawdza ograniczony scenariusz i sposób działania. Produkcyjne integracje, bezpieczeństwo oraz monitoring są planowane osobno po walidacji.',
-          sources: [
-            'Przykładowy zakres demo: „Granice rozwiązania”, punkt 3',
-            'Przykładowy dokument: „Demo a system produkcyjny”, sekcja 2',
-          ],
-          confidence: 'Odpowiedź oparta na wskazanych granicach przykładowego zakresu.',
-          status: 'answered',
+          id: 'prezentacja',
+          label: 'Bezpłatna prezentacja',
+          description:
+            'Zobacz, jak chatbot może prowadzić użytkownika do rozmowy i zebrać podstawowe informacje.',
         },
         {
-          id: 'out-of-scope',
-          question: 'Ile dokładnie firma zaoszczędzi po wdrożeniu?',
-          answer:
-            'Materiały w tej symulacji nie pozwalają uczciwie określić wyniku biznesowego bez poznania procesu i danych firmy.',
-          sources: [],
-          confidence: 'Brak wystarczających danych do odpowiedzi.',
-          status: 'handoff',
-          handoff:
-            'To pytanie zostaje przekazane pracownikowi, aby ocenić je na podstawie rzeczywistego procesu i danych.',
+          id: 'wiedza',
+          label: 'Wiedza firmowa',
+          description:
+            'Sprawdź odpowiedzi oparte na dokumentach, FAQ i zatwierdzonych materiałach.',
+        },
+        {
+          id: 'obsluga',
+          label: 'Obsługa i przekazanie sprawy',
+          description: 'Zobacz brak danych, status sprawy, integrację i handoff do człowieka.',
         },
       ],
+      scenarios: [
+        {
+          id: 'oferta-koszt-chatbota',
+          categoryId: 'oferta',
+          question: 'Ile kosztuje wdrożenie chatbota?',
+          aliases: [
+            'jaka jest cena chatbota',
+            'ile kosztuje chatbot',
+            'koszt wdrożenia',
+            'cena wdrożenia chatbota',
+          ],
+          keywords: ['koszt', 'cena', 'wycena', 'ile kosztuje'],
+          answer:
+            'Koszt zależy od liczby scenariuszy, źródeł wiedzy, integracji i wymaganych zabezpieczeń. Pierwszym krokiem może być demo jednego procesu, które pozwala sprawdzić kierunek przed pełnym wdrożeniem.',
+          sources: [
+            'Przykładowy zakres demo: koszty zależą od scenariuszy, źródeł wiedzy i integracji',
+            'Notatka sprzedażowa: start od jednego procesu ogranicza ryzyko',
+          ],
+          confidence: 'Wysoka - odpowiedź opiera się na ustalonym zakresie demo.',
+          status: 'answered',
+        },
+        {
+          id: 'oferta-przygotowanie-demo',
+          categoryId: 'oferta',
+          question: 'Jak wygląda przygotowanie demo?',
+          aliases: ['jak przygotować demo', 'jak powstaje demo', 'co obejmuje demo'],
+          keywords: ['demo', 'przygotowanie', 'zakres', 'scenariusz'],
+          answer:
+            'Najpierw wybieramy jeden proces i kilka przykładowych sytuacji. Następnie powstaje działający scenariusz, lista ograniczeń oraz rekomendacja kolejnego kroku.',
+          sources: [
+            'Przykładowy proces demo: wybór jednego procesu',
+            'Przykładowy proces demo: lista ograniczeń i rekomendacja kolejnego kroku',
+          ],
+          confidence: 'Wysoka - odpowiedź wynika z przygotowanego procesu.',
+          status: 'answered',
+        },
+        {
+          id: 'oferta-osadzanie-na-stronie',
+          categoryId: 'oferta',
+          question: 'Czy chatbot może działać na mojej stronie?',
+          aliases: [
+            'czy chatbot może być na stronie',
+            'czy chatbot da się osadzić na stronie',
+            'widget chatbota na stronie',
+          ],
+          keywords: ['strona', 'osadzenie', 'widget', 'integracja'],
+          answer:
+            'Tak, chatbot może zostać osadzony na stronie i dopasowany do jej wyglądu. Zakres odpowiedzi, źródła wiedzy oraz sposób przekazania sprawy ustala się przed wdrożeniem.',
+          sources: [
+            'Przykładowe wdrożenie: osadzenie na stronie',
+            'Przykładowe wdrożenie: dopasowanie wyglądu',
+          ],
+          confidence: 'Wymaga walidacji zakresu i integracji.',
+          status: 'answered',
+        },
+        {
+          id: 'prezentacja-bezplatna',
+          categoryId: 'prezentacja',
+          question: 'Chcę umówić bezpłatną prezentację',
+          aliases: [
+            'umów bezpłatną prezentację',
+            'chcę darmową prezentację',
+            'zarezerwuj prezentację',
+          ],
+          keywords: ['prezentacja', 'kontakt', 'formularz', 'demo'],
+          answer:
+            'Przejdź do formularza i krótko opisz proces, który chcesz usprawnić. Nie potrzebujesz gotowej specyfikacji.',
+          sources: ['Przykładowy lejek demo: kontakt po wstępnym sprawdzeniu'],
+          confidence: 'Wysoka - użytkownik jest kierowany do formularza kontaktowego.',
+          status: 'answered',
+          nextStep: {
+            label: 'Umów bezpłatną prezentację',
+            path: '/kontakt',
+            queryParams: { projectType: 'rag_chatbot_demo' },
+          },
+        },
+        {
+          id: 'prezentacja-czas-trwania',
+          categoryId: 'prezentacja',
+          question: 'Jak długo trwa prezentacja?',
+          aliases: ['ile trwa prezentacja', 'czas prezentacji', 'jak długo rozmawiamy'],
+          keywords: ['czas', 'prezentacja', 'rozmowa'],
+          answer:
+            'Rozmowa koncentruje się na jednym procesie, najważniejszych pytaniach i możliwym kolejnym kroku. Dokładny czas zależy od zakresu omawianego przypadku.',
+          sources: [
+            'Zakres demo: jedna rozmowa obejmuje jeden proces',
+            'Zakres demo: czas zależy od omawianego przypadku',
+          ],
+          confidence: 'Nie podajemy z góry liczby minut; zależy od zakresu.',
+          status: 'answered',
+        },
+        {
+          id: 'prezentacja-przygotowanie',
+          categoryId: 'prezentacja',
+          question: 'Co przygotować przed rozmową?',
+          aliases: [
+            'co mam przygotować',
+            'co warto mieć przed spotkaniem',
+            'jak się przygotować do prezentacji',
+          ],
+          keywords: ['przygotowanie', 'rozmowa', 'proces', 'dane'],
+          answer:
+            'Wystarczy krótki opis problemu, kilka typowych pytań lub przykładów spraw oraz informacja, gdzie obecnie przechowywane są potrzebne dane.',
+          sources: [
+            'Checklist demo: krótki opis problemu',
+            'Checklist demo: kilka typowych pytań lub przykładów spraw',
+          ],
+          confidence: 'Wysoka - odpowiedź opisuje minimalny zestaw informacji do rozmowy.',
+          status: 'answered',
+        },
+        {
+          id: 'wiedza-dokumenty',
+          categoryId: 'wiedza',
+          question: 'Z jakich dokumentów może korzystać chatbot?',
+          aliases: [
+            'jakie dokumenty dla chatbota',
+            'z jakich materiałów może korzystać chatbot',
+            'źródła wiedzy chatbota',
+          ],
+          keywords: ['dokumenty', 'faq', 'instrukcja', 'materiały'],
+          answer:
+            'Może korzystać z zatwierdzonych FAQ, instrukcji, opisów usług, regulaminów i innych materiałów przekazanych do ustalonego zakresu.',
+          sources: ['Przykładowe FAQ', 'Przykładowa instrukcja firmowa'],
+          confidence: 'Wysoka - odpowiedź opisuje dozwolony zakres materiałów w demo.',
+          status: 'answered',
+        },
+        {
+          id: 'wiedza-zrodlo-w-odpowiedzi',
+          categoryId: 'wiedza',
+          question: 'Czy odpowiedź może zawierać źródło?',
+          aliases: [
+            'czy chatbot pokazuje źródła',
+            'czy odpowiedź ma source',
+            'źródło w odpowiedzi',
+          ],
+          keywords: ['źródło', 'odpowiedź', 'cytowanie', 'dokument'],
+          answer:
+            'Tak. Odpowiedź może wskazywać dokument lub fragment materiału, na którym została oparta. Sposób prezentacji źródeł zależy od projektu.',
+          sources: ['Przykładowy format odpowiedzi: wskazanie dokumentu lub fragmentu materiału'],
+          confidence: 'Wysoka - źródła są częścią scenariusza odpowiedzi.',
+          status: 'answered',
+        },
+        {
+          id: 'wiedza-brak-odpowiedzi',
+          categoryId: 'wiedza',
+          question: 'Co się dzieje, gdy chatbot nie zna odpowiedzi?',
+          aliases: [
+            'co gdy brak odpowiedzi',
+            'jak chatbot reaguje na brak danych',
+            'brak danych w odpowiedzi',
+          ],
+          keywords: ['brak danych', 'handoff', 'nie zna odpowiedzi'],
+          answer:
+            'Chatbot nie powinien wymyślać brakujących informacji. Może poinformować o braku danych, zebrać kontekst i przekazać sprawę człowiekowi.',
+          sources: [
+            'Zasada demo: chatbot nie wymyśla brakujących informacji',
+            'Zasada demo: przekazanie sprawy do człowieka',
+          ],
+          confidence: 'Brak wystarczających danych do pełnej odpowiedzi.',
+          status: 'handoff',
+          handoff: 'Sprawa zostaje oznaczona jako wymagająca odpowiedzi pracownika.',
+        },
+        {
+          id: 'obsluga-handoff',
+          categoryId: 'obsluga',
+          question: 'Czy chatbot może przekazać rozmowę człowiekowi?',
+          aliases: [
+            'przekazanie do człowieka',
+            'handoff do człowieka',
+            'czy chatbot może eskalować sprawę',
+          ],
+          keywords: ['handoff', 'człowiek', 'eskalacja', 'przekazanie'],
+          answer:
+            'Tak. Przekazanie może nastąpić po wykryciu braku danych, nietypowej sytuacji albo prośby użytkownika o kontakt z pracownikiem.',
+          sources: [
+            'Scenariusz obsługi: brak danych lub nietypowa sytuacja',
+            'Scenariusz obsługi: prośba użytkownika o kontakt',
+          ],
+          confidence: 'Wysoka - scenariusz opisuje jawny mechanizm przekazania sprawy.',
+          status: 'handoff',
+          handoff: 'Rozmowa zostaje przekazana pracownikowi.',
+        },
+        {
+          id: 'obsluga-status-sprawy',
+          categoryId: 'obsluga',
+          question: 'Czy chatbot może sprawdzić status zgłoszenia?',
+          aliases: [
+            'status zgłoszenia',
+            'sprawdzenie statusu sprawy',
+            'czy chatbot pokazuje status',
+          ],
+          keywords: ['status', 'zgłoszenie', 'crm', 'system'],
+          answer:
+            'W pełnym wdrożeniu status może zostać pobrany z CRM lub systemu zgłoszeń. Ta symulacja nie jest połączona z systemem produkcyjnym.',
+          sources: [
+            'W pełnym wdrożeniu źródłem statusu może być CRM lub system zgłoszeń',
+            'Symulacja nie łączy się z systemem produkcyjnym',
+          ],
+          confidence: 'Wymaga integracji i ustalenia zasad dostępu.',
+          status: 'answered',
+          productionNote:
+            'Wymaga integracji z systemem przechowującym status sprawy i ustalenia zasad dostępu.',
+        },
+        {
+          id: 'obsluga-crm',
+          categoryId: 'obsluga',
+          question: 'Czy chatbot może zintegrować się z CRM?',
+          aliases: [
+            'integracja z crm',
+            'czy chatbot łączy się z crm',
+            'chatbot i crm',
+            'hubspot crm',
+          ],
+          keywords: ['crm', 'integracja', 'api', 'system'],
+          answer:
+            'Możliwa jest integracja z CRM, ale jej zakres zależy od używanego systemu, dostępnego API oraz operacji, które chatbot może wykonywać.',
+          sources: [
+            'Możliwa integracja zależy od systemu i API',
+            'Zakres operacji trzeba zwalidować na procesie klienta',
+          ],
+          confidence: 'Wymaga sprawdzenia dokumentacji i procesu klienta.',
+          status: 'answered',
+          productionNote:
+            'Demo nie potwierdza gotowości konkretnej integracji bez sprawdzenia dokumentacji i procesu klienta.',
+        },
+      ],
+      customQuestionLabel: 'Zadaj własne pytanie',
+      customQuestionPlaceholder: 'Np. czy chatbot może współpracować z moim CRM?',
+      customQuestionSubmitLabel: 'Sprawdź pytanie',
+      customQuestionHelp:
+        'Nie wpisuj danych osobowych ani poufnych. Pytanie jest analizowane wyłącznie w przeglądarce i nie jest wysyłane.',
+      customQuestionMaxLength: 300,
+      fallbackHeading: 'To pytanie wykracza poza zakres tej symulacji',
+      fallbackBody:
+        'To demo korzysta z przygotowanych scenariuszy i nie łączy się z pełnym modelem AI ani danymi firmy. Podczas bezpłatnej prezentacji pokażemy, jak chatbot może odpowiadać na pytania z Twoich materiałów, korzystać z integracji i przekazywać sprawy człowiekowi.',
+      fallbackCta: {
+        label: 'Umów bezpłatną prezentację',
+        path: '/kontakt',
+        queryParams: { projectType: 'rag_chatbot_demo' },
+      },
+      fallbackResetLabel: 'Wybierz przykładowe pytanie',
     },
   },
   demoExample: {

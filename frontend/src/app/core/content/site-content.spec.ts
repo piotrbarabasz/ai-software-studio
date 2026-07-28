@@ -341,6 +341,88 @@ describe('Site content model', () => {
     );
   });
 
+  it('defines the expanded interactive demo content model without relying on a fixed trio', () => {
+    const demo = siteContent.demo.interactiveDemo;
+    const demoText = JSON.stringify(demo);
+
+    expect(demo.categories).toHaveSize(4);
+    expect(demo.categories.map((category) => category.id)).toEqual([
+      'oferta',
+      'prezentacja',
+      'wiedza',
+      'obsluga',
+    ]);
+    expect(new Set(demo.categories.map((category) => category.id)).size).toBe(
+      demo.categories.length,
+    );
+    expect(
+      demo.scenarios.every((scenario) =>
+        demo.categories.some((category) => category.id === scenario.categoryId),
+      ),
+    ).toBeTrue();
+    expect(demo.categories.every((category) => category.label.length > 0)).toBeTrue();
+    expect(demo.categories.every((category) => category.description.length > 0)).toBeTrue();
+
+    expect(demo.scenarios).toHaveSize(12);
+    expect(new Set(demo.scenarios.map((scenario) => scenario.id)).size).toBe(demo.scenarios.length);
+    expect(
+      demo.categories.every(
+        (category) =>
+          demo.scenarios.filter((scenario) => scenario.categoryId === category.id).length === 3,
+      ),
+    ).toBeTrue();
+    expect(demo.scenarios.every((scenario) => scenario.question.length > 0)).toBeTrue();
+    expect(demo.scenarios.every((scenario) => scenario.answer.length > 0)).toBeTrue();
+    expect(
+      demo.scenarios.every(
+        (scenario) => scenario.aliases.length > 0 || scenario.keywords.length > 0,
+      ),
+    ).toBeTrue();
+    expect(
+      demo.scenarios.every(
+        (scenario) => !scenario.productionNote || scenario.productionNote.length > 0,
+      ),
+    ).toBeTrue();
+    expect(
+      demo.scenarios.every(
+        (scenario) => !scenario.nextStep || scenario.nextStep.path === '/kontakt',
+      ),
+    ).toBeTrue();
+
+    const presentationScenario = demo.scenarios.find(
+      (scenario) => scenario.id === 'prezentacja-bezplatna',
+    );
+    expect(presentationScenario?.nextStep).toEqual(
+      jasmine.objectContaining({
+        label: 'Umów bezpłatną prezentację',
+        path: '/kontakt',
+        queryParams: { projectType: 'rag_chatbot_demo' },
+      }),
+    );
+
+    expect(demo.contactCta).toEqual(
+      jasmine.objectContaining({
+        path: '/kontakt',
+        queryParams: { projectType: 'rag_chatbot_demo' },
+      }),
+    );
+    expect(demo.fallbackCta).toEqual(
+      jasmine.objectContaining({
+        path: '/kontakt',
+        queryParams: { projectType: 'rag_chatbot_demo' },
+      }),
+    );
+    expect(demo.customQuestionMaxLength).toBe(300);
+    expect(demo.customQuestionHelp).toContain('nie jest wysyłane');
+    expect(demo.fallbackHeading).toContain('wykracza poza zakres');
+    expect(demo.fallbackBody).toContain('nie łączy się z pełnym modelem AI');
+    expect(demoText).not.toMatch(/https?:\/\//i);
+    expect(demoText).not.toContain('pełna integracja');
+    expect(demoText).not.toContain('w pełni zintegrowany');
+    expect(demoText).not.toContain('gotowa integracja');
+    expect(demoText).not.toMatch(/\b\d+[.,]?\d*\s?(?:zł|pln|eur|usd)\b/i);
+  });
+
   it('offers five low-risk ways to verify the work before cooperation', () => {
     expect(siteContent.studio.verification.steps).toHaveSize(5);
     expect(siteContent.studio.verification.steps.join(' ')).toContain('Uruchom demo');

@@ -89,6 +89,11 @@
 .interactive-demo {
   display: grid;
   gap: 1rem;
+  min-width: 0;
+}
+
+.interactive-demo app-knowledge-demo {
+  min-width: 0;
 }
 
 .demo-code-link {

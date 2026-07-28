@@ -4,16 +4,17 @@
       <p class="eyebrow">{{ content.eyebrow }}</p>
       <h1>{{ content.title }}</h1>
       <p class="page-lead">{{ content.lead }}</p>
-      <div class="hero-actions" aria-label="Główne działania">
+      <div class="hero-actions" aria-label="GĹ‚Ăłwne dziaĹ‚ania">
         <a
           class="primary-action"
           routerLink="/kontakt"
           [queryParams]="{ projectType: 'mvp_prototype' }"
-          >{{ content.ctaLabel }}</a
         >
-        <a class="secondary-action" routerLink="/demo-ai" fragment="interactive-demo">{{
-          content.interactiveCtaLabel
-        }}</a>
+          {{ content.ctaLabel }}
+        </a>
+        <a class="secondary-action" [routerLink]="content.reportCta.path">
+          {{ content.reportCta.label }}
+        </a>
       </div>
     </div>
   </section>
@@ -86,9 +87,9 @@
       <p class="section-copy">{{ content.result }}</p>
       <p class="section-copy">{{ content.decision }}</p>
     </div>
-    <div class="hero-actions" aria-label="Dalsze działania">
+    <div class="hero-actions" aria-label="Dalsze dziaĹ‚ania">
       <a
-        class="primary-action"
+        class="secondary-action"
         routerLink="/kontakt"
         [queryParams]="{ projectType: 'mvp_prototype' }"
       >

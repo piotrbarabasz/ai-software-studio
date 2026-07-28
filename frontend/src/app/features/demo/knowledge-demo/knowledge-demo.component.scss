@@ -1,13 +1,30 @@
 :host {
   display: block;
   min-width: 0;
+  box-sizing: border-box;
+}
+
+:host *,
+:host *::before,
+:host *::after {
+  box-sizing: inherit;
 }
 
 .knowledge-demo {
   display: grid;
-  gap: 1.25rem;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  grid-template-areas:
+    'intro intro'
+    'picker conversation'
+    'questions conversation'
+    'custom conversation'
+    'actions conversation';
+  gap: 1rem 1.25rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   border: 1px solid var(--color-line);
-  border-radius: 18px;
+  border-radius: var(--radius-panel);
   background: var(--color-surface);
   box-shadow: var(--shadow-soft);
   padding: clamp(1.1rem, 3vw, 2rem);
@@ -15,6 +32,8 @@
 
 .demo-intro,
 .scenario-picker,
+.question-list,
+.custom-question-form,
 .conversation,
 .answer-card,
 .sources,
@@ -22,6 +41,12 @@
   display: grid;
   gap: 0.75rem;
   min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.demo-intro {
+  grid-area: intro;
 }
 
 .simulation-label {
@@ -37,6 +62,8 @@
 
 .demo-intro h2,
 .scenario-picker h3,
+.question-list h3,
+.custom-question-form label,
 .answer-card h3,
 .sources h4,
 .handoff h4 {
@@ -54,23 +81,36 @@
 .question-history,
 .answer-card p,
 .sources li,
-.handoff p {
+.handoff p,
+.section-copy {
   margin: 0;
   color: var(--color-muted);
   overflow-wrap: anywhere;
 }
 
 .demo-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  gap: 1rem;
+  display: contents;
 }
 
 .scenario-picker,
 .conversation {
+  align-self: start;
+  border: 1px solid var(--color-line);
+  border-radius: 16px;
+  padding: 1rem;
+  background: var(--surface);
+}
+
+.scenario-picker {
+  grid-area: picker;
+  align-content: start;
+}
+
+.question-list {
+  grid-area: questions;
   align-content: start;
   border: 1px solid var(--color-line);
-  border-radius: 14px;
+  border-radius: 16px;
   padding: 1rem;
 }
 
@@ -79,12 +119,33 @@
   gap: 0.65rem;
 }
 
+.scenario-picker .scenario-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.question-list .scenario-list {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .scenario-button,
 .reset-button,
-.contact-cta {
+.contact-cta,
+.primary-action {
   min-height: 44px;
   border-radius: 10px;
   font-weight: 700;
+  line-height: 1.25;
+}
+
+.scenario-button,
+.reset-button,
+.contact-cta,
+.primary-action,
+.secondary-action {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  box-sizing: border-box;
 }
 
 .scenario-button {
@@ -92,32 +153,90 @@
   background: var(--surface);
   color: var(--color-ink);
   cursor: pointer;
-  padding: 0.75rem;
+  padding: 0.65rem 0.85rem;
   text-align: left;
+  transition:
+    border-color 120ms ease,
+    background-color 120ms ease,
+    color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.scenario-picker .scenario-button {
+  flex: 1 1 11rem;
+  min-width: 0;
+  font-size: 0.94rem;
+}
+
+.question-list .scenario-button {
+  width: 100%;
+  justify-content: flex-start;
+  font-size: 1rem;
+  padding: 0.9rem 1rem;
 }
 
 .scenario-button:hover,
+.scenario-button:focus-visible,
 .scenario-button.is-selected {
   border-color: var(--color-primary);
   background: var(--brand-50);
 }
 
 .conversation {
+  grid-area: conversation;
   min-height: 13.5rem;
   background: var(--surface-soft);
+}
+
+.conversation,
+.answer-card {
+  align-content: start;
 }
 
 .checking-state {
   width: fit-content;
   margin: 0;
+  border: 1px solid var(--color-line);
   border-left: 3px solid var(--color-accent);
+  border-radius: 999px;
+  background: var(--surface);
   color: var(--color-ink);
   font-weight: 700;
-  padding-left: 0.75rem;
+  padding: 0.65rem 0.9rem 0.65rem 0.75rem;
+}
+
+.message {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.message-user {
+  justify-self: end;
+  width: fit-content;
+  max-width: min(100%, 42rem);
+  margin: 0;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--color-line);
+  border-radius: 16px 16px 6px 16px;
+  background: var(--surface-brand);
+  color: var(--color-ink);
 }
 
 .answer-card {
-  padding: 0.25rem 0;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--color-line);
+  border-radius: 18px;
+  background: var(--surface);
+}
+
+.answer-card > :not(.sources):not(.handoff) {
+  padding-inline: 1rem;
+}
+
+.answer-card > h3 {
+  padding-top: 1rem;
 }
 
 .confidence,
@@ -126,9 +245,14 @@
   padding-left: 0.75rem;
 }
 
+.confidence {
+  margin-inline: 1rem;
+  padding-block: 0.15rem;
+}
+
 .sources {
   border-top: 1px solid var(--color-line);
-  padding-top: 0.9rem;
+  padding: 0.9rem 1rem 1rem;
 }
 
 .sources ul {
@@ -141,14 +265,18 @@
 .handoff {
   border-color: var(--color-accent);
   background: var(--surface-brand);
+  margin-inline: 1rem 1rem;
   padding-block: 0.75rem;
   padding-right: 0.75rem;
+  border-radius: 14px;
 }
 
 .demo-actions {
+  grid-area: actions;
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
+  align-items: center;
 }
 
 .reset-button,
@@ -161,6 +289,11 @@
   color: var(--color-primary-strong);
   padding: 0.7rem 1rem;
   text-decoration: none;
+  transition:
+    border-color 120ms ease,
+    background-color 120ms ease,
+    color 120ms ease,
+    box-shadow 120ms ease;
 }
 
 .reset-button {
@@ -178,27 +311,125 @@
   color: var(--text-on-dark);
 }
 
-.is-compact .demo-intro h2 {
+.contact-cta:hover,
+.contact-cta:focus-visible,
+.reset-button:hover,
+.reset-button:focus-visible,
+.primary-action:hover,
+.primary-action:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 16%, transparent);
+}
+
+.scenario-button:focus-visible,
+.reset-button:focus-visible,
+.contact-cta:focus-visible,
+.primary-action:focus-visible {
+  outline: none;
+}
+
+.scenario-button:hover,
+.scenario-button:focus-visible {
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-primary) 32%, transparent);
+}
+
+.question-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.custom-question-form {
+  grid-area: custom;
+  border: 1px solid var(--color-line);
+  border-radius: 16px;
+  padding: 1rem;
+  background: var(--surface);
+}
+
+.custom-question-form input {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  border: 1px solid var(--color-line);
+  border-radius: 12px;
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font: inherit;
+  padding: 0.8rem 0.95rem;
+}
+
+.custom-question-form input::placeholder {
+  color: var(--color-muted);
+}
+
+.custom-question-form input:focus-visible {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 16%, transparent);
+}
+
+.custom-question-form .primary-action {
+  width: fit-content;
+  border: 1px solid var(--color-primary);
+  background: var(--color-primary);
+  color: var(--text-on-dark);
+  padding: 0.75rem 1rem;
+}
+
+.knowledge-demo.is-compact .demo-intro h2 {
   font-size: clamp(1.45rem, 3vw, 2rem);
 }
 
-@media (max-width: 760px) {
-  .demo-layout {
-    grid-template-columns: 1fr;
+.knowledge-demo.is-compact {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    'intro'
+    'picker'
+    'questions'
+    'custom'
+    'conversation'
+    'actions';
+}
+
+@media (max-width: 960px) {
+  .knowledge-demo {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'intro'
+      'picker'
+      'questions'
+      'custom'
+      'conversation'
+      'actions';
   }
 
-  .conversation {
-    min-height: 0;
-  }
-
-  .demo-actions,
-  .demo-actions > * {
+  .scenario-picker .scenario-list {
     width: 100%;
+  }
+
+  .scenario-picker .scenario-button {
+    flex: 1 1 100%;
+  }
+
+  .demo-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .demo-actions > *,
+  .custom-question-form .primary-action {
+    width: 100%;
+  }
+
+  .message-user {
+    max-width: 100%;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .scenario-button {
+  .scenario-button,
+  .reset-button,
+  .contact-cta,
+  .primary-action {
     transition: none;
   }
 }
