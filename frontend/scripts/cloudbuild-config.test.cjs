@@ -112,3 +112,12 @@ test('frontend Dockerfile stages the production contract for the shared loader o
   const nginxStage = dockerfile.slice(dockerfile.indexOf('FROM nginx:1.27-alpine'));
   assert.doesNotMatch(nginxStage, /production-contract\.json/);
 });
+
+test('frontend Docker image normalizes the entrypoint script before execution', () => {
+  const dockerfile = fs.readFileSync(path.join(repositoryRoot, 'frontend/Dockerfile'), 'utf8');
+
+  assert.ok(
+    dockerfile.includes("sed -i 's/\\r$//' /docker-entrypoint.d/40-validate-legal-artifact.sh"),
+  );
+  assert.match(dockerfile, /chmod 755 \/docker-entrypoint\.d\/40-validate-legal-artifact\.sh/);
+});

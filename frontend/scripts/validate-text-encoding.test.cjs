@@ -5,7 +5,7 @@ const path = require('node:path');
 const { spawnSync } = require('node:child_process');
 const test = require('node:test');
 
-const { validateTextFile } = require('./validate-text-encoding.cjs');
+const { resolveRepositoryRoot, validateTextFile } = require('./validate-text-encoding.cjs');
 
 function temporaryFile(context, name, content) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'text-encoding-'));
@@ -23,6 +23,24 @@ test('accepts valid UTF-8 with Polish characters', (context) => {
   );
 
   assert.deepEqual(validateTextFile(filePath), []);
+});
+
+test('uses the monorepo root when the frontend is nested in the repository', (context) => {
+  const repositoryRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'text-encoding-repository-'));
+  context.after(() => fs.rmSync(repositoryRoot, { recursive: true, force: true }));
+  const frontendRoot = path.join(repositoryRoot, 'frontend');
+  fs.mkdirSync(frontendRoot);
+  fs.writeFileSync(path.join(frontendRoot, 'package.json'), '{}');
+
+  assert.equal(resolveRepositoryRoot(frontendRoot), repositoryRoot);
+});
+
+test('uses the application root when the frontend is copied directly into a container', (context) => {
+  const applicationRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'text-encoding-app-'));
+  context.after(() => fs.rmSync(applicationRoot, { recursive: true, force: true }));
+  fs.writeFileSync(path.join(applicationRoot, 'package.json'), '{}');
+
+  assert.equal(resolveRepositoryRoot(applicationRoot), applicationRoot);
 });
 
 test('detects a UTF-8 BOM', (context) => {

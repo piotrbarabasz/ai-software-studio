@@ -1,7 +1,16 @@
 const fs = require('node:fs');
 const path = require('node:path');
 
-const REPOSITORY_ROOT = path.resolve(__dirname, '../..');
+const FRONTEND_ROOT = path.resolve(__dirname, '..');
+
+function resolveRepositoryRoot(frontendRoot, existsSync = fs.existsSync) {
+  const repositoryCandidate = path.resolve(frontendRoot, '..');
+  const nestedFrontendManifest = path.join(repositoryCandidate, 'frontend', 'package.json');
+
+  return existsSync(nestedFrontendManifest) ? repositoryCandidate : frontendRoot;
+}
+
+const REPOSITORY_ROOT = resolveRepositoryRoot(FRONTEND_ROOT);
 const UTF8_BOM = Buffer.from([0xef, 0xbb, 0xbf]);
 const UTF8_DECODER = new TextDecoder('utf-8', { fatal: true });
 const TEXT_EXTENSIONS = new Set([
@@ -228,6 +237,7 @@ if (require.main === module) {
 
 module.exports = {
   collectTextFiles,
+  resolveRepositoryRoot,
   validateTextBuffer,
   validateTextEncoding,
   validateTextFile,

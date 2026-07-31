@@ -31,7 +31,9 @@ COPY --from=build /app/generated/nginx-security-headers.conf /etc/nginx/security
 COPY --from=build /app/generated/nginx-security-headers-noindex.conf /etc/nginx/security-headers-noindex.conf
 COPY frontend/docker-entrypoint.d/40-validate-legal-artifact.sh /docker-entrypoint.d/40-validate-legal-artifact.sh
 
-RUN chmod 755 /docker-entrypoint.d/40-validate-legal-artifact.sh && nginx -t
+RUN sed -i 's/\r$//' /docker-entrypoint.d/40-validate-legal-artifact.sh \
+    && chmod 755 /docker-entrypoint.d/40-validate-legal-artifact.sh \
+    && nginx -t
 
 COPY --from=build /app/dist/aisoftware-studio/browser /usr/share/nginx/html
 
