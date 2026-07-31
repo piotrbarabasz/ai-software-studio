@@ -25,7 +25,7 @@ function loadProductionContract(candidates = productionContractCandidates()) {
     contract.invariants === null ||
     Array.isArray(contract.invariants)
   ) {
-    throw new Error('NieobsĹ‚ugiwana wersja kontraktu produkcyjnego.');
+    throw new Error('Nieobsługiwana wersja kontraktu produkcyjnego.');
   }
   return contract.invariants;
 }
@@ -131,13 +131,8 @@ function generatedDirectory() {
   return path.join(FRONTEND_ROOT, 'generated');
 }
 
-function writeSeoArtifacts(environment) {
-  const origin = normalizeOrigin(environment.publicSiteUrl);
-  const routes = publicPrerenderRoutes();
-  const outputDirectory = generatedDirectory();
-  fs.mkdirSync(outputDirectory, { recursive: true });
-
-  const sitemap = [
+function renderSitemap(origin, routes) {
+  return [
     '<?xml version="1.0" encoding="UTF-8"?>',
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
     ...routes.map(
@@ -146,17 +141,32 @@ function writeSeoArtifacts(environment) {
     '</urlset>',
     '',
   ].join('\n');
-  const robots = ['User-agent: *', 'Allow: /', '', `Sitemap: ${origin}/sitemap.xml`, ''].join('\n');
+}
+
+function renderRobots(origin) {
+  return ['User-agent: *', 'Allow: /', '', `Sitemap: ${origin}/sitemap.xml`, ''].join('\n');
+}
+
+function writeSeoArtifacts(environment, { outputDirectory = generatedDirectory() } = {}) {
+  const origin = normalizeOrigin(environment.publicSiteUrl);
+  const routes = publicPrerenderRoutes();
+  fs.mkdirSync(outputDirectory, { recursive: true });
+
+  const sitemap = renderSitemap(origin, routes);
+  const robots = renderRobots(origin);
 
   fs.writeFileSync(path.join(outputDirectory, 'sitemap.xml'), sitemap, 'utf8');
   fs.writeFileSync(path.join(outputDirectory, 'robots.txt'), robots, 'utf8');
 }
 
-function validateSeoArtifacts(environment, { production = false } = {}) {
+function validateSeoArtifacts(
+  environment,
+  { production = false, artifactDirectory = generatedDirectory() } = {},
+) {
   const origin = normalizeOrigin(environment.publicSiteUrl);
   const expectedRoutes = publicPrerenderRoutes();
-  const sitemapPath = path.join(generatedDirectory(), 'sitemap.xml');
-  const robotsPath = path.join(generatedDirectory(), 'robots.txt');
+  const sitemapPath = path.join(artifactDirectory, 'sitemap.xml');
+  const robotsPath = path.join(artifactDirectory, 'robots.txt');
   const errors = [];
 
   if (!fs.existsSync(sitemapPath) || !fs.existsSync(robotsPath)) {
@@ -166,12 +176,16 @@ function validateSeoArtifacts(environment, { production = false } = {}) {
   const sitemap = fs.readFileSync(sitemapPath, 'utf8');
   const robots = fs.readFileSync(robotsPath, 'utf8');
   const locations = Array.from(sitemap.matchAll(/<loc>([^<]+)<\/loc>/g), (match) => match[1]);
-  const expectedLocations = expectedRoutes.map((route) => `${origin}${route === '/' ? '' : route}`);
+  const expectedSitemap = renderSitemap(origin, expectedRoutes);
+  const expectedRobots = renderRobots(origin);
 
-  if (
-    locations.length !== expectedLocations.length ||
-    locations.some((location, index) => location !== expectedLocations[index])
-  ) {
+  if (new Set(expectedRoutes).size !== expectedRoutes.length) {
+    errors.push('prerender routes contain duplicates');
+  }
+  if (new Set(locations).size !== locations.length) {
+    errors.push('sitemap contains duplicate canonical URLs');
+  }
+  if (sitemap !== expectedSitemap) {
     errors.push('sitemap routes do not match prerender routes');
   }
   if (/__PUBLIC_CONFIG_REQUIRED__|\.example(?:\.com)?/i.test(sitemap + robots)) {
@@ -180,7 +194,18 @@ function validateSeoArtifacts(environment, { production = false } = {}) {
   if (production && /localhost/i.test(sitemap + robots)) {
     errors.push('production SEO artifacts contain a localhost origin');
   }
-  if (!robots.includes(`Sitemap: ${origin}/sitemap.xml`)) {
+  if (robots !== expectedRobots) {
+    errors.push('robots.txt does not match the public crawling contract');
+  }
+  if (!/^User-agent:\s*\*$/m.test(robots)) {
+    errors.push('robots.txt must target User-agent: *');
+  }
+  if (
+    !new RegExp(
+      `^Sitemap: ${origin.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}/sitemap\\.xml$`,
+      'm',
+    ).test(robots)
+  ) {
     errors.push('robots sitemap URL does not match publicSiteUrl');
   }
   if (!/^Allow:\s*\/$/m.test(robots)) {
@@ -202,6 +227,8 @@ module.exports = {
   loadProductionContract,
   normalizeOrigin,
   publicPrerenderRoutes,
+  renderRobots,
+  renderSitemap,
   validateProductionSiteConfig,
   validateSeoArtifacts,
   writeSeoArtifacts,

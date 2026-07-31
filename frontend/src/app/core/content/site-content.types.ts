@@ -17,6 +17,7 @@ export type StaticRoutePath =
   | '/rozwiazania/automatyzacja-procesow'
   | '/rozwiazania/integracje-whatsapp-crm'
   | '/rozwiazania/systemy-agentowe'
+  | '/dla-software-house'
   | '/development'
   | '/studio'
   | '/rd'
@@ -46,6 +47,7 @@ export type PublicRouteKind =
   | 'demo-example'
   | 'solutions'
   | 'service-landing'
+  | 'partner'
   | 'development'
   | 'studio'
   | 'research'
@@ -101,6 +103,13 @@ export interface ServiceLandingRouteMetadata extends RouteMetadataBase {
 export interface DevelopmentRouteMetadata extends RouteMetadataBase {
   readonly kind: 'development';
   readonly path: '/development';
+  readonly productId?: never;
+  readonly contactContext?: never;
+}
+
+export interface PartnerRouteMetadata extends RouteMetadataBase {
+  readonly kind: 'partner';
+  readonly path: '/dla-software-house';
   readonly productId?: never;
   readonly contactContext?: never;
 }
@@ -207,7 +216,8 @@ export interface TrustContent {
 }
 
 export interface HomeTrustTeaser {
-  readonly statement: string;
+  readonly title: string;
+  readonly points: readonly [string, string, string];
   readonly cta: HomeCta;
 }
 
@@ -215,6 +225,7 @@ export interface HomeEvidenceTeaser {
   readonly eyebrow: string;
   readonly title: string;
   readonly lead: string;
+  readonly note: string;
 }
 
 export interface HomeClosingCta {
@@ -237,11 +248,6 @@ export interface ResearchDirection {
 export interface HomePageContent {
   readonly path: StaticRoutePath;
   readonly hero: HomeHero;
-  readonly problemsHeading: HomeSectionHeading;
-  readonly problemGroups: readonly [HomeProblemGroup, HomeProblemGroup, HomeProblemGroup];
-  readonly pathsHeading: HomeSectionHeading;
-  readonly paths: readonly [HomePath, HomePath];
-  readonly studioEyebrow: string;
   readonly trustTeaser: HomeTrustTeaser;
   readonly evidenceTeaser: HomeEvidenceTeaser;
   readonly closingCta: HomeClosingCta;
@@ -251,9 +257,10 @@ export interface HomePageContent {
     HomeTrustStripItem,
     HomeTrustStripItem,
   ];
+  readonly useCasesHeading: HomeSectionHeading;
   readonly useCases: readonly HomeUseCase[];
   readonly businessFlow: HomeBusinessFlow;
-  readonly sevenDayResults: HomeSevenDayResults;
+  readonly sevenDayDemo: HomeSevenDayDemo;
 }
 
 export interface HomeSectionHeading {
@@ -272,19 +279,12 @@ export interface HomeCta {
 export interface HomeHero {
   readonly eyebrow: string;
   readonly title: string;
-  readonly titleBeforeHighlight: string;
-  readonly highlightedTitlePart: string;
-  readonly titleAfterHighlight: string;
   readonly audience: string;
   readonly lead: string;
   readonly primaryCta: HomeCta;
   readonly secondaryCta: HomeCta;
-  readonly supportingNote: string;
+  readonly processTitle: string;
   readonly processDiagram: readonly [string, string, string, string];
-  readonly proof: {
-    readonly label: string;
-    readonly steps: readonly [string, string, string];
-  };
 }
 
 export interface HomeTrustStripItem {
@@ -296,7 +296,6 @@ export interface HomeTrustStripItem {
 export interface HomeUseCase {
   readonly id: string;
   readonly title: string;
-  readonly summary?: string;
   readonly problem: string;
   readonly outcome: string;
   readonly cta?: HomeCta;
@@ -409,24 +408,16 @@ export interface SolutionsPageContent {
   readonly closingCta: HomeClosingCta;
 }
 
-export interface HomeSevenDayResult {
-  readonly id: string;
-  readonly title: string;
-  readonly description: string;
-  readonly order?: number;
-}
-
-export interface HomeSevenDayResults {
+export interface HomeSevenDayDemo {
   readonly eyebrow: string;
   readonly title: string;
-  readonly lead: string;
-  readonly reportCta: HomeCta;
-  readonly items: readonly [
-    HomeSevenDayResult,
-    HomeSevenDayResult,
-    HomeSevenDayResult,
-    HomeSevenDayResult,
-  ];
+  readonly deliverablesTitle: string;
+  readonly deliverables: readonly [string, string, string, string];
+  readonly inputsTitle: string;
+  readonly inputs: readonly [string, string, string, string];
+  readonly pricingTitle: string;
+  readonly pricingDescription: string;
+  readonly pricingNote: string;
 }
 
 export interface HomeBusinessFlowStep {
@@ -451,23 +442,9 @@ export interface HomeBusinessFlow {
   ];
 }
 
-export interface HomeProblemGroup {
-  readonly title: string;
-  readonly effect: string;
-  readonly examples: readonly [string, string, string];
-}
-
 export interface HomeComparisonCard {
   readonly title: string;
   readonly points: readonly string[];
-}
-
-export interface HomePath {
-  readonly eyebrow: string;
-  readonly title: string;
-  readonly lead: string;
-  readonly points: readonly [string, string, string];
-  readonly cta: HomeCta;
 }
 
 export interface DemoPageContent {
@@ -673,6 +650,52 @@ export interface DevelopmentPageContent {
   readonly closingCta: HomeClosingCta;
 }
 
+export interface PartnerCollaborationModel {
+  readonly title: string;
+  readonly description: string;
+}
+
+export interface PartnerFaqItem {
+  readonly question: string;
+  readonly answer: string;
+}
+
+export interface PartnerPageContent {
+  readonly path: '/dla-software-house';
+  readonly eyebrow: string;
+  readonly title: string;
+  readonly lead: string;
+  readonly primaryCta: HomeCta;
+  readonly secondaryCta: HomeCta;
+  readonly fitTitle: string;
+  readonly fitItems: readonly [string, string, string, string];
+  readonly scopeTitle: string;
+  readonly scopeItems: readonly [string, string, string, string, string];
+  readonly modelsTitle: string;
+  readonly models: readonly [
+    PartnerCollaborationModel,
+    PartnerCollaborationModel,
+    PartnerCollaborationModel,
+  ];
+  readonly rulesTitle: string;
+  readonly rulesLead: string;
+  readonly rules: readonly [string, string, string, string, string];
+  readonly evidenceTitle: string;
+  readonly evidenceLead: string;
+  readonly evidenceLinks: readonly [HomeCta, HomeCta, HomeCta];
+  readonly faqTitle: string;
+  readonly faqs: readonly [
+    PartnerFaqItem,
+    PartnerFaqItem,
+    PartnerFaqItem,
+    PartnerFaqItem,
+    PartnerFaqItem,
+  ];
+  readonly closingTitle: string;
+  readonly closingLead: string;
+  readonly serviceType: string;
+}
+
 export interface StudioPageContent {
   readonly path: StaticRoutePath;
   readonly eyebrow: string;
@@ -701,6 +724,7 @@ export interface StudioPageContent {
 
 export interface FooterContent {
   readonly summary: string;
+  readonly contactEmail?: string;
   readonly offerLinks: readonly NavigationItem[];
   readonly studioLinks: readonly NavigationItem[];
   readonly informationLinks: readonly NavigationItem[];
@@ -720,7 +744,14 @@ export interface ContactPageContent {
   readonly budgetHint: string;
   readonly nextSteps: readonly [string, string, string];
   readonly noSpecificationNeeded: string;
-  readonly firstMessagePurpose: string;
+  readonly messageLabel: string;
+  readonly additionalInformationLabel: string;
+  readonly messageGuidance: {
+    readonly generalLabel: string;
+    readonly general: readonly [string, string, string];
+    readonly partnerLabel: string;
+    readonly partner: readonly [string, string, string];
+  };
   readonly noCommitment: string;
   readonly directEmail?: string;
   readonly directEmailLabel: string;
@@ -786,6 +817,7 @@ export interface SiteContent {
   readonly demoExample: DemoExamplePageContent;
   readonly solutions: SolutionsPageContent;
   readonly serviceLandingPages: readonly ServiceLandingPageContent[];
+  readonly partner: PartnerPageContent;
   readonly development: DevelopmentPageContent;
   readonly studio: StudioPageContent;
   readonly research: ResearchPageContent;
@@ -800,6 +832,7 @@ export type PublicRouteMetadata =
   | DemoExampleRouteMetadata
   | SolutionsRouteMetadata
   | ServiceLandingRouteMetadata
+  | PartnerRouteMetadata
   | DevelopmentRouteMetadata
   | StudioRouteMetadata
   | ResearchRouteMetadata

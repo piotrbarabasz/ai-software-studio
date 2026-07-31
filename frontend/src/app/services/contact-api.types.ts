@@ -12,6 +12,7 @@ export type ProjectType =
   | 'external_integration'
   | 'dashboard_internal_tool'
   | 'mvp_prototype'
+  | 'software_house_partnership'
   | 'other';
 
 export type BudgetRange =

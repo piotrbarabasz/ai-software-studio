@@ -46,8 +46,8 @@
       @for (outcome of content.outcomes; track outcome) {
         <article class="info-card">
           <h3>{{ outcome.title }}</h3>
-          <p><strong>Docelowy spos?b pracy:</strong> {{ outcome.targetWorkflow }}</p>
-          <p><strong>Punkt wyj?cia:</strong> {{ outcome.startingPoint }}</p>
+          <p><strong>Docelowy sposób pracy:</strong> {{ outcome.targetWorkflow }}</p>
+          <p><strong>Punkt wyjścia:</strong> {{ outcome.startingPoint }}</p>
           <ul class="outcome-elements">
             @for (element of outcome.solutionElements; track element) {
               <li>{{ element }}</li>

@@ -16,11 +16,8 @@
         formControlName="name"
         required
         [attr.aria-invalid]="isInvalid('name')"
-        [attr.aria-describedby]="isInvalid('name') ? 'name-hint name-error' : 'name-hint'"
+        [attr.aria-describedby]="isInvalid('name') ? 'name-error' : null"
       />
-      <p id="name-hint" class="field-hint">
-        Wymagane — wystarczy imię i nazwisko osoby do kontaktu.
-      </p>
       @if (isInvalid('name')) {
         <p id="name-error" class="field-error">{{ errorFor('name') }}</p>
       }
@@ -35,9 +32,8 @@
         formControlName="email"
         required
         [attr.aria-invalid]="isInvalid('email')"
-        [attr.aria-describedby]="isInvalid('email') ? 'email-hint email-error' : 'email-hint'"
+        [attr.aria-describedby]="isInvalid('email') ? 'email-error' : null"
       />
-      <p id="email-hint" class="field-hint">Wymagane — użyj adresu, na który można odpisać.</p>
       @if (isInvalid('email')) {
         <p id="email-error" class="field-error">{{ errorFor('email') }}</p>
       }
@@ -67,9 +63,7 @@
         formControlName="projectType"
         required
         [attr.aria-invalid]="isInvalid('projectType')"
-        [attr.aria-describedby]="
-          isInvalid('projectType') ? 'project-type-hint project-type-error' : 'project-type-hint'
-        "
+        [attr.aria-describedby]="isInvalid('projectType') ? 'project-type-error' : null"
       >
         <option value="">Wybierz najbliższą opcję</option>
         @for (option of content.projectTypes; track option) {
@@ -78,9 +72,6 @@
           </option>
         }
       </select>
-      <p id="project-type-hint" class="field-hint">
-        Wybierz opcję najbardziej zbliżoną do Twojego pomysłu.
-      </p>
       @if (isInvalid('projectType')) {
         <p id="project-type-error" class="field-error">
           {{ errorFor('projectType') }}
@@ -88,7 +79,7 @@
       }
     </div>
     <div class="field field-full">
-      <label for="message">Opisz proces w 3 zdaniach <span aria-hidden="true">*</span></label>
+      <label for="message">{{ content.messageLabel }} <span aria-hidden="true">*</span></label>
       <textarea
         id="message"
         name="message"
@@ -102,39 +93,15 @@
         "
       ></textarea>
       <div id="message-hint" class="field-hint message-hint">
-        <p>{{ content.firstMessagePurpose }}</p>
-        <ul class="message-guidance" aria-label="Pomoc do opisu procesu">
-          <li>Kto wykonuje tę pracę?</li>
-          <li>Co jest dziś wykonywane ręcznie?</li>
-          <li>Jaki rezultat powinien się zmienić?</li>
+        <ul class="message-guidance" [attr.aria-label]="messageGuidanceLabel">
+          @for (item of messageGuidance; track item) {
+            <li>{{ item }}</li>
+          }
         </ul>
       </div>
       @if (isInvalid('message')) {
         <p id="message-error" class="field-error">
           {{ errorFor('message') }}
-        </p>
-      }
-    </div>
-    <div class="field">
-      <label for="budgetRange">Budżet orientacyjny — opcjonalnie</label>
-      <select
-        id="budgetRange"
-        name="budgetRange"
-        formControlName="budgetRange"
-        [attr.aria-invalid]="isInvalid('budgetRange')"
-        aria-describedby="budget-range-hint"
-      >
-        <option value="">Nie wybieram teraz (opcjonalnie)</option>
-        @for (option of content.budgetRanges; track option) {
-          <option [value]="option.value">
-            {{ option.label }}
-          </option>
-        }
-      </select>
-      <p id="budget-range-hint" class="field-hint">{{ content.budgetHint }}</p>
-      @if (isInvalid('budgetRange')) {
-        <p id="budget-range-error" class="field-error">
-          {{ errorFor('budgetRange') }}
         </p>
       }
     </div>
@@ -173,6 +140,32 @@
       }
     </div>
     <p class="form-legal-note">{{ content.noCommitment }}</p>
+    <details class="additional-information field-full">
+      <summary>{{ content.additionalInformationLabel }}</summary>
+      <div class="field budget-field">
+        <label for="budgetRange">Budżet orientacyjny</label>
+        <select
+          id="budgetRange"
+          name="budgetRange"
+          formControlName="budgetRange"
+          [attr.aria-invalid]="isInvalid('budgetRange')"
+          aria-describedby="budget-range-hint"
+        >
+          <option value="">Nie wybieram teraz</option>
+          @for (option of content.budgetRanges; track option) {
+            <option [value]="option.value">
+              {{ option.label }}
+            </option>
+          }
+        </select>
+        <p id="budget-range-hint" class="field-hint">{{ content.budgetHint }}</p>
+        @if (isInvalid('budgetRange')) {
+          <p id="budget-range-error" class="field-error">
+            {{ errorFor('budgetRange') }}
+          </p>
+        }
+      </div>
+    </details>
     @if (status === 'error' && statusMessage) {
       <div
         #errorSummary

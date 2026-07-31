@@ -231,6 +231,7 @@ export class SiteShellComponent implements OnInit {
         '@type': 'Person',
         name: owner.name,
         jobTitle: owner.role,
+        description: owner.bio,
       },
       {
         '@id': serviceId,
@@ -249,6 +250,7 @@ export class SiteShellComponent implements OnInit {
           contactType: 'sales',
           url: absoluteSiteUrl('/kontakt'),
           availableLanguage: 'pl-PL',
+          ...(siteContent.footer.contactEmail ? { email: siteContent.footer.contactEmail } : {}),
         },
       },
       {
@@ -308,6 +310,19 @@ export class SiteShellComponent implements OnInit {
         inLanguage: 'pl-PL',
         provider: { '@id': serviceId },
         serviceType: serviceLandingPage.serviceType,
+      });
+    }
+
+    if (canonicalPath === siteContent.partner.path) {
+      graph.push({
+        '@id': `${siteSeo.origin}${siteContent.partner.path}#service`,
+        '@type': 'Service',
+        name: siteContent.partner.title,
+        description: route?.description,
+        url: absoluteSiteUrl(siteContent.partner.path),
+        inLanguage: 'pl-PL',
+        provider: { '@id': serviceId },
+        serviceType: siteContent.partner.serviceType,
       });
     }
 

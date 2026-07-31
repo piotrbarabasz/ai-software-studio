@@ -19,6 +19,7 @@ class ProjectType(StrEnum):
     external_integration = "external_integration"
     dashboard_internal_tool = "dashboard_internal_tool"
     mvp_prototype = "mvp_prototype"
+    software_house_partnership = "software_house_partnership"
     other = "other"
 
 

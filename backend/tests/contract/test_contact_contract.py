@@ -33,6 +33,7 @@ EXPECTED_PROJECT_TYPES = {
     "external_integration",
     "dashboard_internal_tool",
     "mvp_prototype",
+    "software_house_partnership",
     "other",
 }
 VISIBLE_PROJECT_TYPES = {
@@ -41,6 +42,7 @@ VISIBLE_PROJECT_TYPES = {
     "backend_api",
     "business_process_automation",
     "rag_chatbot_demo",
+    "software_house_partnership",
     "other",
 }
 

@@ -117,3 +117,19 @@ def test_email_adapter_uses_verified_sender_and_user_reply_to(
     assert sent_messages[0]["From"] == str(settings.contact_from_email)
     assert sent_messages[0]["To"] == str(settings.contact_recipient_email)
     assert sent_messages[0]["Reply-To"] == str(inquiry.email)
+
+
+def test_email_body_uses_a_readable_software_house_partnership_label(
+    valid_contact_payload: dict[str, object],
+) -> None:
+    inquiry = _inquiry(
+        {
+            **valid_contact_payload,
+            "projectType": "software_house_partnership",
+        }
+    )
+
+    body = EmailContactDelivery._build_email_body(inquiry)
+
+    assert "Typ projektu: Współpraca z software house’em lub MSP" in body
+    assert "Typ projektu: software_house_partnership" not in body

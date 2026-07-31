@@ -3,7 +3,7 @@
     <button
       type="button"
       class="carousel-button"
-      aria-label="Poprzednie rozwiązania"
+      aria-label="Poprzednie procesy"
       (click)="move(-1)"
     >
       <span aria-hidden="true">←</span>
@@ -11,12 +11,7 @@
   }
   <p class="carousel-status" aria-live="polite" aria-atomic="true">{{ statusLabel }}</p>
   @if (hasMultipleItems) {
-    <button
-      type="button"
-      class="carousel-button"
-      aria-label="Następne rozwiązania"
-      (click)="move(1)"
-    >
+    <button type="button" class="carousel-button" aria-label="Następne procesy" (click)="move(1)">
       <span aria-hidden="true">→</span>
     </button>
   }
@@ -27,15 +22,22 @@
   tabindex="0"
   (scroll)="onScroll()"
   (keydown)="onKeydown($event)"
-  aria-label="Karuzela rozwiązań"
+  aria-label="Karuzela procesów"
 >
   @for (useCase of items; track useCase.id) {
     <article class="use-case-card" [attr.data-visual-kind]="useCase.visualKind">
       <h3>{{ useCase.title }}</h3>
       <app-use-case-visual [visualKind]="useCase.visualKind" />
-      <p class="use-case-summary">
-        {{ useCase.summary ?? useCase.problem + ' ' + useCase.outcome }}
-      </p>
+      <div class="use-case-details">
+        <div>
+          <p class="use-case-label">Problem</p>
+          <p class="use-case-text">{{ useCase.problem }}</p>
+        </div>
+        <div>
+          <p class="use-case-label">Rezultat</p>
+          <p class="use-case-text">{{ useCase.outcome }}</p>
+        </div>
+      </div>
       @if (useCase.cta) {
         <a
           class="secondary-action"

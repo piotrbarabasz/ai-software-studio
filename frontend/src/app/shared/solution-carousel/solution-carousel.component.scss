@@ -43,9 +43,11 @@
 }
 .use-case-card {
   display: grid;
-  align-content: start;
+  grid-template-rows: auto auto 1fr auto;
   gap: 1rem;
+  height: 100%;
   min-width: 0;
+  box-sizing: border-box;
   padding: clamp(1.25rem, 3vw, 2rem);
   border: 1px solid var(--color-line);
   border-top: 3px solid var(--color-primary);
@@ -61,9 +63,31 @@
 }
 .use-case-card h3 {
   font-size: 1.35rem;
+  line-height: 1.2;
 }
-.use-case-summary {
+.use-case-details {
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+}
+.use-case-details > div {
+  display: grid;
+  gap: 0.3rem;
+}
+.use-case-label {
   color: var(--color-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.use-case-text {
+  color: var(--color-ink);
+  line-height: 1.55;
+}
+.use-case-card .secondary-action {
+  align-self: end;
+  justify-self: start;
 }
 @media (max-width: 1023px) {
   .solution-carousel {

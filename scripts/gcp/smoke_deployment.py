@@ -31,6 +31,7 @@ def _public_routes() -> tuple[str, ...]:
 
 PUBLIC_ROUTES = _public_routes()
 NOT_FOUND_PATH = "/__protolume_read_only_smoke_missing__"
+SOCIAL_PREVIEW_PATH = "/assets/protolume-social-preview.png"
 MAX_RESPONSE_BYTES = 2_000_000
 BUILD_SHA_PATTERN = re.compile(r"^[0-9a-f]{7,64}$")
 PLACEHOLDER_BUILD_SHAS = {"unknown", "local", "test"}
@@ -38,6 +39,7 @@ PRIMARY_NAVIGATION_LINKS = (
     ("/rozwiazania", "Rozwiązania"),
     ("/demo-ai", "Demo w 7 dni"),
     ("/development", "Wdrożenia"),
+    ("/dla-software-house", "Dla partnerów"),
     ("/studio", "O Protolume"),
     ("/kontakt", "Kontakt"),
 )
@@ -296,6 +298,8 @@ def _check_public_routes(
                 f"public route {path}: expected HTTP 200, received {response.status}"
             )
             continue
+        if not response.headers.get("content-type", "").lower().startswith("text/html"):
+            errors.append(f"public route {path}: Content-Type is not text/html")
         if len(response.body) > MAX_RESPONSE_BYTES:
             errors.append(
                 f"public route {path}: response exceeds the smoke-test size limit"
@@ -371,7 +375,7 @@ def _check_public_routes(
             h1 = " ".join(text for tag, text in parser.headings if tag == "h1")
             if not h1:
                 errors.append("public route /: expected an h1 element, received none")
-            for phrase in ("Sprawdź w 7 dni", "konkretny proces"):
+            for phrase in ("Automatyzujemy ręczne procesy", "MŚP"):
                 if phrase.lower() not in h1.lower():
                     errors.append(f"public route /: h1 must contain {phrase!r}")
             if parser.use_case_card_count != 5:
@@ -394,11 +398,11 @@ def _check_public_routes(
                 if phrase.casefold() not in visible_text:
                     errors.append(f"public route /: visible copy is missing {phrase!r}")
             for title in (
-                "Asystent wiedzy",
-                "Obsługa wiadomości i dokumentów",
-                "Panel procesu",
-                "System agentowy do realizacji zadań",
-                "Integracje kanałów i komunikatorów",
+                "Obsługa powtarzalnych pytań",
+                "Kwalifikacja rozmów i zgłoszeń",
+                "Przetwarzanie wiadomości i dokumentów",
+                "Realizacja wieloetapowych zadań",
+                "Obsługa wielu kanałów w jednym procesie",
             ):
                 if title.casefold() not in visible_text:
                     errors.append(f"public route /: visible copy is missing {title!r}")
@@ -498,7 +502,12 @@ def _check_discovery_files(
 ) -> list[str]:
     errors: list[str] = []
     responses: dict[str, Response] = {}
-    for path in ("/robots.txt", "/sitemap.xml"):
+    expected_content_types = {
+        "/robots.txt": "text/plain",
+        "/sitemap.xml": "application/xml",
+        SOCIAL_PREVIEW_PATH: "image/png",
+    }
+    for path, expected_content_type in expected_content_types.items():
         try:
             responses[path] = _get(site_origin, path, request, timeout)
         except Exception:
@@ -508,6 +517,12 @@ def _check_discovery_files(
             errors.append(
                 f"public {path}: expected HTTP 200, received {responses[path].status}"
             )
+            continue
+        content_type = responses[path].headers.get("content-type", "").lower()
+        if not content_type.startswith(expected_content_type):
+            errors.append(
+                f"public {path}: Content-Type is not {expected_content_type}"
+            )
 
     robots_response = responses.get("/robots.txt")
     if robots_response and robots_response.status == 200:
@@ -516,9 +531,12 @@ def _check_discovery_files(
         except UnicodeDecodeError:
             errors.append("public /robots.txt: response is not valid UTF-8")
         else:
-            if f"Sitemap: {site_origin}/sitemap.xml" not in robots:
+            expected_robots = (
+                f"User-agent: *\nAllow: /\n\nSitemap: {site_origin}/sitemap.xml\n"
+            )
+            if robots != expected_robots:
                 errors.append(
-                    "public /robots.txt: sitemap URL does not match the public origin"
+                    "public /robots.txt: crawling contract or sitemap URL does not match"
                 )
 
     sitemap_response = responses.get("/sitemap.xml")

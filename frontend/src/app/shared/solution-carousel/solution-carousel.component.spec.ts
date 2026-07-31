@@ -124,10 +124,48 @@ describe('SolutionCarouselComponent', () => {
     fixture.fixture.detectChanges();
   }
 
-  it('keeps all five cards and their fragment links in the DOM', () => {
+  it('keeps all five cards and their canonical links in the DOM', () => {
     const element = createFixture().element;
     expect(element.querySelectorAll('.use-case-card')).toHaveSize(5);
     expect(element.querySelectorAll('a[href^="/rozwiazania/"]')).toHaveSize(5);
+  });
+
+  it('presents every process as separate problem and result content', () => {
+    const element = createFixture().element;
+    const cards = Array.from(element.querySelectorAll<HTMLElement>('.use-case-card'));
+
+    expect(cards).toHaveSize(5);
+    expect(
+      cards.map((card) =>
+        Array.from(card.querySelectorAll<HTMLElement>('.use-case-label'), (label) =>
+          label.textContent?.trim(),
+        ),
+      ),
+    ).toEqual(Array.from({ length: 5 }, () => ['Problem', 'Rezultat']));
+    expect(cards.every((card) => card.querySelectorAll('.use-case-text').length === 2)).toBeTrue();
+    expect(element.querySelectorAll('.use-case-summary')).toHaveSize(0);
+    expect(
+      Array.from(element.querySelectorAll<HTMLElement>('.use-case-card a'), (link) =>
+        link.textContent?.trim(),
+      ),
+    ).toEqual(Array.from({ length: 5 }, () => 'Zobacz proces'));
+  });
+
+  it('keeps process controls, viewport and live status accessibly labelled', () => {
+    const element = createFixture().element;
+    const buttons = Array.from(
+      element.querySelectorAll<HTMLButtonElement>('.carousel-button'),
+      (button) => button.getAttribute('aria-label'),
+    );
+    const status = element.querySelector('.carousel-status');
+
+    expect(element.querySelector('.solution-carousel')?.getAttribute('aria-label')).toBe(
+      'Karuzela procesów',
+    );
+    expect(buttons).toEqual(['Poprzednie procesy', 'Następne procesy']);
+    expect(status?.getAttribute('aria-live')).toBe('polite');
+    expect(status?.getAttribute('aria-atomic')).toBe('true');
+    expect(status?.textContent).toContain('Wyświetlane procesy');
   });
 
   it('renders decorative pictograms for every use case without textual nodes or external assets', () => {

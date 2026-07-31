@@ -2,6 +2,10 @@
 
 Publiczna, polskojęzyczna strona Protolume — studio wdrożeń AI i automatyzacji, prowadzone przez Piotra Barabasza.
 
+Oficjalna strona: [https://protolume.pl](https://protolume.pl)
+
+Repozytorium zawiera kod strony oraz obsługującego ją API formularza kontaktowego. Oficjalnym źródłem aktualnej oferty jest domena `protolume.pl`.
+
 ## Repository Structure
 
 ```text
@@ -61,6 +65,7 @@ Production deployment to Google Cloud Platform is documented separately:
 - [docs/gcp-cicd.md](docs/gcp-cicd.md)
 - [docs/gcp-deployment.md](docs/gcp-deployment.md)
 - [docs/gcp-runbook.md](docs/gcp-runbook.md)
+- [docs/google-search-console.md](docs/google-search-console.md)
 - [infra/gcp/README.md](infra/gcp/README.md)
 
 Run the local deployment preflight first:

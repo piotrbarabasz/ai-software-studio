@@ -80,6 +80,22 @@ export class ContactFormComponent implements OnInit {
   statusMessage = '';
   submissionSummary?: SubmissionSummary;
 
+  get isPartnerContext(): boolean {
+    return this.form.controls.projectType.value === 'software_house_partnership';
+  }
+
+  get messageGuidance(): readonly [string, string, string] {
+    return this.isPartnerContext
+      ? this.content.messageGuidance.partner
+      : this.content.messageGuidance.general;
+  }
+
+  get messageGuidanceLabel(): string {
+    return this.isPartnerContext
+      ? this.content.messageGuidance.partnerLabel
+      : this.content.messageGuidance.generalLabel;
+  }
+
   ngOnInit(): void {
     if (!this.route) {
       return;

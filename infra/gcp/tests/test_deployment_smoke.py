@@ -6,6 +6,7 @@ import importlib.util
 import json
 import sys
 import unittest
+import unittest.mock
 import urllib.request
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -28,11 +29,11 @@ smoke = load_script()
 
 EXPECTED_BUILD_SHA = "abc1234"
 HOME_USE_CASES = (
-    ("Asystent wiedzy", "asystent-wiedzy"),
-    ("Obsługa wiadomości i dokumentów", "automatyzacja-wiadomosci-i-dokumentow"),
-    ("Panel procesu", "panel-operacyjny"),
-    ("System agentowy do realizacji zadań", "system-agentowy"),
-    ("Integracje kanałów i komunikatorów", "integracje-kanalow"),
+    ("Obsługa powtarzalnych pytań", "chatbot-ai-dla-firm"),
+    ("Kwalifikacja rozmów i zgłoszeń", "voice-ai-dla-firm"),
+    ("Przetwarzanie wiadomości i dokumentów", "automatyzacja-procesow"),
+    ("Realizacja wieloetapowych zadań", "systemy-agentowe"),
+    ("Obsługa wielu kanałów w jednym procesie", "integracje-whatsapp-crm"),
 )
 
 
@@ -40,6 +41,7 @@ PRIMARY_NAVIGATION = (
     ("/rozwiazania", "Rozwiązania"),
     ("/demo-ai", "Demo w 7 dni"),
     ("/development", "Wdrożenia"),
+    ("/dla-software-house", "Dla partnerów"),
     ("/studio", "O Protolume"),
     ("/kontakt", "Kontakt"),
 )
@@ -48,6 +50,7 @@ FOOTER_LINKS = (
     ("/demo-ai", "Demo w 7 dni"),
     ("/przyklad-demo", "Przykładowy raport"),
     ("/development", "Wdrożenia"),
+    ("/dla-software-house", "Dla partnerów"),
     ("/studio", "O Protolume"),
 )
 
@@ -75,7 +78,7 @@ def render_site_shell(
             'Zobacz kod demonstracji'
             '</a>'
             '<a href="https://github.com/piotrbarabasz/ai-software-studio/releases">'
-            'Zobacz kod aplikacji i wdro?enia'
+            'Zobacz kod aplikacji i wdrożenia'
             '</a>'
         )
     return (
@@ -92,7 +95,7 @@ def render_site_shell(
         + body
         + legacy_copy
         + '<footer class="site-footer">'
-        + '<p>Studio wdro?e? AI</p>'
+        + '<p>Studio wdrożeń AI</p>'
         + footer_links
         + '</footer>'
         + '</body></html>'
@@ -110,13 +113,13 @@ def homepage_html(
             f'<article class="use-case-card">'
             f'<h3>{title}</h3>'
             f'<p>{title} wspiera konkretny proces.</p>'
-            f'<a href="/rozwiazania#{slug}">Poznaj rozwi?zanie</a>'
+            f'<a href="/rozwiazania#{slug}">Poznaj rozwiązanie</a>'
             '</article>'
         )
         for title, slug in HOME_USE_CASES
     )
     body = (
-        '<h1>Sprawdź w 7 dni, czy AI usprawni konkretny proces</h1>'
+        '<h1>Automatyzujemy ręczne procesy w MŚP</h1>'
         '<p>Budujemy działające demo jednego przepływu, nie pełną transformację całej firmy.</p>'
         '<section class="hero-proofs">'
         '<p>Rozwiązania</p><p>Wdrożenia</p><p>O Protolume</p><p>Przykładowy raport</p>'
@@ -144,10 +147,10 @@ def route_html(
 ) -> str:
     if path == "/demo-ai":
         body = (
-            '<h1>Demo i sprawdzenie wykonalno?ci</h1>'
+            '<h1>Demo i sprawdzenie wykonalności</h1>'
             '<section class="interactive-demo">demo</section>'
             '<a href="/kontakt">Kontakt</a>'
-            '<a href="/przyklad-demo">Zobacz przyk?adowy raport</a>'
+            '<a href="/przyklad-demo">Zobacz przykładowy raport</a>'
         )
     elif path == "/przyklad-demo":
         body = (
@@ -162,13 +165,13 @@ def route_html(
         )
     elif path == "/rozwiazania":
         body = (
-            '<h1>Rozwi?zania</h1>'
+            '<h1>Rozwiązania</h1>'
             '<p>Asystent wiedzy i automatyzacja procesu.</p>'
             '<a href="#asystent-wiedzy">Asystent</a>'
             '<a href="#automatyzacja-wiadomosci-i-dokumentow">Automatyzacja</a>'
             '<a href="#panel-operacyjny">Panel</a>'
             '<a href="#system-agentowy">Agenci</a>'
-            '<a href="#integracje-kanalow">Kana?y</a>'
+            '<a href="#integracje-kanalow">Kanały</a>'
             '<a href="/kontakt?projectType=rag_chatbot_demo">Kontakt</a>'
             '<a href="/kontakt?projectType=business_process_automation">Kontakt</a>'
             '<a href="/kontakt?projectType=custom_web_app">Kontakt</a>'
@@ -183,31 +186,39 @@ def route_html(
     elif path == "/rozwiazania/voice-ai-dla-firm":
         body = (
             '<h1>Voice AI dla firm</h1>'
-            '<p>Kwalifikacja po??cze? i przekazanie do cz?owieka, gdy jest to potrzebne.</p>'
+            '<p>Kwalifikacja połączeń i przekazanie do człowieka, gdy jest to potrzebne.</p>'
             '<a href="/kontakt">Kontakt</a>'
         )
     elif path == "/rozwiazania/automatyzacja-procesow":
         body = (
-            '<h1>Automatyzacja proces?w</h1>'
-            '<p>Mniej r?cznego przepisywania i mniej pomini?tych krok?w.</p>'
+            '<h1>Automatyzacja procesów</h1>'
+            '<p>Mniej ręcznego przepisywania i mniej pominiętych kroków.</p>'
             '<a href="/kontakt">Kontakt</a>'
         )
     elif path == "/rozwiazania/integracje-whatsapp-crm":
         body = (
             '<h1>Integracje WhatsApp i CRM</h1>'
-            '<p>Porz?dkowanie wiadomo?ci i zapisywanie wyniku w systemie.</p>'
+            '<p>Porządkowanie wiadomości i zapisywanie wyniku w systemie.</p>'
             '<a href="/kontakt">Kontakt</a>'
         )
     elif path == "/rozwiazania/systemy-agentowe":
         body = (
             '<h1>Systemy agentowe</h1>'
-            '<p>Koordynacja wielu krok?w z jasnym momentem kontroli cz?owieka.</p>'
+            '<p>Koordynacja wielu kroków z jasnym momentem kontroli człowieka.</p>'
             '<a href="/kontakt">Kontakt</a>'
         )
     elif path == "/development":
         body = (
-            '<h1>Wdro?enia</h1>'
-            '<p>Najpierw potwierdzamy u?ytkownik?w, dane i rezultat pierwszego etapu.</p>'
+            '<h1>Wdrożenia</h1>'
+            '<p>Najpierw potwierdzamy użytkowników, dane i rezultat pierwszego etapu.</p>'
+        )
+    elif path == "/dla-software-house":
+        body = (
+            '<h1>Partner techniczny AI dla software house’ów i MSP</h1>'
+            '<p>Wsparcie zespołów w ograniczonym zakresie technicznym.</p>'
+            '<a href="/kontakt?projectType=software_house_partnership">'
+            "Porozmawiaj o współpracy"
+            "</a>"
         )
     elif path == "/studio":
         body = (
@@ -217,7 +228,7 @@ def route_html(
     elif path == "/rd":
         body = (
             '<h1>R&D</h1>'
-            '<p>Eksperymenty prowadzone z jasno okre?lon? granic?.</p>'
+            '<p>Eksperymenty prowadzone z jasno określoną granicą.</p>'
         )
     elif path == "/kontakt":
         body = (
@@ -231,7 +242,7 @@ def route_html(
             '</form>'
         )
     elif path == "/polityka-prywatnosci":
-        body = '<h1>Polityka prywatno?ci</h1><a href="mailto:privacy@protolume.pl">kontakt</a>'
+        body = '<h1>Polityka prywatności</h1><a href="mailto:privacy@protolume.pl">kontakt</a>'
     else:
         raise AssertionError(f"unsupported route {path!r}")
     return render_site_shell(path, body, build_sha=build_sha, robots_tag=robots_tag)
@@ -283,12 +294,16 @@ class FakeDeployment:
                     build_sha=self.backend_sha,
                     robots_tag=self.robots_tag,
                 ).encode()
-            headers = {"x-robots-tag": self.robots_tag}
+            headers = {
+                "content-type": "text/html; charset=utf-8",
+                "x-robots-tag": self.robots_tag,
+            }
         elif path == smoke.NOT_FOUND_PATH:
             status, body = 404, b"not found"
             headers = {"x-robots-tag": "noindex, follow"}
         elif path == "/robots.txt":
             body = b"User-agent: *\nAllow: /\n\nSitemap: https://protolume.pl/sitemap.xml\n"
+            headers = {"content-type": "text/plain; charset=utf-8"}
         elif path == "/sitemap.xml":
             locations = "".join(
                 f"<url><loc>https://protolume.pl{'' if route == '/' else route}</loc></url>"
@@ -299,6 +314,10 @@ class FakeDeployment:
                 'xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
                 f"{locations}</urlset>"
             ).encode()
+            headers = {"content-type": "application/xml; charset=utf-8"}
+        elif path == smoke.SOCIAL_PREVIEW_PATH:
+            body = b"\x89PNG\r\n\x1a\n"
+            headers = {"content-type": "image/png"}
         else:
             status, body = 404, b"missing"
         return smoke.Response(status=status, headers=headers, body=body)
@@ -373,6 +392,31 @@ class DeploymentSmokeTest(unittest.TestCase):
         )
 
         self.assertEqual(errors, [])
+        requested_paths = {urlsplit(request.full_url).path for request in deployment.requests}
+        self.assertIn(smoke.SOCIAL_PREVIEW_PATH, requested_paths)
+
+    def test_static_artifact_content_type_mismatch_is_reported(self) -> None:
+        deployment = FakeDeployment(robots_tag="index, follow")
+
+        def wrong_content_type(request, timeout):
+            response = deployment(request, timeout)
+            if urlsplit(request.full_url).path == smoke.SOCIAL_PREVIEW_PATH:
+                return smoke.Response(response.status, {"content-type": "text/plain"}, response.body)
+            return response
+
+        errors = smoke.run_checks(
+            "https://api.run.app",
+            "https://protolume.pl",
+            expect_noindex=False,
+            expected_build_sha=EXPECTED_BUILD_SHA,
+            timeout_seconds=2,
+            request=wrong_content_type,
+        )
+
+        self.assertIn(
+            "public /assets/protolume-social-preview.png: Content-Type is not image/png",
+            errors,
+        )
 
     def test_missing_primary_navigation_link_is_reported(self) -> None:
         deployment = FakeDeployment(robots_tag="index, follow")

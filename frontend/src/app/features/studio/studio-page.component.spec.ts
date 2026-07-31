@@ -18,7 +18,7 @@ describe('StudioPageComponent', () => {
     ).not.toBeNull();
     expect(fixture.nativeElement.querySelector('.hero-panel .hero-cta-note')).not.toBeNull();
     expect(fixture.nativeElement.textContent).toContain('Jak wygląda współpraca?');
-    expect(fixture.nativeElement.textContent).toContain('prowadzi jedna osoba');
+    expect(fixture.nativeElement.textContent).toContain('Rozmawiasz bezpośrednio ze mną');
     expect(fixture.nativeElement.textContent).not.toMatch(/TODO|placeholder|tu będzie/i);
   });
 
@@ -33,9 +33,19 @@ describe('StudioPageComponent', () => {
 
     expect(element.textContent).toContain('Piotr Barabasz');
     expect(element.textContent).toContain('Właściciel i odpowiedzialny partner techniczny');
+    expect(element.querySelector('.hero-owner')?.textContent).toContain(
+      'Prowadzę analizę procesu, decyzje techniczne, realizację, testy i odbiór ustalonego zakresu.',
+    );
+    expect(
+      (element.querySelector('.hero-owner') as Node).compareDocumentPosition(
+        element.querySelector('.evidence-section') as Node,
+      ) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
     expect(element.querySelectorAll('.verified-capabilities dt')).toHaveSize(4);
     expect(element.textContent).toContain('4+ lata doświadczenia w tworzeniu oprogramowania');
     expect(element.textContent).toContain('Politechnika Wrocławska');
+    expect(element.textContent).toContain('praca dyplomowa jest ukończona i oczekuje na obronę');
+    expect(element.textContent).not.toMatch(/absolwent(?:ka)? Politechniki Wrocławskiej/i);
     expect(element.textContent).toContain('zespołach międzynarodowych');
     expect(element.textContent).toContain('Odpowiedzialność end-to-end');
     expect(element.querySelector('a[href*="github.com"]')).toBeNull();
@@ -49,6 +59,10 @@ describe('StudioPageComponent', () => {
     expect(element.textContent).toContain('nie case study klienta');
     expect(element.querySelector('.owner-image')).toBeNull();
     expect(element.querySelector('a[href*="linkedin.com"]')).toBeNull();
+    expect(element.querySelector('a[href=""]')).toBeNull();
+    expect(element.querySelector('a[href*=".example.com"]')).toBeNull();
+    expect(element.querySelector('[class*="client-logo"], [class*="customer-logo"]')).toBeNull();
+    expect(element.textContent).not.toMatch(/zespół Protolume/i);
     expect(element.textContent).not.toMatch(/referencje|nasi klienci|opinie klient/i);
 
     expect(element.querySelectorAll('.verification-steps li')).toHaveSize(5);

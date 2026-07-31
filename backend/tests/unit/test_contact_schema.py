@@ -29,6 +29,20 @@ def test_contact_schema_accepts_productized_project_type(
     assert inquiry.project_type.value == "rag_chatbot_demo"
 
 
+def test_contact_schema_accepts_and_serializes_software_house_partnership(
+    valid_contact_payload: dict[str, object],
+) -> None:
+    payload = {
+        **valid_contact_payload,
+        "projectType": "software_house_partnership",
+    }
+
+    inquiry = ContactInquiry.model_validate(payload)
+
+    assert inquiry.project_type.value == "software_house_partnership"
+    assert inquiry.model_dump(by_alias=True)["projectType"] == "software_house_partnership"
+
+
 @pytest.mark.parametrize(
     ("field", "value"),
     [

@@ -17,40 +17,136 @@ describe('HomeComponent', () => {
     return fixture.nativeElement as HTMLElement;
   }
 
-  it('renders the shortened hero and both CTAs', () => {
+  it('renders the SME automation hero, process panel and both CTAs', () => {
     const element = createFixture();
     const actions = element.querySelector('.hero-actions');
+    const processSteps = Array.from(
+      element.querySelectorAll<HTMLElement>('.hero-process ol > li > span:last-child'),
+      (step) => step.textContent?.replace(/\s+/g, ' ').trim(),
+    );
 
     expect(element.querySelectorAll('h1')).toHaveSize(1);
-    expect(element.querySelector('h1')?.textContent).toContain(
-      'Sprawdź w 7 dni, czy AI usprawni konkretny proces w Twojej firmie.',
+    expect(element.querySelector('h1')?.textContent?.trim()).toBe(
+      'Automatyzujemy ręczne procesy w MŚP',
     );
-    expect(element.querySelector('.hero-lead')?.textContent).toContain(
-      'Budujemy demo jednego procesu w siedem dni.',
+    expect(element.querySelector('.hero-lead')?.textContent?.trim()).toBe(
+      'W 7 dni budujemy działające demo jednego procesu. Zobaczysz, co można zautomatyzować, gdzie potrzebny jest człowiek i jaki powinien być następny krok.',
     );
-    expect(element.querySelector('.hero-supporting-note')).toBeNull();
+    expect(element.querySelector('.hero-audience')?.textContent?.trim()).toBe(
+      'Dla firm, w których zespół przepisuje dane, pilnuje statusów, obsługuje podobne wiadomości lub szuka informacji w rozproszonych materiałach.',
+    );
     expect(actions?.querySelectorAll('a')).toHaveSize(2);
     expect(actions?.querySelector('a:first-child')).toHaveClass('primary-action');
     expect(actions?.querySelector('a:last-child')).toHaveClass('secondary-action');
     expect(
       element.querySelector('a[href="/kontakt?projectType=mvp_prototype"]')?.textContent,
-    ).toContain('Opisz proces');
+    ).toContain('Pokaż mi proces');
     expect(element.querySelector('a[href="/demo-ai"]')?.textContent).toContain(
-      'Zobacz przykładowe demo',
+      'Zobacz działające demo',
     );
+    expect(element.querySelector('.hero-process h2')?.textContent?.trim()).toBe(
+      'Od procesu do decyzji w 7 dni',
+    );
+    expect(element.querySelectorAll('.hero-process ol')).toHaveSize(1);
+    expect(processSteps).toEqual([
+      'Opis obecnej pracy',
+      'Jeden działający scenariusz',
+      'Ryzyka i granice',
+      'Rekomendowany następny krok',
+    ]);
+    expect(element.querySelectorAll('.hero img[src^="http"], .hero img[src^="//"]')).toHaveSize(0);
   });
 
-  it('renders the shortened homepage structure and core links', () => {
+  it('renders the shortened homepage in the intended sales order', () => {
     const element = createFixture();
 
-    expect(element.querySelectorAll('.home-page > section').length).toBeGreaterThanOrEqual(5);
+    expect(
+      Array.from(
+        element.querySelectorAll<HTMLElement>('.home-page > [data-home-section]'),
+        (section) => section.dataset['homeSection'],
+      ),
+    ).toEqual([
+      'hero',
+      'trust',
+      'processes',
+      'flow',
+      'evidence',
+      'demo-scope',
+      'owner',
+      'closing-cta',
+    ]);
     expect(element.querySelectorAll('.trust-strip li')).toHaveSize(4);
-    expect(element.querySelector('.trust-strip')?.textContent).toContain('Demo');
-    expect(element.querySelector('.trust-strip')?.textContent).toContain('Prywatność');
+    expect(
+      Array.from(element.querySelectorAll<HTMLElement>('.trust-strip li'), (item) =>
+        item.textContent?.trim(),
+      ),
+    ).toEqual([
+      'Demo jednego procesu',
+      'Stały zakres przed startem',
+      'Kontrola człowieka',
+      'Poufność danych',
+    ]);
 
+    expect(element.querySelector('.use-cases .eyebrow')?.textContent?.trim()).toBe(
+      'Procesy, które najczęściej zabierają czas',
+    );
     expect(element.querySelectorAll('.use-cases h2')).toHaveSize(1);
-    expect(element.querySelectorAll('.use-case-card')).toHaveSize(5);
+    expect(element.querySelector('.use-cases h2')?.textContent?.trim()).toBe(
+      'Co możemy uporządkować i zautomatyzować',
+    );
+    expect(element.querySelector('.use-cases .section-lead')?.textContent?.trim()).toBe(
+      'Zaczynamy od sposobu pracy zespołu, a dopiero później dobieramy AI, integracje i pozostałe technologie.',
+    );
+    const useCaseCards = Array.from(element.querySelectorAll<HTMLElement>('.use-case-card'));
+    expect(useCaseCards).toHaveSize(5);
     expect(element.querySelectorAll('.use-case-card h3')).toHaveSize(5);
+    expect(useCaseCards.map((card) => card.querySelector('h3')?.textContent?.trim())).toEqual([
+      'Obsługa powtarzalnych pytań',
+      'Kwalifikacja rozmów i zgłoszeń',
+      'Przetwarzanie wiadomości i dokumentów',
+      'Realizacja wieloetapowych zadań',
+      'Obsługa wielu kanałów w jednym procesie',
+    ]);
+    expect(
+      useCaseCards.map((card) =>
+        Array.from(card.querySelectorAll<HTMLElement>('.use-case-label'), (label) =>
+          label.textContent?.trim(),
+        ),
+      ),
+    ).toEqual(Array.from({ length: 5 }, () => ['Problem', 'Rezultat']));
+    expect(
+      useCaseCards.map((card) =>
+        Array.from(card.querySelectorAll<HTMLElement>('.use-case-text'), (text) =>
+          text.textContent?.trim(),
+        ),
+      ),
+    ).toEqual([
+      [
+        'Klienci lub pracownicy szukają odpowiedzi w wielu dokumentach i wiadomościach.',
+        'Otrzymują odpowiedź ze źródłem albo sprawa trafia do właściwej osoby.',
+      ],
+      [
+        'Zespół wielokrotnie zadaje te same pytania i ręcznie zapisuje dane z rozmów.',
+        'System zbiera podstawowe informacje i przekazuje uporządkowaną sprawę pracownikowi.',
+      ],
+      [
+        'Dane są ręcznie kopiowane z e-maili, formularzy lub dokumentów do kolejnych narzędzi.',
+        'Informacje są rozpoznane, sprawdzone i przekazane do następnego kroku.',
+      ],
+      [
+        'Jedna sprawa wymaga kilku kroków, narzędzi i kontroli wyniku.',
+        'Kroki są uporządkowane, a człowiek zatwierdza krytyczne decyzje.',
+      ],
+      [
+        'Wiadomości z formularza, e-maila, WhatsAppa i CRM mają różne statusy.',
+        'Sprawy trafiają do jednego kontrolowanego przepływu z widocznym statusem.',
+      ],
+    ]);
+    expect(
+      Array.from(element.querySelectorAll<HTMLElement>('.use-case-card a'), (link) =>
+        link.textContent?.trim(),
+      ),
+    ).toEqual(Array.from({ length: 5 }, () => 'Zobacz proces'));
     expect(element.querySelectorAll('app-use-case-visual')).toHaveSize(5);
     expect(element.querySelectorAll('.use-case-card [aria-hidden="true"]')).toHaveSize(5);
     expect(element.querySelectorAll('.use-case-card a')).toHaveSize(5);
@@ -59,6 +155,7 @@ describe('HomeComponent', () => {
     expect(element.querySelectorAll('[data-visual-kind="process-panel"]')).toHaveSize(1);
     expect(element.querySelectorAll('[data-visual-kind="agent-system"]')).toHaveSize(1);
     expect(element.querySelectorAll('[data-visual-kind="channel-integrations"]')).toHaveSize(1);
+    expect(element.querySelectorAll('.use-case-summary')).toHaveSize(0);
     expect(
       Array.from(element.querySelectorAll<HTMLAnchorElement>('.use-case-card a'), (link) =>
         link.getAttribute('href'),
@@ -70,27 +167,6 @@ describe('HomeComponent', () => {
       '/rozwiazania/systemy-agentowe',
       '/rozwiazania/integracje-whatsapp-crm',
     ]);
-    expect(element.querySelectorAll('.problem-card')).toHaveSize(0);
-    expect(element.querySelectorAll('.evidence-teaser-card')).toHaveSize(0);
-
-    expect(element.querySelector('.seven-day-results h2')?.textContent).toContain(
-      'Cztery kroki do decyzji',
-    );
-    expect(element.querySelectorAll('.seven-day-results-panel > ol > li')).toHaveSize(4);
-    expect(element.querySelectorAll('.paths .path-card')).toHaveSize(2);
-    expect(element.querySelector('.paths')?.textContent).toContain('Co klient może zobaczyć');
-    expect(element.querySelector('.paths a[href="/demo-ai"]')).not.toBeNull();
-    expect(element.querySelector('.paths a[href="/przyklad-demo"]')).not.toBeNull();
-    expect(element.querySelector('.contact-card')?.textContent).toContain(
-      'Prowadzę analizę, kontakt i realizację.',
-    );
-    expect(element.querySelector('.contact-card')?.textContent).toContain(
-      'Dane i kod pozostają prywatne.',
-    );
-    expect(
-      element.querySelector('.contact-card a[href="/kontakt?projectType=mvp_prototype"]'),
-    ).not.toBeNull();
-
     expect(element.querySelectorAll('img[src^="http"], img[src^="//"]')).toHaveSize(0);
     expect(element.querySelector('app-knowledge-demo')).toBeNull();
     expect(element.querySelectorAll('.business-flow-card')).toHaveSize(4);
@@ -100,12 +176,128 @@ describe('HomeComponent', () => {
     ).not.toBeNull();
   });
 
-  it('keeps the business flow section free of unsupported statistics', () => {
+  it('shows two verifiable work-evidence cards and one shared boundary note', () => {
+    const element = createFixture();
+    const cards = Array.from(element.querySelectorAll<HTMLElement>('.evidence-teaser-card'));
+
+    expect(element.querySelector('.evidence-teaser h2')?.textContent?.trim()).toBe(
+      'Zobacz działające elementy',
+    );
+    expect(cards).toHaveSize(2);
+    expect(
+      cards.map((card) => ({
+        type: card.querySelector('.evidence-type')?.textContent?.trim(),
+        title: card.querySelector('h3')?.textContent?.trim(),
+        description: card.querySelector('p:not(.evidence-type)')?.textContent?.trim(),
+        cta: card.querySelector('a')?.textContent?.trim(),
+        href: card.querySelector('a')?.getAttribute('href'),
+      })),
+    ).toEqual([
+      {
+        type: 'Interaktywne demo',
+        title: 'Asystent wiedzy z obsługą pytań poza zakresem',
+        description:
+          'Sprawdź odpowiedź ze źródłem oraz przekazanie pytania do człowieka, gdy brakuje danych.',
+        cta: 'Uruchom interaktywne demo',
+        href: '/demo-ai',
+      },
+      {
+        type: 'Przykładowy raport',
+        title: 'Raport decyzyjny po Demo w 7 dni',
+        description:
+          'Sprawdź zakres, scenariusze testowe, ryzyka, kryteria odbioru i rekomendację w jednym raporcie.',
+        cta: 'Zobacz przykładowy raport',
+        href: '/przyklad-demo',
+      },
+    ]);
+    expect(element.querySelector('.evidence-note')?.textContent?.trim()).toBe(
+      'To materiały demonstracyjne i projekt własny, a nie case study klienta.',
+    );
+    expect(element.querySelectorAll('.evidence-boundary')).toHaveSize(0);
+    expect(element.querySelector('.evidence-teaser')?.textContent).not.toContain(
+      'Wymaga dodatkowej walidacji',
+    );
+  });
+
+  it('explains the seven-day deliverables, client inputs and pricing method', () => {
+    const element = createFixture();
+    const demoSection = element.querySelector('.seven-day-demo');
+    const lists = demoSection?.querySelectorAll('.scope-list');
+
+    expect(demoSection?.querySelector('h2')?.textContent?.trim()).toBe(
+      'Co otrzymujesz po 7 dniach',
+    );
+    expect(
+      Array.from(lists?.[0]?.querySelectorAll('li') ?? [], (item) => item.textContent?.trim()),
+    ).toEqual([
+      'Opis wybranego procesu i jego granic',
+      'Działające demo jednego scenariusza',
+      'Lista ryzyk, danych i wymaganych integracji',
+      'Rekomendacja kolejnego kroku',
+    ]);
+    expect(
+      Array.from(lists?.[1]?.querySelectorAll('li') ?? [], (item) => item.textContent?.trim()),
+    ).toEqual([
+      'Krótki opis obecnej pracy',
+      'Kilka przykładowych wiadomości, dokumentów lub pytań',
+      'Kontakt do osoby, która zna proces',
+      'Informacja o używanych narzędziach',
+    ]);
+    expect(demoSection?.querySelector('.pricing-card > p')?.textContent?.trim()).toBe(
+      'Po krótkiej rozmowie otrzymujesz stały zakres i wycenę pierwszego etapu przed rozpoczęciem prac.',
+    );
+    expect(demoSection?.querySelector('.pricing-note')?.textContent?.trim()).toBe(
+      'Kwota zależy od danych, liczby integracji i sposobu prezentacji demo.',
+    );
+    expect(demoSection?.textContent).not.toMatch(/\d+\s*(zł|PLN)|\d+\s*–\s*\d+/i);
+  });
+
+  it('shows the named owner, verified facts and a separate final CTA', () => {
+    const element = createFixture();
+    const ownerSection = element.querySelector('.owner-card');
+
+    expect(ownerSection?.querySelector('h2')?.textContent?.trim()).toBe(
+      'Osoba odpowiedzialna za projekt',
+    );
+    expect(ownerSection?.textContent).toContain('Piotr Barabasz');
+    expect(ownerSection?.textContent).toContain('Właściciel i odpowiedzialny partner techniczny');
+    expect(ownerSection?.textContent).toContain(
+      'Prowadzę analizę procesu, decyzje techniczne, realizację, testy i odbiór ustalonego zakresu.',
+    );
+    expect(
+      Array.from(ownerSection?.querySelectorAll('.owner-facts li') ?? [], (item) =>
+        item.textContent?.trim(),
+      ),
+    ).toEqual([
+      '4+ lata doświadczenia komercyjnego',
+      'AI, integracje i aplikacje webowe',
+      'Bezpośrednia odpowiedzialność od analizy do odbioru',
+    ]);
+    expect(ownerSection?.textContent).not.toContain('Politechnika Wrocławska');
+    expect(ownerSection?.querySelector('a[href="/studio"]')?.textContent).toContain(
+      'Poznaj osobę odpowiedzialną',
+    );
+    expect(element.querySelector('.closing-cta h2')?.textContent?.trim()).toBe(
+      'Pokaż proces, który zabiera czas',
+    );
+    expect(
+      element.querySelector('.closing-cta a[href="/kontakt?projectType=mvp_prototype"]')
+        ?.textContent,
+    ).toContain('Opisz proces');
+  });
+
+  it('keeps the complete homepage free of unsupported statistics', () => {
     const element = createFixture();
 
-    const flowText = element.querySelector('.business-flow')?.textContent ?? '';
-    expect(flowText).not.toContain('%');
-    expect(flowText).not.toContain('procent');
-    expect(flowText).not.toContain('statystyka');
+    const homeText = element.querySelector('.home-page')?.textContent ?? '';
+    expect(homeText).not.toContain('%');
+    expect(homeText).not.toContain('procent');
+    expect(homeText).not.toContain('statystyka');
+    expect(homeText).not.toContain('zrealizowanych wdrożeń');
+    expect(homeText).not.toMatch(/zespół Protolume|nasi klienci|logotypy klientów/i);
+    expect(element.querySelector('a[href=""]')).toBeNull();
+    expect(element.querySelector('a[href*=".example.com"]')).toBeNull();
+    expect(element.querySelector('a[href*="linkedin.com"]')).toBeNull();
+    expect(element.querySelector('[class*="client-logo"], [class*="customer-logo"]')).toBeNull();
   });
 });

@@ -79,6 +79,7 @@ describe('ContactApiService', () => {
       'mvp_prototype',
       'custom_web_app',
       'ai_automation',
+      'software_house_partnership',
     ];
 
     selectedProjectTypes.forEach((projectType, index) => {

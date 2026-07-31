@@ -8,6 +8,10 @@ from app.schemas.contact import ContactInquiry
 
 logger = logging.getLogger("aisoftware_studio.contact")
 
+PROJECT_TYPE_LABELS = {
+    "software_house_partnership": "Współpraca z software house’em lub MSP",
+}
+
 
 class DeliveryError(Exception):
     """Raised when the owner notification cannot be delivered."""
@@ -57,12 +61,15 @@ class EmailContactDelivery:
     @staticmethod
     def _build_email_body(inquiry: ContactInquiry) -> str:
         company = inquiry.company or "Nie podano"
+        project_type = PROJECT_TYPE_LABELS.get(
+            inquiry.project_type.value, inquiry.project_type.value
+        )
         return (
             f"Nowe zapytanie z formularza {public_brand['name']}\n\n"
             f"Imię i nazwisko: {inquiry.name}\n"
             f"Email: {inquiry.email}\n"
             f"Firma: {company}\n"
-            f"Typ projektu: {inquiry.project_type.value}\n"
+            f"Typ projektu: {project_type}\n"
             f"Budżet: {inquiry.budget_range.value}\n"
             f"Zgoda: {'tak' if inquiry.consent else 'nie'}\n"
             f"Czas zgłoszenia: {inquiry.submitted_at.isoformat()}\n\n"

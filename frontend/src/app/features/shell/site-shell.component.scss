@@ -247,6 +247,35 @@
   }
 }
 
+@media (min-width: 921px) and (max-width: 1200px) {
+  .site-header {
+    gap: 0.5rem;
+    padding-inline: clamp(0.75rem, 2vw, 1.5rem);
+  }
+
+  .brand {
+    --logo-height: 2.5rem;
+  }
+
+  .primary-nav {
+    gap: 0.35rem;
+  }
+
+  .nav-links {
+    gap: 0.2rem 0.45rem;
+  }
+
+  .nav-links a {
+    padding-inline: 0.1rem;
+    font-size: clamp(0.78rem, 1.25vw, 0.92rem);
+  }
+
+  .primary-cta {
+    padding-inline: 0.75rem;
+    font-size: 0.9rem;
+  }
+}
+
 @media (max-width: 560px) {
   .brand {
     --logo-height: 2.5rem;

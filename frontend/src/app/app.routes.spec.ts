@@ -32,6 +32,7 @@ describe('public routes', () => {
       '/rozwiazania/automatyzacja-procesow': 'app-service-landing-page',
       '/rozwiazania/integracje-whatsapp-crm': 'app-service-landing-page',
       '/rozwiazania/systemy-agentowe': 'app-service-landing-page',
+      '/dla-software-house': 'app-partner-page',
       '/development': 'app-development-page',
       '/studio': 'app-studio-page',
       '/rd': 'app-research-page',
@@ -92,7 +93,7 @@ describe('public routes', () => {
     await fixture.whenStable();
 
     const text = fixture.nativeElement.textContent as string;
-    expect(text).toContain('Opisz proces w 3 zdaniach');
+    expect(text).toContain('Opisz proces lub potrzebne wsparcie');
     expect(text).toContain('Nie potrzebujesz specyfikacji.');
     expect(text).not.toMatch(/\bintent\b|\bpayload\b|\bprojectType\b/i);
   });
@@ -125,8 +126,29 @@ describe('public routes', () => {
       '/rozwiazania',
       '/demo-ai',
       '/development',
+      '/dla-software-house',
       '/studio',
       '/kontakt',
     ]);
+  });
+
+  it('maps every homepage process card to an existing canonical service landing', () => {
+    const cardPaths = siteContent.home.useCases.map((item) => item.cta?.path);
+    const serviceLandingPaths = new Set<string>(
+      siteContent.routes
+        .filter((route) => route.kind === 'service-landing')
+        .map((route) => route.path),
+    );
+
+    expect(cardPaths).toEqual([
+      '/rozwiazania/chatbot-ai-dla-firm',
+      '/rozwiazania/voice-ai-dla-firm',
+      '/rozwiazania/automatyzacja-procesow',
+      '/rozwiazania/systemy-agentowe',
+      '/rozwiazania/integracje-whatsapp-crm',
+    ]);
+    expect(cardPaths.every((path) => path !== undefined && serviceLandingPaths.has(path))).toBe(
+      true,
+    );
   });
 });
