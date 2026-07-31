@@ -59,11 +59,14 @@ describe('ContactFormComponent', () => {
     expect(fixture.nativeElement.ownerDocument.activeElement).toBe(summary);
   }));
 
-  it('preselects a visible category from the contact route query param without changing the payload shape', () => {
+  it('preselects the general homepage category from the contact route query param', () => {
+    projectTypeParams$.next(convertToParamMap({ projectType: 'business_process_automation' }));
     const fixture = TestBed.createComponent(ContactFormComponent);
     fixture.detectChanges();
 
-    expect(fixture.componentInstance.form.controls.projectType.value).toBe('rag_chatbot_demo');
+    expect(fixture.componentInstance.form.controls.projectType.value).toBe(
+      'business_process_automation',
+    );
   });
 
   it('keeps the CTA-selected project type when the visitor edits another form field', () => {
@@ -73,26 +76,41 @@ describe('ContactFormComponent', () => {
     expect(fixture.componentInstance.form.controls.projectType.value).toBe('rag_chatbot_demo');
     fixture.componentInstance.form.controls.projectType.setValue('business_process_automation');
     fixture.componentInstance.form.controls.projectType.markAsDirty();
-    projectTypeParams$.next(convertToParamMap({ projectType: 'custom_web_app' }));
+    projectTypeParams$.next(convertToParamMap({ projectType: 'software_house_partnership' }));
     expect(fixture.componentInstance.form.controls.projectType.value).toBe(
       'business_process_automation',
     );
   });
 
-  it('uses business-only helper copy in the visible form', () => {
+  it('shows concise general guidance in the visible form', () => {
     const fixture = TestBed.createComponent(ContactFormComponent);
     fixture.detectChanges();
 
     const text = fixture.nativeElement.textContent as string;
 
     expect(text).toContain('Czego dotyczy rozmowa?');
-    expect(text).toContain('Wybierz opcję najbardziej zbliżoną do Twojego pomysłu.');
-    expect(text).toContain('Opisz proces w 3 zdaniach');
-    expect(text).toContain('Kto wykonuje tę pracę?');
+    expect(text).toContain('Opisz obecny proces lub potrzebne wsparcie');
     expect(text).toContain('Co jest dziś wykonywane ręcznie?');
-    expect(text).toContain('Jaki rezultat powinien się zmienić?');
+    expect(text).toContain('Kto korzysta z procesu?');
+    expect(text).toContain('Jaki rezultat chcesz uzyskać?');
     expect(text).toContain('Wyślij krótki opis');
+    expect(text).not.toContain('Jaki moduł lub etap chcesz zlecić?');
     expect(text).not.toMatch(/\bintent\b|\bpayload\b|\bprojectType\b/i);
+  });
+
+  it('preselects the partner category and shows partner-specific guidance', () => {
+    projectTypeParams$.next(convertToParamMap({ projectType: 'software_house_partnership' }));
+    const fixture = TestBed.createComponent(ContactFormComponent);
+    fixture.detectChanges();
+
+    const text = fixture.nativeElement.textContent as string;
+    expect(fixture.componentInstance.form.controls.projectType.value).toBe(
+      'software_house_partnership',
+    );
+    expect(text).toContain('Jaki moduł lub etap chcesz zlecić?');
+    expect(text).toContain('Jaki jest obecny stos i stan projektu?');
+    expect(text).toContain('Jakiego modelu współpracy potrzebujesz?');
+    expect(text).not.toContain('Co jest dziś wykonywane ręcznie?');
   });
 
   it('preselects the quick-validation intent from an allowlisted query param', () => {
@@ -110,6 +128,7 @@ describe('ContactFormComponent', () => {
       'custom_web_app',
       'backend_api',
       'business_process_automation',
+      'software_house_partnership',
       'other',
     ];
 
@@ -226,7 +245,7 @@ describe('ContactFormComponent', () => {
     );
   });
 
-  it('renders only the six business project categories from shared contact content', () => {
+  it('renders only the seven business project categories from shared contact content', () => {
     const fixture = TestBed.createComponent(ContactFormComponent);
     fixture.detectChanges();
 
@@ -242,14 +261,16 @@ describe('ContactFormComponent', () => {
       'backend_api',
       'business_process_automation',
       'rag_chatbot_demo',
+      'software_house_partnership',
       'other',
     ]);
     expect(new Set(optionValues).size).toBe(optionValues.length);
     expect(fixture.nativeElement.textContent).toContain('Asystent AI lub RAG');
+    expect(fixture.nativeElement.textContent).toContain('Współpraca z software house’em lub MSP');
     expect(fixture.nativeElement.textContent).toContain('Nie wiem / inny temat');
   });
 
-  it('uses accessible field semantics without making the budget mandatory', () => {
+  it('uses accessible field semantics and keeps optional details collapsed', () => {
     const fixture = TestBed.createComponent(ContactFormComponent);
     fixture.detectChanges();
     const element: HTMLElement = fixture.nativeElement;
@@ -260,6 +281,15 @@ describe('ContactFormComponent', () => {
       'organization',
     );
     expect((element.querySelector('#budgetRange') as HTMLSelectElement).required).toBeFalse();
+    const additionalInformation = element.querySelector(
+      'details.additional-information',
+    ) as HTMLDetailsElement;
+    expect(additionalInformation).not.toBeNull();
+    expect(additionalInformation.open).toBeFalse();
+    expect(additionalInformation.querySelector('summary')?.textContent?.trim()).toBe(
+      'Dodatkowe informacje — opcjonalnie',
+    );
+    expect(additionalInformation.querySelector('#budgetRange')).not.toBeNull();
     expect(element.querySelector('#message')?.getAttribute('aria-describedby')).toBe(
       'message-hint',
     );
@@ -347,10 +377,12 @@ describe('ContactFormComponent', () => {
     expect(fixture.componentInstance.form.controls.budgetRange.valid).toBeTrue();
     expect(fixture.nativeElement.textContent).toContain('Budżet orientacyjny');
     expect(fixture.nativeElement.textContent).toContain('Jeszcze nie wiem');
-    expect(fixture.nativeElement.textContent).toContain('Opisz proces w 3 zdaniach');
-    expect(fixture.nativeElement.textContent).toContain('Kto wykonuje tę pracę?');
+    expect(fixture.nativeElement.textContent).toContain(
+      'Opisz obecny proces lub potrzebne wsparcie',
+    );
     expect(fixture.nativeElement.textContent).toContain('Co jest dziś wykonywane ręcznie?');
-    expect(fixture.nativeElement.textContent).toContain('Jaki rezultat powinien się zmienić?');
+    expect(fixture.nativeElement.textContent).toContain('Kto korzysta z procesu?');
+    expect(fixture.nativeElement.textContent).toContain('Jaki rezultat chcesz uzyskać?');
     expect(fixture.nativeElement.querySelector('#message')?.getAttribute('aria-describedby')).toBe(
       'message-hint',
     );
@@ -369,7 +401,7 @@ describe('ContactFormComponent', () => {
     fixture.componentInstance.submit();
 
     expect(api.submit).toHaveBeenCalledWith(jasmine.objectContaining({ budgetRange: 'not_sure' }));
-    expect(projectTypeOptions).toHaveSize(6);
+    expect(projectTypeOptions).toHaveSize(7);
   });
 
   it('shows and focuses the success path with a reset action and a home link', fakeAsync(() => {

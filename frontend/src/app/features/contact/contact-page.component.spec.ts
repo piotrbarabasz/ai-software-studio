@@ -5,7 +5,7 @@ import { API_CONFIG } from '../../core/api-config';
 import { ContactPageComponent } from './contact-page.component';
 
 describe('ContactPageComponent', () => {
-  it('keeps the contact form on its dedicated page with business-only copy', async () => {
+  it('keeps the concise contact form and direct email on its dedicated page', async () => {
     await TestBed.configureTestingModule({
       imports: [ContactPageComponent],
       providers: [
@@ -19,14 +19,11 @@ describe('ContactPageComponent', () => {
 
     expect(fixture.nativeElement.querySelectorAll('h1')).toHaveSize(1);
     expect(fixture.nativeElement.querySelector('app-contact-form')).not.toBeNull();
-    expect(fixture.nativeElement.textContent).toContain('Opisz proces w 3 zdaniach');
+    expect(fixture.nativeElement.textContent).toContain('Opisz proces lub potrzebne wsparcie');
     expect(fixture.nativeElement.textContent).toContain(
-      'Wystarczą trzy krótkie zdania: kto pracuje, co jest dziś robione ręcznie i co ma się zmienić.',
+      'Krótki opis wystarczy, żeby sprawdzić temat i wskazać możliwy następny krok.',
     );
     expect(fixture.nativeElement.textContent).toContain('Nie potrzebujesz specyfikacji.');
-    expect(fixture.nativeElement.textContent).toContain(
-      'Wystarczą 3 zdania: kto wykonuje pracę, co jest robione ręcznie i jaki efekt ma się zmienić.',
-    );
     expect(fixture.nativeElement.textContent).toContain(
       'Wysłanie formularza nie jest zamówieniem, akceptacją wyceny',
     );
@@ -44,6 +41,9 @@ describe('ContactPageComponent', () => {
     expect(noScript).not.toBeNull();
     expect(noScript?.textContent).toContain('sales@contact.test');
     expect(noScript?.innerHTML).toContain('mailto:sales@contact.test');
+    expect(fixture.nativeElement.querySelector('a[href*="calendly"]')).toBeNull();
+    expect(fixture.nativeElement.querySelector('a[href*="calendar"]')).toBeNull();
+    expect(fixture.nativeElement.textContent).not.toContain('Umów rozmowę');
     expect(fixture.nativeElement.textContent).not.toMatch(
       /\bintent\b|\bpayload\b|\bprojectType\b/i,
     );

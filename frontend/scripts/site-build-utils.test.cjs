@@ -100,6 +100,9 @@ test('generates sitemap and robots from every non-404 prerender route', () => {
   assert.match(sitemap, /<loc>https:\/\/protolume\.pl\/przyklad-demo<\/loc>/);
   assert.match(sitemap, /<loc>https:\/\/protolume\.pl\/rozwiazania\/chatbot-ai-dla-firm<\/loc>/);
   assert.match(sitemap, /<loc>https:\/\/protolume\.pl\/kontakt<\/loc>/);
+  assert.match(sitemap, /<loc>https:\/\/protolume\.pl\/dla-software-house<\/loc>/);
+  assert.doesNotMatch(sitemap, /<loc>[^<]*\/404<\/loc>/);
+  assert.doesNotMatch(sitemap, /<loc>[^<]*\/demo-w-7-dni<\/loc>/);
   assert.match(robots, /^Sitemap: https:\/\/protolume\.pl\/sitemap\.xml$/m);
   assert.match(robots, /^Allow: \/$/m);
   assert.doesNotMatch(robots, /^Disallow: \/$/m);
@@ -113,12 +116,74 @@ test('generates sitemap and robots from every non-404 prerender route', () => {
     '/rozwiazania/automatyzacja-procesow',
     '/rozwiazania/integracje-whatsapp-crm',
     '/rozwiazania/systemy-agentowe',
+    '/dla-software-house',
     '/development',
     '/studio',
     '/rd',
     '/kontakt',
     '/polityka-prywatnosci',
   ]);
+});
+
+test('rejects altered sitemap and robots discovery contracts', (context) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'seo-artifacts-contract-'));
+  context.after(() => fs.rmSync(root, { recursive: true, force: true }));
+
+  const validate = () =>
+    validateSeoArtifacts(configuredEnvironment, {
+      production: true,
+      artifactDirectory: root,
+    });
+  const reset = () => writeSeoArtifacts(configuredEnvironment, { outputDirectory: root });
+  const mutate = (fileName, update) => {
+    const filePath = path.join(root, fileName);
+    fs.writeFileSync(filePath, update(fs.readFileSync(filePath, 'utf8')), 'utf8');
+  };
+
+  reset();
+  mutate('sitemap.xml', (content) =>
+    content.replace('</urlset>', '  <url><loc>https://protolume.pl/404</loc></url>\n</urlset>'),
+  );
+  assert.ok(validate().includes('sitemap routes do not match prerender routes'));
+
+  reset();
+  mutate('sitemap.xml', (content) =>
+    content.replace(
+      '</urlset>',
+      '  <url><loc>https://protolume.pl/demo-w-7-dni</loc></url>\n</urlset>',
+    ),
+  );
+  assert.ok(validate().includes('sitemap routes do not match prerender routes'));
+
+  reset();
+  mutate('sitemap.xml', (content) =>
+    content.replace(
+      '</urlset>',
+      '  <url><loc>https://protolume.pl/dla-software-house</loc></url>\n</urlset>',
+    ),
+  );
+  assert.ok(validate().includes('sitemap contains duplicate canonical URLs'));
+
+  reset();
+  mutate('sitemap.xml', (content) => content.replace('&amp;', '&'));
+  if (validate().length === 0) {
+    mutate('sitemap.xml', (content) => content.replace('</loc>', '?a=1&b=2</loc>', 1));
+  }
+  assert.ok(validate().includes('sitemap routes do not match prerender routes'));
+
+  reset();
+  mutate('robots.txt', (content) => content.replace('User-agent: *\n', ''));
+  assert.ok(validate().includes('robots.txt must target User-agent: *'));
+
+  reset();
+  mutate('robots.txt', (content) => content.replace('Allow: /', 'Disallow: /'));
+  const disallowErrors = validate();
+  assert.ok(disallowErrors.includes('robots.txt must allow crawling with Allow: /'));
+  assert.ok(disallowErrors.includes('robots.txt must not disallow / in production'));
+
+  reset();
+  mutate('robots.txt', (content) => content.replace('protolume.pl', 'www.protolume.pl'));
+  assert.ok(validate().includes('robots sitemap URL does not match publicSiteUrl'));
 });
 
 test('allows a localhost origin only for development artifacts', () => {

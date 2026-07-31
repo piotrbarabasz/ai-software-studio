@@ -1,0 +1,127 @@
+<div class="partner-page">
+  <section class="hero section-shell" aria-labelledby="partner-title" appRevealOnScroll>
+    <div class="hero-copy">
+      <p class="eyebrow">{{ content.eyebrow }}</p>
+      <h1 id="partner-title">{{ content.title }}</h1>
+      <p class="page-lead">{{ content.lead }}</p>
+      <div class="hero-actions" aria-label="Działania dotyczące współpracy">
+        <a
+          class="primary-action"
+          [routerLink]="content.primaryCta.path"
+          [queryParams]="content.primaryCta.queryParams"
+          >{{ content.primaryCta.label }}</a
+        >
+        <a
+          class="secondary-action"
+          [routerLink]="content.secondaryCta.path"
+          [fragment]="content.secondaryCta.fragment"
+          >{{ content.secondaryCta.label }}</a
+        >
+      </div>
+    </div>
+    <aside class="hero-panel" aria-labelledby="partner-fit-title">
+      <p class="panel-kicker">Dopasowanie</p>
+      <h2 id="partner-fit-title">{{ content.fitTitle }}</h2>
+      <ul>
+        @for (item of content.fitItems; track item) {
+          <li>{{ item }}</li>
+        }
+      </ul>
+    </aside>
+  </section>
+
+  <section
+    id="zakres-techniczny"
+    class="section-shell"
+    aria-labelledby="partner-scope-title"
+    appRevealOnScroll
+  >
+    <div class="section-heading">
+      <p class="eyebrow">Technologie podporządkowane zakresowi</p>
+      <h2 id="partner-scope-title">{{ content.scopeTitle }}</h2>
+    </div>
+    <ul class="scope-list">
+      @for (item of content.scopeItems; track item) {
+        <li>{{ item }}</li>
+      }
+    </ul>
+  </section>
+
+  <section class="section-shell section-muted" aria-labelledby="models-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">Elastyczny zakres odpowiedzialności</p>
+      <h2 id="models-title">{{ content.modelsTitle }}</h2>
+    </div>
+    <div class="model-grid">
+      @for (model of content.models; track model.title) {
+        <article class="model-card">
+          <h3>{{ model.title }}</h3>
+          <p>{{ model.description }}</p>
+        </article>
+      }
+    </div>
+  </section>
+
+  <section class="section-shell rules-section" aria-labelledby="rules-title" appRevealOnScroll>
+    <div class="section-heading">
+      <p class="eyebrow">Przed rozpoczęciem</p>
+      <h2 id="rules-title">{{ content.rulesTitle }}</h2>
+      <p class="page-lead">{{ content.rulesLead }}</p>
+    </div>
+    <ul class="rules-list">
+      @for (rule of content.rules; track rule) {
+        <li>{{ rule }}</li>
+      }
+    </ul>
+  </section>
+
+  <section
+    class="section-shell evidence-section"
+    aria-labelledby="evidence-title"
+    appRevealOnScroll
+  >
+    <div class="section-heading">
+      <p class="eyebrow">Dowody pracy</p>
+      <h2 id="evidence-title">{{ content.evidenceTitle }}</h2>
+      <p class="page-lead">{{ content.evidenceLead }}</p>
+    </div>
+    <div class="evidence-links">
+      @for (link of content.evidenceLinks; track link.path) {
+        <a class="secondary-action" [routerLink]="link.path">{{ link.label }}</a>
+      }
+    </div>
+  </section>
+
+  <section
+    class="section-shell section-muted faq-section"
+    aria-labelledby="faq-title"
+    appRevealOnScroll
+  >
+    <div class="section-heading">
+      <p class="eyebrow">FAQ</p>
+      <h2 id="faq-title">{{ content.faqTitle }}</h2>
+    </div>
+    <div class="faq-list">
+      @for (faq of content.faqs; track faq.question) {
+        <details>
+          <summary>{{ faq.question }}</summary>
+          <p>{{ faq.answer }}</p>
+        </details>
+      }
+    </div>
+  </section>
+
+  <section class="closing section-shell" aria-labelledby="partner-closing-title" appRevealOnScroll>
+    <div>
+      <p class="eyebrow">Następny krok</p>
+      <h2 id="partner-closing-title">{{ content.closingTitle }}</h2>
+      <p class="page-lead">{{ content.closingLead }}</p>
+    </div>
+    <a
+      class="primary-action"
+      [routerLink]="content.primaryCta.path"
+      [queryParams]="content.primaryCta.queryParams"
+      >{{ content.primaryCta.label }}</a
+    >
+  </section>
+</div>

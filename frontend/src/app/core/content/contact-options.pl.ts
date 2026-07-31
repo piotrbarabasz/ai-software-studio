@@ -8,6 +8,7 @@ export type VisibleProjectType = Extract<
   | 'backend_api'
   | 'business_process_automation'
   | 'rag_chatbot_demo'
+  | 'software_house_partnership'
   | 'other'
 >;
 
@@ -17,6 +18,7 @@ export const projectTypeOptions = [
   { value: 'backend_api', label: 'Integracja lub API' },
   { value: 'business_process_automation', label: 'Automatyzacja procesu' },
   { value: 'rag_chatbot_demo', label: 'Asystent AI lub RAG' },
+  { value: 'software_house_partnership', label: 'Współpraca z software house’em lub MSP' },
   { value: 'other', label: 'Nie wiem / inny temat' },
 ] satisfies readonly SelectOption<VisibleProjectType>[];
 
@@ -26,6 +28,7 @@ const projectTypeQueryMap: Readonly<Record<ProjectType, VisibleProjectType>> = {
   backend_api: 'backend_api',
   business_process_automation: 'business_process_automation',
   rag_chatbot_demo: 'rag_chatbot_demo',
+  software_house_partnership: 'software_house_partnership',
   other: 'other',
   ai_automation: 'business_process_automation',
   email_automation: 'business_process_automation',

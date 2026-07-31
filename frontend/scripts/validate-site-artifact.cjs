@@ -5,6 +5,7 @@ const {
   loadEnvironment,
   normalizeOrigin,
   publicPrerenderRoutes,
+  validateSeoArtifacts,
 } = require('./site-build-utils.cjs');
 const publicBrandManifest = require('../config/public-brand.json');
 
@@ -15,6 +16,7 @@ const PRIMARY_NAVIGATION_ROUTES = [
   '/rozwiazania',
   '/demo-ai',
   '/development',
+  '/dla-software-house',
   '/studio',
   '/kontakt',
 ];
@@ -29,6 +31,14 @@ const socialPreviewPath = publicBrandManifest.assets.socialPreviewPath;
 const socialPreviewType = publicBrandManifest.assets.socialPreviewType;
 const socialPreviewName = path.basename(socialPreviewPath);
 REQUIRED_BRAND_ASSETS.push(socialPreviewName);
+const SOCIAL_PREVIEW_WIDTH = 1200;
+const SOCIAL_PREVIEW_HEIGHT = 630;
+const PNG_SIGNATURE = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+const IMAGE_EXTENSIONS_BY_MIME = {
+  'image/png': '.png',
+  'image/jpeg': '.jpg',
+  'image/svg+xml': '.svg',
+};
 const BUILD_SHA_PATTERN = /^[0-9a-f]{7,64}$/;
 const FORBIDDEN_COPY_PHRASES = [
   'publiczny kod',
@@ -37,6 +47,17 @@ const FORBIDDEN_COPY_PHRASES = [
   'zobacz kod demonstracji',
   'zobacz kod aplikacji i wdrożenia',
 ];
+const FORBIDDEN_PRODUCTION_VALUE_PATTERN =
+  /__PUBLIC_CONFIG_REQUIRED__|\blocalhost\b|\.example\.com\b/i;
+
+function matchingTags(html, tagName, identifyingAttribute, identifyingValue) {
+  const tags = html.match(new RegExp(`<${tagName}\\b[^>]*>`, 'gi')) ?? [];
+  const identifyingPattern = new RegExp(
+    `\\b${identifyingAttribute}\\s*=\\s*(["'])${identifyingValue}\\1`,
+    'i',
+  );
+  return tags.filter((candidate) => identifyingPattern.test(candidate));
+}
 
 function buildShaMetaValues(html) {
   return (html.match(/<meta\b[^>]*>/gi) ?? [])
@@ -49,37 +70,45 @@ function buildShaMetaValues(html) {
 
 function validateSocialPreviewAsset(assetPath, mimeType) {
   const errors = [];
-  if (mimeType !== 'image/svg+xml') {
+  const expectedExtension = IMAGE_EXTENSIONS_BY_MIME[mimeType];
+  const actualExtension = path.extname(assetPath).toLowerCase();
+  if (!expectedExtension) {
+    errors.push(`social preview uses unsupported MIME type ${mimeType}`);
     return errors;
   }
-  const svg = fs.readFileSync(assetPath, 'utf8');
-  if (!/<svg\b/i.test(svg)) errors.push('social preview SVG is missing an svg element');
-  if (!/\bviewBox=["']0 0 1200 630["']/i.test(svg))
-    errors.push('social preview SVG must use viewBox 0 0 1200 630');
-  if (/<script\b|\bon[a-z]+\s*=/i.test(svg))
-    errors.push('social preview SVG contains script or event handler');
-  const externalResourceAttribute =
-    /\b(?:href|xlink:href|src)\s*=\s*["']\s*(?:https?:|\/\/|data:)/i;
-  const externalCssResource = /(?:url\s*\(\s*["']?\s*(?:https?:|\/\/|data:)|@import\b)/i;
-  if (
-    /<foreignObject\b|<image\b|data:image|base64/i.test(svg) ||
-    externalResourceAttribute.test(svg) ||
-    externalCssResource.test(svg)
-  )
-    errors.push('social preview SVG contains a forbidden embedded or external resource');
-  if (/^\s*<svg\b[^>]*>\s*<\/svg>\s*$/i.test(svg))
-    errors.push('social preview SVG is an empty placeholder');
+  if (actualExtension !== expectedExtension) {
+    errors.push(
+      `social preview extension ${actualExtension || '(none)'} does not match MIME type ${mimeType}`,
+    );
+  }
+  if (mimeType !== 'image/png') {
+    errors.push(`social preview must use image/png, received ${mimeType}`);
+    return errors;
+  }
+
+  const png = fs.readFileSync(assetPath);
+  const hasPngHeader =
+    png.length >= 24 &&
+    png.subarray(0, PNG_SIGNATURE.length).equals(PNG_SIGNATURE) &&
+    png.toString('ascii', 12, 16) === 'IHDR';
+  if (!hasPngHeader) {
+    errors.push('social preview PNG has an invalid PNG header');
+    return errors;
+  }
+
+  const width = png.readUInt32BE(16);
+  const height = png.readUInt32BE(20);
+  if (width !== SOCIAL_PREVIEW_WIDTH || height !== SOCIAL_PREVIEW_HEIGHT) {
+    errors.push(
+      `social preview PNG must be ${SOCIAL_PREVIEW_WIDTH}x${SOCIAL_PREVIEW_HEIGHT}, received ${width}x${height}`,
+    );
+  }
   return errors;
 }
 
 function extractAttribute(html, tagName, identifyingAttribute, identifyingValue, resultAttribute) {
-  const tags = html.match(new RegExp(`<${tagName}\\b[^>]*>`, 'gi')) ?? [];
-  const identifyingPattern = new RegExp(
-    `\\b${identifyingAttribute}=["']${identifyingValue}["']`,
-    'i',
-  );
   const resultPattern = new RegExp(`\\b${resultAttribute}=["']([^"']+)["']`, 'i');
-  const tag = tags.find((candidate) => identifyingPattern.test(candidate));
+  const tag = matchingTags(html, tagName, identifyingAttribute, identifyingValue)[0];
   return tag?.match(resultPattern)?.[1];
 }
 
@@ -191,6 +220,12 @@ function validateSiteArtifact(artifactRoot, environment) {
     const primaryNavigation = html.match(
       /<nav\b(?=[^>]*\bid=["']primary-navigation["'])[^>]*>[\s\S]*?<\/nav>/i,
     )?.[0];
+    const canonicalTags = matchingTags(html, 'link', 'rel', 'canonical');
+    const descriptionTags = matchingTags(html, 'meta', 'name', 'description');
+    const robotsTags = matchingTags(html, 'meta', 'name', 'robots');
+    const openGraphUrlTags = matchingTags(html, 'meta', 'property', 'og:url');
+    const charsetTags = html.match(/<meta\b[^>]*\bcharset\s*=\s*(["'])utf-8\1[^>]*>/gi) ?? [];
+    const titleTags = html.match(/<title\b[^>]*>[\s\S]*?<\/title>/gi) ?? [];
 
     if (route === '/') {
       const buildShaValues = buildShaMetaValues(html);
@@ -207,11 +242,37 @@ function validateSiteArtifact(artifactRoot, environment) {
     if (canonical !== expectedUrl) {
       errors.push(`${route}: canonical does not match PUBLIC_SITE_URL`);
     }
+    if (canonicalTags.length !== 1) {
+      errors.push(`${route}: expected exactly one canonical, received ${canonicalTags.length}`);
+    }
     if (openGraphUrl !== expectedUrl) {
       errors.push(`${route}: og:url does not match PUBLIC_SITE_URL`);
     }
+    if (openGraphUrlTags.length !== 1) {
+      errors.push(`${route}: expected exactly one og:url, received ${openGraphUrlTags.length}`);
+    }
     if (robots !== expectedRobots) {
       errors.push(`${route}: robots must be ${expectedRobots}`);
+    }
+    if (robotsTags.length !== 1) {
+      errors.push(`${route}: expected exactly one robots meta tag, received ${robotsTags.length}`);
+    }
+    if (!/<html\b[^>]*\blang\s*=\s*(["'])pl\1[^>]*>/i.test(html)) {
+      errors.push(`${route}: html lang must be pl`);
+    }
+    if (charsetTags.length !== 1) {
+      errors.push(
+        `${route}: expected exactly one utf-8 charset meta tag, received ${charsetTags.length}`,
+      );
+    }
+    if (titleTags.length !== 1 || !title?.trim()) {
+      errors.push(`${route}: expected exactly one non-empty title`);
+    }
+    if (descriptionTags.length !== 1 || !description?.trim()) {
+      errors.push(`${route}: expected exactly one non-empty description`);
+    }
+    if (FORBIDDEN_PRODUCTION_VALUE_PATTERN.test(html)) {
+      errors.push(`${route}: prerendered document contains localhost or a placeholder value`);
     }
     if (!html.includes(PUBLIC_BRAND_NAME)) {
       errors.push(`${route}: prerendered document must show ${PUBLIC_BRAND_NAME}`);
@@ -220,16 +281,12 @@ function validateSiteArtifact(artifactRoot, environment) {
       errors.push(`${route}: prerendered document contains a retired public brand name`);
     }
     if (
-      ![
-        title,
-        description,
-        openGraphTitle,
-        openGraphDescription,
-        twitterTitle,
-        twitterDescription,
-      ].every((value) => value?.includes(PUBLIC_BRAND_NAME))
+      ![title, openGraphTitle, twitterTitle].every((value) => value?.includes(PUBLIC_BRAND_NAME))
     ) {
-      errors.push(`${route}: titles and descriptions must identify ${PUBLIC_BRAND_NAME}`);
+      errors.push(`${route}: titles must identify ${PUBLIC_BRAND_NAME}`);
+    }
+    if (![description, openGraphDescription, twitterDescription].every(Boolean)) {
+      errors.push(`${route}: descriptions must be present`);
     }
     const socialPreviewUrl = `${origin}${socialPreviewPath}`;
     if (
@@ -320,20 +377,12 @@ function validateSiteArtifact(artifactRoot, environment) {
     errors.push(...validatePublicCopy(html, relativePath));
   }
 
-  for (const artifactName of ['sitemap.xml', 'robots.txt']) {
-    const artifactPath = path.join(root, artifactName);
-    if (!fs.existsSync(artifactPath)) {
-      errors.push(`missing ${artifactName}`);
-      continue;
-    }
-    const content = fs.readFileSync(artifactPath, 'utf8');
-    if (!content.includes(origin)) {
-      errors.push(`${artifactName}: missing PUBLIC_SITE_URL`);
-    }
-    if (!origin.includes('.run.app') && /\.run\.app/i.test(content)) {
-      errors.push(`${artifactName}: contains an unexpected run.app URL`);
-    }
-  }
+  errors.push(
+    ...validateSeoArtifacts(environment, {
+      production: true,
+      artifactDirectory: root,
+    }),
+  );
 
   return errors;
 }
@@ -352,4 +401,4 @@ if (require.main === module) {
   main();
 }
 
-module.exports = { validateSiteArtifact };
+module.exports = { validateSiteArtifact, validateSocialPreviewAsset };

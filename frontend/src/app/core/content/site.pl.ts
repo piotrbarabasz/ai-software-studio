@@ -1,4 +1,4 @@
-﻿import { budgetRangeOptions, projectTypeOptions } from './contact-options.pl';
+import { budgetRangeOptions, projectTypeOptions } from './contact-options.pl';
 import { publicBrand } from '../brand/public-brand.config';
 import type {
   PublicRouteMetadata,
@@ -258,10 +258,9 @@ const routeMetadata = [
     path: '/',
     label: 'Start',
 
-    title: brandTitle('AI i automatyzacje dla firm | Demo w 7 dni'),
-    description: brandDescription(
-      'Sprawdź w 7 dni jeden proces z użyciem AI lub automatyzacji dla firm i wybierz właściwy następny krok.',
-    ),
+    title: brandTitle('Automatyzacje AI dla firm'),
+    description:
+      'Protolume automatyzuje ręczne procesy w MŚP i wspiera software house’y w realizacji modułów AI, integracji i systemów agentowych.',
     kind: 'home',
   },
   {
@@ -292,6 +291,14 @@ const routeMetadata = [
     kind: 'solutions',
   },
   ...serviceLandingRouteMetadata,
+  {
+    path: '/dla-software-house',
+    label: 'Dla partnerów',
+    title: brandTitle('Partner AI dla software house’ów i MSP'),
+    description:
+      'Wsparcie software house’ów i MSP w realizacji modułów AI, automatyzacji, RAG, systemów agentowych i integracji API.',
+    kind: 'partner',
+  },
   {
     path: '/development',
     label: 'Wdrożenia',
@@ -363,6 +370,7 @@ const primaryNavigation = [
   { label: 'Rozwiązania', path: '/rozwiazania' },
   { label: 'Demo w 7 dni', path: '/demo-ai' },
   { label: 'Wdrożenia', path: '/development' },
+  { label: 'Dla partnerów', path: '/dla-software-house' },
   { label: 'O Protolume', path: '/studio' },
   { label: 'Kontakt', path: '/kontakt' },
 ] as const;
@@ -373,47 +381,43 @@ const navigationLink = (path: (typeof primaryNavigation)[number]['path']) =>
 const homeUseCases: readonly HomeUseCase[] = [
   {
     id: 'knowledge-assistant',
-    title: 'Chatbot',
-    summary: 'Pytania trafiają szybko do odpowiedzi albo człowieka.',
-    problem: 'Pytania wracają codziennie.',
-    outcome: 'Odpowiedź albo handoff.',
-    cta: { label: 'Sprawdź', path: '/rozwiazania/chatbot-ai-dla-firm' },
+    title: 'Obsługa powtarzalnych pytań',
+    problem: 'Klienci lub pracownicy szukają odpowiedzi w wielu dokumentach i wiadomościach.',
+    outcome: 'Otrzymują odpowiedź ze źródłem albo sprawa trafia do właściwej osoby.',
+    cta: { label: 'Zobacz proces', path: '/rozwiazania/chatbot-ai-dla-firm' },
     visualKind: 'knowledge-assistant',
   },
   {
     id: 'message-and-document-workflow',
-    title: 'Voice AI',
-    summary: 'Telefony trafiają do porządku przed przejęciem sprawy.',
-    problem: 'Telefony zajmują zespół.',
-    outcome: 'System zbiera dane.',
-    cta: { label: 'Sprawdź', path: '/rozwiazania/voice-ai-dla-firm' },
+    title: 'Kwalifikacja rozmów i zgłoszeń',
+    problem: 'Zespół wielokrotnie zadaje te same pytania i ręcznie zapisuje dane z rozmów.',
+    outcome: 'System zbiera podstawowe informacje i przekazuje uporządkowaną sprawę pracownikowi.',
+    cta: { label: 'Zobacz proces', path: '/rozwiazania/voice-ai-dla-firm' },
     visualKind: 'message-workflow',
   },
   {
     id: 'process-panel',
-    title: 'Automatyzacja',
-    summary: 'Dane są przepisywane ręcznie, więc sprawa idzie dalej.',
-    problem: 'Dane są przepisywane ręcznie.',
-    outcome: 'Sprawa trafia dalej.',
-    cta: { label: 'Sprawdź', path: '/rozwiazania/automatyzacja-procesow' },
+    title: 'Przetwarzanie wiadomości i dokumentów',
+    problem:
+      'Dane są ręcznie kopiowane z e-maili, formularzy lub dokumentów do kolejnych narzędzi.',
+    outcome: 'Informacje są rozpoznane, sprawdzone i przekazane do następnego kroku.',
+    cta: { label: 'Zobacz proces', path: '/rozwiazania/automatyzacja-procesow' },
     visualKind: 'process-panel',
   },
   {
     id: 'agent-system',
-    title: 'Agenci',
-    summary: 'Zadanie ma kilka kroków, a człowiek zatwierdza wynik.',
-    problem: 'Zadanie ma kilka kroków.',
-    outcome: 'Człowiek zatwierdza wynik.',
-    cta: { label: 'Sprawdź', path: '/rozwiazania/systemy-agentowe' },
+    title: 'Realizacja wieloetapowych zadań',
+    problem: 'Jedna sprawa wymaga kilku kroków, narzędzi i kontroli wyniku.',
+    outcome: 'Kroki są uporządkowane, a człowiek zatwierdza krytyczne decyzje.',
+    cta: { label: 'Zobacz proces', path: '/rozwiazania/systemy-agentowe' },
     visualKind: 'agent-system',
   },
   {
     id: 'channel-integrations',
-    title: 'WhatsApp i CRM',
-    summary: 'Kanały wpadają razem, ale zostaje jeden tor.',
-    problem: 'Wiadomości wpadają z wielu miejsc.',
-    outcome: 'Jeden tor i status.',
-    cta: { label: 'Sprawdź', path: '/rozwiazania/integracje-whatsapp-crm' },
+    title: 'Obsługa wielu kanałów w jednym procesie',
+    problem: 'Wiadomości z formularza, e-maila, WhatsAppa i CRM mają różne statusy.',
+    outcome: 'Sprawy trafiają do jednego kontrolowanego przepływu z widocznym statusem.',
+    cta: { label: 'Zobacz proces', path: '/rozwiazania/integracje-whatsapp-crm' },
     visualKind: 'channel-integrations',
   },
 ];
@@ -424,14 +428,15 @@ export const siteContent = {
   navigation: primaryNavigation,
   solutions: solutionsContent,
   footer: {
-    summary:
-      'Studio wdrożeń AI i automatyzacji. Od działającego demo jednego procesu do jasno zaplanowanego pierwszego etapu.',
+    summary: 'Protolume — studio wdrożeń AI i automatyzacji prowadzone przez Piotra Barabasza.',
+    contactEmail: environment.publicSalesEmail,
 
     offerLinks: [
       navigationLink('/rozwiazania'),
       navigationLink('/demo-ai'),
       { label: 'Przykładowy raport', path: '/przyklad-demo' },
       navigationLink('/development'),
+      navigationLink('/dla-software-house'),
     ],
     studioLinks: [navigationLink('/studio'), { label: 'R&D Lab', path: '/rd' }],
     informationLinks: [
@@ -442,12 +447,12 @@ export const siteContent = {
   },
   serviceLandingPages,
   trust: {
-    ownerSectionTitle: `Kto prowadzi ${publicBrand.name}?`,
-    ownerSectionEyebrow: 'Osoba odpowiedzialna',
+    ownerSectionTitle: 'Doświadczenie i zakres odpowiedzialności',
+    ownerSectionEyebrow: 'Sprawdzalne informacje',
     owner: {
       name: publicBrand.owner.name,
       role: publicBrand.owner.role,
-      bio: 'Prowadzę analizę, kontakt i realizację.',
+      bio: 'Prowadzę analizę procesu, decyzje techniczne, realizację, testy i odbiór ustalonego zakresu.',
       privacyNotice: 'Dane i kod pozostają prywatne.',
       verifiedCapabilities: [
         {
@@ -555,90 +560,43 @@ export const siteContent = {
   home: {
     path: '/',
     hero: {
-      titleBeforeHighlight: 'Sprawdź w 7 dni, czy AI usprawni ',
-      highlightedTitlePart: 'konkretny proces',
-      titleAfterHighlight: ' w Twojej firmie.',
-      supportingNote: 'Bez gotowej specyfikacji.',
-      processDiagram: ['Obecny proces', 'Demo', 'Wnioski', 'Decyzja'],
-      eyebrow: 'Protolume — studio wdrożeń AI i automatyzacji',
-      title: 'Sprawdź w 7 dni, czy AI usprawni konkretny proces w Twojej firmie.',
+      eyebrow: 'Automatyzacje AI dla MŚP',
+      title: 'Automatyzujemy ręczne procesy w MŚP',
+      lead: 'W 7 dni budujemy działające demo jednego procesu. Zobaczysz, co można zautomatyzować, gdzie potrzebny jest człowiek i jaki powinien być następny krok.',
       audience:
-        'Dla zespołów, które ręcznie przenoszą informacje, pilnują statusów lub odpowiadają na powtarzalne pytania.',
-      lead: 'Budujemy demo jednego procesu w siedem dni. Potem pokazujemy granice i kolejny krok.',
+        'Dla firm, w których zespół przepisuje dane, pilnuje statusów, obsługuje podobne wiadomości lub szuka informacji w rozproszonych materiałach.',
       primaryCta: {
-        label: 'Opisz proces',
+        label: 'Pokaż mi proces',
         path: '/kontakt',
         queryParams: { projectType: 'mvp_prototype' },
       },
-      secondaryCta: { label: 'Zobacz przykładowe demo', path: '/demo-ai' },
-      proof: {
-        label: 'Co dostajesz po siedmiu dniach',
-        steps: ['Przepływ', 'Granice', 'Następny krok'],
-      },
+      secondaryCta: { label: 'Zobacz działające demo', path: '/demo-ai' },
+      processTitle: 'Od procesu do decyzji w 7 dni',
+      processDiagram: [
+        'Opis obecnej pracy',
+        'Jeden działający scenariusz',
+        'Ryzyka i granice',
+        'Rekomendowany następny krok',
+      ],
     },
-    problemsHeading: {
-      eyebrow: 'Problemy operacyjne',
-      title: 'Gdzie zespół najczęściej traci czas i kontekst',
-    },
-    problemGroups: [
-      {
-        title: 'Powtarzalne pytania',
-        effect: 'Odpowiedzi są rozproszone, a klient lub pracownik czeka na właściwą osobę.',
-        examples: ['obsługa pytań o ofertę', 'wiedza wewnętrzna', 'kwalifikacja zapytań'],
-      },
-      {
-        title: 'Ręczne przekazywanie spraw',
-        effect:
-          'Dane są kopiowane między wiadomościami i systemami, a status zależy od pamięci zespołu.',
-        examples: ['klasyfikacja e-mail', 'routing zadań', 'powiadomienia o statusie'],
-      },
-      {
-        title: 'Brak wspólnego widoku',
-        effect: 'Decyzje, dane i odpowiedzialności nie są widoczne w jednym miejscu.',
-        examples: ['panel operacyjny', 'dashboard statusów', 'wewnętrzna aplikacja'],
-      },
-    ],
-    pathsHeading: {
-      eyebrow: 'Przykłady',
-      title: 'Co klient może zobaczyć',
-    },
-    paths: [
-      {
-        eyebrow: 'Interaktywne demo',
-        title: 'Demo procesu',
-        lead: 'Bez produkcyjnych danych.',
-        points: ['jedna ścieżka', 'handoff', 'kolejny krok'],
-        cta: {
-          label: 'Uruchom demo',
-          path: '/demo-ai',
-          queryParams: undefined,
-        },
-      },
-      {
-        eyebrow: 'Przykładowy raport',
-        title: 'Raport',
-        lead: 'Zakres, ryzyka, rekomendacja.',
-        points: ['zakres i wynik', 'ryzyka', 'materiał demo'],
-        cta: {
-          label: 'Otwórz raport',
-          path: '/przyklad-demo',
-          queryParams: undefined,
-        },
-      },
-    ],
-    studioEyebrow: 'O Protolume',
     trustTeaser: {
-      statement: 'Projekt prowadzony bezpośrednio przez Piotra Barabasza',
+      title: 'Osoba odpowiedzialna za projekt',
+      points: [
+        '4+ lata doświadczenia komercyjnego',
+        'AI, integracje i aplikacje webowe',
+        'Bezpośrednia odpowiedzialność od analizy do odbioru',
+      ],
       cta: { label: 'Poznaj osobę odpowiedzialną', path: '/studio' },
     },
     evidenceTeaser: {
-      eyebrow: 'Sprawdzalne przykłady',
-      title: 'Sprawdź działające elementy i jasno opisane granice',
+      eyebrow: 'Dowody pracy',
+      title: 'Zobacz działające elementy',
       lead: 'Uruchom demonstrację, przejrzyj przykładowy rezultat i zobacz, co każdy materiał faktycznie potwierdza.',
+      note: 'To materiały demonstracyjne i projekt własny, a nie case study klienta.',
     },
     closingCta: {
-      title: 'Jedna osoba prowadzi projekt',
-      lead: 'Analiza, kontakt i realizacja są po jednej stronie.',
+      title: 'Pokaż proces, który zabiera czas',
+      lead: 'Krótki opis wystarczy, żeby ustalić, czy kolejnym krokiem powinno być Demo w 7 dni.',
       primaryCta: {
         label: 'Opisz proces',
         path: '/kontakt',
@@ -646,11 +604,16 @@ export const siteContent = {
       },
     },
     trustStrip: [
-      { id: 'direct-technical-contact', title: 'Demo' },
-      { id: 'demo-before-investment', title: 'Koszt' },
-      { id: 'ai-cost-boundaries', title: 'Ryzyka' },
-      { id: 'client-confidentiality', title: 'Prywatność' },
+      { id: 'direct-technical-contact', title: 'Demo jednego procesu' },
+      { id: 'demo-before-investment', title: 'Stały zakres przed startem' },
+      { id: 'ai-cost-boundaries', title: 'Kontrola człowieka' },
+      { id: 'client-confidentiality', title: 'Poufność danych' },
     ],
+    useCasesHeading: {
+      eyebrow: 'Procesy, które najczęściej zabierają czas',
+      title: 'Co możemy uporządkować i zautomatyzować',
+      lead: 'Zaczynamy od sposobu pracy zespołu, a dopiero później dobieramy AI, integracje i pozostałe technologie.',
+    },
     useCases: homeUseCases,
     businessFlow: {
       eyebrow: 'Jak rozwiązania współpracują',
@@ -698,37 +661,27 @@ export const siteContent = {
         },
       ],
     },
-    sevenDayResults: {
-      eyebrow: 'Jak wygląda siedem dni',
-      title: 'Cztery kroki do decyzji',
-      lead: 'Od opisu do rekomendacji.',
-      reportCta: { label: 'Zobacz przykładowy raport', path: '/przyklad-demo' },
-      items: [
-        {
-          id: 'visible-flow',
-          title: 'Opis procesu',
-          description: 'Proces, dane, granice.',
-          order: 1,
-        },
-        {
-          id: 'key-assumption-test',
-          title: 'Walidacja',
-          description: 'Założenia i ryzyka.',
-          order: 2,
-        },
-        {
-          id: 'risks-and-dependencies',
-          title: 'Działające demo',
-          description: 'Jeden scenariusz.',
-          order: 3,
-        },
-        {
-          id: 'decision-recommendation',
-          title: 'Rekomendacja',
-          description: 'Kolejny krok.',
-          order: 4,
-        },
+    sevenDayDemo: {
+      eyebrow: 'Demo w 7 dni',
+      title: 'Co otrzymujesz po 7 dniach',
+      deliverablesTitle: 'Co otrzymujesz',
+      deliverables: [
+        'Opis wybranego procesu i jego granic',
+        'Działające demo jednego scenariusza',
+        'Lista ryzyk, danych i wymaganych integracji',
+        'Rekomendacja kolejnego kroku',
       ],
+      inputsTitle: 'Co jest potrzebne od klienta',
+      inputs: [
+        'Krótki opis obecnej pracy',
+        'Kilka przykładowych wiadomości, dokumentów lub pytań',
+        'Kontakt do osoby, która zna proces',
+        'Informacja o używanych narzędziach',
+      ],
+      pricingTitle: 'Jak wygląda wycena',
+      pricingDescription:
+        'Po krótkiej rozmowie otrzymujesz stały zakres i wycenę pierwszego etapu przed rozpoczęciem prac.',
+      pricingNote: 'Kwota zależy od danych, liczby integracji i sposobu prezentacji demo.',
     },
   },
   demo: {
@@ -1259,11 +1212,11 @@ export const siteContent = {
     ],
     collaboration: {
       title: 'Jak wygląda współpraca?',
-      lead: `${publicBrand.name} prowadzi jedna osoba, więc kontakt, analiza i realizacja pozostają po jednej stronie.`,
+      lead: 'Rozmawiasz bezpośrednio ze mną. Prowadzę analizę, realizację i odbiór ustalonego zakresu.',
       points: [
-        'bezpośredni kontakt od rozmowy do odbioru',
-        'jeden partner techniczny do ustaleń i realizacji',
-        'jawne punkty kontroli zamiast niejasnego przebiegu',
+        'bezpośredni kontakt od pierwszej rozmowy do odbioru',
+        'jedna osoba odpowiedzialna za decyzje techniczne i realizację',
+        'jasne punkty kontroli i granice zakresu',
       ],
     },
     engagementModel: [
@@ -1275,8 +1228,7 @@ export const siteContent = {
     verification: {
       eyebrow: 'Przed współpracą',
       title: 'Jak możesz zweryfikować sposób pracy',
-
-      lead: 'Nie musisz opierać decyzji wyłącznie na opisie oferty. Zacznij od elementu, który możesz sprawdzić sam.',
+      lead: 'Zacznij od działającego elementu, który możesz sprawdzić samodzielnie.',
       steps: [
         'Uruchom demo i sprawdź odpowiedź oraz pytanie poza zakresem.',
         'Przejrzyj przykładowy raport po siedmiu dniach.',
@@ -1294,6 +1246,102 @@ export const siteContent = {
       },
     },
     ctaLabel: 'Opisz planowane wdrożenie',
+  },
+  partner: {
+    path: '/dla-software-house',
+    eyebrow: 'Współpraca B2B',
+    title: 'Partner techniczny AI dla software house’ów i MSP',
+    lead: 'Wspieram zespoły w analizie, budowie i dowiezieniu modułów AI, automatyzacji oraz integracji — jako podwykonawca, partner white-label lub dodatkowe wsparcie techniczne.',
+    primaryCta: {
+      label: 'Porozmawiaj o współpracy',
+      path: '/kontakt',
+      queryParams: { projectType: 'software_house_partnership' },
+    },
+    secondaryCta: {
+      label: 'Zobacz zakres techniczny',
+      path: '/dla-software-house',
+      fragment: 'zakres-techniczny',
+    },
+    fitTitle: 'Kiedy współpraca ma sens',
+    fitItems: [
+      'Klient końcowy oczekuje funkcji AI, a zespół nie chce budować kompetencji od zera.',
+      'Potrzebne jest szybkie demo lub technical discovery.',
+      'Projekt wymaga RAG, automatyzacji dokumentów, agentów albo integracji API.',
+      'Potrzebny jest właściciel techniczny ograniczonego modułu.',
+    ],
+    scopeTitle: 'Zakres wsparcia technicznego',
+    scopeItems: [
+      'Asystenci wiedzy i RAG',
+      'Automatyzacja wiadomości i dokumentów',
+      'Systemy agentowe z kontrolą człowieka',
+      'Integracje API, CRM i kanałów komunikacji',
+      'Prototypy, testy, dokumentacja i przekazanie rozwiązania',
+    ],
+    modelsTitle: 'Modele współpracy',
+    models: [
+      {
+        title: 'Ograniczony moduł',
+        description: 'Odpowiedzialność za uzgodniony komponent.',
+      },
+      {
+        title: 'Technical discovery i demo',
+        description: 'Sprawdzenie wykonalności przed większym wdrożeniem.',
+      },
+      {
+        title: 'Wsparcie zespołu',
+        description: 'Współpraca z developerami i osobą prowadzącą projekt po stronie partnera.',
+      },
+    ],
+    rulesTitle: 'Zasady do ustalenia przed startem',
+    rulesLead:
+      'Przed rozpoczęciem wspólnie ustalamy zasady właściwe dla zakresu i modelu współpracy.',
+    rules: [
+      'Zasady poufności',
+      'Kontakt z klientem końcowym',
+      'Własność i przekazanie kodu',
+      'Odpowiedzialność za deployment i utrzymanie',
+      'Sposób odbioru i rozliczenia',
+    ],
+    evidenceTitle: 'Sprawdź sposób pracy przed rozmową',
+    evidenceLead:
+      'Zobacz działające materiały i opis kompetencji bez logotypów klientów ani niepotwierdzonych wyników.',
+    evidenceLinks: [
+      { label: 'Uruchom działające demo', path: '/demo-ai' },
+      { label: 'Przejrzyj przykładowy raport', path: '/przyklad-demo' },
+      { label: 'Poznaj kompetencje i sposób pracy', path: '/studio' },
+    ],
+    faqTitle: 'Pytania o współpracę partnerską',
+    faqs: [
+      {
+        question: 'Czy współpraca może być white-label?',
+        answer:
+          'Taki model może zostać uwzględniony. Przed startem ustalamy zakres widoczności, kontakt z klientem końcowym, poufność i sposób prezentowania pracy.',
+      },
+      {
+        question: 'Czy można zlecić tylko jeden moduł?',
+        answer:
+          'Zakres może obejmować jeden uzgodniony komponent. Najpierw określamy jego granice, zależności, kryteria odbioru i sposób połączenia z resztą systemu.',
+      },
+      {
+        question: 'Czy pracujesz z istniejącym repozytorium?',
+        answer:
+          'To zależy od technologii, jakości obecnej bazy kodu i oczekiwanego zakresu. Przed przyjęciem odpowiedzialności za moduł potrzebny jest przegląd repozytorium oraz zasad pracy zespołu.',
+      },
+      {
+        question: 'Jak wygląda przekazanie kodu i dokumentacji?',
+        answer:
+          'Zakres przekazania ustalamy przed startem. Może obejmować kod uzgodnionego modułu, testy, instrukcję uruchomienia i dokumentację potrzebną zespołowi do dalszej pracy.',
+      },
+      {
+        question: 'Czy demo oznacza zobowiązanie do pełnego wdrożenia?',
+        answer:
+          'Demo służy ocenie wykonalności ograniczonego scenariusza. Ewentualne wdrożenie wymaga osobnego uzgodnienia zakresu, odpowiedzialności, wyceny i kryteriów odbioru.',
+      },
+    ],
+    closingTitle: 'Porozmawiajmy o ograniczonym zakresie, który ma wesprzeć Twój zespół',
+    closingLead:
+      'Opisz projekt, rolę partnera i etap prac. Pierwsza rozmowa służy sprawdzeniu dopasowania oraz ustaleniu możliwego następnego kroku.',
+    serviceType: 'Wsparcie techniczne AI dla software house’ów i MSP',
   },
   development: {
     path: '/development',
@@ -1438,16 +1486,30 @@ export const siteContent = {
   contact: {
     path: '/kontakt',
     eyebrow: 'Kontakt',
-    title: 'Opisz proces w 3 zdaniach',
-    lead: 'Wystarczą trzy krótkie zdania: kto pracuje, co jest dziś robione ręcznie i co ma się zmienić.',
+    title: 'Opisz proces lub potrzebne wsparcie',
+    lead: 'Krótki opis wystarczy, żeby sprawdzić temat i wskazać możliwy następny krok.',
     nextSteps: [
       'Sprawdzam, jakie informacje są potrzebne do dalszej rozmowy.',
       'Wskażę właściwą ścieżkę: demo, walidację, plan prac albo wdrożenie.',
       'Dalsze ustalenia są przed płatną realizacją.',
     ],
     noSpecificationNeeded: 'Nie potrzebujesz specyfikacji.',
-    firstMessagePurpose:
-      'Wystarczą 3 zdania: kto wykonuje pracę, co jest robione ręcznie i jaki efekt ma się zmienić.',
+    messageLabel: 'Opisz obecny proces lub potrzebne wsparcie',
+    additionalInformationLabel: 'Dodatkowe informacje — opcjonalnie',
+    messageGuidance: {
+      generalLabel: 'Pomoc do opisu procesu',
+      general: [
+        'Co jest dziś wykonywane ręcznie?',
+        'Kto korzysta z procesu?',
+        'Jaki rezultat chcesz uzyskać?',
+      ],
+      partnerLabel: 'Pomoc do opisu współpracy partnerskiej',
+      partner: [
+        'Jaki moduł lub etap chcesz zlecić?',
+        'Jaki jest obecny stos i stan projektu?',
+        'Jakiego modelu współpracy potrzebujesz?',
+      ],
+    },
     noCommitment: contactNoCommitment,
     directEmail: environment.publicSalesEmail,
     directEmailLabel: 'Bezpośredni kontakt e-mail',

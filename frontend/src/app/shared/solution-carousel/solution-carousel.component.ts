@@ -63,10 +63,10 @@ export class SolutionCarouselComponent implements AfterViewInit, OnDestroy {
   get statusLabel(): string {
     const total = this.items.length;
     if (total === 0) {
-      return 'Brak rozwiązań';
+      return 'Brak procesów';
     }
     const end = Math.min(total, this.currentIndex + this.visibleCount);
-    return `Wyświetlane rozwiązania ${this.currentIndex + 1}–${end} z ${total}`;
+    return `Wyświetlane procesy ${this.currentIndex + 1}–${end} z ${total}`;
   }
 
   move(direction: -1 | 1): void {

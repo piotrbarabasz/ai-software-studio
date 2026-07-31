@@ -7,6 +7,7 @@
 /rozwiazania/automatyzacja-procesow
 /rozwiazania/integracje-whatsapp-crm
 /rozwiazania/systemy-agentowe
+/dla-software-house
 /development
 /studio
 /rd

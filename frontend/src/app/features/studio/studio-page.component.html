@@ -4,6 +4,28 @@
       <p class="eyebrow">{{ content.eyebrow }}</p>
       <h1>{{ content.title }}</h1>
       <p class="page-lead">{{ content.lead }}</p>
+      <article
+        class="hero-owner"
+        [class.has-image]="trust.owner.image"
+        aria-labelledby="studio-owner-name"
+      >
+        @if (trust.owner.image) {
+          <img
+            class="owner-image"
+            [src]="trust.owner.image.src"
+            [alt]="trust.owner.image.alt"
+            width="160"
+            height="160"
+            loading="lazy"
+            decoding="async"
+          />
+        }
+        <div>
+          <p class="owner-role">{{ trust.owner.role }}</p>
+          <h2 id="studio-owner-name">{{ trust.owner.name }}</h2>
+          <p>{{ trust.owner.bio }}</p>
+        </div>
+      </article>
     </div>
     <aside class="hero-panel" aria-label="Zasady współpracy">
       <p class="panel-kicker">Zasady współpracy</p>
@@ -30,27 +52,13 @@
       <p class="eyebrow">{{ trust.ownerSectionEyebrow }}</p>
       <h2 id="owner-title">{{ trust.ownerSectionTitle }}</h2>
     </div>
-    <article class="owner-card" [class.has-image]="trust.owner.image">
-      @if (trust.owner.image) {
-        <img
-          class="owner-image"
-          [src]="trust.owner.image.src"
-          [alt]="trust.owner.image.alt"
-          width="160"
-          height="160"
-          loading="lazy"
-          decoding="async"
-        />
-      }
+    <article class="owner-card">
       <div class="owner-copy">
-        <p class="owner-role">{{ trust.owner.role }}</p>
-        <h3>{{ trust.owner.name }}</h3>
-        <p>{{ trust.owner.bio }}</p>
         <p class="accountability">{{ trust.owner.privacyNotice }}</p>
         <p class="accountability">{{ trust.owner.accountability.statement }}</p>
         <p>{{ trust.owner.accountability.detail }}</p>
         <div class="verified-capabilities">
-          <h4>Co możesz sprawdzić na stronie</h4>
+          <h3>Co możesz sprawdzić na stronie</h3>
           <dl>
             @for (capability of trust.owner.verifiedCapabilities; track capability) {
               <div>

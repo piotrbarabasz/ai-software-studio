@@ -7,7 +7,7 @@ import { routes } from '../../app.routes';
 import { API_CONFIG } from '../../core/api-config';
 import { siteContent } from '../../core/content/site.pl';
 import { publicBrand } from '../../core/brand/public-brand.config';
-import { absoluteSiteUrl, siteSeo, siteSocialImageUrl } from '../../core/seo/site-seo.config';
+import { absoluteSiteUrl, siteSeo } from '../../core/seo/site-seo.config';
 import { SiteShellComponent } from './site-shell.component';
 
 describe('SiteShellComponent', () => {
@@ -36,6 +36,7 @@ describe('SiteShellComponent', () => {
     expect(element.querySelector('.site-footer a[href="/demo-ai"]')).not.toBeNull();
     expect(element.querySelector('.site-footer a[href="/przyklad-demo"]')).not.toBeNull();
     expect(element.querySelector('.site-footer a[href="/development"]')).not.toBeNull();
+    expect(element.querySelector('.site-footer a[href="/dla-software-house"]')).not.toBeNull();
     expect(element.querySelector('.site-footer a[href="/studio"]')).not.toBeNull();
     expect(element.querySelector('.site-footer a[href="/rd"]')?.textContent?.trim()).toBe(
       'R&D Lab',
@@ -67,6 +68,7 @@ describe('SiteShellComponent', () => {
       { label: 'Rozwiązania', href: '/rozwiazania' },
       { label: 'Demo w 7 dni', href: '/demo-ai' },
       { label: 'Wdrożenia', href: '/development' },
+      { label: 'Dla partnerów', href: '/dla-software-house' },
       { label: 'O Protolume', href: '/studio' },
       { label: 'Kontakt', href: '/kontakt' },
     ]);
@@ -79,9 +81,17 @@ describe('SiteShellComponent', () => {
       `© ${new Date().getFullYear()}`,
     );
     expect(element.querySelector('.site-footer')?.textContent).toContain(publicBrand.name);
-    expect(element.querySelector('.site-footer')?.textContent).toContain('Studio wdrożeń AI');
-    expect(element.querySelector('.site-footer a[href^="mailto:"]')).toBeNull();
+    expect(element.querySelector('.site-footer')?.textContent).toContain(
+      'Protolume — studio wdrożeń AI i automatyzacji prowadzone przez Piotra Barabasza.',
+    );
+    expect(element.querySelector('.site-footer a[href^="mailto:"]')?.getAttribute('href')).toBe(
+      `mailto:${siteContent.footer.contactEmail}`,
+    );
     expect(element.querySelector('.site-footer a[href*="github.com"]')).toBeNull();
+    expect(element.querySelector('.site-footer a[href*="linkedin.com"]')).toBeNull();
+    expect(element.querySelector('.site-footer a[href*=".example.com"]')).toBeNull();
+    expect(element.querySelector('.site-footer')?.textContent).not.toMatch(/zespół Protolume/i);
+    expect(element.querySelector('.site-footer [class*="client-logo"]')).toBeNull();
     const footerLinks = Array.from(
       element.querySelectorAll<HTMLAnchorElement>('.site-footer a[href]'),
     );
@@ -306,6 +316,38 @@ describe('SiteShellComponent', () => {
     }
   });
 
+  it('keeps all six primary links inside the header between 921px and 1200px', async () => {
+    await TestBed.configureTestingModule({
+      imports: [SiteShellComponent],
+      providers: [
+        provideRouter(routes),
+        provideHttpClient(withXhr()),
+        { provide: API_CONFIG, useValue: { apiUrl: 'http://api.test' } },
+      ],
+    }).compileComponents();
+    const fixture = TestBed.createComponent(SiteShellComponent);
+    fixture.detectChanges();
+
+    const element = fixture.nativeElement as HTMLElement;
+    const header = element.querySelector('.site-header') as HTMLElement;
+    const navigation = element.querySelector('#primary-navigation') as HTMLElement;
+    const links = navigation.querySelectorAll('.nav-links a');
+
+    expect(links).toHaveSize(6);
+    for (const width of [921, 1000, 1200]) {
+      element.style.display = 'block';
+      element.style.width = `${width}px`;
+      fixture.detectChanges();
+
+      expect(header.scrollWidth)
+        .withContext(`header at ${width}px`)
+        .toBeLessThanOrEqual(header.clientWidth);
+      expect(navigation.getBoundingClientRect().right)
+        .withContext(`navigation at ${width}px`)
+        .toBeLessThanOrEqual(header.getBoundingClientRect().right + 1);
+    }
+  });
+
   it('updates unique SEO metadata after client-side navigation and noindexes the 404 page', async () => {
     await TestBed.configureTestingModule({
       imports: [SiteShellComponent],
@@ -380,14 +422,17 @@ describe('SiteShellComponent', () => {
       }
     }
 
+    expect(publicBrand.assets.socialPreviewPath).toBe('/assets/protolume-social-preview.png');
+    expect(publicBrand.assets.socialPreviewType).toBe('image/png');
+    const expectedSocialImageUrl = absoluteSiteUrl(publicBrand.assets.socialPreviewPath);
     expect(document.querySelector('meta[property="og:image"]')?.getAttribute('content')).toBe(
-      siteSocialImageUrl,
+      expectedSocialImageUrl,
     );
     expect(document.querySelector('meta[property="og:image:type"]')?.getAttribute('content')).toBe(
-      publicBrand.assets.socialPreviewType,
+      'image/png',
     );
     expect(document.querySelector('meta[name="twitter:image"]')?.getAttribute('content')).toBe(
-      siteSocialImageUrl,
+      expectedSocialImageUrl,
     );
 
     await fixture.ngZone!.run(() => router.navigateByUrl('/studio'));
@@ -426,11 +471,14 @@ describe('SiteShellComponent', () => {
         '@type': 'ContactPoint',
         contactType: 'sales',
         url: absoluteSiteUrl('/kontakt'),
+        email: siteContent.footer.contactEmail,
       }),
     );
     expect(mainService?.['sameAs']).toBeUndefined();
     expect(founder?.['name']).toBe(siteContent.trust.owner.name);
     expect(founder?.['jobTitle']).toBe(siteContent.trust.owner.role);
+    expect(founder?.['description']).toBe(siteContent.trust.owner.bio);
+    expect(founder?.['sameAs']).toBeUndefined();
     expect(website?.['url']).toBe(siteSeo.origin);
     expect(website?.['publisher']).toEqual({ '@id': `${siteSeo.origin}#professional-service` });
     expect(JSON.stringify(structuredData)).not.toContain('aggregateRating');
@@ -438,6 +486,8 @@ describe('SiteShellComponent', () => {
     expect(JSON.stringify(structuredData)).not.toContain('telephone');
     expect(JSON.stringify(structuredData)).not.toContain('run.app');
     expect(JSON.stringify(structuredData)).not.toContain('github.com');
+    expect(JSON.stringify(structuredData)).not.toMatch(/linkedin|\.example\.com|zespół Protolume/i);
+    expect(JSON.stringify(structuredData)).not.toContain(':[]');
 
     await fixture.ngZone!.run(() => router.navigateByUrl('/demo-ai'));
     fixture.detectChanges();
@@ -498,6 +548,30 @@ describe('SiteShellComponent', () => {
     }
     expect(JSON.stringify(solutionsStructuredData)).not.toContain('aggregateRating');
     expect(JSON.stringify(solutionsStructuredData)).not.toContain('run.app');
+
+    await fixture.ngZone!.run(() => router.navigateByUrl('/dla-software-house'));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const partnerStructuredData = JSON.parse(
+      document.querySelector('#site-structured-data')?.textContent ?? '{}',
+    ) as { '@graph': Array<Record<string, unknown>> };
+    const partnerService = partnerStructuredData['@graph'].find(
+      (item) => item['@id'] === `${siteSeo.origin}/dla-software-house#service`,
+    );
+    expect(document.title).toBe('Partner AI dla software house’ów i MSP | Protolume');
+    expect(document.querySelector('link[rel="canonical"]')?.getAttribute('href')).toBe(
+      absoluteSiteUrl('/dla-software-house'),
+    );
+    expect(partnerService).toEqual(
+      jasmine.objectContaining({
+        '@type': 'Service',
+        name: siteContent.partner.title,
+        url: absoluteSiteUrl('/dla-software-house'),
+        provider: { '@id': `${siteSeo.origin}#professional-service` },
+        serviceType: siteContent.partner.serviceType,
+      }),
+    );
+    expect(document.querySelectorAll('#site-structured-data')).toHaveSize(1);
 
     await fixture.ngZone!.run(() => router.navigateByUrl('/missing'));
     fixture.detectChanges();
