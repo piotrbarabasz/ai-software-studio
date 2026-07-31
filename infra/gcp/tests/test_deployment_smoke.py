@@ -90,7 +90,10 @@ def render_site_shell(
         + build_sha
         + '"></head><body>'
         + '<nav id="primary-navigation">'
+        + '<div class="nav-links">'
         + nav
+        + '</div>'
+        + '<a class="primary-cta" href="/kontakt?projectType=mvp_prototype">Opisz proces</a>'
         + '</nav>'
         + body
         + legacy_copy
@@ -418,6 +421,64 @@ class DeploymentSmokeTest(unittest.TestCase):
             errors,
         )
 
+    def test_sitemap_content_type_mismatch_is_reported(self) -> None:
+        deployment = FakeDeployment(robots_tag="index, follow")
+
+        def wrong_content_type(request, timeout):
+            response = deployment(request, timeout)
+            if urlsplit(request.full_url).path == "/sitemap.xml":
+                return smoke.Response(
+                    response.status,
+                    {"content-type": "text/xml; charset=utf-8"},
+                    response.body,
+                )
+            return response
+
+        errors = smoke.run_checks(
+            "https://api.run.app",
+            "https://protolume.pl",
+            expect_noindex=False,
+            expected_build_sha=EXPECTED_BUILD_SHA,
+            timeout_seconds=2,
+            request=wrong_content_type,
+        )
+
+        self.assertIn(
+            "public /sitemap.xml: Content-Type is not application/xml",
+            errors,
+        )
+
+    def test_parser_separates_navigation_links_from_cta_by_context(self) -> None:
+        parser = smoke.SeoMetadataParser()
+        parser.feed(
+            '<nav aria-label="secondary"><div class="nav-links">'
+            '<a href="/ignored">Ignored</a></div></nav>'
+            '<nav id="primary-navigation">'
+            '<div class="layout nav-links expanded"><div>'
+            '<a href="/first"> First <span>link</span> </a></div>'
+            '<a href="/second">Second link</a>'
+            '<a class="button primary-cta emphasized" '
+            'href="/kontakt?projectType=mvp_prototype">'
+            'Opisz <span>proces</span></a></div></nav>'
+            '<footer><a class="primary-cta" href="/ignored">Ignored</a></footer>'
+        )
+
+        self.assertEqual(
+            parser.primary_navigation_links,
+            [("/first", "First link"), ("/second", "Second link")],
+        )
+        self.assertEqual(
+            parser.primary_navigation_ctas,
+            [("/kontakt?projectType=mvp_prototype", "Opisz proces")],
+        )
+
+    def test_primary_navigation_cta_is_not_counted_as_a_seventh_link(self) -> None:
+        parser = smoke.SeoMetadataParser()
+        parser.feed(render_site_shell("/studio", "<h1>Studio</h1>"))
+
+        self.assertEqual(parser.primary_navigation_links, list(PRIMARY_NAVIGATION))
+        self.assertEqual(len(parser.primary_navigation_ctas), 1)
+
     def test_missing_primary_navigation_link_is_reported(self) -> None:
         deployment = FakeDeployment(robots_tag="index, follow")
 
@@ -433,6 +494,27 @@ class DeploymentSmokeTest(unittest.TestCase):
                 lambda body: body.decode("utf-8")
                 .replace('<a href="/kontakt">Kontakt</a>', "", 1)
                 .encode("utf-8"),
+            ),
+        )
+
+        self.assertIn(
+            "public route /studio: primary navigation links or labels do not match the shared shell",
+            errors,
+        )
+
+    def test_missing_nav_links_container_is_reported(self) -> None:
+        deployment = FakeDeployment(robots_tag="index, follow")
+
+        errors = smoke.run_checks(
+            "https://api.run.app",
+            "https://protolume.pl",
+            expect_noindex=False,
+            expected_build_sha=EXPECTED_BUILD_SHA,
+            timeout_seconds=2,
+            request=mutate_public_route(
+                deployment,
+                "/studio",
+                lambda body: body.replace(b'class="nav-links"', b'class="links"', 1),
             ),
         )
 
@@ -463,6 +545,183 @@ class DeploymentSmokeTest(unittest.TestCase):
             "public route /development: primary navigation links or labels do not match the shared shell",
             errors,
         )
+
+    def test_reordered_primary_navigation_links_are_reported(self) -> None:
+        deployment = FakeDeployment(robots_tag="index, follow")
+        first = '<a href="/rozwiazania">Rozwiązania</a>'
+        second = '<a href="/demo-ai">Demo w 7 dni</a>'
+
+        errors = smoke.run_checks(
+            "https://api.run.app",
+            "https://protolume.pl",
+            expect_noindex=False,
+            expected_build_sha=EXPECTED_BUILD_SHA,
+            timeout_seconds=2,
+            request=mutate_public_route(
+                deployment,
+                "/studio",
+                lambda body: body.decode("utf-8")
+                .replace(first + second, second + first, 1)
+                .encode("utf-8"),
+            ),
+        )
+
+        self.assertIn(
+            "public route /studio: primary navigation links or labels do not match the shared shell",
+            errors,
+        )
+
+    def test_duplicate_primary_navigation_link_is_reported(self) -> None:
+        deployment = FakeDeployment(robots_tag="index, follow")
+
+        errors = smoke.run_checks(
+            "https://api.run.app",
+            "https://protolume.pl",
+            expect_noindex=False,
+            expected_build_sha=EXPECTED_BUILD_SHA,
+            timeout_seconds=2,
+            request=mutate_public_route(
+                deployment,
+                "/studio",
+                lambda body: body.replace(
+                    b'<a href="/kontakt">Kontakt</a>',
+                    b'<a href="/kontakt">Kontakt</a>'
+                    b'<a href="/kontakt">Kontakt</a>',
+                    1,
+                ),
+            ),
+        )
+
+        self.assertIn(
+            "public route /studio: primary navigation links or labels do not match the shared shell",
+            errors,
+        )
+
+    def test_missing_primary_navigation_cta_is_reported_separately(self) -> None:
+        deployment = FakeDeployment(robots_tag="index, follow")
+        cta = (
+            b'<a class="primary-cta" '
+            b'href="/kontakt?projectType=mvp_prototype">Opisz proces</a>'
+        )
+
+        errors = smoke.run_checks(
+            "https://api.run.app",
+            "https://protolume.pl",
+            expect_noindex=False,
+            expected_build_sha=EXPECTED_BUILD_SHA,
+            timeout_seconds=2,
+            request=mutate_public_route(
+                deployment,
+                "/studio",
+                lambda body: body.replace(cta, b"", 1),
+            ),
+        )
+
+        self.assertIn(
+            "public route /studio: primary navigation CTA does not match the shared shell",
+            errors,
+        )
+        self.assertNotIn(
+            "public route /studio: primary navigation links or labels do not match the shared shell",
+            errors,
+        )
+
+    def test_changed_primary_navigation_cta_text_is_reported(self) -> None:
+        deployment = FakeDeployment(robots_tag="index, follow")
+
+        errors = smoke.run_checks(
+            "https://api.run.app",
+            "https://protolume.pl",
+            expect_noindex=False,
+            expected_build_sha=EXPECTED_BUILD_SHA,
+            timeout_seconds=2,
+            request=mutate_public_route(
+                deployment,
+                "/studio",
+                lambda body: body.replace(b">Opisz proces</a>", b">Napisz do nas</a>", 1),
+            ),
+        )
+
+        self.assertIn(
+            "public route /studio: primary navigation CTA does not match the shared shell",
+            errors,
+        )
+
+    def test_wrong_primary_navigation_cta_query_parameter_is_reported(self) -> None:
+        deployment = FakeDeployment(robots_tag="index, follow")
+
+        errors = smoke.run_checks(
+            "https://api.run.app",
+            "https://protolume.pl",
+            expect_noindex=False,
+            expected_build_sha=EXPECTED_BUILD_SHA,
+            timeout_seconds=2,
+            request=mutate_public_route(
+                deployment,
+                "/studio",
+                lambda body: body.replace(
+                    b"projectType=mvp_prototype",
+                    b"projectType=backend_api",
+                    1,
+                ),
+            ),
+        )
+
+        self.assertIn(
+            "public route /studio: primary navigation CTA does not match the shared shell",
+            errors,
+        )
+
+    def test_duplicate_primary_navigation_cta_is_reported(self) -> None:
+        deployment = FakeDeployment(robots_tag="index, follow")
+        cta = (
+            b'<a class="primary-cta" '
+            b'href="/kontakt?projectType=mvp_prototype">Opisz proces</a>'
+        )
+
+        errors = smoke.run_checks(
+            "https://api.run.app",
+            "https://protolume.pl",
+            expect_noindex=False,
+            expected_build_sha=EXPECTED_BUILD_SHA,
+            timeout_seconds=2,
+            request=mutate_public_route(
+                deployment,
+                "/studio",
+                lambda body: body.replace(cta, cta + cta, 1),
+            ),
+        )
+
+        self.assertIn(
+            "public route /studio: primary navigation CTA does not match the shared shell",
+            errors,
+        )
+
+    def test_links_outside_primary_navigation_do_not_change_its_contract(self) -> None:
+        deployment = FakeDeployment(robots_tag="index, follow")
+        unrelated_navigation = (
+            '<nav aria-label="Pomocnicza"><div class="nav-links">'
+            '<a href="/ignored">Ignored</a></div>'
+            '<a class="primary-cta" href="/ignored">Ignored</a></nav>'
+            '<a class="primary-cta" href="/ignored">Ignored footer CTA</a>'
+        )
+
+        errors = smoke.run_checks(
+            "https://api.run.app",
+            "https://protolume.pl",
+            expect_noindex=False,
+            expected_build_sha=EXPECTED_BUILD_SHA,
+            timeout_seconds=2,
+            request=mutate_public_route(
+                deployment,
+                "/studio",
+                lambda body: body.decode("utf-8")
+                .replace("</footer>", unrelated_navigation + "</footer>", 1)
+                .encode("utf-8"),
+            ),
+        )
+
+        self.assertEqual(errors, [])
 
     def test_github_link_on_non_homepage_is_reported(self) -> None:
         deployment = FakeDeployment(robots_tag="index, follow")

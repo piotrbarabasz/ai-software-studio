@@ -15,7 +15,7 @@ from dataclasses import dataclass
 from html.parser import HTMLParser
 from pathlib import Path
 from typing import Callable, Mapping
-from urllib.parse import urlsplit
+from urllib.parse import parse_qs, urlsplit
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 PUBLIC_ROUTES_PATH = REPOSITORY_ROOT / "frontend" / "src" / "prerender-routes.txt"
@@ -43,6 +43,28 @@ PRIMARY_NAVIGATION_LINKS = (
     ("/studio", "O Protolume"),
     ("/kontakt", "Kontakt"),
 )
+PRIMARY_NAVIGATION_CTA = (
+    "/kontakt",
+    "Opisz proces",
+    "projectType",
+    "mvp_prototype",
+)
+HTML_VOID_ELEMENTS = {
+    "area",
+    "base",
+    "br",
+    "col",
+    "embed",
+    "hr",
+    "img",
+    "input",
+    "link",
+    "meta",
+    "param",
+    "source",
+    "track",
+    "wbr",
+}
 
 
 @dataclass(frozen=True)
@@ -61,6 +83,7 @@ class SeoMetadataParser(HTMLParser):
         self.headings: list[tuple[str, str]] = []
         self.hrefs: list[str] = []
         self.primary_navigation_links: list[tuple[str, str]] = []
+        self.primary_navigation_ctas: list[tuple[str, str]] = []
         self.primary_navigation_count = 0
         self.has_footer = False
         self.form_names: set[str] = set()
@@ -71,9 +94,16 @@ class SeoMetadataParser(HTMLParser):
         self._text_stack: list[str] = []
         self._ignored_text_depth = 0
         self._nav_stack: list[bool] = []
-        self._primary_navigation_depth = 0
+        self._nav_links_tag_stacks: dict[str, list[bool]] = {}
+        self._nav_links_depth = 0
         self._current_navigation_href: str | None = None
         self._current_navigation_text_parts: list[str] = []
+        self._current_navigation_is_link = False
+        self._current_navigation_is_cta = False
+
+    @property
+    def _inside_primary_navigation(self) -> bool:
+        return bool(self._nav_stack and self._nav_stack[-1])
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         tag_name = tag.lower()
@@ -97,10 +127,18 @@ class SeoMetadataParser(HTMLParser):
         if is_primary_navigation:
             self._nav_stack.append(True)
             self.primary_navigation_count += 1
-            self._primary_navigation_depth += 1
         elif tag_name == "nav":
             self._nav_stack.append(False)
         classes = set(attributes.get("class", "").split())
+        is_nav_links_container = (
+            self._inside_primary_navigation and "nav-links" in classes
+        )
+        if tag_name not in HTML_VOID_ELEMENTS:
+            self._nav_links_tag_stacks.setdefault(tag_name, []).append(
+                is_nav_links_container
+            )
+        if is_nav_links_container:
+            self._nav_links_depth += 1
         if "interactive-demo" in classes:
             self.has_interactive_demo = True
         if "use-case-card" in classes:
@@ -112,9 +150,17 @@ class SeoMetadataParser(HTMLParser):
         name = attributes.get("name")
         if name:
             self.form_names.add(name)
-        if tag_name == "a" and self._primary_navigation_depth > 0:
+        is_navigation_cta = "primary-cta" in classes
+        is_navigation_link = self._nav_links_depth > 0 and not is_navigation_cta
+        if (
+            tag_name == "a"
+            and self._inside_primary_navigation
+            and (is_navigation_link or is_navigation_cta)
+        ):
             self._current_navigation_href = attributes.get("href")
             self._current_navigation_text_parts = []
+            self._current_navigation_is_link = is_navigation_link
+            self._current_navigation_is_cta = is_navigation_cta
 
     def handle_endtag(self, tag: str) -> None:
         tag_name = tag.lower()
@@ -122,23 +168,34 @@ class SeoMetadataParser(HTMLParser):
             self._ignored_text_depth -= 1
         if tag_name in {"h1", "h2", "h3"} and self._text_stack:
             self.headings.append((tag.lower(), re.sub(r"\s+", " ", self._text_stack.pop()).strip()))
-        if tag_name == "a" and self._current_navigation_href is not None and self._primary_navigation_depth > 0:
+        if tag_name == "a" and self._current_navigation_href is not None:
             text = re.sub(r"\s+", " ", "".join(self._current_navigation_text_parts)).strip()
             href = self._current_navigation_href.strip()
-            self.primary_navigation_links.append((href, text))
+            if self._current_navigation_is_link:
+                self.primary_navigation_links.append((href, text))
+            if self._current_navigation_is_cta:
+                self.primary_navigation_ctas.append((href, text))
             self._current_navigation_href = None
             self._current_navigation_text_parts = []
+            self._current_navigation_is_link = False
+            self._current_navigation_is_cta = False
+        tag_stack = self._nav_links_tag_stacks.get(tag_name)
+        if tag_stack:
+            was_nav_links_container = tag_stack.pop()
+            if was_nav_links_container and self._nav_links_depth > 0:
+                self._nav_links_depth -= 1
         if tag_name == "nav" and self._nav_stack:
-            was_primary_navigation = self._nav_stack.pop()
-            if was_primary_navigation and self._primary_navigation_depth > 0:
-                self._primary_navigation_depth -= 1
+            self._nav_stack.pop()
 
     def handle_data(self, data: str) -> None:
         if self._ignored_text_depth == 0:
             self._visible_text_parts.append(data)
         if self._text_stack and self._ignored_text_depth == 0:
             self._text_stack[-1] += data
-        if self._current_navigation_href is not None and self._primary_navigation_depth > 0 and self._ignored_text_depth == 0:
+        if (
+            self._current_navigation_href is not None
+            and self._ignored_text_depth == 0
+        ):
             self._current_navigation_text_parts.append(data)
 
     @property
@@ -326,6 +383,26 @@ def _check_public_routes(
         if actual_navigation != expected_navigation:
             errors.append(
                 f"public route {path}: primary navigation links or labels do not match the shared shell"
+            )
+        cta_matches = False
+        if len(parser.primary_navigation_ctas) == 1:
+            cta_href, cta_text = parser.primary_navigation_ctas[0]
+            parsed_cta = urlsplit(cta_href)
+            expected_path, expected_text, query_name, query_value = (
+                PRIMARY_NAVIGATION_CTA
+            )
+            cta_matches = (
+                not parsed_cta.scheme
+                and not parsed_cta.netloc
+                and parsed_cta.path == expected_path
+                and not parsed_cta.fragment
+                and cta_text == expected_text
+                and parse_qs(parsed_cta.query, keep_blank_values=True)
+                == {query_name: [query_value]}
+            )
+        if not cta_matches:
+            errors.append(
+                f"public route {path}: primary navigation CTA does not match the shared shell"
             )
         if not parser.has_footer:
             errors.append(f"public route {path}: expected a shared footer, received none")
