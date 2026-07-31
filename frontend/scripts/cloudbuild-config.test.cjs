@@ -73,6 +73,21 @@ test('only the combined SHA pipeline can deploy Cloud Run', () => {
   assert.doesNotMatch(`${frontend}${backend}${pullRequest}`, /gcloud run deploy/);
 });
 
+test('frontend image smoke validates the deployed static response contracts', () => {
+  const smoke = fs.readFileSync(
+    path.join(repositoryRoot, 'scripts/gcp/smoke-frontend-image.sh'),
+    'utf8',
+  );
+
+  for (const resource of ['/sitemap.xml', '/robots.txt', '/assets/protolume-social-preview.png']) {
+    assert.match(smoke, new RegExp(resource.replaceAll('.', '\\.')));
+  }
+  for (const contentType of ['text/html', 'application/xml', 'text/plain', 'image/png']) {
+    assert.match(smoke, new RegExp(contentType.replace('/', '\\/')));
+  }
+  assert.match(smoke, /Sitemap: https:\/\/protolume\.pl\/sitemap\.xml/);
+});
+
 test('pull-request preview checks are fixed to noindex and have no secrets', () => {
   const pullRequest = readConfig('cloudbuild.pr-checks.yaml');
 
