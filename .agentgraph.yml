@@ -19,7 +19,7 @@ review:
 
 policy:
   max_repair_cycles: 2
-  max_work_items_per_run: 8
+  max_work_items_per_run: 10
   checkpoint_ttl_seconds: 3600
   validation_timeout_seconds: 600
   max_steps: 30
