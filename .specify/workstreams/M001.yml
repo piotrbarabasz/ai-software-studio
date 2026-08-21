@@ -1,0 +1,10 @@
+id: M001
+title: Protolume UX Redesign
+status: active
+goal: Transform Protolume into an interactive product-style experience while preserving SSR, SEO, accessibility, deployment contracts, and existing public routes.
+
+epics:
+  - E001
+
+completion_criteria:
+  - The planned Protolume UX redesign scopes are implemented and validated.

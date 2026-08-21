@@ -1,0 +1,32 @@
+id: E001
+title: UX-01 Foundations
+milestone: M001
+feature: specs/001-ux-foundations
+base_branch: master
+branch: feat/ux001-foundations
+status: planned
+risk: high
+depends_on: []
+
+tasks:
+  - T001
+  - T002
+  - T003
+  - T004
+  - T005
+  - T006
+  - T007
+  - T008
+
+required_checks:
+  - "git --no-pager diff --check"
+  
+pr_policy:
+  one_pr_per_epic: true
+  merge_requires_human: true
+  auto_merge: false
+
+commit_policy:
+  one_commit_per_task: true
+  commit_requires_human: true
+  auto_commit: false
