@@ -1,0 +1,121 @@
+# UX-01 Foundations
+
+- [ ] T001 Add semantic design tokens V2
+  - **Milestone:** M001
+  - **Epic:** E001
+  - **Risk:** medium
+  - **Implementation files:** `frontend/src/styles.scss`
+  - **Test files:** none
+  - **Validation commands:** npm --prefix frontend ci; npm --prefix frontend run format:check; npm --prefix frontend run build:development; git --no-pager diff --check
+  - **Final PR review required:** yes
+  - **Goal:** Introduce the semantic visual foundation required by the Protolume UX redesign without changing the public page structure or activating the final redesign.
+  - **Dependencies:** None
+  - **Acceptance criteria:** Semantic tokens exist for canvas, surfaces, primary and secondary text, borders, accent, status states, motion durations, easing, radii and content widths. Existing variables including --color-bg, --color-surface, --color-ink, --color-muted, --color-line, --color-primary and --color-primary-strong remain available as compatibility aliases. Existing public pages retain their current visual structure and the application is not globally switched to the final dark theme.
+  - **Test requirements:** Install the existing frontend dependencies in the AgentGraph workspace, verify formatting and verify that the Angular development build can compile the stylesheet changes.
+  - **Parallelizable:** no
+  - **Notes:** This is a compatibility-first token migration. Do not redesign Home, SiteShell, navigation, footer or marketing content in this task.
+
+- [ ] T002 Add GSAP as the motion runtime dependency
+  - **Milestone:** M001
+  - **Epic:** E001
+  - **Risk:** medium
+  - **Implementation files:** `frontend/package.json`, `frontend/package-lock.json`
+  - **Test files:** none
+  - **Validation commands:** npm --prefix frontend ci; npm --prefix frontend run build:development; git --no-pager diff --check
+  - **Final PR review required:** yes
+  - **Goal:** Add GSAP as the single animation runtime dependency required by the new Protolume motion architecture while keeping the dependency footprint minimal.
+  - **Dependencies:** T001
+  - **Acceptance criteria:** GSAP is declared as a production dependency and package-lock.json is synchronized with package.json. No Three.js, Lenis, Framer Motion, Anime.js or other animation or smooth-scroll runtime is introduced. The dependency can be installed using npm ci and the existing Angular development build still succeeds.
+  - **Test requirements:** Reinstall dependencies from the updated lockfile using npm ci and verify that the frontend still builds successfully.
+  - **Parallelizable:** no
+  - **Notes:** Do not add CDN scripts or external runtime origins. GSAP will be loaded dynamically by the motion runtime in a later task rather than statically from the application root.
+
+- [ ] T003 Add SSR-safe motion preferences service
+  - **Milestone:** M001
+  - **Epic:** E001
+  - **Risk:** medium
+  - **Implementation files:** `frontend/src/app/core/motion/motion-preferences.service.ts`
+  - **Test files:** `frontend/src/app/core/motion/motion-preferences.service.spec.ts`
+  - **Validation commands:** npm --prefix frontend run lint; npm --prefix frontend test; git --no-pager diff --check
+  - **Final PR review required:** yes
+  - **Goal:** Centralize motion and viewport preferences so future animated sections can consistently distinguish desktop, mobile and reduced-motion environments without breaking SSR or prerendering.
+  - **Dependencies:** T001
+  - **Acceptance criteria:** MotionPreferencesService is SSR-safe, performs no browser global access at module scope, exposes reduced-motion state and the shared responsive breakpoint where widths up to and including 920px are mobile and widths from 921px are desktop. Browser capabilities are accessed through an Angular-safe browser boundary such as DOCUMENT.defaultView or an equivalent platform-safe mechanism. The service remains usable when window and matchMedia are unavailable.
+  - **Test requirements:** Add focused unit coverage for SSR or missing browser globals, reduced motion enabled and disabled, a viewport at or below 920px and a viewport at or above 921px.
+  - **Parallelizable:** no
+  - **Notes:** Do not introduce a second unrelated breakpoint system. The 920/921 boundary must remain compatible with the current SiteShell responsive behavior.
+
+- [ ] T004 Add SSR-safe dynamic GSAP motion runtime
+  - **Milestone:** M001
+  - **Epic:** E001
+  - **Risk:** high
+  - **Implementation files:** `frontend/src/app/core/motion/motion-runtime.service.ts`
+  - **Test files:** `frontend/src/app/core/motion/motion-runtime.service.spec.ts`
+  - **Validation commands:** npm --prefix frontend run lint; npm --prefix frontend test; npm --prefix frontend run build:development; git --no-pager diff --check
+  - **Final PR review required:** yes
+  - **Goal:** Provide one browser-only runtime boundary for dynamically loading GSAP and ScrollTrigger so individual experience sections can use motion without making the Angular application root or SSR path depend on browser-only libraries.
+  - **Dependencies:** T002, T003
+  - **Acceptance criteria:** MotionRuntimeService dynamically imports GSAP and ScrollTrigger only in a browser environment, registers ScrollTrigger centrally and at most once, caches the runtime loading promise or equivalent runtime state, safely supports repeated callers and fails without crashing the application when the motion runtime cannot be loaded. No static GSAP or ScrollTrigger import is added to AppComponent, SiteShellComponent or another globally eager application entry point. No window or document access exists at module scope.
+  - **Test requirements:** Add unit coverage proving SSR does not initialize browser motion, repeated load requests reuse the same runtime initialization, ScrollTrigger registration is not duplicated and a runtime loading failure is handled as progressive enhancement rather than an application crash.
+  - **Parallelizable:** no
+  - **Notes:** Angular UI state remains Angular-owned. GSAP is a presentation layer only and must not become an application state manager.
+
+- [ ] T005 Add neutral workflow presentation model
+  - **Milestone:** M001
+  - **Epic:** E001
+  - **Risk:** low
+  - **Implementation files:** `frontend/src/app/shared/workflow/workflow.types.ts`
+  - **Test files:** none
+  - **Validation commands:** npm --prefix frontend run lint; npm --prefix frontend run build:development; git --no-pager diff --check
+  - **Final PR review required:** yes
+  - **Goal:** Define a small presentation-only workflow model that can be reused by the Hero, Process Story, Use Case Explorer and later Protolume sections without coupling the website to Agent Graph Engine execution semantics.
+  - **Dependencies:** T001
+  - **Acceptance criteria:** The shared workflow model defines node kinds covering source, ai, system, human, result and warning; node statuses covering idle, active, success, warning and error; a WorkflowNodeModel with id, label, kind, optional status and optional description; and a WorkflowConnection with from, to and optional label. Models are readonly where appropriate and contain presentation data only.
+  - **Test requirements:** TypeScript compilation must verify the model contracts. Runtime unit tests are not required for type-only declarations.
+  - **Parallelizable:** no
+  - **Notes:** Do not import Agent Graph Engine concepts or implement graph execution, traversal, scheduling, automatic layout or business-process orchestration in the frontend model.
+
+- [ ] T006 Add workflow node, status and badge primitives
+  - **Milestone:** M001
+  - **Epic:** E001
+  - **Risk:** medium
+  - **Implementation files:** `frontend/src/app/shared/workflow/workflow-node/`, `frontend/src/app/shared/workflow/workflow-status/`, `frontend/src/app/shared/workflow/workflow-badge/`
+  - **Test files:** `frontend/src/app/shared/workflow/workflow-node/`, `frontend/src/app/shared/workflow/workflow-status/`, `frontend/src/app/shared/workflow/workflow-badge/`
+  - **Validation commands:** npm --prefix frontend run lint; npm --prefix frontend test; npm --prefix frontend run build:development; git --no-pager diff --check
+  - **Final PR review required:** yes
+  - **Goal:** Create small standalone Angular primitives for rendering workflow nodes and their visual metadata consistently across future interactive Protolume sections.
+  - **Dependencies:** T005
+  - **Acceptance criteria:** Standalone reusable WorkflowNodeComponent, WorkflowStatusComponent and WorkflowBadgeComponent exist and consume the shared workflow presentation model or equivalent typed inputs. Node visuals support the declared workflow kinds and statuses without embedding page-specific marketing copy. Components are non-interactive by default, do not create accidental tab stops and can be marked decorative when used as visual-only workflow illustrations. Styling uses the semantic design tokens introduced by T001 and does not introduce permanent decorative pulse animations.
+  - **Test requirements:** Add focused component tests covering rendered labels, kinds and statuses, basic semantic or accessibility output and confirmation that the primitives do not become interactive controls by default.
+  - **Parallelizable:** no
+  - **Notes:** Keep the primitives intentionally small. Do not build Hero, Process Story, Use Case Explorer, cards, graph auto-layout or GSAP timelines in this task.
+
+- [ ] T007 Add reusable workflow connector primitive
+  - **Milestone:** M001
+  - **Epic:** E001
+  - **Risk:** medium
+  - **Implementation files:** `frontend/src/app/shared/workflow/workflow-connector/`
+  - **Test files:** `frontend/src/app/shared/workflow/workflow-connector/`
+  - **Validation commands:** npm --prefix frontend run lint; npm --prefix frontend test; npm --prefix frontend run build:development; git --no-pager diff --check
+  - **Final PR review required:** yes
+  - **Goal:** Add a simple reusable connector for visually linking workflow nodes without introducing a graph layout engine or page-specific animation logic.
+  - **Dependencies:** T006
+  - **Acceptance criteria:** WorkflowConnectorComponent supports simple horizontal and vertical presentation, supports at least idle, active and success visual states, and uses CSS and/or SVG rather than canvas or WebGL. Decorative connector output does not add focusable elements or unnecessary accessibility noise. Motion, if present at all, respects prefers-reduced-motion and is not required to understand the workflow.
+  - **Test requirements:** Add focused component tests for orientation, visual state inputs and non-interactive or decorative accessibility behavior.
+  - **Parallelizable:** no
+  - **Notes:** Do not implement automatic routing, node measurement, graph layout, Three.js, canvas rendering or scroll-driven animation here. ScrollTrigger integration belongs to later UX epics.
+
+- [ ] T008 Document and harden the UX foundation integration
+  - **Milestone:** M001
+  - **Epic:** E001
+  - **Risk:** high
+  - **Implementation files:** `frontend/src/app/core/motion/`, `frontend/src/app/shared/workflow/`, `frontend/src/styles.scss`, `frontend/package.json`, `frontend/package-lock.json`
+  - **Test files:** `frontend/src/app/core/motion/`, `frontend/src/app/shared/workflow/`
+  - **Validation commands:** npm --prefix frontend ci; npm --prefix frontend run format:check; npm --prefix frontend run lint; npm --prefix frontend test; npm --prefix frontend run build:development; git --no-pager diff --check
+  - **Final PR review required:** yes
+  - **Goal:** Finish UX-01 as a coherent reusable foundation by documenting the motion architecture, validating integration across all preceding tasks and fixing only foundation-level issues discovered by the final quality gate.
+  - **Dependencies:** T004, T007
+  - **Acceptance criteria:** A motion architecture README exists under frontend/src/app/core/motion and documents progressive enhancement, browser-only initialization, dynamic GSAP loading, centralized ScrollTrigger registration, the 920/921 responsive boundary, reduced-motion handling, section-local animation scope and cleanup using gsap.context or equivalent scoped cleanup. All UX-01 foundation code compiles and tests successfully. GSAP remains dynamically loaded rather than globally eager. Existing CSS compatibility aliases remain intact. No public Home redesign, SiteShell redesign, navigation change, marketing copy change, new public route, backend API change, bundle budget increase, Three.js dependency or Lenis dependency is introduced.
+  - **Test requirements:** Reinstall the frontend from the committed lockfile and run formatting, linting, the complete existing frontend test suite and an Angular development build over the accumulated UX-01 result.
+  - **Parallelizable:** no
+  - **Notes:** This task may correct integration problems only inside the declared UX-01 foundation files. Do not start UX-02 Global Shell or UX-03 Hero and Process Story work.
