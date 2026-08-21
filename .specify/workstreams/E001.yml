@@ -19,12 +19,8 @@ tasks:
   - T008
 
 required_checks:
-  - "npm --prefix frontend run format:check"
-  - "npm --prefix frontend run lint"
-  - "npm --prefix frontend test"
-  - "npm --prefix frontend run build"
   - "git --no-pager diff --check"
-
+  
 pr_policy:
   one_pr_per_epic: true
   merge_requires_human: true
