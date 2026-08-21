@@ -13,7 +13,7 @@ frontend/   Angular single-page marketing website
 backend/    FastAPI contact intake API
 docs/       Local development and deployment notes
 infra/      Future infrastructure notes only
-specs/      Spec Kit artifacts and API contract
+specs/      Implementation scopes and task definitions consumed by AgentGraph
 ```
 
 ## Local Development
