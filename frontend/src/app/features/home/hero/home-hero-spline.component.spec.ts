@@ -182,4 +182,104 @@ describe('HomeHeroSplineComponent', () => {
       jasmine.any(Function),
     );
   });
-});
+
+  it('handles full lifecycle: load-start, load-complete, unload, load-complete', async () => {
+    const loader = await configure();
+    useMediaQueries(true, false);
+    const fixture = TestBed.createComponent(HomeHeroSplineComponent);
+    const readiness: boolean[] = [];
+    fixture.componentInstance.sceneReadyChange.subscribe((ready) => readiness.push(ready));
+
+    // Initial state: not ready
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+    expect(readiness).toEqual([]);
+
+    const viewer = fixture.nativeElement.querySelector('spline-viewer') as HTMLElement | null;
+    expect(viewer).not.toBeNull();
+
+    // load-start: fallback shows but scene not ready
+    viewer?.dispatchEvent(new Event('load-start'));
+    fixture.detectChanges();
+    expect(fixture.componentInstance.isSceneReady()).toBe(false);
+    expect(readiness).toEqual([false]);
+
+    // load-complete: scene ready
+    viewer?.dispatchEvent(new CustomEvent('load-complete', { detail: { url: SCENE_URL } }));
+    fixture.detectChanges();
+    expect(fixture.componentInstance.isSceneReady()).toBe(true);
+    expect(fixture.nativeElement.querySelector('.spline-layer')).toHaveClass('is-ready');
+    expect(readiness).toEqual([false, true]);
+
+    // unload: fallback returns, scene not ready
+    viewer?.dispatchEvent(new Event('unload'));
+    fixture.detectChanges();
+    expect(fixture.componentInstance.isSceneReady()).toBe(false);
+    expect(fixture.nativeElement.querySelector('.spline-layer')).not.toHaveClass('is-ready');
+    expect(readiness).toEqual([false, true, false]);
+
+    // load-start again: fallback remains, not ready
+    viewer?.dispatchEvent(new Event('load-start'));
+    fixture.detectChanges();
+    expect(fixture.componentInstance.isSceneReady()).toBe(false);
+    expect(readiness).toEqual([false, true, false]); // no new readiness change
+
+    // load-complete again: scene ready
+    viewer?.dispatchEvent(new CustomEvent('load-complete', { detail: { url: SCENE_URL } }));
+    fixture.detectChanges();
+    expect(fixture.componentInstance.isSceneReady()).toBe(true);
+    expect(fixture.nativeElement.querySelector('.spline-layer')).toHaveClass('is-ready');
+    expect(readiness).toEqual([false, true, false, true]);
+  });
+
+  it('shows fallback on context-loss and allows reload', async () => {
+    const loader = await configure();
+    useMediaQueries(true, false);
+    const fixture = TestBed.createComponent(HomeHeroSplineComponent);
+    const readiness: boolean[] = [];
+    fixture.componentInstance.sceneReadyChange.subscribe((ready) => readiness.push(ready));
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const viewer = fixture.nativeElement.querySelector('spline-viewer') as HTMLElement | null;
+    expect(viewer).not.toBeNull();
+
+    // Load complete
+    viewer?.dispatchEvent(new CustomEvent('load-complete', { detail: { url: SCENE_URL } }));
+    fixture.detectChanges();
+    expect(fixture.componentInstance.isSceneReady()).toBe(true);
+
+    // Context loss
+    viewer?.dispatchEvent(new Event('context-loss'));
+    fixture.detectChanges();
+    expect(fixture.componentInstance.isSceneReady()).toBe(false);
+    expect(readiness).toEqual([true, false]);
+
+    // Can load again
+    viewer?.dispatchEvent(new CustomEvent('load-complete', { detail: { url: SCENE_URL } }));
+    fixture.detectChanges();
+    expect(fixture.componentInstance.isSceneReady()).toBe(true);
+    expect(readiness).toEqual([true, false, true]);
+  });
+
+  it('removes all viewer event listeners during cleanup', async () => {
+    const loader = await configure();
+    useMediaQueries(true, false);
+    const fixture = TestBed.createComponent(HomeHeroSplineComponent);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const viewer = fixture.nativeElement.querySelector('spline-viewer') as HTMLElement | null;
+    const removeEventListenerSpy = spyOn(viewer!, 'removeEventListener');
+
+    fixture.destroy();
+
+    expect(removeEventListenerSpy).toHaveBeenCalledWith('load-start', jasmine.any(Function));
+    expect(removeEventListenerSpy).toHaveBeenCalledWith('load-complete', jasmine.any(Function));
+    expect(removeEventListenerSpy).toHaveBeenCalledWith('unload', jasmine.any(Function));
+    expect(removeEventListenerSpy).toHaveBeenCalledWith('context-loss', jasmine.any(Function));
+  });

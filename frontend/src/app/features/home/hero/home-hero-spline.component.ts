@@ -169,21 +169,35 @@ export class HomeHeroSplineComponent implements AfterViewInit {
       return;
     }
     this.ngZone.runOutsideAngular(() => {
+      this.viewerElement?.addEventListener('load-start', this.handleSceneLoadStart);
       this.viewerElement?.addEventListener('load-complete', this.handleSceneReady);
+      this.viewerElement?.addEventListener('unload', this.handleSceneUnload);
       this.viewerElement?.addEventListener('context-loss', this.handleSceneUnavailable);
     });
   }
 
   private detachViewerListeners(): void {
+    this.viewerElement?.removeEventListener('load-start', this.handleSceneLoadStart);
     this.viewerElement?.removeEventListener('load-complete', this.handleSceneReady);
+    this.viewerElement?.removeEventListener('unload', this.handleSceneUnload);
     this.viewerElement?.removeEventListener('context-loss', this.handleSceneUnavailable);
   }
+
+  private readonly handleSceneLoadStart = (): void => {
+    if (this.lastEligible) {
+      this.updateSceneState(true, false);
+    }
+  };
 
   private readonly handleSceneReady = (event: Event): void => {
     const loadedUrl = (event as CustomEvent<{ url?: string }>).detail?.url;
     if (loadedUrl === this.sceneUrl && this.lastEligible) {
       this.updateSceneState(true, true);
     }
+  };
+
+  private readonly handleSceneUnload = (): void => {
+    this.updateSceneState(this.lastEligible, false);
   };
 
   private readonly handleSceneUnavailable = (): void => {
