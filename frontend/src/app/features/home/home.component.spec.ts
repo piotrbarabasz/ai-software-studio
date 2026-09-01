@@ -108,9 +108,17 @@ describe('HomeComponent', () => {
     expect(element.querySelector('.use-cases .section-lead')?.textContent?.trim()).toBe(
       'Zaczynamy od sposobu pracy zespołu, a dopiero później dobieramy AI, integracje i pozostałe technologie.',
     );
-    const useCaseCards = Array.from(element.querySelectorAll<HTMLElement>('.use-case-card'));
+    const useCaseCards = Array.from(
+      element.querySelectorAll<HTMLElement>('.automation-bento-card'),
+    );
     expect(useCaseCards).toHaveSize(5);
-    expect(element.querySelectorAll('.use-case-card h3')).toHaveSize(5);
+    expect(element.querySelector('app-automation-bento')).not.toBeNull();
+    expect(element.querySelector('app-solution-carousel')).toBeNull();
+    expect(element.querySelector('#home-processes')).not.toBeNull();
+    expect(element.querySelector('.hero-scroll-link')?.getAttribute('href')).toBe(
+      '#home-processes',
+    );
+    expect(element.querySelectorAll('.automation-bento-card h3')).toHaveSize(5);
     expect(useCaseCards.map((card) => card.querySelector('h3')?.textContent?.trim())).toEqual([
       'Obsługa powtarzalnych pytań',
       'Kwalifikacja rozmów i zgłoszeń',
@@ -120,14 +128,7 @@ describe('HomeComponent', () => {
     ]);
     expect(
       useCaseCards.map((card) =>
-        Array.from(card.querySelectorAll<HTMLElement>('.use-case-label'), (label) =>
-          label.textContent?.trim(),
-        ),
-      ),
-    ).toEqual(Array.from({ length: 5 }, () => ['Problem', 'Rezultat']));
-    expect(
-      useCaseCards.map((card) =>
-        Array.from(card.querySelectorAll<HTMLElement>('.use-case-text'), (text) =>
+        Array.from(card.querySelectorAll<HTMLElement>('.bento-problem, .bento-outcome'), (text) =>
           text.textContent?.trim(),
         ),
       ),
@@ -154,13 +155,14 @@ describe('HomeComponent', () => {
       ],
     ]);
     expect(
-      Array.from(element.querySelectorAll<HTMLElement>('.use-case-card a'), (link) =>
+      Array.from(element.querySelectorAll<HTMLElement>('.automation-bento-card a'), (link) =>
         link.textContent?.trim(),
       ),
     ).toEqual(Array.from({ length: 5 }, () => 'Zobacz proces'));
-    expect(element.querySelectorAll('app-use-case-visual')).toHaveSize(5);
-    expect(element.querySelectorAll('.use-case-card [aria-hidden="true"]')).toHaveSize(5);
-    expect(element.querySelectorAll('.use-case-card a')).toHaveSize(5);
+    expect(element.querySelectorAll('app-use-case-visual')).toHaveSize(0);
+    expect(element.querySelectorAll('app-automation-bento-visual')).toHaveSize(5);
+    expect(element.querySelectorAll('.automation-bento-card [aria-hidden="true"]')).toHaveSize(5);
+    expect(element.querySelectorAll('.automation-bento-card a')).toHaveSize(5);
     expect(element.querySelectorAll('[data-visual-kind="knowledge-assistant"]')).toHaveSize(1);
     expect(element.querySelectorAll('[data-visual-kind="message-workflow"]')).toHaveSize(1);
     expect(element.querySelectorAll('[data-visual-kind="process-panel"]')).toHaveSize(1);
@@ -168,7 +170,7 @@ describe('HomeComponent', () => {
     expect(element.querySelectorAll('[data-visual-kind="channel-integrations"]')).toHaveSize(1);
     expect(element.querySelectorAll('.use-case-summary')).toHaveSize(0);
     expect(
-      Array.from(element.querySelectorAll<HTMLAnchorElement>('.use-case-card a'), (link) =>
+      Array.from(element.querySelectorAll<HTMLAnchorElement>('.automation-bento-card a'), (link) =>
         link.getAttribute('href'),
       ),
     ).toEqual([
@@ -194,9 +196,10 @@ describe('HomeComponent', () => {
 
     expect(hero?.hasAttribute('appReveal')).toBeFalse();
     expect(hero?.classList).not.toContain('reveal');
-    expect(revealElements).toHaveSize(6);
+    expect(revealElements).toHaveSize(7);
     expect(element.querySelector('.trust-strip ul[appReveal].motion-stagger')).not.toBeNull();
     expect(element.querySelector('.use-cases .section-heading[appReveal]')).not.toBeNull();
+    expect(element.querySelector('.automation-bento[appReveal].motion-stagger')).not.toBeNull();
     expect(element.querySelector('.evidence-teaser .section-heading[appReveal]')).not.toBeNull();
     expect(element.querySelector('.seven-day-demo .section-heading[appReveal]')).not.toBeNull();
     expect(element.querySelector('.owner-card[appReveal]')).not.toBeNull();
