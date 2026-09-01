@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClient, withXhr } from '@angular/common/http';
-import { PLATFORM_ID } from '@angular/core';
+import { NgZone, PLATFORM_ID } from '@angular/core';
 import { provideRouter, Router } from '@angular/router';
 
 import { routes } from '../../app.routes';
@@ -156,15 +156,23 @@ describe('SiteShellComponent', () => {
     fixture.detectChanges();
     const toggle = fixture.nativeElement.querySelector('.menu-toggle') as HTMLButtonElement;
     const navigation = fixture.nativeElement.querySelector('#primary-navigation') as HTMLElement;
+    const main = fixture.nativeElement.querySelector('.site-main') as HTMLElement;
+    const footer = fixture.nativeElement.querySelector('.site-footer') as HTMLElement;
     expect(toggle.getAttribute('aria-controls')).toBe('primary-navigation');
     expect(toggle.hasAttribute('aria-haspopup')).toBeFalse();
     expect(toggle.textContent).toContain('Menu');
     expect(navigation.hasAttribute('inert')).toBeTrue();
+    expect(main.hasAttribute('inert')).toBeFalse();
+    expect(footer.hasAttribute('inert')).toBeFalse();
+    expect(document.body.classList).not.toContain('is-navigation-locked');
     toggle.click();
     fixture.detectChanges();
     await fixture.whenStable();
     expect(toggle.getAttribute('aria-expanded')).toBe('true');
     expect(navigation.hasAttribute('inert')).toBeFalse();
+    expect(main.hasAttribute('inert')).toBeTrue();
+    expect(footer.hasAttribute('inert')).toBeTrue();
+    expect(document.body.classList).toContain('is-navigation-locked');
     expect(fixture.nativeElement.ownerDocument.activeElement).toBe(
       fixture.nativeElement.querySelector('.nav-links a'),
     );
@@ -173,6 +181,9 @@ describe('SiteShellComponent', () => {
     );
     fixture.detectChanges();
     expect(toggle.getAttribute('aria-expanded')).toBe('false');
+    expect(main.hasAttribute('inert')).toBeFalse();
+    expect(footer.hasAttribute('inert')).toBeFalse();
+    expect(document.body.classList).not.toContain('is-navigation-locked');
     expect(fixture.nativeElement.ownerDocument.activeElement).toBe(toggle);
   });
 
@@ -189,10 +200,10 @@ describe('SiteShellComponent', () => {
     fixture.detectChanges();
 
     const cta = fixture.nativeElement.querySelector('.primary-cta') as HTMLAnchorElement;
-    expect(getComputedStyle(cta).minHeight).toBe('44px');
+    expect(Number.parseFloat(getComputedStyle(cta).minHeight)).toBeGreaterThanOrEqual(44);
   });
 
-  it('does not trap Tab focus inside the open mobile navigation panel', async () => {
+  it('keeps background content inert while the fullscreen menu is open and cleans up on destroy', async () => {
     await TestBed.configureTestingModule({
       imports: [SiteShellComponent],
       providers: [
@@ -202,20 +213,25 @@ describe('SiteShellComponent', () => {
       ],
     }).compileComponents();
     const fixture = TestBed.createComponent(SiteShellComponent);
+    fixture.detectChanges();
     fixture.componentInstance.isNavigationEnhanced = true;
     fixture.componentInstance.isMobileViewport = true;
-    fixture.componentInstance.isMobileNavigationOpen = true;
+    const toggle = fixture.nativeElement.querySelector('.menu-toggle') as HTMLButtonElement;
+    const main = fixture.nativeElement.querySelector('.site-main') as HTMLElement;
+    const footer = fixture.nativeElement.querySelector('.site-footer') as HTMLElement;
+
+    toggle.click();
     fixture.detectChanges();
+    await fixture.whenStable();
 
-    const event = new KeyboardEvent('keydown', {
-      key: 'Tab',
-      bubbles: true,
-      cancelable: true,
-    });
-    fixture.nativeElement.ownerDocument.dispatchEvent(event);
+    expect(main.hasAttribute('inert')).toBeTrue();
+    expect(footer.hasAttribute('inert')).toBeTrue();
+    expect(document.body.classList).toContain('is-navigation-locked');
+    main.focus();
+    expect(document.activeElement).not.toBe(main);
 
-    expect(event.defaultPrevented).toBeFalse();
-    expect(fixture.componentInstance.isMobileNavigationOpen).toBeTrue();
+    fixture.destroy();
+    expect(document.body.classList).not.toContain('is-navigation-locked');
   });
 
   it('closes the mobile menu when a navigation link is activated', async () => {
@@ -228,16 +244,22 @@ describe('SiteShellComponent', () => {
       ],
     }).compileComponents();
     const fixture = TestBed.createComponent(SiteShellComponent);
+    fixture.detectChanges();
     fixture.componentInstance.isNavigationEnhanced = true;
     fixture.componentInstance.isMobileViewport = true;
-    fixture.componentInstance.isMobileNavigationOpen = true;
+    const toggle = fixture.nativeElement.querySelector('.menu-toggle') as HTMLButtonElement;
+
+    toggle.click();
     fixture.detectChanges();
+    await fixture.whenStable();
+    expect(document.body.classList).toContain('is-navigation-locked');
 
     const firstLink = fixture.nativeElement.querySelector('.nav-links a') as HTMLAnchorElement;
     firstLink.click();
     fixture.detectChanges();
 
     expect(fixture.componentInstance.isMobileNavigationOpen).toBeFalse();
+    expect(document.body.classList).not.toContain('is-navigation-locked');
   });
 
   it('keeps desktop navigation expanded and closes a mobile menu at the desktop breakpoint', async () => {
@@ -253,7 +275,8 @@ describe('SiteShellComponent', () => {
     fixture.detectChanges();
     fixture.componentInstance.isNavigationEnhanced = true;
     fixture.componentInstance.isMobileViewport = true;
-    fixture.componentInstance.isMobileNavigationOpen = true;
+    fixture.componentInstance.toggleNavigation();
+    expect(document.body.classList).toContain('is-navigation-locked');
 
     spyOn(window, 'matchMedia').and.returnValue({ matches: false } as MediaQueryList);
     fixture.componentInstance.updateViewportState();
@@ -265,6 +288,54 @@ describe('SiteShellComponent', () => {
     expect(fixture.componentInstance.isMobileNavigationOpen).toBeFalse();
     expect(toggle.getAttribute('aria-expanded')).toBeNull();
     expect(navigation.hasAttribute('inert')).toBeFalse();
+    expect(document.body.classList).not.toContain('is-navigation-locked');
+  });
+
+  it('uses a passive scroll listener outside Angular and enters Angular only across the threshold', async () => {
+    await TestBed.configureTestingModule({
+      imports: [SiteShellComponent],
+      providers: [
+        provideRouter(routes),
+        provideHttpClient(withXhr()),
+        { provide: API_CONFIG, useValue: { apiUrl: 'http://api.test' } },
+      ],
+    }).compileComponents();
+    const fixture = TestBed.createComponent(SiteShellComponent);
+    const zone = TestBed.inject(NgZone);
+    let scrollY = 0;
+    spyOnProperty(window, 'scrollY', 'get').and.callFake(() => scrollY);
+    const outsideAngular = spyOn(zone, 'runOutsideAngular').and.callThrough();
+    const addEventListener = spyOn(window, 'addEventListener').and.callThrough();
+    const removeEventListener = spyOn(window, 'removeEventListener').and.callThrough();
+
+    fixture.detectChanges();
+
+    const scrollRegistration = addEventListener.calls
+      .allArgs()
+      .find(([eventName]) => eventName === 'scroll');
+    expect(outsideAngular).toHaveBeenCalled();
+    expect(scrollRegistration?.[2]).toEqual(jasmine.objectContaining({ passive: true }));
+
+    const enterAngular = spyOn(zone, 'run').and.callThrough();
+    const initialAngularEntries = enterAngular.calls.count();
+    scrollY = 13;
+    window.dispatchEvent(new Event('scroll'));
+    expect(fixture.componentInstance.isHeaderScrolled).toBeTrue();
+    const entriesAfterCrossingThreshold = enterAngular.calls.count();
+    expect(entriesAfterCrossingThreshold).toBeGreaterThan(initialAngularEntries);
+
+    scrollY = 24;
+    window.dispatchEvent(new Event('scroll'));
+    expect(enterAngular.calls.count()).toBe(entriesAfterCrossingThreshold);
+
+    scrollY = 12;
+    window.dispatchEvent(new Event('scroll'));
+    expect(fixture.componentInstance.isHeaderScrolled).toBeFalse();
+    expect(enterAngular.calls.count()).toBeGreaterThan(entriesAfterCrossingThreshold);
+
+    const scrollListener = scrollRegistration?.[1] as EventListenerOrEventListenerObject;
+    fixture.destroy();
+    expect(removeEventListener).toHaveBeenCalledWith('scroll', scrollListener);
   });
 
   it('does not introduce horizontal navigation overflow at 320px or 360px', async () => {

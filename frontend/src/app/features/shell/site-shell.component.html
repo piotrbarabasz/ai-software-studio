@@ -1,98 +1,117 @@
 <a class="skip-link" href="#main-content" (click)="focusMainContent($event)">Przejdź do treści</a>
 
-<header class="site-header" [class.is-enhanced]="isNavigationEnhanced">
-  <app-protolume-logo
-    class="brand"
-    variant="horizontal"
-    theme="dark"
-    [linkToHome]="true"
-    accessibleLabel="Protolume — strona główna"
-    (click)="closeNavigation()"
-  />
-  <button
-    #menuToggle
-    type="button"
-    class="menu-toggle"
-    aria-controls="primary-navigation"
-    [attr.aria-label]="isMobileNavigationOpen ? 'Zamknij menu główne' : 'Otwórz menu główne'"
-    [attr.aria-expanded]="isNavigationEnhanced && isMobileViewport ? isMobileNavigationOpen : null"
-    (click)="toggleNavigation()"
-  >
-    <span aria-hidden="true">{{ isMobileNavigationOpen ? '×' : '☰' }}</span>
-    <span>{{ isMobileNavigationOpen ? 'Zamknij menu' : 'Menu' }}</span>
-  </button>
-  <nav
-    #primaryNavigation
-    id="primary-navigation"
-    class="primary-nav"
-    [class.is-open]="isMobileNavigationOpen"
-    [attr.inert]="isNavigationEnhanced && isMobileViewport && !isMobileNavigationOpen ? '' : null"
-    aria-label="Główna nawigacja"
-  >
-    <div class="nav-links">
-      @for (item of navigation; track item) {
-        <a
-          [routerLink]="item.path"
-          routerLinkActive="is-active"
-          [routerLinkActiveOptions]="{ exact: true }"
-          #routeLink="routerLinkActive"
-          [attr.aria-current]="routeLink.isActive ? 'page' : null"
-          (click)="closeNavigation()"
-          >{{ item.label }}</a
-        >
-      }
-    </div>
-    <a
-      class="primary-cta"
-      routerLink="/kontakt"
-      [queryParams]="{ projectType: 'mvp_prototype' }"
+<header
+  class="site-header"
+  [class.is-enhanced]="isNavigationEnhanced"
+  [class.is-scrolled]="isHeaderScrolled"
+  [class.is-menu-open]="isMobileNavigationOpen"
+>
+  <div class="header-inner">
+    <app-protolume-logo
+      class="brand"
+      variant="horizontal"
+      theme="dark"
+      [linkToHome]="true"
+      accessibleLabel="Protolume — strona główna"
       (click)="closeNavigation()"
-      >Opisz proces</a
+    />
+    <button
+      #menuToggle
+      type="button"
+      class="menu-toggle"
+      aria-controls="primary-navigation"
+      [attr.aria-label]="isMobileNavigationOpen ? 'Zamknij menu główne' : 'Otwórz menu główne'"
+      [attr.aria-expanded]="
+        isNavigationEnhanced && isMobileViewport ? isMobileNavigationOpen : null
+      "
+      (click)="toggleNavigation()"
     >
-  </nav>
+      <span class="menu-icon" aria-hidden="true"></span>
+      <span class="menu-label">{{ isMobileNavigationOpen ? 'Zamknij menu' : 'Menu' }}</span>
+    </button>
+    <nav
+      #primaryNavigation
+      id="primary-navigation"
+      class="primary-nav"
+      [class.is-open]="isMobileNavigationOpen"
+      [attr.inert]="isNavigationEnhanced && isMobileViewport && !isMobileNavigationOpen ? '' : null"
+      aria-label="Główna nawigacja"
+    >
+      <div class="nav-links">
+        @for (item of navigation; track item) {
+          <a
+            [routerLink]="item.path"
+            routerLinkActive="is-active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            #routeLink="routerLinkActive"
+            [attr.aria-current]="routeLink.isActive ? 'page' : null"
+            (click)="closeNavigation()"
+            >{{ item.label }}</a
+          >
+        }
+      </div>
+      <a
+        class="primary-cta"
+        routerLink="/kontakt"
+        [queryParams]="{ projectType: 'mvp_prototype' }"
+        (click)="closeNavigation()"
+        >Opisz proces</a
+      >
+    </nav>
+  </div>
 </header>
 
-<main #mainContent id="main-content" class="site-main" tabindex="-1">
+<main
+  #mainContent
+  id="main-content"
+  class="site-main"
+  tabindex="-1"
+  [attr.inert]="isFullscreenNavigationOpen ? '' : null"
+>
   <router-outlet />
 </main>
 
-<footer class="site-footer">
-  <div class="footer-column footer-brand">
-    <app-protolume-logo variant="horizontal" theme="light" [linkToHome]="true" />
-    <p>{{ footer.summary }}</p>
-    @if (footer.contactEmail) {
-      <a class="footer-email" [href]="'mailto:' + footer.contactEmail">{{ footer.contactEmail }}</a>
-    }
-  </div>
-  <div class="footer-column">
-    <h2>Oferta</h2>
-    @for (item of footer.offerLinks; track item.path) {
-      <a [routerLink]="item.path" (click)="closeNavigation()">{{ item.label }}</a>
-    }
-  </div>
-  <div class="footer-column">
-    <h2>O Protolume</h2>
-    @for (item of footer.studioLinks; track item.label) {
-      @if ('url' in item && 'accessibleName' in item) {
-        <a
-          [href]="item.url"
-          target="_blank"
-          rel="noopener noreferrer"
-          [attr.aria-label]="item.accessibleName"
-          >{{ item.label }}</a
-        >
-      } @else {
+<footer class="site-footer" [attr.inert]="isFullscreenNavigationOpen ? '' : null">
+  <div class="footer-inner">
+    <div class="footer-column footer-brand">
+      <app-protolume-logo variant="horizontal" theme="light" [linkToHome]="true" />
+      <p>{{ footer.summary }}</p>
+      @if (footer.contactEmail) {
+        <a class="footer-email" [href]="'mailto:' + footer.contactEmail">{{
+          footer.contactEmail
+        }}</a>
+      }
+    </div>
+    <div class="footer-column">
+      <h2>Oferta</h2>
+      @for (item of footer.offerLinks; track item.path) {
         <a [routerLink]="item.path" (click)="closeNavigation()">{{ item.label }}</a>
       }
-    }
-  </div>
-  <div class="footer-column">
-    <h2>Informacje</h2>
-    @for (item of footer.informationLinks; track item.path) {
-      <a [routerLink]="item.path" (click)="closeNavigation()">{{ item.label }}</a>
-    }
-  </div>
-  <div class="footer-bottom">
-    <p>© {{ currentYear }} {{ brand.name }} — {{ footer.copyright }}</p>
+    </div>
+    <div class="footer-column">
+      <h2>O Protolume</h2>
+      @for (item of footer.studioLinks; track item.label) {
+        @if ('url' in item && 'accessibleName' in item) {
+          <a
+            [href]="item.url"
+            target="_blank"
+            rel="noopener noreferrer"
+            [attr.aria-label]="item.accessibleName"
+            >{{ item.label }}</a
+          >
+        } @else {
+          <a [routerLink]="item.path" (click)="closeNavigation()">{{ item.label }}</a>
+        }
+      }
+    </div>
+    <div class="footer-column">
+      <h2>Informacje</h2>
+      @for (item of footer.informationLinks; track item.path) {
+        <a [routerLink]="item.path" (click)="closeNavigation()">{{ item.label }}</a>
+      }
+    </div>
+    <div class="footer-bottom">
+      <p>© {{ currentYear }} {{ brand.name }} — {{ footer.copyright }}</p>
+    </div>
   </div>
 </footer>

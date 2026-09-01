@@ -30,9 +30,9 @@
 .hero h1 {
   max-width: 17ch;
   margin: 0;
-  font-size: clamp(2.25rem, 4.2vw, 4rem);
+  font-size: var(--font-size-display);
   line-height: 0.98;
-  overflow-wrap: anywhere;
+  letter-spacing: -0.045em;
 }
 .hero-process {
   display: grid;
@@ -160,7 +160,8 @@
   align-items: center;
   justify-content: center;
   width: fit-content;
-  border-radius: 999px;
+  min-height: 46px;
+  border-radius: var(--radius-pill);
   font-weight: 700;
   text-align: center;
   text-decoration: none;
@@ -188,7 +189,7 @@
 .closing-cta-panel h2 {
   max-width: 19ch;
   margin: 0;
-  font-size: clamp(2rem, 4vw, 3.6rem);
+  font-size: var(--font-size-h2);
   line-height: 1.02;
 }
 .evidence-teaser p,
@@ -232,7 +233,7 @@
   width: fit-content;
   margin: 0;
   border: 1px solid var(--border-on-dark);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   color: var(--color-accent-soft) !important;
   font-size: 0.8rem;
   font-weight: 800;
@@ -265,7 +266,7 @@
   min-width: 0;
   padding: clamp(1.1rem, 2vw, 1.5rem);
   border: 1px solid var(--brand-200);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   background: var(--color-surface);
 }
 .seven-day-demo-grid h3 {
@@ -337,7 +338,7 @@
   .trust-strip ul,
   .evidence-teaser-grid,
   .seven-day-demo-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
   .hero-actions,
   .hero-actions a,
@@ -358,7 +359,7 @@
   .seven-day-demo-panel,
   .owner-card-panel,
   .closing-cta-panel {
-    border-radius: 14px;
+    border-radius: var(--radius-card);
   }
 
   .trust-strip li + li {
@@ -370,7 +371,7 @@
 @media (min-width: 761px) and (max-width: 980px) {
   .hero,
   .seven-day-demo-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .trust-strip ul {
@@ -390,9 +391,5 @@
 @media (max-width: 360px) {
   .hero-copy {
     padding: 1.25rem;
-  }
-
-  .hero h1 {
-    font-size: clamp(1.8rem, 9vw, 2rem);
   }
 }
