@@ -13,6 +13,7 @@ import { RevealOnScrollDirective } from '../../shared/reveal/reveal-on-scroll.di
 import { AutomationBentoComponent } from './automation-bento/automation-bento.component';
 import { BusinessFlowSectionComponent } from './business-flow-section.component';
 import { HomeHeroVisualComponent } from './hero/home-hero-visual.component';
+import { SevenDayDemoComponent } from './seven-day-demo/seven-day-demo.component';
 
 @Component({
   selector: 'app-home',
@@ -22,6 +23,7 @@ import { HomeHeroVisualComponent } from './hero/home-hero-visual.component';
     BusinessFlowSectionComponent,
     HomeHeroVisualComponent,
     RevealOnScrollDirective,
+    SevenDayDemoComponent,
   ],
   templateUrl: './home.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,

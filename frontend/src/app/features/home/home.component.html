@@ -98,41 +98,7 @@
     <p class="evidence-note" role="note">{{ home.evidenceTeaser.note }}</p>
   </section>
 
-  <section
-    class="seven-day-demo section-shell"
-    aria-labelledby="seven-day-demo-title"
-    data-home-section="demo-scope"
-  >
-    <div class="section-panel seven-day-demo-panel">
-      <div appReveal class="section-heading reveal--subtle">
-        <p class="eyebrow">{{ home.sevenDayDemo.eyebrow }}</p>
-        <h2 id="seven-day-demo-title">{{ home.sevenDayDemo.title }}</h2>
-      </div>
-      <div class="seven-day-demo-grid">
-        <article>
-          <h3>{{ home.sevenDayDemo.deliverablesTitle }}</h3>
-          <ul class="scope-list">
-            @for (item of home.sevenDayDemo.deliverables; track item) {
-              <li>{{ item }}</li>
-            }
-          </ul>
-        </article>
-        <article>
-          <h3>{{ home.sevenDayDemo.inputsTitle }}</h3>
-          <ul class="scope-list">
-            @for (item of home.sevenDayDemo.inputs; track item) {
-              <li>{{ item }}</li>
-            }
-          </ul>
-        </article>
-        <article class="pricing-card">
-          <h3>{{ home.sevenDayDemo.pricingTitle }}</h3>
-          <p>{{ home.sevenDayDemo.pricingDescription }}</p>
-          <p class="pricing-note">{{ home.sevenDayDemo.pricingNote }}</p>
-        </article>
-      </div>
-    </div>
-  </section>
+  <app-seven-day-demo data-home-section="demo-scope" [demo]="home.sevenDayDemo" />
 
   <section
     appReveal

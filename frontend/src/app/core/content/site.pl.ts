@@ -671,25 +671,61 @@ export const siteContent = {
     },
     sevenDayDemo: {
       eyebrow: 'Demo w 7 dni',
-      title: 'Co otrzymujesz po 7 dniach',
-      deliverablesTitle: 'Co otrzymujesz',
+      title: 'Od procesu do działającego demo w 7 dni',
+      lead: 'Zanim inwestujesz w pełne wdrożenie, sprawdzamy jeden konkretny proces na działającym scenariuszu.',
+      timeline: [
+        {
+          id: 'process-scope',
+          period: 'Dzień 1',
+          title: 'Zrozumienie procesu',
+          description:
+            'Ustalamy jeden proces, dane wejściowe, oczekiwany rezultat i granice pierwszego demo.',
+        },
+        {
+          id: 'demo-build',
+          period: 'Dni 2–3',
+          title: 'Budowa demo',
+          description:
+            'Budujemy działający przepływ dla wybranego scenariusza i łączymy potrzebne elementy.',
+        },
+        {
+          id: 'scenario-test',
+          period: 'Dni 4–5',
+          title: 'Test i dopracowanie',
+          description:
+            'Sprawdzamy przykładowe przypadki, błędy, brakujące dane i miejsca wymagające kontroli człowieka.',
+        },
+        {
+          id: 'validation-recommendation',
+          period: 'Dni 6–7',
+          title: 'Walidacja i rekomendacja',
+          description:
+            'Porządkujemy wyniki, ryzyka i wymagane integracje oraz rekomendujemy kolejny krok.',
+        },
+      ],
+      deliverablesTitle: 'Po 7 dniach',
       deliverables: [
         'Opis wybranego procesu i jego granic',
         'Działające demo jednego scenariusza',
         'Lista ryzyk, danych i wymaganych integracji',
         'Rekomendacja kolejnego kroku',
       ],
-      inputsTitle: 'Co jest potrzebne od klienta',
+      inputsTitle: 'Czego potrzebujemy od Ciebie',
       inputs: [
         'Krótki opis obecnej pracy',
         'Kilka przykładowych wiadomości, dokumentów lub pytań',
         'Kontakt do osoby, która zna proces',
         'Informacja o używanych narzędziach',
       ],
-      pricingTitle: 'Jak wygląda wycena',
+      pricingTitle: 'Stały zakres przed startem',
       pricingDescription:
         'Po krótkiej rozmowie otrzymujesz stały zakres i wycenę pierwszego etapu przed rozpoczęciem prac.',
       pricingNote: 'Kwota zależy od danych, liczby integracji i sposobu prezentacji demo.',
+      cta: {
+        label: 'Pokaż mi proces',
+        path: '/kontakt',
+        queryParams: { projectType: 'mvp_prototype' },
+      },
     },
   },
   demo: {
