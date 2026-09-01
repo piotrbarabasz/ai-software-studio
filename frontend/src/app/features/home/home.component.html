@@ -32,7 +32,7 @@
   >
     <div class="section-panel trust-strip-panel">
       <h2 id="trust-strip-title" class="visually-hidden">Dlaczego warto zacząć od sprawdzenia</h2>
-      <ul>
+      <ul appReveal class="motion-stagger">
         @for (item of home.trustStrip; track item.id) {
           <li>
             <span class="trust-icon" aria-hidden="true"></span>
@@ -50,7 +50,7 @@
     data-home-section="processes"
   >
     <div class="section-panel use-cases-panel">
-      <div class="section-heading">
+      <div appReveal class="section-heading reveal--subtle">
         <p class="eyebrow">{{ home.useCasesHeading.eyebrow }}</p>
         <h2 id="use-cases-title">{{ home.useCasesHeading.title }}</h2>
         <p class="section-lead">{{ home.useCasesHeading.lead }}</p>
@@ -66,7 +66,7 @@
     aria-labelledby="evidence-teaser-title"
     data-home-section="evidence"
   >
-    <div class="section-heading">
+    <div appReveal class="section-heading reveal--subtle">
       <p class="eyebrow">{{ home.evidenceTeaser.eyebrow }}</p>
       <h2 id="evidence-teaser-title">{{ home.evidenceTeaser.title }}</h2>
       <p class="section-lead">{{ home.evidenceTeaser.lead }}</p>
@@ -104,7 +104,7 @@
     data-home-section="demo-scope"
   >
     <div class="section-panel seven-day-demo-panel">
-      <div class="section-heading">
+      <div appReveal class="section-heading reveal--subtle">
         <p class="eyebrow">{{ home.sevenDayDemo.eyebrow }}</p>
         <h2 id="seven-day-demo-title">{{ home.sevenDayDemo.title }}</h2>
       </div>
@@ -134,7 +134,12 @@
     </div>
   </section>
 
-  <section class="owner-card section-shell" aria-labelledby="owner-title" data-home-section="owner">
+  <section
+    appReveal
+    class="owner-card section-shell reveal--scale"
+    aria-labelledby="owner-title"
+    data-home-section="owner"
+  >
     <div class="section-panel owner-card-panel">
       <div>
         <p class="eyebrow">Osoba odpowiedzialna</p>
@@ -154,6 +159,7 @@
   </section>
 
   <section
+    appReveal
     class="closing-cta section-shell"
     aria-labelledby="closing-cta-title"
     data-home-section="closing-cta"

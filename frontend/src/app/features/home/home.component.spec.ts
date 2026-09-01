@@ -187,6 +187,23 @@ describe('HomeComponent', () => {
     ).not.toBeNull();
   });
 
+  it('keeps the hero immediate and opts only selected lower content into motion', () => {
+    const element = createFixture();
+    const hero = element.querySelector('.hero');
+    const revealElements = Array.from(element.querySelectorAll<HTMLElement>('[appReveal]'));
+
+    expect(hero?.hasAttribute('appReveal')).toBeFalse();
+    expect(hero?.classList).not.toContain('reveal');
+    expect(revealElements).toHaveSize(6);
+    expect(element.querySelector('.trust-strip ul[appReveal].motion-stagger')).not.toBeNull();
+    expect(element.querySelector('.use-cases .section-heading[appReveal]')).not.toBeNull();
+    expect(element.querySelector('.evidence-teaser .section-heading[appReveal]')).not.toBeNull();
+    expect(element.querySelector('.seven-day-demo .section-heading[appReveal]')).not.toBeNull();
+    expect(element.querySelector('.owner-card[appReveal]')).not.toBeNull();
+    expect(element.querySelector('.closing-cta[appReveal]')).not.toBeNull();
+    expect(element.querySelector('header [appReveal], footer [appReveal]')).toBeNull();
+  });
+
   it('shows two verifiable work-evidence cards and one shared boundary note', () => {
     const element = createFixture();
     const cards = Array.from(element.querySelectorAll<HTMLElement>('.evidence-teaser-card'));

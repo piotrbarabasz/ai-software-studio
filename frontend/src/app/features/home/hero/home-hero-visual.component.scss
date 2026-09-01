@@ -70,34 +70,26 @@
   display: none;
 }
 
-.connection,
-.connection-signal {
-  fill: none;
-  vector-effect: non-scaling-stroke;
-}
-
 .connection {
-  stroke: color-mix(in srgb, var(--brand-400) 62%, var(--border-subtle));
-  stroke-width: 1.25;
+  --motion-flow-line-color: color-mix(in srgb, var(--brand-400) 62%, var(--border-subtle));
 }
 
 .connection-signal {
-  stroke: var(--brand-600);
-  stroke-width: 3.5;
-  stroke-linecap: round;
-  stroke-dasharray: 0.035 0.965;
-  animation: signal-flow 5.8s linear infinite;
+  --motion-flow-signal-color: var(--brand-600);
+  --motion-flow-dash: 0.035 0.965;
+  --motion-flow-duration: 5.8s;
+
   filter: drop-shadow(0 0 5px rgba(104, 71, 245, 0.65));
 }
 
 .signal-two {
   animation-delay: -2s;
-  animation-duration: 6.6s;
+  --motion-flow-duration: 6.6s;
 }
 
 .signal-three {
   animation-delay: -3.7s;
-  animation-duration: 7.2s;
+  --motion-flow-duration: 7.2s;
 }
 
 .system-node {
@@ -272,15 +264,6 @@
   letter-spacing: 0.14em;
 }
 
-@keyframes signal-flow {
-  from {
-    stroke-dashoffset: 1;
-  }
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
 @keyframes core-rotate {
   to {
     transform: rotate(1turn);
@@ -335,7 +318,7 @@
   }
 
   .connection-signal {
-    animation-duration: 8s;
+    --motion-flow-duration: 8s;
   }
 
   .system-node small {
