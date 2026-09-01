@@ -11,6 +11,7 @@ import type {
 } from '../../core/content/site-content.types';
 import { BusinessFlowSectionComponent } from './business-flow-section.component';
 import { HomeHeroVisualComponent } from './hero/home-hero-visual.component';
+import { RevealOnScrollDirective } from '../../shared/reveal/reveal-on-scroll.directive';
 import { SolutionCarouselComponent } from '../../shared/solution-carousel/solution-carousel.component';
 
 @Component({
@@ -20,6 +21,7 @@ import { SolutionCarouselComponent } from '../../shared/solution-carousel/soluti
     SolutionCarouselComponent,
     BusinessFlowSectionComponent,
     HomeHeroVisualComponent,
+    RevealOnScrollDirective,
   ],
   templateUrl: './home.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,

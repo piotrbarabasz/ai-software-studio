@@ -55,6 +55,15 @@
   --transition-base: 200ms;
   --transition-slow: 320ms;
   --ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --motion-duration-fast: var(--transition-fast);
+  --motion-duration-base: 240ms;
+  --motion-duration-enter: 560ms;
+  --motion-duration-slow: 800ms;
+  --motion-distance-small: 10px;
+  --motion-distance-base: 24px;
+  --motion-stagger-step: 80ms;
+  --motion-ease-standard: var(--ease-standard);
+  --motion-ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
 
   /* Layout and typography. */
   --container-max: 1280px;
@@ -332,9 +341,81 @@ button {
   transform: none;
 }
 
+.reveal.is-reveal-ready {
+  transition:
+    opacity var(--motion-duration-enter) var(--motion-ease-enter),
+    transform var(--motion-duration-enter) var(--motion-ease-enter);
+  will-change: opacity, transform;
+}
+
+.reveal.is-reveal-ready:not(.is-visible) {
+  opacity: 0;
+  transform: translate3d(0, var(--motion-distance-base), 0);
+}
+
+.reveal--subtle.is-reveal-ready:not(.is-visible) {
+  transform: translate3d(0, var(--motion-distance-small), 0);
+}
+
+.reveal--scale.is-reveal-ready:not(.is-visible) {
+  transform: scale(0.985);
+}
+
 .reveal.is-visible {
   opacity: 1;
   transform: none;
+  will-change: auto;
+}
+
+.motion-stagger.is-reveal-ready {
+  transform: none;
+}
+
+.motion-stagger.is-reveal-ready > * {
+  transition:
+    opacity var(--motion-duration-enter) var(--motion-ease-enter) var(--motion-delay, 0ms),
+    transform var(--motion-duration-enter) var(--motion-ease-enter) var(--motion-delay, 0ms);
+}
+
+.motion-stagger.is-reveal-ready:not(.is-visible) > * {
+  opacity: 0;
+  transform: translate3d(0, var(--motion-distance-small), 0);
+}
+
+.motion-stagger.is-visible > * {
+  opacity: 1;
+  transform: none;
+}
+
+@for $motion-item from 1 through 8 {
+  .motion-stagger > :nth-child(#{$motion-item}) {
+    --motion-delay: #{($motion-item - 1) * 80ms};
+  }
+}
+
+.motion-flow-line,
+.motion-flow-signal {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+.motion-flow-line {
+  stroke: var(--motion-flow-line-color, currentColor);
+  stroke-width: var(--motion-flow-line-width, 1.25);
+}
+
+.motion-flow-signal {
+  stroke: var(--motion-flow-signal-color, var(--brand-500));
+  stroke-width: var(--motion-flow-signal-width, 3.5);
+  stroke-linecap: round;
+  stroke-dasharray: var(--motion-flow-dash, 0.08 0.92);
+  animation: motion-flow-signal var(--motion-flow-duration, 6s) linear infinite;
+}
+
+@keyframes motion-flow-signal {
+  to {
+    stroke-dashoffset: -1;
+  }
 }
 
 /* The public footer is part of the global visual foundation. */
@@ -464,9 +545,19 @@ button {
     transition-duration: 0.01ms !important;
   }
 
-  .reveal {
+  .reveal,
+  .reveal.is-reveal-ready,
+  .reveal.is-reveal-ready:not(.is-visible),
+  .motion-stagger.is-reveal-ready:not(.is-visible) > *,
+  .motion-stagger.is-visible > * {
     opacity: 1;
     transform: none;
+    transition: none;
+  }
+
+  .motion-flow-signal {
+    animation: none;
+    stroke-dashoffset: 0;
   }
 }
 
