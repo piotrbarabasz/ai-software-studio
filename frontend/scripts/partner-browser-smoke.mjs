@@ -395,6 +395,96 @@ async function assertAutomationBento(page, baseUrl) {
   }
 }
 
+async function assertProcessStory(page, baseUrl) {
+  const desktop = { width: 1440, height: 900 };
+  await page.setViewportSize(desktop);
+  await page.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
+  const desktopState = await page.locator('.business-flow').evaluate((section) => {
+    const visualColumn = section.querySelector('.business-flow-visual-column');
+    const visual = section.querySelector('.process-visual');
+    const cta = section.querySelector('a.primary-action');
+    const visualBox = visual?.getBoundingClientRect();
+    return {
+      ctaHref: cta?.getAttribute('href') ?? '',
+      documentOverflow:
+        document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+      headingCount: section.querySelectorAll('h2').length,
+      stepCount: section.querySelectorAll('.business-flow-step').length,
+      stepHeadingCount: section.querySelectorAll('.business-flow-step h3').length,
+      stickyPosition: visualColumn ? getComputedStyle(visualColumn).position : '',
+      stickyTop: visualColumn ? Number.parseFloat(getComputedStyle(visualColumn).top) : 0,
+      visualHeight: visualBox?.height ?? 0,
+      visualHidden: visual?.getAttribute('aria-hidden') === 'true',
+      visualInteractiveCount:
+        visual?.querySelectorAll('a, button, input, select, textarea').length ?? -1,
+    };
+  });
+  if (
+    desktopState.stepCount !== 5 ||
+    desktopState.stepHeadingCount !== 5 ||
+    desktopState.headingCount !== 1 ||
+    desktopState.stickyPosition !== 'sticky' ||
+    desktopState.stickyTop < 70 ||
+    desktopState.visualHeight > desktop.height - desktopState.stickyTop + 1 ||
+    !desktopState.visualHidden ||
+    desktopState.visualInteractiveCount !== 0 ||
+    desktopState.ctaHref !== '/kontakt?projectType=backend_api' ||
+    desktopState.documentOverflow
+  ) {
+    throw new Error(`Desktop process story contract failed: ${JSON.stringify(desktopState)}`);
+  }
+
+  for (const step of [1, 3, 5]) {
+    await page.locator(`[data-flow-step="${step}"]`).evaluate((node) => {
+      node.scrollIntoView({ block: 'center', behavior: 'instant' });
+    });
+    await page.waitForFunction(
+      (expectedStep) =>
+        document.querySelector('.business-flow')?.getAttribute('data-active-step') === expectedStep,
+      String(step),
+    );
+  }
+
+  await page.locator('.business-flow a.primary-action').click();
+  await page.waitForURL(/\/kontakt\?projectType=backend_api$/);
+
+  for (const viewport of [
+    { width: 768, height: 1024 },
+    { width: 390, height: 844 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
+    const state = await page.locator('.business-flow').evaluate((section) => {
+      const steps = Array.from(section.querySelectorAll('.business-flow-step'));
+      const visual = section.querySelector('.business-flow-visual-column');
+      const visualBox = visual?.getBoundingClientRect();
+      const firstStepBox = steps[0]?.getBoundingClientRect();
+      return {
+        activeStep: section.getAttribute('data-active-step'),
+        documentOverflow:
+          document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+        hiddenSteps: steps.filter((step) => getComputedStyle(step).display === 'none').length,
+        position: visual ? getComputedStyle(visual).position : '',
+        stepCount: steps.length,
+        visualBeforeSteps: (visualBox?.top ?? 0) < (firstStepBox?.top ?? 0),
+      };
+    });
+
+    if (
+      state.stepCount !== 5 ||
+      state.hiddenSteps !== 0 ||
+      state.position === 'sticky' ||
+      !state.visualBeforeSteps ||
+      state.activeStep !== '1' ||
+      state.documentOverflow
+    ) {
+      throw new Error(
+        `Static process story failed at ${viewport.width}px: ${JSON.stringify(state)}`,
+      );
+    }
+  }
+}
+
 async function assertContactContexts(page, baseUrl) {
   const scenarios = [
     { query: '', value: '', guidance: 'Co jest dziś wykonywane ręcznie?' },
@@ -494,6 +584,7 @@ async function assertBrandContrast(page, baseUrl) {
 
 async function assertReducedMotion(page, baseUrl) {
   await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
   const state = await page.evaluate(() => {
     const reveal = document.querySelector('.reveal');
@@ -502,6 +593,7 @@ async function assertReducedMotion(page, baseUrl) {
       (signal) => getComputedStyle(signal),
     );
     const bentoCards = Array.from(document.querySelectorAll('.automation-bento-card'));
+    const processNodes = Array.from(document.querySelectorAll('.process-node'));
     return {
       animationDuration: style?.animationDuration ?? '',
       bentoVisible: bentoCards.every((card) => {
@@ -509,6 +601,10 @@ async function assertReducedMotion(page, baseUrl) {
         return cardStyle.opacity === '1' && cardStyle.transform === 'none';
       }),
       flowAnimationDurations: flowSignalStyles.map((signalStyle) => signalStyle.animationDuration),
+      processStatic: processNodes.every((node) => getComputedStyle(node).transform === 'none'),
+      processTransitionDurations: processNodes.map(
+        (node) => getComputedStyle(node).transitionDuration,
+      ),
       scrollBehavior: getComputedStyle(document.documentElement).scrollBehavior,
       transitionDuration: style?.transitionDuration ?? '',
     };
@@ -525,6 +621,8 @@ async function assertReducedMotion(page, baseUrl) {
   if (
     state.scrollBehavior !== 'auto' ||
     !state.bentoVisible ||
+    !state.processStatic ||
+    state.processTransitionDurations.some((duration) => durationInMilliseconds(duration) > 10) ||
     durationInMilliseconds(state.animationDuration) > 10 ||
     state.flowAnimationDurations.some((duration) => durationInMilliseconds(duration) > 10) ||
     durationInMilliseconds(state.transitionDuration) > 10
@@ -614,6 +712,7 @@ async function main() {
     }
 
     await assertAutomationBento(page, server.baseUrl);
+    await assertProcessStory(page, server.baseUrl);
     await assertContactContexts(page, server.baseUrl);
     await assertBrandContrast(page, server.baseUrl);
     await assertReducedMotion(page, server.baseUrl);

@@ -182,7 +182,7 @@ describe('HomeComponent', () => {
     ]);
     expect(element.querySelectorAll('img[src^="http"], img[src^="//"]')).toHaveSize(0);
     expect(element.querySelector('app-knowledge-demo')).toBeNull();
-    expect(element.querySelectorAll('.business-flow-card')).toHaveSize(4);
+    expect(element.querySelectorAll('.business-flow-step')).toHaveSize(5);
     expect(element.querySelector('.business-flow')?.textContent).toContain('Jasny handoff.');
     expect(
       element.querySelector('.business-flow a[href="/kontakt?projectType=backend_api"]'),
