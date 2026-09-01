@@ -1,9 +1,9 @@
 export const environment = {
   production: true,
-  apiUrl: '__PUBLIC_CONFIG_REQUIRED__:apiUrl',
-  publicSiteUrl: '__PUBLIC_CONFIG_REQUIRED__:publicSiteUrl',
-  indexingEnabled: false,
-  publicSalesEmail: '__PUBLIC_CONFIG_REQUIRED__:publicSalesEmail',
-  publicPrivacyEmail: '__PUBLIC_CONFIG_REQUIRED__:publicPrivacyEmail',
-  buildSha: 'unknown',
+  apiUrl: 'https://aisoftware-studio-api-175725977490.europe-central2.run.app',
+  publicSiteUrl: 'https://protolume.pl',
+  indexingEnabled: true,
+  publicSalesEmail: 'kontakt@protolume.pl',
+  publicPrivacyEmail: 'kontakt@protolume.pl',
+  buildSha: 'b4dc7063276729a08849931ac7a7a97acb58068d',
 } as const;

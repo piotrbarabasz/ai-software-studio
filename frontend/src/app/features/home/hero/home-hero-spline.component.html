@@ -1,0 +1,14 @@
+@if (shouldRenderViewer() && sceneUrl) {
+  <div class="spline-layer" [class.is-ready]="isSceneReady()" data-hero-spline>
+    <spline-viewer
+      #viewer
+      [attr.url]="sceneUrl"
+      loading="auto"
+      unloadable
+      events-target="local"
+      background="transparent"
+      aria-hidden="true"
+      tabindex="-1"
+    ></spline-viewer>
+  </div>
+}

@@ -1,0 +1,37 @@
+:host {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  display: block;
+  min-width: 0;
+  pointer-events: none;
+}
+
+.spline-layer,
+spline-viewer {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.spline-layer {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 480ms var(--motion-ease-enter);
+}
+
+.spline-layer.is-ready {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+spline-viewer {
+  border-radius: clamp(1.5rem, 3vw, 2.5rem);
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spline-layer {
+    transition: none;
+  }
+}

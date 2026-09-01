@@ -51,6 +51,23 @@ test('detects unhashed inline scripts and rejects unsafe-inline in script-src', 
   });
 });
 
+test('rejects wildcards, unsafe-eval and foreign script origins', () => {
+  const jsonLd = '{}';
+  const headers = headersFor(jsonLd)
+    .replace("script-src 'self'", "script-src 'self' 'unsafe-eval' https://cdn.spline.design")
+    .replace('default-src', 'connect-src *; default-src');
+
+  withArtifact(
+    `<link rel="stylesheet" href="styles.css"><script type="application/ld+json">${jsonLd}</script>`,
+    (root) => {
+      const errors = validateCspArtifact(root, headers).join('\n');
+      assert.match(errors, /connect-src must not contain a wildcard source/);
+      assert.match(errors, /must not contain 'unsafe-eval'/);
+      assert.match(errors, /must not contain a foreign script origin/);
+    },
+  );
+});
+
 test('detects a missing JSON-LD hash and a fictitious reporting endpoint', () => {
   const jsonLd = '{"name":"Protolume"}';
   const headers = headersFor('{}', 'report-uri /csp-report;');

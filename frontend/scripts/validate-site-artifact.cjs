@@ -237,6 +237,12 @@ function validateSiteArtifact(artifactRoot, environment) {
           'public route /: protolume-build-sha meta tag must match environment.buildSha exactly once',
         );
       }
+      if (!/\bdata-hero-fallback(?:\s|=|>)/i.test(html)) {
+        errors.push('public route /: prerendered hero must contain the lightweight fallback');
+      }
+      if (/<spline-viewer\b/i.test(html)) {
+        errors.push('public route /: prerendered hero must not instantiate the Spline viewer');
+      }
     }
 
     if (canonical !== expectedUrl) {

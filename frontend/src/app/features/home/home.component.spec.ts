@@ -43,6 +43,8 @@ describe('HomeComponent', () => {
     expect(element.querySelector('.hero-process')).toBeNull();
     expect(element.querySelector('app-home-hero-visual')).not.toBeNull();
     expect(element.querySelector('[data-hero-visual]')?.getAttribute('aria-hidden')).toBe('true');
+    expect(element.querySelector('[data-hero-fallback]')).not.toBeNull();
+    expect(element.querySelector('spline-viewer')).toBeNull();
     expect(
       element.querySelectorAll(
         '[data-hero-visual] a, [data-hero-visual] button, [data-hero-visual] input, [data-hero-visual] [tabindex]:not([tabindex="-1"])',
