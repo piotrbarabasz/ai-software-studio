@@ -50,6 +50,7 @@ export class SiteShellComponent implements OnInit {
   isMobileNavigationOpen = false;
   isMobileViewport = false;
   isNavigationEnhanced = false;
+  isHeaderScrolled = false;
   readonly navigation = siteContent.navigation;
   readonly footer = siteContent.footer;
   readonly trust = siteContent.trust;
@@ -64,6 +65,7 @@ export class SiteShellComponent implements OnInit {
     if (this.isBrowser) {
       this.isNavigationEnhanced = true;
       this.updateViewportState();
+      this.updateHeaderState();
     }
     this.syncRouteMetadata();
 
@@ -131,6 +133,15 @@ export class SiteShellComponent implements OnInit {
     if (!this.isMobileViewport) {
       this.closeNavigation(false);
     }
+  }
+
+  @HostListener('window:scroll')
+  updateHeaderState(): void {
+    if (!this.isBrowser) {
+      return;
+    }
+
+    this.isHeaderScrolled = (this.document.defaultView?.scrollY ?? 0) > 12;
   }
 
   private syncRouteMetadata(): void {

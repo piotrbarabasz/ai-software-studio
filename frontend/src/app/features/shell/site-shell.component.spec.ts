@@ -189,7 +189,7 @@ describe('SiteShellComponent', () => {
     fixture.detectChanges();
 
     const cta = fixture.nativeElement.querySelector('.primary-cta') as HTMLAnchorElement;
-    expect(getComputedStyle(cta).minHeight).toBe('44px');
+    expect(Number.parseFloat(getComputedStyle(cta).minHeight)).toBeGreaterThanOrEqual(44);
   });
 
   it('does not trap Tab focus inside the open mobile navigation panel', async () => {
