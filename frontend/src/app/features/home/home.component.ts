@@ -9,16 +9,16 @@ import type {
   WorkEvidence,
   WorkEvidenceLink,
 } from '../../core/content/site-content.types';
+import { RevealOnScrollDirective } from '../../shared/reveal/reveal-on-scroll.directive';
+import { AutomationBentoComponent } from './automation-bento/automation-bento.component';
 import { BusinessFlowSectionComponent } from './business-flow-section.component';
 import { HomeHeroVisualComponent } from './hero/home-hero-visual.component';
-import { RevealOnScrollDirective } from '../../shared/reveal/reveal-on-scroll.directive';
-import { SolutionCarouselComponent } from '../../shared/solution-carousel/solution-carousel.component';
 
 @Component({
   selector: 'app-home',
   imports: [
     RouterLink,
-    SolutionCarouselComponent,
+    AutomationBentoComponent,
     BusinessFlowSectionComponent,
     HomeHeroVisualComponent,
     RevealOnScrollDirective,

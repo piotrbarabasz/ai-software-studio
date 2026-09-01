@@ -49,13 +49,13 @@
     aria-labelledby="use-cases-title"
     data-home-section="processes"
   >
-    <div class="section-panel use-cases-panel">
+    <div class="use-cases-panel">
       <div appReveal class="section-heading reveal--subtle">
         <p class="eyebrow">{{ home.useCasesHeading.eyebrow }}</p>
         <h2 id="use-cases-title">{{ home.useCasesHeading.title }}</h2>
         <p class="section-lead">{{ home.useCasesHeading.lead }}</p>
       </div>
-      <app-solution-carousel [items]="home.useCases" />
+      <app-automation-bento [items]="home.useCases" />
     </div>
   </section>
 

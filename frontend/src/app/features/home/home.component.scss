@@ -131,10 +131,13 @@
 .use-cases {
   display: grid;
   gap: 1.25rem;
+  margin-top: -6rem;
+  padding-top: 6rem;
   scroll-margin-top: 6rem;
 }
 .use-cases-panel {
-  padding-bottom: clamp(1rem, 2vw, 1.5rem);
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
 }
 .hero-lead,
 .hero-audience,

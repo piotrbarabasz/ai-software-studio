@@ -327,40 +327,71 @@ async function assertMobileMenu(page, baseUrl, viewport) {
   }
 }
 
-async function assertCarouselInput(page, baseUrl) {
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
-  const carousel = page.locator('.solution-carousel');
-  const next = page.getByRole('button', { name: 'Następne procesy' });
-  const initial = await carousel.evaluate((node) => node.scrollLeft);
-  await next.click();
-  await page.waitForTimeout(450);
-  const afterMouse = await carousel.evaluate((node) => node.scrollLeft);
-  await carousel.focus();
-  await page.keyboard.press('ArrowRight');
-  await page.waitForTimeout(450);
-  const afterKeyboard = await carousel.evaluate((node) => node.scrollLeft);
-  const box = await carousel.boundingBox();
-  if (!box) throw new Error('Carousel is not visible for touch audit');
-  const session = await page.context().newCDPSession(page);
-  const startX = box.x + box.width * 0.8;
-  const endX = box.x + box.width * 0.2;
-  const y = box.y + Math.min(box.height / 2, 180);
-  await session.send('Input.dispatchTouchEvent', {
-    type: 'touchStart',
-    touchPoints: [{ x: startX, y }],
-  });
-  await session.send('Input.dispatchTouchEvent', {
-    type: 'touchMove',
-    touchPoints: [{ x: endX, y }],
-  });
-  await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
-  await page.waitForTimeout(450);
-  const afterTouch = await carousel.evaluate((node) => node.scrollLeft);
-  if (!(afterMouse > initial) || afterKeyboard === afterMouse || afterTouch === afterKeyboard) {
-    throw new Error(
-      `Carousel input audit failed: ${JSON.stringify({ initial, afterMouse, afterKeyboard, afterTouch })}`,
-    );
+async function assertAutomationBento(page, baseUrl) {
+  const expectedRoutes = [
+    '/rozwiazania/chatbot-ai-dla-firm',
+    '/rozwiazania/voice-ai-dla-firm',
+    '/rozwiazania/automatyzacja-procesow',
+    '/rozwiazania/systemy-agentowe',
+    '/rozwiazania/integracje-whatsapp-crm',
+  ];
+
+  for (const viewport of [
+    { width: 390, height: 844 },
+    { width: 768, height: 1024 },
+    { width: 1440, height: 900 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
+    const state = await page.locator('.automation-bento').evaluate((bento) => {
+      const cards = Array.from(bento.querySelectorAll('.automation-bento-card'));
+      const boxes = cards.map((card) => card.getBoundingClientRect());
+      return {
+        cardCount: cards.length,
+        darkCardCount: cards.filter((card) => card.classList.contains('is-dark')).length,
+        headingCount: cards.filter((card) => card.querySelector('h3')).length,
+        interactiveCounts: cards.map(
+          (card) => card.querySelectorAll('a, button, input, select, textarea').length,
+        ),
+        visualInteractiveCount: bento.querySelectorAll(
+          'app-automation-bento-visual a, app-automation-bento-visual button, app-automation-bento-visual input, app-automation-bento-visual select, app-automation-bento-visual textarea',
+        ).length,
+        decorativeVisualCount: bento.querySelectorAll(
+          'app-automation-bento-visual [aria-hidden="true"]',
+        ).length,
+        routes: cards.map((card) => card.querySelector('a')?.getAttribute('href') ?? ''),
+        boxes: boxes.map(({ top, width }) => ({ top, width })),
+      };
+    });
+
+    const basicContractFailed =
+      state.cardCount !== 5 ||
+      state.darkCardCount !== 1 ||
+      state.headingCount !== 5 ||
+      state.decorativeVisualCount !== 5 ||
+      state.visualInteractiveCount !== 0 ||
+      state.interactiveCounts.some((count) => count !== 1) ||
+      JSON.stringify(state.routes) !== JSON.stringify(expectedRoutes);
+    const [first, second, third, fourth, fifth] = state.boxes;
+    const layoutFailed =
+      viewport.width === 390
+        ? state.boxes.some((box) => Math.abs(box.width - first.width) > 2) ||
+          state.boxes.some((box, index) => index > 0 && box.top <= state.boxes[index - 1].top)
+        : viewport.width === 768
+          ? Math.abs(first.top - second.top) > 2 ||
+            third.width < first.width * 1.8 ||
+            Math.abs(fourth.top - fifth.top) > 2
+          : !(
+              first.width < second.width &&
+              third.width > fourth.width &&
+              fifth.width > second.width
+            );
+
+    if (basicContractFailed || layoutFailed) {
+      throw new Error(
+        `Automation bento audit failed at ${viewport.width}px: ${JSON.stringify(state)}`,
+      );
+    }
   }
 }
 
@@ -467,8 +498,17 @@ async function assertReducedMotion(page, baseUrl) {
   const state = await page.evaluate(() => {
     const reveal = document.querySelector('.reveal');
     const style = reveal ? getComputedStyle(reveal) : null;
+    const flowSignalStyles = Array.from(document.querySelectorAll('.motion-flow-signal')).map(
+      (signal) => getComputedStyle(signal),
+    );
+    const bentoCards = Array.from(document.querySelectorAll('.automation-bento-card'));
     return {
       animationDuration: style?.animationDuration ?? '',
+      bentoVisible: bentoCards.every((card) => {
+        const cardStyle = getComputedStyle(card);
+        return cardStyle.opacity === '1' && cardStyle.transform === 'none';
+      }),
+      flowAnimationDurations: flowSignalStyles.map((signalStyle) => signalStyle.animationDuration),
       scrollBehavior: getComputedStyle(document.documentElement).scrollBehavior,
       transitionDuration: style?.transitionDuration ?? '',
     };
@@ -484,7 +524,9 @@ async function assertReducedMotion(page, baseUrl) {
     );
   if (
     state.scrollBehavior !== 'auto' ||
+    !state.bentoVisible ||
     durationInMilliseconds(state.animationDuration) > 10 ||
+    state.flowAnimationDurations.some((duration) => durationInMilliseconds(duration) > 10) ||
     durationInMilliseconds(state.transitionDuration) > 10
   ) {
     throw new Error(`Reduced-motion contract failed: ${JSON.stringify(state)}`);
@@ -571,7 +613,7 @@ async function main() {
       }
     }
 
-    await assertCarouselInput(page, server.baseUrl);
+    await assertAutomationBento(page, server.baseUrl);
     await assertContactContexts(page, server.baseUrl);
     await assertBrandContrast(page, server.baseUrl);
     await assertReducedMotion(page, server.baseUrl);

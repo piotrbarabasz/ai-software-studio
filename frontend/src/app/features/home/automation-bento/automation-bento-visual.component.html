@@ -1,0 +1,117 @@
+<div class="bento-visual" [attr.data-bento-visual-kind]="visualKind" aria-hidden="true">
+  @switch (visualKind) {
+    @case ('knowledge-assistant') {
+      <div class="knowledge-visual">
+        <div class="mini-panel query-panel">
+          <span class="mini-label">Pytanie</span>
+          <strong>Jaki jest status zamówienia?</strong>
+        </div>
+        <div class="knowledge-sources">
+          <span>DOC</span>
+          <span>PDF</span>
+          <span>FAQ</span>
+        </div>
+        <div class="mini-panel answer-panel">
+          <span class="found-status">Źródło znalezione</span>
+          <strong>Odpowiedź gotowa</strong>
+          <span class="source-line">Dokument · strona 4</span>
+        </div>
+      </div>
+    }
+
+    @case ('message-workflow') {
+      <div class="qualification-visual">
+        <div class="conversation-panel">
+          <span class="mini-label">Rozmowa</span>
+          <div class="message-bubble">
+            <span>Klient</span>
+            <strong>Potrzebuję uporządkować obsługę zgłoszeń.</strong>
+          </div>
+        </div>
+        <div class="extract-badge"><span>AI</span> porządkuje dane</div>
+        <div class="lead-panel">
+          <div><span>Firma</span><i></i></div>
+          <div><span>Potrzeba</span><i></i></div>
+          <div><span>Budżet</span><i></i></div>
+          <div><span>Termin</span><i></i></div>
+          <strong><span>✓</span> Zgłoszenie gotowe</strong>
+        </div>
+      </div>
+    }
+
+    @case ('process-panel') {
+      <div class="documents-visual">
+        <svg
+          class="document-flow"
+          viewBox="0 0 100 26"
+          preserveAspectRatio="none"
+          focusable="false"
+        >
+          <path class="motion-flow-line" pathLength="1" d="M13 13H87" />
+          <path class="motion-flow-signal" pathLength="1" d="M13 13H87" />
+        </svg>
+        <div class="document-input mini-panel">
+          <span class="mail-mark">@</span>
+          <span>
+            <small>Email</small>
+            <strong>faktura.pdf</strong>
+          </span>
+          <i>PDF</i>
+        </div>
+        <div class="extract-panel mini-panel">
+          <span class="mini-label">Odczytane dane</span>
+          <div><span>NIP</span><strong>894•••••••</strong></div>
+          <div><span>Kwota</span><strong>12 480,00</strong></div>
+          <div><span>Termin</span><strong>14 dni</strong></div>
+        </div>
+        <div class="document-result mini-panel">
+          <span class="validation-badge">✓ Sprawdzone</span>
+          <strong>CRM / ERP</strong>
+          <small>Rekord gotowy</small>
+        </div>
+      </div>
+    }
+
+    @case ('agent-system') {
+      <div class="multi-step-visual">
+        <svg class="step-flow" viewBox="0 0 100 64" preserveAspectRatio="none" focusable="false">
+          <path class="motion-flow-line" pathLength="1" d="M12 15H50H88V49H50H12" />
+          <path class="motion-flow-signal" pathLength="1" d="M12 15H50H88V49H50H12" />
+        </svg>
+        <div class="step-node"><span>01</span><strong>Trigger</strong></div>
+        <div class="step-node is-ai"><span>02</span><strong>AI analysis</strong></div>
+        <div class="step-node"><span>03</span><strong>API</strong></div>
+        <div class="step-node"><span>04</span><strong>Check</strong></div>
+        <div class="step-node is-human"><span>05</span><strong>Human approval</strong></div>
+        <div class="step-node is-done"><span>06</span><strong>Done</strong></div>
+      </div>
+    }
+
+    @case ('channel-integrations') {
+      <div class="omnichannel-visual">
+        <svg class="channel-flow" viewBox="0 0 100 76" preserveAspectRatio="none" focusable="false">
+          <path class="motion-flow-line" pathLength="1" d="M18 12H43V38H82" />
+          <path class="motion-flow-line" pathLength="1" d="M18 29H43" />
+          <path class="motion-flow-line" pathLength="1" d="M18 47H43" />
+          <path class="motion-flow-line" pathLength="1" d="M18 64H43V38" />
+          <path class="motion-flow-signal" pathLength="1" d="M18 12H43V38H82" />
+        </svg>
+        <div class="channel-list">
+          <span><i>@</i>Email</span>
+          <span><i>WA</i>WhatsApp</span>
+          <span><i>F</i>Formularz</span>
+          <span><i>V</i>Voice</span>
+        </div>
+        <div class="process-core">
+          <span>Kontrolowany</span>
+          <strong>PROCESS</strong>
+          <small>jeden status</small>
+        </div>
+        <div class="crm-output">
+          <span>CRM</span>
+          <strong>Sprawa zapisana</strong>
+        </div>
+      </div>
+    }
+  }
+</div>
