@@ -1,6 +1,6 @@
 <div class="home-page">
   <section class="hero section-shell" aria-labelledby="hero-title" data-home-section="hero">
-    <div class="section-panel hero-copy">
+    <div class="hero-copy">
       <p class="eyebrow">{{ home.hero.eyebrow }}</p>
       <h1 id="hero-title">{{ home.hero.title }}</h1>
       <p class="hero-lead">{{ home.hero.lead }}</p>
@@ -18,17 +18,11 @@
         </a>
       </div>
     </div>
-    <div class="section-panel hero-process" aria-labelledby="hero-process-title">
-      <h2 id="hero-process-title">{{ home.hero.processTitle }}</h2>
-      <ol>
-        @for (step of home.hero.processDiagram; track step; let stepIndex = $index) {
-          <li>
-            <span class="process-node" aria-hidden="true">{{ stepIndex + 1 }}</span>
-            <span>{{ step }}</span>
-          </li>
-        }
-      </ol>
-    </div>
+    <app-home-hero-visual />
+    <a class="hero-scroll-link" href="#home-processes">
+      <span aria-hidden="true">↓</span>
+      Zobacz jak działa automatyzacja
+    </a>
   </section>
 
   <section
@@ -50,6 +44,7 @@
   </section>
 
   <section
+    id="home-processes"
     class="use-cases section-shell"
     aria-labelledby="use-cases-title"
     data-home-section="processes"

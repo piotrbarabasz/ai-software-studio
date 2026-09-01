@@ -17,17 +17,13 @@ describe('HomeComponent', () => {
     return fixture.nativeElement as HTMLElement;
   }
 
-  it('renders the SME automation hero, process panel and both CTAs', () => {
+  it('renders the redesigned SME automation hero, flow visual and both CTAs', () => {
     const element = createFixture();
     const actions = element.querySelector('.hero-actions');
-    const processSteps = Array.from(
-      element.querySelectorAll<HTMLElement>('.hero-process ol > li > span:last-child'),
-      (step) => step.textContent?.replace(/\s+/g, ' ').trim(),
-    );
 
     expect(element.querySelectorAll('h1')).toHaveSize(1);
     expect(element.querySelector('h1')?.textContent?.trim()).toBe(
-      'Automatyzujemy ręczne procesy w MŚP',
+      'Automatyzujemy procesy, które dziś zabierają ludziom czas.',
     );
     expect(element.querySelector('.hero-lead')?.textContent?.trim()).toBe(
       'W 7 dni budujemy działające demo jednego procesu. Zobaczysz, co można zautomatyzować, gdzie potrzebny jest człowiek i jaki powinien być następny krok.',
@@ -44,17 +40,32 @@ describe('HomeComponent', () => {
     expect(element.querySelector('a[href="/demo-ai"]')?.textContent).toContain(
       'Zobacz działające demo',
     );
-    expect(element.querySelector('.hero-process h2')?.textContent?.trim()).toBe(
-      'Od procesu do decyzji w 7 dni',
-    );
-    expect(element.querySelectorAll('.hero-process ol')).toHaveSize(1);
-    expect(processSteps).toEqual([
-      'Opis obecnej pracy',
-      'Jeden działający scenariusz',
-      'Ryzyka i granice',
-      'Rekomendowany następny krok',
-    ]);
+    expect(element.querySelector('.hero-process')).toBeNull();
+    expect(element.querySelector('app-home-hero-visual')).not.toBeNull();
+    expect(element.querySelector('[data-hero-visual]')?.getAttribute('aria-hidden')).toBe('true');
+    expect(
+      element.querySelectorAll(
+        '[data-hero-visual] a, [data-hero-visual] button, [data-hero-visual] input, [data-hero-visual] [tabindex]:not([tabindex="-1"])',
+      ),
+    ).toHaveSize(0);
     expect(element.querySelectorAll('.hero img[src^="http"], .hero img[src^="//"]')).toHaveSize(0);
+  });
+
+  it('keeps IDs unique and primary hero content available with reduced motion', () => {
+    spyOn(window, 'matchMedia').and.callFake(
+      (query: string) =>
+        ({
+          matches: query === '(prefers-reduced-motion: reduce)',
+          media: query,
+        }) as MediaQueryList,
+    );
+    const element = createFixture();
+    const ids = Array.from(element.querySelectorAll<HTMLElement>('[id]'), (item) => item.id);
+
+    expect(new Set(ids).size).toBe(ids.length);
+    expect(element.querySelector('#hero-title')?.textContent).toContain('Automatyzujemy procesy');
+    expect(element.querySelectorAll('.hero-actions a')).toHaveSize(2);
+    expect(element.querySelector('[data-hero-visual]')).not.toBeNull();
   });
 
   it('renders the shortened homepage in the intended sales order', () => {

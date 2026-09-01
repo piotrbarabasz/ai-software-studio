@@ -561,7 +561,7 @@ export const siteContent = {
     path: '/',
     hero: {
       eyebrow: 'Automatyzacje AI dla MŚP',
-      title: 'Automatyzujemy ręczne procesy w MŚP',
+      title: 'Automatyzujemy procesy, które dziś zabierają ludziom czas.',
       lead: 'W 7 dni budujemy działające demo jednego procesu. Zobaczysz, co można zautomatyzować, gdzie potrzebny jest człowiek i jaki powinien być następny krok.',
       audience:
         'Dla firm, w których zespół przepisuje dane, pilnuje statusów, obsługuje podobne wiadomości lub szuka informacji w rozproszonych materiałach.',

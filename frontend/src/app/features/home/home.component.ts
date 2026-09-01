@@ -10,11 +10,17 @@ import type {
   WorkEvidenceLink,
 } from '../../core/content/site-content.types';
 import { BusinessFlowSectionComponent } from './business-flow-section.component';
+import { HomeHeroVisualComponent } from './hero/home-hero-visual.component';
 import { SolutionCarouselComponent } from '../../shared/solution-carousel/solution-carousel.component';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, SolutionCarouselComponent, BusinessFlowSectionComponent],
+  imports: [
+    RouterLink,
+    SolutionCarouselComponent,
+    BusinessFlowSectionComponent,
+    HomeHeroVisualComponent,
+  ],
   templateUrl: './home.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './home.component.scss',

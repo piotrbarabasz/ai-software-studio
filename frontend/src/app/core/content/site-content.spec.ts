@@ -68,7 +68,9 @@ describe('Site content model', () => {
 
   it('keeps homepage content focused on a short sales path with verifiable evidence', () => {
     expect(siteContent.home.hero.eyebrow).toBe('Automatyzacje AI dla MŚP');
-    expect(siteContent.home.hero.title).toBe('Automatyzujemy ręczne procesy w MŚP');
+    expect(siteContent.home.hero.title).toBe(
+      'Automatyzujemy procesy, które dziś zabierają ludziom czas.',
+    );
     expect(siteContent.home.hero.audience).toContain('zespół przepisuje dane');
     expect(siteContent.home.hero.lead).toContain('W 7 dni budujemy działające demo');
     expect(siteContent.home.hero.lead).toContain('następny krok');
