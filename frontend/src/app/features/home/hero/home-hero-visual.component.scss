@@ -44,7 +44,14 @@
   transform: translate3d(var(--hero-shift-x), var(--hero-shift-y), 0) rotateX(var(--hero-rotate-x))
     rotateY(var(--hero-rotate-y));
   transform-style: preserve-3d;
-  transition: transform 520ms var(--ease-standard);
+  transition:
+    opacity 480ms var(--motion-ease-enter),
+    transform 520ms var(--ease-standard);
+}
+
+.hero-visual.is-spline-ready .visual-scene {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .visual-grid {

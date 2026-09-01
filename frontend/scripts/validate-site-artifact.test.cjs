@@ -41,7 +41,7 @@ function writeArtifact(root, environment, injectedText = '', extraFiles = []) {
   ];
   const routeBodies = {
     '/':
-      '<section class="hero"><h1>AI i automatyzacje dla firm</h1><p>Sprawdź jeden proces.</p></section>' +
+      '<section class="hero"><h1>AI i automatyzacje dla firm</h1><p>Sprawdź jeden proces.</p><div data-hero-fallback></div></section>' +
       '<section class="trust-strip"><p>Materiały, dane i kod klienta pozostają prywatne...</p><div id="client-confidentiality">Prywatność danych i kodu klienta</div></section>' +
       '<section class="evidence-teaser"><p>Sprawdzalne przykłady</p><h2>Sprawdź działające elementy i jasno opisane granice</h2><p>Uruchom demonstrację, przejrzyj przykładowy rezultat i zobacz, co każdy materiał faktycznie potwierdza.</p></section>' +
       '<section class="use-cases"><article class="use-case-card">One</article><article class="use-case-card">Two</article><article class="use-case-card">Three</article><article class="use-case-card">Four</article><article class="use-case-card">Five</article></section>',
@@ -421,6 +421,37 @@ test('validates the homepage build SHA against the environment', (context) => {
       name,
     );
   }
+});
+
+test('requires the lightweight hero fallback and rejects a prerendered Spline instance', (context) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'site-artifact-hero-fallback-'));
+  context.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const environment = {
+    publicSiteUrl: 'https://protolume.pl',
+    indexingEnabled: true,
+    buildSha: 'abc1234',
+  };
+  writeArtifact(root, environment);
+  const homePath = path.join(root, 'index.html');
+  const html = fs.readFileSync(homePath, 'utf8');
+
+  fs.writeFileSync(homePath, html.replace(' data-hero-fallback', ''), 'utf8');
+  assert.ok(
+    validateSiteArtifact(root, environment).some((error) =>
+      error.includes('must contain the lightweight fallback'),
+    ),
+  );
+
+  fs.writeFileSync(
+    homePath,
+    html.replace('</section>', '<spline-viewer></spline-viewer></section>'),
+    'utf8',
+  );
+  assert.ok(
+    validateSiteArtifact(root, environment).some((error) =>
+      error.includes('must not instantiate the Spline viewer'),
+    ),
+  );
 });
 
 test('rejects leaked run.app URLs from a Protolume production artifact', (context) => {

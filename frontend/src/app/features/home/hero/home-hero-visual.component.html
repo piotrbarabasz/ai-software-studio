@@ -1,5 +1,11 @@
-<div #visualFrame class="hero-visual" aria-hidden="true" data-hero-visual>
-  <div class="visual-scene">
+<div
+  #visualFrame
+  class="hero-visual"
+  [class.is-spline-ready]="isSplineReady()"
+  aria-hidden="true"
+  data-hero-visual
+>
+  <div class="visual-scene" data-hero-fallback>
     <span class="visual-grid"></span>
 
     <svg
@@ -138,4 +144,6 @@
       </span>
     </div>
   </div>
+
+  <app-home-hero-spline (sceneReadyChange)="handleSplineReadyChange($event)" />
 </div>

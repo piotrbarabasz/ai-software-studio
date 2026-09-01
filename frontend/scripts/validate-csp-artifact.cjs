@@ -68,8 +68,19 @@ function validateCspArtifact(artifactRoot, headers) {
 
   const scriptSources = directives.get('script-src') ?? [];
   const styleSources = directives.get('style-src') ?? [];
+  for (const [directive, sources] of directives) {
+    if (sources.includes('*')) {
+      errors.push(`${directive} must not contain a wildcard source`);
+    }
+  }
   if (scriptSources.includes("'unsafe-inline'")) {
     errors.push("script-src must not contain 'unsafe-inline'");
+  }
+  if (scriptSources.includes("'unsafe-eval'")) {
+    errors.push("script-src must not contain 'unsafe-eval'");
+  }
+  if (scriptSources.some((source) => /^https?:/i.test(source))) {
+    errors.push('script-src must not contain a foreign script origin');
   }
   if (!scriptSources.includes("'self'")) {
     errors.push("script-src must allow 'self' for Angular bundles");

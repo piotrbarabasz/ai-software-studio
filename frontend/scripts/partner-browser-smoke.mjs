@@ -395,6 +395,67 @@ async function assertAutomationBento(page, baseUrl) {
   }
 }
 
+async function assertHeroThreeDimensionalEnhancement(page, baseUrl) {
+  for (const viewport of [
+    { width: 1440, height: 900 },
+    { width: 768, height: 1024 },
+    { width: 390, height: 844 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
+    const hero = page.locator('.hero');
+    const initialHeight = (await hero.boundingBox())?.height ?? 0;
+    await page.waitForTimeout(600);
+    const settledHeight = (await hero.boundingBox())?.height ?? 0;
+    const state = await hero.evaluate((section) => {
+      const fallback = section.querySelector('[data-hero-fallback]');
+      const fallbackStyle = fallback ? getComputedStyle(fallback) : null;
+      const actions = Array.from(section.querySelectorAll('.hero-actions a'));
+      return {
+        actionCount: actions.length,
+        actionsVisible: actions.every((action) => {
+          const box = action.getBoundingClientRect();
+          return box.width > 0 && box.height >= 44;
+        }),
+        documentOverflow:
+          document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+        fallbackExists: Boolean(fallback),
+        fallbackVisible:
+          fallbackStyle?.display !== 'none' && Number.parseFloat(fallbackStyle?.opacity ?? '0') > 0,
+        h1Visible: Boolean(section.querySelector('h1')?.getBoundingClientRect().height),
+        splineContainerCount: section.querySelectorAll('[data-hero-spline]').length,
+        splineViewerCount: section.querySelectorAll('spline-viewer').length,
+      };
+    });
+
+    const fallbackOnlyViewport = viewport.width < 1024;
+    if (
+      !state.h1Visible ||
+      state.actionCount !== 2 ||
+      !state.actionsVisible ||
+      !state.fallbackExists ||
+      (!state.fallbackVisible && state.splineViewerCount === 0) ||
+      state.documentOverflow ||
+      Math.abs(initialHeight - settledHeight) > 1 ||
+      (fallbackOnlyViewport &&
+        (state.splineContainerCount !== 0 || state.splineViewerCount !== 0)) ||
+      state.splineViewerCount > 1
+    ) {
+      throw new Error(
+        `Hero 3D progressive enhancement failed at ${viewport.width}px: ${JSON.stringify({ ...state, initialHeight, settledHeight })}`,
+      );
+    }
+  }
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
+  await page.locator('.hero-actions a[href="/demo-ai"]').click();
+  await page.waitForURL(/\/demo-ai$/);
+  await page.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
+  await page.locator('.hero-actions a[href="/kontakt?projectType=mvp_prototype"]').click();
+  await page.waitForURL(/\/kontakt\?projectType=mvp_prototype$/);
+}
+
 async function assertProcessStory(page, baseUrl) {
   const desktop = { width: 1440, height: 900 };
   await page.setViewportSize(desktop);
@@ -697,6 +758,8 @@ async function assertReducedMotion(page, baseUrl) {
     const processNodes = Array.from(document.querySelectorAll('.process-node'));
     const demoMilestones = Array.from(document.querySelectorAll('.demo-milestone'));
     const demoSignal = document.querySelector('.timeline-flow .motion-flow-signal');
+    const heroFallback = document.querySelector('[data-hero-fallback]');
+    const heroFallbackStyle = heroFallback ? getComputedStyle(heroFallback) : null;
     return {
       animationDuration: style?.animationDuration ?? '',
       bentoVisible: bentoCards.every((card) => {
@@ -715,11 +778,19 @@ async function assertReducedMotion(page, baseUrl) {
           );
         }),
       flowAnimationDurations: flowSignalStyles.map((signalStyle) => signalStyle.animationDuration),
+      heroActionCount: document.querySelectorAll('.hero-actions a').length,
+      heroContentVisible: Boolean(
+        document.querySelector('.hero h1')?.getBoundingClientRect().height,
+      ),
+      heroFallbackVisible:
+        heroFallbackStyle?.display !== 'none' &&
+        Number.parseFloat(heroFallbackStyle?.opacity ?? '0') > 0,
       processStatic: processNodes.every((node) => getComputedStyle(node).transform === 'none'),
       processTransitionDurations: processNodes.map(
         (node) => getComputedStyle(node).transitionDuration,
       ),
       scrollBehavior: getComputedStyle(document.documentElement).scrollBehavior,
+      splineViewerCount: document.querySelectorAll('spline-viewer').length,
       transitionDuration: style?.transitionDuration ?? '',
     };
   });
@@ -737,6 +808,10 @@ async function assertReducedMotion(page, baseUrl) {
     !state.bentoVisible ||
     !state.demoVisible ||
     !state.demoSignalStatic ||
+    state.heroActionCount !== 2 ||
+    !state.heroContentVisible ||
+    !state.heroFallbackVisible ||
+    state.splineViewerCount !== 0 ||
     !state.processStatic ||
     state.processTransitionDurations.some((duration) => durationInMilliseconds(duration) > 10) ||
     durationInMilliseconds(state.animationDuration) > 10 ||
@@ -827,6 +902,7 @@ async function main() {
       }
     }
 
+    await assertHeroThreeDimensionalEnhancement(page, server.baseUrl);
     await assertAutomationBento(page, server.baseUrl);
     await assertProcessStory(page, server.baseUrl);
     await assertSevenDayDemo(page, server.baseUrl);

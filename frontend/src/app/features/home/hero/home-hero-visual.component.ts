@@ -8,14 +8,16 @@ import {
   PLATFORM_ID,
   ViewChild,
   inject,
+  signal,
 } from '@angular/core';
 import type { AfterViewInit, ElementRef } from '@angular/core';
 
 import { ProtolumeLogoComponent } from '../../../shared/brand/protolume-logo/protolume-logo.component';
+import { HomeHeroSplineComponent } from './home-hero-spline.component';
 
 @Component({
   selector: 'app-home-hero-visual',
-  imports: [ProtolumeLogoComponent],
+  imports: [HomeHeroSplineComponent, ProtolumeLogoComponent],
   templateUrl: './home-hero-visual.component.html',
   styleUrl: './home-hero-visual.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,6 +27,7 @@ export class HomeHeroVisualComponent implements AfterViewInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly ngZone = inject(NgZone);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  protected readonly isSplineReady = signal(false);
 
   @ViewChild('visualFrame', { static: true })
   private readonly visualFrame?: ElementRef<HTMLElement>;
@@ -69,7 +72,7 @@ export class HomeHeroVisualComponent implements AfterViewInit {
     };
 
     const handlePointerMove = (event: PointerEvent): void => {
-      if (!pointerMedia.matches || reducedMotionMedia.matches) {
+      if (this.isSplineReady() || !pointerMedia.matches || reducedMotionMedia.matches) {
         resetPointerPosition();
         return;
       }
@@ -92,5 +95,20 @@ export class HomeHeroVisualComponent implements AfterViewInit {
         view.cancelAnimationFrame(animationFrame);
       }
     });
+  }
+
+  protected handleSplineReadyChange(isReady: boolean): void {
+    if (this.isSplineReady() === isReady) {
+      return;
+    }
+    this.isSplineReady.set(isReady);
+
+    if (isReady) {
+      const frame = this.visualFrame?.nativeElement;
+      frame?.style.setProperty('--hero-rotate-x', '0deg');
+      frame?.style.setProperty('--hero-rotate-y', '0deg');
+      frame?.style.setProperty('--hero-shift-x', '0px');
+      frame?.style.setProperty('--hero-shift-y', '0px');
+    }
   }
 }
