@@ -348,7 +348,7 @@ button {
   will-change: opacity, transform;
 }
 
-.reveal.is-reveal-ready:not(.is-visible) {
+.reveal.is-reveal-ready:not(.is-visible):not(.motion-stagger) {
   opacity: 0;
   transform: translate3d(0, var(--motion-distance-base), 0);
 }
@@ -367,8 +367,11 @@ button {
   will-change: auto;
 }
 
-.motion-stagger.is-reveal-ready {
+.reveal.motion-stagger.is-reveal-ready {
+  opacity: 1;
   transform: none;
+  transition: none;
+  will-change: auto;
 }
 
 .motion-stagger.is-reveal-ready > * {
