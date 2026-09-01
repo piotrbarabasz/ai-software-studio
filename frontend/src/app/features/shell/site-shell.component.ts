@@ -3,6 +3,7 @@ import {
   Component,
   DestroyRef,
   HostListener,
+  NgZone,
   PLATFORM_ID,
   ViewChild,
   inject,
@@ -37,6 +38,7 @@ export class SiteShellComponent implements OnInit {
   private readonly meta = inject(Meta);
   private readonly document = inject(DOCUMENT);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly ngZone = inject(NgZone);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private currentRouteUrl = this.router.url;
   private currentRouteKind = this.resolveRouteKind(
@@ -61,11 +63,17 @@ export class SiteShellComponent implements OnInit {
     return this.currentRouteKind === 'demo-example';
   }
 
+  get isFullscreenNavigationOpen(): boolean {
+    return this.isNavigationEnhanced && this.isMobileViewport && this.isMobileNavigationOpen;
+  }
+
   ngOnInit(): void {
     if (this.isBrowser) {
       this.isNavigationEnhanced = true;
       this.updateViewportState();
-      this.updateHeaderState();
+      this.initializeHeaderScrollState();
+      this.registerHeaderScrollListener();
+      this.destroyRef.onDestroy(() => this.setNavigationScrollLock(false));
     }
     this.syncRouteMetadata();
 
@@ -91,6 +99,7 @@ export class SiteShellComponent implements OnInit {
     }
 
     this.isMobileNavigationOpen = !this.isMobileNavigationOpen;
+    this.syncNavigationScrollLock();
 
     if (this.isMobileNavigationOpen) {
       setTimeout(() => this.focusFirstNavigationItem());
@@ -99,6 +108,7 @@ export class SiteShellComponent implements OnInit {
 
   closeNavigation(restoreFocus = false): void {
     this.isMobileNavigationOpen = false;
+    this.syncNavigationScrollLock();
 
     if (restoreFocus) {
       this.menuToggle?.nativeElement.focus();
@@ -132,16 +142,48 @@ export class SiteShellComponent implements OnInit {
       this.document.defaultView?.matchMedia('(max-width: 920px)').matches ?? false;
     if (!this.isMobileViewport) {
       this.closeNavigation(false);
+    } else {
+      this.syncNavigationScrollLock();
     }
   }
 
-  @HostListener('window:scroll')
-  updateHeaderState(): void {
+  private initializeHeaderScrollState(): void {
+    this.isHeaderScrolled = (this.document.defaultView?.scrollY ?? 0) > 12;
+  }
+
+  private registerHeaderScrollListener(): void {
+    const view = this.document.defaultView;
+    if (!view) {
+      return;
+    }
+
+    const handleScroll = (): void => {
+      const nextHeaderScrolled = view.scrollY > 12;
+      if (nextHeaderScrolled === this.isHeaderScrolled) {
+        return;
+      }
+
+      this.ngZone.run(() => {
+        this.isHeaderScrolled = nextHeaderScrolled;
+      });
+    };
+
+    this.ngZone.runOutsideAngular(() => {
+      view.addEventListener('scroll', handleScroll, { passive: true });
+    });
+    this.destroyRef.onDestroy(() => view.removeEventListener('scroll', handleScroll));
+  }
+
+  private syncNavigationScrollLock(): void {
+    this.setNavigationScrollLock(this.isFullscreenNavigationOpen);
+  }
+
+  private setNavigationScrollLock(isLocked: boolean): void {
     if (!this.isBrowser) {
       return;
     }
 
-    this.isHeaderScrolled = (this.document.defaultView?.scrollY ?? 0) > 12;
+    this.document.body.classList.toggle('is-navigation-locked', isLocked);
   }
 
   private syncRouteMetadata(): void {
