@@ -422,7 +422,7 @@ export interface HomeSevenDayDemo {
 
 export interface HomeBusinessFlowStep {
   readonly id: string;
-  readonly kind: 'contact' | 'collect' | 'qualify' | 'suggest' | 'save' | 'handoff';
+  readonly kind: 'contact' | 'collect' | 'automate' | 'handoff' | 'result';
   readonly kicker: string;
   readonly title: string;
   readonly description: string;
@@ -435,6 +435,7 @@ export interface HomeBusinessFlow {
   readonly results: readonly [string, string, string, string];
   readonly cta: HomeCta;
   readonly steps: readonly [
+    HomeBusinessFlowStep,
     HomeBusinessFlowStep,
     HomeBusinessFlowStep,
     HomeBusinessFlowStep,

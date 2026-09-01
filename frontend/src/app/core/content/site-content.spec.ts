@@ -154,7 +154,13 @@ describe('Site content model', () => {
         visualKind: 'channel-integrations',
       },
     ]);
-    expect(siteContent.home.businessFlow.steps).toHaveSize(4);
+    expect(siteContent.home.businessFlow.steps).toEqual([
+      jasmine.objectContaining({ kind: 'contact', title: 'Zgłoszenie' }),
+      jasmine.objectContaining({ kind: 'collect', title: 'Rozpoznanie danych' }),
+      jasmine.objectContaining({ kind: 'automate', title: 'Praca systemu' }),
+      jasmine.objectContaining({ kind: 'handoff', title: 'Kontrola człowieka' }),
+      jasmine.objectContaining({ kind: 'result', title: 'Konkretna akcja' }),
+    ]);
     expect(siteContent.home.businessFlow.results).toEqual([
       'Mniej przepisywania.',
       'Szybsza odpowiedź.',

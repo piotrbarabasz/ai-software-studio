@@ -1,167 +1,300 @@
 :host {
   display: block;
+  min-width: 0;
 }
 
 .business-flow {
   min-width: 0;
+  padding-block: clamp(4rem, 8vw, 7rem);
+  overflow: clip;
+  background:
+    radial-gradient(circle at 76% 18%, rgba(124, 92, 255, 0.15), transparent 34rem),
+    radial-gradient(circle at 15% 82%, rgba(99, 216, 255, 0.045), transparent 28rem),
+    var(--dark-950);
+  color: var(--text-light);
 }
 
-.business-flow-panel {
-  display: grid;
-  gap: 1.25rem;
+.business-flow-shell,
+.business-flow-heading,
+.business-flow-story,
+.business-flow-steps,
+.business-flow-footer {
   min-width: 0;
 }
 
-.business-flow-panel > .section-heading,
-.business-flow-panel > .business-flow-grid,
-.business-flow-panel > .business-flow-results,
-.business-flow-panel > .primary-action {
-  min-inline-size: 0;
-  max-inline-size: 100%;
-}
-
-.business-flow-panel > .section-heading h2,
-.business-flow-panel > .section-heading p {
-  min-inline-size: 0;
-  max-inline-size: 100%;
-  overflow-wrap: anywhere;
-}
-
-.business-flow-grid {
+.business-flow-shell {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
-  gap: 1rem;
-  min-width: 0;
-  padding: 0;
+  gap: clamp(2.5rem, 6vw, 5rem);
+}
+
+.business-flow-heading {
+  display: grid;
+  max-width: 48rem;
+  gap: 0.65rem;
+}
+
+.business-flow-heading .eyebrow,
+.business-flow-heading h2,
+.business-flow-heading p {
+  margin: 0;
+}
+
+.business-flow-heading .eyebrow {
+  color: var(--brand-200);
+}
+
+.business-flow-heading h2 {
+  max-width: 14ch;
+  color: var(--text-light);
+  font-size: var(--font-size-h2);
+  line-height: 1.02;
+}
+
+.business-flow-heading > p:last-child {
+  max-width: 58ch;
+  color: var(--text-light-muted);
+  font-size: var(--font-size-lead);
+  line-height: 1.65;
+}
+
+.business-flow-story {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(28rem, 1.15fr);
+  align-items: start;
+  gap: clamp(3rem, 8vw, 8rem);
+}
+
+.business-flow-steps {
+  display: grid;
+  padding: 0 0 4rem;
   margin: 0;
   list-style: none;
 }
 
-.business-flow-card {
+.business-flow-step {
+  position: relative;
   display: grid;
-  gap: 0.85rem;
-  align-content: start;
-  min-width: 0;
-  padding: 1rem;
-  border: 1px solid var(--color-line);
-  border-radius: 16px;
-  background: var(--color-surface);
+  min-height: clamp(27rem, 62vh, 39rem);
+  grid-template-columns: auto minmax(0, 1fr);
+  align-content: center;
+  gap: 1.1rem;
+  padding: clamp(2rem, 5vw, 4rem) 0;
+  color: var(--text-light-muted);
+  opacity: 0.7;
+  transition:
+    color var(--motion-duration-base) var(--motion-ease-standard),
+    opacity var(--motion-duration-base) var(--motion-ease-standard),
+    transform var(--motion-duration-base) var(--motion-ease-standard);
 }
 
-.business-flow-card.is-human {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-primary) 18%, transparent);
+.business-flow-step::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 1.05rem;
+  width: 1px;
+  background: rgba(167, 139, 250, 0.2);
+  content: '';
 }
 
-.business-flow-icon {
+.business-flow-step:first-child::before {
+  top: 50%;
+}
+
+.business-flow-step:last-child::before {
+  bottom: 50%;
+}
+
+.business-flow-step.is-active {
+  color: var(--text-light);
+  opacity: 1;
+  transform: translateX(0.4rem);
+}
+
+.business-flow-step.is-complete {
+  opacity: 0.82;
+}
+
+.step-marker {
+  position: relative;
+  z-index: 1;
   display: grid;
-  width: 3rem;
-  height: 3rem;
+  width: 2.15rem;
+  height: 2.15rem;
   place-items: center;
-  border: 1px solid color-mix(in srgb, var(--color-primary) 38%, var(--color-line));
-  border-radius: 999px;
-  color: var(--color-primary-strong);
-  background: color-mix(in srgb, var(--surface-brand) 70%, white);
+  border: 1px solid rgba(167, 139, 250, 0.34);
+  border-radius: 50%;
+  background: var(--dark-950);
+  color: var(--brand-200);
+  font-size: 0.65rem;
+  font-weight: 850;
+  transition:
+    border-color var(--motion-duration-base) var(--motion-ease-standard),
+    background-color var(--motion-duration-base) var(--motion-ease-standard),
+    box-shadow var(--motion-duration-base) var(--motion-ease-standard);
 }
 
-.business-flow-card.is-human .business-flow-icon {
-  background: var(--color-primary);
-  color: var(--text-on-dark);
+.business-flow-step.is-active .step-marker {
+  border-color: var(--brand-400);
+  background: var(--brand-600);
+  color: white;
+  box-shadow: 0 0 0 0.45rem rgba(124, 92, 255, 0.1);
 }
 
-.business-flow-icon svg {
-  width: 1.6rem;
-  height: 1.6rem;
+.business-flow-step.is-human.is-active .step-marker {
+  border-color: var(--signal);
+  background: color-mix(in srgb, var(--signal) 28%, var(--dark-900));
 }
 
-.business-flow-copy {
+.business-flow-step.is-complete .step-marker {
+  border-color: rgba(110, 231, 183, 0.3);
+  color: #a7f3d0;
+}
+
+.step-copy {
   display: grid;
-  gap: 0.35rem;
-  min-width: 0;
+  max-width: 34rem;
+  align-content: center;
+  gap: 0.65rem;
 }
 
-.business-flow-kicker {
+.step-copy p,
+.step-copy h3 {
   margin: 0;
-  color: var(--color-accent);
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.11em;
+}
+
+.step-copy > p:first-child {
+  color: var(--brand-200);
+  font-size: 0.7rem;
+  font-weight: 850;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
-.business-flow-copy h3,
-.business-flow-copy p,
-.business-flow-results li {
-  margin: 0;
+.step-copy h3 {
+  color: inherit;
+  font-size: clamp(1.8rem, 3vw, 3rem);
+  line-height: 1.05;
 }
 
-.business-flow-copy h3 {
-  font-size: 1.05rem;
-  line-height: 1.15;
+.step-copy > p:last-child {
+  max-width: 48ch;
+  color: inherit;
+  font-size: clamp(1rem, 1.4vw, 1.12rem);
+  line-height: 1.65;
 }
 
-.business-flow-copy p {
-  color: var(--color-muted);
-  font-size: 0.98rem;
+.business-flow-visual-column {
+  position: sticky;
+  top: 7rem;
+  min-width: 0;
+}
+
+.business-flow-footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 2rem;
+  padding-top: clamp(2rem, 5vw, 4rem);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .business-flow-results {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
-  min-width: 0;
-  max-width: 100%;
+  gap: 0.6rem;
   padding: 0;
   margin: 0;
   list-style: none;
 }
 
 .business-flow-results li {
-  flex: 0 1 auto;
-  min-width: 0;
-  max-width: 100%;
-  padding: 0.55rem 0.85rem;
-  border: 1px solid var(--brand-200);
-  border-radius: 999px;
-  background: var(--color-surface);
-  color: var(--color-ink);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-light-muted);
+  font-size: 0.78rem;
   font-weight: 700;
-  overflow-wrap: anywhere;
+  padding: 0.5rem 0.75rem;
 }
 
-.business-flow-panel > .primary-action {
+.business-flow-footer .primary-action {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  justify-self: start;
-  inline-size: min(100%, 30rem);
-  min-inline-size: 0;
-  max-inline-size: 100%;
+  width: fit-content;
+  min-height: 46px;
+  border: 1px solid var(--brand-200);
+  border-radius: var(--radius-pill);
   padding: 0.85rem 1.2rem;
-  border: 1px solid var(--color-primary);
-  border-radius: 999px;
-  background: var(--color-primary);
-  color: var(--text-on-dark);
+  justify-self: end;
+  background: var(--text-light);
+  color: var(--brand-800);
   font-weight: 700;
-  line-height: 1.3;
   text-align: center;
   text-decoration: none;
   white-space: normal;
-  overflow-wrap: anywhere;
 }
 
-@media (max-width: 760px) {
-  .business-flow-grid {
-    grid-template-columns: 1fr;
+@media (max-width: 999px) {
+  .business-flow-story {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.5rem;
   }
 
-  .business-flow-results li {
+  .business-flow-steps {
+    padding-bottom: 0;
+  }
+
+  .business-flow-visual-column {
+    position: static;
+    order: -1;
+  }
+
+  .business-flow-step {
+    min-height: auto;
+    padding: 1.5rem 0;
+    opacity: 1;
+    transform: none;
+  }
+
+  .business-flow-step.is-active {
+    transform: none;
+  }
+
+  .step-copy h3 {
+    font-size: clamp(1.45rem, 5vw, 2rem);
+  }
+}
+
+@media (max-width: 700px) {
+  .business-flow {
+    padding-block: 3.5rem;
+  }
+
+  .business-flow-shell {
+    gap: 2.5rem;
+  }
+
+  .business-flow-footer {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .business-flow-results {
+    display: grid;
+  }
+
+  .business-flow-footer .primary-action {
     width: 100%;
+    justify-self: stretch;
   }
 }
 
-@media (max-width: 480px) {
-  .business-flow-panel > .primary-action {
-    inline-size: 100%;
+@media (prefers-reduced-motion: reduce) {
+  .business-flow-step,
+  .business-flow-step.is-active,
+  .step-marker {
+    transition: none;
+    transform: none;
   }
 }

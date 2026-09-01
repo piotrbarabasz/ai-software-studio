@@ -1,4 +1,4 @@
-import { PLATFORM_ID } from '@angular/core';
+import { NgZone, PLATFORM_ID } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import type { ComponentFixture } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
@@ -6,13 +6,61 @@ import { provideRouter } from '@angular/router';
 import { siteContent } from '../../core/content/site.pl';
 import { BusinessFlowSectionComponent } from './business-flow-section.component';
 
+class MockIntersectionObserver {
+  static instance: MockIntersectionObserver | undefined;
+
+  readonly observe = jasmine.createSpy('observe');
+  readonly disconnect = jasmine.createSpy('disconnect');
+
+  constructor(
+    private readonly callback: IntersectionObserverCallback,
+    readonly options?: IntersectionObserverInit,
+  ) {
+    MockIntersectionObserver.instance = this;
+  }
+
+  trigger(target: Element, isIntersecting = true): void {
+    this.callback(
+      [{ isIntersecting, target } as IntersectionObserverEntry],
+      this as unknown as IntersectionObserver,
+    );
+  }
+}
+
 describe('BusinessFlowSectionComponent', () => {
+  const mutableWindow = window as Window & {
+    IntersectionObserver?: typeof IntersectionObserver;
+  };
+  let originalIntersectionObserver: typeof IntersectionObserver | undefined;
+
   beforeEach(async () => {
+    originalIntersectionObserver = mutableWindow.IntersectionObserver;
+    MockIntersectionObserver.instance = undefined;
     await TestBed.configureTestingModule({
       imports: [BusinessFlowSectionComponent],
       providers: [provideRouter([])],
     }).compileComponents();
   });
+
+  afterEach(() => {
+    if (originalIntersectionObserver) {
+      mutableWindow.IntersectionObserver = originalIntersectionObserver;
+    } else {
+      delete mutableWindow.IntersectionObserver;
+    }
+  });
+
+  function useDesktopObserver(): MediaQueryList {
+    mutableWindow.IntersectionObserver =
+      MockIntersectionObserver as unknown as typeof IntersectionObserver;
+    const mediaQuery = {
+      matches: true,
+      addEventListener: jasmine.createSpy('addEventListener'),
+      removeEventListener: jasmine.createSpy('removeEventListener'),
+    } as unknown as MediaQueryList;
+    spyOn(window, 'matchMedia').and.returnValue(mediaQuery);
+    return mediaQuery;
+  }
 
   function render(): {
     fixture: ComponentFixture<BusinessFlowSectionComponent>;
@@ -21,48 +69,108 @@ describe('BusinessFlowSectionComponent', () => {
     const fixture = TestBed.createComponent(BusinessFlowSectionComponent);
     fixture.componentInstance.flow = siteContent.home.businessFlow;
     fixture.detectChanges();
-    return {
-      fixture,
-      element: fixture.nativeElement as HTMLElement,
-    };
+    return { fixture, element: fixture.nativeElement as HTMLElement };
   }
 
-  it('renders every stage and the handoff to a human', () => {
+  it('renders the five content-backed steps as one ordered story', () => {
+    useDesktopObserver();
     const { element } = render();
-    const stepTitles = Array.from(element.querySelectorAll('.business-flow-card h3'), (node) =>
-      node.textContent?.trim(),
-    );
+    const steps = Array.from(element.querySelectorAll<HTMLElement>('.business-flow-step'));
 
-    expect(element.querySelectorAll('.business-flow-card')).toHaveSize(4);
-    expect(stepTitles).toEqual(['Kontakt', 'Zbieranie', 'AI', 'Handoff']);
-    expect(element.querySelector('.business-flow-card[data-step-kind="handoff"]')).not.toBeNull();
-    expect(element.querySelector('.business-flow-card.is-human')).not.toBeNull();
+    expect(element.querySelectorAll('.business-flow-steps')).toHaveSize(1);
+    expect(element.querySelector('.business-flow-steps')?.tagName).toBe('OL');
+    expect(steps).toHaveSize(5);
+    expect(steps.map((step) => step.querySelector('h3')?.textContent?.trim())).toEqual(
+      siteContent.home.businessFlow.steps.map((step) => step.title),
+    );
+    expect(
+      steps.map((step) => step.querySelector('.step-copy > p:last-child')?.textContent?.trim()),
+    ).toEqual(siteContent.home.businessFlow.steps.map((step) => step.description));
+    expect(element.querySelectorAll('.business-flow-heading h2')).toHaveSize(1);
+    expect(element.querySelectorAll('.business-flow-step h3')).toHaveSize(5);
+  });
+
+  it('keeps one decorative visual, no visual controls and the existing CTA route', () => {
+    useDesktopObserver();
+    const { element } = render();
+    const visual = element.querySelector('app-business-flow-visual');
+    const cta = element.querySelector('a.primary-action') as HTMLAnchorElement | null;
+
+    expect(visual).not.toBeNull();
+    expect(visual?.querySelector('[aria-hidden="true"]')).not.toBeNull();
+    expect(visual?.querySelectorAll('a, button, input, select, textarea')).toHaveSize(0);
+    expect(cta?.getAttribute('href')).toBe('/kontakt?projectType=backend_api');
+    expect(cta?.textContent).toContain('Sprawdź taki proces na swoim przykładzie');
     expect(element.querySelector('.business-flow-results')?.textContent).toContain(
       'Jasny handoff.',
     );
-    expect(element.querySelectorAll('.business-flow-card [aria-hidden="true"]')).toHaveSize(4);
-    expect(element.querySelectorAll('img, video, iframe, object, embed, use')).toHaveSize(0);
   });
 
-  it('links to contact with the existing project type query', () => {
+  it('observes all steps outside Angular with the reading-zone root margin', () => {
+    useDesktopObserver();
+    const ngZone = TestBed.inject(NgZone);
+    const runOutsideAngular = spyOn(ngZone, 'runOutsideAngular').and.callThrough();
     const { element } = render();
-    const cta = element.querySelector('a.primary-action') as HTMLAnchorElement | null;
+    const observer = MockIntersectionObserver.instance;
 
-    expect(cta?.getAttribute('href')).toBe('/kontakt?projectType=backend_api');
-    expect(cta?.textContent).toContain('Sprawdź taki proces na swoim przykładzie');
+    expect(runOutsideAngular).toHaveBeenCalled();
+    expect(observer?.options?.rootMargin).toBe('-35% 0px -45% 0px');
+    expect(observer?.observe).toHaveBeenCalledTimes(5);
+    expect(observer?.observe.calls.allArgs().map(([target]) => target)).toEqual(
+      Array.from(element.querySelectorAll('.business-flow-step')),
+    );
   });
 
-  it('does not introduce unsupported statistics or claims without sources', () => {
+  it('changes active state once and skips Angular work for the same step', () => {
+    useDesktopObserver();
+    const { fixture, element } = render();
+    const ngZone = TestBed.inject(NgZone);
+    const run = spyOn(ngZone, 'run').and.callThrough();
+    run.calls.reset();
+    const thirdStep = element.querySelector('[data-flow-step="3"]') as HTMLElement;
+
+    MockIntersectionObserver.instance?.trigger(thirdStep);
+    fixture.detectChanges();
+    expect(fixture.componentInstance.activeStep).toBe(2);
+    expect(element.querySelector('.business-flow')?.getAttribute('data-active-step')).toBe('3');
+    expect(thirdStep).toHaveClass('is-active');
+    const zoneRunCountAfterChange = run.calls.count();
+    expect(zoneRunCountAfterChange).toBeGreaterThan(0);
+
+    MockIntersectionObserver.instance?.trigger(thirdStep);
+    expect(run.calls.count()).toBe(zoneRunCountAfterChange);
+  });
+
+  it('disconnects the observer and breakpoint listener on destroy', () => {
+    const mediaQuery = useDesktopObserver();
+    const { fixture } = render();
+    const observer = MockIntersectionObserver.instance;
+
+    fixture.destroy();
+
+    expect(observer?.disconnect).toHaveBeenCalledTimes(1);
+    expect(mediaQuery.removeEventListener).toHaveBeenCalled();
+  });
+
+  it('keeps the complete static story when IntersectionObserver is unavailable', () => {
+    delete mutableWindow.IntersectionObserver;
+    spyOn(window, 'matchMedia').and.returnValue({
+      matches: true,
+      addEventListener: jasmine.createSpy('addEventListener'),
+      removeEventListener: jasmine.createSpy('removeEventListener'),
+    } as unknown as MediaQueryList);
+
     const { element } = render();
-    const text = element.textContent ?? '';
 
-    expect(text).not.toContain('%');
-    expect(text).not.toContain('procent');
-    expect(text).not.toContain('statystyka');
+    expect(MockIntersectionObserver.instance).toBeUndefined();
+    expect(element.querySelectorAll('.business-flow-step')).toHaveSize(5);
+    expect(element.querySelectorAll('.business-flow-step h3')).toHaveSize(5);
   });
 
-  it('renders without browser globals during SSR', async () => {
+  it('does not access browser observers during SSR', async () => {
     TestBed.resetTestingModule();
+    mutableWindow.IntersectionObserver =
+      MockIntersectionObserver as unknown as typeof IntersectionObserver;
     await TestBed.configureTestingModule({
       imports: [BusinessFlowSectionComponent],
       providers: [{ provide: PLATFORM_ID, useValue: 'server' }, provideRouter([])],
@@ -70,42 +178,8 @@ describe('BusinessFlowSectionComponent', () => {
 
     const fixture = TestBed.createComponent(BusinessFlowSectionComponent);
     fixture.componentInstance.flow = siteContent.home.businessFlow;
-    fixture.detectChanges();
-
-    expect(fixture.nativeElement.querySelectorAll('.business-flow-card')).toHaveSize(4);
-    expect(fixture.nativeElement.querySelector('svg')).not.toBeNull();
-  });
-
-  it('keeps the flow inside narrow and wide container widths', () => {
-    const { fixture, element } = render();
-    const flow = element.querySelector('.business-flow-panel') as HTMLElement;
-    const host = fixture.nativeElement as HTMLElement;
-    host.style.display = 'block';
-    const cta = element.querySelector(
-      '.business-flow-panel > .primary-action',
-    ) as HTMLAnchorElement;
-
-    for (const width of [320, 390, 768, 1024, 1440]) {
-      host.style.width = `${width}px`;
-      flow.style.width = '100%';
-      flow.style.margin = '0';
-      fixture.detectChanges();
-      void flow.offsetWidth;
-
-      const flowRect = flow.getBoundingClientRect();
-      const rightBoundary = flowRect.left + flow.clientLeft + flow.clientWidth + 0.5;
-
-      expect(flow.scrollWidth).toBeLessThanOrEqual(flow.clientWidth);
-      expect(cta.scrollWidth).toBeLessThanOrEqual(cta.clientWidth);
-      expect(cta.getBoundingClientRect().right).toBeLessThanOrEqual(rightBoundary);
-
-      const directChildren = Array.from(flow.children) as HTMLElement[];
-      for (const child of directChildren) {
-        const childRect = child.getBoundingClientRect();
-        expect(childRect.left).toBeGreaterThanOrEqual(flowRect.left - 0.5);
-        expect(childRect.right).toBeLessThanOrEqual(rightBoundary);
-        expect(child.scrollWidth).toBeLessThanOrEqual(child.clientWidth);
-      }
-    }
+    expect(() => fixture.detectChanges()).not.toThrow();
+    expect(fixture.nativeElement.querySelectorAll('.business-flow-step')).toHaveSize(5);
+    expect(MockIntersectionObserver.instance).toBeUndefined();
   });
 });
