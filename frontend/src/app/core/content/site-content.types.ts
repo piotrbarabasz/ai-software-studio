@@ -408,9 +408,23 @@ export interface SolutionsPageContent {
   readonly closingCta: HomeClosingCta;
 }
 
+export interface HomeSevenDayDemoMilestone {
+  readonly id: string;
+  readonly period: string;
+  readonly title: string;
+  readonly description: string;
+}
+
 export interface HomeSevenDayDemo {
   readonly eyebrow: string;
   readonly title: string;
+  readonly lead: string;
+  readonly timeline: readonly [
+    HomeSevenDayDemoMilestone,
+    HomeSevenDayDemoMilestone,
+    HomeSevenDayDemoMilestone,
+    HomeSevenDayDemoMilestone,
+  ];
   readonly deliverablesTitle: string;
   readonly deliverables: readonly [string, string, string, string];
   readonly inputsTitle: string;
@@ -418,6 +432,7 @@ export interface HomeSevenDayDemo {
   readonly pricingTitle: string;
   readonly pricingDescription: string;
   readonly pricingNote: string;
+  readonly cta: HomeCta;
 }
 
 export interface HomeBusinessFlowStep {

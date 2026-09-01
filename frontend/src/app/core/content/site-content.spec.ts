@@ -193,6 +193,17 @@ describe('Site content model', () => {
     expect(siteContent.home.sevenDayDemo.pricingNote).toBe(
       'Kwota zależy od danych, liczby integracji i sposobu prezentacji demo.',
     );
+    expect(siteContent.home.sevenDayDemo.timeline).toEqual([
+      jasmine.objectContaining({ period: 'Dzień 1', title: 'Zrozumienie procesu' }),
+      jasmine.objectContaining({ period: 'Dni 2–3', title: 'Budowa demo' }),
+      jasmine.objectContaining({ period: 'Dni 4–5', title: 'Test i dopracowanie' }),
+      jasmine.objectContaining({ period: 'Dni 6–7', title: 'Walidacja i rekomendacja' }),
+    ]);
+    expect(siteContent.home.sevenDayDemo.cta).toEqual({
+      label: 'Pokaż mi proces',
+      path: '/kontakt',
+      queryParams: { projectType: 'mvp_prototype' },
+    });
     expect(siteContent.home.trustTeaser).toEqual({
       title: 'Osoba odpowiedzialna za projekt',
       points: [

@@ -1,0 +1,69 @@
+<section class="seven-day-demo section-shell" aria-labelledby="seven-day-demo-title">
+  <header appReveal class="demo-heading reveal--subtle">
+    <p class="eyebrow">{{ demo.eyebrow }}</p>
+    <h2 id="seven-day-demo-title">{{ demo.title }}</h2>
+    <p class="demo-lead">{{ demo.lead }}</p>
+  </header>
+
+  <div class="timeline-shell">
+    <svg class="timeline-flow" viewBox="0 0 100 4" preserveAspectRatio="none" aria-hidden="true">
+      <path class="motion-flow-line" pathLength="1" d="M12.5 2H87.5" />
+      <path class="motion-flow-signal" pathLength="1" d="M12.5 2H87.5" />
+    </svg>
+
+    <ol appReveal class="demo-timeline motion-stagger" aria-label="Plan przygotowania demo">
+      @for (milestone of demo.timeline; track milestone.id; let index = $index) {
+        <li class="demo-milestone">
+          <span class="milestone-marker" aria-hidden="true">
+            {{ (index + 1).toString().padStart(2, '0') }}
+          </span>
+          <p class="milestone-period">{{ milestone.period }}</p>
+          <h3>{{ milestone.title }}</h3>
+          <p>{{ milestone.description }}</p>
+        </li>
+      }
+    </ol>
+  </div>
+
+  <div class="demo-outcome-layout">
+    <section appReveal class="result-panel reveal--subtle" aria-labelledby="demo-results-title">
+      <span class="result-seven" aria-hidden="true">7</span>
+      <p class="result-kicker">Rezultat pierwszego etapu</p>
+      <h3 id="demo-results-title">{{ demo.deliverablesTitle }}</h3>
+      <ul class="result-list">
+        @for (item of demo.deliverables; track item) {
+          <li>
+            <span aria-hidden="true">✓</span>
+            {{ item }}
+          </li>
+        }
+      </ul>
+    </section>
+
+    <section class="client-inputs" aria-labelledby="demo-inputs-title">
+      <p class="inputs-kicker">Start współpracy</p>
+      <h3 id="demo-inputs-title">{{ demo.inputsTitle }}</h3>
+      <ul class="input-list">
+        @for (item of demo.inputs; track item; let index = $index) {
+          <li>
+            <span aria-hidden="true">{{ (index + 1).toString().padStart(2, '0') }}</span>
+            {{ item }}
+          </li>
+        }
+      </ul>
+    </section>
+  </div>
+
+  <footer class="demo-conversion">
+    <div class="pricing-note" role="note">
+      <p class="pricing-kicker">{{ demo.pricingTitle }}</p>
+      <p>{{ demo.pricingDescription }}</p>
+      <p>{{ demo.pricingNote }}</p>
+    </div>
+
+    <a class="primary-action" [routerLink]="demo.cta.path" [queryParams]="demo.cta.queryParams">
+      {{ demo.cta.label }}
+      <span aria-hidden="true">→</span>
+    </a>
+  </footer>
+</section>

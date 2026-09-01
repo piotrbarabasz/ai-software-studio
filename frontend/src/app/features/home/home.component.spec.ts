@@ -196,12 +196,14 @@ describe('HomeComponent', () => {
 
     expect(hero?.hasAttribute('appReveal')).toBeFalse();
     expect(hero?.classList).not.toContain('reveal');
-    expect(revealElements).toHaveSize(7);
+    expect(revealElements).toHaveSize(9);
     expect(element.querySelector('.trust-strip ul[appReveal].motion-stagger')).not.toBeNull();
     expect(element.querySelector('.use-cases .section-heading[appReveal]')).not.toBeNull();
     expect(element.querySelector('.automation-bento[appReveal].motion-stagger')).not.toBeNull();
     expect(element.querySelector('.evidence-teaser .section-heading[appReveal]')).not.toBeNull();
-    expect(element.querySelector('.seven-day-demo .section-heading[appReveal]')).not.toBeNull();
+    expect(element.querySelector('.seven-day-demo .demo-heading[appReveal]')).not.toBeNull();
+    expect(element.querySelector('.seven-day-demo .demo-timeline[appReveal]')).not.toBeNull();
+    expect(element.querySelector('.seven-day-demo .result-panel[appReveal]')).not.toBeNull();
     expect(element.querySelector('.owner-card[appReveal]')).not.toBeNull();
     expect(element.querySelector('.closing-cta[appReveal]')).not.toBeNull();
     expect(element.querySelector('header [appReveal], footer [appReveal]')).toBeNull();
@@ -250,37 +252,23 @@ describe('HomeComponent', () => {
     );
   });
 
-  it('explains the seven-day deliverables, client inputs and pricing method', () => {
+  it('integrates the four-step seven-day timeline at the existing homepage position', () => {
     const element = createFixture();
+    const demoComponent = element.querySelector('app-seven-day-demo');
     const demoSection = element.querySelector('.seven-day-demo');
-    const lists = demoSection?.querySelectorAll('.scope-list');
 
+    expect(demoComponent).not.toBeNull();
+    expect(demoComponent?.getAttribute('data-home-section')).toBe('demo-scope');
+    expect(element.querySelector('.seven-day-demo-grid')).toBeNull();
     expect(demoSection?.querySelector('h2')?.textContent?.trim()).toBe(
-      'Co otrzymujesz po 7 dniach',
+      'Od procesu do działającego demo w 7 dni',
     );
+    expect(demoSection?.querySelectorAll('.demo-timeline')).toHaveSize(1);
+    expect(demoSection?.querySelectorAll('.demo-milestone')).toHaveSize(4);
+    expect(demoSection?.querySelectorAll('a.primary-action')).toHaveSize(1);
     expect(
-      Array.from(lists?.[0]?.querySelectorAll('li') ?? [], (item) => item.textContent?.trim()),
-    ).toEqual([
-      'Opis wybranego procesu i jego granic',
-      'Działające demo jednego scenariusza',
-      'Lista ryzyk, danych i wymaganych integracji',
-      'Rekomendacja kolejnego kroku',
-    ]);
-    expect(
-      Array.from(lists?.[1]?.querySelectorAll('li') ?? [], (item) => item.textContent?.trim()),
-    ).toEqual([
-      'Krótki opis obecnej pracy',
-      'Kilka przykładowych wiadomości, dokumentów lub pytań',
-      'Kontakt do osoby, która zna proces',
-      'Informacja o używanych narzędziach',
-    ]);
-    expect(demoSection?.querySelector('.pricing-card > p')?.textContent?.trim()).toBe(
-      'Po krótkiej rozmowie otrzymujesz stały zakres i wycenę pierwszego etapu przed rozpoczęciem prac.',
-    );
-    expect(demoSection?.querySelector('.pricing-note')?.textContent?.trim()).toBe(
-      'Kwota zależy od danych, liczby integracji i sposobu prezentacji demo.',
-    );
-    expect(demoSection?.textContent).not.toMatch(/\d+\s*(zł|PLN)|\d+\s*–\s*\d+/i);
+      demoSection?.querySelector('a[href="/kontakt?projectType=mvp_prototype"]'),
+    ).not.toBeNull();
   });
 
   it('shows the named owner, verified facts and a separate final CTA', () => {

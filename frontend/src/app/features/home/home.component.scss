@@ -40,7 +40,6 @@
 .hero-copy,
 .evidence-teaser,
 .evidence-teaser-card,
-.seven-day-demo-panel,
 .owner-card-panel,
 .closing-cta-panel {
   min-width: 0;
@@ -143,7 +142,6 @@
 .hero-audience,
 .section-lead,
 .evidence-teaser p,
-.seven-day-demo p,
 .owner-card-panel p,
 .closing-cta-panel p {
   color: var(--color-muted);
@@ -209,7 +207,6 @@
   line-height: 1.02;
 }
 .evidence-teaser p,
-.seven-day-demo p,
 .owner-card-panel p,
 .closing-cta-panel p {
   margin: 0;
@@ -262,52 +259,6 @@
 .evidence-note {
   border-top: 1px solid var(--border-on-dark);
   padding-top: 1rem;
-  font-size: 0.95rem !important;
-}
-.seven-day-demo-panel {
-  display: grid;
-  gap: 1.5rem;
-  border-color: var(--brand-200);
-  background: var(--surface-brand);
-}
-.seven-day-demo-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
-}
-.seven-day-demo-grid article {
-  display: grid;
-  align-content: start;
-  gap: 0.9rem;
-  min-width: 0;
-  padding: clamp(1.1rem, 2vw, 1.5rem);
-  border: 1px solid var(--brand-200);
-  border-radius: var(--radius-card);
-  background: var(--color-surface);
-}
-.seven-day-demo-grid h3 {
-  margin: 0;
-  font-size: 1.25rem;
-  line-height: 1.2;
-}
-.scope-list {
-  display: grid;
-  gap: 0.7rem;
-  padding-left: 1.15rem;
-  margin: 0;
-}
-.scope-list li {
-  padding-left: 0.2rem;
-}
-.scope-list li::marker {
-  color: var(--color-primary);
-}
-.pricing-card {
-  border-color: var(--brand-400) !important;
-}
-.pricing-note {
-  border-left: 3px solid var(--brand-400);
-  padding-left: 0.75rem;
   font-size: 0.95rem !important;
 }
 .owner-card-panel,
@@ -375,8 +326,7 @@
 }
 @media (max-width: 760px) {
   .trust-strip ul,
-  .evidence-teaser-grid,
-  .seven-day-demo-grid {
+  .evidence-teaser-grid {
     grid-template-columns: minmax(0, 1fr);
   }
   .hero-actions,
@@ -398,7 +348,6 @@
   .hero-copy,
   .evidence-teaser,
   .evidence-teaser-card,
-  .seven-day-demo-panel,
   .owner-card-panel,
   .closing-cta-panel {
     border-radius: var(--radius-card);
@@ -411,10 +360,6 @@
 }
 
 @media (min-width: 761px) and (max-width: 980px) {
-  .seven-day-demo-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
   .trust-strip ul {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }

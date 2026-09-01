@@ -485,6 +485,107 @@ async function assertProcessStory(page, baseUrl) {
   }
 }
 
+async function assertSevenDayDemo(page, baseUrl) {
+  for (const viewport of [
+    { width: 1440, height: 900 },
+    { width: 768, height: 1024 },
+    { width: 390, height: 844 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
+    const state = await page.locator('.seven-day-demo').evaluate((section) => {
+      const milestones = Array.from(section.querySelectorAll('.demo-milestone'));
+      const milestoneBoxes = milestones.map((milestone) => milestone.getBoundingClientRect());
+      const markerBoxes = Array.from(section.querySelectorAll('.milestone-marker'), (marker) =>
+        marker.getBoundingClientRect(),
+      );
+      const resultPanel = section.querySelector('.result-panel');
+      const inputPanel = section.querySelector('.client-inputs');
+      const cta = section.querySelector('a.primary-action');
+      const conversion = section.querySelector('.demo-conversion');
+      const sectionBox = section.getBoundingClientRect();
+      const resultBox = resultPanel?.getBoundingClientRect();
+      const inputBox = inputPanel?.getBoundingClientRect();
+      const ctaBox = cta?.getBoundingClientRect();
+      const conversionBox = conversion?.getBoundingClientRect();
+      const flow = section.querySelector('.timeline-flow');
+      return {
+        ctaCount: section.querySelectorAll('a.primary-action').length,
+        ctaHeight: ctaBox?.height ?? 0,
+        ctaHref: cta?.getAttribute('href') ?? '',
+        ctaWidth: ctaBox?.width ?? 0,
+        conversionWidth: conversionBox?.width ?? 0,
+        documentOverflow:
+          document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+        flowDisplay: flow ? getComputedStyle(flow).display : '',
+        headingCount: section.querySelectorAll('h2').length,
+        hiddenMilestones: milestones.filter(
+          (milestone) => getComputedStyle(milestone).display === 'none',
+        ).length,
+        inputCount: section.querySelectorAll('.input-list li').length,
+        inputInside:
+          !!inputBox &&
+          inputBox.left >= sectionBox.left - 1 &&
+          inputBox.right <= sectionBox.right + 1,
+        markerLefts: markerBoxes.map((box) => box.left),
+        milestoneCount: milestones.length,
+        milestonePeriods: milestones.map(
+          (milestone) => milestone.querySelector('.milestone-period')?.textContent?.trim() ?? '',
+        ),
+        milestoneTops: milestoneBoxes.map((box) => box.top),
+        orderedTimeline: section.querySelector('.demo-timeline')?.tagName === 'OL',
+        resultCount: section.querySelectorAll('.result-list li').length,
+        resultInside:
+          !!resultBox &&
+          resultBox.left >= sectionBox.left - 1 &&
+          resultBox.right <= sectionBox.right + 1,
+        resultVisible: !!resultBox && resultBox.width > 0 && resultBox.height > 0,
+        sectionWidth: sectionBox.width,
+      };
+    });
+
+    const commonFailure =
+      state.milestoneCount !== 4 ||
+      state.hiddenMilestones !== 0 ||
+      !state.orderedTimeline ||
+      state.headingCount !== 1 ||
+      state.resultCount !== 4 ||
+      state.inputCount !== 4 ||
+      !state.resultVisible ||
+      !state.resultInside ||
+      !state.inputInside ||
+      state.ctaCount !== 1 ||
+      state.ctaHref !== '/kontakt?projectType=mvp_prototype' ||
+      state.ctaHeight < 44 ||
+      state.documentOverflow ||
+      JSON.stringify(state.milestonePeriods) !==
+        JSON.stringify(['Dzień 1', 'Dni 2–3', 'Dni 4–5', 'Dni 6–7']);
+    const horizontalFailure =
+      viewport.width === 1440 &&
+      (state.flowDisplay === 'none' ||
+        state.milestoneTops.some((top) => Math.abs(top - state.milestoneTops[0]) > 2));
+    const verticalFailure =
+      viewport.width < 1100 &&
+      (state.flowDisplay !== 'none' ||
+        state.markerLefts.some((left) => Math.abs(left - state.markerLefts[0]) > 2) ||
+        state.milestoneTops.some(
+          (top, index) => index > 0 && top <= state.milestoneTops[index - 1],
+        ));
+    const mobileCtaFailure = viewport.width === 390 && state.ctaWidth < state.conversionWidth - 2;
+
+    if (commonFailure || horizontalFailure || verticalFailure || mobileCtaFailure) {
+      throw new Error(
+        `Seven-day demo audit failed at ${viewport.width}px: ${JSON.stringify(state)}`,
+      );
+    }
+  }
+
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
+  await page.locator('.seven-day-demo a.primary-action').click();
+  await page.waitForURL(/\/kontakt\?projectType=mvp_prototype$/);
+}
+
 async function assertContactContexts(page, baseUrl) {
   const scenarios = [
     { query: '', value: '', guidance: 'Co jest dziś wykonywane ręcznie?' },
@@ -594,12 +695,25 @@ async function assertReducedMotion(page, baseUrl) {
     );
     const bentoCards = Array.from(document.querySelectorAll('.automation-bento-card'));
     const processNodes = Array.from(document.querySelectorAll('.process-node'));
+    const demoMilestones = Array.from(document.querySelectorAll('.demo-milestone'));
+    const demoSignal = document.querySelector('.timeline-flow .motion-flow-signal');
     return {
       animationDuration: style?.animationDuration ?? '',
       bentoVisible: bentoCards.every((card) => {
         const cardStyle = getComputedStyle(card);
         return cardStyle.opacity === '1' && cardStyle.transform === 'none';
       }),
+      demoSignalStatic: !demoSignal || getComputedStyle(demoSignal).animationName === 'none',
+      demoVisible:
+        demoMilestones.length === 4 &&
+        demoMilestones.every((milestone) => {
+          const milestoneStyle = getComputedStyle(milestone);
+          return (
+            milestoneStyle.display !== 'none' &&
+            milestoneStyle.opacity === '1' &&
+            milestoneStyle.transform === 'none'
+          );
+        }),
       flowAnimationDurations: flowSignalStyles.map((signalStyle) => signalStyle.animationDuration),
       processStatic: processNodes.every((node) => getComputedStyle(node).transform === 'none'),
       processTransitionDurations: processNodes.map(
@@ -621,6 +735,8 @@ async function assertReducedMotion(page, baseUrl) {
   if (
     state.scrollBehavior !== 'auto' ||
     !state.bentoVisible ||
+    !state.demoVisible ||
+    !state.demoSignalStatic ||
     !state.processStatic ||
     state.processTransitionDurations.some((duration) => durationInMilliseconds(duration) > 10) ||
     durationInMilliseconds(state.animationDuration) > 10 ||
@@ -713,6 +829,7 @@ async function main() {
 
     await assertAutomationBento(page, server.baseUrl);
     await assertProcessStory(page, server.baseUrl);
+    await assertSevenDayDemo(page, server.baseUrl);
     await assertContactContexts(page, server.baseUrl);
     await assertBrandContrast(page, server.baseUrl);
     await assertReducedMotion(page, server.baseUrl);
