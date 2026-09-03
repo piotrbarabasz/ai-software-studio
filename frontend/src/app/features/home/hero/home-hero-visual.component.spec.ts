@@ -38,7 +38,9 @@ describe('HomeHeroVisualComponent', () => {
         ({
           matches: query === '(prefers-reduced-motion: reduce)',
           media: query,
-        }) as MediaQueryList,
+          addEventListener: jasmine.createSpy('addEventListener'),
+          removeEventListener: jasmine.createSpy('removeEventListener'),
+        }) as unknown as MediaQueryList,
     );
     const fixture = TestBed.createComponent(HomeHeroVisualComponent);
     fixture.detectChanges();

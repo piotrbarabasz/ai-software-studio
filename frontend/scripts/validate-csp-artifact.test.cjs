@@ -4,7 +4,10 @@ const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
 
-const { hashInlineScript } = require('./generate-nginx-security-headers.cjs');
+const {
+  SPLINE_INLINE_SCRIPT_HASHES,
+  hashInlineScript,
+} = require('./generate-nginx-security-headers.cjs');
 const { validateCspArtifact } = require('./validate-csp-artifact.cjs');
 
 function withArtifact(html, callback) {
@@ -19,7 +22,7 @@ function withArtifact(html, callback) {
 
 function headersFor(jsonLd, overrides = '') {
   const hash = hashInlineScript(jsonLd);
-  return `add_header Content-Security-Policy "default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; script-src 'self' ${hash}; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; ${overrides}" always;`;
+  return `add_header Content-Security-Policy "default-src 'self'; base-uri 'self'; connect-src 'self' https://api.site.invalid https://prod.spline.design https://fonts.gstatic.com; form-action 'self'; frame-ancestors 'none'; img-src 'self' data: https://app.spline.design; object-src 'none'; script-src 'self' ${hash} ${SPLINE_INLINE_SCRIPT_HASHES.join(' ')}; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; ${overrides}" always;`;
 }
 
 test('accepts extracted CSS, hashed JSON-LD and Angular prerender styles', () => {
@@ -55,7 +58,7 @@ test('rejects wildcards, unsafe-eval and foreign script origins', () => {
   const jsonLd = '{}';
   const headers = headersFor(jsonLd)
     .replace("script-src 'self'", "script-src 'self' 'unsafe-eval' https://cdn.spline.design")
-    .replace('default-src', 'connect-src *; default-src');
+    .replace("connect-src 'self'", "connect-src 'self' *");
 
   withArtifact(
     `<link rel="stylesheet" href="styles.css"><script type="application/ld+json">${jsonLd}</script>`,
@@ -66,6 +69,45 @@ test('rejects wildcards, unsafe-eval and foreign script origins', () => {
       assert.match(errors, /must not contain a foreign script origin/);
     },
   );
+});
+
+test('requires only the audited Spline origins in their narrow directives', () => {
+  const jsonLd = '{}';
+  const html = `<link rel="stylesheet" href="styles.css"><script type="application/ld+json">${jsonLd}</script>`;
+
+  withArtifact(html, (root) => {
+    const missingSceneOrigin = headersFor(jsonLd).replace(' https://prod.spline.design', '');
+    const missingFontFetchOrigin = headersFor(jsonLd).replace(' https://fonts.gstatic.com', '');
+    const missingSplineImageOrigin = headersFor(jsonLd).replace(' https://app.spline.design', '');
+
+    assert.match(
+      validateCspArtifact(root, missingSceneOrigin).join('\n'),
+      /connect-src is missing required sources:.*prod\.spline\.design/,
+    );
+    assert.match(
+      validateCspArtifact(root, missingFontFetchOrigin).join('\n'),
+      /connect-src is missing required sources:.*fonts\.gstatic\.com/,
+    );
+    assert.match(
+      validateCspArtifact(root, missingSplineImageOrigin).join('\n'),
+      /img-src is missing required sources:.*app\.spline\.design/,
+    );
+  });
+});
+
+test('requires the exact audited hashes for Spline scene behavior scripts', () => {
+  const jsonLd = '{}';
+  const html = `<link rel="stylesheet" href="styles.css"><script type="application/ld+json">${jsonLd}</script>`;
+
+  withArtifact(html, (root) => {
+    for (const hash of SPLINE_INLINE_SCRIPT_HASHES) {
+      const headers = headersFor(jsonLd).replace(` ${hash}`, '');
+      assert.match(
+        validateCspArtifact(root, headers).join('\n'),
+        /script-src is missing audited Spline behavior hashes/,
+      );
+    }
+  });
 });
 
 test('detects a missing JSON-LD hash and a fictitious reporting endpoint', () => {

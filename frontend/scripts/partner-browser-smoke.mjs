@@ -7,6 +7,11 @@ import { chromium } from '@playwright/test';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distDirectory = path.resolve(__dirname, '../dist/aisoftware-studio/browser');
+const generatedSecurityHeadersPath = path.resolve(
+  __dirname,
+  '../generated/nginx-security-headers.conf',
+);
+const splineSceneUrl = 'https://prod.spline.design/BGR1H1zz5oGfRgjZ/scene.splinecode';
 const desktopWidths = [921, 960, 1024, 1200];
 const mobileWidths = [320, 390];
 const auditedRoutes = [
@@ -60,6 +65,17 @@ function contentType(filePath) {
 }
 
 async function startServer() {
+  const securityHeaders = await fs.readFile(generatedSecurityHeadersPath, 'utf8');
+  const contentSecurityPolicy = securityHeaders.match(
+    /add_header\s+Content-Security-Policy\s+"([^"]+)"/i,
+  )?.[1];
+  if (!contentSecurityPolicy) {
+    throw new Error('Wygenerowana konfiguracja nie zawiera wymuszanego CSP.');
+  }
+  const headersFor = (filePath) => ({
+    'Content-Security-Policy': contentSecurityPolicy,
+    'Content-Type': contentType(filePath),
+  });
   const server = createServer(async (request, response) => {
     try {
       const pathname = decodeURIComponent(new URL(request.url ?? '/', 'http://local').pathname);
@@ -74,11 +90,11 @@ async function startServer() {
         if (stat.isDirectory()) {
           filePath = path.join(filePath, 'index.html');
         }
-        response.writeHead(200, { 'Content-Type': contentType(filePath) });
+        response.writeHead(200, headersFor(filePath));
         response.end(await fs.readFile(filePath));
       } catch {
         const notFoundPath = path.join(distDirectory, '404', 'index.html');
-        response.writeHead(404, { 'Content-Type': contentType(notFoundPath) });
+        response.writeHead(404, headersFor(notFoundPath));
         response.end(await fs.readFile(notFoundPath));
       }
     } catch {
@@ -402,14 +418,37 @@ async function assertHeroThreeDimensionalEnhancement(page, baseUrl) {
     { width: 390, height: 844 },
   ]) {
     await page.setViewportSize(viewport);
-    await page.goto(`${baseUrl}/`, { waitUntil: 'networkidle' });
+    await page.goto(`${baseUrl}/`, { waitUntil: 'domcontentloaded' });
     const hero = page.locator('.hero');
+    await hero.waitFor();
     const initialHeight = (await hero.boundingBox())?.height ?? 0;
-    await page.waitForTimeout(600);
+    const fallbackOnlyViewport = viewport.width < 1024;
+    if (fallbackOnlyViewport) {
+      await page.waitForTimeout(600);
+    } else {
+      await page.waitForSelector('spline-viewer');
+      await page.waitForFunction(
+        (expectedUrl) => {
+          const viewer = document.querySelector('spline-viewer');
+          const layer = document.querySelector('[data-hero-spline]');
+          return (
+            viewer?.getAttribute('url') === expectedUrl &&
+            layer &&
+            getComputedStyle(layer).opacity === '1'
+          );
+        },
+        splineSceneUrl,
+        { timeout: 30_000 },
+      );
+    }
     const settledHeight = (await hero.boundingBox())?.height ?? 0;
     const state = await hero.evaluate((section) => {
       const fallback = section.querySelector('[data-hero-fallback]');
       const fallbackStyle = fallback ? getComputedStyle(fallback) : null;
+      const splineLayer = section.querySelector('[data-hero-spline]');
+      const viewer = section.querySelector('spline-viewer');
+      const fallbackBox = fallback?.getBoundingClientRect();
+      const splineBox = splineLayer?.getBoundingClientRect();
       const actions = Array.from(section.querySelectorAll('.hero-actions a'));
       return {
         actionCount: actions.length,
@@ -423,12 +462,30 @@ async function assertHeroThreeDimensionalEnhancement(page, baseUrl) {
         fallbackVisible:
           fallbackStyle?.display !== 'none' && Number.parseFloat(fallbackStyle?.opacity ?? '0') > 0,
         h1Visible: Boolean(section.querySelector('h1')?.getBoundingClientRect().height),
+        fallbackHeight: fallbackBox?.height ?? 0,
+        fallbackWidth: fallbackBox?.width ?? 0,
+        splineHeight: splineBox?.height ?? 0,
+        splineWidth: splineBox?.width ?? 0,
+        splineLayerOpacity: splineLayer ? getComputedStyle(splineLayer).opacity : null,
         splineContainerCount: section.querySelectorAll('[data-hero-spline]').length,
         splineViewerCount: section.querySelectorAll('spline-viewer').length,
+        viewerAriaHidden: viewer?.getAttribute('aria-hidden') ?? null,
+        viewerTabIndex: viewer?.getAttribute('tabindex') ?? null,
+        viewerUrl: viewer?.getAttribute('url') ?? null,
       };
     });
 
-    const fallbackOnlyViewport = viewport.width < 1024;
+    const desktopSplineFailed =
+      !fallbackOnlyViewport &&
+      (state.fallbackVisible ||
+        state.splineContainerCount !== 1 ||
+        state.splineViewerCount !== 1 ||
+        state.splineLayerOpacity !== '1' ||
+        state.viewerUrl !== splineSceneUrl ||
+        state.viewerAriaHidden !== 'true' ||
+        state.viewerTabIndex !== '-1' ||
+        Math.abs(state.fallbackWidth - state.splineWidth) > 1 ||
+        Math.abs(state.fallbackHeight - state.splineHeight) > 1);
     if (
       !state.h1Visible ||
       state.actionCount !== 2 ||
@@ -439,10 +496,46 @@ async function assertHeroThreeDimensionalEnhancement(page, baseUrl) {
       Math.abs(initialHeight - settledHeight) > 1 ||
       (fallbackOnlyViewport &&
         (state.splineContainerCount !== 0 || state.splineViewerCount !== 0)) ||
+      desktopSplineFailed ||
       state.splineViewerCount > 1
     ) {
       throw new Error(
         `Hero 3D progressive enhancement failed at ${viewport.width}px: ${JSON.stringify({ ...state, initialHeight, settledHeight })}`,
+      );
+    }
+
+    if (!fallbackOnlyViewport) {
+      await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+      await page.waitForFunction(
+        () => {
+          const fallback = document.querySelector('[data-hero-fallback]');
+          const layer = document.querySelector('[data-hero-spline]');
+          return (
+            fallback &&
+            layer &&
+            getComputedStyle(fallback).opacity === '1' &&
+            getComputedStyle(layer).opacity === '0'
+          );
+        },
+        undefined,
+        { timeout: 15_000 },
+      );
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.waitForFunction(
+        (expectedUrl) => {
+          const viewer = document.querySelector('spline-viewer');
+          const fallback = document.querySelector('[data-hero-fallback]');
+          const layer = document.querySelector('[data-hero-spline]');
+          return (
+            viewer?.getAttribute('url') === expectedUrl &&
+            fallback &&
+            layer &&
+            getComputedStyle(fallback).opacity === '0' &&
+            getComputedStyle(layer).opacity === '1'
+          );
+        },
+        splineSceneUrl,
+        { timeout: 30_000 },
       );
     }
   }
@@ -857,6 +950,7 @@ async function main() {
       await page.setViewportSize(viewport);
       for (const route of auditedRoutes) {
         const response = await page.goto(`${server.baseUrl}${route}`, { waitUntil: 'networkidle' });
+        await page.locator('h1').waitFor();
         const state = await pageAuditState(page, route);
         const problems = auditProblems(state, route, viewport, response?.status());
         const result = {
@@ -902,7 +996,41 @@ async function main() {
       }
     }
 
+    const heroConsoleErrors = [];
+    const heroPageErrors = [];
+    const heroNetworkFailures = [];
+    const recordHeroConsoleError = (message) => {
+      if (message.type() === 'error') {
+        heroConsoleErrors.push(message.text());
+      }
+    };
+    const recordHeroPageError = (error) => heroPageErrors.push(error.message);
+    const recordHeroRequestFailure = (request) => {
+      heroNetworkFailures.push(`${request.url()}: ${request.failure()?.errorText ?? 'failed'}`);
+    };
+    const recordHeroResponseFailure = (response) => {
+      if (response.status() >= 400) {
+        heroNetworkFailures.push(`${response.url()}: HTTP ${response.status()}`);
+      }
+    };
+    page.on('console', recordHeroConsoleError);
+    page.on('pageerror', recordHeroPageError);
+    page.on('requestfailed', recordHeroRequestFailure);
+    page.on('response', recordHeroResponseFailure);
     await assertHeroThreeDimensionalEnhancement(page, server.baseUrl);
+    page.off('console', recordHeroConsoleError);
+    page.off('pageerror', recordHeroPageError);
+    page.off('requestfailed', recordHeroRequestFailure);
+    page.off('response', recordHeroResponseFailure);
+    if (
+      heroConsoleErrors.length > 0 ||
+      heroPageErrors.length > 0 ||
+      heroNetworkFailures.length > 0
+    ) {
+      throw new Error(
+        `Hero browser errors detected: ${JSON.stringify({ heroConsoleErrors, heroPageErrors, heroNetworkFailures })}`,
+      );
+    }
     await assertAutomationBento(page, server.baseUrl);
     await assertProcessStory(page, server.baseUrl);
     await assertSevenDayDemo(page, server.baseUrl);
