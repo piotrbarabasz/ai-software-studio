@@ -5,10 +5,9 @@ export interface HomeHero3dConfig {
   readonly sceneUrl: string | null;
 }
 
-// Activation requires a production-owned Viewer export from the Protolume Spline project.
 export const homeHero3dConfig: HomeHero3dConfig = {
-  enabled: false,
-  sceneUrl: null,
+  enabled: true,
+  sceneUrl: 'https://prod.spline.design/BGR1H1zz5oGfRgjZ/scene.splinecode',
 };
 
 export const HOME_HERO_3D_CONFIG = new InjectionToken<HomeHero3dConfig>('HOME_HERO_3D_CONFIG', {
