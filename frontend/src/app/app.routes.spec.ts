@@ -132,23 +132,12 @@ describe('public routes', () => {
     ]);
   });
 
-  it('maps every homepage process card to an existing canonical service landing', () => {
-    const cardPaths = siteContent.home.useCases.map((item) => item.cta?.path);
-    const serviceLandingPaths = new Set<string>(
-      siteContent.routes
-        .filter((route) => route.kind === 'service-landing')
-        .map((route) => route.path),
-    );
-
-    expect(cardPaths).toEqual([
-      '/rozwiazania/chatbot-ai-dla-firm',
-      '/rozwiazania/voice-ai-dla-firm',
-      '/rozwiazania/automatyzacja-procesow',
-      '/rozwiazania/systemy-agentowe',
-      '/rozwiazania/integracje-whatsapp-crm',
-    ]);
-    expect(cardPaths.every((path) => path !== undefined && serviceLandingPaths.has(path))).toBe(
-      true,
-    );
+  it('keeps the shortened homepage cards focused on problems and links to all solutions once', () => {
+    expect(siteContent.home.useCases).toHaveSize(3);
+    expect(siteContent.home.useCases.every((item) => item.cta === undefined)).toBeTrue();
+    expect(siteContent.home.useCasesCta.path).toBe('/rozwiazania');
+    expect(
+      siteContent.routes.some((route) => route.path === siteContent.home.useCasesCta.path),
+    ).toBe(true);
   });
 });

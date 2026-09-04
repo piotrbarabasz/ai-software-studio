@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { siteContent } from '../../core/content/site.pl';
 import type {
   ExternalLink,
+  HomePageContent,
   InternalLink,
   TrustContent,
   WorkEvidence,
@@ -30,7 +31,7 @@ import { SevenDayDemoComponent } from './seven-day-demo/seven-day-demo.component
   styleUrl: './home.component.scss',
 })
 export class HomeComponent {
-  readonly home = siteContent.home;
+  readonly home: HomePageContent = siteContent.home;
   readonly trust: TrustContent = siteContent.trust;
   readonly evidenceItems: readonly WorkEvidence[] = siteContent.trust.evidence.items.slice(0, 2);
 

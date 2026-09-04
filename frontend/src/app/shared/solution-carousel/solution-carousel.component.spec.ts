@@ -1,8 +1,51 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
-import { siteContent } from '../../core/content/site.pl';
+import type { HomeUseCase } from '../../core/content/site-content.types';
 import { SolutionCarouselComponent } from './solution-carousel.component';
+
+const carouselItems = [
+  {
+    id: 'knowledge-assistant',
+    title: 'Asystent wiedzy',
+    problem: 'Wiedza jest rozproszona.',
+    outcome: 'Odpowiedzi są dostępne szybciej.',
+    visualKind: 'knowledge-assistant',
+    cta: { label: 'Zobacz proces', path: '/rozwiazania/chatbot-ai-dla-firm' },
+  },
+  {
+    id: 'message-workflow',
+    title: 'Obsługa wiadomości',
+    problem: 'Wiadomości wymagają ręcznego sortowania.',
+    outcome: 'Sprawy trafiają do właściwej osoby.',
+    visualKind: 'message-workflow',
+    cta: { label: 'Zobacz proces', path: '/rozwiazania/voice-ai-dla-firm' },
+  },
+  {
+    id: 'process-panel',
+    title: 'Automatyzacja procesu',
+    problem: 'Dane są przepisywane między narzędziami.',
+    outcome: 'Proces działa w jednym przepływie.',
+    visualKind: 'process-panel',
+    cta: { label: 'Zobacz proces', path: '/rozwiazania/automatyzacja-procesow' },
+  },
+  {
+    id: 'agent-system',
+    title: 'System agentowy',
+    problem: 'Złożone zadania wymagają wielu kroków.',
+    outcome: 'Kroki są koordynowane automatycznie.',
+    visualKind: 'agent-system',
+    cta: { label: 'Zobacz proces', path: '/rozwiazania/systemy-agentowe' },
+  },
+  {
+    id: 'channel-integrations',
+    title: 'Integracje kanałów',
+    problem: 'Kanały kontaktu są rozproszone.',
+    outcome: 'Zgłoszenia trafiają do wspólnego procesu.',
+    visualKind: 'channel-integrations',
+    cta: { label: 'Zobacz proces', path: '/rozwiazania/integracje-whatsapp-crm' },
+  },
+] satisfies readonly HomeUseCase[];
 
 type ResizeObserverHost = Window & {
   ResizeObserver?: typeof ResizeObserver;
@@ -63,7 +106,7 @@ describe('SolutionCarouselComponent', () => {
     } as DOMRectReadOnly;
   }
 
-  function createFixture(items = siteContent.home.useCases) {
+  function createFixture(items: readonly HomeUseCase[] = carouselItems) {
     const fixture = TestBed.createComponent(SolutionCarouselComponent);
     fixture.componentInstance.items = items;
     fixture.detectChanges();
@@ -301,7 +344,7 @@ describe('SolutionCarouselComponent', () => {
   });
 
   it('supports two cards without disabling the controls', () => {
-    const fixture = createFixture(siteContent.home.useCases.slice(0, 2));
+    const fixture = createFixture(carouselItems.slice(0, 2));
     applyGeometry(fixture, {
       viewportWidth: 1000,
       cardWidth: 320,
@@ -324,7 +367,7 @@ describe('SolutionCarouselComponent', () => {
   });
 
   it('hides controls for a single card and keeps the status stable', () => {
-    const fixture = createFixture(siteContent.home.useCases.slice(0, 1));
+    const fixture = createFixture(carouselItems.slice(0, 1));
     applyGeometry(fixture, {
       viewportWidth: 320,
       cardWidth: 320,
