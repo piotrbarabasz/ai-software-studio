@@ -8,12 +8,6 @@ const TEMPLATE_PATH = path.resolve(__dirname, '../nginx-security-headers.conf');
 const OUTPUT_PATH = path.join(generatedDirectory(), 'nginx-security-headers.conf');
 const NOINDEX_OUTPUT_PATH = path.join(generatedDirectory(), 'nginx-security-headers-noindex.conf');
 const DEFAULT_ARTIFACT_ROOT = path.resolve(__dirname, '../dist/aisoftware-studio/browser');
-const SPLINE_CONNECT_ORIGINS = ['https://prod.spline.design', 'https://fonts.gstatic.com'];
-const SPLINE_IMAGE_ORIGINS = ['https://app.spline.design'];
-const SPLINE_INLINE_SCRIPT_HASHES = [
-  "'sha256-eAE7BZuXDq2P1PND53muXZZssljx+A/chzBu1dgKH/s='",
-  "'sha256-J5EByEpF1Y9BXd8L1407C4n1GY5MeFpVd14kXPrYPmE='",
-];
 
 function listHtmlFiles(root) {
   const files = [];
@@ -63,21 +57,16 @@ function collectInlineScriptHashes(artifactRoot = DEFAULT_ARTIFACT_ROOT) {
 
 function renderSecurityHeaders(environment, template, inlineScriptHashes, robotsHeader) {
   const apiOrigin = new URL(environment.apiUrl).origin;
-  const connectSources = [apiOrigin, ...SPLINE_CONNECT_ORIGINS].join(' ');
-  const imageSources = SPLINE_IMAGE_ORIGINS.join(' ');
   const resolvedRobotsHeader =
     typeof robotsHeader === 'string'
       ? robotsHeader
       : environment.indexingEnabled
         ? ''
         : 'noindex, follow';
-  const scriptHashes = [...new Set([...inlineScriptHashes, ...SPLINE_INLINE_SCRIPT_HASHES])]
-    .sort()
-    .join(' ');
+  const scriptHashes = inlineScriptHashes.join(' ');
 
   return template
-    .replaceAll('__CSP_CONNECT_SRC__', connectSources)
-    .replaceAll('__CSP_IMG_SRC__', imageSources)
+    .replaceAll('__CSP_CONNECT_SRC__', apiOrigin)
     .replaceAll('__CSP_SCRIPT_HASHES__', scriptHashes)
     .replaceAll('__ROBOTS_HEADER__', resolvedRobotsHeader);
 }
@@ -113,9 +102,6 @@ if (require.main === module) {
 }
 
 module.exports = {
-  SPLINE_CONNECT_ORIGINS,
-  SPLINE_IMAGE_ORIGINS,
-  SPLINE_INLINE_SCRIPT_HASHES,
   collectInlineScriptHashes,
   hashInlineScript,
   renderSecurityHeaders,
