@@ -24,7 +24,7 @@
     </div>
     <div class="card-grid">
       @for (direction of content.directions; track direction) {
-        <article class="info-card">
+        <article class="card-surface lab-card info-card" data-card-variant="lab-card">
           @if (direction.status) {
             <p class="panel-kicker">
               {{ content.statusLabels[direction.status] }}

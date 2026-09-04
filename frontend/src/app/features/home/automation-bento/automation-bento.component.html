@@ -1,7 +1,8 @@
 <div appReveal class="problem-grid motion-stagger">
   @for (item of items; track item.id) {
     <article
-      class="problem-card"
+      class="card-surface process-card problem-card"
+      data-card-variant="process-card"
       [attr.data-visual-kind]="item.visualKind"
       [attr.aria-labelledby]="'problem-' + item.id + '-title'"
     >

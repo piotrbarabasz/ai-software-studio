@@ -18,9 +18,9 @@
 .hero-copy,
 .hero-panel {
   min-width: 0;
-  border: 1px solid var(--color-line);
-  border-radius: 16px;
-  background: var(--color-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--card-radius);
+  background: var(--surface-card);
   box-shadow: var(--shadow-soft);
 }
 
@@ -76,7 +76,7 @@
 .hero-panel {
   display: grid;
   gap: 1rem;
-  padding: 1.35rem;
+  padding: var(--card-padding);
 }
 
 .hero-panel ul {
@@ -166,15 +166,7 @@
 }
 
 .info-card {
-  display: grid;
-  gap: 0.75rem;
-  border-top: 1px solid var(--color-line);
-  padding: 1.15rem 0;
-}
-
-.info-card + .info-card {
-  border-left: 1px solid var(--color-line);
-  padding-left: clamp(1rem, 2.5vw, 1.75rem);
+  align-content: start;
 }
 
 .process-list {
@@ -186,12 +178,9 @@
 }
 
 .process-list li {
-  display: grid;
   grid-template-columns: auto 1fr;
   gap: 1rem;
   align-items: start;
-  border-top: 1px solid var(--color-line);
-  padding: 1.1rem 0;
 }
 
 .step-number {
@@ -241,13 +230,7 @@
 
 .owner-card,
 .evidence-card {
-  display: grid;
   gap: clamp(1.25rem, 3vw, 2.5rem);
-  border: 1px solid var(--color-line);
-  border-radius: 18px;
-  background: var(--color-surface);
-  box-shadow: var(--shadow-soft);
-  padding: clamp(1.25rem, 3vw, 2.25rem);
 }
 
 .owner-card {
@@ -361,14 +344,6 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.evidence-card:first-child {
-  border-top: 4px solid var(--color-primary);
-}
-
-.evidence-card:last-child {
-  border-top: 4px solid var(--color-accent);
-}
-
 .evidence-details h4 {
   margin: 0;
   color: var(--color-primary-strong);
@@ -461,7 +436,6 @@
     grid-template-columns: 1fr;
   }
 
-  .info-card + .info-card,
   .bullet-grid li + li {
     border-top: 1px solid var(--color-line);
     border-left: 0;

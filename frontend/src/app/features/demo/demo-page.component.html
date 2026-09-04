@@ -57,7 +57,7 @@
       <h2 id="demo-comparison-title">{{ content.comparison.title }}</h2>
     </div>
     <div class="compare-grid">
-      <article class="compare-card">
+      <article class="card-surface info-card compare-card" data-card-variant="info-card">
         <h3>{{ content.comparison.demo.title }}</h3>
         <ul>
           @for (item of content.comparison.demo.points; track item) {
@@ -65,7 +65,7 @@
           }
         </ul>
       </article>
-      <article class="compare-card">
+      <article class="card-surface info-card compare-card" data-card-variant="info-card">
         <h3>{{ content.comparison.production.title }}</h3>
         <ul>
           @for (item of content.comparison.production.points; track item) {

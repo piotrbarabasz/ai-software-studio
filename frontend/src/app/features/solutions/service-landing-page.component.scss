@@ -53,17 +53,13 @@
 }
 
 .flow-step {
-  display: grid;
   grid-template-columns: auto 1fr;
   gap: 0.875rem;
-  padding: 1rem 1.125rem;
-  border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(124, 92, 255, 0.16);
 }
 
 .flow-step.is-handoff {
-  background: linear-gradient(135deg, rgba(124, 92, 255, 0.14), rgba(255, 255, 255, 0.92));
+  border-color: var(--border-emphasis);
+  background: color-mix(in srgb, var(--surface-card) 84%, var(--surface-interactive));
 }
 
 .flow-step-index {
@@ -86,10 +82,7 @@
 
 .demo-grid article,
 .faq-list details {
-  padding: 1rem 1.125rem;
-  border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(26, 30, 46, 0.08);
+  align-content: start;
 }
 
 .faq-list {

@@ -1,0 +1,41 @@
+<div class="proof-visual" [attr.data-proof-visual]="visualKind" aria-hidden="true">
+  @switch (visualKind) {
+    @case ('demo') {
+      <div class="demo-visual">
+        <span class="chat-question">Jak wygląda zwrot?</span>
+        <div class="chat-answer">
+          <small>ANSWER</small>
+          <strong>Odpowiedź znaleziona</strong>
+        </div>
+        <div class="chat-meta">
+          <span>SOURCE / 02</span>
+          <span>HUMAN FALLBACK</span>
+        </div>
+      </div>
+    }
+    @case ('report') {
+      <div class="report-visual">
+        <header><span>DEMO / DAY 7</span><i>PDF</i></header>
+        <small>DECISION</small>
+        <strong>CONDITIONAL GO</strong>
+        <ul>
+          <li>scenarios</li>
+          <li>risks</li>
+          <li>next step</li>
+        </ul>
+      </div>
+    }
+    @case ('lab') {
+      <div class="lab-visual">
+        <header><span>LAB / INDEX</span><i>EXPERIMENT</i></header>
+        <div class="lab-tags">
+          <span>RAG</span>
+          <span>AGENTS</span>
+          <span>EVALUATION</span>
+          <span>RELIABILITY</span>
+        </div>
+        <div class="lab-signal"><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+    }
+  }
+</div>

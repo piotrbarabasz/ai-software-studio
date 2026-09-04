@@ -68,7 +68,7 @@
   <app-business-flow-section data-home-section="flow" [flow]="home.businessFlow" />
 
   <section
-    class="evidence-teaser section-shell"
+    class="evidence-teaser dark-section section-shell"
     aria-labelledby="evidence-teaser-title"
     data-home-section="evidence"
   >
@@ -78,26 +78,16 @@
       <p class="section-lead">{{ home.evidenceTeaser.lead }}</p>
     </div>
     <div class="evidence-teaser-grid">
-      @for (item of evidenceItems; track item.id) {
-        <article class="section-panel evidence-teaser-card">
-          <p class="evidence-type">{{ item.typeLabel }}</p>
+      @for (item of home.evidenceTeaser.items; track item.id) {
+        <article
+          class="card-surface proof-card evidence-teaser-card"
+          data-card-variant="proof-card"
+        >
+          <p class="evidence-type">{{ item.eyebrow }}</p>
           <h3>{{ item.title }}</h3>
-          <p>{{ item.teaser }}</p>
-          @if (isInternalWorkEvidenceLink(item.liveLink)) {
-            <a class="secondary-action" [routerLink]="item.liveLink.path">
-              {{ item.liveLink.label }}
-            </a>
-          } @else if (isExternalWorkEvidenceLink(item.liveLink)) {
-            <a
-              class="secondary-action"
-              [href]="item.liveLink.url"
-              target="_blank"
-              rel="noopener noreferrer"
-              [attr.aria-label]="item.liveLink.accessibleName"
-            >
-              {{ item.liveLink.label }}
-            </a>
-          }
+          <p>{{ item.description }}</p>
+          <app-home-proof-visual [visualKind]="item.visualKind" />
+          <a class="secondary-action" [routerLink]="item.cta.path">{{ item.cta.label }}</a>
         </article>
       }
     </div>
@@ -112,7 +102,10 @@
     aria-labelledby="owner-title"
     data-home-section="owner"
   >
-    <div class="section-panel owner-card-panel">
+    <div
+      class="section-panel card-surface info-card owner-card-panel"
+      data-card-variant="info-card"
+    >
       <div>
         <p class="eyebrow">Osoba odpowiedzialna</p>
         <h2 id="owner-title">{{ home.trustTeaser.title }}</h2>
@@ -136,7 +129,7 @@
     aria-labelledby="closing-cta-title"
     data-home-section="closing-cta"
   >
-    <div class="section-panel closing-cta-panel">
+    <div class="section-panel dark-section closing-cta-panel">
       <div>
         <h2 id="closing-cta-title">{{ home.closingCta.title }}</h2>
         <p>{{ home.closingCta.lead }}</p>

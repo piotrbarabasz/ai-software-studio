@@ -10,20 +10,8 @@
 }
 
 .problem-card {
-  display: grid;
-  min-width: 0;
   grid-template-rows: auto auto auto 1fr;
-  gap: 0.85rem;
   overflow: hidden;
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-xl);
-  padding: clamp(1.15rem, 2.2vw, 1.65rem);
-  background: var(--surface-1);
-  box-shadow: 0 16px 42px rgba(16, 19, 28, 0.05);
-  transition:
-    border-color var(--motion-normal) var(--ease-standard),
-    box-shadow var(--motion-normal) var(--ease-standard),
-    transform var(--motion-normal) var(--ease-standard);
 }
 
 .problem-card-header {
@@ -78,14 +66,6 @@
   padding-top: 0.65rem;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .problem-card:hover {
-    border-color: color-mix(in srgb, var(--accent-primary) 42%, var(--border-subtle));
-    box-shadow: 0 22px 52px rgba(84, 52, 214, 0.1);
-    transform: translateY(-3px);
-  }
-}
-
 @media (max-width: 920px) {
   .problem-grid {
     grid-template-columns: minmax(0, 1fr);
@@ -115,8 +95,8 @@
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto;
     gap: 0.75rem;
-    border-radius: var(--radius-lg);
-    padding: 1.1rem;
+    border-radius: var(--card-radius);
+    padding: var(--card-padding);
   }
 
   .problem-card-header,
@@ -129,13 +109,5 @@
 
   .problem-copy {
     max-width: none;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .problem-card,
-  .problem-card:hover {
-    transition: none;
-    transform: none;
   }
 }

@@ -117,13 +117,7 @@
 }
 
 .compare-card {
-  display: grid;
-  gap: 0.75rem;
-  padding: 1.25rem;
-  border: 1px solid var(--color-line);
-  border-radius: var(--radius-panel);
-  background: var(--color-surface);
-  box-shadow: var(--shadow-soft);
+  align-content: start;
 }
 
 .compare-card h3 {

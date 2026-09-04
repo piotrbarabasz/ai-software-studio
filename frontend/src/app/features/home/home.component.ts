@@ -2,18 +2,12 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { siteContent } from '../../core/content/site.pl';
-import type {
-  ExternalLink,
-  HomePageContent,
-  InternalLink,
-  TrustContent,
-  WorkEvidence,
-  WorkEvidenceLink,
-} from '../../core/content/site-content.types';
+import type { HomePageContent, TrustContent } from '../../core/content/site-content.types';
 import { RevealOnScrollDirective } from '../../shared/reveal/reveal-on-scroll.directive';
 import { AutomationBentoComponent } from './automation-bento/automation-bento.component';
 import { BusinessFlowSectionComponent } from './business-flow-section.component';
 import { HomeHeroVisualComponent } from './hero/home-hero-visual.component';
+import { HomeProofVisualComponent } from './home-proof-visual/home-proof-visual.component';
 import { SevenDayDemoComponent } from './seven-day-demo/seven-day-demo.component';
 
 @Component({
@@ -23,6 +17,7 @@ import { SevenDayDemoComponent } from './seven-day-demo/seven-day-demo.component
     AutomationBentoComponent,
     BusinessFlowSectionComponent,
     HomeHeroVisualComponent,
+    HomeProofVisualComponent,
     RevealOnScrollDirective,
     SevenDayDemoComponent,
   ],
@@ -33,13 +28,4 @@ import { SevenDayDemoComponent } from './seven-day-demo/seven-day-demo.component
 export class HomeComponent {
   readonly home: HomePageContent = siteContent.home;
   readonly trust: TrustContent = siteContent.trust;
-  readonly evidenceItems: readonly WorkEvidence[] = siteContent.trust.evidence.items.slice(0, 2);
-
-  protected isInternalWorkEvidenceLink(link: WorkEvidenceLink | undefined): link is InternalLink {
-    return link?.kind === 'internal';
-  }
-
-  protected isExternalWorkEvidenceLink(link: WorkEvidenceLink | undefined): link is ExternalLink {
-    return link?.kind === 'external';
-  }
 }

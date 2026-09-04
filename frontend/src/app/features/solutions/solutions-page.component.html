@@ -21,7 +21,10 @@
   <div class="solutions-list">
     @for (solution of content.solutions; track solution.id) {
       <article class="solution-card section-shell" [id]="solution.id" appRevealOnScroll>
-        <div class="section-panel">
+        <div
+          class="section-panel card-surface solution-card-surface"
+          data-card-variant="solution-card"
+        >
           <div class="solution-heading">
             <p class="eyebrow">{{ solution.id }}</p>
             <h2>{{ solution.title }}</h2>

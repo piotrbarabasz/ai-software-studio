@@ -39,7 +39,11 @@
     </div>
     <ol class="flow-list">
       @for (step of content.flowSteps; track step.id) {
-        <li class="flow-step" [class.is-handoff]="step.handoff">
+        <li
+          class="card-surface process-card flow-step"
+          data-card-variant="process-card"
+          [class.is-handoff]="step.handoff"
+        >
           <span class="flow-step-index" aria-hidden="true">{{ $index + 1 }}</span>
           <div>
             <h3>{{ step.title }}</h3>
@@ -57,7 +61,7 @@
       <p class="section-lead">{{ content.demoLead }}</p>
     </div>
     <div class="demo-grid">
-      <article>
+      <article class="card-surface info-card" data-card-variant="info-card">
         <h3>Zakres</h3>
         <ul class="bullet-list">
           @for (item of content.demoScope; track item) {
@@ -65,7 +69,7 @@
           }
         </ul>
       </article>
-      <article>
+      <article class="card-surface info-card" data-card-variant="info-card">
         <h3>Kryteria</h3>
         <ul class="bullet-list">
           @for (item of content.demoCriteria; track item) {
@@ -73,7 +77,7 @@
           }
         </ul>
       </article>
-      <article>
+      <article class="card-surface info-card" data-card-variant="info-card">
         <h3>Dane wejściowe</h3>
         <ul class="bullet-list">
           @for (item of content.demoInputs; track item) {
@@ -81,7 +85,7 @@
           }
         </ul>
       </article>
-      <article>
+      <article class="card-surface info-card" data-card-variant="info-card">
         <h3>Ograniczenia</h3>
         <ul class="bullet-list">
           @for (item of content.demoLimitations; track item) {
@@ -124,7 +128,7 @@
     </div>
     <div class="faq-list">
       @for (item of content.faqs; track item.question) {
-        <details>
+        <details class="card-surface info-card" data-card-variant="info-card">
           <summary>{{ item.question }}</summary>
           <p>{{ item.answer }}</p>
         </details>

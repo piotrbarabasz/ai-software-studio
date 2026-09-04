@@ -226,6 +226,18 @@ export interface HomeEvidenceTeaser {
   readonly title: string;
   readonly lead: string;
   readonly note: string;
+  readonly items: readonly [HomeProofItem, HomeProofItem, HomeProofItem];
+}
+
+export type HomeProofVisualKind = 'demo' | 'report' | 'lab';
+
+export interface HomeProofItem {
+  readonly id: string;
+  readonly eyebrow: string;
+  readonly title: string;
+  readonly description: string;
+  readonly visualKind: HomeProofVisualKind;
+  readonly cta: HomeCta;
 }
 
 export interface HomeClosingCta {

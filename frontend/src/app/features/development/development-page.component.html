@@ -14,7 +14,11 @@
         <p class="hero-cta-note">{{ content.heroNextStep }}</p>
       </div>
     </div>
-    <aside class="hero-panel" aria-label="Zakres wdrożeń">
+    <aside
+      class="card-surface info-card hero-panel"
+      data-card-variant="info-card"
+      aria-label="Zakres wdrożeń"
+    >
       <p class="panel-kicker">Zasady pracy</p>
       <ul>
         @for (item of content.principles; track item) {
@@ -44,7 +48,7 @@
     </div>
     <div class="card-grid">
       @for (outcome of content.outcomes; track outcome) {
-        <article class="info-card">
+        <article class="card-surface solution-card info-card" data-card-variant="solution-card">
           <h3>{{ outcome.title }}</h3>
           <p><strong>Docelowy sposób pracy:</strong> {{ outcome.targetWorkflow }}</p>
           <p><strong>Punkt wyjścia:</strong> {{ outcome.startingPoint }}</p>
@@ -85,7 +89,10 @@
       <p class="page-lead">{{ content.scope.lead }}</p>
     </div>
     <div class="scope-grid">
-      <article class="scope-card scope-card-included">
+      <article
+        class="card-surface info-card scope-card scope-card-included"
+        data-card-variant="info-card"
+      >
         <h3>{{ content.scope.includedTitle }}</h3>
         <ul>
           @for (item of content.scope.included; track item) {
@@ -93,7 +100,10 @@
           }
         </ul>
       </article>
-      <article class="scope-card scope-card-excluded">
+      <article
+        class="card-surface info-card scope-card scope-card-excluded"
+        data-card-variant="info-card"
+      >
         <h3>{{ content.scope.excludedTitle }}</h3>
         <ul>
           @for (item of content.scope.excluded; track item) {
@@ -112,7 +122,7 @@
     </div>
     <ol class="process-list">
       @for (step of content.deliverySteps; track step; let index = $index) {
-        <li>
+        <li class="card-surface process-card" data-card-variant="process-card">
           <span class="step-number">{{ index + 1 }}</span>
           <div>
             <h3>{{ step.title }}</h3>

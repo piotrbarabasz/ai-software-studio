@@ -562,9 +562,38 @@ export const siteContent = {
     },
     evidenceTeaser: {
       eyebrow: 'Dowody pracy',
-      title: 'Zobacz działające elementy',
-      lead: 'Uruchom demonstrację, przejrzyj przykładowy rezultat i zobacz, co każdy materiał faktycznie potwierdza.',
+      title: 'Zobacz zamiast czytać.',
+      lead: 'Uruchom działający element, przejrzyj rezultat albo zajrzyj do eksperymentów technicznych.',
       note: 'To materiały demonstracyjne i projekt własny, a nie case study klienta.',
+      items: [
+        {
+          id: 'interactive-demo',
+          eyebrow: 'Try it',
+          title: 'Interaktywne demo',
+          description:
+            'Sprawdź odpowiedź ze źródłem oraz przekazanie pytania do człowieka, gdy brakuje danych.',
+          visualKind: 'demo',
+          cta: { label: 'Uruchom demo →', path: '/demo-ai' },
+        },
+        {
+          id: 'example-report',
+          eyebrow: 'Inspect it',
+          title: 'Przykładowy raport',
+          description:
+            'Zobacz zakres, scenariusze testowe, ryzyka, kryteria odbioru i rekomendację dalszego kroku.',
+          visualKind: 'report',
+          cta: { label: 'Zobacz raport →', path: '/przyklad-demo' },
+        },
+        {
+          id: 'protolume-lab',
+          eyebrow: 'Explore it',
+          title: 'Protolume Lab',
+          description:
+            'Eksperymenty z RAG, agentami, ewaluacją i niezawodnością systemów AI.',
+          visualKind: 'lab',
+          cta: { label: 'Explore Lab →', path: '/rd' },
+        },
+      ],
     },
     closingCta: {
       title: 'Pokaż proces, który zabiera czas',
