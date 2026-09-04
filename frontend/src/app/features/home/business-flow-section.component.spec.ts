@@ -72,14 +72,14 @@ describe('BusinessFlowSectionComponent', () => {
     return { fixture, element: fixture.nativeElement as HTMLElement };
   }
 
-  it('renders the five content-backed steps as one ordered story', () => {
+  it('renders the six content-backed steps as one ordered story', () => {
     useDesktopObserver();
     const { element } = render();
     const steps = Array.from(element.querySelectorAll<HTMLElement>('.business-flow-step'));
 
     expect(element.querySelectorAll('.business-flow-steps')).toHaveSize(1);
     expect(element.querySelector('.business-flow-steps')?.tagName).toBe('OL');
-    expect(steps).toHaveSize(5);
+    expect(steps).toHaveSize(6);
     expect(steps.map((step) => step.querySelector('h3')?.textContent?.trim())).toEqual(
       siteContent.home.businessFlow.steps.map((step) => step.title),
     );
@@ -87,7 +87,7 @@ describe('BusinessFlowSectionComponent', () => {
       steps.map((step) => step.querySelector('.step-copy > p:last-child')?.textContent?.trim()),
     ).toEqual(siteContent.home.businessFlow.steps.map((step) => step.description));
     expect(element.querySelectorAll('.business-flow-heading h2')).toHaveSize(1);
-    expect(element.querySelectorAll('.business-flow-step h3')).toHaveSize(5);
+    expect(element.querySelectorAll('.business-flow-step h3')).toHaveSize(6);
   });
 
   it('keeps one decorative visual, no visual controls and the existing CTA route', () => {
@@ -115,7 +115,7 @@ describe('BusinessFlowSectionComponent', () => {
 
     expect(runOutsideAngular).toHaveBeenCalled();
     expect(observer?.options?.rootMargin).toBe('-35% 0px -45% 0px');
-    expect(observer?.observe).toHaveBeenCalledTimes(5);
+    expect(observer?.observe).toHaveBeenCalledTimes(6);
     expect(observer?.observe.calls.allArgs().map(([target]) => target)).toEqual(
       Array.from(element.querySelectorAll('.business-flow-step')),
     );
@@ -163,8 +163,8 @@ describe('BusinessFlowSectionComponent', () => {
     const { element } = render();
 
     expect(MockIntersectionObserver.instance).toBeUndefined();
-    expect(element.querySelectorAll('.business-flow-step')).toHaveSize(5);
-    expect(element.querySelectorAll('.business-flow-step h3')).toHaveSize(5);
+    expect(element.querySelectorAll('.business-flow-step')).toHaveSize(6);
+    expect(element.querySelectorAll('.business-flow-step h3')).toHaveSize(6);
   });
 
   it('does not access browser observers during SSR', async () => {
@@ -179,7 +179,7 @@ describe('BusinessFlowSectionComponent', () => {
     const fixture = TestBed.createComponent(BusinessFlowSectionComponent);
     fixture.componentInstance.flow = siteContent.home.businessFlow;
     expect(() => fixture.detectChanges()).not.toThrow();
-    expect(fixture.nativeElement.querySelectorAll('.business-flow-step')).toHaveSize(5);
+    expect(fixture.nativeElement.querySelectorAll('.business-flow-step')).toHaveSize(6);
     expect(MockIntersectionObserver.instance).toBeUndefined();
   });
 });

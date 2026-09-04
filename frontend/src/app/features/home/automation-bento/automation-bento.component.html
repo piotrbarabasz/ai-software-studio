@@ -1,33 +1,19 @@
-<div appReveal class="automation-bento motion-stagger">
+<div appReveal class="problem-grid motion-stagger">
   @for (item of items; track item.id) {
     <article
-      class="automation-bento-card"
-      [class.is-dark]="item.visualKind === 'agent-system'"
+      class="problem-card"
       [attr.data-visual-kind]="item.visualKind"
-      [attr.aria-labelledby]="'bento-' + item.id + '-title'"
+      [attr.aria-labelledby]="'problem-' + item.id + '-title'"
     >
-      <div class="bento-card-copy">
-        <p class="bento-category">{{ categoryByVisualKind[item.visualKind] }}</p>
-        <h3 [id]="'bento-' + item.id + '-title'">{{ item.title }}</h3>
-        <p class="bento-problem">{{ item.problem }}</p>
-      </div>
-
-      <app-automation-bento-visual [visualKind]="item.visualKind" />
-
-      <div class="bento-card-footer">
-        <p class="bento-outcome">
-          {{ item.outcome }}
-        </p>
-        @if (item.cta) {
-          <a
-            class="secondary-action"
-            [routerLink]="item.cta.path"
-            [queryParams]="item.cta.queryParams"
-            [fragment]="item.cta.fragment"
-          >
-            {{ item.cta.label }}
-          </a>
-        }
+      <header class="problem-card-header">
+        <span class="problem-number" aria-hidden="true">{{ item.number }}</span>
+        <p>Problem</p>
+      </header>
+      <h3 [id]="'problem-' + item.id + '-title'">{{ item.title }}</h3>
+      <p class="problem-copy">{{ item.problem }}</p>
+      <div class="problem-visual-block">
+        <span class="problem-solution-label">Przepływ rozwiązania</span>
+        <app-automation-bento-visual [visualKind]="item.visualKind" />
       </div>
     </article>
   }

@@ -1,4 +1,4 @@
-import { DOCUMENT } from '@angular/core';
+import { DOCUMENT, PLATFORM_ID } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { MOTION_VIEWPORT, MotionPreferencesService } from './motion-preferences.service';
@@ -40,6 +40,23 @@ describe('MotionPreferencesService', () => {
     expect(service.reducedMotion()).toBeFalse();
     expect(service.isMobileViewport()).toBeFalse();
     expect(service.viewportBoundary).toEqual({ mobileMax: 920, desktopMin: 921 });
+  });
+
+  it('does not access media queries when Angular renders on the server', () => {
+    const matchMedia = jasmine.createSpy('matchMedia');
+    TestBed.configureTestingModule({
+      providers: [
+        MotionPreferencesService,
+        { provide: PLATFORM_ID, useValue: 'server' },
+        { provide: DOCUMENT, useValue: { defaultView: { matchMedia } } },
+      ],
+    });
+
+    const service = TestBed.inject(MotionPreferencesService);
+
+    expect(service.reducedMotion()).toBeFalse();
+    expect(service.isMobileViewport()).toBeFalse();
+    expect(matchMedia).not.toHaveBeenCalled();
   });
 
   it('reports reduced motion and a viewport at or below 920px', () => {

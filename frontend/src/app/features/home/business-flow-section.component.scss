@@ -74,7 +74,7 @@
 .business-flow-step {
   position: relative;
   display: grid;
-  min-height: clamp(27rem, 62vh, 39rem);
+  min-height: clamp(22rem, 52vh, 32rem);
   grid-template-columns: auto minmax(0, 1fr);
   align-content: center;
   gap: 1.1rem;

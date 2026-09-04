@@ -17,33 +17,32 @@ describe('HomeComponent', () => {
     return fixture.nativeElement as HTMLElement;
   }
 
-  it('renders the redesigned SME automation hero, flow visual and both CTAs', () => {
+  it('renders the productized seven-day hero, workflow and both CTAs', () => {
     const element = createFixture();
     const actions = element.querySelector('.hero-actions');
 
     expect(element.querySelectorAll('h1')).toHaveSize(1);
     expect(element.querySelector('h1')?.textContent?.trim()).toBe(
-      'Automatyzujemy procesy, które dziś zabierają ludziom czas.',
+      'Pokaż nam proces.\nW 7 dni pokażemy działającą automatyzację.',
     );
     expect(element.querySelector('.hero-lead')?.textContent?.trim()).toBe(
-      'W 7 dni budujemy działające demo jednego procesu. Zobaczysz, co można zautomatyzować, gdzie potrzebny jest człowiek i jaki powinien być następny krok.',
+      'Bierzemy jeden powtarzalny proces — wiadomości, dokumenty, CRM albo wiedzę firmy — i budujemy jego działające demo przed pełnym wdrożeniem.',
     );
-    expect(element.querySelector('.hero-audience')?.textContent?.trim()).toBe(
-      'Dla firm, w których zespół przepisuje dane, pilnuje statusów, obsługuje podobne wiadomości lub szuka informacji w rozproszonych materiałach.',
+    expect(element.querySelector('.hero-supporting-line')?.textContent?.trim()).toBe(
+      '1 proces · stały zakres · kontrola człowieka · wynik po 7 dniach',
     );
+    expect(element.querySelector('.hero-audience')).toBeNull();
     expect(actions?.querySelectorAll('a')).toHaveSize(2);
     expect(actions?.querySelector('a:first-child')).toHaveClass('primary-action');
     expect(actions?.querySelector('a:last-child')).toHaveClass('secondary-action');
     expect(
       element.querySelector('a[href="/kontakt?projectType=mvp_prototype"]')?.textContent,
-    ).toContain('Pokaż mi proces');
-    expect(element.querySelector('a[href="/demo-ai"]')?.textContent).toContain(
-      'Zobacz działające demo',
-    );
+    ).toContain('Opisz proces');
+    expect(element.querySelector('a[href="/demo-ai"]')?.textContent).toContain('Zobacz demo →');
     expect(element.querySelector('.hero-process')).toBeNull();
     expect(element.querySelector('app-home-hero-visual')).not.toBeNull();
     expect(element.querySelector('[data-hero-visual]')?.getAttribute('aria-hidden')).toBe('true');
-    expect(element.querySelector('[data-hero-fallback]')).not.toBeNull();
+    expect(element.querySelectorAll('[data-hero-visual] app-workflow-node')).toHaveSize(5);
     expect(element.querySelector('spline-viewer')).toBeNull();
     expect(
       element.querySelectorAll(
@@ -65,7 +64,7 @@ describe('HomeComponent', () => {
     const ids = Array.from(element.querySelectorAll<HTMLElement>('[id]'), (item) => item.id);
 
     expect(new Set(ids).size).toBe(ids.length);
-    expect(element.querySelector('#hero-title')?.textContent).toContain('Automatyzujemy procesy');
+    expect(element.querySelector('#hero-title')?.textContent).toContain('Pokaż nam proces');
     expect(element.querySelectorAll('.hero-actions a')).toHaveSize(2);
     expect(element.querySelector('[data-hero-visual]')).not.toBeNull();
   });
@@ -101,90 +100,47 @@ describe('HomeComponent', () => {
     ]);
 
     expect(element.querySelector('.use-cases .eyebrow')?.textContent?.trim()).toBe(
-      'Procesy, które najczęściej zabierają czas',
+      'Gdzie najczęściej znika czas?',
     );
     expect(element.querySelectorAll('.use-cases h2')).toHaveSize(1);
     expect(element.querySelector('.use-cases h2')?.textContent?.trim()).toBe(
-      'Co możemy uporządkować i zautomatyzować',
+      'Trzy problemy, które warto przestać obsługiwać ręcznie',
     );
-    expect(element.querySelector('.use-cases .section-lead')?.textContent?.trim()).toBe(
-      'Zaczynamy od sposobu pracy zespołu, a dopiero później dobieramy AI, integracje i pozostałe technologie.',
-    );
-    const useCaseCards = Array.from(
-      element.querySelectorAll<HTMLElement>('.automation-bento-card'),
-    );
-    expect(useCaseCards).toHaveSize(5);
+    expect(element.querySelector('.use-cases .section-lead')).toBeNull();
+    const useCaseCards = Array.from(element.querySelectorAll<HTMLElement>('.problem-card'));
+    expect(useCaseCards).toHaveSize(3);
     expect(element.querySelector('app-automation-bento')).not.toBeNull();
     expect(element.querySelector('app-solution-carousel')).toBeNull();
     expect(element.querySelector('#home-processes')).not.toBeNull();
-    expect(element.querySelector('.hero-scroll-link')?.getAttribute('href')).toBe(
-      '#home-processes',
-    );
-    expect(element.querySelectorAll('.automation-bento-card h3')).toHaveSize(5);
+    expect(element.querySelector('.hero-scroll-link')).toBeNull();
+    expect(element.querySelectorAll('.problem-card h3')).toHaveSize(3);
     expect(useCaseCards.map((card) => card.querySelector('h3')?.textContent?.trim())).toEqual([
-      'Obsługa powtarzalnych pytań',
-      'Kwalifikacja rozmów i zgłoszeń',
-      'Przetwarzanie wiadomości i dokumentów',
-      'Realizacja wieloetapowych zadań',
-      'Obsługa wielu kanałów w jednym procesie',
+      'Wiadomości i dokumenty',
+      'Wiedza firmy',
+      'Obsługa spraw',
     ]);
     expect(
-      useCaseCards.map((card) =>
-        Array.from(card.querySelectorAll<HTMLElement>('.bento-problem, .bento-outcome'), (text) =>
-          text.textContent?.trim(),
-        ),
-      ),
+      useCaseCards.map((card) => card.querySelector('.problem-copy')?.textContent?.trim()),
     ).toEqual([
-      [
-        'Klienci lub pracownicy szukają odpowiedzi w wielu dokumentach i wiadomościach.',
-        'Otrzymują odpowiedź ze źródłem albo sprawa trafia do właściwej osoby.',
-      ],
-      [
-        'Zespół wielokrotnie zadaje te same pytania i ręcznie zapisuje dane z rozmów.',
-        'System zbiera podstawowe informacje i przekazuje uporządkowaną sprawę pracownikowi.',
-      ],
-      [
-        'Dane są ręcznie kopiowane z e-maili, formularzy lub dokumentów do kolejnych narzędzi.',
-        'Informacje są rozpoznane, sprawdzone i przekazane do następnego kroku.',
-      ],
-      [
-        'Jedna sprawa wymaga kilku kroków, narzędzi i kontroli wyniku.',
-        'Kroki są uporządkowane, a człowiek zatwierdza krytyczne decyzje.',
-      ],
-      [
-        'Wiadomości z formularza, e-maila, WhatsAppa i CRM mają różne statusy.',
-        'Sprawy trafiają do jednego kontrolowanego przepływu z widocznym statusem.',
-      ],
+      'Pracownik nie powinien przepisywać danych z maila do systemu.',
+      'Pracownik nie powinien przeszukiwać kilku dokumentów, żeby odpowiedzieć klientowi.',
+      'Klient nie powinien ginąć między WhatsAppem, mailem i CRM.',
     ]);
-    expect(
-      Array.from(element.querySelectorAll<HTMLElement>('.automation-bento-card a'), (link) =>
-        link.textContent?.trim(),
-      ),
-    ).toEqual(Array.from({ length: 5 }, () => 'Zobacz proces'));
+    expect(element.querySelectorAll('.problem-card a')).toHaveSize(0);
+    expect(element.querySelector('.use-cases-link')?.textContent).toContain(
+      'Zobacz wszystkie rozwiązania →',
+    );
+    expect(element.querySelector('.use-cases-link')?.getAttribute('href')).toBe('/rozwiazania');
     expect(element.querySelectorAll('app-use-case-visual')).toHaveSize(0);
-    expect(element.querySelectorAll('app-automation-bento-visual')).toHaveSize(5);
-    expect(element.querySelectorAll('.automation-bento-card [aria-hidden="true"]')).toHaveSize(5);
-    expect(element.querySelectorAll('.automation-bento-card a')).toHaveSize(5);
-    expect(element.querySelectorAll('[data-visual-kind="knowledge-assistant"]')).toHaveSize(1);
-    expect(element.querySelectorAll('[data-visual-kind="message-workflow"]')).toHaveSize(1);
+    expect(element.querySelectorAll('app-automation-bento-visual')).toHaveSize(3);
+    expect(element.querySelectorAll('.problem-card [aria-hidden="true"]')).toHaveSize(6);
     expect(element.querySelectorAll('[data-visual-kind="process-panel"]')).toHaveSize(1);
-    expect(element.querySelectorAll('[data-visual-kind="agent-system"]')).toHaveSize(1);
+    expect(element.querySelectorAll('[data-visual-kind="knowledge-assistant"]')).toHaveSize(1);
     expect(element.querySelectorAll('[data-visual-kind="channel-integrations"]')).toHaveSize(1);
     expect(element.querySelectorAll('.use-case-summary')).toHaveSize(0);
-    expect(
-      Array.from(element.querySelectorAll<HTMLAnchorElement>('.automation-bento-card a'), (link) =>
-        link.getAttribute('href'),
-      ),
-    ).toEqual([
-      '/rozwiazania/chatbot-ai-dla-firm',
-      '/rozwiazania/voice-ai-dla-firm',
-      '/rozwiazania/automatyzacja-procesow',
-      '/rozwiazania/systemy-agentowe',
-      '/rozwiazania/integracje-whatsapp-crm',
-    ]);
     expect(element.querySelectorAll('img[src^="http"], img[src^="//"]')).toHaveSize(0);
     expect(element.querySelector('app-knowledge-demo')).toBeNull();
-    expect(element.querySelectorAll('.business-flow-step')).toHaveSize(5);
+    expect(element.querySelectorAll('.business-flow-step')).toHaveSize(6);
     expect(element.querySelector('.business-flow')?.textContent).toContain('Jasny handoff.');
     expect(
       element.querySelector('.business-flow a[href="/kontakt?projectType=backend_api"]'),
@@ -201,7 +157,7 @@ describe('HomeComponent', () => {
     expect(revealElements).toHaveSize(9);
     expect(element.querySelector('.trust-strip ul[appReveal].motion-stagger')).not.toBeNull();
     expect(element.querySelector('.use-cases .section-heading[appReveal]')).not.toBeNull();
-    expect(element.querySelector('.automation-bento[appReveal].motion-stagger')).not.toBeNull();
+    expect(element.querySelector('.problem-grid[appReveal].motion-stagger')).not.toBeNull();
     expect(element.querySelector('.evidence-teaser .section-heading[appReveal]')).not.toBeNull();
     expect(element.querySelector('.seven-day-demo .demo-heading[appReveal]')).not.toBeNull();
     expect(element.querySelector('.seven-day-demo .demo-timeline[appReveal]')).not.toBeNull();

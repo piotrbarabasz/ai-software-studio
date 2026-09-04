@@ -1,98 +1,125 @@
-import { TestBed } from '@angular/core/testing';
 import { PLATFORM_ID } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 
-import { HOME_HERO_3D_CONFIG } from './home-hero-3d.config';
 import { HomeHeroVisualComponent } from './home-hero-visual.component';
-import { SplineViewerLoader } from './spline-viewer-loader.service';
+
+class MockIntersectionObserver {
+  static instance: MockIntersectionObserver | undefined;
+
+  readonly observe = jasmine.createSpy('observe');
+  readonly disconnect = jasmine.createSpy('disconnect');
+
+  constructor(private readonly callback: IntersectionObserverCallback) {
+    MockIntersectionObserver.instance = this;
+  }
+
+  trigger(target: Element, isIntersecting: boolean): void {
+    this.callback(
+      [{ target, isIntersecting } as IntersectionObserverEntry],
+      this as unknown as IntersectionObserver,
+    );
+  }
+}
 
 describe('HomeHeroVisualComponent', () => {
+  const mutableWindow = window as Window & {
+    IntersectionObserver?: typeof IntersectionObserver;
+  };
+  let originalObserver: typeof IntersectionObserver | undefined;
+
   beforeEach(async () => {
+    originalObserver = mutableWindow.IntersectionObserver;
+    MockIntersectionObserver.instance = undefined;
     await TestBed.configureTestingModule({
       imports: [HomeHeroVisualComponent],
     }).compileComponents();
   });
 
-  it('renders one decorative flow visual without interactive controls', () => {
-    const fixture = TestBed.createComponent(HomeHeroVisualComponent);
-    fixture.detectChanges();
-    const element = fixture.nativeElement as HTMLElement;
-    const visual = element.querySelector<HTMLElement>('[data-hero-visual]');
+  afterEach(() => {
+    if (originalObserver) {
+      mutableWindow.IntersectionObserver = originalObserver;
+    } else {
+      delete mutableWindow.IntersectionObserver;
+    }
+  });
 
-    expect(visual?.getAttribute('aria-hidden')).toBe('true');
-    expect(element.querySelectorAll('[data-hero-fallback]')).toHaveSize(1);
-    expect(element.querySelector('spline-viewer')).toBeNull();
-    expect(element.querySelectorAll('.protolume-core')).toHaveSize(1);
-    expect(element.querySelectorAll('.system-node')).toHaveSize(6);
-    expect(element.textContent).toContain('PROTOLUME');
-    expect(element.textContent).toContain('Human');
+  it('renders one concise decorative process with real workflow primitives', () => {
+    const element = render();
+
+    expect(element.querySelector('[data-hero-visual]')?.getAttribute('aria-hidden')).toBe('true');
+    expect(element.querySelectorAll('app-workflow-node')).toHaveSize(5);
+    expect(element.querySelectorAll('app-workflow-connector')).toHaveSize(4);
+    expect(element.querySelectorAll('.workflow-payload > span')).toHaveSize(3);
+    expect(element.textContent).toContain('New email');
     expect(
-      element.querySelectorAll(
-        'a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])',
+      Array.from(element.querySelectorAll<HTMLElement>('.workflow-map span'), (item) =>
+        item.textContent?.trim(),
       ),
-    ).toHaveSize(0);
+    ).toEqual(['INPUT', 'DATA', 'AI / AUTO', 'HUMAN', 'SYSTEM', 'RESULT']);
+    expect(element.textContent).toContain('AI extracting');
+    expect(element.textContent).toContain('25 000 PLN');
+    expect(element.textContent).toContain('Human review');
+    expect(element.textContent).toContain('CRM updated');
+    expect(element.textContent).toContain('Done');
+    expect(element.querySelector('app-home-hero-spline, spline-viewer, canvas')).toBeNull();
+    expect(element.querySelectorAll('a, button, input, select, textarea, [tabindex]')).toHaveSize(
+      0,
+    );
   });
 
-  it('keeps the complete visual available when reduced motion is preferred', () => {
-    spyOn(window, 'matchMedia').and.callFake(
-      (query: string) =>
-        ({
-          matches: query === '(prefers-reduced-motion: reduce)',
-          media: query,
-        }) as MediaQueryList,
-    );
+  it('starts and stops the ten-second CSS sequence with viewport visibility', () => {
+    useObserver();
     const fixture = TestBed.createComponent(HomeHeroVisualComponent);
     fixture.detectChanges();
-    const element = fixture.nativeElement as HTMLElement;
+    const visual = fixture.nativeElement.querySelector('[data-hero-visual]') as HTMLElement;
+    const observer = MockIntersectionObserver.instance;
 
-    expect(element.querySelector('[data-hero-visual]')).not.toBeNull();
-    expect(element.querySelectorAll('.connection')).toHaveSize(10);
-    expect(element.querySelectorAll('.protolume-core')).toHaveSize(1);
+    expect(observer?.observe).toHaveBeenCalledOnceWith(visual);
+    observer?.trigger(visual, true);
+    fixture.detectChanges();
+    expect(visual).toHaveClass('is-in-view');
+
+    observer?.trigger(visual, false);
+    fixture.detectChanges();
+    expect(visual).not.toHaveClass('is-in-view');
+
+    fixture.destroy();
+    expect(observer?.disconnect).toHaveBeenCalledTimes(1);
   });
 
-  it('renders safely during SSR without accessing browser media queries', () => {
+  it('shows the complete final state without an observer for reduced motion', () => {
+    useObserver();
+    spyOn(window, 'matchMedia').and.callFake(
+      (query: string) => ({ matches: query.includes('prefers-reduced-motion') }) as MediaQueryList,
+    );
+
+    const element = render();
+
+    expect(element.querySelector('[data-hero-visual]')).toHaveClass('is-reduced-motion');
+    expect(element.querySelectorAll('[data-flow-stage]')).toHaveSize(6);
+    expect(MockIntersectionObserver.instance).toBeUndefined();
+  });
+
+  it('renders safely during SSR without accessing browser media queries or observers', () => {
     TestBed.overrideProvider(PLATFORM_ID, { useValue: 'server' });
     const matchMedia = spyOn(window, 'matchMedia');
-    const fixture = TestBed.createComponent(HomeHeroVisualComponent);
+    useObserver();
 
-    expect(() => fixture.detectChanges()).not.toThrow();
+    const element = render();
+
     expect(matchMedia).not.toHaveBeenCalled();
-    expect(fixture.nativeElement.querySelector('[data-hero-visual]')).not.toBeNull();
+    expect(MockIntersectionObserver.instance).toBeUndefined();
+    expect(element.querySelectorAll('app-workflow-node')).toHaveSize(5);
   });
 
-  it('keeps the fallback mounted until an eligible configured scene reports ready', async () => {
-    const sceneUrl = 'https://prod.spline.design/protolume-test/scene.splinecode';
-    const loader = jasmine.createSpyObj<SplineViewerLoader>('SplineViewerLoader', ['load']);
-    loader.load.and.resolveTo(undefined);
-    TestBed.overrideProvider(HOME_HERO_3D_CONFIG, {
-      useValue: { enabled: true, sceneUrl },
-    });
-    TestBed.overrideProvider(SplineViewerLoader, { useValue: loader });
-    spyOn(window, 'matchMedia').and.callFake(
-      (query: string) =>
-        ({
-          matches: query !== '(prefers-reduced-motion: reduce)',
-          media: query,
-          addEventListener: jasmine.createSpy('addEventListener'),
-          removeEventListener: jasmine.createSpy('removeEventListener'),
-        }) as unknown as MediaQueryList,
-    );
+  function useObserver(): void {
+    mutableWindow.IntersectionObserver =
+      MockIntersectionObserver as unknown as typeof IntersectionObserver;
+  }
+
+  function render(): HTMLElement {
     const fixture = TestBed.createComponent(HomeHeroVisualComponent);
     fixture.detectChanges();
-    await fixture.whenStable();
-    fixture.detectChanges();
-
-    const element = fixture.nativeElement as HTMLElement;
-    const visual = element.querySelector('[data-hero-visual]');
-    const fallback = element.querySelector('[data-hero-fallback]');
-    const viewer = element.querySelector('spline-viewer');
-    expect(fallback).not.toBeNull();
-    expect(viewer).not.toBeNull();
-    expect(visual).not.toHaveClass('is-spline-ready');
-
-    viewer?.dispatchEvent(new CustomEvent('load-complete', { detail: { url: sceneUrl } }));
-    fixture.detectChanges();
-
-    expect(fallback).not.toBeNull();
-    expect(visual).toHaveClass('is-spline-ready');
-  });
+    return fixture.nativeElement as HTMLElement;
+  }
 });

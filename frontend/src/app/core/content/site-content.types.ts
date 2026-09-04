@@ -259,6 +259,7 @@ export interface HomePageContent {
   ];
   readonly useCasesHeading: HomeSectionHeading;
   readonly useCases: readonly HomeUseCase[];
+  readonly useCasesCta: HomeCta;
   readonly businessFlow: HomeBusinessFlow;
   readonly sevenDayDemo: HomeSevenDayDemo;
 }
@@ -279,12 +280,10 @@ export interface HomeCta {
 export interface HomeHero {
   readonly eyebrow: string;
   readonly title: string;
-  readonly audience: string;
   readonly lead: string;
+  readonly supportingLine: string;
   readonly primaryCta: HomeCta;
   readonly secondaryCta: HomeCta;
-  readonly processTitle: string;
-  readonly processDiagram: readonly [string, string, string, string];
 }
 
 export interface HomeTrustStripItem {
@@ -295,9 +294,10 @@ export interface HomeTrustStripItem {
 
 export interface HomeUseCase {
   readonly id: string;
+  readonly number?: '01' | '02' | '03';
   readonly title: string;
   readonly problem: string;
-  readonly outcome: string;
+  readonly outcome?: string;
   readonly cta?: HomeCta;
   readonly visualKind:
     | 'knowledge-assistant'
@@ -437,7 +437,7 @@ export interface HomeSevenDayDemo {
 
 export interface HomeBusinessFlowStep {
   readonly id: string;
-  readonly kind: 'contact' | 'collect' | 'automate' | 'handoff' | 'result';
+  readonly kind: 'contact' | 'collect' | 'automate' | 'handoff' | 'system' | 'result';
   readonly kicker: string;
   readonly title: string;
   readonly description: string;
@@ -450,6 +450,7 @@ export interface HomeBusinessFlow {
   readonly results: readonly [string, string, string, string];
   readonly cta: HomeCta;
   readonly steps: readonly [
+    HomeBusinessFlowStep,
     HomeBusinessFlowStep,
     HomeBusinessFlowStep,
     HomeBusinessFlowStep,

@@ -49,26 +49,6 @@
   background: var(--signal);
 }
 
-.input-sources {
-  display: flex;
-  justify-content: center;
-  gap: 0.45rem;
-  margin-bottom: 0.6rem;
-}
-
-.input-sources span,
-.automation-tags i,
-.review-actions i {
-  border: 1px solid rgba(255, 255, 255, 0.13);
-  border-radius: var(--radius-pill);
-  background: rgba(255, 255, 255, 0.055);
-  color: var(--text-light-muted);
-  font-size: 0.58rem;
-  font-style: normal;
-  font-weight: 750;
-  padding: 0.28rem 0.5rem;
-}
-
 .process-node {
   display: grid;
   width: min(100%, 23rem);
@@ -146,30 +126,6 @@
   color: var(--signal);
   font-size: 0.8rem;
   font-weight: 900;
-}
-
-.data-fields,
-.automation-tags,
-.review-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-}
-
-.data-fields i {
-  width: 2.4rem;
-  height: 0.2rem;
-  border-radius: var(--radius-pill);
-  background: var(--brand-300);
-}
-
-.automation-tags i {
-  color: var(--brand-100);
-}
-
-.review-actions i:first-child {
-  border-color: rgba(99, 216, 255, 0.26);
-  color: var(--signal);
 }
 
 .result-status {

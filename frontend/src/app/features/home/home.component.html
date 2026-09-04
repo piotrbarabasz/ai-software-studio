@@ -4,7 +4,6 @@
       <p class="eyebrow">{{ home.hero.eyebrow }}</p>
       <h1 id="hero-title">{{ home.hero.title }}</h1>
       <p class="hero-lead">{{ home.hero.lead }}</p>
-      <p class="hero-audience">{{ home.hero.audience }}</p>
       <div class="hero-actions" aria-label="Główne akcje">
         <a
           class="primary-action"
@@ -13,16 +12,16 @@
         >
           {{ home.hero.primaryCta.label }}
         </a>
-        <a class="secondary-action" [routerLink]="home.hero.secondaryCta.path">
+        <a
+          class="secondary-action hero-secondary-action"
+          [routerLink]="home.hero.secondaryCta.path"
+        >
           {{ home.hero.secondaryCta.label }}
         </a>
       </div>
     </div>
     <app-home-hero-visual />
-    <a class="hero-scroll-link" href="#home-processes">
-      <span aria-hidden="true">↓</span>
-      Zobacz jak działa automatyzacja
-    </a>
+    <p class="hero-supporting-line">{{ home.hero.supportingLine }}</p>
   </section>
 
   <section
@@ -53,9 +52,16 @@
       <div appReveal class="section-heading reveal--subtle">
         <p class="eyebrow">{{ home.useCasesHeading.eyebrow }}</p>
         <h2 id="use-cases-title">{{ home.useCasesHeading.title }}</h2>
-        <p class="section-lead">{{ home.useCasesHeading.lead }}</p>
+        @if (home.useCasesHeading.lead) {
+          <p class="section-lead">{{ home.useCasesHeading.lead }}</p>
+        }
       </div>
       <app-automation-bento [items]="home.useCases" />
+      <div class="use-cases-footer">
+        <a class="use-cases-link" [routerLink]="home.useCasesCta.path">
+          {{ home.useCasesCta.label }}
+        </a>
+      </div>
     </div>
   </section>
 

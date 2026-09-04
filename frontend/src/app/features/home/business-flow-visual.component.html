@@ -4,12 +4,6 @@
     <span class="live-status"><i></i> Kontrolowany proces</span>
   </div>
 
-  <div class="input-sources">
-    <span>E-mail</span>
-    <span>Formularz</span>
-    <span>API</span>
-  </div>
-
   <div
     class="process-node process-node--input"
     [class.is-active]="activeStep === 0"
@@ -39,7 +33,6 @@
     <div>
       <small>DATA</small>
       <strong>Dane uporządkowane</strong>
-      <span class="data-fields"><i></i><i></i><i></i></span>
     </div>
     <span class="node-state">{{ isComplete(1) ? '✓' : activeStep === 1 ? '●' : '○' }}</span>
   </div>
@@ -59,8 +52,7 @@
     <span class="node-index">03</span>
     <div>
       <small>AUTOMATION</small>
-      <strong>Reguły i integracje</strong>
-      <span class="automation-tags"><i>AI</i><i>API</i><i>IF</i></span>
+      <strong>Reguły i AI</strong>
     </div>
     <span class="node-state">{{ isComplete(2) ? '✓' : activeStep === 2 ? '●' : '○' }}</span>
   </div>
@@ -80,8 +72,7 @@
     <span class="node-index">04</span>
     <div>
       <small>HUMAN REVIEW</small>
-      <strong>Kontekst do decyzji</strong>
-      <span class="review-actions"><i>✓ Zatwierdź</i><i>Popraw</i></span>
+      <strong>Decyzja człowieka</strong>
     </div>
     <span class="node-state">{{ isComplete(3) ? '✓' : activeStep === 3 ? '●' : '○' }}</span>
   </div>
@@ -93,11 +84,31 @@
     }
   </svg>
 
-  <div class="process-node process-node--result" [class.is-active]="activeStep === 4">
+  <div
+    class="process-node process-node--system"
+    [class.is-active]="activeStep === 4"
+    [class.is-complete]="isComplete(4)"
+  >
     <span class="node-index">05</span>
     <div>
       <small>SYSTEM</small>
-      <strong>CRM · status zaktualizowany</strong>
+      <strong>CRM zaktualizowany</strong>
+    </div>
+    <span class="node-state">{{ isComplete(4) ? '✓' : activeStep === 4 ? '●' : '○' }}</span>
+  </div>
+
+  <svg class="process-connector" viewBox="0 0 20 48" preserveAspectRatio="none" focusable="false">
+    <path class="motion-flow-line" pathLength="1" d="M10 0V48" />
+    @if (activeStep === 5) {
+      <path class="motion-flow-signal" pathLength="1" d="M10 0V48" />
+    }
+  </svg>
+
+  <div class="process-node process-node--result" [class.is-active]="activeStep === 5">
+    <span class="node-index">06</span>
+    <div>
+      <small>RESULT</small>
+      <strong>Gotowy wynik</strong>
     </div>
     <span class="result-status">DONE</span>
   </div>

@@ -16,10 +16,10 @@ describe('BusinessFlowVisualComponent', () => {
     return fixture.nativeElement as HTMLElement;
   }
 
-  it('keeps one coherent five-node diagram with a single active state', () => {
-    for (let activeStep = 0; activeStep < 5; activeStep += 1) {
+  it('keeps one coherent six-node diagram with a single active state', () => {
+    for (let activeStep = 0; activeStep < 6; activeStep += 1) {
       const element = render(activeStep);
-      expect(element.querySelectorAll('.process-node')).toHaveSize(5);
+      expect(element.querySelectorAll('.process-node')).toHaveSize(6);
       expect(element.querySelectorAll('.process-node.is-active')).toHaveSize(1);
       expect(element.querySelectorAll('.process-node.is-complete')).toHaveSize(activeStep);
       expect(

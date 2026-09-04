@@ -1,149 +1,55 @@
 <div
-  #visualFrame
-  class="hero-visual"
-  [class.is-spline-ready]="isSplineReady()"
+  #workflowFrame
+  class="hero-workflow"
+  [class.is-in-view]="isInView()"
+  [class.is-reduced-motion]="motionPreferences.reducedMotion()"
   aria-hidden="true"
   data-hero-visual
 >
-  <div class="visual-scene" data-hero-fallback>
-    <span class="visual-grid"></span>
+  <header class="workflow-header">
+    <span>LIVE PROCESS / 01</span>
+    <span class="workflow-status"><i></i> HUMAN CONTROL</span>
+  </header>
 
-    <svg
-      class="connections connections-desktop"
-      viewBox="0 0 640 600"
-      preserveAspectRatio="none"
-      focusable="false"
-    >
-      <path
-        class="connection motion-flow-line"
-        pathLength="1"
-        d="M126 102C212 104 238 218 294 269"
-      />
-      <path
-        class="connection motion-flow-line"
-        pathLength="1"
-        d="M120 276C194 276 236 282 292 292"
-      />
-      <path
-        class="connection motion-flow-line"
-        pathLength="1"
-        d="M138 454C220 430 244 362 300 326"
-      />
-      <path
-        class="connection motion-flow-line"
-        pathLength="1"
-        d="M510 126C432 138 400 220 353 270"
-      />
-      <path
-        class="connection motion-flow-line"
-        pathLength="1"
-        d="M526 330C454 328 404 316 358 304"
-      />
-      <path
-        class="connection motion-flow-line"
-        pathLength="1"
-        d="M414 502C400 424 365 374 339 338"
-      />
-      <path
-        class="connection-signal motion-flow-signal signal-one"
-        pathLength="1"
-        d="M126 102C212 104 238 218 294 269"
-      />
-      <path
-        class="connection-signal motion-flow-signal signal-two"
-        pathLength="1"
-        d="M510 126C432 138 400 220 353 270"
-      />
-      <path
-        class="connection-signal motion-flow-signal signal-three"
-        pathLength="1"
-        d="M414 502C400 424 365 374 339 338"
-      />
-    </svg>
-
-    <svg
-      class="connections connections-mobile"
-      viewBox="0 0 360 430"
-      preserveAspectRatio="none"
-      focusable="false"
-    >
-      <path class="connection motion-flow-line" pathLength="1" d="M70 58C112 82 132 130 157 164" />
-      <path
-        class="connection motion-flow-line"
-        pathLength="1"
-        d="M64 326C106 302 130 278 156 250"
-      />
-      <path class="connection motion-flow-line" pathLength="1" d="M292 60C248 84 224 130 202 166" />
-      <path
-        class="connection motion-flow-line"
-        pathLength="1"
-        d="M286 330C240 306 220 278 202 250"
-      />
-      <path
-        class="connection-signal motion-flow-signal signal-one"
-        pathLength="1"
-        d="M70 58C112 82 132 130 157 164"
-      />
-      <path
-        class="connection-signal motion-flow-signal signal-two"
-        pathLength="1"
-        d="M292 60C248 84 224 130 202 166"
-      />
-    </svg>
-
-    <div class="system-node node-email">
-      <span class="node-mark">@</span>
-      <span>
-        <strong>Email</strong>
-        <small>Nowe zgłoszenie</small>
-      </span>
-    </div>
-    <div class="system-node node-document">
-      <span class="node-mark">DOC</span>
-      <span>
-        <strong>Dokument</strong>
-        <small>Dane odczytane</small>
-      </span>
-    </div>
-    <div class="system-node node-whatsapp">
-      <span class="node-mark">WA</span>
-      <span>
-        <strong>WhatsApp</strong>
-        <small>Wiadomość</small>
-      </span>
-    </div>
-    <div class="system-node node-crm">
-      <span class="node-mark">CRM</span>
-      <span>
-        <strong>CRM</strong>
-        <small>Status zapisany</small>
-      </span>
-    </div>
-    <div class="system-node node-api">
-      <span class="node-mark">API</span>
-      <span>
-        <strong>API</strong>
-        <small>Połączenie</small>
-      </span>
-    </div>
-    <div class="system-node node-human">
-      <span class="node-mark node-mark-human">✓</span>
-      <span>
-        <strong>Human</strong>
-        <small>Zatwierdzenie</small>
-      </span>
-    </div>
-
-    <div class="protolume-core">
-      <span class="core-orbit core-orbit-outer"></span>
-      <span class="core-orbit core-orbit-inner"></span>
-      <span class="core-content">
-        <app-protolume-logo variant="symbol" theme="dark" />
-        <strong>PROTOLUME</strong>
-        <small>FLOW CORE</small>
-      </span>
-    </div>
+  <div class="workflow-map">
+    <span>INPUT</span><i>→</i><span>DATA</span><i>→</i><span>AI / AUTO</span><i>→</i
+    ><span>HUMAN</span><i>→</i><span>SYSTEM</span><i>→</i><span>RESULT</span>
   </div>
 
-  <app-home-hero-spline (sceneReadyChange)="handleSplineReadyChange($event)" />
+  <div class="workflow-track">
+    <div class="hero-flow-stage" data-flow-stage="input">
+      <app-workflow-node [node]="emailNode" />
+    </div>
+
+    <app-workflow-connector class="hero-connector connector-ai" orientation="vertical" />
+
+    <div class="hero-flow-stage" data-flow-stage="ai">
+      <app-workflow-node [node]="aiNode" />
+    </div>
+
+    <div class="workflow-payload" data-flow-stage="payload">
+      <span><small>Company</small><strong>Acme</strong></span>
+      <span><small>Budget</small><strong>25 000 PLN</strong></span>
+      <span><small>Deadline</small><strong>14 days</strong></span>
+    </div>
+
+    <app-workflow-connector class="hero-connector connector-human" orientation="vertical" />
+
+    <div class="hero-flow-stage human-stage" data-flow-stage="human">
+      <app-workflow-node [node]="humanNode" />
+      <span class="approve-chip">Approve</span>
+    </div>
+
+    <app-workflow-connector class="hero-connector connector-system" orientation="vertical" />
+
+    <div class="workflow-result-row">
+      <div class="hero-flow-stage" data-flow-stage="system">
+        <app-workflow-node [node]="crmNode" />
+      </div>
+      <app-workflow-connector class="hero-connector result-connector" />
+      <div class="hero-flow-stage" data-flow-stage="result">
+        <app-workflow-node [node]="doneNode" />
+      </div>
+    </div>
+  </div>
 </div>

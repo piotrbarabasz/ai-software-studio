@@ -3,251 +3,138 @@
   min-width: 0;
 }
 
-.automation-bento {
+.problem-grid {
   display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: clamp(1rem, 1.8vw, 1.5rem);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.9rem, 1.8vw, 1.35rem);
 }
 
-.automation-bento-card {
-  position: relative;
+.problem-card {
   display: grid;
   min-width: 0;
-  grid-template-rows: auto 1fr auto;
-  gap: clamp(1.1rem, 2vw, 1.5rem);
+  grid-template-rows: auto auto auto 1fr;
+  gap: 0.85rem;
   overflow: hidden;
-  padding: clamp(1.25rem, 2.5vw, 2rem);
   border: 1px solid var(--border-subtle);
-  border-radius: clamp(1.25rem, 2vw, 1.75rem);
-  background: var(--background-elevated);
-  box-shadow: 0 18px 48px rgba(16, 19, 28, 0.055);
+  border-radius: var(--radius-xl);
+  padding: clamp(1.15rem, 2.2vw, 1.65rem);
+  background: var(--surface-1);
+  box-shadow: 0 16px 42px rgba(16, 19, 28, 0.05);
   transition:
-    border-color var(--motion-duration-base) var(--motion-ease-standard),
-    box-shadow var(--motion-duration-base) var(--motion-ease-standard),
-    transform var(--motion-duration-base) var(--motion-ease-standard);
+    border-color var(--motion-normal) var(--ease-standard),
+    box-shadow var(--motion-normal) var(--ease-standard),
+    transform var(--motion-normal) var(--ease-standard);
 }
 
-.automation-bento-card::before {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(135deg, rgba(124, 92, 255, 0.045), transparent 42%);
-  content: '';
-}
-
-.automation-bento-card[data-visual-kind='knowledge-assistant'] {
-  min-height: 27rem;
-  grid-column: span 5;
-  background: color-mix(in srgb, var(--background-brand) 58%, white);
-}
-
-.automation-bento-card[data-visual-kind='message-workflow'] {
-  min-height: 27rem;
-  grid-column: span 7;
-}
-
-.automation-bento-card[data-visual-kind='process-panel'] {
-  min-height: 33rem;
-  grid-column: span 7;
-  border-color: color-mix(in srgb, var(--brand-400) 52%, var(--border-subtle));
-}
-
-.automation-bento-card[data-visual-kind='agent-system'] {
-  min-height: 33rem;
-  grid-column: span 5;
-}
-
-.automation-bento-card[data-visual-kind='channel-integrations'] {
-  min-height: 23rem;
-  grid-column: 1 / -1;
-  grid-template-columns: minmax(17rem, 0.72fr) minmax(0, 1.28fr);
-  grid-template-rows: auto 1fr;
+.problem-card-header {
+  display: flex;
   align-items: center;
-}
-
-.automation-bento-card[data-visual-kind='channel-integrations'] .bento-card-copy {
-  grid-column: 1;
-  grid-row: 1;
-}
-
-.automation-bento-card[data-visual-kind='channel-integrations'] app-automation-bento-visual {
-  grid-column: 2;
-  grid-row: 1 / span 2;
-}
-
-.automation-bento-card[data-visual-kind='channel-integrations'] .bento-card-footer {
-  grid-column: 1;
-  grid-row: 2;
-}
-
-.bento-card-copy,
-.bento-card-footer {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  min-width: 0;
-  align-content: start;
-}
-
-.bento-card-copy {
-  gap: 0.65rem;
-}
-
-.bento-card-footer {
-  align-items: end;
+  justify-content: space-between;
   gap: 1rem;
 }
 
-.bento-category,
-.bento-problem,
-.bento-outcome,
-.automation-bento-card h3 {
+.problem-card-header p,
+.problem-card h3,
+.problem-copy {
   margin: 0;
 }
 
-.bento-category {
-  color: var(--brand-700);
-  font-size: 0.75rem;
+.problem-card-header p,
+.problem-solution-label {
+  color: var(--text-muted);
+  font-size: 0.64rem;
   font-weight: 800;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
 }
 
-.automation-bento-card h3 {
-  max-width: 20ch;
-  font-size: clamp(1.55rem, 2.5vw, 2.25rem);
-  line-height: 1.04;
+.problem-number {
+  color: var(--accent-primary);
+  font-size: 0.75rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
 }
 
-.bento-problem {
-  max-width: 58ch;
-  color: var(--text-muted);
-  font-size: 0.98rem;
+.problem-card h3 {
+  max-width: 18ch;
+  color: var(--text-primary);
+  font-size: clamp(1.35rem, 2vw, 1.8rem);
+  letter-spacing: -0.025em;
+  line-height: 1.06;
+  text-transform: uppercase;
+}
+
+.problem-copy {
+  max-width: 34ch;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
   line-height: 1.55;
 }
 
-.bento-outcome {
+.problem-visual-block {
   display: grid;
-  max-width: 58ch;
-  grid-template-columns: auto minmax(0, 1fr);
+  align-self: end;
   gap: 0.55rem;
-  color: var(--text-dark);
-  font-size: 0.95rem;
-  font-weight: 690;
-  line-height: 1.5;
-}
-
-.bento-outcome::before {
-  color: var(--brand-600);
-  content: '→';
-  font-weight: 800;
-}
-
-.secondary-action {
-  width: fit-content;
-  min-width: 9rem;
-  justify-self: start;
-}
-
-.is-dark {
-  border-color: rgba(255, 255, 255, 0.16);
-  background:
-    radial-gradient(circle at 88% 12%, rgba(124, 92, 255, 0.22), transparent 17rem), var(--dark-900);
-  box-shadow: 0 24px 58px rgba(8, 10, 16, 0.16);
-}
-
-.is-dark::before {
-  background: linear-gradient(145deg, rgba(99, 216, 255, 0.045), transparent 42%);
-}
-
-.is-dark h3,
-.is-dark .bento-outcome {
-  color: var(--text-light);
-}
-
-.is-dark .bento-category {
-  color: var(--brand-200);
-}
-
-.is-dark .bento-problem {
-  color: var(--text-light-muted);
-}
-
-.is-dark .bento-outcome::before {
-  color: var(--signal);
-}
-
-.is-dark .secondary-action {
-  border-color: rgba(255, 255, 255, 0.3);
-  background: var(--text-light);
-  color: var(--brand-800);
+  padding-top: 0.65rem;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .automation-bento-card:hover {
-    border-color: color-mix(in srgb, var(--brand-500) 48%, var(--border-subtle));
-    box-shadow: 0 22px 54px rgba(84, 52, 214, 0.1);
+  .problem-card:hover {
+    border-color: color-mix(in srgb, var(--accent-primary) 42%, var(--border-subtle));
+    box-shadow: 0 22px 52px rgba(84, 52, 214, 0.1);
     transform: translateY(-3px);
-  }
-
-  .automation-bento-card.is-dark:hover {
-    border-color: color-mix(in srgb, var(--brand-400) 64%, transparent);
-    box-shadow: 0 26px 64px rgba(8, 10, 16, 0.22);
   }
 }
 
-@media (max-width: 1199px) {
-  .automation-bento {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .automation-bento-card,
-  .automation-bento-card[data-visual-kind] {
-    min-height: auto;
-    grid-column: auto;
+@media (max-width: 920px) {
+  .problem-grid {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto 1fr auto;
   }
 
-  .automation-bento-card[data-visual-kind='process-panel'] {
-    grid-column: 1 / -1;
+  .problem-card {
+    grid-template-columns: minmax(0, 0.9fr) minmax(18rem, 1.1fr);
+    grid-template-rows: auto auto 1fr;
+    column-gap: 1.5rem;
   }
 
-  .automation-bento-card[data-visual-kind='channel-integrations'] .bento-card-copy,
-  .automation-bento-card[data-visual-kind='channel-integrations'] app-automation-bento-visual,
-  .automation-bento-card[data-visual-kind='channel-integrations'] .bento-card-footer {
-    grid-column: auto;
-    grid-row: auto;
+  .problem-card-header,
+  .problem-card h3,
+  .problem-copy {
+    grid-column: 1;
+  }
+
+  .problem-visual-block {
+    grid-column: 2;
+    grid-row: 1 / -1;
+    align-self: center;
   }
 }
 
 @media (max-width: 700px) {
-  .automation-bento {
+  .problem-card {
     grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto;
+    gap: 0.75rem;
+    border-radius: var(--radius-lg);
+    padding: 1.1rem;
   }
 
-  .automation-bento-card,
-  .automation-bento-card[data-visual-kind='process-panel'] {
+  .problem-card-header,
+  .problem-card h3,
+  .problem-copy,
+  .problem-visual-block {
     grid-column: 1;
+    grid-row: auto;
   }
 
-  .automation-bento-card {
-    gap: 1rem;
-    padding: 1.15rem;
-  }
-
-  .automation-bento-card h3 {
-    font-size: clamp(1.45rem, 7vw, 1.85rem);
-  }
-
-  .secondary-action {
-    width: 100%;
+  .problem-copy {
+    max-width: none;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .automation-bento-card,
-  .automation-bento-card:hover {
+  .problem-card,
+  .problem-card:hover {
     transition: none;
     transform: none;
   }

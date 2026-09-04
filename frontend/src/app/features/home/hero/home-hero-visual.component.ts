@@ -1,4 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
+import type { AfterViewInit, ElementRef } from '@angular/core';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -10,14 +11,15 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import type { AfterViewInit, ElementRef } from '@angular/core';
 
-import { ProtolumeLogoComponent } from '../../../shared/brand/protolume-logo/protolume-logo.component';
-import { HomeHeroSplineComponent } from './home-hero-spline.component';
+import { MotionPreferencesService } from '../../../core/motion/motion-preferences.service';
+import { WorkflowConnectorComponent } from '../../../shared/workflow/workflow-connector/workflow-connector.component';
+import { WorkflowNodeComponent } from '../../../shared/workflow/workflow-node/workflow-node.component';
+import type { WorkflowNodeModel } from '../../../shared/workflow/workflow.types';
 
 @Component({
   selector: 'app-home-hero-visual',
-  imports: [HomeHeroSplineComponent, ProtolumeLogoComponent],
+  imports: [WorkflowConnectorComponent, WorkflowNodeComponent],
   templateUrl: './home-hero-visual.component.html',
   styleUrl: './home-hero-visual.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,88 +29,75 @@ export class HomeHeroVisualComponent implements AfterViewInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly ngZone = inject(NgZone);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
-  protected readonly isSplineReady = signal(false);
 
-  @ViewChild('visualFrame', { static: true })
-  private readonly visualFrame?: ElementRef<HTMLElement>;
+  protected readonly motionPreferences = inject(MotionPreferencesService);
+  protected readonly isInView = signal(false);
+
+  protected readonly emailNode: WorkflowNodeModel = {
+    id: 'new-email',
+    label: 'New email',
+    kind: 'source',
+    status: 'success',
+    description: 'Acme Sp. z o.o.',
+  };
+
+  protected readonly aiNode: WorkflowNodeModel = {
+    id: 'ai-extracting',
+    label: 'AI extracting',
+    kind: 'ai',
+    status: 'active',
+    description: 'Classification + extraction',
+  };
+
+  protected readonly humanNode: WorkflowNodeModel = {
+    id: 'human-review',
+    label: 'Human review',
+    kind: 'human',
+    status: 'warning',
+    description: 'Decision remains under control',
+  };
+
+  protected readonly crmNode: WorkflowNodeModel = {
+    id: 'crm-updated',
+    label: 'CRM updated',
+    kind: 'system',
+    status: 'success',
+  };
+
+  protected readonly doneNode: WorkflowNodeModel = {
+    id: 'done',
+    label: 'Done',
+    kind: 'result',
+    status: 'success',
+  };
+
+  @ViewChild('workflowFrame', { static: true })
+  private readonly workflowFrame?: ElementRef<HTMLElement>;
 
   ngAfterViewInit(): void {
-    const view = this.document.defaultView;
-    const frame = this.visualFrame?.nativeElement;
-    if (!this.isBrowser || !view || !frame || typeof view.matchMedia !== 'function') {
+    const frame = this.workflowFrame?.nativeElement;
+    const Observer = this.document.defaultView?.IntersectionObserver as
+      typeof IntersectionObserver | undefined;
+
+    if (!this.isBrowser || !frame || !Observer || this.motionPreferences.reducedMotion()) {
       return;
     }
-
-    const pointerMedia = view.matchMedia('(min-width: 721px) and (pointer: fine)');
-    const reducedMotionMedia = view.matchMedia('(prefers-reduced-motion: reduce)');
-    if (!pointerMedia.matches || reducedMotionMedia.matches) {
-      return;
-    }
-
-    let animationFrame: number | undefined;
-    let latestPointerEvent: PointerEvent | undefined;
-
-    const renderPointerPosition = (): void => {
-      animationFrame = undefined;
-      if (!latestPointerEvent) {
-        return;
-      }
-
-      const bounds = frame.getBoundingClientRect();
-      const horizontalPosition = (latestPointerEvent.clientX - bounds.left) / bounds.width - 0.5;
-      const verticalPosition = (latestPointerEvent.clientY - bounds.top) / bounds.height - 0.5;
-      frame.style.setProperty('--hero-rotate-x', `${verticalPosition * -4}deg`);
-      frame.style.setProperty('--hero-rotate-y', `${horizontalPosition * 6}deg`);
-      frame.style.setProperty('--hero-shift-x', `${horizontalPosition * 6}px`);
-      frame.style.setProperty('--hero-shift-y', `${verticalPosition * 4}px`);
-    };
-
-    const resetPointerPosition = (): void => {
-      latestPointerEvent = undefined;
-      frame.style.setProperty('--hero-rotate-x', '0deg');
-      frame.style.setProperty('--hero-rotate-y', '0deg');
-      frame.style.setProperty('--hero-shift-x', '0px');
-      frame.style.setProperty('--hero-shift-y', '0px');
-    };
-
-    const handlePointerMove = (event: PointerEvent): void => {
-      if (this.isSplineReady() || !pointerMedia.matches || reducedMotionMedia.matches) {
-        resetPointerPosition();
-        return;
-      }
-
-      latestPointerEvent = event;
-      if (animationFrame === undefined) {
-        animationFrame = view.requestAnimationFrame(renderPointerPosition);
-      }
-    };
 
     this.ngZone.runOutsideAngular(() => {
-      frame.addEventListener('pointermove', handlePointerMove, { passive: true });
-      frame.addEventListener('pointerleave', resetPointerPosition);
+      const observer = new Observer(
+        (entries) => {
+          const nextValue = entries.some((entry) => entry.isIntersecting);
+          if (nextValue === this.isInView()) {
+            return;
+          }
+
+          this.ngZone.run(() => this.isInView.set(nextValue));
+        },
+        { rootMargin: '10% 0px', threshold: 0.2 },
+      );
+
+      observer.observe(frame);
+      this.destroyRef.onDestroy(() => observer.disconnect());
     });
-
-    this.destroyRef.onDestroy(() => {
-      frame.removeEventListener('pointermove', handlePointerMove);
-      frame.removeEventListener('pointerleave', resetPointerPosition);
-      if (animationFrame !== undefined) {
-        view.cancelAnimationFrame(animationFrame);
-      }
-    });
-  }
-
-  protected handleSplineReadyChange(isReady: boolean): void {
-    if (this.isSplineReady() === isReady) {
-      return;
-    }
-    this.isSplineReady.set(isReady);
-
-    if (isReady) {
-      const frame = this.visualFrame?.nativeElement;
-      frame?.style.setProperty('--hero-rotate-x', '0deg');
-      frame?.style.setProperty('--hero-rotate-y', '0deg');
-      frame?.style.setProperty('--hero-shift-x', '0px');
-      frame?.style.setProperty('--hero-shift-y', '0px');
-    }
   }
 }

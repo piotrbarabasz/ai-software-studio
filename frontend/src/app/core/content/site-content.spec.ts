@@ -67,99 +67,63 @@ describe('Site content model', () => {
   });
 
   it('keeps homepage content focused on a short sales path with verifiable evidence', () => {
-    expect(siteContent.home.hero.eyebrow).toBe('Automatyzacje AI dla MŚP');
+    expect(siteContent.home.hero.eyebrow).toBe('AI AUTOMATION STUDIO');
     expect(siteContent.home.hero.title).toBe(
-      'Automatyzujemy procesy, które dziś zabierają ludziom czas.',
+      'Pokaż nam proces.\nW 7 dni pokażemy działającą automatyzację.',
     );
-    expect(siteContent.home.hero.audience).toContain('zespół przepisuje dane');
-    expect(siteContent.home.hero.lead).toContain('W 7 dni budujemy działające demo');
-    expect(siteContent.home.hero.lead).toContain('następny krok');
-    expect(siteContent.home.hero.primaryCta.label).toBe('Pokaż mi proces');
-    expect(siteContent.home.hero.secondaryCta.label).toBe('Zobacz działające demo');
+    expect(siteContent.home.hero.lead).toContain('jeden powtarzalny proces');
+    expect(siteContent.home.hero.lead).toContain('działające demo');
+    expect(siteContent.home.hero.supportingLine).toBe(
+      '1 proces · stały zakres · kontrola człowieka · wynik po 7 dniach',
+    );
+    expect(siteContent.home.hero.primaryCta.label).toBe('Opisz proces');
+    expect(siteContent.home.hero.secondaryCta.label).toBe('Zobacz demo →');
     expect(siteContent.home.hero.secondaryCta.path).toBe('/demo-ai');
-    expect(siteContent.home.hero.processTitle).toBe('Od procesu do decyzji w 7 dni');
-    expect(siteContent.home.hero.processDiagram).toEqual([
-      'Opis obecnej pracy',
-      'Jeden działający scenariusz',
-      'Ryzyka i granice',
-      'Rekomendowany następny krok',
-    ]);
     expect(siteContent.home.trustStrip).toHaveSize(4);
     expect(siteContent.home.useCasesHeading).toEqual({
-      eyebrow: 'Procesy, które najczęściej zabierają czas',
-      title: 'Co możemy uporządkować i zautomatyzować',
-      lead: 'Zaczynamy od sposobu pracy zespołu, a dopiero później dobieramy AI, integracje i pozostałe technologie.',
+      eyebrow: 'Gdzie najczęściej znika czas?',
+      title: 'Trzy problemy, które warto przestać obsługiwać ręcznie',
     });
-    expect(siteContent.home.useCases).toHaveSize(5);
-    expect(siteContent.home.useCases.every((item) => Boolean(item.cta))).toBeTrue();
+    expect(siteContent.home.useCases).toHaveSize(3);
     expect(
-      siteContent.home.useCases.map(({ title, problem, outcome, cta, visualKind }) => ({
+      siteContent.home.useCases.map(({ number, title, problem, visualKind }) => ({
+        number,
         title,
         problem,
-        outcome,
-        cta,
         visualKind,
       })),
     ).toEqual([
       {
-        title: 'Obsługa powtarzalnych pytań',
-        problem: 'Klienci lub pracownicy szukają odpowiedzi w wielu dokumentach i wiadomościach.',
-        outcome: 'Otrzymują odpowiedź ze źródłem albo sprawa trafia do właściwej osoby.',
-        cta: {
-          label: 'Zobacz proces',
-          path: '/rozwiazania/chatbot-ai-dla-firm',
-        },
-        visualKind: 'knowledge-assistant',
-      },
-      {
-        title: 'Kwalifikacja rozmów i zgłoszeń',
-        problem: 'Zespół wielokrotnie zadaje te same pytania i ręcznie zapisuje dane z rozmów.',
-        outcome:
-          'System zbiera podstawowe informacje i przekazuje uporządkowaną sprawę pracownikowi.',
-        cta: {
-          label: 'Zobacz proces',
-          path: '/rozwiazania/voice-ai-dla-firm',
-        },
-        visualKind: 'message-workflow',
-      },
-      {
-        title: 'Przetwarzanie wiadomości i dokumentów',
-        problem:
-          'Dane są ręcznie kopiowane z e-maili, formularzy lub dokumentów do kolejnych narzędzi.',
-        outcome: 'Informacje są rozpoznane, sprawdzone i przekazane do następnego kroku.',
-        cta: {
-          label: 'Zobacz proces',
-          path: '/rozwiazania/automatyzacja-procesow',
-        },
+        number: '01',
+        title: 'Wiadomości i dokumenty',
+        problem: 'Pracownik nie powinien przepisywać danych z maila do systemu.',
         visualKind: 'process-panel',
       },
       {
-        title: 'Realizacja wieloetapowych zadań',
-        problem: 'Jedna sprawa wymaga kilku kroków, narzędzi i kontroli wyniku.',
-        outcome: 'Kroki są uporządkowane, a człowiek zatwierdza krytyczne decyzje.',
-        cta: {
-          label: 'Zobacz proces',
-          path: '/rozwiazania/systemy-agentowe',
-        },
-        visualKind: 'agent-system',
+        number: '02',
+        title: 'Wiedza firmy',
+        problem:
+          'Pracownik nie powinien przeszukiwać kilku dokumentów, żeby odpowiedzieć klientowi.',
+        visualKind: 'knowledge-assistant',
       },
       {
-        title: 'Obsługa wielu kanałów w jednym procesie',
-        problem: 'Wiadomości z formularza, e-maila, WhatsAppa i CRM mają różne statusy.',
-        outcome: 'Sprawy trafiają do jednego kontrolowanego przepływu z widocznym statusem.',
-        cta: {
-          label: 'Zobacz proces',
-          path: '/rozwiazania/integracje-whatsapp-crm',
-        },
+        number: '03',
+        title: 'Obsługa spraw',
+        problem: 'Klient nie powinien ginąć między WhatsAppem, mailem i CRM.',
         visualKind: 'channel-integrations',
       },
     ]);
+    expect(siteContent.home.useCasesCta).toEqual({
+      label: 'Zobacz wszystkie rozwiązania →',
+      path: '/rozwiazania',
+    });
     expect(siteContent.home.businessFlow.steps).toEqual([
-      jasmine.objectContaining({ kind: 'contact', title: 'Zgłoszenie' }),
-      jasmine.objectContaining({ kind: 'collect', title: 'Rozpoznanie danych' }),
-      jasmine.objectContaining({ kind: 'automate', title: 'Praca systemu' }),
-      jasmine.objectContaining({ kind: 'handoff', title: 'Kontrola człowieka' }),
-      jasmine.objectContaining({ kind: 'result', title: 'Konkretna akcja' }),
+      jasmine.objectContaining({ kind: 'contact', kicker: 'Input', title: 'Nowe zgłoszenie' }),
+      jasmine.objectContaining({ kind: 'collect', kicker: 'Data', title: 'Dane uporządkowane' }),
+      jasmine.objectContaining({ kind: 'automate', kicker: 'Automation', title: 'Reguły i AI' }),
+      jasmine.objectContaining({ kind: 'handoff', kicker: 'Human review' }),
+      jasmine.objectContaining({ kind: 'system', kicker: 'System' }),
+      jasmine.objectContaining({ kind: 'result', kicker: 'Result', title: 'Gotowy wynik' }),
     ]);
     expect(siteContent.home.businessFlow.results).toEqual([
       'Mniej przepisywania.',

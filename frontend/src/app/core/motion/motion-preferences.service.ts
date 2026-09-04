@@ -1,4 +1,5 @@
-import { DOCUMENT, Injectable, inject, signal } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { DOCUMENT, Injectable, PLATFORM_ID, inject, signal } from '@angular/core';
 import type { OnDestroy, Signal } from '@angular/core';
 
 export const MOTION_VIEWPORT = {
@@ -11,7 +12,9 @@ const MOBILE_VIEWPORT_QUERY = `(max-width: ${MOTION_VIEWPORT.mobileMax}px)`;
 
 @Injectable({ providedIn: 'root' })
 export class MotionPreferencesService implements OnDestroy {
-  private readonly browserWindow = inject(DOCUMENT).defaultView;
+  private readonly document = inject(DOCUMENT);
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  private readonly browserWindow = this.isBrowser ? this.document.defaultView : null;
   private readonly reducedMotionQuery = this.createMediaQuery(REDUCED_MOTION_QUERY);
   private readonly mobileViewportQuery = this.createMediaQuery(MOBILE_VIEWPORT_QUERY);
   private readonly reducedMotionState = signal(this.reducedMotionQuery?.matches ?? false);
