@@ -59,9 +59,7 @@ describe('HomeComponent', () => {
         ({
           matches: query === '(prefers-reduced-motion: reduce)',
           media: query,
-          addEventListener: jasmine.createSpy('addEventListener'),
-          removeEventListener: jasmine.createSpy('removeEventListener'),
-        }) as unknown as MediaQueryList,
+        }) as MediaQueryList,
     );
     const element = createFixture();
     const ids = Array.from(element.querySelectorAll<HTMLElement>('[id]'), (item) => item.id);

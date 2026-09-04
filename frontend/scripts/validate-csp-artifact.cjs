@@ -2,8 +2,6 @@ const crypto = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
 
-const { SPLINE_INLINE_SCRIPT_HASHES } = require('./generate-nginx-security-headers.cjs');
-
 const DEFAULT_ARTIFACT_ROOT = path.resolve(__dirname, '../dist/aisoftware-studio/browser');
 const DEFAULT_HEADERS_PATH = path.resolve(__dirname, '../generated/nginx-security-headers.conf');
 
@@ -56,10 +54,8 @@ function validateCspArtifact(artifactRoot, headers) {
   const requiredDirectives = new Map([
     ['default-src', ["'self'"]],
     ['base-uri', ["'self'"]],
-    ['connect-src', ["'self'", 'https://prod.spline.design', 'https://fonts.gstatic.com']],
     ['form-action', ["'self'"]],
     ['frame-ancestors', ["'none'"]],
-    ['img-src', ["'self'", 'data:', 'https://app.spline.design']],
     ['object-src', ["'none'"]],
     ['script-src-attr', ["'none'"]],
   ]);
@@ -72,14 +68,6 @@ function validateCspArtifact(artifactRoot, headers) {
 
   const scriptSources = directives.get('script-src') ?? [];
   const styleSources = directives.get('style-src') ?? [];
-  const missingSplineScriptHashes = SPLINE_INLINE_SCRIPT_HASHES.filter(
-    (hash) => !scriptSources.includes(hash),
-  );
-  if (missingSplineScriptHashes.length > 0) {
-    errors.push(
-      `script-src is missing audited Spline behavior hashes: ${missingSplineScriptHashes.join(' ')}`,
-    );
-  }
   for (const [directive, sources] of directives) {
     if (sources.includes('*')) {
       errors.push(`${directive} must not contain a wildcard source`);

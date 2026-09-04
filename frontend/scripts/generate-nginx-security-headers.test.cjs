@@ -6,9 +6,6 @@ const os = require('node:os');
 const path = require('node:path');
 
 const {
-  SPLINE_CONNECT_ORIGINS,
-  SPLINE_IMAGE_ORIGINS,
-  SPLINE_INLINE_SCRIPT_HASHES,
   collectInlineScriptHashes,
   hashInlineScript,
   renderSecurityHeaders,
@@ -16,7 +13,6 @@ const {
 
 const template = [
   'connect-src __CSP_CONNECT_SRC__;',
-  'img-src __CSP_IMG_SRC__;',
   'script-src __CSP_SCRIPT_HASHES__;',
   'add_header X-Robots-Tag "__ROBOTS_HEADER__" always;',
 ].join('\n');
@@ -25,7 +21,7 @@ function stripRobotsHeader(rendered) {
   return rendered.replace(/add_header X-Robots-Tag ".*?" always;\n?/, '');
 }
 
-test('restricts CSP connections and images to audited production origins', () => {
+test('restricts CSP connections to the configured API origin', () => {
   const rendered = renderSecurityHeaders(
     {
       apiUrl: 'https://api.site.invalid/v1/contact',
@@ -35,20 +31,8 @@ test('restricts CSP connections and images to audited production origins', () =>
     ["'sha256-inline-json-ld'"],
   );
 
-  assert.match(
-    rendered,
-    new RegExp(
-      `connect-src https:\\/\\/api\\.site\\.invalid ${SPLINE_CONNECT_ORIGINS.join(' ').replaceAll('.', '\\.')};`,
-    ),
-  );
-  assert.match(
-    rendered,
-    new RegExp(`img-src ${SPLINE_IMAGE_ORIGINS.join(' ').replaceAll('.', '\\.')};`),
-  );
-  assert.match(rendered, /script-src .*'sha256-inline-json-ld'/);
-  for (const hash of SPLINE_INLINE_SCRIPT_HASHES) {
-    assert.ok(rendered.includes(hash));
-  }
+  assert.match(rendered, /connect-src https:\/\/api\.site\.invalid;/);
+  assert.match(rendered, /script-src 'sha256-inline-json-ld';/);
   assert.match(rendered, /X-Robots-Tag ""/);
 });
 
