@@ -34,14 +34,35 @@
   --border-on-dark: rgba(255, 255, 255, 0.14);
   --focus: var(--brand-700);
 
+  /* Protolume V2 semantic layer. Keep this layer theme-neutral until the
+     experience sections opt into their final dark-first presentation. */
+  --background-primary: var(--light-50);
+  --background-secondary: #f0f1f7;
+  --surface-1: var(--light-0);
+  --surface-2: #f7f5ff;
+  --surface-interactive: #f1efff;
+  --border-interactive: #c9c1f5;
+  --text-primary: var(--dark-900);
+  --text-secondary: #414756;
+  --accent-primary: var(--brand-600);
+  --accent-secondary: var(--signal);
+
   /* Feedback. */
   --success: #166534;
   --success-surface: #e3f4ec;
   --success-text: #07553f;
   --warning: #92400e;
+  --warning-surface: #fff4d8;
+  --warning-text: #71370b;
   --error: #b91c1c;
   --error-surface: #ffe9e5;
   --error-text: #8c1d18;
+  --status-success: var(--success);
+  --status-success-surface: var(--success-surface);
+  --status-warning: var(--warning);
+  --status-warning-surface: var(--warning-surface);
+  --status-error: var(--error);
+  --status-error-surface: var(--error-surface);
   --brand-gradient: linear-gradient(135deg, var(--brand-500), var(--brand-700));
 
   /* Shape, depth and motion. */
@@ -49,6 +70,10 @@
   --radius-card: 16px;
   --radius-panel: 22px;
   --radius-pill: 999px;
+  --radius-sm: 8px;
+  --radius-md: var(--radius-control);
+  --radius-lg: var(--radius-card);
+  --radius-xl: var(--radius-panel);
   --shadow-soft: 0 18px 48px rgba(16, 19, 28, 0.07);
   --shadow-control: 0 10px 24px rgba(84, 52, 214, 0.2);
   --shadow-header: 0 10px 30px rgba(8, 10, 16, 0.05);
@@ -65,11 +90,19 @@
   --motion-stagger-step: 80ms;
   --motion-ease-standard: var(--ease-standard);
   --motion-ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-ease-exit: cubic-bezier(0.7, 0, 0.84, 0);
+  --motion-fast: var(--motion-duration-fast);
+  --motion-normal: var(--motion-duration-base);
+  --motion-slow: var(--motion-duration-slow);
+  --ease-enter: var(--motion-ease-enter);
+  --ease-exit: var(--motion-ease-exit);
 
   /* Layout and typography. */
   --container-max: 1280px;
   --container-gutter: clamp(1rem, 4vw, 3rem);
   --space-section: clamp(4.5rem, 9vw, 9rem);
+  --spacing-section: var(--space-section);
+  --content-max-width: var(--container-max);
   --space-content: clamp(1.25rem, 2.5vw, 2rem);
   --measure-copy: 68ch;
   --font-size-display: clamp(3.2rem, 6vw, 6rem);

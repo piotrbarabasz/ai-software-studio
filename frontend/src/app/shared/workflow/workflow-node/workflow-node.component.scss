@@ -1,0 +1,63 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.workflow-node {
+  display: grid;
+  min-width: 9rem;
+  gap: 0.65rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 0.9rem;
+  background: var(--surface-1);
+  color: var(--text-primary);
+  box-shadow: 0 8px 24px rgba(16, 19, 28, 0.05);
+  transition:
+    border-color var(--motion-normal) var(--ease-standard),
+    background-color var(--motion-normal) var(--ease-standard),
+    box-shadow var(--motion-normal) var(--ease-standard);
+}
+
+.workflow-node__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.workflow-node__label {
+  font-size: 0.92rem;
+  line-height: 1.25;
+}
+
+.workflow-node__description {
+  color: var(--text-muted);
+  font-size: 0.76rem;
+  line-height: 1.4;
+}
+
+.workflow-node[data-kind='ai'],
+.workflow-node[data-status='active'] {
+  border-color: var(--border-interactive);
+  background: var(--surface-interactive);
+}
+
+.workflow-node[data-status='success'] {
+  border-color: color-mix(in srgb, var(--status-success) 38%, var(--border-subtle));
+}
+
+.workflow-node[data-status='warning'] {
+  border-color: color-mix(in srgb, var(--status-warning) 40%, var(--border-subtle));
+}
+
+.workflow-node[data-status='error'] {
+  border-color: color-mix(in srgb, var(--status-error) 40%, var(--border-subtle));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .workflow-node {
+    transition: none;
+  }
+}

@@ -1,6 +1,6 @@
 # UX-01 Foundations
 
-- [ ] T001 Add semantic design tokens V2
+- [x] T001 Add semantic design tokens V2
   - **Milestone:** M001
   - **Epic:** E001
   - **Risk:** medium
@@ -15,7 +15,7 @@
   - **Parallelizable:** no
   - **Notes:** This is a compatibility-first token migration. Do not redesign Home, SiteShell, navigation, footer or marketing content in this task.
 
-- [ ] T002 Add GSAP as the motion runtime dependency
+- [x] T002 Add GSAP as the motion runtime dependency
   - **Milestone:** M001
   - **Epic:** E001
   - **Risk:** medium
@@ -30,7 +30,7 @@
   - **Parallelizable:** no
   - **Notes:** Do not add CDN scripts or external runtime origins. GSAP will be loaded dynamically by the motion runtime in a later task rather than statically from the application root.
 
-- [ ] T003 Add SSR-safe motion preferences service
+- [x] T003 Add SSR-safe motion preferences service
   - **Milestone:** M001
   - **Epic:** E001
   - **Risk:** medium
@@ -45,7 +45,7 @@
   - **Parallelizable:** no
   - **Notes:** Do not introduce a second unrelated breakpoint system. The 920/921 boundary must remain compatible with the current SiteShell responsive behavior.
 
-- [ ] T004 Add SSR-safe dynamic GSAP motion runtime
+- [x] T004 Add SSR-safe dynamic GSAP motion runtime
   - **Milestone:** M001
   - **Epic:** E001
   - **Risk:** high
@@ -60,7 +60,7 @@
   - **Parallelizable:** no
   - **Notes:** Angular UI state remains Angular-owned. GSAP is a presentation layer only and must not become an application state manager.
 
-- [ ] T005 Add neutral workflow presentation model
+- [x] T005 Add neutral workflow presentation model
   - **Milestone:** M001
   - **Epic:** E001
   - **Risk:** low
@@ -75,7 +75,7 @@
   - **Parallelizable:** no
   - **Notes:** Do not import Agent Graph Engine concepts or implement graph execution, traversal, scheduling, automatic layout or business-process orchestration in the frontend model.
 
-- [ ] T006 Add workflow node, status and badge primitives
+- [x] T006 Add workflow node, status and badge primitives
   - **Milestone:** M001
   - **Epic:** E001
   - **Risk:** medium
@@ -90,7 +90,7 @@
   - **Parallelizable:** no
   - **Notes:** Keep the primitives intentionally small. Do not build Hero, Process Story, Use Case Explorer, cards, graph auto-layout or GSAP timelines in this task.
 
-- [ ] T007 Add reusable workflow connector primitive
+- [x] T007 Add reusable workflow connector primitive
   - **Milestone:** M001
   - **Epic:** E001
   - **Risk:** medium
@@ -105,7 +105,7 @@
   - **Parallelizable:** no
   - **Notes:** Do not implement automatic routing, node measurement, graph layout, Three.js, canvas rendering or scroll-driven animation here. ScrollTrigger integration belongs to later UX epics.
 
-- [ ] T008 Document and harden the UX foundation integration
+- [x] T008 Document and harden the UX foundation integration
   - **Milestone:** M001
   - **Epic:** E001
   - **Risk:** high

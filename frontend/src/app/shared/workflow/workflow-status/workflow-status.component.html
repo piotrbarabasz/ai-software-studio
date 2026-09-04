@@ -1,0 +1,10 @@
+<span
+  class="workflow-status"
+  [attr.data-status]="status"
+  [attr.aria-hidden]="decorative ? 'true' : null"
+  [attr.role]="decorative ? null : 'status'"
+  [attr.aria-label]="decorative ? null : resolvedLabel"
+>
+  <span class="workflow-status__indicator"></span>
+  <span>{{ resolvedLabel }}</span>
+</span>

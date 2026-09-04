@@ -1,0 +1,19 @@
+<div
+  class="workflow-node"
+  [attr.data-kind]="node.kind"
+  [attr.data-status]="node.status || 'idle'"
+  [attr.aria-hidden]="decorative ? 'true' : null"
+  [attr.role]="decorative ? null : 'group'"
+  [attr.aria-label]="decorative ? null : accessibleLabel"
+>
+  <div class="workflow-node__meta">
+    <app-workflow-badge [kind]="node.kind" />
+    @if (node.status) {
+      <app-workflow-status [status]="node.status" />
+    }
+  </div>
+  <strong class="workflow-node__label">{{ node.label }}</strong>
+  @if (node.description) {
+    <span class="workflow-node__description">{{ node.description }}</span>
+  }
+</div>

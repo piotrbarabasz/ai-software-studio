@@ -1,0 +1,41 @@
+:host {
+  display: inline-flex;
+}
+
+.workflow-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.5rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.2rem 0.45rem;
+  background: var(--surface-2);
+  color: var(--text-secondary);
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.workflow-badge[data-kind='ai'] {
+  border-color: var(--border-interactive);
+  background: var(--surface-interactive);
+  color: var(--accent-primary);
+}
+
+.workflow-badge[data-kind='human'] {
+  border-color: color-mix(in srgb, var(--accent-secondary) 42%, var(--border-subtle));
+}
+
+.workflow-badge[data-kind='result'] {
+  border-color: color-mix(in srgb, var(--status-success) 35%, var(--border-subtle));
+  background: var(--status-success-surface);
+  color: var(--status-success);
+}
+
+.workflow-badge[data-kind='warning'] {
+  border-color: color-mix(in srgb, var(--status-warning) 38%, var(--border-subtle));
+  background: var(--status-warning-surface);
+  color: var(--status-warning);
+}

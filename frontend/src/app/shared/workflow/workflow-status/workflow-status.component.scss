@@ -1,0 +1,54 @@
+:host {
+  display: inline-flex;
+}
+
+.workflow-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-weight: 750;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.workflow-status__indicator {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: var(--radius-pill);
+  background: var(--border-strong);
+}
+
+.workflow-status[data-status='active'] {
+  color: var(--accent-primary);
+}
+
+.workflow-status[data-status='active'] .workflow-status__indicator {
+  background: var(--accent-primary);
+}
+
+.workflow-status[data-status='success'] {
+  color: var(--status-success);
+}
+
+.workflow-status[data-status='success'] .workflow-status__indicator {
+  background: var(--status-success);
+}
+
+.workflow-status[data-status='warning'] {
+  color: var(--status-warning);
+}
+
+.workflow-status[data-status='warning'] .workflow-status__indicator {
+  background: var(--status-warning);
+}
+
+.workflow-status[data-status='error'] {
+  color: var(--status-error);
+}
+
+.workflow-status[data-status='error'] .workflow-status__indicator {
+  background: var(--status-error);
+}
