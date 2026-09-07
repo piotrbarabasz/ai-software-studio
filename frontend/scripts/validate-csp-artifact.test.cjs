@@ -96,3 +96,33 @@ test('requires the narrow style exception when prerendered styles are inline', (
     },
   );
 });
+
+for (const attrs of [
+  '',
+  'type="module"',
+  'type="text/javascript"',
+  'data-type="application/json"',
+  'data-src="main.js"',
+  `title='type="application/json"'`,
+  'type="module" type="application/json"',
+]) {
+  test(`rejects executable inline script even with a matching CSP hash: ${attrs}`, () => {
+    withArtifact(
+      `<link rel="stylesheet" href="styles.css"><script ${attrs}>alert(1)</script>`,
+      (root) => {
+        assert.match(
+          validateCspArtifact(root, headersFor('alert(1)')).join('\n'),
+          /executable inline script is not allowed/,
+        );
+      },
+    );
+  });
+}
+test('accepts hydration JSON without a CSP hash', () => {
+  withArtifact(
+    '<link rel="stylesheet" href="styles.css"><script type="application/ld+json">{}</script><script type="application/json">{"hydration":true}</script>',
+    (root) => {
+      assert.deepEqual(validateCspArtifact(root, headersFor('{}')), []);
+    },
+  );
+});

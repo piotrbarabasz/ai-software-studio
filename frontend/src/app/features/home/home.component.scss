@@ -263,6 +263,8 @@
   padding: 0.3rem 0.6rem;
 }
 .evidence-teaser-card .secondary-action {
+  color: var(--text-primary);
+  background: var(--surface-card);
   align-self: end;
   justify-self: start;
 }

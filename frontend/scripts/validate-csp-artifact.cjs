@@ -1,6 +1,7 @@
 const crypto = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
+const { scriptAttributes } = require('./script-attributes.cjs');
 
 const DEFAULT_ARTIFACT_ROOT = path.resolve(__dirname, '../dist/aisoftware-studio/browser');
 const DEFAULT_HEADERS_PATH = path.resolve(__dirname, '../generated/nginx-security-headers.conf');
@@ -117,17 +118,21 @@ function validateCspArtifact(artifactRoot, headers) {
     }
 
     for (const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
-      const attributes = match[1];
-      if (/\bsrc\s*=/i.test(attributes)) {
+      const attributes = scriptAttributes(match[1]);
+      if (attributes.has('src')) {
         continue;
       }
-      const scriptType = attributes.match(/\btype\s*=\s*(["'])(.*?)\1/i)?.[2]?.toLowerCase();
+      const scriptType = attributes.get('type')?.toLowerCase();
       if (scriptType === 'application/json') {
+        continue;
+      }
+      if (scriptType !== 'application/ld+json') {
+        errors.push(`${relativePath}: executable inline script is not allowed`);
         continue;
       }
       const hash = scriptHash(match[2]);
       if (!scriptSources.includes(hash)) {
-        errors.push(`${relativePath}: inline script hash ${hash} is missing from script-src`);
+        errors.push(`${relativePath}: JSON-LD hash ${hash} is missing from script-src`);
       }
     }
   }

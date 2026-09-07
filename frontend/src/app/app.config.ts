@@ -1,7 +1,7 @@
 import type { ApplicationConfig } from '@angular/core';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
-import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
+import { provideClientHydration, withNoIncrementalHydration } from '@angular/platform-browser';
 
 import { environment } from '../environments/environment';
 import { API_CONFIG } from './core/api-config';
@@ -9,7 +9,9 @@ import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideClientHydration(withEventReplay()),
+    // Event replay emits executable inline bootstrap scripts. Keep hydration
+    // without replay to preserve the production CSP's JSON-only invariant.
+    provideClientHydration(withNoIncrementalHydration()),
     provideRouter(
       routes,
       withInMemoryScrolling({

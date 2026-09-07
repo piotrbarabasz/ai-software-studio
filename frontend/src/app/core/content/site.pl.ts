@@ -588,8 +588,7 @@ export const siteContent = {
           id: 'protolume-lab',
           eyebrow: 'Explore it',
           title: 'Protolume Lab',
-          description:
-            'Eksperymenty z RAG, agentami, ewaluacją i niezawodnością systemów AI.',
+          description: 'Eksperymenty z RAG, agentami, ewaluacją i niezawodnością systemów AI.',
           visualKind: 'lab',
           cta: { label: 'Explore Lab →', path: '/rd' },
         },

@@ -240,6 +240,18 @@
 }
 
 @media (max-width: 920px) {
+  // Match the enhanced layout before Angular starts. With scripting disabled,
+  // the existing expanded navigation remains available without a layout swap.
+  @media (scripting: enabled) {
+    .menu-toggle {
+      display: inline-flex;
+    }
+
+    .primary-nav {
+      display: none;
+    }
+  }
+
   .site-header,
   .header-inner {
     min-height: 68px;
