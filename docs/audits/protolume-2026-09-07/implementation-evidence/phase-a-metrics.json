@@ -1,0 +1,205 @@
+[
+  {
+    "route": "/",
+    "run": 1,
+    "main": [
+      {
+        "time": 779.5,
+        "height": 9181.984375
+      },
+      {
+        "time": 909,
+        "height": 10639.484375
+      }
+    ],
+    "shifts": [],
+    "lcp": 812,
+    "height": 11563,
+    "proofY": 5761.34375,
+    "cls": 0,
+    "errors": []
+  },
+  {
+    "route": "/",
+    "run": 2,
+    "main": [
+      {
+        "time": 880.0999999642372,
+        "height": 10639.484375
+      }
+    ],
+    "shifts": [],
+    "lcp": 912,
+    "height": 11563,
+    "proofY": 5761.34375,
+    "cls": 0,
+    "errors": []
+  },
+  {
+    "route": "/",
+    "run": 3,
+    "main": [
+      {
+        "time": 924.6999999880791,
+        "height": 10639.484375
+      }
+    ],
+    "shifts": [],
+    "lcp": 956,
+    "height": 11563,
+    "proofY": 5761.34375,
+    "cls": 0,
+    "errors": []
+  },
+  {
+    "route": "/demo-ai",
+    "run": 1,
+    "main": [
+      {
+        "time": 401.5999999642372,
+        "height": 3174.453125
+      },
+      {
+        "time": 722,
+        "height": 4285.34375
+      }
+    ],
+    "shifts": [],
+    "lcp": 728,
+    "height": 5209,
+    "cls": 0,
+    "errors": []
+  },
+  {
+    "route": "/demo-ai",
+    "run": 2,
+    "main": [
+      {
+        "time": 316.0999999642372,
+        "height": 4285.34375
+      }
+    ],
+    "shifts": [],
+    "lcp": 356,
+    "height": 5209,
+    "cls": 0,
+    "errors": []
+  },
+  {
+    "route": "/demo-ai",
+    "run": 3,
+    "main": [
+      {
+        "time": 441.19999998807907,
+        "height": 4285.34375
+      }
+    ],
+    "shifts": [],
+    "lcp": 464,
+    "height": 5209,
+    "cls": 0,
+    "errors": []
+  },
+  {
+    "route": "/rozwiazania/chatbot-ai-dla-firm",
+    "run": 1,
+    "main": [
+      {
+        "time": 518.3999999761581,
+        "height": 5263.71875
+      }
+    ],
+    "shifts": [],
+    "lcp": 540,
+    "height": 6187,
+    "cls": 0,
+    "errors": []
+  },
+  {
+    "route": "/rozwiazania/chatbot-ai-dla-firm",
+    "run": 2,
+    "main": [
+      {
+        "time": 274.30000001192093,
+        "height": 4251.5
+      },
+      {
+        "time": 658.7000000476837,
+        "height": 5263.71875
+      }
+    ],
+    "shifts": [],
+    "lcp": 660,
+    "height": 6187,
+    "cls": 0,
+    "errors": []
+  },
+  {
+    "route": "/rozwiazania/chatbot-ai-dla-firm",
+    "run": 3,
+    "main": [
+      {
+        "time": 296.0999999642372,
+        "height": 4282.859375
+      },
+      {
+        "time": 463.5999999642372,
+        "height": 5263.71875
+      }
+    ],
+    "shifts": [],
+    "lcp": 340,
+    "height": 6187,
+    "cls": 0,
+    "errors": []
+  },
+  {
+    "route": "/kontakt",
+    "run": 1,
+    "main": [
+      {
+        "time": 380.80000001192093,
+        "height": 1765.484375
+      }
+    ],
+    "shifts": [],
+    "lcp": 452,
+    "height": 2689,
+    "cls": 0,
+    "errors": []
+  },
+  {
+    "route": "/kontakt",
+    "run": 2,
+    "main": [
+      {
+        "time": 418.5,
+        "height": 1765.484375
+      }
+    ],
+    "shifts": [],
+    "lcp": 484,
+    "height": 2689,
+    "cls": 0,
+    "errors": []
+  },
+  {
+    "route": "/kontakt",
+    "run": 3,
+    "main": [
+      {
+        "time": 208.19999998807907,
+        "height": 603.078125
+      },
+      {
+        "time": 452.69999998807907,
+        "height": 1765.484375
+      }
+    ],
+    "shifts": [],
+    "lcp": 272,
+    "height": 2689,
+    "cls": 0,
+    "errors": []
+  }
+]
