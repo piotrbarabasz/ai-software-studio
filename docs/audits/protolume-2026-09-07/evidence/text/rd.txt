@@ -1,0 +1,67 @@
+R&D
+
+Badania i eksperymenty, które wspierają kolejne iteracje
+
+Eksperymenty służą sprawdzeniu narzędzi i wzorców pracy. Nie są obietnicą gotowego rozwiązania dla każdego projektu.
+
+Omów konkretny problem
+
+Po wysłaniu opisu ustalimy, czy temat wymaga eksperymentu, demo czy planu prac.
+
+OBSZARY
+
+Eksperymenty prowadzone z jasno określoną granicą
+
+EKSPERYMENT
+
+Kontrola kosztów agentów
+
+Agenci i automatyzacje mogą szybko stać się zbyt drogie lub zbyt niestabilne.
+
+Cel: Sprawdzić, jak monitorować koszt, jakość i zachowanie modeli w praktyce.
+
+Potencjalna wartość: Tańsze i bardziej przewidywalne wdrożenia dla klientów.
+
+Granica zastosowania: Zastosowanie produkcyjne wymaga dodatkowej walidacji na danych, modelach i warunkach konkretnego klienta.
+
+PROTOTYP
+
+Ewaluacja RAG
+
+Sama generacja odpowiedzi nie wystarcza bez kontroli jakości źródeł i trafności.
+
+Cel: Wypracować wzorce oceny odpowiedzi oraz jakości indeksów wiedzy.
+
+Potencjalna wartość: Lepsze asystenty wiedzy i mniejsze ryzyko błędnych odpowiedzi.
+
+Granica zastosowania: Zastosowanie produkcyjne wymaga dodatkowych testów jakości dla konkretnej bazy wiedzy i procesu.
+
+ZWERYFIKOWANE WEWNĘTRZNIE
+
+Orkiestracja przez komunikatory
+
+Zespół potrzebuje lekkiego sposobu przekazywania statusów i decyzji.
+
+Cel: Sprawdzić, jak zarządzać zadaniami i zatwierdzeniami przez komunikatory.
+
+Potencjalna wartość: Szybsze decyzje operacyjne i prostsza współpraca zespołowa.
+
+Granica zastosowania: Zastosowanie produkcyjne wymaga doprecyzowania punktów zatwierdzania i roli człowieka w procesie.
+
+EKSPERYMENT
+
+Automatyczna ocena odpowiedzi
+
+Ręczne sprawdzanie jakości odpowiedzi i promptów jest zbyt wolne.
+
+Cel: Uprościć walidację odpowiedzi i proponować lepsze wzorce orkiestracji.
+
+Potencjalna wartość: Szybsze iteracje i niższy koszt eksperymentów klienta.
+
+Granica zastosowania: Zastosowanie produkcyjne wymaga pełnej weryfikacji biznesowej oraz testów produkcyjnych.
+
+GRANICA R&D
+
+Wynik eksperymentu nie zawsze jest gotowym produktem
+
+Jeżeli chcesz omówić konkretny problem biznesowy, zacznij od kontaktu i osobnego zakresu.

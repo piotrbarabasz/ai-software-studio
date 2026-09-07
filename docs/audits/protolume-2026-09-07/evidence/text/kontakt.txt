@@ -1,0 +1,42 @@
+KONTAKT
+
+Opisz proces lub potrzebne wsparcie
+
+Krótki opis wystarczy, żeby sprawdzić temat i wskazać możliwy następny krok.
+
+1
+Sprawdzam, jakie informacje są potrzebne do dalszej rozmowy.
+2
+Wskażę właściwą ścieżkę: demo, walidację, plan prac albo wdrożenie.
+3
+Dalsze ustalenia są przed płatną realizacją.
+
+Nie potrzebujesz specyfikacji.
+
+Bezpośredni kontakt e-mail:kontakt@protolume.pl
+
+Imię i nazwisko *
+E-mail *
+Firma (opcjonalnie)
+Czego dotyczy rozmowa? *
+Wybierz najbliższą opcję
+Demo lub sprawdzenie pomysłu
+Aplikacja albo panel
+Integracja lub API
+Automatyzacja procesu
+Asystent AI lub RAG
+Współpraca z software house’em lub MSP
+Nie wiem / inny temat
+Opisz obecny proces lub potrzebne wsparcie *
+Co jest dziś wykonywane ręcznie?
+Kto korzysta z procesu?
+Jaki rezultat chcesz uzyskać?
+Wyrażam zgodę na kontakt w sprawie tego zapytania zgodnie z *polityką prywatności.
+
+Wysłanie formularza nie jest zamówieniem, akceptacją wyceny ani automatycznym rozpoczęciem płatnej realizacji.
+
+Dodatkowe informacje — opcjonalnie
+
+Po wysłaniu opisu potwierdzimy jego przyjęcie i wskażemy właściwy kolejny krok.
+
+Wyślij krótki opis

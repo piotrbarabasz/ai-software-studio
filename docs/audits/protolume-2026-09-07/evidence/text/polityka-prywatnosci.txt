@@ -1,0 +1,46 @@
+PRYWATNOŚĆ
+
+Informacja o prywatności formularza kontaktowego
+
+Poniższa informacja opisuje dane przetwarzane przy wysłaniu formularza kontaktowego Protolume.
+
+Administrator i kontakt
+Administrator danych
+Piotr Barabasz
+Adres korespondencyjny
+Polska, Wrocław
+Zakres zbieranych danych
+Formularz zbiera imię i nazwisko, adres e-mail, opcjonalną nazwę firmy, rodzaj projektu, opcjonalny budżet oraz treść wiadomości.
+Sposób przesyłania danych
+
+Po wysłaniu formularza dane trafiają do API formularza. Po poprawnym przyjęciu API przekazuje wiadomość na skonfigurowany adres odbiorcy przez usługę SMTP.
+
+Cele przetwarzania
+Obsługa zapytań przesyłanych przez formularz kontaktowy
+Przygotowanie odpowiedzi oraz kontakt w sprawie przedstawionej oferty lub projektu
+Podstawy przetwarzania
+Podjęcie działań na żądanie osoby przed zawarciem umowy
+Prawnie uzasadniony interes administratora polegający na obsłudze korespondencji i zapytań
+Odbiorcy i dostawcy
+Odbiorcy danych
+Podmioty świadczące usługi hostingowe, infrastrukturalne i pocztowe na rzecz administratora
+Dostawcy infrastruktury
+Google Cloud Platform (Cloud Run)
+Dostawcy poczty
+Google Workspace
+Okres przechowywania
+Dane są przechowywane przez okres niezbędny do obsługi zapytania, a następnie przez okres wymagany do zabezpieczenia ewentualnych roszczeń
+Prawa użytkownika
+Prawo dostępu do danych
+Prawo sprostowania danych
+Prawo usunięcia danych
+Prawo ograniczenia przetwarzania
+Prawo wniesienia sprzeciwu
+Prawo wniesienia skargi do Prezesa Urzędu Ochrony Danych Osobowych
+Kontakt w sprawach danych osobowych
+
+kontakt@protolume.pl
+
+Data aktualizacji
+
+2026-07-17

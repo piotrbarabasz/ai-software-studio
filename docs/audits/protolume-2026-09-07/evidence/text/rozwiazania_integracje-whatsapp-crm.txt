@@ -1,0 +1,115 @@
+KANAŁY OBSŁUGI
+
+Integracje WhatsApp i CRM
+
+Mniej ręcznego przepisywania wiadomości i mniej zagubionych zapytań.
+
+Pokazujemy, jak wiadomość z kanału trafia do uporządkowanego procesu, a pracownik dostaje gotowy wynik zamiast surowej treści.
+
+Porozmawiaj o zakresie
+Zobacz przykładowy raport
+
+Łączymy WhatsApp, CRM, e-mail i formularze w jeden kontrolowany proces obsługi spraw z jasnym momentem przekazania do człowieka.
+
+PROBLEM
+
+Kiedy integracje mają sens
+Zapytania trafiają jednocześnie z WhatsAppa, e-maila i formularzy.
+Ktoś ręcznie przepisuje dane do CRM lub innego systemu.
+Status sprawy zależy od pamięci osoby obsługującej.
+Kanały komunikacji nie mają jednego miejsca przekazania do człowieka.
+Zespół potrzebuje jednej kolejki, a nie kilku osobnych skrzynek.
+
+JAK DZIAŁA ROZWIĄZANIE
+
+Jak działa rozwiązanie
+
+Kanał wejściowy, reguły routingu, zapis i handoff pozostają w jednym przewidywalnym ciągu.
+
+1
+Wiadomość
+
+Sprawa przychodzi z WhatsAppa, formularza albo skrzynki mailowej.
+
+2
+Agent
+
+System czyta treść i wyciąga najważniejsze informacje.
+
+3
+CRM
+
+Dane trafiają do właściwego rekordu lub nowej sprawy.
+
+4
+Kontrola
+
+Gdy sprawa wymaga decyzji, system zatrzymuje się przed automatycznym domknięciem.
+
+5
+Pracownik
+
+Zespół widzi uporządkowany wynik i kolejny krok.
+
+DEMO
+
+Co można sprawdzić w demo
+
+Demo pokazuje symulowany przepływ, bez wysyłania prawdziwych wiadomości do systemów klienta.
+
+Zakres
+jedną wiadomość z wybranego kanału
+zapis danych do przykładowego CRM
+eskalację sprawy do człowieka
+przykładowy status procesu
+Kryteria
+czy wiadomość przechodzi do właściwego procesu
+czy CRM dostaje uporządkowany wynik
+czy moment handoffu jest jasno widoczny
+Dane wejściowe
+lista kanałów i systemów
+przykładowe wiadomości
+zasady routingu i odpowiedzialności
+Ograniczenia
+demo nie oznacza gotowej integracji z każdym dostawcą
+API i zgody trzeba potwierdzić przed wdrożeniem
+zakres zależy od realnych systemów klienta
+
+INTEGRACJE
+
+Integracje
+
+Nie zakładamy gotowości wszystkich połączeń. Wskazujemy tylko te, które da się realnie wdrożyć.
+
+WhatsApp Business API lub inny oficjalny kanał
+CRM albo system sprzedaży
+formularze i webhooks z własnej strony
+
+BEZPIECZEŃSTWO I PRYWATNOŚĆ
+
+Bezpieczeństwo i prywatność
+nie kopiujemy danych poza ustalony zakres
+materiały demonstracyjne nie pokazują danych klienta
+człowiek przejmuje sprawę przed ryzykownym krokiem
+
+FAQ
+
+Najczęstsze pytania
+Czy integracja z WhatsApp jest zawsze dostępna?
+Czy CRM musi być ten sam dla wszystkich kanałów?
+Czy wiadomość może zostać bez odpowiedzi?
+Czy to jest chatbot?
+Czy można zacząć od jednego kanału?
+
+NASTĘPNY KROK
+
+Chcesz połączyć wiadomości z CRM w prosty proces?
+
+Najpierw ustalamy kanał i punkt przekazania, potem dopiero zakres integracji.
+
+Porozmawiaj o zakresie
+Opisz proces
+Zobacz przykładowy raport
+Wróć do katalogu
+
+Wróć do huba rozwiązań.

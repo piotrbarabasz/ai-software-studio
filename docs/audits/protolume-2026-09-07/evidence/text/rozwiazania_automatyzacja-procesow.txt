@@ -1,0 +1,115 @@
+PRZEPŁYWY I STATUSY
+
+Automatyzacja procesów
+
+Mniej ręcznej pracy i mniej zagubionych spraw.
+
+Budujemy ograniczone demo, w którym jeden proces przechodzi przez klasyfikację, reguły i zapis do docelowego systemu.
+
+Porozmawiaj o zakresie
+Zobacz przykładowy raport
+
+Porządkujemy ręczne przepisywanie danych, przypisywanie spraw i zmianę statusów w jednym kontrolowanym przepływie.
+
+PROBLEM
+
+Kiedy automatyzacja ma sens
+Pracownicy kopiują dane między wiadomościami, formularzami i systemami.
+Status sprawy zmienia się ręcznie i łatwo go zgubić.
+Powtarzalne kroki są wykonywane w tej samej kolejności przez różne osoby.
+Zespół nie ma jednego źródła prawdy o kolejnych krokach.
+Wyjątki i zgody wciąż wymagają jasnego miejsca przekazania do człowieka.
+
+JAK DZIAŁA ROZWIĄZANIE
+
+Jak działa rozwiązanie
+
+Proces prowadzi od wejścia do wyniku bez zbędnych przeskoków i z kontrolą człowieka w ważnym miejscu.
+
+1
+Wejście
+
+System pobiera dane z formularza, wiadomości lub pliku.
+
+2
+Reguły
+
+Dane są klasyfikowane i kierowane zgodnie z ustalonym scenariuszem.
+
+3
+Docelowy system
+
+Wynik trafia do CRM, panelu lub kolejki zadań.
+
+4
+Kontrola
+
+Jeśli pojawia się wyjątek albo brak danych, człowiek przejmuje sprawę.
+
+5
+Wynik
+
+Pracownik widzi uporządkowaną informację i następny krok.
+
+DEMO
+
+Co można sprawdzić w demo
+
+Demo pokazuje jeden ograniczony przepływ, a nie pełną automatyzację całej firmy.
+
+Zakres
+jedna ścieżka procesu
+przypisanie sprawy na podstawie reguł
+przekazanie wyjątku do człowieka
+wynik zapisany w prostym panelu
+Kryteria
+czy widać, które kroki są automatyczne
+czy człowiek ma jawny punkt przejęcia
+czy wynik trafia do właściwego miejsca
+Dane wejściowe
+przykładowe wiadomości lub formularze
+zasady klasyfikacji i wyjątków
+docelowy system zapisu wyniku
+Ograniczenia
+demo nie oznacza gotowego wdrożenia dla każdego procesu
+integracje zależą od dostępnych API i dostępu do systemów
+zakres trzeba doprecyzować na danych konkretnego klienta
+
+INTEGRACJE
+
+Integracje
+
+Wskazujemy tylko systemy, które można realnie połączyć z procesem.
+
+CRM lub system zgłoszeń
+formularze, skrzynka mailowa lub webhook
+panel operacyjny i kolejka zadań
+
+BEZPIECZEŃSTWO I PRYWATNOŚĆ
+
+Bezpieczeństwo i prywatność
+przetwarzamy minimalny zestaw danych
+nie publikujemy danych klienta w materiałach demonstracyjnych
+nie domykamy wyjątków bez jawnej kontroli
+
+FAQ
+
+Najczęstsze pytania
+Czy automatyzacja zastępuje zespół?
+Czy to wymaga pełnej integracji od pierwszego dnia?
+Czy można zacząć od jednego procesu?
+Czy wynik musi trafiać do CRM?
+Czy demo pokazuje wszystkie wyjątki?
+
+NASTĘPNY KROK
+
+Chcesz uporządkować jeden proces bez wielkiego wdrożenia?
+
+Najpierw sprawdzamy przepływ i granice, dopiero potem zakres produkcyjny.
+
+Porozmawiaj o zakresie
+Opisz proces
+Zobacz przykładowy raport
+Wróć do katalogu
+
+Wróć do huba rozwiązań.

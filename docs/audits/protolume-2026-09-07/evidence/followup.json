@@ -1,0 +1,97 @@
+{
+  "focus": {
+    "id": "contact-form-error-summary",
+    "rect": {
+      "x": 33,
+      "y": 389.015625,
+      "width": 324,
+      "height": 101.21875,
+      "top": 389.015625,
+      "right": 357,
+      "bottom": 490.234375,
+      "left": 33
+    }
+  },
+  "demo": {
+    "scrollY": 1883,
+    "result": {
+      "x": 34.59375,
+      "y": 961.765625,
+      "width": 320.8125,
+      "height": 712.78125,
+      "top": 961.765625,
+      "right": 355.40625,
+      "bottom": 1674.546875,
+      "left": 34.59375
+    },
+    "focused": " Ile kosztuje wdrożenie chatbota? "
+  },
+  "faq": {
+    "open": true,
+    "text": "Czy chatbot odpowiada na wszystko?\n\nNie. Działa tylko w ustalonym zakresie i przekazuje sprawę do człowieka, gdy brakuje danych albo pytanie wykracza poza scenariusz.",
+    "summary": {
+      "x": 35,
+      "y": 409.09375,
+      "width": 320,
+      "height": 26.578125,
+      "top": 409.09375,
+      "right": 355,
+      "bottom": 435.671875,
+      "left": 35
+    }
+  },
+  "layout": {
+    "shifts": [
+      {
+        "time": 1551.699999988079,
+        "value": 0.9182464454976303,
+        "hadRecentInput": false,
+        "sources": [
+          {
+            "tag": "FOOTER",
+            "cls": "site-footer",
+            "previous": {
+              "x": 0,
+              "y": 69,
+              "width": 390,
+              "height": 775,
+              "top": 69,
+              "right": 390,
+              "bottom": 844,
+              "left": 0
+            },
+            "current": {
+              "x": 0,
+              "y": 0,
+              "width": 0,
+              "height": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          }
+        ]
+      }
+    ],
+    "main": [
+      {
+        "time": 216,
+        "h1": true,
+        "mainHeight": 8745.890625
+      },
+      {
+        "time": 1363.800000011921,
+        "h1": false,
+        "mainHeight": 0,
+        "footerY": 69
+      },
+      {
+        "time": 1502.9000000357628,
+        "h1": true,
+        "mainHeight": 9915.484375,
+        "footerY": 9984.484375
+      }
+    ]
+  }
+}

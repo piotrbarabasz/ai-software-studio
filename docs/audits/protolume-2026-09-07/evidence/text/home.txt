@@ -1,0 +1,309 @@
+AI AUTOMATION STUDIO
+
+Pokaż nam proces.
+W 7 dni pokażemy działającą automatyzację.
+
+Bierzemy jeden powtarzalny proces — wiadomości, dokumenty, CRM albo wiedzę firmy — i budujemy jego działające demo przed pełnym wdrożeniem.
+
+Opisz proces
+Zobacz demo →
+LIVE PROCESS / 01
+HUMAN CONTROL
+INPUT
+→
+DATA
+→
+AI / AUTO
+→
+HUMAN
+→
+SYSTEM
+→
+RESULT
+SOURCE
+COMPLETE
+New email
+Acme Sp. z o.o.
+AI
+ACTIVE
+AI extracting
+Classification + extraction
+COMPANY
+Acme
+BUDGET
+25 000 PLN
+DEADLINE
+14 days
+HUMAN
+REVIEW
+Human review
+Decision remains under control
+Approve
+SYSTEM
+COMPLETE
+CRM updated
+RESULT
+COMPLETE
+Done
+
+1 proces · stały zakres · kontrola człowieka · wynik po 7 dniach
+
+Dlaczego warto zacząć od sprawdzenia
+Demo jednego procesu
+Stały zakres przed startem
+Kontrola człowieka
+Poufność danych
+
+GDZIE NAJCZĘŚCIEJ ZNIKA CZAS?
+
+Trzy problemy, które warto przestać obsługiwać ręcznie
+01
+
+PROBLEM
+
+WIADOMOŚCI I DOKUMENTY
+
+Pracownik nie powinien przepisywać danych z maila do systemu.
+
+PRZEPŁYW ROZWIĄZANIA
+Email
+↓
+AI extraction
+↓
+Human validation
+↓
+CRM
+02
+
+PROBLEM
+
+WIEDZA FIRMY
+
+Pracownik nie powinien przeszukiwać kilku dokumentów, żeby odpowiedzieć klientowi.
+
+PRZEPŁYW ROZWIĄZANIA
+Question
+↓
+Knowledge
+↓
+Sources
+↓
+Answer
+03
+
+PROBLEM
+
+OBSŁUGA SPRAW
+
+Klient nie powinien ginąć między WhatsAppem, mailem i CRM.
+
+PRZEPŁYW ROZWIĄZANIA
+WhatsApp
+Email
+Form
+→
+Workflow
+→
+Owner
+Zobacz wszystkie rozwiązania →
+
+JAK DZIAŁA PEŁNY PROCES
+
+Od wejścia do wyniku
+
+Jeden kontrolowany przepływ od danych wejściowych do rezultatu w używanym systemie.
+
+01
+
+INPUT
+
+Nowe zgłoszenie
+
+Wiadomość lub dokument rozpoczyna proces.
+
+02
+
+DATA
+
+Dane uporządkowane
+
+System odczytuje potrzebne informacje.
+
+03
+
+AUTOMATION
+
+Reguły i AI
+
+Automatyzacja wykonuje uzgodnione kroki.
+
+04
+
+HUMAN REVIEW
+
+Decyzja człowieka
+
+Ważne wyjątki wymagają akceptacji.
+
+05
+
+SYSTEM
+
+Aktualizacja narzędzia
+
+Zweryfikowane dane trafiają do właściwego systemu.
+
+06
+
+RESULT
+
+Gotowy wynik
+
+Proces kończy się jednoznacznym statusem lub akcją.
+
+PRZEPŁYW SPRAWY
+Kontrolowany proces
+01
+INPUT
+Nowe zgłoszenie
+●
+02
+DATA
+Dane uporządkowane
+○
+03
+AUTOMATION
+Reguły i AI
+○
+04
+HUMAN REVIEW
+Decyzja człowieka
+○
+05
+SYSTEM
+CRM zaktualizowany
+○
+06
+RESULT
+Gotowy wynik
+DONE
+Mniej przepisywania.
+Szybsza odpowiedź.
+Mniej zagubionych spraw.
+Jasny handoff.
+Sprawdź taki proces na swoim przykładzie
+
+DOWODY PRACY
+
+Zobacz działające elementy
+
+Uruchom demonstrację, przejrzyj przykładowy rezultat i zobacz, co każdy materiał faktycznie potwierdza.
+
+Interaktywne demo
+
+Asystent wiedzy z obsługą pytań poza zakresem
+
+Sprawdź odpowiedź ze źródłem oraz przekazanie pytania do człowieka, gdy brakuje danych.
+
+Uruchom interaktywne demo
+
+Przykładowy raport
+
+Raport decyzyjny po Demo w 7 dni
+
+Sprawdź zakres, scenariusze testowe, ryzyka, kryteria odbioru i rekomendację w jednym raporcie.
+
+Zobacz przykładowy raport
+
+To materiały demonstracyjne i projekt własny, a nie case study klienta.
+
+DEMO W 7 DNI
+
+Od procesu do działającego demo w 7 dni
+
+Zanim inwestujesz w pełne wdrożenie, sprawdzamy jeden konkretny proces na działającym scenariuszu.
+
+01
+
+DZIEŃ 1
+
+Zrozumienie procesu
+
+Ustalamy jeden proces, dane wejściowe, oczekiwany rezultat i granice pierwszego demo.
+
+02
+
+DNI 2–3
+
+Budowa demo
+
+Budujemy działający przepływ dla wybranego scenariusza i łączymy potrzebne elementy.
+
+03
+
+DNI 4–5
+
+Test i dopracowanie
+
+Sprawdzamy przykładowe przypadki, błędy, brakujące dane i miejsca wymagające kontroli człowieka.
+
+04
+
+DNI 6–7
+
+Walidacja i rekomendacja
+
+Porządkujemy wyniki, ryzyka i wymagane integracje oraz rekomendujemy kolejny krok.
+
+7
+
+REZULTAT PIERWSZEGO ETAPU
+
+Po 7 dniach
+✓
+Opis wybranego procesu i jego granic
+✓
+Działające demo jednego scenariusza
+✓
+Lista ryzyk, danych i wymaganych integracji
+✓
+Rekomendacja kolejnego kroku
+
+START WSPÓŁPRACY
+
+Czego potrzebujemy od Ciebie
+01
+Krótki opis obecnej pracy
+02
+Kilka przykładowych wiadomości, dokumentów lub pytań
+03
+Kontakt do osoby, która zna proces
+04
+Informacja o używanych narzędziach
+
+STAŁY ZAKRES PRZED STARTEM
+
+Po krótkiej rozmowie otrzymujesz stały zakres i wycenę pierwszego etapu przed rozpoczęciem prac.
+
+Kwota zależy od danych, liczby integracji i sposobu prezentacji demo.
+
+Pokaż mi proces
+→
+
+OSOBA ODPOWIEDZIALNA
+
+Osoba odpowiedzialna za projekt
+
+Piotr Barabasz — Właściciel i odpowiedzialny partner techniczny
+
+Prowadzę analizę procesu, decyzje techniczne, realizację, testy i odbiór ustalonego zakresu.
+
+4+ lata doświadczenia komercyjnego
+AI, integracje i aplikacje webowe
+Bezpośrednia odpowiedzialność od analizy do odbioru
+Poznaj osobę odpowiedzialną
+Pokaż proces, który zabiera czas
+
+Krótki opis wystarczy, żeby ustalić, czy kolejnym krokiem powinno być Demo w 7 dni.
+
+Opisz proces

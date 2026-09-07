@@ -1,0 +1,197 @@
+ROZWIĄZANIA
+
+Pięć sposobów na uporządkowanie konkretnego procesu
+
+Nie sprzedajemy jednego gotowego systemu z półki. Dobieramy ograniczony zakres do problemu firmy, sprawdzamy go w demo, a następnie planujemy właściwe wdrożenie.
+
+Poniższe opisy pokazują możliwy kierunek rozwiązania. Finalny zakres zależy od procesu, danych, integracji i wymaganych zabezpieczeń.
+
+Chatbot AI i asystent wiedzy dla firm
+Voice AI dla firm
+Automatyzacja procesów
+Integracje WhatsApp i CRM
+Systemy agentowe
+Asystent wiedzy
+Automatyzacja wiadomości i dokumentów
+Panel operacyjny procesu
+System agentowy do realizacji zadań
+Integracje kanałów i komunikatorów
+
+ASYSTENT-WIEDZY
+
+Asystent wiedzy
+
+Pomaga pracownikom lub klientom szybciej znaleźć odpowiedź w zatwierdzonych materiałach firmy.
+
+Problem
+
+Wiedza jest rozproszona między dokumentami, instrukcjami, wiadomościami i doświadczeniem pracowników.
+
+Dla kogo
+
+Dla zespołów, które regularnie odpowiadają na powtarzalne pytania albo pracują na rozproszonej dokumentacji.
+
+Co może robić
+wyszukiwanie informacji w wybranych materiałach
+odpowiedzi ze wskazaniem źródła
+kontrola zakresu odpowiedzi
+Co jest potrzebne na start
+wybrany zestaw dokumentów lub instrukcji
+przykładowe pytania użytkowników
+zasady braku odpowiedzi poza zakresem
+Co możemy pokazać w demo
+
+Demo może pokazać pytania do ograniczonego zestawu materiałów, odpowiedzi ze źródłami oraz przekazanie sprawy do człowieka.
+
+Co obejmuje pełne wdrożenie
+bezpieczny indeks wiedzy
+role i ochrona danych
+monitoring jakości i kosztów
+Porozmawiaj o asystencie wiedzy
+Zobacz symulację asystenta
+
+AUTOMATYZACJA-WIADOMOSCI-I-DOKUMENTOW
+
+Automatyzacja wiadomości i dokumentów
+
+Ogranicza ręczne czytanie wiadomości, przepisywanie danych i przekazywanie spraw między osobami.
+
+Problem
+
+Pracownicy odczytują wiadomości lub dokumenty, kopiują informacje do innych narzędzi i ręcznie ustalają kolejny krok.
+
+Dla kogo
+
+Dla zespołów obsługujących dużą liczbę powtarzalnych wiadomości, formularzy, zamówień, zgłoszeń lub dokumentów.
+
+Co może robić
+rozpoznawanie rodzaju wiadomości lub dokumentu
+wyciąganie danych
+przypisanie sprawy
+szkic odpowiedzi lub zadania
+Co jest potrzebne na start
+przykładowe wiadomości lub dokumenty
+zasady klasyfikacji i wyjątków
+miejsce docelowe wyników
+Co możemy pokazać w demo
+
+Demo może pokazać klasyfikację przykładowych wiadomości i zaproponowanie kolejnego kroku bez produkcyjnej skrzynki.
+
+Co obejmuje pełne wdrożenie
+integracje z systemem firmowym
+ponowienia i audyt
+zatwierdzanie działań przez człowieka
+Porozmawiaj o automatyzacji
+
+PANEL-OPERACYJNY
+
+Panel operacyjny procesu
+
+Pokazuje status spraw, odpowiedzialność i następny krok w jednym miejscu.
+
+Problem
+
+Informacje o procesie są rozproszone między e-mailem, komunikatorami, arkuszami i systemami.
+
+Dla kogo
+
+Dla zespołów, które potrzebują wspólnego widoku procesu, a nie kolejnego dashboardu z wykresami.
+
+Co może robić
+wspólny widok spraw i statusów
+osoba odpowiedzialna
+następny krok
+historia zmian
+Co jest potrzebne na start
+etapy i statusy procesu
+role i odpowiedzialności
+źródła danych zespołu
+Co możemy pokazać w demo
+
+Demo może pokazać jeden proces na przykładowych danych z podstawowymi statusami i kolejnym krokiem.
+
+Co obejmuje pełne wdrożenie
+logowanie i uprawnienia
+baza danych i integracje
+monitoring i kopie bezpieczeństwa
+Porozmawiaj o panelu procesu
+
+SYSTEM-AGENTOWY
+
+System agentowy do realizacji zadań
+
+Koordynuje kilka wyspecjalizowanych kroków lub agentów, zachowując kontrolę człowieka nad ważnymi decyzjami.
+
+Problem
+
+Złożone zadanie wymaga zebrania informacji, wykonania kilku operacji, sprawdzenia wyniku i przekazania decyzji między osobami lub systemami.
+
+Dla kogo
+
+Dla zespołów, które chcą uporządkować wieloetapową pracę, a nie tylko wygenerować pojedynczą odpowiedź AI.
+
+Co może robić
+podział zadania na kontrolowane etapy
+przekazywanie wyniku między wyspecjalizowanymi agentami
+wywoływanie uzgodnionych narzędzi lub API
+weryfikacja wyniku przed kolejnym krokiem
+zatwierdzenie człowieka w krytycznym punkcie
+Co jest potrzebne na start
+opis procesu i jego etapów
+reguły decyzji oraz obsługi wyjątków
+lista narzędzi lub systemów
+miejsca wymagające zatwierdzenia człowieka
+Co możemy pokazać w demo
+
+Demo może pokazać jeden ograniczony przebieg zadania, role agentów, przekazywanie wyników oraz punkt kontroli człowieka.
+
+Co obejmuje pełne wdrożenie
+bezpieczne integracje i uprawnienia
+limity kosztów oraz liczby operacji
+monitoring, audyt i ponowienia
+obsługa błędów i zatrzymanie procesu
+Porozmawiaj o systemie agentowym
+
+INTEGRACJE-KANALOW
+
+Integracje kanałów i komunikatorów
+
+Łączy WhatsApp, e-mail, formularze i CRM z jednym kontrolowanym procesem obsługi spraw.
+
+Problem
+
+Wiadomości trafiają z wielu kanałów, a pracownicy ręcznie kopiują dane, zmieniają statusy i przekazują sprawy do innych narzędzi.
+
+Dla kogo
+
+Dla zespołów obsługujących klientów lub operacje przez kilka kanałów komunikacji.
+
+Co może robić
+odbieranie zdarzeń z wybranych kanałów
+rozpoznanie rodzaju sprawy
+przekazanie danych do właściwego procesu
+aktualizacja statusu w CRM lub panelu
+eskalacja do człowieka
+Co jest potrzebne na start
+lista kanałów i systemów
+przykładowe wiadomości
+zasady routingu i odpowiedzialności
+dostępność API dostawców
+Co możemy pokazać w demo
+
+Demo może pokazać symulowany przepływ wiadomości z WhatsAppa, e-maila albo formularza do procesu i panelu statusów, bez wysyłania prawdziwych wiadomości.
+
+Co obejmuje pełne wdrożenie
+oficjalne API dostawców
+zgody, szablony wiadomości i limity
+audyt komunikacji
+bezpieczeństwo danych oraz monitoring integracji
+Porozmawiaj o integracjach
+
+NASTĘPNY KROK
+
+Nie wiesz, który kierunek pasuje do procesu?
+
+Opisz obecny sposób pracy. Pierwszym krokiem jest ustalenie problemu, a nie wybór technologii.
+
+Opisz proces

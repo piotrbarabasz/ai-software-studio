@@ -1,0 +1,2934 @@
+[
+  {
+    "name": "home-1",
+    "route": "/",
+    "date": "2026-09-07T07:30:03.511Z",
+    "version": "13.4.1",
+    "settings": {
+      "output": [
+        "json",
+        "html"
+      ],
+      "maxWaitForFcp": 30000,
+      "maxWaitForLoad": 45000,
+      "pauseAfterFcpMs": 1000,
+      "pauseAfterLoadMs": 1000,
+      "networkQuietThresholdMs": 1000,
+      "cpuQuietThresholdMs": 1000,
+      "formFactor": "mobile",
+      "throttling": {
+        "rttMs": 150,
+        "throughputKbps": 1638.4,
+        "requestLatencyMs": 562.5,
+        "downloadThroughputKbps": 1474.5600000000002,
+        "uploadThroughputKbps": 675,
+        "cpuSlowdownMultiplier": 4
+      },
+      "throttlingMethod": "simulate",
+      "screenEmulation": {
+        "mobile": true,
+        "width": 412,
+        "height": 823,
+        "deviceScaleFactor": 1.75,
+        "disabled": false
+      },
+      "emulatedUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36",
+      "auditMode": false,
+      "gatherMode": false,
+      "clearStorageTypes": [
+        "file_systems",
+        "shader_cache",
+        "service_workers",
+        "cache_storage"
+      ],
+      "disableStorageReset": false,
+      "debugNavigation": false,
+      "channel": "node",
+      "usePassiveGathering": false,
+      "disableFullPageScreenshot": false,
+      "skipAboutBlank": false,
+      "blankPage": "about:blank",
+      "ignoreStatusCode": false,
+      "locale": "en-US",
+      "blockedUrlPatterns": null,
+      "additionalTraceCategories": null,
+      "extraHeaders": null,
+      "precomputedLanternData": null,
+      "onlyAudits": null,
+      "onlyCategories": [
+        "performance",
+        "accessibility",
+        "best-practices",
+        "seo"
+      ],
+      "skipAudits": null
+    },
+    "score": {
+      "performance": 0.73,
+      "accessibility": 0.96,
+      "best-practices": 1,
+      "seo": 1
+    },
+    "metrics": {
+      "first-contentful-paint": {
+        "value": 1905.1309999999999,
+        "display": "1.9 s"
+      },
+      "largest-contentful-paint": {
+        "value": 2041.6309999999999,
+        "display": "2.0 s"
+      },
+      "cumulative-layout-shift": {
+        "value": 0.9161603888213852,
+        "display": "0.916"
+      },
+      "total-blocking-time": {
+        "value": 65.5,
+        "display": "70 ms"
+      },
+      "speed-index": {
+        "value": 1905.1309999999999,
+        "display": "1.9 s"
+      },
+      "total-byte-weight": {
+        "value": 195729,
+        "display": "Total size was 191 KiB"
+      },
+      "bootup-time": {
+        "value": 434.3319999999974,
+        "display": "0.4 s"
+      }
+    },
+    "findings": [
+      {
+        "id": "first-contentful-paint",
+        "title": "First Contentful Paint",
+        "description": "First Contentful Paint marks the time at which the first text or image is painted. [Learn more about the First Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/first-contentful-paint/).",
+        "display": "1.9 s"
+      },
+      {
+        "id": "largest-contentful-paint",
+        "title": "Largest Contentful Paint",
+        "description": "Largest Contentful Paint marks the time at which the largest text or image is painted. [Learn more about the Largest Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+        "display": "2.0 s"
+      },
+      {
+        "id": "total-blocking-time",
+        "title": "Total Blocking Time",
+        "description": "Sum of all time periods between FCP and Time to Interactive, when task length exceeded 50ms, expressed in milliseconds. [Learn more about the Total Blocking Time metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-total-blocking-time/).",
+        "display": "70 ms"
+      },
+      {
+        "id": "max-potential-fid",
+        "title": "Max Potential First Input Delay",
+        "description": "The maximum potential First Input Delay that your users could experience is the duration of the longest task. [Learn more about the Maximum Potential First Input Delay metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-max-potential-fid/).",
+        "display": "130 ms"
+      },
+      {
+        "id": "cumulative-layout-shift",
+        "title": "Cumulative Layout Shift",
+        "description": "Cumulative Layout Shift measures the movement of visible elements within the viewport. [Learn more about the Cumulative Layout Shift metric](https://web.dev/articles/cls).",
+        "display": "0.916",
+        "details": {
+          "type": "debugdata",
+          "items": [
+            {
+              "cumulativeLayoutShiftMainFrame": 0.9161603888213852,
+              "newEngineResultDiffered": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "interactive",
+        "title": "Time to Interactive",
+        "description": "Time to Interactive is the amount of time it takes for the page to become fully interactive. [Learn more about the Time to Interactive metric](https://developer.chrome.com/docs/lighthouse/performance/interactive/).",
+        "display": "2.1 s"
+      },
+      {
+        "id": "layout-shifts",
+        "title": "Avoid large layout shifts",
+        "description": "These are the largest layout shifts observed on the page. Each table item represents a single layout shift, and shows the element that shifted the most. Below each item are possible root causes that led to the layout shift. Some of these layout shifts may not be included in the CLS metric value due to [windowing](https://web.dev/articles/cls#what_is_cls). [Learn how to improve CLS](https://web.dev/articles/optimize-cls)",
+        "display": "1 layout shift found",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "node",
+              "valueType": "node",
+              "subItemsHeading": {
+                "key": "extra"
+              },
+              "label": "Element"
+            },
+            {
+              "key": "score",
+              "valueType": "numeric",
+              "subItemsHeading": {
+                "key": "cause",
+                "valueType": "text"
+              },
+              "granularity": 0.001,
+              "label": "Layout shift score"
+            }
+          ],
+          "items": [
+            {
+              "node": {
+                "type": "node",
+                "lhId": "page-1-FOOTER",
+                "path": "1,HTML,1,BODY,0,APP-ROOT,0,APP-SITE-SHELL,3,FOOTER",
+                "selector": "body > app-root > app-site-shell > footer.site-footer",
+                "boundingRect": {
+                  "top": 9789,
+                  "bottom": 10643,
+                  "left": 0,
+                  "right": 412,
+                  "width": 412,
+                  "height": 854
+                },
+                "snippet": "<footer _ngcontent-ng-c285404801=\"\" class=\"site-footer\">",
+                "nodeLabel": "Protolume — studio wdrożeń AI i automatyzacji prowadzone przez Piotra Barabasza…"
+              },
+              "score": 0.9161603888213852
+            }
+          ]
+        }
+      },
+      {
+        "id": "color-contrast",
+        "title": "Background and foreground colors do not have a sufficient contrast ratio.",
+        "description": "Low-contrast text is difficult or impossible for many users to read. [Learn how to provide sufficient color contrast](https://dequeuniversity.com/rules/axe/4.12/color-contrast).",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "node",
+              "valueType": "node",
+              "subItemsHeading": {
+                "key": "relatedNode",
+                "valueType": "node"
+              },
+              "label": "Failing Elements"
+            }
+          ],
+          "items": [
+            {
+              "node": {
+                "type": "node",
+                "lhId": "1-0-H3",
+                "path": "1,HTML,1,BODY,0,APP-ROOT,0,APP-SITE-SHELL,2,MAIN,1,APP-HOME,0,DIV,4,SECTION,1,DIV,0,ARTICLE,1,H3",
+                "selector": "section.evidence-teaser > div.evidence-teaser-grid > article.section-panel > h3",
+                "boundingRect": {
+                  "top": 5994,
+                  "bottom": 6040,
+                  "left": 45,
+                  "right": 298,
+                  "width": 253,
+                  "height": 46
+                },
+                "snippet": "<h3 _ngcontent-ng-c189896396=\"\">",
+                "nodeLabel": "Asystent wiedzy z obsługą pytań poza zakresem",
+                "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.27 (foreground color: #11131a, background color: #242936, font size: 15.0pt (20px), font weight: bold). Expected contrast ratio of 3:1"
+              },
+              "subItems": {
+                "type": "subitems",
+                "items": [
+                  {
+                    "relatedNode": {
+                      "type": "node",
+                      "lhId": "1-1-ARTICLE",
+                      "path": "1,HTML,1,BODY,0,APP-ROOT,0,APP-SITE-SHELL,2,MAIN,1,APP-HOME,0,DIV,4,SECTION,1,DIV,0,ARTICLE",
+                      "selector": "div.home-page > section.evidence-teaser > div.evidence-teaser-grid > article.section-panel",
+                      "boundingRect": {
+                        "top": 5921,
+                        "bottom": 6214,
+                        "left": 24,
+                        "right": 388,
+                        "width": 364,
+                        "height": 292
+                      },
+                      "snippet": "<article _ngcontent-ng-c189896396=\"\" class=\"section-panel evidence-teaser-card\">",
+                      "nodeLabel": "Interaktywne demo\n\nAsystent wiedzy z obsługą pytań poza zakresem\n\nSprawdź odpow…"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "node": {
+                "type": "node",
+                "lhId": "1-2-H3",
+                "path": "1,HTML,1,BODY,0,APP-ROOT,0,APP-SITE-SHELL,2,MAIN,1,APP-HOME,0,DIV,4,SECTION,1,DIV,1,ARTICLE,1,H3",
+                "selector": "section.evidence-teaser > div.evidence-teaser-grid > article.section-panel > h3",
+                "boundingRect": {
+                  "top": 6302,
+                  "bottom": 6348,
+                  "left": 45,
+                  "right": 298,
+                  "width": 253,
+                  "height": 46
+                },
+                "snippet": "<h3 _ngcontent-ng-c189896396=\"\">",
+                "nodeLabel": "Raport decyzyjny po Demo w 7 dni",
+                "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.27 (foreground color: #11131a, background color: #242936, font size: 15.0pt (20px), font weight: bold). Expected contrast ratio of 3:1"
+              },
+              "subItems": {
+                "type": "subitems",
+                "items": [
+                  {
+                    "relatedNode": {
+                      "type": "node",
+                      "lhId": "1-3-ARTICLE",
+                      "path": "1,HTML,1,BODY,0,APP-ROOT,0,APP-SITE-SHELL,2,MAIN,1,APP-HOME,0,DIV,4,SECTION,1,DIV,1,ARTICLE",
+                      "selector": "div.home-page > section.evidence-teaser > div.evidence-teaser-grid > article.section-panel",
+                      "boundingRect": {
+                        "top": 6230,
+                        "bottom": 6522,
+                        "left": 24,
+                        "right": 388,
+                        "width": 364,
+                        "height": 292
+                      },
+                      "snippet": "<article _ngcontent-ng-c189896396=\"\" class=\"section-panel evidence-teaser-card\">",
+                      "nodeLabel": "Przykładowy raport\n\nRaport decyzyjny po Demo w 7 dni\n\nSprawdź zakres, scenarius…"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "debugData": {
+            "type": "debugdata",
+            "impact": "serious",
+            "tags": [
+              "cat.color",
+              "wcag2aa",
+              "wcag143",
+              "TTv5",
+              "TT13.c",
+              "EN-301-549",
+              "EN-9.1.4.3",
+              "ACT",
+              "RGAAv4",
+              "RGAA-3.2.1"
+            ]
+          }
+        }
+      },
+      {
+        "id": "cache-insight",
+        "title": "Use efficient cache lifetimes",
+        "description": "A long cache lifetime can speed up repeat visits to your page. [Learn more about caching](https://developer.chrome.com/docs/performance/insights/cache).",
+        "display": "Est savings of 3 KiB",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "url",
+              "valueType": "url",
+              "label": "Request"
+            },
+            {
+              "key": "cacheLifetimeMs",
+              "valueType": "ms",
+              "label": "Cache TTL",
+              "displayUnit": "duration"
+            },
+            {
+              "key": "totalBytes",
+              "valueType": "bytes",
+              "label": "Transfer Size",
+              "displayUnit": "kb",
+              "granularity": 1
+            }
+          ],
+          "items": [
+            {
+              "url": "https://protolume.pl/assets/protolume-logo-horizontal-light.svg",
+              "cacheLifetimeMs": 86400000,
+              "totalBytes": 4394,
+              "wastedBytes": 1757.6000000000001
+            },
+            {
+              "url": "https://protolume.pl/assets/protolume-logo-horizontal-dark.svg",
+              "cacheLifetimeMs": 86400000,
+              "totalBytes": 4016,
+              "wastedBytes": 1606.4
+            }
+          ],
+          "sortedBy": [
+            "wastedBytes"
+          ],
+          "skipSumming": [
+            "cacheLifetimeMs"
+          ],
+          "debugData": {
+            "type": "debugdata",
+            "wastedBytes": 3364
+          }
+        }
+      },
+      {
+        "id": "cls-culprits-insight",
+        "title": "Layout shift culprits",
+        "description": "Layout shifts occur when elements move absent any user interaction. [Investigate the causes of layout shifts](https://developer.chrome.com/docs/performance/insights/cls-culprit), such as elements being added, removed, or their fonts changing as the page loads.",
+        "details": {
+          "type": "list",
+          "items": [
+            {
+              "type": "table",
+              "headings": [
+                {
+                  "key": "node",
+                  "valueType": "node",
+                  "subItemsHeading": {
+                    "key": "extra"
+                  },
+                  "label": "Element"
+                },
+                {
+                  "key": "score",
+                  "valueType": "numeric",
+                  "subItemsHeading": {
+                    "key": "cause",
+                    "valueType": "text"
+                  },
+                  "granularity": 0.001,
+                  "label": "Layout shift score"
+                }
+              ],
+              "items": [
+                {
+                  "node": {
+                    "type": "text",
+                    "value": "Total"
+                  },
+                  "score": 0.9161603888213852
+                },
+                {
+                  "node": {
+                    "type": "node",
+                    "lhId": "page-1-FOOTER",
+                    "path": "1,HTML,1,BODY,0,APP-ROOT,0,APP-SITE-SHELL,3,FOOTER",
+                    "selector": "body > app-root > app-site-shell > footer.site-footer",
+                    "boundingRect": {
+                      "top": 9789,
+                      "bottom": 10643,
+                      "left": 0,
+                      "right": 412,
+                      "width": 412,
+                      "height": 854
+                    },
+                    "snippet": "<footer _ngcontent-ng-c285404801=\"\" class=\"site-footer\">",
+                    "nodeLabel": "Protolume — studio wdrożeń AI i automatyzacji prowadzone przez Piotra Barabasza…"
+                  },
+                  "score": 0.9161603888213852
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "network-dependency-tree-insight",
+        "title": "Network dependency tree",
+        "description": "[Avoid chaining critical requests](https://developer.chrome.com/docs/performance/insights/network-dependency-tree) by reducing the length of chains, reducing the download size of resources, or deferring the download of unnecessary resources to improve page load.",
+        "details": {
+          "type": "list",
+          "items": [
+            {
+              "type": "list-section",
+              "value": {
+                "type": "network-tree",
+                "chains": {
+                  "57BABE20BC92FAC5979C46E6BF7F96E5": {
+                    "url": "https://protolume.pl/",
+                    "navStartToEndTime": 212,
+                    "transferSize": 18734,
+                    "isLongest": true,
+                    "children": {
+                      "15320.11": {
+                        "url": "https://protolume.pl/main-HWKTDZMX.js",
+                        "navStartToEndTime": 441,
+                        "transferSize": 10002,
+                        "isLongest": true,
+                        "children": {
+                          "15320.24": {
+                            "url": "https://protolume.pl/chunk-2TOFAXFE.js",
+                            "navStartToEndTime": 582,
+                            "transferSize": 16920,
+                            "isLongest": true,
+                            "children": {
+                              "15320.26": {
+                                "url": "https://protolume.pl/chunk-2522GT72.js",
+                                "navStartToEndTime": 613,
+                                "transferSize": 2597,
+                                "isLongest": true,
+                                "children": {}
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "15320.10": {
+                        "url": "https://protolume.pl/polyfills-5CFQRCPP.js",
+                        "navStartToEndTime": 441,
+                        "transferSize": 14202,
+                        "children": {}
+                      },
+                      "15320.2": {
+                        "url": "https://protolume.pl/styles-G4ZBBLIG.css",
+                        "navStartToEndTime": 238,
+                        "transferSize": 5759,
+                        "children": {}
+                      }
+                    }
+                  }
+                },
+                "longestChain": {
+                  "duration": 613
+                }
+              }
+            },
+            {
+              "type": "list-section",
+              "title": "Preconnected origins",
+              "description": "[preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/) hints help the browser establish a connection earlier in the page load, saving time when the first request for that origin is made. The following are the origins that the page preconnected to.",
+              "value": {
+                "type": "text",
+                "value": "no origins were preconnected"
+              }
+            },
+            {
+              "type": "list-section",
+              "title": "Preconnect candidates",
+              "description": "Add [preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/) hints to your most important origins, but try to use no more than 4.",
+              "value": {
+                "type": "text",
+                "value": "No additional origins are good candidates for preconnecting"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "render-blocking-insight",
+        "title": "Render-blocking requests",
+        "description": "Requests are blocking the page's initial render, which may delay LCP. [Deferring or inlining](https://developer.chrome.com/docs/performance/insights/render-blocking) can move these network requests out of the critical path.",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "url",
+              "valueType": "url",
+              "label": "URL"
+            },
+            {
+              "key": "totalBytes",
+              "valueType": "bytes",
+              "label": "Transfer Size"
+            },
+            {
+              "key": "wastedMs",
+              "valueType": "timespanMs",
+              "label": "Duration"
+            }
+          ],
+          "items": [
+            {
+              "url": "https://protolume.pl/styles-G4ZBBLIG.css",
+              "totalBytes": 5759
+            }
+          ]
+        }
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "name": "home-2",
+    "route": "/",
+    "date": "2026-09-07T07:31:38.025Z",
+    "version": "13.4.1",
+    "settings": {
+      "output": [
+        "json",
+        "html"
+      ],
+      "maxWaitForFcp": 30000,
+      "maxWaitForLoad": 45000,
+      "pauseAfterFcpMs": 1000,
+      "pauseAfterLoadMs": 1000,
+      "networkQuietThresholdMs": 1000,
+      "cpuQuietThresholdMs": 1000,
+      "formFactor": "mobile",
+      "throttling": {
+        "rttMs": 150,
+        "throughputKbps": 1638.4,
+        "requestLatencyMs": 562.5,
+        "downloadThroughputKbps": 1474.5600000000002,
+        "uploadThroughputKbps": 675,
+        "cpuSlowdownMultiplier": 4
+      },
+      "throttlingMethod": "simulate",
+      "screenEmulation": {
+        "mobile": true,
+        "width": 412,
+        "height": 823,
+        "deviceScaleFactor": 1.75,
+        "disabled": false
+      },
+      "emulatedUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36",
+      "auditMode": false,
+      "gatherMode": false,
+      "clearStorageTypes": [
+        "file_systems",
+        "shader_cache",
+        "service_workers",
+        "cache_storage"
+      ],
+      "disableStorageReset": false,
+      "debugNavigation": false,
+      "channel": "node",
+      "usePassiveGathering": false,
+      "disableFullPageScreenshot": false,
+      "skipAboutBlank": false,
+      "blankPage": "about:blank",
+      "ignoreStatusCode": false,
+      "locale": "en-US",
+      "blockedUrlPatterns": null,
+      "additionalTraceCategories": null,
+      "extraHeaders": null,
+      "precomputedLanternData": null,
+      "onlyAudits": null,
+      "onlyCategories": [
+        "performance",
+        "accessibility",
+        "best-practices",
+        "seo"
+      ],
+      "skipAudits": null
+    },
+    "score": {
+      "performance": 0.73,
+      "accessibility": 0.96,
+      "best-practices": 1,
+      "seo": 1
+    },
+    "metrics": {
+      "first-contentful-paint": {
+        "value": 1856.9215,
+        "display": "1.9 s"
+      },
+      "largest-contentful-paint": {
+        "value": 2004.4215,
+        "display": "2.0 s"
+      },
+      "cumulative-layout-shift": {
+        "value": 0.9161603888213852,
+        "display": "0.916"
+      },
+      "total-blocking-time": {
+        "value": 57,
+        "display": "60 ms"
+      },
+      "speed-index": {
+        "value": 2872.427672017551,
+        "display": "2.9 s"
+      },
+      "total-byte-weight": {
+        "value": 196042,
+        "display": "Total size was 191 KiB"
+      },
+      "bootup-time": {
+        "value": 421.7319999999979,
+        "display": "0.4 s"
+      }
+    },
+    "findings": [
+      {
+        "id": "first-contentful-paint",
+        "title": "First Contentful Paint",
+        "description": "First Contentful Paint marks the time at which the first text or image is painted. [Learn more about the First Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/first-contentful-paint/).",
+        "display": "1.9 s"
+      },
+      {
+        "id": "largest-contentful-paint",
+        "title": "Largest Contentful Paint",
+        "description": "Largest Contentful Paint marks the time at which the largest text or image is painted. [Learn more about the Largest Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+        "display": "2.0 s"
+      },
+      {
+        "id": "speed-index",
+        "title": "Speed Index",
+        "description": "Speed Index shows how quickly the contents of a page are visibly populated. [Learn more about the Speed Index metric](https://developer.chrome.com/docs/lighthouse/performance/speed-index/).",
+        "display": "2.9 s"
+      },
+      {
+        "id": "cumulative-layout-shift",
+        "title": "Cumulative Layout Shift",
+        "description": "Cumulative Layout Shift measures the movement of visible elements within the viewport. [Learn more about the Cumulative Layout Shift metric](https://web.dev/articles/cls).",
+        "display": "0.916",
+        "details": {
+          "type": "debugdata",
+          "items": [
+            {
+              "cumulativeLayoutShiftMainFrame": 0.9161603888213852,
+              "newEngineResult": {
+                "cumulativeLayoutShift": 0.9161603888213852,
+                "cumulativeLayoutShiftMainFrame": 0.9161603888213852
+              },
+              "newEngineResultDiffered": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "interactive",
+        "title": "Time to Interactive",
+        "description": "Time to Interactive is the amount of time it takes for the page to become fully interactive. [Learn more about the Time to Interactive metric](https://developer.chrome.com/docs/lighthouse/performance/interactive/).",
+        "display": "2.1 s"
+      },
+      {
+        "id": "layout-shifts",
+        "title": "Avoid large layout shifts",
+        "description": "These are the largest layout shifts observed on the page. Each table item represents a single layout shift, and shows the element that shifted the most. Below each item are possible root causes that led to the layout shift. Some of these layout shifts may not be included in the CLS metric value due to [windowing](https://web.dev/articles/cls#what_is_cls). [Learn how to improve CLS](https://web.dev/articles/optimize-cls)",
+        "display": "1 layout shift found",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "node",
+              "valueType": "node",
+              "subItemsHeading": {
+                "key": "extra"
+              },
+              "label": "Element"
+            },
+            {
+              "key": "score",
+              "valueType": "numeric",
+              "subItemsHeading": {
+                "key": "cause",
+                "valueType": "text"
+              },
+              "granularity": 0.001,
+              "label": "Layout shift score"
+            }
+          ],
+          "items": [
+            {
+              "node": {
+                "type": "node",
+                "lhId": "page-1-FOOTER",
+                "path": "1,HTML,1,BODY,0,APP-ROOT,0,APP-SITE-SHELL,3,FOOTER",
+                "selector": "body > app-root > app-site-shell > footer.site-footer",
+                "boundingRect": {
+                  "top": 9789,
+                  "bottom": 10643,
+                  "left": 0,
+                  "right": 412,
+                  "width": 412,
+                  "height": 854
+                },
+                "snippet": "<footer _ngcontent-ng-c285404801=\"\" class=\"site-footer\">",
+                "nodeLabel": "Protolume — studio wdrożeń AI i automatyzacji prowadzone przez Piotra Barabasza…"
+              },
+              "score": 0.9161603888213852
+            }
+          ]
+        }
+      },
+      {
+        "id": "color-contrast",
+        "title": "Background and foreground colors do not have a sufficient contrast ratio.",
+        "description": "Low-contrast text is difficult or impossible for many users to read. [Learn how to provide sufficient color contrast](https://dequeuniversity.com/rules/axe/4.12/color-contrast).",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "node",
+              "valueType": "node",
+              "subItemsHeading": {
+                "key": "relatedNode",
+                "valueType": "node"
+              },
+              "label": "Failing Elements"
+            }
+          ],
+          "items": [
+            {
+              "node": {
+                "type": "node",
+                "lhId": "1-0-H3",
+                "path": "1,HTML,1,BODY,0,APP-ROOT,0,APP-SITE-SHELL,2,MAIN,1,APP-HOME,0,DIV,4,SECTION,1,DIV,0,ARTICLE,1,H3",
+                "selector": "section.evidence-teaser > div.evidence-teaser-grid > article.section-panel > h3",
+                "boundingRect": {
+                  "top": 5994,
+                  "bottom": 6040,
+                  "left": 45,
+                  "right": 298,
+                  "width": 253,
+                  "height": 46
+                },
+                "snippet": "<h3 _ngcontent-ng-c189896396=\"\">",
+                "nodeLabel": "Asystent wiedzy z obsługą pytań poza zakresem",
+                "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.27 (foreground color: #11131a, background color: #242936, font size: 15.0pt (20px), font weight: bold). Expected contrast ratio of 3:1"
+              },
+              "subItems": {
+                "type": "subitems",
+                "items": [
+                  {
+                    "relatedNode": {
+                      "type": "node",
+                      "lhId": "1-1-ARTICLE",
+                      "path": "1,HTML,1,BODY,0,APP-ROOT,0,APP-SITE-SHELL,2,MAIN,1,APP-HOME,0,DIV,4,SECTION,1,DIV,0,ARTICLE",
+                      "selector": "div.home-page > section.evidence-teaser > div.evidence-teaser-grid > article.section-panel",
+                      "boundingRect": {
+                        "top": 5921,
+                        "bottom": 6214,
+                        "left": 24,
+                        "right": 388,
+                        "width": 364,
+                        "height": 292
+                      },
+                      "snippet": "<article _ngcontent-ng-c189896396=\"\" class=\"section-panel evidence-teaser-card\">",
+                      "nodeLabel": "Interaktywne demo\n\nAsystent wiedzy z obsługą pytań poza zakresem\n\nSprawdź odpow…"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "node": {
+                "type": "node",
+                "lhId": "1-2-H3",
+                "path": "1,HTML,1,BODY,0,APP-ROOT,0,APP-SITE-SHELL,2,MAIN,1,APP-HOME,0,DIV,4,SECTION,1,DIV,1,ARTICLE,1,H3",
+                "selector": "section.evidence-teaser > div.evidence-teaser-grid > article.section-panel > h3",
+                "boundingRect": {
+                  "top": 6302,
+                  "bottom": 6348,
+                  "left": 45,
+                  "right": 298,
+                  "width": 253,
+                  "height": 46
+                },
+                "snippet": "<h3 _ngcontent-ng-c189896396=\"\">",
+                "nodeLabel": "Raport decyzyjny po Demo w 7 dni",
+                "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.27 (foreground color: #11131a, background color: #242936, font size: 15.0pt (20px), font weight: bold). Expected contrast ratio of 3:1"
+              },
+              "subItems": {
+                "type": "subitems",
+                "items": [
+                  {
+                    "relatedNode": {
+                      "type": "node",
+                      "lhId": "1-3-ARTICLE",
+                      "path": "1,HTML,1,BODY,0,APP-ROOT,0,APP-SITE-SHELL,2,MAIN,1,APP-HOME,0,DIV,4,SECTION,1,DIV,1,ARTICLE",
+                      "selector": "div.home-page > section.evidence-teaser > div.evidence-teaser-grid > article.section-panel",
+                      "boundingRect": {
+                        "top": 6230,
+                        "bottom": 6522,
+                        "left": 24,
+                        "right": 388,
+                        "width": 364,
+                        "height": 292
+                      },
+                      "snippet": "<article _ngcontent-ng-c189896396=\"\" class=\"section-panel evidence-teaser-card\">",
+                      "nodeLabel": "Przykładowy raport\n\nRaport decyzyjny po Demo w 7 dni\n\nSprawdź zakres, scenarius…"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "debugData": {
+            "type": "debugdata",
+            "impact": "serious",
+            "tags": [
+              "cat.color",
+              "wcag2aa",
+              "wcag143",
+              "TTv5",
+              "TT13.c",
+              "EN-301-549",
+              "EN-9.1.4.3",
+              "ACT",
+              "RGAAv4",
+              "RGAA-3.2.1"
+            ]
+          }
+        }
+      },
+      {
+        "id": "cache-insight",
+        "title": "Use efficient cache lifetimes",
+        "description": "A long cache lifetime can speed up repeat visits to your page. [Learn more about caching](https://developer.chrome.com/docs/performance/insights/cache).",
+        "display": "Est savings of 3 KiB",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "url",
+              "valueType": "url",
+              "label": "Request"
+            },
+            {
+              "key": "cacheLifetimeMs",
+              "valueType": "ms",
+              "label": "Cache TTL",
+              "displayUnit": "duration"
+            },
+            {
+              "key": "totalBytes",
+              "valueType": "bytes",
+              "label": "Transfer Size",
+              "displayUnit": "kb",
+              "granularity": 1
+            }
+          ],
+          "items": [
+            {
+              "url": "https://protolume.pl/assets/protolume-logo-horizontal-light.svg",
+              "cacheLifetimeMs": 86400000,
+              "totalBytes": 4369,
+              "wastedBytes": 1747.6000000000001
+            },
+            {
+              "url": "https://protolume.pl/assets/protolume-logo-horizontal-dark.svg",
+              "cacheLifetimeMs": 86400000,
+              "totalBytes": 4144,
+              "wastedBytes": 1657.6000000000001
+            }
+          ],
+          "sortedBy": [
+            "wastedBytes"
+          ],
+          "skipSumming": [
+            "cacheLifetimeMs"
+          ],
+          "debugData": {
+            "type": "debugdata",
+            "wastedBytes": 3405.2000000000003
+          }
+        }
+      },
+      {
+        "id": "cls-culprits-insight",
+        "title": "Layout shift culprits",
+        "description": "Layout shifts occur when elements move absent any user interaction. [Investigate the causes of layout shifts](https://developer.chrome.com/docs/performance/insights/cls-culprit), such as elements being added, removed, or their fonts changing as the page loads.",
+        "details": {
+          "type": "list",
+          "items": [
+            {
+              "type": "table",
+              "headings": [
+                {
+                  "key": "node",
+                  "valueType": "node",
+                  "subItemsHeading": {
+                    "key": "extra"
+                  },
+                  "label": "Element"
+                },
+                {
+                  "key": "score",
+                  "valueType": "numeric",
+                  "subItemsHeading": {
+                    "key": "cause",
+                    "valueType": "text"
+                  },
+                  "granularity": 0.001,
+                  "label": "Layout shift score"
+                }
+              ],
+              "items": [
+                {
+                  "node": {
+                    "type": "text",
+                    "value": "Total"
+                  },
+                  "score": 0.9161603888213852
+                },
+                {
+                  "node": {
+                    "type": "node",
+                    "lhId": "page-1-FOOTER",
+                    "path": "1,HTML,1,BODY,0,APP-ROOT,0,APP-SITE-SHELL,3,FOOTER",
+                    "selector": "body > app-root > app-site-shell > footer.site-footer",
+                    "boundingRect": {
+                      "top": 9789,
+                      "bottom": 10643,
+                      "left": 0,
+                      "right": 412,
+                      "width": 412,
+                      "height": 854
+                    },
+                    "snippet": "<footer _ngcontent-ng-c285404801=\"\" class=\"site-footer\">",
+                    "nodeLabel": "Protolume — studio wdrożeń AI i automatyzacji prowadzone przez Piotra Barabasza…"
+                  },
+                  "score": 0.9161603888213852
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "network-dependency-tree-insight",
+        "title": "Network dependency tree",
+        "description": "[Avoid chaining critical requests](https://developer.chrome.com/docs/performance/insights/network-dependency-tree) by reducing the length of chains, reducing the download size of resources, or deferring the download of unnecessary resources to improve page load.",
+        "details": {
+          "type": "list",
+          "items": [
+            {
+              "type": "list-section",
+              "value": {
+                "type": "network-tree",
+                "chains": {
+                  "122868483928A7CF464E6EEF533C4B3F": {
+                    "url": "https://protolume.pl/",
+                    "navStartToEndTime": 176,
+                    "transferSize": 18734,
+                    "isLongest": true,
+                    "children": {
+                      "26344.11": {
+                        "url": "https://protolume.pl/main-HWKTDZMX.js",
+                        "navStartToEndTime": 364,
+                        "transferSize": 9979,
+                        "isLongest": true,
+                        "children": {
+                          "26344.24": {
+                            "url": "https://protolume.pl/chunk-2TOFAXFE.js",
+                            "navStartToEndTime": 482,
+                            "transferSize": 16950,
+                            "isLongest": true,
+                            "children": {
+                              "26344.26": {
+                                "url": "https://protolume.pl/chunk-2522GT72.js",
+                                "navStartToEndTime": 509,
+                                "transferSize": 2247,
+                                "isLongest": true,
+                                "children": {}
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "26344.10": {
+                        "url": "https://protolume.pl/polyfills-5CFQRCPP.js",
+                        "navStartToEndTime": 365,
+                        "transferSize": 14302,
+                        "children": {}
+                      },
+                      "26344.2": {
+                        "url": "https://protolume.pl/styles-G4ZBBLIG.css",
+                        "navStartToEndTime": 202,
+                        "transferSize": 5777,
+                        "children": {}
+                      }
+                    }
+                  }
+                },
+                "longestChain": {
+                  "duration": 509
+                }
+              }
+            },
+            {
+              "type": "list-section",
+              "title": "Preconnected origins",
+              "description": "[preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/) hints help the browser establish a connection earlier in the page load, saving time when the first request for that origin is made. The following are the origins that the page preconnected to.",
+              "value": {
+                "type": "text",
+                "value": "no origins were preconnected"
+              }
+            },
+            {
+              "type": "list-section",
+              "title": "Preconnect candidates",
+              "description": "Add [preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/) hints to your most important origins, but try to use no more than 4.",
+              "value": {
+                "type": "text",
+                "value": "No additional origins are good candidates for preconnecting"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "render-blocking-insight",
+        "title": "Render-blocking requests",
+        "description": "Requests are blocking the page's initial render, which may delay LCP. [Deferring or inlining](https://developer.chrome.com/docs/performance/insights/render-blocking) can move these network requests out of the critical path.",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "url",
+              "valueType": "url",
+              "label": "URL"
+            },
+            {
+              "key": "totalBytes",
+              "valueType": "bytes",
+              "label": "Transfer Size"
+            },
+            {
+              "key": "wastedMs",
+              "valueType": "timespanMs",
+              "label": "Duration"
+            }
+          ],
+          "items": [
+            {
+              "url": "https://protolume.pl/styles-G4ZBBLIG.css",
+              "totalBytes": 5777
+            }
+          ]
+        }
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "name": "home-3",
+    "route": "/",
+    "date": "2026-09-07T07:33:24.750Z",
+    "version": "13.4.1",
+    "settings": {
+      "output": [
+        "json",
+        "html"
+      ],
+      "maxWaitForFcp": 30000,
+      "maxWaitForLoad": 45000,
+      "pauseAfterFcpMs": 1000,
+      "pauseAfterLoadMs": 1000,
+      "networkQuietThresholdMs": 1000,
+      "cpuQuietThresholdMs": 1000,
+      "formFactor": "mobile",
+      "throttling": {
+        "rttMs": 150,
+        "throughputKbps": 1638.4,
+        "requestLatencyMs": 562.5,
+        "downloadThroughputKbps": 1474.5600000000002,
+        "uploadThroughputKbps": 675,
+        "cpuSlowdownMultiplier": 4
+      },
+      "throttlingMethod": "simulate",
+      "screenEmulation": {
+        "mobile": true,
+        "width": 412,
+        "height": 823,
+        "deviceScaleFactor": 1.75,
+        "disabled": false
+      },
+      "emulatedUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36",
+      "auditMode": false,
+      "gatherMode": false,
+      "clearStorageTypes": [
+        "file_systems",
+        "shader_cache",
+        "service_workers",
+        "cache_storage"
+      ],
+      "disableStorageReset": false,
+      "debugNavigation": false,
+      "channel": "node",
+      "usePassiveGathering": false,
+      "disableFullPageScreenshot": false,
+      "skipAboutBlank": false,
+      "blankPage": "about:blank",
+      "ignoreStatusCode": false,
+      "locale": "en-US",
+      "blockedUrlPatterns": null,
+      "additionalTraceCategories": null,
+      "extraHeaders": null,
+      "precomputedLanternData": null,
+      "onlyAudits": null,
+      "onlyCategories": [
+        "performance",
+        "accessibility",
+        "best-practices",
+        "seo"
+      ],
+      "skipAudits": null
+    },
+    "score": {
+      "performance": 0.87,
+      "accessibility": 0.96,
+      "best-practices": 1,
+      "seo": 1
+    },
+    "metrics": {
+      "first-contentful-paint": {
+        "value": 1583.339,
+        "display": "1.6 s"
+      },
+      "largest-contentful-paint": {
+        "value": 1946.339,
+        "display": "1.9 s"
+      },
+      "cumulative-layout-shift": {
+        "value": 0,
+        "display": "0"
+      },
+      "total-blocking-time": {
+        "value": 442,
+        "display": "440 ms"
+      },
+      "speed-index": {
+        "value": 2808.926443276827,
+        "display": "2.8 s"
+      },
+      "total-byte-weight": {
+        "value": 196032,
+        "display": "Total size was 191 KiB"
+      },
+      "bootup-time": {
+        "value": 398.0999999999975,
+        "display": "0.4 s"
+      }
+    },
+    "findings": [
+      {
+        "id": "first-contentful-paint",
+        "title": "First Contentful Paint",
+        "description": "First Contentful Paint marks the time at which the first text or image is painted. [Learn more about the First Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/first-contentful-paint/).",
+        "display": "1.6 s"
+      },
+      {
+        "id": "largest-contentful-paint",
+        "title": "Largest Contentful Paint",
+        "description": "Largest Contentful Paint marks the time at which the largest text or image is painted. [Learn more about the Largest Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+        "display": "1.9 s"
+      },
+      {
+        "id": "speed-index",
+        "title": "Speed Index",
+        "description": "Speed Index shows how quickly the contents of a page are visibly populated. [Learn more about the Speed Index metric](https://developer.chrome.com/docs/lighthouse/performance/speed-index/).",
+        "display": "2.8 s"
+      },
+      {
+        "id": "total-blocking-time",
+        "title": "Total Blocking Time",
+        "description": "Sum of all time periods between FCP and Time to Interactive, when task length exceeded 50ms, expressed in milliseconds. [Learn more about the Total Blocking Time metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-total-blocking-time/).",
+        "display": "440 ms"
+      },
+      {
+        "id": "max-potential-fid",
+        "title": "Max Potential First Input Delay",
+        "description": "The maximum potential First Input Delay that your users could experience is the duration of the longest task. [Learn more about the Maximum Potential First Input Delay metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-max-potential-fid/).",
+        "display": "330 ms"
+      },
+      {
+        "id": "interactive",
+        "title": "Time to Interactive",
+        "description": "Time to Interactive is the amount of time it takes for the page to become fully interactive. [Learn more about the Time to Interactive metric](https://developer.chrome.com/docs/lighthouse/performance/interactive/).",
+        "display": "2.3 s"
+      },
+      {
+        "id": "mainthread-work-breakdown",
+        "title": "Minimize main-thread work",
+        "description": "Consider reducing the time spent parsing, compiling and executing JS. You may find delivering smaller JS payloads helps with this. [Learn how to minimize main-thread work](https://developer.chrome.com/docs/lighthouse/performance/mainthread-work-breakdown/)",
+        "display": "2.2 s",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "groupLabel",
+              "valueType": "text",
+              "label": "Category"
+            },
+            {
+              "key": "duration",
+              "valueType": "ms",
+              "granularity": 1,
+              "label": "Time Spent"
+            }
+          ],
+          "items": [
+            {
+              "group": "other",
+              "groupLabel": "Other",
+              "duration": 997.1600000000004
+            },
+            {
+              "group": "styleLayout",
+              "groupLabel": "Style & Layout",
+              "duration": 660.3199999999996
+            },
+            {
+              "group": "scriptEvaluation",
+              "groupLabel": "Script Evaluation",
+              "duration": 406.07600000000616
+            },
+            {
+              "group": "paintCompositeRender",
+              "groupLabel": "Rendering",
+              "duration": 62.09199999999994
+            },
+            {
+              "group": "parseHTML",
+              "groupLabel": "Parse HTML & CSS",
+              "duration": 26.035999999999998
+            },
+            {
+              "group": "garbageCollection",
+              "groupLabel": "Garbage Collection",
+              "duration": 15.487999999999992
+            },
+            {
+              "group": "scriptParseCompile",
+              "groupLabel": "Script Parsing & Compilation",
+              "duration": 3.384
+            }
+          ],
+          "sortedBy": [
+            "duration"
+          ]
+        }
+      },
+      {
+        "id": "color-contrast",
+        "title": "Background and foreground colors do not have a sufficient contrast ratio.",
+        "description": "Low-contrast text is difficult or impossible for many users to read. [Learn how to provide sufficient color contrast](https://dequeuniversity.com/rules/axe/4.12/color-contrast).",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "node",
+              "valueType": "node",
+              "subItemsHeading": {
+                "key": "relatedNode",
+                "valueType": "node"
+              },
+              "label": "Failing Elements"
+            }
+          ],
+          "items": [
+            {
+              "node": {
+                "type": "node",
+                "lhId": "1-0-H3",
+                "path": "1,HTML,1,BODY,0,APP-ROOT,0,APP-SITE-SHELL,2,MAIN,1,APP-HOME,0,DIV,4,SECTION,1,DIV,0,ARTICLE,1,H3",
+                "selector": "section.evidence-teaser > div.evidence-teaser-grid > article.section-panel > h3",
+                "boundingRect": {
+                  "top": 5994,
+                  "bottom": 6040,
+                  "left": 45,
+                  "right": 298,
+                  "width": 253,
+                  "height": 46
+                },
+                "snippet": "<h3 _ngcontent-ng-c189896396=\"\">",
+                "nodeLabel": "Asystent wiedzy z obsługą pytań poza zakresem",
+                "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.27 (foreground color: #11131a, background color: #242936, font size: 15.0pt (20px), font weight: bold). Expected contrast ratio of 3:1"
+              },
+              "subItems": {
+                "type": "subitems",
+                "items": [
+                  {
+                    "relatedNode": {
+                      "type": "node",
+                      "lhId": "1-1-ARTICLE",
+                      "path": "1,HTML,1,BODY,0,APP-ROOT,0,APP-SITE-SHELL,2,MAIN,1,APP-HOME,0,DIV,4,SECTION,1,DIV,0,ARTICLE",
+                      "selector": "div.home-page > section.evidence-teaser > div.evidence-teaser-grid > article.section-panel",
+                      "boundingRect": {
+                        "top": 5921,
+                        "bottom": 6214,
+                        "left": 24,
+                        "right": 388,
+                        "width": 364,
+                        "height": 292
+                      },
+                      "snippet": "<article _ngcontent-ng-c189896396=\"\" class=\"section-panel evidence-teaser-card\">",
+                      "nodeLabel": "Interaktywne demo\n\nAsystent wiedzy z obsługą pytań poza zakresem\n\nSprawdź odpow…"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "node": {
+                "type": "node",
+                "lhId": "1-2-H3",
+                "path": "1,HTML,1,BODY,0,APP-ROOT,0,APP-SITE-SHELL,2,MAIN,1,APP-HOME,0,DIV,4,SECTION,1,DIV,1,ARTICLE,1,H3",
+                "selector": "section.evidence-teaser > div.evidence-teaser-grid > article.section-panel > h3",
+                "boundingRect": {
+                  "top": 6302,
+                  "bottom": 6348,
+                  "left": 45,
+                  "right": 298,
+                  "width": 253,
+                  "height": 46
+                },
+                "snippet": "<h3 _ngcontent-ng-c189896396=\"\">",
+                "nodeLabel": "Raport decyzyjny po Demo w 7 dni",
+                "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.27 (foreground color: #11131a, background color: #242936, font size: 15.0pt (20px), font weight: bold). Expected contrast ratio of 3:1"
+              },
+              "subItems": {
+                "type": "subitems",
+                "items": [
+                  {
+                    "relatedNode": {
+                      "type": "node",
+                      "lhId": "1-3-ARTICLE",
+                      "path": "1,HTML,1,BODY,0,APP-ROOT,0,APP-SITE-SHELL,2,MAIN,1,APP-HOME,0,DIV,4,SECTION,1,DIV,1,ARTICLE",
+                      "selector": "div.home-page > section.evidence-teaser > div.evidence-teaser-grid > article.section-panel",
+                      "boundingRect": {
+                        "top": 6230,
+                        "bottom": 6522,
+                        "left": 24,
+                        "right": 388,
+                        "width": 364,
+                        "height": 292
+                      },
+                      "snippet": "<article _ngcontent-ng-c189896396=\"\" class=\"section-panel evidence-teaser-card\">",
+                      "nodeLabel": "Przykładowy raport\n\nRaport decyzyjny po Demo w 7 dni\n\nSprawdź zakres, scenarius…"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "debugData": {
+            "type": "debugdata",
+            "impact": "serious",
+            "tags": [
+              "cat.color",
+              "wcag2aa",
+              "wcag143",
+              "TTv5",
+              "TT13.c",
+              "EN-301-549",
+              "EN-9.1.4.3",
+              "ACT",
+              "RGAAv4",
+              "RGAA-3.2.1"
+            ]
+          }
+        }
+      },
+      {
+        "id": "cache-insight",
+        "title": "Use efficient cache lifetimes",
+        "description": "A long cache lifetime can speed up repeat visits to your page. [Learn more about caching](https://developer.chrome.com/docs/performance/insights/cache).",
+        "display": "Est savings of 3 KiB",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "url",
+              "valueType": "url",
+              "label": "Request"
+            },
+            {
+              "key": "cacheLifetimeMs",
+              "valueType": "ms",
+              "label": "Cache TTL",
+              "displayUnit": "duration"
+            },
+            {
+              "key": "totalBytes",
+              "valueType": "bytes",
+              "label": "Transfer Size",
+              "displayUnit": "kb",
+              "granularity": 1
+            }
+          ],
+          "items": [
+            {
+              "url": "https://protolume.pl/assets/protolume-logo-horizontal-dark.svg",
+              "cacheLifetimeMs": 86400000,
+              "totalBytes": 4378,
+              "wastedBytes": 1751.2
+            },
+            {
+              "url": "https://protolume.pl/assets/protolume-logo-horizontal-light.svg",
+              "cacheLifetimeMs": 86400000,
+              "totalBytes": 4291,
+              "wastedBytes": 1716.4
+            }
+          ],
+          "sortedBy": [
+            "wastedBytes"
+          ],
+          "skipSumming": [
+            "cacheLifetimeMs"
+          ],
+          "debugData": {
+            "type": "debugdata",
+            "wastedBytes": 3467.6000000000004
+          }
+        }
+      },
+      {
+        "id": "forced-reflow-insight",
+        "title": "Forced reflow",
+        "description": "A forced reflow occurs when JavaScript queries geometric properties (such as offsetWidth) after styles have been invalidated by a change to the DOM state. This can result in poor performance. Learn more about [forced reflows](https://developer.chrome.com/docs/performance/insights/forced-reflow) and possible mitigations.",
+        "details": {
+          "type": "list",
+          "items": [
+            {
+              "type": "table",
+              "headings": [
+                {
+                  "key": "source",
+                  "valueType": "source-location",
+                  "label": "Source"
+                },
+                {
+                  "key": "reflowTime",
+                  "valueType": "ms",
+                  "granularity": 1,
+                  "label": "Total reflow time"
+                }
+              ],
+              "items": [
+                {
+                  "source": {
+                    "type": "text",
+                    "value": "[unattributed]"
+                  },
+                  "reflowTime": 108.562
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "network-dependency-tree-insight",
+        "title": "Network dependency tree",
+        "description": "[Avoid chaining critical requests](https://developer.chrome.com/docs/performance/insights/network-dependency-tree) by reducing the length of chains, reducing the download size of resources, or deferring the download of unnecessary resources to improve page load.",
+        "details": {
+          "type": "list",
+          "items": [
+            {
+              "type": "list-section",
+              "value": {
+                "type": "network-tree",
+                "chains": {
+                  "589900DCDF80C1760E3FB95B104A3CCB": {
+                    "url": "https://protolume.pl/",
+                    "navStartToEndTime": 163,
+                    "transferSize": 18743,
+                    "isLongest": true,
+                    "children": {
+                      "21828.12": {
+                        "url": "https://protolume.pl/main-HWKTDZMX.js",
+                        "navStartToEndTime": 352,
+                        "transferSize": 9983,
+                        "isLongest": true,
+                        "children": {
+                          "21828.15": {
+                            "url": "https://protolume.pl/chunk-2TOFAXFE.js",
+                            "navStartToEndTime": 566,
+                            "transferSize": 16935,
+                            "isLongest": true,
+                            "children": {
+                              "21828.17": {
+                                "url": "https://protolume.pl/chunk-2522GT72.js",
+                                "navStartToEndTime": 594,
+                                "transferSize": 2249,
+                                "isLongest": true,
+                                "children": {}
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "21828.11": {
+                        "url": "https://protolume.pl/polyfills-5CFQRCPP.js",
+                        "navStartToEndTime": 351,
+                        "transferSize": 14051,
+                        "children": {}
+                      },
+                      "21828.8": {
+                        "url": "https://protolume.pl/chunk-6Q5473ZS.js",
+                        "navStartToEndTime": 351,
+                        "transferSize": 50782,
+                        "children": {}
+                      },
+                      "21828.7": {
+                        "url": "https://protolume.pl/chunk-B4XFO4OV.js",
+                        "navStartToEndTime": 350,
+                        "transferSize": 36171,
+                        "children": {}
+                      },
+                      "21828.6": {
+                        "url": "https://protolume.pl/chunk-GMHKWTWH.js",
+                        "navStartToEndTime": 350,
+                        "transferSize": 25853,
+                        "children": {}
+                      },
+                      "21828.5": {
+                        "url": "https://protolume.pl/chunk-7PJAU62Y.js",
+                        "navStartToEndTime": 195,
+                        "transferSize": 1940,
+                        "children": {}
+                      },
+                      "21828.4": {
+                        "url": "https://protolume.pl/chunk-R67RZ3RQ.js",
+                        "navStartToEndTime": 194,
+                        "transferSize": 2038,
+                        "children": {}
+                      },
+                      "21828.2": {
+                        "url": "https://protolume.pl/styles-G4ZBBLIG.css",
+                        "navStartToEndTime": 190,
+                        "transferSize": 5778,
+                        "children": {}
+                      }
+                    }
+                  }
+                },
+                "longestChain": {
+                  "duration": 594
+                }
+              }
+            },
+            {
+              "type": "list-section",
+              "title": "Preconnected origins",
+              "description": "[preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/) hints help the browser establish a connection earlier in the page load, saving time when the first request for that origin is made. The following are the origins that the page preconnected to.",
+              "value": {
+                "type": "text",
+                "value": "no origins were preconnected"
+              }
+            },
+            {
+              "type": "list-section",
+              "title": "Preconnect candidates",
+              "description": "Add [preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/) hints to your most important origins, but try to use no more than 4.",
+              "value": {
+                "type": "text",
+                "value": "No additional origins are good candidates for preconnecting"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "render-blocking-insight",
+        "title": "Render-blocking requests",
+        "description": "Requests are blocking the page's initial render, which may delay LCP. [Deferring or inlining](https://developer.chrome.com/docs/performance/insights/render-blocking) can move these network requests out of the critical path.",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "url",
+              "valueType": "url",
+              "label": "URL"
+            },
+            {
+              "key": "totalBytes",
+              "valueType": "bytes",
+              "label": "Transfer Size"
+            },
+            {
+              "key": "wastedMs",
+              "valueType": "timespanMs",
+              "label": "Duration"
+            }
+          ],
+          "items": [
+            {
+              "url": "https://protolume.pl/styles-G4ZBBLIG.css",
+              "totalBytes": 5778
+            }
+          ]
+        }
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "name": "contact",
+    "route": "/kontakt",
+    "date": "2026-09-07T07:33:35.857Z",
+    "version": "13.4.1",
+    "settings": {
+      "output": [
+        "json",
+        "html"
+      ],
+      "maxWaitForFcp": 30000,
+      "maxWaitForLoad": 45000,
+      "pauseAfterFcpMs": 1000,
+      "pauseAfterLoadMs": 1000,
+      "networkQuietThresholdMs": 1000,
+      "cpuQuietThresholdMs": 1000,
+      "formFactor": "mobile",
+      "throttling": {
+        "rttMs": 150,
+        "throughputKbps": 1638.4,
+        "requestLatencyMs": 562.5,
+        "downloadThroughputKbps": 1474.5600000000002,
+        "uploadThroughputKbps": 675,
+        "cpuSlowdownMultiplier": 4
+      },
+      "throttlingMethod": "simulate",
+      "screenEmulation": {
+        "mobile": true,
+        "width": 412,
+        "height": 823,
+        "deviceScaleFactor": 1.75,
+        "disabled": false
+      },
+      "emulatedUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36",
+      "auditMode": false,
+      "gatherMode": false,
+      "clearStorageTypes": [
+        "file_systems",
+        "shader_cache",
+        "service_workers",
+        "cache_storage"
+      ],
+      "disableStorageReset": false,
+      "debugNavigation": false,
+      "channel": "node",
+      "usePassiveGathering": false,
+      "disableFullPageScreenshot": false,
+      "skipAboutBlank": false,
+      "blankPage": "about:blank",
+      "ignoreStatusCode": false,
+      "locale": "en-US",
+      "blockedUrlPatterns": null,
+      "additionalTraceCategories": null,
+      "extraHeaders": null,
+      "precomputedLanternData": null,
+      "onlyAudits": null,
+      "onlyCategories": [
+        "performance",
+        "accessibility",
+        "best-practices",
+        "seo"
+      ],
+      "skipAudits": null
+    },
+    "score": {
+      "performance": 0.74,
+      "accessibility": 1,
+      "best-practices": 1,
+      "seo": 1
+    },
+    "metrics": {
+      "first-contentful-paint": {
+        "value": 1666.396,
+        "display": "1.7 s"
+      },
+      "largest-contentful-paint": {
+        "value": 1948.396,
+        "display": "1.9 s"
+      },
+      "cumulative-layout-shift": {
+        "value": 0.9161603888213852,
+        "display": "0.916"
+      },
+      "total-blocking-time": {
+        "value": 59,
+        "display": "60 ms"
+      },
+      "speed-index": {
+        "value": 1666.396,
+        "display": "1.7 s"
+      },
+      "total-byte-weight": {
+        "value": 187883,
+        "display": "Total size was 183 KiB"
+      },
+      "bootup-time": {
+        "value": 406.07199999999995,
+        "display": "0.4 s"
+      }
+    },
+    "findings": [
+      {
+        "id": "first-contentful-paint",
+        "title": "First Contentful Paint",
+        "description": "First Contentful Paint marks the time at which the first text or image is painted. [Learn more about the First Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/first-contentful-paint/).",
+        "display": "1.7 s"
+      },
+      {
+        "id": "largest-contentful-paint",
+        "title": "Largest Contentful Paint",
+        "description": "Largest Contentful Paint marks the time at which the largest text or image is painted. [Learn more about the Largest Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+        "display": "1.9 s"
+      },
+      {
+        "id": "max-potential-fid",
+        "title": "Max Potential First Input Delay",
+        "description": "The maximum potential First Input Delay that your users could experience is the duration of the longest task. [Learn more about the Maximum Potential First Input Delay metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-max-potential-fid/).",
+        "display": "110 ms"
+      },
+      {
+        "id": "cumulative-layout-shift",
+        "title": "Cumulative Layout Shift",
+        "description": "Cumulative Layout Shift measures the movement of visible elements within the viewport. [Learn more about the Cumulative Layout Shift metric](https://web.dev/articles/cls).",
+        "display": "0.916",
+        "details": {
+          "type": "debugdata",
+          "items": [
+            {
+              "cumulativeLayoutShiftMainFrame": 0.9161603888213852,
+              "newEngineResultDiffered": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "interactive",
+        "title": "Time to Interactive",
+        "description": "Time to Interactive is the amount of time it takes for the page to become fully interactive. [Learn more about the Time to Interactive metric](https://developer.chrome.com/docs/lighthouse/performance/interactive/).",
+        "display": "2.0 s"
+      },
+      {
+        "id": "layout-shifts",
+        "title": "Avoid large layout shifts",
+        "description": "These are the largest layout shifts observed on the page. Each table item represents a single layout shift, and shows the element that shifted the most. Below each item are possible root causes that led to the layout shift. Some of these layout shifts may not be included in the CLS metric value due to [windowing](https://web.dev/articles/cls#what_is_cls). [Learn how to improve CLS](https://web.dev/articles/optimize-cls)",
+        "display": "1 layout shift found",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "node",
+              "valueType": "node",
+              "subItemsHeading": {
+                "key": "extra"
+              },
+              "label": "Element"
+            },
+            {
+              "key": "score",
+              "valueType": "numeric",
+              "subItemsHeading": {
+                "key": "cause",
+                "valueType": "text"
+              },
+              "granularity": 0.001,
+              "label": "Layout shift score"
+            }
+          ],
+          "items": [
+            {
+              "node": {
+                "type": "node",
+                "lhId": "page-1-FOOTER",
+                "path": "1,HTML,1,BODY,0,APP-ROOT,0,APP-SITE-SHELL,3,FOOTER",
+                "selector": "body > app-root > app-site-shell > footer.site-footer",
+                "boundingRect": {
+                  "top": 1810,
+                  "bottom": 2664,
+                  "left": 0,
+                  "right": 412,
+                  "width": 412,
+                  "height": 854
+                },
+                "snippet": "<footer _ngcontent-ng-c285404801=\"\" class=\"site-footer\">",
+                "nodeLabel": "Protolume — studio wdrożeń AI i automatyzacji prowadzone przez Piotra Barabasza…"
+              },
+              "score": 0.9161603888213852
+            }
+          ]
+        }
+      },
+      {
+        "id": "cache-insight",
+        "title": "Use efficient cache lifetimes",
+        "description": "A long cache lifetime can speed up repeat visits to your page. [Learn more about caching](https://developer.chrome.com/docs/performance/insights/cache).",
+        "display": "Est savings of 3 KiB",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "url",
+              "valueType": "url",
+              "label": "Request"
+            },
+            {
+              "key": "cacheLifetimeMs",
+              "valueType": "ms",
+              "label": "Cache TTL",
+              "displayUnit": "duration"
+            },
+            {
+              "key": "totalBytes",
+              "valueType": "bytes",
+              "label": "Transfer Size",
+              "displayUnit": "kb",
+              "granularity": 1
+            }
+          ],
+          "items": [
+            {
+              "url": "https://protolume.pl/assets/protolume-logo-horizontal-light.svg",
+              "cacheLifetimeMs": 86400000,
+              "totalBytes": 4403,
+              "wastedBytes": 1761.2
+            },
+            {
+              "url": "https://protolume.pl/assets/protolume-logo-horizontal-dark.svg",
+              "cacheLifetimeMs": 86400000,
+              "totalBytes": 4035,
+              "wastedBytes": 1614
+            }
+          ],
+          "sortedBy": [
+            "wastedBytes"
+          ],
+          "skipSumming": [
+            "cacheLifetimeMs"
+          ],
+          "debugData": {
+            "type": "debugdata",
+            "wastedBytes": 3375.2
+          }
+        }
+      },
+      {
+        "id": "cls-culprits-insight",
+        "title": "Layout shift culprits",
+        "description": "Layout shifts occur when elements move absent any user interaction. [Investigate the causes of layout shifts](https://developer.chrome.com/docs/performance/insights/cls-culprit), such as elements being added, removed, or their fonts changing as the page loads.",
+        "details": {
+          "type": "list",
+          "items": [
+            {
+              "type": "table",
+              "headings": [
+                {
+                  "key": "node",
+                  "valueType": "node",
+                  "subItemsHeading": {
+                    "key": "extra"
+                  },
+                  "label": "Element"
+                },
+                {
+                  "key": "score",
+                  "valueType": "numeric",
+                  "subItemsHeading": {
+                    "key": "cause",
+                    "valueType": "text"
+                  },
+                  "granularity": 0.001,
+                  "label": "Layout shift score"
+                }
+              ],
+              "items": [
+                {
+                  "node": {
+                    "type": "text",
+                    "value": "Total"
+                  },
+                  "score": 0.9161603888213852
+                },
+                {
+                  "node": {
+                    "type": "node",
+                    "lhId": "page-1-FOOTER",
+                    "path": "1,HTML,1,BODY,0,APP-ROOT,0,APP-SITE-SHELL,3,FOOTER",
+                    "selector": "body > app-root > app-site-shell > footer.site-footer",
+                    "boundingRect": {
+                      "top": 1810,
+                      "bottom": 2664,
+                      "left": 0,
+                      "right": 412,
+                      "width": 412,
+                      "height": 854
+                    },
+                    "snippet": "<footer _ngcontent-ng-c285404801=\"\" class=\"site-footer\">",
+                    "nodeLabel": "Protolume — studio wdrożeń AI i automatyzacji prowadzone przez Piotra Barabasza…"
+                  },
+                  "score": 0.9161603888213852
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "network-dependency-tree-insight",
+        "title": "Network dependency tree",
+        "description": "[Avoid chaining critical requests](https://developer.chrome.com/docs/performance/insights/network-dependency-tree) by reducing the length of chains, reducing the download size of resources, or deferring the download of unnecessary resources to improve page load.",
+        "details": {
+          "type": "list",
+          "items": [
+            {
+              "type": "list-section",
+              "value": {
+                "type": "network-tree",
+                "chains": {
+                  "AA38B56B89BCD53BBEAA1714C6FA0CB9": {
+                    "url": "https://protolume.pl/kontakt",
+                    "navStartToEndTime": 234,
+                    "transferSize": 9113,
+                    "isLongest": true,
+                    "children": {
+                      "13100.11": {
+                        "url": "https://protolume.pl/main-HWKTDZMX.js",
+                        "navStartToEndTime": 364,
+                        "transferSize": 10001,
+                        "isLongest": true,
+                        "children": {
+                          "13100.24": {
+                            "url": "https://protolume.pl/chunk-Z76MOHMH.js",
+                            "navStartToEndTime": 481,
+                            "transferSize": 18461,
+                            "isLongest": true,
+                            "children": {
+                              "13100.26": {
+                                "url": "https://protolume.pl/chunk-2522GT72.js",
+                                "navStartToEndTime": 508,
+                                "transferSize": 2242,
+                                "isLongest": true,
+                                "children": {}
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "13100.10": {
+                        "url": "https://protolume.pl/polyfills-5CFQRCPP.js",
+                        "navStartToEndTime": 363,
+                        "transferSize": 14261,
+                        "children": {}
+                      },
+                      "13100.2": {
+                        "url": "https://protolume.pl/styles-G4ZBBLIG.css",
+                        "navStartToEndTime": 268,
+                        "transferSize": 5779,
+                        "children": {}
+                      }
+                    }
+                  }
+                },
+                "longestChain": {
+                  "duration": 508
+                }
+              }
+            },
+            {
+              "type": "list-section",
+              "title": "Preconnected origins",
+              "description": "[preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/) hints help the browser establish a connection earlier in the page load, saving time when the first request for that origin is made. The following are the origins that the page preconnected to.",
+              "value": {
+                "type": "text",
+                "value": "no origins were preconnected"
+              }
+            },
+            {
+              "type": "list-section",
+              "title": "Preconnect candidates",
+              "description": "Add [preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/) hints to your most important origins, but try to use no more than 4.",
+              "value": {
+                "type": "text",
+                "value": "No additional origins are good candidates for preconnecting"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "render-blocking-insight",
+        "title": "Render-blocking requests",
+        "description": "Requests are blocking the page's initial render, which may delay LCP. [Deferring or inlining](https://developer.chrome.com/docs/performance/insights/render-blocking) can move these network requests out of the critical path.",
+        "display": "Est savings of 150 ms",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "url",
+              "valueType": "url",
+              "label": "URL"
+            },
+            {
+              "key": "totalBytes",
+              "valueType": "bytes",
+              "label": "Transfer Size"
+            },
+            {
+              "key": "wastedMs",
+              "valueType": "timespanMs",
+              "label": "Duration"
+            }
+          ],
+          "items": [
+            {
+              "url": "https://protolume.pl/styles-G4ZBBLIG.css",
+              "totalBytes": 5779,
+              "wastedMs": 150
+            }
+          ]
+        }
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "name": "rag",
+    "route": "/rozwiazania/chatbot-ai-dla-firm",
+    "date": "2026-09-07T07:33:45.314Z",
+    "version": "13.4.1",
+    "settings": {
+      "output": [
+        "json",
+        "html"
+      ],
+      "maxWaitForFcp": 30000,
+      "maxWaitForLoad": 45000,
+      "pauseAfterFcpMs": 1000,
+      "pauseAfterLoadMs": 1000,
+      "networkQuietThresholdMs": 1000,
+      "cpuQuietThresholdMs": 1000,
+      "formFactor": "mobile",
+      "throttling": {
+        "rttMs": 150,
+        "throughputKbps": 1638.4,
+        "requestLatencyMs": 562.5,
+        "downloadThroughputKbps": 1474.5600000000002,
+        "uploadThroughputKbps": 675,
+        "cpuSlowdownMultiplier": 4
+      },
+      "throttlingMethod": "simulate",
+      "screenEmulation": {
+        "mobile": true,
+        "width": 412,
+        "height": 823,
+        "deviceScaleFactor": 1.75,
+        "disabled": false
+      },
+      "emulatedUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36",
+      "auditMode": false,
+      "gatherMode": false,
+      "clearStorageTypes": [
+        "file_systems",
+        "shader_cache",
+        "service_workers",
+        "cache_storage"
+      ],
+      "disableStorageReset": false,
+      "debugNavigation": false,
+      "channel": "node",
+      "usePassiveGathering": false,
+      "disableFullPageScreenshot": false,
+      "skipAboutBlank": false,
+      "blankPage": "about:blank",
+      "ignoreStatusCode": false,
+      "locale": "en-US",
+      "blockedUrlPatterns": null,
+      "additionalTraceCategories": null,
+      "extraHeaders": null,
+      "precomputedLanternData": null,
+      "onlyAudits": null,
+      "onlyCategories": [
+        "performance",
+        "accessibility",
+        "best-practices",
+        "seo"
+      ],
+      "skipAudits": null
+    },
+    "score": {
+      "performance": 0.75,
+      "accessibility": 1,
+      "best-practices": 1,
+      "seo": 1
+    },
+    "metrics": {
+      "first-contentful-paint": {
+        "value": 1662.723,
+        "display": "1.7 s"
+      },
+      "largest-contentful-paint": {
+        "value": 1766.223,
+        "display": "1.8 s"
+      },
+      "cumulative-layout-shift": {
+        "value": 0.9161603888213852,
+        "display": "0.916"
+      },
+      "total-blocking-time": {
+        "value": 39,
+        "display": "40 ms"
+      },
+      "speed-index": {
+        "value": 1662.723,
+        "display": "1.7 s"
+      },
+      "total-byte-weight": {
+        "value": 173713,
+        "display": "Total size was 170 KiB"
+      },
+      "bootup-time": {
+        "value": 320.6919999999975,
+        "display": "0.3 s"
+      }
+    },
+    "findings": [
+      {
+        "id": "first-contentful-paint",
+        "title": "First Contentful Paint",
+        "description": "First Contentful Paint marks the time at which the first text or image is painted. [Learn more about the First Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/first-contentful-paint/).",
+        "display": "1.7 s"
+      },
+      {
+        "id": "largest-contentful-paint",
+        "title": "Largest Contentful Paint",
+        "description": "Largest Contentful Paint marks the time at which the largest text or image is painted. [Learn more about the Largest Contentful Paint metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/)",
+        "display": "1.8 s"
+      },
+      {
+        "id": "max-potential-fid",
+        "title": "Max Potential First Input Delay",
+        "description": "The maximum potential First Input Delay that your users could experience is the duration of the longest task. [Learn more about the Maximum Potential First Input Delay metric](https://developer.chrome.com/docs/lighthouse/performance/lighthouse-max-potential-fid/).",
+        "display": "90 ms"
+      },
+      {
+        "id": "cumulative-layout-shift",
+        "title": "Cumulative Layout Shift",
+        "description": "Cumulative Layout Shift measures the movement of visible elements within the viewport. [Learn more about the Cumulative Layout Shift metric](https://web.dev/articles/cls).",
+        "display": "0.916",
+        "details": {
+          "type": "debugdata",
+          "items": [
+            {
+              "cumulativeLayoutShiftMainFrame": 0.9161603888213852,
+              "newEngineResultDiffered": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "layout-shifts",
+        "title": "Avoid large layout shifts",
+        "description": "These are the largest layout shifts observed on the page. Each table item represents a single layout shift, and shows the element that shifted the most. Below each item are possible root causes that led to the layout shift. Some of these layout shifts may not be included in the CLS metric value due to [windowing](https://web.dev/articles/cls#what_is_cls). [Learn how to improve CLS](https://web.dev/articles/optimize-cls)",
+        "display": "1 layout shift found",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "node",
+              "valueType": "node",
+              "subItemsHeading": {
+                "key": "extra"
+              },
+              "label": "Element"
+            },
+            {
+              "key": "score",
+              "valueType": "numeric",
+              "subItemsHeading": {
+                "key": "cause",
+                "valueType": "text"
+              },
+              "granularity": 0.001,
+              "label": "Layout shift score"
+            }
+          ],
+          "items": [
+            {
+              "node": {
+                "type": "node",
+                "lhId": "page-1-FOOTER",
+                "path": "1,HTML,1,BODY,0,APP-ROOT,0,APP-SITE-SHELL,3,FOOTER",
+                "selector": "body > app-root > app-site-shell > footer.site-footer",
+                "boundingRect": {
+                  "top": 5129,
+                  "bottom": 5983,
+                  "left": 0,
+                  "right": 412,
+                  "width": 412,
+                  "height": 854
+                },
+                "snippet": "<footer _ngcontent-ng-c285404801=\"\" class=\"site-footer\">",
+                "nodeLabel": "Protolume — studio wdrożeń AI i automatyzacji prowadzone przez Piotra Barabasza…"
+              },
+              "score": 0.9161603888213852
+            }
+          ]
+        }
+      },
+      {
+        "id": "cache-insight",
+        "title": "Use efficient cache lifetimes",
+        "description": "A long cache lifetime can speed up repeat visits to your page. [Learn more about caching](https://developer.chrome.com/docs/performance/insights/cache).",
+        "display": "Est savings of 3 KiB",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "url",
+              "valueType": "url",
+              "label": "Request"
+            },
+            {
+              "key": "cacheLifetimeMs",
+              "valueType": "ms",
+              "label": "Cache TTL",
+              "displayUnit": "duration"
+            },
+            {
+              "key": "totalBytes",
+              "valueType": "bytes",
+              "label": "Transfer Size",
+              "displayUnit": "kb",
+              "granularity": 1
+            }
+          ],
+          "items": [
+            {
+              "url": "https://protolume.pl/assets/protolume-logo-horizontal-dark.svg",
+              "cacheLifetimeMs": 86400000,
+              "totalBytes": 4399,
+              "wastedBytes": 1759.6000000000001
+            },
+            {
+              "url": "https://protolume.pl/assets/protolume-logo-horizontal-light.svg",
+              "cacheLifetimeMs": 86400000,
+              "totalBytes": 4348,
+              "wastedBytes": 1739.2
+            }
+          ],
+          "sortedBy": [
+            "wastedBytes"
+          ],
+          "skipSumming": [
+            "cacheLifetimeMs"
+          ],
+          "debugData": {
+            "type": "debugdata",
+            "wastedBytes": 3498.8
+          }
+        }
+      },
+      {
+        "id": "cls-culprits-insight",
+        "title": "Layout shift culprits",
+        "description": "Layout shifts occur when elements move absent any user interaction. [Investigate the causes of layout shifts](https://developer.chrome.com/docs/performance/insights/cls-culprit), such as elements being added, removed, or their fonts changing as the page loads.",
+        "details": {
+          "type": "list",
+          "items": [
+            {
+              "type": "table",
+              "headings": [
+                {
+                  "key": "node",
+                  "valueType": "node",
+                  "subItemsHeading": {
+                    "key": "extra"
+                  },
+                  "label": "Element"
+                },
+                {
+                  "key": "score",
+                  "valueType": "numeric",
+                  "subItemsHeading": {
+                    "key": "cause",
+                    "valueType": "text"
+                  },
+                  "granularity": 0.001,
+                  "label": "Layout shift score"
+                }
+              ],
+              "items": [
+                {
+                  "node": {
+                    "type": "text",
+                    "value": "Total"
+                  },
+                  "score": 0.9161603888213852
+                },
+                {
+                  "node": {
+                    "type": "node",
+                    "lhId": "page-1-FOOTER",
+                    "path": "1,HTML,1,BODY,0,APP-ROOT,0,APP-SITE-SHELL,3,FOOTER",
+                    "selector": "body > app-root > app-site-shell > footer.site-footer",
+                    "boundingRect": {
+                      "top": 5129,
+                      "bottom": 5983,
+                      "left": 0,
+                      "right": 412,
+                      "width": 412,
+                      "height": 854
+                    },
+                    "snippet": "<footer _ngcontent-ng-c285404801=\"\" class=\"site-footer\">",
+                    "nodeLabel": "Protolume — studio wdrożeń AI i automatyzacji prowadzone przez Piotra Barabasza…"
+                  },
+                  "score": 0.9161603888213852
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "network-dependency-tree-insight",
+        "title": "Network dependency tree",
+        "description": "[Avoid chaining critical requests](https://developer.chrome.com/docs/performance/insights/network-dependency-tree) by reducing the length of chains, reducing the download size of resources, or deferring the download of unnecessary resources to improve page load.",
+        "details": {
+          "type": "list",
+          "items": [
+            {
+              "type": "list-section",
+              "value": {
+                "type": "network-tree",
+                "chains": {
+                  "97109E2D4C000DAEBBC395F7FF9F1DED": {
+                    "url": "https://protolume.pl/rozwiazania/chatbot-ai-dla-firm",
+                    "navStartToEndTime": 232,
+                    "transferSize": 8728,
+                    "isLongest": true,
+                    "children": {
+                      "5744.11": {
+                        "url": "https://protolume.pl/main-HWKTDZMX.js",
+                        "navStartToEndTime": 352,
+                        "transferSize": 10002,
+                        "isLongest": true,
+                        "children": {
+                          "5744.24": {
+                            "url": "https://protolume.pl/chunk-INIKIGLC.js",
+                            "navStartToEndTime": 459,
+                            "transferSize": 4587,
+                            "isLongest": true,
+                            "children": {
+                              "5744.26": {
+                                "url": "https://protolume.pl/chunk-2522GT72.js",
+                                "navStartToEndTime": 485,
+                                "transferSize": 2264,
+                                "isLongest": true,
+                                "children": {}
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "5744.10": {
+                        "url": "https://protolume.pl/polyfills-5CFQRCPP.js",
+                        "navStartToEndTime": 352,
+                        "transferSize": 14271,
+                        "children": {}
+                      },
+                      "5744.2": {
+                        "url": "https://protolume.pl/styles-G4ZBBLIG.css",
+                        "navStartToEndTime": 259,
+                        "transferSize": 5777,
+                        "children": {}
+                      }
+                    }
+                  }
+                },
+                "longestChain": {
+                  "duration": 485
+                }
+              }
+            },
+            {
+              "type": "list-section",
+              "title": "Preconnected origins",
+              "description": "[preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/) hints help the browser establish a connection earlier in the page load, saving time when the first request for that origin is made. The following are the origins that the page preconnected to.",
+              "value": {
+                "type": "text",
+                "value": "no origins were preconnected"
+              }
+            },
+            {
+              "type": "list-section",
+              "title": "Preconnect candidates",
+              "description": "Add [preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/) hints to your most important origins, but try to use no more than 4.",
+              "value": {
+                "type": "text",
+                "value": "No additional origins are good candidates for preconnecting"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "render-blocking-insight",
+        "title": "Render-blocking requests",
+        "description": "Requests are blocking the page's initial render, which may delay LCP. [Deferring or inlining](https://developer.chrome.com/docs/performance/insights/render-blocking) can move these network requests out of the critical path.",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "url",
+              "valueType": "url",
+              "label": "URL"
+            },
+            {
+              "key": "totalBytes",
+              "valueType": "bytes",
+              "label": "Transfer Size"
+            },
+            {
+              "key": "wastedMs",
+              "valueType": "timespanMs",
+              "label": "Duration"
+            }
+          ],
+          "items": [
+            {
+              "url": "https://protolume.pl/styles-G4ZBBLIG.css",
+              "totalBytes": 5777
+            }
+          ]
+        }
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "name": "home-desktop",
+    "route": "/",
+    "date": "2026-09-07T07:33:54.974Z",
+    "version": "13.4.1",
+    "settings": {
+      "output": [
+        "json",
+        "html"
+      ],
+      "maxWaitForFcp": 30000,
+      "maxWaitForLoad": 45000,
+      "pauseAfterFcpMs": 1000,
+      "pauseAfterLoadMs": 1000,
+      "networkQuietThresholdMs": 1000,
+      "cpuQuietThresholdMs": 1000,
+      "formFactor": "desktop",
+      "throttling": {
+        "rttMs": 40,
+        "throughputKbps": 10240,
+        "requestLatencyMs": 562.5,
+        "downloadThroughputKbps": 1474.5600000000002,
+        "uploadThroughputKbps": 675,
+        "cpuSlowdownMultiplier": 1
+      },
+      "throttlingMethod": "simulate",
+      "screenEmulation": {
+        "mobile": false,
+        "width": 1440,
+        "height": 1000,
+        "deviceScaleFactor": 1,
+        "disabled": false
+      },
+      "emulatedUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36",
+      "auditMode": false,
+      "gatherMode": false,
+      "clearStorageTypes": [
+        "file_systems",
+        "shader_cache",
+        "service_workers",
+        "cache_storage"
+      ],
+      "disableStorageReset": false,
+      "debugNavigation": false,
+      "channel": "node",
+      "usePassiveGathering": false,
+      "disableFullPageScreenshot": false,
+      "skipAboutBlank": false,
+      "blankPage": "about:blank",
+      "ignoreStatusCode": false,
+      "locale": "en-US",
+      "blockedUrlPatterns": null,
+      "additionalTraceCategories": null,
+      "extraHeaders": null,
+      "precomputedLanternData": null,
+      "onlyAudits": null,
+      "onlyCategories": [
+        "performance",
+        "accessibility",
+        "best-practices",
+        "seo"
+      ],
+      "skipAudits": null
+    },
+    "score": {
+      "performance": 0.9,
+      "accessibility": 0.96,
+      "best-practices": 1,
+      "seo": 1
+    },
+    "metrics": {
+      "first-contentful-paint": {
+        "value": 450.086,
+        "display": "0.5 s"
+      },
+      "largest-contentful-paint": {
+        "value": 496.586,
+        "display": "0.5 s"
+      },
+      "cumulative-layout-shift": {
+        "value": 0,
+        "display": "0"
+      },
+      "total-blocking-time": {
+        "value": 4.5,
+        "display": "0 ms"
+      },
+      "speed-index": {
+        "value": 5100.648457823101,
+        "display": "5.1 s"
+      },
+      "total-byte-weight": {
+        "value": 196016,
+        "display": "Total size was 191 KiB"
+      },
+      "bootup-time": {
+        "value": 85.97899999999933,
+        "display": "0.1 s"
+      }
+    },
+    "findings": [
+      {
+        "id": "speed-index",
+        "title": "Speed Index",
+        "description": "Speed Index shows how quickly the contents of a page are visibly populated. [Learn more about the Speed Index metric](https://developer.chrome.com/docs/lighthouse/performance/speed-index/).",
+        "display": "5.1 s"
+      },
+      {
+        "id": "color-contrast",
+        "title": "Background and foreground colors do not have a sufficient contrast ratio.",
+        "description": "Low-contrast text is difficult or impossible for many users to read. [Learn how to provide sufficient color contrast](https://dequeuniversity.com/rules/axe/4.12/color-contrast).",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "node",
+              "valueType": "node",
+              "subItemsHeading": {
+                "key": "relatedNode",
+                "valueType": "node"
+              },
+              "label": "Failing Elements"
+            }
+          ],
+          "items": [
+            {
+              "node": {
+                "type": "node",
+                "lhId": "1-0-H3",
+                "path": "1,HTML,1,BODY,0,APP-ROOT,0,APP-SITE-SHELL,2,MAIN,1,APP-HOME,0,DIV,4,SECTION,1,DIV,0,ARTICLE,1,H3",
+                "selector": "section.evidence-teaser > div.evidence-teaser-grid > article.section-panel > h3",
+                "boundingRect": {
+                  "top": 6578,
+                  "bottom": 6638,
+                  "left": 142,
+                  "right": 476,
+                  "width": 334,
+                  "height": 61
+                },
+                "snippet": "<h3 _ngcontent-ng-c189896396=\"\">",
+                "nodeLabel": "Asystent wiedzy z obsługą pytań poza zakresem",
+                "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.27 (foreground color: #11131a, background color: #242936, font size: 19.8pt (26.4px), font weight: bold). Expected contrast ratio of 3:1"
+              },
+              "subItems": {
+                "type": "subitems",
+                "items": [
+                  {
+                    "relatedNode": {
+                      "type": "node",
+                      "lhId": "1-1-ARTICLE",
+                      "path": "1,HTML,1,BODY,0,APP-ROOT,0,APP-SITE-SHELL,2,MAIN,1,APP-HOME,0,DIV,4,SECTION,1,DIV,0,ARTICLE",
+                      "selector": "div.home-page > section.evidence-teaser > div.evidence-teaser-grid > article.section-panel",
+                      "boundingRect": {
+                        "top": 6494,
+                        "bottom": 6800,
+                        "left": 113,
+                        "right": 705,
+                        "width": 592,
+                        "height": 305
+                      },
+                      "snippet": "<article _ngcontent-ng-c189896396=\"\" class=\"section-panel evidence-teaser-card\">",
+                      "nodeLabel": "Interaktywne demo\n\nAsystent wiedzy z obsługą pytań poza zakresem\n\nSprawdź odpow…"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "node": {
+                "type": "node",
+                "lhId": "1-2-H3",
+                "path": "1,HTML,1,BODY,0,APP-ROOT,0,APP-SITE-SHELL,2,MAIN,1,APP-HOME,0,DIV,4,SECTION,1,DIV,1,ARTICLE,1,H3",
+                "selector": "section.evidence-teaser > div.evidence-teaser-grid > article.section-panel > h3",
+                "boundingRect": {
+                  "top": 6578,
+                  "bottom": 6638,
+                  "left": 750,
+                  "right": 1084,
+                  "width": 334,
+                  "height": 61
+                },
+                "snippet": "<h3 _ngcontent-ng-c189896396=\"\">",
+                "nodeLabel": "Raport decyzyjny po Demo w 7 dni",
+                "explanation": "Fix any of the following:\n  Element has insufficient color contrast of 1.27 (foreground color: #11131a, background color: #242936, font size: 19.8pt (26.4px), font weight: bold). Expected contrast ratio of 3:1"
+              },
+              "subItems": {
+                "type": "subitems",
+                "items": [
+                  {
+                    "relatedNode": {
+                      "type": "node",
+                      "lhId": "1-3-ARTICLE",
+                      "path": "1,HTML,1,BODY,0,APP-ROOT,0,APP-SITE-SHELL,2,MAIN,1,APP-HOME,0,DIV,4,SECTION,1,DIV,1,ARTICLE",
+                      "selector": "div.home-page > section.evidence-teaser > div.evidence-teaser-grid > article.section-panel",
+                      "boundingRect": {
+                        "top": 6494,
+                        "bottom": 6800,
+                        "left": 721,
+                        "right": 1313,
+                        "width": 592,
+                        "height": 305
+                      },
+                      "snippet": "<article _ngcontent-ng-c189896396=\"\" class=\"section-panel evidence-teaser-card\">",
+                      "nodeLabel": "Przykładowy raport\n\nRaport decyzyjny po Demo w 7 dni\n\nSprawdź zakres, scenarius…"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "debugData": {
+            "type": "debugdata",
+            "impact": "serious",
+            "tags": [
+              "cat.color",
+              "wcag2aa",
+              "wcag143",
+              "TTv5",
+              "TT13.c",
+              "EN-301-549",
+              "EN-9.1.4.3",
+              "ACT",
+              "RGAAv4",
+              "RGAA-3.2.1"
+            ]
+          }
+        }
+      },
+      {
+        "id": "cache-insight",
+        "title": "Use efficient cache lifetimes",
+        "description": "A long cache lifetime can speed up repeat visits to your page. [Learn more about caching](https://developer.chrome.com/docs/performance/insights/cache).",
+        "display": "Est savings of 3 KiB",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "url",
+              "valueType": "url",
+              "label": "Request"
+            },
+            {
+              "key": "cacheLifetimeMs",
+              "valueType": "ms",
+              "label": "Cache TTL",
+              "displayUnit": "duration"
+            },
+            {
+              "key": "totalBytes",
+              "valueType": "bytes",
+              "label": "Transfer Size",
+              "displayUnit": "kb",
+              "granularity": 1
+            }
+          ],
+          "items": [
+            {
+              "url": "https://protolume.pl/assets/protolume-logo-horizontal-light.svg",
+              "cacheLifetimeMs": 86400000,
+              "totalBytes": 4377,
+              "wastedBytes": 1750.8000000000002
+            },
+            {
+              "url": "https://protolume.pl/assets/protolume-logo-horizontal-dark.svg",
+              "cacheLifetimeMs": 86400000,
+              "totalBytes": 4145,
+              "wastedBytes": 1658
+            }
+          ],
+          "sortedBy": [
+            "wastedBytes"
+          ],
+          "skipSumming": [
+            "cacheLifetimeMs"
+          ],
+          "debugData": {
+            "type": "debugdata",
+            "wastedBytes": 3408.8
+          }
+        }
+      },
+      {
+        "id": "lcp-breakdown-insight",
+        "title": "LCP breakdown",
+        "description": "Each [subpart has specific improvement strategies](https://developer.chrome.com/docs/performance/insights/lcp-breakdown). Ideally, most of the LCP time should be spent on loading the resources, not within delays.",
+        "details": {
+          "type": "list",
+          "items": [
+            {
+              "type": "table",
+              "headings": [
+                {
+                  "key": "label",
+                  "valueType": "text",
+                  "label": "Subpart"
+                },
+                {
+                  "key": "duration",
+                  "valueType": "ms",
+                  "label": "Duration"
+                }
+              ],
+              "items": [
+                {
+                  "subpart": "timeToFirstByte",
+                  "label": "Time to first byte",
+                  "duration": 197.849
+                },
+                {
+                  "subpart": "elementRenderDelay",
+                  "label": "Element render delay",
+                  "duration": 8254.334
+                }
+              ]
+            },
+            {
+              "type": "node",
+              "lhId": "page-0-H1",
+              "path": "1,HTML,1,BODY,0,APP-ROOT,0,APP-SITE-SHELL,2,MAIN,1,APP-HOME,0,DIV,0,SECTION,0,DIV,1,H1",
+              "selector": "div.home-page > section.hero > div.hero-copy > h1#hero-title",
+              "boundingRect": {
+                "top": 271,
+                "bottom": 525,
+                "left": 48,
+                "right": 570,
+                "width": 522,
+                "height": 254
+              },
+              "snippet": "<h1 _ngcontent-ng-c189896396=\"\" id=\"hero-title\">",
+              "nodeLabel": "Pokaż nam proces.\nW 7 dni pokażemy działającą automatyzację."
+            }
+          ]
+        }
+      },
+      {
+        "id": "network-dependency-tree-insight",
+        "title": "Network dependency tree",
+        "description": "[Avoid chaining critical requests](https://developer.chrome.com/docs/performance/insights/network-dependency-tree) by reducing the length of chains, reducing the download size of resources, or deferring the download of unnecessary resources to improve page load.",
+        "details": {
+          "type": "list",
+          "items": [
+            {
+              "type": "list-section",
+              "value": {
+                "type": "network-tree",
+                "chains": {
+                  "55C653E7AB4E4C6D94850A027A6CDD3D": {
+                    "url": "https://protolume.pl/",
+                    "navStartToEndTime": 222,
+                    "transferSize": 18725,
+                    "isLongest": true,
+                    "children": {
+                      "7864.11": {
+                        "url": "https://protolume.pl/main-HWKTDZMX.js",
+                        "navStartToEndTime": 286,
+                        "transferSize": 9893,
+                        "isLongest": true,
+                        "children": {
+                          "7864.24": {
+                            "url": "https://protolume.pl/chunk-2TOFAXFE.js",
+                            "navStartToEndTime": 406,
+                            "transferSize": 16945,
+                            "isLongest": true,
+                            "children": {
+                              "7864.26": {
+                                "url": "https://protolume.pl/chunk-2522GT72.js",
+                                "navStartToEndTime": 433,
+                                "transferSize": 2243,
+                                "isLongest": true,
+                                "children": {}
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "7864.10": {
+                        "url": "https://protolume.pl/polyfills-5CFQRCPP.js",
+                        "navStartToEndTime": 294,
+                        "transferSize": 14295,
+                        "children": {}
+                      },
+                      "7864.2": {
+                        "url": "https://protolume.pl/styles-G4ZBBLIG.css",
+                        "navStartToEndTime": 250,
+                        "transferSize": 5777,
+                        "children": {}
+                      }
+                    }
+                  }
+                },
+                "longestChain": {
+                  "duration": 433
+                }
+              }
+            },
+            {
+              "type": "list-section",
+              "title": "Preconnected origins",
+              "description": "[preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/) hints help the browser establish a connection earlier in the page load, saving time when the first request for that origin is made. The following are the origins that the page preconnected to.",
+              "value": {
+                "type": "text",
+                "value": "no origins were preconnected"
+              }
+            },
+            {
+              "type": "list-section",
+              "title": "Preconnect candidates",
+              "description": "Add [preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/) hints to your most important origins, but try to use no more than 4.",
+              "value": {
+                "type": "text",
+                "value": "No additional origins are good candidates for preconnecting"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "render-blocking-insight",
+        "title": "Render-blocking requests",
+        "description": "Requests are blocking the page's initial render, which may delay LCP. [Deferring or inlining](https://developer.chrome.com/docs/performance/insights/render-blocking) can move these network requests out of the critical path.",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "url",
+              "valueType": "url",
+              "label": "URL"
+            },
+            {
+              "key": "totalBytes",
+              "valueType": "bytes",
+              "label": "Transfer Size"
+            },
+            {
+              "key": "wastedMs",
+              "valueType": "timespanMs",
+              "label": "Duration"
+            }
+          ],
+          "items": [
+            {
+              "url": "https://protolume.pl/styles-G4ZBBLIG.css",
+              "totalBytes": 5777
+            }
+          ]
+        }
+      }
+    ],
+    "warnings": []
+  }
+]

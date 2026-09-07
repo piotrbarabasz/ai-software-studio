@@ -1,0 +1,170 @@
+O PROTOLUME
+
+Jedna odpowiedzialna osoba od analizy do realizacji
+
+Bezpośrednio współpracujesz z Piotrem Barabaszem — od pierwszej rozmowy do odbioru ustalonego zakresu.
+
+Właściciel i odpowiedzialny partner techniczny
+
+Piotr Barabasz
+
+Prowadzę analizę procesu, decyzje techniczne, realizację, testy i odbiór ustalonego zakresu.
+
+ZASADY WSPÓŁPRACY
+
+kontakt, analiza i wykonanie są po jednej stronie
+przed startem ustalamy zakres i kryteria odbioru
+decyzje i ograniczenia są jawne
+sposób realizacji dobieramy do problemu
+
+Po wysłaniu opisu ustalimy, czy kolejnym krokiem jest demo czy plan pierwszego etapu.
+
+Opisz planowane wdrożenie
+
+SPRAWDZALNE INFORMACJE
+
+Doświadczenie i zakres odpowiedzialności
+
+Dane i kod pozostają prywatne.
+
+Jedna osoba prowadzi projekt od startu do odbioru.
+
+Rozmowa i decyzje są po jednej stronie.
+
+Co możesz sprawdzić na stronie
+4+ lata doświadczenia w tworzeniu oprogramowania
+Doświadczenie komercyjne obejmuje analizę, implementację oraz dostarczanie działających rozwiązań.
+Politechnika Wrocławska — zaufana sztuczna inteligencja
+Ukończony program studiów magisterskich w obszarze zaufanej sztucznej inteligencji; praca dyplomowa jest ukończona i oczekuje na obronę. Wcześniej ukończone studia inżynierskie na kierunku Mechatronika.
+Doświadczenie w zespołach międzynarodowych
+Praca w międzynarodowych i interdyscyplinarnych zespołach, w tym współpraca z zespołem z Londynu oraz interesariuszami biznesowymi i technicznymi.
+Odpowiedzialność end-to-end
+Bezpośredni kontakt, analiza procesu, decyzje techniczne, realizacja, testy i odbiór ustalonego zakresu pozostają po jednej stronie odpowiedzialności.
+
+CO DZIAŁA NAPRAWDĘ
+
+Trzy dowody pracy, które możesz sprawdzić samodzielnie
+
+Pokazujemy działające elementy, przykładowy rezultat i granice tego, co faktycznie potwierdzają.
+
+Interaktywne demo
+
+Asystent wiedzy z obsługą pytań poza zakresem
+
+Problem: Jak szybko ocenić sposób rozmowy z asystentem wiedzy i obsługę pytań bez odpowiedzi?
+
+Co zostało zbudowane: Interaktywna symulacja z trzema pytaniami, odpowiedziami ze wskazaniem przykładowych źródeł oraz przekazaniem sprawy do człowieka, gdy brakuje danych.
+
+Co można samodzielnie sprawdzić
+Uruchom demo i wybierz jedno z trzech przykładowych pytań.
+Sprawdź odpowiedź ze źródłami oraz scenariusz przekazania sprawy do człowieka.
+Możesz samodzielnie uruchomić symulację i sprawdzić zachowanie dla pytań w zakresie i poza zakresem.
+Co nadal wymaga walidacji
+
+To demo korzysta ze stałych pytań i odpowiedzi. Wymaga dodatkowej walidacji na danych firmy, integracji z bazą wiedzy i gotowości produkcyjnej.
+
+Uruchom interaktywne demo
+
+Przykładowy raport
+
+Raport decyzyjny po Demo w 7 dni
+
+Problem: Jak pokazać interesariuszom, co dokładnie otrzymują po etapie demo i czego to jeszcze nie potwierdza?
+
+Co zostało zbudowane: Fikcyjny raport demonstracyjny po siedmiu dniach z decyzją, zakresem, trzema scenariuszami testowymi, rejestrem ryzyk, przykładowymi kryteriami odbioru i planem pierwszego etapu.
+
+Co można samodzielnie sprawdzić
+Przejrzyj sekcję streszczenia decyzji i porównaj ją z zakresem demo.
+Sprawdź trzy scenariusze testowe, w tym sytuację poza zakresem i handoff.
+Oceń przykładowe kryteria odbioru, rejestr ryzyk i plan pierwszego etapu.
+Co nadal wymaga walidacji
+
+To fikcyjny materiał demonstracyjny, a nie wynik projektu klienta. Wymaga dodatkowej walidacji danych i kryteriów dla konkretnej firmy.
+
+Zobacz przykładowy raport
+
+Projekt własny
+
+Protolume jako działająca aplikacja
+
+Problem: Jak połączyć wielostronicową ofertę, interaktywne demo i działający formularz w jednej aplikacji?
+
+Co zostało zbudowane: Działająca wielostronicowa aplikacja z formularzem kontaktowym, interaktywnym demo i jasno opisanym procesem realizacji.
+
+Co można samodzielnie sprawdzić
+Przejdź między publicznymi trasami i uruchom interaktywne demo.
+Sprawdź działający formularz kontaktowy i opis kolejnych etapów współpracy.
+Porównaj zakres demo z opisem kryteriów odbioru i zależności.
+Co nadal wymaga walidacji
+
+To projekt własny, a nie case study klienta. Nie potwierdza wyników biznesowych ani efektów wdrożeń u klientów.
+
+Otwórz działającą stronę
+
+PRZED WSPÓŁPRACĄ
+
+Jak możesz zweryfikować sposób pracy
+
+Zacznij od działającego elementu, który możesz sprawdzić samodzielnie.
+
+1
+
+Uruchom demo i sprawdź odpowiedź oraz pytanie poza zakresem.
+
+2
+
+Przejrzyj przykładowy raport po siedmiu dniach.
+
+3
+
+Przejrzyj zakres demo i kryteria odbioru.
+
+4
+
+Omów pierwszy etap z zakresem i kryteriami.
+
+5
+
+Wysłanie formularza nie jest zamówieniem, akceptacją wyceny ani automatycznym rozpoczęciem płatnej realizacji.
+
+Uruchom demo
+Przejrzyj przykładowy raport
+Sprawdź zasady pierwszego etapu
+Opisz problem bez zobowiązania
+
+WSPÓŁPRACA
+
+Jak wygląda współpraca?
+
+Rozmawiasz bezpośrednio ze mną. Prowadzę analizę, realizację i odbiór ustalonego zakresu.
+
+bezpośredni kontakt od pierwszej rozmowy do odbioru
+jedna osoba odpowiedzialna za decyzje techniczne i realizację
+jasne punkty kontroli i granice zakresu
+
+KOMPETENCJE
+
+Zakres techniczny dobierany do problemu
+analiza procesu i wymagania
+działające demo lub pierwszy etap
+formularze, walidacja i testy
+dokumentacja, bezpieczeństwo i utrzymanie
+
+SPOSÓB PRACY
+
+Małe iteracje i jasne granice odpowiedzialności
+1
+
+jeden scenariusz i rezultat do oceny
+
+2
+
+krótkie przeglądy zamiast długiego milczenia
+
+3
+
+wycena po potwierdzeniu zakresu
+
+4
+
+przy produkcji ustalamy testy, bezpieczeństwo i utrzymanie

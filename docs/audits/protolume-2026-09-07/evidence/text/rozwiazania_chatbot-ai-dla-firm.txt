@@ -1,0 +1,115 @@
+ASYSTENT WIEDZY
+
+Chatbot AI i asystent wiedzy dla firm
+
+Mniej czasu na szukanie odpowiedzi i mniej powtarzalnych pytań.
+
+Budujemy ograniczone demo oparte na wybranych materiałach. Pokazujemy, gdzie asystent odpowiada sam, a kiedy przekazuje sprawę dalej.
+
+Porozmawiaj o zakresie
+Zobacz przykładowy raport
+
+Pomagamy pracownikom i klientom szybciej znaleźć odpowiedź w zatwierdzonych materiałach, a sprawę bez danych przekazać do człowieka.
+
+PROBLEM
+
+Kiedy chatbot AI ma sens
+Wiedza jest rozproszona między dokumentami, notatkami i wiadomościami.
+Zespół odpowiada w kółko na podobne pytania od klientów lub pracowników.
+Brakuje jednego miejsca, w którym da się sprawdzić źródło odpowiedzi.
+Sprawy bez danych trafiają do niewłaściwej osoby lub wracają kilka razy.
+Nowe osoby uczą się procesu długo, bo wiedza nie jest uporządkowana.
+
+JAK DZIAŁA ROZWIĄZANIE
+
+Jak działa rozwiązanie
+
+Przepływ pozostaje prosty: wejście, wyszukanie, odpowiedź, kontrola i przekazanie sprawy.
+
+1
+Materiały wejściowe
+
+Dobieramy kilka zatwierdzonych dokumentów, instrukcji lub FAQ.
+
+2
+Wyszukanie
+
+Asystent znajduje pasujące fragmenty i buduje odpowiedź tylko w zakresie.
+
+3
+Odpowiedź
+
+Użytkownik widzi krótką odpowiedź z podstawą w źródłach.
+
+4
+Kontrola
+
+Gdy brakuje danych albo pytanie wychodzi poza zakres, sprawa nie jest domykana automatycznie.
+
+5
+Człowiek
+
+Pracownik przejmuje temat i decyduje o dalszym kroku.
+
+DEMO
+
+Co można sprawdzić w demo
+
+Demo pokazuje jeden ograniczony zakres, a nie pełne wdrożenie produkcyjne.
+
+Zakres
+trzy przykładowe pytania
+odpowiedzi ze wskazaniem źródła
+scenariusz poza zakresem
+przekazanie do człowieka
+Kryteria
+czy odpowiedź opiera się na wybranych materiałach
+czy widać moment handoffu
+czy zakres jest jasno opisany
+Dane wejściowe
+dokumenty lub FAQ
+przykładowe pytania
+zasady braku odpowiedzi poza zakresem
+Ograniczenia
+demo korzysta z ograniczonego zestawu treści
+integracja z bazą wiedzy wymaga osobnej walidacji
+finalny zakres zależy od jakości materiałów wejściowych
+
+INTEGRACJE
+
+Integracje
+
+Używamy tylko rzeczywiście potrzebnych narzędzi i nie obiecujemy gotowej integracji bez potwierdzenia zakresu.
+
+baza wiedzy lub dokumenty firmowe
+formularz kontaktowy lub kolejka spraw
+CRM albo panel operacyjny po stronie klienta
+
+BEZPIECZEŃSTWO I PRYWATNOŚĆ
+
+Bezpieczeństwo i prywatność
+minimalizujemy dane wejściowe do niezbędnego zakresu
+nie publikujemy materiałów klienta na publicznej stronie
+moment przekazania do człowieka jest jawny
+
+FAQ
+
+Najczęstsze pytania
+Czy chatbot odpowiada na wszystko?
+Czy demo oznacza gotowe wdrożenie?
+Czy muszę mieć dużą bazę wiedzy?
+Czy można zostawić decyzję człowiekowi?
+Czy potrzebna jest integracja z każdym systemem?
+
+NASTĘPNY KROK
+
+Chcesz sprawdzić taki asystent na swoich materiałach?
+
+Najpierw ustalamy zakres, a dopiero potem wybieramy technologię i integracje.
+
+Porozmawiaj o zakresie
+Opisz proces
+Zobacz przykładowy raport
+Wróć do katalogu
+
+Wróć do huba rozwiązań.

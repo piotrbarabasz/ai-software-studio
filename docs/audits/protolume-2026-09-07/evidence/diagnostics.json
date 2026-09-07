@@ -1,0 +1,1227 @@
+{
+  "axe": [
+    {
+      "route": "/",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "nodes": [
+            {
+              "target": [
+                "#evidence-teaser-title"
+              ],
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.07 (foreground color: #11131a, background color: #171b26, font size: 29.3pt (39px), font weight: bold). Expected contrast ratio of 3:1",
+              "html": "<h2 _ngcontent-ng-c189896396=\"\" id=\"evidence-teaser-title\">Zobacz działające elementy</h2>",
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#11131a",
+                    "bgColor": "#171b26",
+                    "contrastRatio": 1.07,
+                    "fontSize": "29.3pt (39px)",
+                    "fontWeight": "bold",
+                    "messageKey": null,
+                    "expectedContrastRatio": "3:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<section _ngcontent-ng-c189896396=\"\" aria-labelledby=\"evidence-teaser-title\" data-home-section=\"evidence\" class=\"evidence-teaser section-shell\">",
+                      "target": [
+                        ".evidence-teaser"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 1.07 (foreground color: #11131a, background color: #171b26, font size: 29.3pt (39px), font weight: bold). Expected contrast ratio of 3:1"
+                }
+              ]
+            },
+            {
+              "target": [
+                ".evidence-teaser-card:nth-child(1) > h3"
+              ],
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.27 (foreground color: #11131a, background color: #242936, font size: 15.0pt (20px), font weight: bold). Expected contrast ratio of 3:1",
+              "html": "<h3 _ngcontent-ng-c189896396=\"\">Asystent wiedzy z obsługą pytań poza zakresem</h3>",
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#11131a",
+                    "bgColor": "#242936",
+                    "contrastRatio": 1.27,
+                    "fontSize": "15.0pt (20px)",
+                    "fontWeight": "bold",
+                    "messageKey": null,
+                    "expectedContrastRatio": "3:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<article _ngcontent-ng-c189896396=\"\" class=\"section-panel evidence-teaser-card\">",
+                      "target": [
+                        ".evidence-teaser-card:nth-child(1)"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 1.27 (foreground color: #11131a, background color: #242936, font size: 15.0pt (20px), font weight: bold). Expected contrast ratio of 3:1"
+                }
+              ]
+            },
+            {
+              "target": [
+                ".evidence-teaser-card:nth-child(2) > h3"
+              ],
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.27 (foreground color: #11131a, background color: #242936, font size: 15.0pt (20px), font weight: bold). Expected contrast ratio of 3:1",
+              "html": "<h3 _ngcontent-ng-c189896396=\"\">Raport decyzyjny po Demo w 7 dni</h3>",
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#11131a",
+                    "bgColor": "#242936",
+                    "contrastRatio": 1.27,
+                    "fontSize": "15.0pt (20px)",
+                    "fontWeight": "bold",
+                    "messageKey": null,
+                    "expectedContrastRatio": "3:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<article _ngcontent-ng-c189896396=\"\" class=\"section-panel evidence-teaser-card\">",
+                      "target": [
+                        ".evidence-teaser-card:nth-child(2)"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 1.27 (foreground color: #11131a, background color: #242936, font size: 15.0pt (20px), font weight: bold). Expected contrast ratio of 3:1"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "count": 1
+        },
+        {
+          "id": "color-contrast",
+          "count": 177
+        }
+      ],
+      "passes": 24
+    },
+    {
+      "route": "/rozwiazania",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "count": 1
+        },
+        {
+          "id": "color-contrast",
+          "count": 143
+        }
+      ],
+      "passes": 21
+    },
+    {
+      "route": "/rozwiazania/chatbot-ai-dla-firm",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "count": 2
+        },
+        {
+          "id": "color-contrast",
+          "count": 93
+        }
+      ],
+      "passes": 22
+    },
+    {
+      "route": "/rozwiazania/voice-ai-dla-firm",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "count": 2
+        },
+        {
+          "id": "color-contrast",
+          "count": 93
+        }
+      ],
+      "passes": 22
+    },
+    {
+      "route": "/rozwiazania/automatyzacja-procesow",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "count": 2
+        },
+        {
+          "id": "color-contrast",
+          "count": 93
+        }
+      ],
+      "passes": 22
+    },
+    {
+      "route": "/rozwiazania/integracje-whatsapp-crm",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "count": 2
+        },
+        {
+          "id": "color-contrast",
+          "count": 93
+        }
+      ],
+      "passes": 22
+    },
+    {
+      "route": "/rozwiazania/systemy-agentowe",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "count": 2
+        },
+        {
+          "id": "color-contrast",
+          "count": 93
+        }
+      ],
+      "passes": 22
+    },
+    {
+      "route": "/demo-ai",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "count": 2
+        },
+        {
+          "id": "color-contrast",
+          "count": 34
+        }
+      ],
+      "passes": 24
+    },
+    {
+      "route": "/development",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "count": 1
+        },
+        {
+          "id": "color-contrast",
+          "count": 74
+        }
+      ],
+      "passes": 21
+    },
+    {
+      "route": "/dla-software-house",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "count": 1
+        },
+        {
+          "id": "color-contrast",
+          "count": 34
+        }
+      ],
+      "passes": 22
+    },
+    {
+      "route": "/studio",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "count": 1
+        },
+        {
+          "id": "color-contrast",
+          "count": 33
+        }
+      ],
+      "passes": 23
+    },
+    {
+      "route": "/rd",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "count": 1
+        },
+        {
+          "id": "color-contrast",
+          "count": 54
+        }
+      ],
+      "passes": 19
+    },
+    {
+      "route": "/przyklad-demo",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "aria-prohibited-attr",
+          "count": 1
+        },
+        {
+          "id": "color-contrast",
+          "count": 46
+        }
+      ],
+      "passes": 26
+    },
+    {
+      "route": "/kontakt",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "count": 25
+        }
+      ],
+      "passes": 27
+    },
+    {
+      "route": "/polityka-prywatnosci",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "count": 54
+        }
+      ],
+      "passes": 22
+    }
+  ],
+  "responsive": [
+    {
+      "route": "/",
+      "w": 360,
+      "scrollWidth": 360,
+      "height": 11118,
+      "headerHeight": 69,
+      "h1": "44px",
+      "cta": [
+        {
+          "text": "Opisz proces",
+          "y": 590.71875,
+          "height": 49.3125
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "w": 430,
+      "scrollWidth": 430,
+      "height": 10623,
+      "headerHeight": 69,
+      "h1": "44px",
+      "cta": [
+        {
+          "text": "Opisz proces",
+          "y": 447.5,
+          "height": 49.3125
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "w": 921,
+      "scrollWidth": 921,
+      "height": 7427,
+      "headerHeight": 76,
+      "h1": "44px",
+      "cta": [
+        {
+          "text": "Opisz proces",
+          "y": 546.84375,
+          "height": 49.3125
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "w": 1024,
+      "scrollWidth": 1024,
+      "height": 9147,
+      "headerHeight": 76,
+      "h1": "46.08px",
+      "cta": [
+        {
+          "text": "Opisz proces",
+          "y": 558.703125,
+          "height": 49.3125
+        }
+      ]
+    },
+    {
+      "route": "/rozwiazania",
+      "w": 360,
+      "scrollWidth": 360,
+      "height": 11069,
+      "headerHeight": 69,
+      "h1": "32px",
+      "cta": [
+        {
+          "text": "Porozmawiaj o asystencie wiedzy",
+          "y": 2932.46875,
+          "height": 46
+        }
+      ]
+    },
+    {
+      "route": "/rozwiazania",
+      "w": 430,
+      "scrollWidth": 430,
+      "height": 9872,
+      "headerHeight": 69,
+      "h1": "32px",
+      "cta": [
+        {
+          "text": "Porozmawiaj o asystencie wiedzy",
+          "y": 2635.328125,
+          "height": 46
+        }
+      ]
+    },
+    {
+      "route": "/rozwiazania",
+      "w": 921,
+      "scrollWidth": 921,
+      "height": 7069,
+      "headerHeight": 76,
+      "h1": "46.05px",
+      "cta": [
+        {
+          "text": "Porozmawiaj o asystencie wiedzy",
+          "y": 1938.703125,
+          "height": 46.15625
+        }
+      ]
+    },
+    {
+      "route": "/rozwiazania",
+      "w": 1024,
+      "scrollWidth": 1024,
+      "height": 7229,
+      "headerHeight": 76,
+      "h1": "51.2px",
+      "cta": [
+        {
+          "text": "Porozmawiaj o asystencie wiedzy",
+          "y": 1994.171875,
+          "height": 46.15625
+        }
+      ]
+    },
+    {
+      "route": "/rozwiazania/chatbot-ai-dla-firm",
+      "w": 360,
+      "scrollWidth": 360,
+      "height": 6382,
+      "headerHeight": 69,
+      "h1": "32px",
+      "cta": [
+        {
+          "text": "Porozmawiaj o zakresie",
+          "y": 482.03125,
+          "height": 46
+        }
+      ]
+    },
+    {
+      "route": "/rozwiazania/chatbot-ai-dla-firm",
+      "w": 430,
+      "scrollWidth": 430,
+      "height": 5980,
+      "headerHeight": 69,
+      "h1": "34.4px",
+      "cta": [
+        {
+          "text": "Porozmawiaj o zakresie",
+          "y": 461.75,
+          "height": 46
+        }
+      ]
+    },
+    {
+      "route": "/rozwiazania/chatbot-ai-dla-firm",
+      "w": 921,
+      "scrollWidth": 921,
+      "height": 4308,
+      "headerHeight": 76,
+      "h1": "46.05px",
+      "cta": [
+        {
+          "text": "Porozmawiaj o zakresie",
+          "y": 448.9375,
+          "height": 46.15625
+        }
+      ]
+    },
+    {
+      "route": "/rozwiazania/chatbot-ai-dla-firm",
+      "w": 1024,
+      "scrollWidth": 1024,
+      "height": 4375,
+      "headerHeight": 76,
+      "h1": "51.2px",
+      "cta": [
+        {
+          "text": "Porozmawiaj o zakresie",
+          "y": 462.484375,
+          "height": 46.15625
+        }
+      ]
+    },
+    {
+      "route": "/rozwiazania/voice-ai-dla-firm",
+      "w": 360,
+      "scrollWidth": 360,
+      "height": 6298,
+      "headerHeight": 69,
+      "h1": "32px",
+      "cta": [
+        {
+          "text": "Porozmawiaj o zakresie",
+          "y": 450.671875,
+          "height": 46
+        }
+      ]
+    },
+    {
+      "route": "/rozwiazania/voice-ai-dla-firm",
+      "w": 430,
+      "scrollWidth": 430,
+      "height": 5713,
+      "headerHeight": 69,
+      "h1": "32px",
+      "cta": [
+        {
+          "text": "Porozmawiaj o zakresie",
+          "y": 424.09375,
+          "height": 46
+        }
+      ]
+    },
+    {
+      "route": "/rozwiazania/voice-ai-dla-firm",
+      "w": 921,
+      "scrollWidth": 921,
+      "height": 4091,
+      "headerHeight": 76,
+      "h1": "32px",
+      "cta": [
+        {
+          "text": "Porozmawiaj o zakresie",
+          "y": 374.828125,
+          "height": 46
+        }
+      ]
+    },
+    {
+      "route": "/rozwiazania/voice-ai-dla-firm",
+      "w": 1024,
+      "scrollWidth": 1024,
+      "height": 4038,
+      "headerHeight": 76,
+      "h1": "32px",
+      "cta": [
+        {
+          "text": "Porozmawiaj o zakresie",
+          "y": 374.828125,
+          "height": 46
+        }
+      ]
+    },
+    {
+      "route": "/rozwiazania/automatyzacja-procesow",
+      "w": 360,
+      "scrollWidth": 360,
+      "height": 6337,
+      "headerHeight": 69,
+      "h1": "32px",
+      "cta": [
+        {
+          "text": "Porozmawiaj o zakresie",
+          "y": 455.453125,
+          "height": 46
+        }
+      ]
+    },
+    {
+      "route": "/rozwiazania/automatyzacja-procesow",
+      "w": 430,
+      "scrollWidth": 430,
+      "height": 5733,
+      "headerHeight": 69,
+      "h1": "32px",
+      "cta": [
+        {
+          "text": "Porozmawiaj o zakresie",
+          "y": 424.09375,
+          "height": 46
+        }
+      ]
+    },
+    {
+      "route": "/rozwiazania/automatyzacja-procesow",
+      "w": 921,
+      "scrollWidth": 921,
+      "height": 4162,
+      "headerHeight": 76,
+      "h1": "32px",
+      "cta": [
+        {
+          "text": "Porozmawiaj o zakresie",
+          "y": 374.828125,
+          "height": 46
+        }
+      ]
+    },
+    {
+      "route": "/rozwiazania/automatyzacja-procesow",
+      "w": 1024,
+      "scrollWidth": 1024,
+      "height": 4068,
+      "headerHeight": 76,
+      "h1": "32px",
+      "cta": [
+        {
+          "text": "Porozmawiaj o zakresie",
+          "y": 349.84375,
+          "height": 46
+        }
+      ]
+    },
+    {
+      "route": "/rozwiazania/integracje-whatsapp-crm",
+      "w": 360,
+      "scrollWidth": 360,
+      "height": 6440,
+      "headerHeight": 69,
+      "h1": "32px",
+      "cta": [
+        {
+          "text": "Porozmawiaj o zakresie",
+          "y": 485.140625,
+          "height": 46
+        }
+      ]
+    },
+    {
+      "route": "/rozwiazania/integracje-whatsapp-crm",
+      "w": 430,
+      "scrollWidth": 430,
+      "height": 5876,
+      "headerHeight": 69,
+      "h1": "32px",
+      "cta": [
+        {
+          "text": "Porozmawiaj o zakresie",
+          "y": 424.09375,
+          "height": 46
+        }
+      ]
+    },
+    {
+      "route": "/rozwiazania/integracje-whatsapp-crm",
+      "w": 921,
+      "scrollWidth": 921,
+      "height": 4261,
+      "headerHeight": 76,
+      "h1": "46.05px",
+      "cta": [
+        {
+          "text": "Porozmawiaj o zakresie",
+          "y": 403.8125,
+          "height": 46.15625
+        }
+      ]
+    },
+    {
+      "route": "/rozwiazania/integracje-whatsapp-crm",
+      "w": 1024,
+      "scrollWidth": 1024,
+      "height": 4214,
+      "headerHeight": 76,
+      "h1": "46.05px",
+      "cta": [
+        {
+          "text": "Porozmawiaj o zakresie",
+          "y": 403.8125,
+          "height": 46.15625
+        }
+      ]
+    },
+    {
+      "route": "/rozwiazania/systemy-agentowe",
+      "w": 360,
+      "scrollWidth": 360,
+      "height": 6272,
+      "headerHeight": 69,
+      "h1": "32px",
+      "cta": [
+        {
+          "text": "Porozmawiaj o zakresie",
+          "y": 453.78125,
+          "height": 46
+        }
+      ]
+    },
+    {
+      "route": "/rozwiazania/systemy-agentowe",
+      "w": 430,
+      "scrollWidth": 430,
+      "height": 5651,
+      "headerHeight": 69,
+      "h1": "32px",
+      "cta": [
+        {
+          "text": "Porozmawiaj o zakresie",
+          "y": 397.515625,
+          "height": 46
+        }
+      ]
+    },
+    {
+      "route": "/rozwiazania/systemy-agentowe",
+      "w": 921,
+      "scrollWidth": 921,
+      "height": 4121,
+      "headerHeight": 76,
+      "h1": "32px",
+      "cta": [
+        {
+          "text": "Porozmawiaj o zakresie",
+          "y": 348.25,
+          "height": 46
+        }
+      ]
+    },
+    {
+      "route": "/rozwiazania/systemy-agentowe",
+      "w": 1024,
+      "scrollWidth": 1024,
+      "height": 4107,
+      "headerHeight": 76,
+      "h1": "32px",
+      "cta": [
+        {
+          "text": "Porozmawiaj o zakresie",
+          "y": 349.84375,
+          "height": 46
+        }
+      ]
+    },
+    {
+      "route": "/demo-ai",
+      "w": 360,
+      "scrollWidth": 360,
+      "height": 5701,
+      "headerHeight": 69,
+      "h1": "35.2px",
+      "cta": [
+        {
+          "text": "Omów sytuację do sprawdzenia",
+          "y": 498.15625,
+          "height": 69.4375
+        }
+      ]
+    },
+    {
+      "route": "/demo-ai",
+      "w": 430,
+      "scrollWidth": 430,
+      "height": 5034,
+      "headerHeight": 69,
+      "h1": "35.2px",
+      "cta": [
+        {
+          "text": "Omów sytuację do sprawdzenia",
+          "y": 415.96875,
+          "height": 49.3125
+        }
+      ]
+    },
+    {
+      "route": "/demo-ai",
+      "w": 921,
+      "scrollWidth": 921,
+      "height": 4411,
+      "headerHeight": 76,
+      "h1": "35.2px",
+      "cta": [
+        {
+          "text": "Omów sytuację do sprawdzenia",
+          "y": 396.578125,
+          "height": 49.3125
+        }
+      ]
+    },
+    {
+      "route": "/demo-ai",
+      "w": 1024,
+      "scrollWidth": 1024,
+      "height": 3633,
+      "headerHeight": 76,
+      "h1": "35.2px",
+      "cta": [
+        {
+          "text": "Omów sytuację do sprawdzenia",
+          "y": 396.578125,
+          "height": 49.3125
+        }
+      ]
+    },
+    {
+      "route": "/development",
+      "w": 360,
+      "scrollWidth": 360,
+      "height": 7312,
+      "headerHeight": 69,
+      "h1": "35.2px",
+      "cta": [
+        {
+          "text": "Opisz potrzebę wdrożenia",
+          "y": 452.984375,
+          "height": 49.3125
+        }
+      ]
+    },
+    {
+      "route": "/development",
+      "w": 430,
+      "scrollWidth": 430,
+      "height": 6860,
+      "headerHeight": 69,
+      "h1": "35.2px",
+      "cta": [
+        {
+          "text": "Opisz potrzebę wdrożenia",
+          "y": 452.984375,
+          "height": 49.3125
+        }
+      ]
+    },
+    {
+      "route": "/development",
+      "w": 921,
+      "scrollWidth": 921,
+      "height": 6504,
+      "headerHeight": 76,
+      "h1": "46.05px",
+      "cta": [
+        {
+          "text": "Opisz potrzebę wdrożenia",
+          "y": 504.6875,
+          "height": 50.3125
+        }
+      ]
+    },
+    {
+      "route": "/development",
+      "w": 1024,
+      "scrollWidth": 1024,
+      "height": 5355,
+      "headerHeight": 76,
+      "h1": "51.2px",
+      "cta": [
+        {
+          "text": "Opisz potrzebę wdrożenia",
+          "y": 540.78125,
+          "height": 50.3125
+        }
+      ]
+    },
+    {
+      "route": "/dla-software-house",
+      "w": 360,
+      "scrollWidth": 360,
+      "height": 5405,
+      "headerHeight": 69,
+      "h1": "39.6px",
+      "cta": [
+        {
+          "text": "Porozmawiaj o współpracy",
+          "y": 451.3125,
+          "height": 47.0625
+        }
+      ]
+    },
+    {
+      "route": "/dla-software-house",
+      "w": 430,
+      "scrollWidth": 430,
+      "height": 4829,
+      "headerHeight": 69,
+      "h1": "39.6px",
+      "cta": [
+        {
+          "text": "Porozmawiaj o współpracy",
+          "y": 385.328125,
+          "height": 47.0625
+        }
+      ]
+    },
+    {
+      "route": "/dla-software-house",
+      "w": 921,
+      "scrollWidth": 921,
+      "height": 4017,
+      "headerHeight": 76,
+      "h1": "39.6px",
+      "cta": [
+        {
+          "text": "Porozmawiaj o współpracy",
+          "y": 365.9375,
+          "height": 47.0625
+        }
+      ]
+    },
+    {
+      "route": "/dla-software-house",
+      "w": 1024,
+      "scrollWidth": 1024,
+      "height": 3862,
+      "headerHeight": 76,
+      "h1": "51.2px",
+      "cta": [
+        {
+          "text": "Porozmawiaj o współpracy",
+          "y": 417.5625,
+          "height": 47.0625
+        }
+      ]
+    },
+    {
+      "route": "/studio",
+      "w": 360,
+      "scrollWidth": 360,
+      "height": 9338,
+      "headerHeight": 69,
+      "h1": "32px",
+      "cta": [
+        {
+          "text": "Opisz planowane wdrożenie",
+          "y": 987.25,
+          "height": 49.3125
+        }
+      ]
+    },
+    {
+      "route": "/studio",
+      "w": 430,
+      "scrollWidth": 430,
+      "height": 8569,
+      "headerHeight": 69,
+      "h1": "32px",
+      "cta": [
+        {
+          "text": "Opisz planowane wdrożenie",
+          "y": 889.640625,
+          "height": 49.3125
+        }
+      ]
+    },
+    {
+      "route": "/studio",
+      "w": 921,
+      "scrollWidth": 921,
+      "height": 6996,
+      "headerHeight": 76,
+      "h1": "32px",
+      "cta": [
+        {
+          "text": "Opisz planowane wdrożenie",
+          "y": 794.296875,
+          "height": 49.3125
+        }
+      ]
+    },
+    {
+      "route": "/studio",
+      "w": 1024,
+      "scrollWidth": 1024,
+      "height": 5675,
+      "headerHeight": 76,
+      "h1": "32px",
+      "cta": [
+        {
+          "text": "Opisz planowane wdrożenie",
+          "y": 421.8125,
+          "height": 49.3125
+        }
+      ]
+    },
+    {
+      "route": "/rd",
+      "w": 360,
+      "scrollWidth": 360,
+      "height": 4425,
+      "headerHeight": 69,
+      "h1": "35.2px",
+      "cta": [
+        {
+          "text": "Omów konkretny problem",
+          "y": 408.96875,
+          "height": 49.3125
+        }
+      ]
+    },
+    {
+      "route": "/rd",
+      "w": 430,
+      "scrollWidth": 430,
+      "height": 4119,
+      "headerHeight": 69,
+      "h1": "35.2px",
+      "cta": [
+        {
+          "text": "Omów konkretny problem",
+          "y": 382.578125,
+          "height": 49.3125
+        }
+      ]
+    },
+    {
+      "route": "/rd",
+      "w": 921,
+      "scrollWidth": 921,
+      "height": 3317,
+      "headerHeight": 76,
+      "h1": "35.2px",
+      "cta": [
+        {
+          "text": "Omów konkretny problem",
+          "y": 363.1875,
+          "height": 49.3125
+        }
+      ]
+    },
+    {
+      "route": "/rd",
+      "w": 1024,
+      "scrollWidth": 1024,
+      "height": 3062,
+      "headerHeight": 76,
+      "h1": "51.2px",
+      "cta": [
+        {
+          "text": "Omów konkretny problem",
+          "y": 438.375,
+          "height": 49.3125
+        }
+      ]
+    },
+    {
+      "route": "/przyklad-demo",
+      "w": 360,
+      "scrollWidth": 360,
+      "height": 13461,
+      "headerHeight": 69,
+      "h1": "35.2px",
+      "cta": [
+        {
+          "text": "Opisz podobny proces",
+          "y": 705.875,
+          "height": 46.125
+        }
+      ]
+    },
+    {
+      "route": "/przyklad-demo",
+      "w": 430,
+      "scrollWidth": 430,
+      "height": 12303,
+      "headerHeight": 69,
+      "h1": "35.2px",
+      "cta": [
+        {
+          "text": "Opisz podobny proces",
+          "y": 597.296875,
+          "height": 46.125
+        }
+      ]
+    },
+    {
+      "route": "/przyklad-demo",
+      "w": 921,
+      "scrollWidth": 921,
+      "height": 10046,
+      "headerHeight": 76,
+      "h1": "46.05px",
+      "cta": [
+        {
+          "text": "Opisz podobny proces",
+          "y": 591.5625,
+          "height": 53.890625
+        }
+      ]
+    },
+    {
+      "route": "/przyklad-demo",
+      "w": 1024,
+      "scrollWidth": 1024,
+      "height": 10036,
+      "headerHeight": 76,
+      "h1": "51.2px",
+      "cta": [
+        {
+          "text": "Opisz podobny proces",
+          "y": 619.25,
+          "height": 53.890625
+        }
+      ]
+    },
+    {
+      "route": "/kontakt",
+      "w": 360,
+      "scrollWidth": 360,
+      "height": 2922,
+      "headerHeight": 69,
+      "h1": "35.2px",
+      "cta": []
+    },
+    {
+      "route": "/kontakt",
+      "w": 430,
+      "scrollWidth": 430,
+      "height": 2616,
+      "headerHeight": 69,
+      "h1": "35.2px",
+      "cta": []
+    },
+    {
+      "route": "/kontakt",
+      "w": 921,
+      "scrollWidth": 921,
+      "height": 1498,
+      "headerHeight": 76,
+      "h1": "35.2px",
+      "cta": []
+    },
+    {
+      "route": "/kontakt",
+      "w": 1024,
+      "scrollWidth": 1024,
+      "height": 1568,
+      "headerHeight": 76,
+      "h1": "46.05px",
+      "cta": []
+    },
+    {
+      "route": "/polityka-prywatnosci",
+      "w": 360,
+      "scrollWidth": 360,
+      "height": 3670,
+      "headerHeight": 69,
+      "h1": "33.6px",
+      "cta": []
+    },
+    {
+      "route": "/polityka-prywatnosci",
+      "w": 430,
+      "scrollWidth": 430,
+      "height": 3287,
+      "headerHeight": 69,
+      "h1": "33.6px",
+      "cta": []
+    },
+    {
+      "route": "/polityka-prywatnosci",
+      "w": 921,
+      "scrollWidth": 921,
+      "height": 2652,
+      "headerHeight": 76,
+      "h1": "33.6px",
+      "cta": []
+    },
+    {
+      "route": "/polityka-prywatnosci",
+      "w": 1024,
+      "scrollWidth": 1024,
+      "height": 2654,
+      "headerHeight": 76,
+      "h1": "33.6px",
+      "cta": []
+    }
+  ],
+  "interactions": {
+    "firstTab": {
+      "tag": "A",
+      "text": "Przejdź do treści",
+      "outline": "rgb(247, 247, 250) solid 3px"
+    },
+    "skipTarget": "main-content",
+    "menuOpen": {
+      "expanded": "true",
+      "focus": "Rozwiązania",
+      "mainInert": true,
+      "bodyOverflow": "hidden"
+    },
+    "menuEscape": {
+      "expanded": "false",
+      "focus": "Otwórz menu główne"
+    },
+    "demoKnown": "Interaktywna symulacja przepływu demo\n\nSprawdź przykładowy przepływ asystenta wiedzy\n\nTo przykład doświadczenia użytkownika, a nie połączenie z produkcyjną bazą wiedzy.\n\nWybierz obszar\nOferta i sprzedaż\nBezpłatna prezentacja\nWiedza firmowa\nObsługa i przekazanie sprawy\n\nSprawdź odpowiedzi na pytania o zakres, koszt i sposób uruchomienia rozwiązania.\n\nPytanie: Ile kosztuje wdrożenie chatbota?\n\nOdpowiedź asystenta\n\nKoszt zależy od liczby scenariuszy, źródeł wiedzy, integracji i wymaganych zabezpieczeń. Pierwszym krokiem może być demo jednego procesu, które pozwala sprawdzić kierunek przed pełnym wdrożeniem.\n\nPoziom pewności: Wysoka - odpowiedź opiera się na ustalonym zakresie demo.\n\nWykorzystane źródła\nPrzykładowy zakres demo: koszty zależą od scenariuszy, źródeł wiedzy i integracji\nNotatka sprzedażowa: start od jednego procesu ogranicza ryzyko\nRozpocznij ponownie\nUmów bezpłatną prezentację\nWybierz przykładowe pytanie\nIle kosztuje wdrożenie chatbota?\nJak wygląda przygotowanie demo?\nCzy chatbot może działać na mojej stronie?\nZadaj własne pytanie\n\nNie wpisuj danych osobowych ani poufnych. Pytanie jest analizowane wyłącznie w przeglądarce i nie jest wysyłane.\n\nSprawdź pytanie",
+    "demoUnknown": "Interaktywna symulacja przepływu demo\n\nSprawdź przykładowy przepływ asystenta wiedzy\n\nTo przykład doświadczenia użytkownika, a nie połączenie z produkcyjną bazą wiedzy.\n\nWybierz obszar\nOferta i sprzedaż\nBezpłatna prezentacja\nWiedza firmowa\nObsługa i przekazanie sprawy\n\nSprawdź odpowiedzi na pytania o zakres, koszt i sposób uruchomienia rozwiązania.\n\nPytanie: Czy Protolume sprzedaje części do rowerów?\n\nTo pytanie wykracza poza zakres tej symulacji\n\nTo demo korzysta z przygotowanych scenariuszy i nie łączy się z pełnym modelem AI ani danymi firmy. Podczas bezpłatnej prezentacji pokażemy, jak chatbot może odpowiadać na pytania z Twoich materiałów, korzystać z integracji i przekazywać sprawy człowiekowi.\n\nUmów bezpłatną prezentację\nWybierz przykładowe pytanie\nRozpocznij ponownie\nUmów bezpłatną prezentację\nWybierz przykładowe pytanie\nIle kosztuje wdrożenie chatbota?\nJak wygląda przygotowanie demo?\nCzy chatbot może działać na mojej stronie?\nZadaj własne pytanie\n\nNie wpisuj danych osobowych ani poufnych. Pytanie jest analizowane wyłącznie w przeglądarce i nie jest wysyłane.\n\nSprawdź pytanie",
+    "demoRequests": [],
+    "voicePrefill": "custom_web_app",
+    "contactInvalid": {
+      "errors": [
+        "To pole jest wymagane.",
+        "To pole jest wymagane.",
+        "To pole jest wymagane.",
+        "To pole jest wymagane."
+      ],
+      "focus": "",
+      "summary": "Formularz wymaga uwagi.Uzupełnij wymagane pola i popraw zaznaczone błędy.",
+      "fields": [
+        {
+          "id": "name",
+          "describedby": "name-error"
+        },
+        {
+          "id": "email",
+          "describedby": "email-error"
+        },
+        {
+          "id": "message",
+          "describedby": "message-hint message-error"
+        },
+        {
+          "id": "consent",
+          "describedby": "consent-error"
+        }
+      ]
+    },
+    "contactPosts": []
+  }
+}

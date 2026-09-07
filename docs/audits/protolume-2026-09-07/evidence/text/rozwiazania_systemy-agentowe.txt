@@ -1,0 +1,115 @@
+WIELOETAPOWE ZADANIA
+
+Systemy agentowe
+
+Mniej ręcznego nadzoru nad złożonymi zadaniami i więcej kontroli nad wynikiem.
+
+Pokazujemy, jak kilka kontrolowanych kroków może współpracować bez obietnicy pełnej autonomii.
+
+Porozmawiaj o zakresie
+Zobacz przykładowy raport
+
+Budujemy wieloetapowe przepływy AI, które zbierają dane, wykonują operacje i przekazują decyzję człowiekowi w krytycznym punkcie.
+
+PROBLEM
+
+Kiedy system agentowy ma sens
+Jedno zadanie wymaga kilku zależnych kroków i kilku źródeł danych.
+Zespół chce ograniczyć ręczne sprawdzanie między etapami.
+Niektóre decyzje powinny nadal należeć do człowieka.
+Ważne jest, by nie udawać pełnej autonomii, której jeszcze nie ma.
+Wynik ma być uporządkowany, a nie tylko wygenerowany tekstowo.
+
+JAK DZIAŁA ROZWIĄZANIE
+
+Jak działa rozwiązanie
+
+Kolejne kroki realizują zadanie etapami, a człowiek nadal decyduje w kluczowym miejscu.
+
+1
+Zadanie
+
+System przyjmuje cel i rozpoczyna pracę na ustalonym zakresie.
+
+2
+Agenci
+
+Kolejne kroki zbierają dane, wykonują operacje i przekazują wynik dalej.
+
+3
+Kontrola
+
+Sprawdzamy poprawność przed kolejnym krokiem i pilnujemy ograniczeń.
+
+4
+Kontrola człowieka
+
+W krytycznym punkcie decyzja nie zapada automatycznie.
+
+5
+Rezultat
+
+Pracownik dostaje uporządkowany wynik i może podjąć decyzję.
+
+DEMO
+
+Co można sprawdzić w demo
+
+Demo pokazuje jeden wieloetapowy przebieg, a nie pełną autonomię procesu.
+
+Zakres
+rozdzielenie zadania na etapy
+przekazywanie wyników między krokami
+moment zatrzymania przed decyzją
+przykładowy uporządkowany rezultat
+Kryteria
+czy widać kontrolowane kroki
+czy człowiek ma jawny moment przejęcia
+czy wynik nie sugeruje pełnej autonomii
+Dane wejściowe
+opis procesu
+reguły decyzji i wyjątków
+lista systemów lub narzędzi
+Ograniczenia
+demo nie oznacza gotowego agenta dla każdego klienta
+integracje i limity trzeba potwierdzić osobno
+zakres zależy od tego, co naprawdę wolno automatyzować
+
+INTEGRACJE
+
+Integracje
+
+Łączymy tylko narzędzia, które są potrzebne do konkretnego zadania.
+
+wewnętrzne API lub webhooks
+CRM, panel lub system zgłoszeń
+narzędzia pomocnicze do weryfikacji wyniku
+
+BEZPIECZEŃSTWO I PRYWATNOŚĆ
+
+Bezpieczeństwo i prywatność
+każdy etap ma jawny zakres odpowiedzialności
+dane klienta nie są publikowane w materiałach
+człowiek przejmuje kontrolę przed domknięciem decyzji
+
+FAQ
+
+Najczęstsze pytania
+Czy system agentowy działa sam?
+Czy to jest to samo co chatbot?
+Czy można zacząć od małego procesu?
+Czy system wymaga wielu integracji?
+Czy demo potwierdza produkcję?
+
+NASTĘPNY KROK
+
+Chcesz sprawdzić system agentowy na jednym zadaniu?
+
+Najpierw wybieramy zadanie i punkt kontroli, dopiero potem zakres automatyzacji.
+
+Porozmawiaj o zakresie
+Opisz proces
+Zobacz przykładowy raport
+Wróć do katalogu
+
+Wróć do huba rozwiązań.

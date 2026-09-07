@@ -1,0 +1,211 @@
+PRZYKŁADOWY REZULTAT
+
+To fikcyjny scenariusz demonstracyjny. Nie jest case study klienta ani obietnicą gotowego wdrożenia produkcyjnego.
+
+WARUNKOWE GO DO KOLEJNEGO ETAPU
+
+Raport po 7 dniach: obsługa zapytań produktowych przez e-mail
+
+Poniżej pokazujemy, jak może wyglądać raport przekazywany po walidacji ograniczonego demo dla powtarzalnych zapytań produktowych obsługiwanych przez e-mail. To skrócony przykład tego, co po siedmiu dniach można przekazać do decyzji.
+
+Opisz podobny proces
+Zobacz zakres Demo w 7 dni
+Drukuj lub zapisz jako PDF
+
+STRESZCZENIE DECYZJI
+
+Warunkowe GO do kolejnego etapu
+
+Operator widzi źródło odpowiedzi, szkic i punkt zatwierdzenia, więc może przejść od wiadomości do decyzji o wysłaniu albo handoffie.
+
+Czego nadal nie wiadomo
+Nie wiadomo jeszcze, jak zachowują się dokumenty i skrzynki w produkcyjnym wolumenie.
+Nie wiadomo, jakie zasady odpowiedzialności i zatwierdzania obowiązują w docelowym zespole.
+
+Rekomendowany kolejny krok: Warto przejść do uzgodnienia danych, sandboxa integracji i zasad akceptacji przed szerszym pilotażem.
+
+Granica tego dowodu: to fikcyjny scenariusz demonstracyjny, nie case study klienta i nie potwierdzenie efektu produkcyjnego. Wymaga doprecyzowania danych oraz kryteriów dla konkretnej firmy.
+
+PYTANIE WALIDACYJNE
+
+Jedno pytanie, które miało odpowiedzieć demo
+
+Czy operator może od wiadomości dojść do propozycji odpowiedzi, sprawdzić źródło i podjąć decyzję o wysłaniu albo handoffie?
+
+PUNKT WYJŚCIA
+
+Obecny punkt wyjścia
+Role
+Osoba obsługująca skrzynkę
+Ekspert produktowy
+Osoba zatwierdzająca odpowiedź
+Ręczne kroki
+ręczne czytanie wiadomości i rozpoznanie tematu
+szukanie informacji w dokumentach
+kopiowanie danych do odpowiedzi
+przekazanie trudniejszych pytań właściwej osobie
+Źródła danych
+e-maile produktowe
+instrukcje i dokumentacja
+wewnętrzna lista osób odpowiedzialnych
+Główne miejsca utraty czasu
+przerzucanie informacji między skrzynką i dokumentami
+brak jednego widoku statusu sprawy
+Założenia wejściowe
+skrzynka zawiera powtarzalne pytania produktowe
+operator ma dostęp do materiałów źródłowych
+istnieje osoba zatwierdzająca wysyłkę lub handoff
+
+ZAKRES DEMO
+
+Zakres demo i elementy poza zakresem
+
+Najpierw pokazano, jaką wartość i rezultat da się zobaczyć w ograniczonym demo. Dopiero potem pokazano, czego to demo nie obejmuje.
+
+Najpierw wartość i rezultat
+jedna propozycja odpowiedzi i widoczny punkt akceptacji
+przykładowy zestaw dokumentów i danych dla jednego procesu
+kontrola człowieka przed wysłaniem albo handoffem
+Co nadal wymaga walidacji
+produkcyjna integracja poczty i automatyczna wysyłka
+pełny system uprawnień, audytu i monitoringu
+generalizacja na wszystkie linie produktowe bez walidacji
+obietnica wyniku biznesowego bez danych konkretnej firmy
+
+SCENARIUSZE TESTOWE
+
+Co pokazano w demonstracji
+Pytanie z pełną odpowiedzią w materiałach
+
+SPEŁNIONE W DEMONSTRACJI
+
+Wejście
+Zapytanie o parametry produktu opisane w aktualnej instrukcji i cenniku.
+Oczekiwane zachowanie
+System wskazuje źródło, przygotowuje propozycję odpowiedzi i daje operatorowi możliwość zatwierdzenia.
+Zachowanie pokazane w demo
+W demonstracji operator widzi dokument źródłowy, szkic odpowiedzi i ekran zatwierdzenia przed wysłaniem.
+Pytanie wymagające zatwierdzenia
+
+SPEŁNIONE W DEMONSTRACJI
+
+Wejście
+Zapytanie z niejednoznacznym wariantem, gdzie materiał sugeruje odpowiedź, ale potrzebna jest kontrola.
+Oczekiwane zachowanie
+System oznacza odpowiedź jako wymagającą zatwierdzenia i zatrzymuje wysyłkę do czasu decyzji człowieka.
+Zachowanie pokazane w demo
+W demonstracji operator widzi propozycję, źródło i przycisk przekazania do akceptacji bez automatycznej wysyłki.
+Pytanie poza zakresem wymagające handoffu
+
+WYMAGA DALSZEJ WALIDACJI
+
+Wejście
+Zapytanie o nieudokumentowany wariant produktu lub warunek, którego nie ma w materiałach.
+Oczekiwane zachowanie
+System nie udaje pewności, tylko przekazuje sprawę do handoffu z informacją o braku danych.
+Zachowanie pokazane w demo
+W demonstracji pytanie trafia do handoffu z wyjaśnieniem, że nie ma podstaw do odpowiedzi automatycznej.
+
+PRZYKŁADOWE KRYTERIA DO UZGODNIENIA Z KLIENTEM
+
+Przykładowe kryteria do uzgodnienia z klientem
+operator widzi źródło odpowiedzi
+odpowiedź nie jest wysyłana bez zatwierdzenia
+pytanie bez danych trafia do handoffu
+status sprawy jest widoczny na każdym etapie
+
+REJESTR RYZYK
+
+Rejestr ryzyk
+Jakość dokumentów
+
+Znaczenie: Nieaktualne lub niejednoznaczne materiały mogą prowadzić do błędnych propozycji odpowiedzi.
+
+Proponowane ograniczenie ryzyka: Wybrać zatwierdzony zestaw źródeł i ustalić właściciela dokumentów.
+
+Weryfikacja: Przed podłączeniem szerszego zestawu materiałów.
+
+Dane osobowe
+
+Znaczenie: Wiadomości mogą zawierać dane wrażliwe lub identyfikujące klienta.
+
+Proponowane ograniczenie ryzyka: Uzgodnić maskowanie, zasady retencji i ograniczony dostęp do treści.
+
+Weryfikacja: Przed testami na realnych wiadomościach.
+
+Integracja poczty
+
+Znaczenie: Błędna konfiguracja może skutkować brakiem pobrania lub wysyłki wiadomości.
+
+Proponowane ograniczenie ryzyka: Najpierw uruchomić sandbox i sprawdzić scenariusze odbioru, kolejki i błędów.
+
+Weryfikacja: Przed jakąkolwiek integracją produkcyjną.
+
+Błędna klasyfikacja
+
+Znaczenie: Zapytanie może zostać przypisane do złego typu odpowiedzi albo do złego handoffu.
+
+Proponowane ograniczenie ryzyka: Zdefiniować reguły klasyfikacji i zestaw pytań granicznych do testów.
+
+Weryfikacja: W testach jakości i w pilotażu.
+
+Koszt modeli
+
+Znaczenie: Przy większej liczbie spraw koszt przetwarzania może być wyższy niż zakładano.
+
+Proponowane ograniczenie ryzyka: Limitować liczbę wywołań, monitorować zużycie i ustalić progi eskalacji.
+
+Weryfikacja: W sandboxie i po pierwszym tygodniu pilotażu.
+
+Odpowiedzialność człowieka
+
+Znaczenie: Bez jasnego zatwierdzenia nie wolno sugerować, że AI ponosi decyzję za zespół.
+
+Proponowane ograniczenie ryzyka: Wprowadzić widoczny etap akceptacji i jasno opisać, kto zatwierdza wysyłkę.
+
+Weryfikacja: Przed startem pilotażu i przed odbiorem etapu.
+
+REKOMENDACJA
+
+Warunkowe GO
+
+WARUNKOWE GO
+
+Demonstrowany przepływ pokazuje wartość operacyjną i pozwala ocenić, gdzie operator potrzebuje źródła, akceptacji i handoffu. To wystarcza, aby przejść do kolejnej walidacji, ale nie do deklaracji efektu produkcyjnego.
+
+Granica tego dowodu: to fikcyjny scenariusz demonstracyjny, nie case study klienta i nie potwierdzenie efektu produkcyjnego. Wymaga doprecyzowania danych oraz kryteriów dla konkretnej firmy.
+
+Warunki rozpoczęcia kolejnego etapu
+ustalenie danych wejściowych i zasad ich jakości
+sandbox integracji poczty oraz kontroli dostępu
+jasny model odpowiedzialności i zatwierdzania
+Lista brakujących informacji
+jakie materiały mają być źródłem prawdy
+jakie role mogą zatwierdzać odpowiedź
+jakie wolumeny i limity kosztowe są docelowe
+
+PLAN PIERWSZEGO ETAPU
+
+Plan pierwszego etapu
+1
+warsztat danych
+2
+sandbox integracji
+3
+role i uprawnienia
+4
+testy jakości
+5
+monitoring
+6
+pilotaż
+
+WERSJA DO ZAPISANIA JAKO PDF
+
+Przekaż raport dalej albo zachowaj go w pliku
+
+Użyj drukowania systemowego, aby zapisać ten raport jako PDF bez dodatkowych narzędzi.
+
+Drukuj lub zapisz jako PDF
+Opisz podobny proces
+Zobacz zakres Demo w 7 dni

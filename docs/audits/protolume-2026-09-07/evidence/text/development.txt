@@ -1,0 +1,137 @@
+WDROŻENIA
+
+Aplikacje, API, integracje i automatyzacje z jasno ustalonym pierwszym etapem
+
+Najpierw potwierdzamy użytkowników, dane i rezultat pierwszego etapu. Potem można planować wdrożenie.
+
+Opisz potrzebę wdrożenia
+
+Po wysłaniu opisu sprawdzimy, czy można przejść do planowania pierwszego etapu.
+
+ZASADY PRACY
+
+przed startem ustalamy pierwszy etap, odpowiedzialności i kryteria odbioru
+zmiana potwierdzonego zakresu może zmienić harmonogram oraz wycenę
+integracje, bezpieczeństwo i utrzymanie są planowane zgodnie z potrzebami etapu
+
+DECYZJA O STARCIE
+
+Kiedy wdrożenie ma sens
+
+Najpierw potwierdzamy użytkowników, dane i rezultat pierwszego etapu. Potem można planować wdrożenie.
+
+potwierdzona potrzeba biznesowa
+znani użytkownicy rozwiązania
+jasny rezultat systemu
+dostępne dane lub systemy
+gotowość do ustalenia pierwszego etapu
+
+REZULTATY
+
+Od rozproszonej pracy do konkretnego rezultatu
+Panel operacyjny
+
+Docelowy sposób pracy: Zespół widzi status spraw w jednym miejscu.
+
+Punkt wyjścia: Dane, zadania i decyzje są rozproszone.
+
+aplikacja webowa dla zespołu
+role użytkowników
+dane lub integracje pierwszego etapu
+
+Ważna zależność: Wymaga ustalenia źródła prawdy i uprawnień.
+
+Asystent wiedzy
+
+Docelowy sposób pracy: Użytkownik dostaje odpowiedź z materiałów albo sprawa trafia do człowieka.
+
+Punkt wyjścia: Odpowiedzi są rozproszone w dokumentach i wiadomościach.
+
+przygotowanie i wyszukiwanie wiedzy
+interfejs rozmowy
+przekazanie pytania do człowieka
+
+Ważna zależność: Jakość zależy od aktualnych materiałów źródłowych.
+
+Automatyzacja procesu
+
+Docelowy sposób pracy: Powtarzalne działania przebiegają w ustalonej kolejności z widocznym statusem.
+
+Punkt wyjścia: Formularze, wiadomości i systemy wymagają ręcznego przekazywania danych.
+
+formularz, API lub zdarzenie
+integracje między systemami
+statusy, powiadomienia i wyjątki
+
+Ważna zależność: Wymaga dostępu do systemów i punktu przekazania człowiekowi.
+
+PRZED ROZPOCZĘCIEM
+
+Co ustalamy przed rozpoczęciem
+
+Te ustalenia tworzą zakres pierwszego etapu i podstawę wyceny.
+
+użytkownicy i scenariusze
+zakres pierwszej wersji
+integracje i odpowiedzialności
+bezpieczeństwo oraz dostęp do danych
+kryteria odbioru
+dokumentacja potrzebna zespołowi
+utrzymanie po odbiorze
+elementy wyłączone z wyceny
+
+ZAKRES I WYCENA
+
+Pierwszy etap i rzeczy wyceniane osobno
+
+Najpierw pokazujemy rezultat pierwszego etapu, potem elementy realizacji i rzeczy wyceniane osobno.
+
+Rezultat i elementy realizacji
+rezultat pierwszego etapu
+interfejs, panel lub punkt wejścia
+backend, dane lub API
+integracja z uzgodnionym systemem
+testy, dokumentacja i monitoring
+Nie wchodzą automatycznie w wycenę
+nowe wymagania poza zakresem
+licencje i usługi zewnętrzne
+dostęp lub przygotowanie danych
+utrzymanie, rozwój i dyżury
+
+Wycena zależy od potwierdzonego zakresu. Budżet w formularzu jest orientacyjny; zmiana zakresu może zmienić wycenę i harmonogram.
+
+PROCES
+
+Od diagnozy do odbioru i kolejnego etapu
+1
+Diagnoza i ustalenie celu
+
+Sprawdzamy użytkowników, proces, ograniczenia i rezultat.
+
+2
+Zakres pierwszego etapu
+
+Uzgadniamy rezultat, zależności, kryteria i dokumentację.
+
+3
+Implementacja z punktami kontrolnymi
+
+Pokazujemy kolejne elementy i sprawdzamy ich działanie.
+
+4
+Odbiór według kryteriów
+
+Wspólnie sprawdzamy scenariusze i przekazujemy dokumentację.
+
+5
+Utrzymanie lub kolejny etap
+
+Po odbiorze ustalamy utrzymanie, monitoring i rozwój.
+
+NASTĘPNY KROK
+
+Planujesz aplikację, API, integrację albo automatyzację?
+
+Opisz obecną sytuację, użytkowników i oczekiwany rezultat. Jeśli zakres jest gotowy, przejdziemy dalej.
+
+Opisz potrzebę wdrożenia
