@@ -1,4 +1,4 @@
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, ViewportScroller } from '@angular/common';
 import {
   Component,
   DestroyRef,
@@ -34,6 +34,7 @@ import { ProtolumeLogoComponent } from '../../shared/brand/protolume-logo/protol
 })
 export class SiteShellComponent implements OnInit {
   private readonly router = inject(Router);
+  private readonly viewportScroller = inject(ViewportScroller);
   private readonly title = inject(Title);
   private readonly meta = inject(Meta);
   private readonly document = inject(DOCUMENT);
@@ -69,6 +70,11 @@ export class SiteShellComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.isBrowser) {
+      this.viewportScroller.setOffset(() => [
+        0,
+        (this.document.querySelector('header.site-header')?.getBoundingClientRect().height ?? 68) +
+          16,
+      ]);
       this.isNavigationEnhanced = true;
       this.updateViewportState();
       this.initializeHeaderScrollState();
@@ -117,7 +123,8 @@ export class SiteShellComponent implements OnInit {
 
   focusMainContent(event?: Event): void {
     event?.preventDefault();
-    this.mainContent?.nativeElement.focus();
+    // Route focus must not undo the router's fragment/scroll restoration.
+    this.mainContent?.nativeElement.focus({ preventScroll: !event });
   }
 
   @HostListener('document:keydown', ['$event'])

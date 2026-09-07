@@ -4,52 +4,55 @@
 `fix/audit-p0-stability-accessibility`
 
 ## Last completed task
-?aden task nie jest jeszcze DONE we wszystkich kryteriach. P0 kod zweryfikowany lokalnie.
+No task has all acceptance criteria completed, including production verification. P0 has local evidence.
 
 ## Current task
-Domkni?cie dowod?w UX-001/002, nast?pnie UX-003/004 (model oferty i intencja kontaktu).
+UX-003/004 central offer model and contact intent. P0 local verification complete; production gates remain B-006.
 
 ## Current hypothesis / root cause
-Hydration naprawia destrukcj? DOM. Angular 22 domy?lnie w??cza incremental hydration/event replay: trzeba `withNoIncrementalHydration()`, by nie generowa? executable inline JS. Dalszy CLS 0.621 powodowa?a rozwini?ta mobilna nawigacja przed bootstrapem. Dynamiczny DOM w noscript kontaktu powodowa? `e.hasAttribute is not a function`; zast?piono stabilnym DOM + CSS scripting media. Lokalne CTA nadpisywa?y kolor dark-section; naprawione.
+Angular 22 enables incremental hydration/event replay by default. `withNoIncrementalHydration()` preserves hydration without executable inline scripts. Mobile expanded navigation before bootstrap caused remaining CLS 0.621; CSS scripting media preserves initial geometry and real no-JS navigation. Dynamic DOM inside noscript caused hydration TypeError; stable DOM with scripting CSS fixes it. Home CTA styles overrode dark semantic colors.
 
 ## Files currently involved
-* app.config.ts; shell/contact HTML i SCSS; home SCSS
-* frontend/scripts/*csp* i script-attributes.cjs
-* docs/audits/protolume-2026-09-07/implementation-evidence/
+* app.config.ts, shell/contact HTML and SCSS, home SCSS
+* frontend/scripts/*csp*, script-attributes.cjs
+* implementation-evidence/ (persistent results)
+* shell focusMainContent and styles.scss focus color: follow-up in progress
 
 ## Tests already passed
-* npm ci; frontend lint; npm test: 204 Angular + Node suites (log tmp/audit-implementation/phase-a-tests.log).
-* npm run build: 16 prerender tras, CSP, SEO, legal/artifact validators.
-* Backend Python 3.12 venv: lock + editable install, ruff check, format, pytest 75.
-* Deployment unittest: 60; Cloud Build YAML: 23.
-* Oba Docker obrazy zbudowane: aisoftware-studio-api:local oraz aisoftware-studio-web:audit.
-* 12 cold runs: /, /demo-ai, /kontakt i RAG, po 3; CPU x4, 390x844, bez throttlingu sieci, localhost, Chromium 151; CLS 0, brak znikania main i b??d?w.
-* axe home: 320/360/390/430/768/921/1024/1440, reduced motion; zero violations/overflow. Realny no-JS menu i mail dzia?aj?. Skip link + Escape dzia?aj?.
+* npm ci, lint, npm test: 204 Angular tests plus Node suites.
+* Production npm build: 16 prerender routes, CSP/SEO/legal/artifact validators.
+* Python 3.12 backend venv: dev lock + editable install, ruff check/format, pytest 75.
+* Deployment contract unittest 60, Cloud Build YAML unittest 23.
+* Both images built: aisoftware-studio-api:local, aisoftware-studio-web:audit.
+* 12 cold runs (home, demo, RAG, contact x3): 390x844, CPU x4, fresh contexts/cache disabled, local server without network throttling. CLS 0, no zero main or hydration errors. Raw results in implementation-evidence.
+* Home axe at 320/360/390/430/768/921/1024/1440 reduced motion: zero violations and overflow. Real javaScriptEnabled:false verifies menu and email. Skip and Escape work.
+* Browser invalid contact focuses error summary; fields have errors. Hover CTA colors are readable. Focus outline needed lighter dark-section color.
 
 ## Tests still required
-* Finalny frontend format:check po zmianach (wcze?niej zastany format site.pl.ts poprawiono).
-* Hover/focus kontrast, formularz browser, anchors; por?wnanie lab LCP w identycznych warunkach (lokalny LCP niepor?wnywalny z Lighthouse produkcji).
-* Backend container health smoke i resolved production contract wymagaj? prawdziwych niesekretnych SMTP vars (B-006).
-* Produkcyjny deployment/read-only smoke nie wykonany.
+* Final lint/format/tests/build after follow-up; anchor scroll check (focus used to undo it).
+* Comparable LCP baseline: local timings cannot be compared directly to production Lighthouse.
+* Backend real container health smoke and resolved production contract need real SMTP non-secret vars (B-006).
+* New production build verification not performed; do not mark merge ready.
 
 ## Known failing test / command
-Brak znanego b??du kodu po 204 testach. Domy?lny Python to Anaconda 3.9, instalacja locka nie dzia?a; u?ywaj backend/.venv/Scripts/python.exe (3.12). Nigdy nie u?ywaj frontend/.public-legal-config.json: zastana fikcyjna konfiguracja z mojibake.
+No currently failing local check. Full suite 204 passed; shell suite passed after scroll offset; production build passed. Fragment/form/focus browser checks passed. Original audit Lighthouse versus local timings are not directly comparable. Default Python is Anaconda 3.9; use backend/.venv/Scripts/python.exe (3.12).
 
 ## Exact next action
-1. Zako?cz test hover/focus/form/anchors na lokalnym artefakcie; zapisz wynik i commit checkpoint.
-2. UX-003/004: centralny neutralny model pierwszego etapu, rozdziel symulacj?; kontekst pi?ciu us?ug bez utraty r?cznej zmiany tematu. Bez nowych obietnic biznesowych.
-3. Nast?pnie UX-005/006 hub/nawigacja, UX-007/008 home/symulacja, UX-009 rejestr proof; kontynuuj reszt? backlogu. Checkpoint co 1?3 taski i przed d?ugimi testami.
+1. UX-003/004: central neutral first-stage definitions, distinct simulation/presentation/production, service contact context and correct Voice/agent topics; preserve manual topic changes.
+2. Verify changed content/contact behavior, production build and desktop/mobile; checkpoint.
+3. UX-005/006 hub/navigation, then UX-007/008 home/simulation, UX-009 proof registry; proceed through all 28 tasks without waiting for owner blockers.
 
 ## Do not redo
-* Ca?y audyt przeczytany; nie audytuj od zera.
-* Nie przepisuj poprawionej hydration/CSP; aktualne pomiary s? w implementation-evidence.
-* Nie w??czaj withEventReplay ani domy?lnej incremental hydration; nie hashuj executable inline JS.
-* Nie publikuj fikcyjnego legal configu ani generowanych environment.prod.ts/build SHA.
+* Full audit already read. Do not audit from scratch.
+* Do not re-enable event replay or automatically hash executable inline JS.
+* No fabricated legal config, pricing, provider results, customer proof or SMTP.
+* Restore generated environment.prod.ts and index.html from master after builds before committing.
+* PowerShell piping non-ASCII into Python needs UTF-8 OutputEncoding; prefer apply_patch for source edits.
 
 ## Last known good commit
-`6bb3e90` dla lokalnych zachowa? P0; nie jest MERGE_READY (brak pe?nych gates).
+`6bb3e90` for local P0 behavior only; not merge ready.
 
 ## Uncommitted work
-Checkpoint stanu + przywr?cenie generowanych environment.prod.ts/index.html do szablon?w master. Sprawd? git status.
+None after checkpoint; always inspect git status.
 
-Lokalne narz?dzia: tmp/audit-implementation/build.ps1 (build z warto?ciami kontraktu i kopi? aktualnie publicznej polityki, nie zmienia podstaw prawnych); serve.cjs na porcie 4400 (sesja mo?e nie dzia?a? po wznowieniu); measure.cjs, a11y.cjs. Surowe logi w tym katalogu. Public legal JSON odtworzony dok?adnie z opublikowanej polityki build 8386de6; to nie potwierdzenie poprawno?ci prawnej lub zgodno?ci z najnowszym Secret Manager.
+Local tools: tmp/audit-implementation/build.ps1, serve.cjs (port 4400), measure.cjs, a11y.cjs, interactions.cjs. Server session may need restart. Logs in that directory. Build uses production contract public values and an exact copy of currently published legal text (build 8386de6), not invented input. This is not verification against Secret Manager or legal approval. Never use frontend/.public-legal-config.json: pre-existing fake administrator and corrupted strings.
