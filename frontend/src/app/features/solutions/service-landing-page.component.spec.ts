@@ -39,7 +39,9 @@ describe('ServiceLandingPageComponent', () => {
       'Chatbot AI i asystent wiedzy dla firm',
     );
     expect(element.querySelector('.hero-result')?.textContent).toContain('Mniej czasu na szukanie');
-    expect(element.querySelector('a[href="/kontakt?projectType=rag_chatbot_demo&service=rag"]')).not.toBeNull();
+    expect(
+      element.querySelector('a[href="/kontakt?projectType=rag_chatbot_demo&service=rag"]'),
+    ).not.toBeNull();
     expect(element.querySelector('a[href="/przyklad-demo"]')).not.toBeNull();
     expect(element.querySelector('a[href="/rozwiazania#asystent-wiedzy"]')).not.toBeNull();
     expect(element.querySelectorAll('.flow-step')).toHaveSize(5);

@@ -67,10 +67,9 @@ describe('SiteShellComponent', () => {
     ).toEqual([
       { label: 'Rozwiązania', href: '/rozwiazania' },
       { label: 'Demo w 7 dni', href: '/demo-ai' },
-      { label: 'Wdrożenia', href: '/development' },
-      { label: 'Dla partnerów', href: '/dla-software-house' },
-      { label: 'O Protolume', href: '/studio' },
-      { label: 'Kontakt', href: '/kontakt' },
+      { label: 'Aplikacje i integracje', href: '/development' },
+      { label: 'Dla software house’ów', href: '/dla-software-house' },
+      { label: 'Studio', href: '/studio' },
     ]);
     expect(element.querySelectorAll('.primary-cta')).toHaveSize(1);
     expect(element.querySelector('.primary-cta')?.textContent?.trim()).toBe('Opisz proces');
@@ -385,7 +384,7 @@ describe('SiteShellComponent', () => {
     }
   });
 
-  it('keeps all six primary links inside the header between 921px and 1200px', async () => {
+  it('keeps all five primary links inside the header between 921px and 1200px', async () => {
     await TestBed.configureTestingModule({
       imports: [SiteShellComponent],
       providers: [
@@ -402,7 +401,7 @@ describe('SiteShellComponent', () => {
     const navigation = element.querySelector('#primary-navigation') as HTMLElement;
     const links = navigation.querySelectorAll('.nav-links a');
 
-    expect(links).toHaveSize(6);
+    expect(links).toHaveSize(5);
     for (const width of [921, 1000, 1200]) {
       element.style.display = 'block';
       element.style.width = `${width}px`;

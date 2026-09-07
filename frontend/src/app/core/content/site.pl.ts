@@ -1,3 +1,4 @@
+import { serviceCatalog } from './service-catalog.pl';
 import { firstStageOffer } from './first-stage.pl';
 import { budgetRangeOptions, projectTypeOptions } from './contact-options.pl';
 import { publicBrand } from '../brand/public-brand.config';
@@ -67,182 +68,15 @@ export const researchDirections = [
 const solutionsContent: SolutionsPageContent = {
   path: '/rozwiazania',
   eyebrow: 'Rozwiązania',
-  title: 'Pięć sposobów na uporządkowanie konkretnego procesu',
-  lead: 'Nie sprzedajemy jednego gotowego systemu z półki. Dobieramy ograniczony zakres do problemu firmy, sprawdzamy go w demo, a następnie planujemy właściwe wdrożenie.',
-  scopeNotice:
-    'Poniższe opisy pokazują możliwy kierunek rozwiązania. Finalny zakres zależy od procesu, danych, integracji i wymaganych zabezpieczeń.',
-  quickLinksLabel: 'Przejdź do rozwiązania',
-  solutions: [
-    {
-      id: 'asystent-wiedzy',
-      title: 'Asystent wiedzy',
-      summary:
-        'Pomaga pracownikom lub klientom szybciej znaleźć odpowiedź w zatwierdzonych materiałach firmy.',
-      problem:
-        'Wiedza jest rozproszona między dokumentami, instrukcjami, wiadomościami i doświadczeniem pracowników.',
-      audience:
-        'Dla zespołów, które regularnie odpowiadają na powtarzalne pytania albo pracują na rozproszonej dokumentacji.',
-      capabilities: [
-        'wyszukiwanie informacji w wybranych materiałach',
-        'odpowiedzi ze wskazaniem źródła',
-        'kontrola zakresu odpowiedzi',
-      ],
-      requiredInputs: [
-        'wybrany zestaw dokumentów lub instrukcji',
-        'przykładowe pytania użytkowników',
-        'zasady braku odpowiedzi poza zakresem',
-      ],
-      demoScope:
-        'Demo może pokazać pytania do ograniczonego zestawu materiałów, odpowiedzi ze źródłami oraz przekazanie sprawy do człowieka.',
-      productionScope: [
-        'bezpieczny indeks wiedzy',
-        'role i ochrona danych',
-        'monitoring jakości i kosztów',
-      ],
-      primaryCta: {
-        label: 'Porozmawiaj o asystencie wiedzy',
-        path: '/kontakt',
-        queryParams: { projectType: 'rag_chatbot_demo' },
-      },
-      optionalSecondaryCta: { label: 'Zobacz symulację asystenta', path: '/demo-ai' },
-    },
-    {
-      id: 'automatyzacja-wiadomosci-i-dokumentow',
-      title: 'Automatyzacja wiadomości i dokumentów',
-      summary:
-        'Ogranicza ręczne czytanie wiadomości, przepisywanie danych i przekazywanie spraw między osobami.',
-      problem:
-        'Pracownicy odczytują wiadomości lub dokumenty, kopiują informacje do innych narzędzi i ręcznie ustalają kolejny krok.',
-      audience:
-        'Dla zespołów obsługujących dużą liczbę powtarzalnych wiadomości, formularzy, zamówień, zgłoszeń lub dokumentów.',
-      capabilities: [
-        'rozpoznawanie rodzaju wiadomości lub dokumentu',
-        'wyciąganie danych',
-        'przypisanie sprawy',
-        'szkic odpowiedzi lub zadania',
-      ],
-      requiredInputs: [
-        'przykładowe wiadomości lub dokumenty',
-        'zasady klasyfikacji i wyjątków',
-        'miejsce docelowe wyników',
-      ],
-      demoScope:
-        'Demo może pokazać klasyfikację przykładowych wiadomości i zaproponowanie kolejnego kroku bez produkcyjnej skrzynki.',
-      productionScope: [
-        'integracje z systemem firmowym',
-        'ponowienia i audyt',
-        'zatwierdzanie działań przez człowieka',
-      ],
-      primaryCta: {
-        label: 'Porozmawiaj o automatyzacji',
-        path: '/kontakt',
-        queryParams: { projectType: 'business_process_automation' },
-      },
-    },
-    {
-      id: 'panel-operacyjny',
-      title: 'Panel operacyjny procesu',
-      summary: 'Pokazuje status spraw, odpowiedzialność i następny krok w jednym miejscu.',
-      problem:
-        'Informacje o procesie są rozproszone między e-mailem, komunikatorami, arkuszami i systemami.',
-      audience:
-        'Dla zespołów, które potrzebują wspólnego widoku procesu, a nie kolejnego dashboardu z wykresami.',
-      capabilities: [
-        'wspólny widok spraw i statusów',
-        'osoba odpowiedzialna',
-        'następny krok',
-        'historia zmian',
-      ],
-      requiredInputs: [
-        'etapy i statusy procesu',
-        'role i odpowiedzialności',
-        'źródła danych zespołu',
-      ],
-      demoScope:
-        'Demo może pokazać jeden proces na przykładowych danych z podstawowymi statusami i kolejnym krokiem.',
-      productionScope: [
-        'logowanie i uprawnienia',
-        'baza danych i integracje',
-        'monitoring i kopie bezpieczeństwa',
-      ],
-      primaryCta: {
-        label: 'Porozmawiaj o panelu procesu',
-        path: '/kontakt',
-        queryParams: { projectType: 'custom_web_app' },
-      },
-    },
-    {
-      id: 'system-agentowy',
-      title: 'System agentowy do realizacji zadań',
-      summary:
-        'Koordynuje kilka wyspecjalizowanych kroków lub agentów, zachowując kontrolę człowieka nad ważnymi decyzjami.',
-      problem:
-        'Złożone zadanie wymaga zebrania informacji, wykonania kilku operacji, sprawdzenia wyniku i przekazania decyzji między osobami lub systemami.',
-      audience:
-        'Dla zespołów, które chcą uporządkować wieloetapową pracę, a nie tylko wygenerować pojedynczą odpowiedź AI.',
-      capabilities: [
-        'podział zadania na kontrolowane etapy',
-        'przekazywanie wyniku między wyspecjalizowanymi agentami',
-        'wywoływanie uzgodnionych narzędzi lub API',
-        'weryfikacja wyniku przed kolejnym krokiem',
-        'zatwierdzenie człowieka w krytycznym punkcie',
-      ],
-      requiredInputs: [
-        'opis procesu i jego etapów',
-        'reguły decyzji oraz obsługi wyjątków',
-        'lista narzędzi lub systemów',
-        'miejsca wymagające zatwierdzenia człowieka',
-      ],
-      demoScope:
-        'Demo może pokazać jeden ograniczony przebieg zadania, role agentów, przekazywanie wyników oraz punkt kontroli człowieka.',
-      productionScope: [
-        'bezpieczne integracje i uprawnienia',
-        'limity kosztów oraz liczby operacji',
-        'monitoring, audyt i ponowienia',
-        'obsługa błędów i zatrzymanie procesu',
-      ],
-      primaryCta: {
-        label: 'Porozmawiaj o systemie agentowym',
-        path: '/kontakt',
-        queryParams: { projectType: 'business_process_automation' },
-      },
-    },
-    {
-      id: 'integracje-kanalow',
-      title: 'Integracje kanałów i komunikatorów',
-      summary:
-        'Łączy WhatsApp, e-mail, formularze i CRM z jednym kontrolowanym procesem obsługi spraw.',
-      problem:
-        'Wiadomości trafiają z wielu kanałów, a pracownicy ręcznie kopiują dane, zmieniają statusy i przekazują sprawy do innych narzędzi.',
-      audience: 'Dla zespołów obsługujących klientów lub operacje przez kilka kanałów komunikacji.',
-      capabilities: [
-        'odbieranie zdarzeń z wybranych kanałów',
-        'rozpoznanie rodzaju sprawy',
-        'przekazanie danych do właściwego procesu',
-        'aktualizacja statusu w CRM lub panelu',
-        'eskalacja do człowieka',
-      ],
-      requiredInputs: [
-        'lista kanałów i systemów',
-        'przykładowe wiadomości',
-        'zasady routingu i odpowiedzialności',
-        'dostępność API dostawców',
-      ],
-      demoScope:
-        'Demo może pokazać symulowany przepływ wiadomości z WhatsAppa, e-maila albo formularza do procesu i panelu statusów, bez wysyłania prawdziwych wiadomości.',
-      productionScope: [
-        'oficjalne API dostawców',
-        'zgody, szablony wiadomości i limity',
-        'audyt komunikacji',
-        'bezpieczeństwo danych oraz monitoring integracji',
-      ],
-      primaryCta: {
-        label: 'Porozmawiaj o integracjach',
-        path: '/kontakt',
-        queryParams: { projectType: 'backend_api' },
-      },
-    },
-  ],
+  title: 'Który proces chcesz usprawnić?',
+  lead: 'Wybierz sytuację podobną do pracy Twojego zespołu. Na stronie rozwiązania znajdziesz rezultat, zakres i sposób sprawdzenia.',
+  solutions: serviceCatalog.map((service) => ({
+    id: service.legacyAnchor,
+    title: service.label,
+    summary: service.result,
+    problem: service.problem,
+    path: service.path,
+  })),
   closingCta: {
     title: 'Nie wiesz, który kierunek pasuje do procesu?',
     lead: 'Opisz obecny sposób pracy. Pierwszym krokiem jest ustalenie problemu, a nie wybór technologii.',
@@ -287,14 +121,15 @@ const routeMetadata = [
     label: 'Rozwiązania',
     title: brandTitle('Rozwiązania AI i automatyzacji'),
     description: brandDescription(
-      'Asystent wiedzy, automatyzacja wiadomości i dokumentów, panel operacyjny procesu, system agentowy oraz integracje kanałów Protolume.',
+      serviceCatalog.map((service) => service.label).join(', ') +
+        ' — wybierz proces do usprawnienia.',
     ),
     kind: 'solutions',
   },
   ...serviceLandingRouteMetadata,
   {
     path: '/dla-software-house',
-    label: 'Dla partnerów',
+    label: 'Dla software house’ów',
     title: brandTitle('Partner AI dla software house’ów i MSP'),
     description:
       'Wsparcie software house’ów i MSP w realizacji modułów AI, automatyzacji, RAG, systemów agentowych i integracji API.',
@@ -302,7 +137,7 @@ const routeMetadata = [
   },
   {
     path: '/development',
-    label: 'Wdrożenia',
+    label: 'Aplikacje i integracje',
     title: brandTitle('Wdrożenia aplikacji, API i automatyzacji'),
     description: brandDescription(
       'Planowanie i realizacja aplikacji, API, integracji oraz automatyzacji w potwierdzonym zakresie.',
@@ -311,10 +146,10 @@ const routeMetadata = [
   },
   {
     path: '/studio',
-    label: 'O Protolume',
+    label: 'Studio',
     title: brandTitle(publicBrand.owner.name),
     description: brandDescription(
-      `Poznaj sposób współpracy z ${publicBrand.owner.name} oraz sprawdzalne przykłady pracy.`,
+      'Poznaj sposób współpracy z Piotrem Barabaszem oraz sprawdzalne przykłady pracy.',
     ),
 
     kind: 'studio',
@@ -369,10 +204,9 @@ const contactNoCommitment = firstStageOffer.noCommitment;
 const primaryNavigation = [
   { label: 'Rozwiązania', path: '/rozwiazania' },
   { label: 'Demo w 7 dni', path: '/demo-ai' },
-  { label: 'Wdrożenia', path: '/development' },
-  { label: 'Dla partnerów', path: '/dla-software-house' },
-  { label: 'O Protolume', path: '/studio' },
-  { label: 'Kontakt', path: '/kontakt' },
+  { label: 'Aplikacje i integracje', path: '/development' },
+  { label: 'Dla software house’ów', path: '/dla-software-house' },
+  { label: 'Studio', path: '/studio' },
 ] as const;
 
 const navigationLink = (path: (typeof primaryNavigation)[number]['path']) =>
@@ -420,7 +254,7 @@ export const siteContent = {
     ],
     studioLinks: [navigationLink('/studio'), { label: 'R&D Lab', path: '/rd' }],
     informationLinks: [
-      navigationLink('/kontakt'),
+      { label: 'Kontakt', path: '/kontakt' },
       { label: 'Polityka prywatności', path: '/polityka-prywatnosci' },
     ],
     copyright: 'Wszelkie prawa zastrzeżone.',

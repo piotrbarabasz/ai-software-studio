@@ -41,6 +41,7 @@
         @for (item of navigation; track item) {
           <a
             [routerLink]="item.path"
+            [class.is-section-active]="item.path === '/rozwiazania' && isServicePage"
             routerLinkActive="is-active"
             [routerLinkActiveOptions]="{ exact: true }"
             #routeLink="routerLinkActive"

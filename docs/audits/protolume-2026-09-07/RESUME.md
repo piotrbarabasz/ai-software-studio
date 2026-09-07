@@ -7,7 +7,7 @@
 No task has all acceptance criteria completed, including production verification. P0 has local evidence.
 
 ## Current task
-UX-005/006 hub and navigation. UX-003/004 production build and browser checks passed: five service intents and seven widths, no errors/overflow. 211 frontend tests, lint and 84 backend tests pass. First-stage commercial details remain B-001.
+UX-005/006 implemented: one catalog from serviceCatalog, preserved old anchors, five navigation links plus CTA, visible/schema breadcrumbs. Full suite had 206/207 with one obsolete label expectation; updated shell suite passes 12/12. Production build and browser verification next. UX-003/004 production build and browser checks passed: five service intents and seven widths, no errors/overflow. 211 frontend tests, lint and 84 backend tests pass. First-stage commercial details remain B-001.
 
 ## Current hypothesis / root cause
 Angular 22 enables incremental hydration/event replay by default. `withNoIncrementalHydration()` preserves hydration without executable inline scripts. Mobile expanded navigation before bootstrap caused remaining CLS 0.621; CSS scripting media preserves initial geometry and real no-JS navigation. Dynamic DOM inside noscript caused hydration TypeError; stable DOM with scripting CSS fixes it. Home CTA styles overrode dark semantic colors.

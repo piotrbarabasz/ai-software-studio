@@ -64,6 +64,10 @@ export class SiteShellComponent implements OnInit {
     return this.currentRouteKind === 'demo-example';
   }
 
+  get isServicePage(): boolean {
+    return this.currentRouteKind === 'service-landing';
+  }
+
   get isFullscreenNavigationOpen(): boolean {
     return this.isNavigationEnhanced && this.isMobileViewport && this.isMobileNavigationOpen;
   }
@@ -337,7 +341,7 @@ export class SiteShellComponent implements OnInit {
             '@type': 'Service',
             name: solution.title,
             description: solution.summary,
-            url: `${absoluteSiteUrl('/rozwiazania')}#${solution.id}`,
+            url: absoluteSiteUrl(solution.path),
             provider: { '@id': serviceId },
           },
         })),
@@ -415,10 +419,20 @@ export class SiteShellComponent implements OnInit {
             name: 'Strona główna',
             item: absoluteSiteUrl('/'),
           },
+          ...(serviceLandingPage
+            ? [
+                {
+                  '@type': 'ListItem',
+                  position: 2,
+                  name: 'Rozwiązania',
+                  item: absoluteSiteUrl('/rozwiazania'),
+                },
+              ]
+            : []),
           {
             '@type': 'ListItem',
-            position: 2,
-            name: route.label,
+            position: serviceLandingPage ? 3 : 2,
+            name: serviceLandingPage?.eyebrow ?? route.label,
             item: absoluteSiteUrl(route.path),
           },
         ],

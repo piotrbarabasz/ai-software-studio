@@ -52,14 +52,7 @@ describe('Site content model', () => {
     expect(
       siteContent.solutions.solutions.every(
         (solution) =>
-          solution.problem &&
-          solution.audience &&
-          solution.capabilities.length > 0 &&
-          solution.requiredInputs.length > 0 &&
-          solution.demoScope &&
-          solution.productionScope.length > 0 &&
-          solution.primaryCta.path === '/kontakt' &&
-          solution.primaryCta.queryParams?.['projectType'],
+          solution.problem && solution.summary && solution.path.startsWith('/rozwiazania/'),
       ),
     ).toBeTrue();
     expect(siteContent.privacy.dataScopeItems[0]).toContain('Formularz zbiera');
@@ -406,12 +399,11 @@ describe('Site content model', () => {
     expect(siteContent.navigation.map((item) => item.label)).toEqual([
       'Rozwiązania',
       'Demo w 7 dni',
-      'Wdrożenia',
-      'Dla partnerów',
-      'O Protolume',
-      'Kontakt',
+      'Aplikacje i integracje',
+      'Dla software house’ów',
+      'Studio',
     ]);
-    expect(siteContent.routes.find((route) => route.path === '/studio')?.label).toBe('O Protolume');
+    expect(siteContent.routes.find((route) => route.path === '/studio')?.label).toBe('Studio');
     expect(siteContent.home.evidenceTeaser).toEqual(
       jasmine.objectContaining({
         eyebrow: 'Dowody pracy',

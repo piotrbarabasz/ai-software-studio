@@ -14,5 +14,4 @@ import { RevealOnScrollDirective } from '../../shared/reveal/reveal-on-scroll.di
 })
 export class SolutionsPageComponent {
   readonly content: SolutionsPageContent = siteContent.solutions;
-  readonly landingPages = siteContent.serviceLandingPages;
 }

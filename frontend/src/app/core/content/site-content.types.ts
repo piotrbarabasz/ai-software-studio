@@ -320,22 +320,11 @@ export interface HomeUseCase {
 }
 
 export interface SolutionOffer {
-  readonly id:
-    | 'asystent-wiedzy'
-    | 'automatyzacja-wiadomosci-i-dokumentow'
-    | 'panel-operacyjny'
-    | 'system-agentowy'
-    | 'integracje-kanalow';
+  readonly id: string;
   readonly title: string;
   readonly summary: string;
   readonly problem: string;
-  readonly audience: string;
-  readonly capabilities: readonly string[];
-  readonly requiredInputs: readonly string[];
-  readonly demoScope: string;
-  readonly productionScope: readonly string[];
-  readonly primaryCta: HomeCta;
-  readonly optionalSecondaryCta?: HomeCta;
+  readonly path: PublicRoutePath;
 }
 
 export type ServiceLandingSlug =
@@ -414,8 +403,6 @@ export interface SolutionsPageContent {
   readonly eyebrow: string;
   readonly title: string;
   readonly lead: string;
-  readonly scopeNotice: string;
-  readonly quickLinksLabel: string;
   readonly solutions: readonly SolutionOffer[];
   readonly closingCta: HomeClosingCta;
 }
