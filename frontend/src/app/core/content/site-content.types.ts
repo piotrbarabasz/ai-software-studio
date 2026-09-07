@@ -404,7 +404,7 @@ export interface ServiceLandingPageContent {
   readonly closingTitle: string;
   readonly closingLead: string;
   readonly primaryCta: HomeCta;
-  readonly relatedLinks: readonly [HomeCta, HomeCta, HomeCta];
+  readonly relatedLinks: readonly HomeCta[];
   readonly serviceType: string;
   readonly hubAnchor: string;
 }

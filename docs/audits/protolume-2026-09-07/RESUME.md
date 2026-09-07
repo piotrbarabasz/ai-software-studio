@@ -7,7 +7,7 @@
 No task has all acceptance criteria completed, including production verification. P0 has local evidence.
 
 ## Current task
-UX-003/004 central offer model and contact intent. P0 local verification complete; production gates remain B-006.
+UX-003/004 implementation ready for production build/browser checks; 211 frontend tests, lint and 84 backend tests pass. First-stage commercial details remain B-001.
 
 ## Current hypothesis / root cause
 Angular 22 enables incremental hydration/event replay by default. `withNoIncrementalHydration()` preserves hydration without executable inline scripts. Mobile expanded navigation before bootstrap caused remaining CLS 0.621; CSS scripting media preserves initial geometry and real no-JS navigation. Dynamic DOM inside noscript caused hydration TypeError; stable DOM with scripting CSS fixes it. Home CTA styles overrode dark semantic colors.
@@ -38,9 +38,9 @@ Angular 22 enables incremental hydration/event replay by default. `withNoIncreme
 No currently failing local check. Full suite 204 passed; shell suite passed after scroll offset; production build passed. Fragment/form/focus browser checks passed. Original audit Lighthouse versus local timings are not directly comparable. Default Python is Anaconda 3.9; use backend/.venv/Scripts/python.exe (3.12).
 
 ## Exact next action
-1. UX-003/004: central neutral first-stage definitions, distinct simulation/presentation/production, service contact context and correct Voice/agent topics; preserve manual topic changes.
-2. Verify changed content/contact behavior, production build and desktop/mobile; checkpoint.
-3. UX-005/006 hub/navigation, then UX-007/008 home/simulation, UX-009 proof registry; proceed through all 28 tasks without waiting for owner blockers.
+1. Run tmp/audit-implementation/build.ps1; browser check five service CTA destinations, context and manual topic override at 360/390/430/768/921/1024/1440. Restore generated env/index before commit.
+2. Add explicit backend delivery assertion for service context if needed; all schema contexts already covered by API tests. Full backend Docker/smoke gates remain required after backend changes (B-006).
+3. UX-005/006: replace duplicated solutions catalog with serviceCatalog (UI/ItemList/metadata), keep old anchors, add visible/schema breadcrumbs, rename navigation, preserve responsive menu. Checkpoint, then UX-007/008 and UX-009.
 
 ## Do not redo
 * Full audit already read. Do not audit from scratch.
@@ -53,6 +53,8 @@ No currently failing local check. Full suite 204 passed; shell suite passed afte
 `6bb3e90` for local P0 behavior only; not merge ready.
 
 ## Uncommitted work
-None after checkpoint; always inspect git status.
+Safe UX-003/004 implementation checkpoint; production build/browser checks pending. Inspect git status.
 
 Local tools: tmp/audit-implementation/build.ps1, serve.cjs (port 4400), measure.cjs, a11y.cjs, interactions.cjs. Server session may need restart. Logs in that directory. Build uses production contract public values and an exact copy of currently published legal text (build 8386de6), not invented input. This is not verification against Secret Manager or legal approval. Never use frontend/.public-legal-config.json: pre-existing fake administrator and corrupted strings.
+
+UX-003/004 files: first-stage.pl.ts, service-catalog.pl.ts, service-pages.pl.ts, shared/first-stage-terms.component.ts, contact-options/form/API types, backend ContactInquiry optional allowlisted serviceContext and email rendering. No new env. Query service is separate from topic; no free text allowed by API. Existing tests updated only for intentionally changed copy/visible topic list; old compatibility mappings preserved except now dedicated Voice/WhatsApp/agents choices.

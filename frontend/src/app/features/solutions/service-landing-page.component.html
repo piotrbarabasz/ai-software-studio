@@ -12,7 +12,11 @@
       >
         {{ content.hero.primaryCta.label }}
       </a>
-      <a class="secondary-action" [routerLink]="content.hero.secondaryCta.path">
+      <a
+        class="secondary-action"
+        [routerLink]="content.hero.secondaryCta.path"
+        [fragment]="content.hero.secondaryCta.fragment"
+      >
         {{ content.hero.secondaryCta.label }}
       </a>
     </div>

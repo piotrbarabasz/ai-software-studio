@@ -3,11 +3,12 @@ import { RouterLink } from '@angular/router';
 
 import type { HomeSevenDayDemo } from '../../../core/content/site-content.types';
 import { RevealOnScrollDirective } from '../../../shared/reveal/reveal-on-scroll.directive';
+import { FirstStageTermsComponent } from '../../../shared/first-stage-terms.component';
 
 @Component({
   selector: 'app-seven-day-demo',
   standalone: true,
-  imports: [RouterLink, RevealOnScrollDirective],
+  imports: [RouterLink, RevealOnScrollDirective, FirstStageTermsComponent],
   templateUrl: './seven-day-demo.component.html',
   styleUrl: './seven-day-demo.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

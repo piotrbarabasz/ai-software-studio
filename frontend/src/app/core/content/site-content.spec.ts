@@ -511,10 +511,10 @@ describe('Site content model', () => {
     );
     expect(siteContent.trust.evidence.items[1].limitation).toContain('Wymaga dodatkowej walidacji');
     expect(siteContent.demo.interactiveDemo.disclaimer).toContain(
-      'nie połączenie z produkcyjną bazą wiedzy',
+      'gotową odpowiedź zapisaną w tej stronie',
     );
     expect(siteContent.demo.interactiveDemo.disclaimer).toContain(
-      'przykład doświadczenia użytkownika',
+      'Pytanie pozostaje w Twojej przeglądarce',
     );
     expect(siteContent.demoExample.fictionalNotice).toContain(
       'To fikcyjny scenariusz demonstracyjny',
@@ -584,7 +584,7 @@ describe('Site content model', () => {
     );
     expect(presentationScenario?.nextStep).toEqual(
       jasmine.objectContaining({
-        label: 'Umów bezpłatną prezentację',
+        label: 'Opisz proces',
         path: '/kontakt',
         queryParams: { projectType: 'rag_chatbot_demo' },
       }),

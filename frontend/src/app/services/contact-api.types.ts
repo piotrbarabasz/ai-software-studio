@@ -23,6 +23,7 @@ export interface ContactInquiryRequest {
   readonly email: string;
   readonly company: string | null;
   readonly projectType: ProjectType;
+  readonly serviceContext?: 'automation' | 'rag' | 'voice' | 'whatsapp' | 'agents';
   readonly budgetRange: BudgetRange;
   readonly message: string;
   readonly consent: true;

@@ -1,3 +1,4 @@
+import { serviceCatalog } from './service-catalog.pl';
 import { publicBrand } from '../brand/public-brand.config';
 import type { HomeCta, PublicRouteMetadata, ServiceLandingPageContent } from './site-content.types';
 
@@ -16,7 +17,7 @@ interface ServiceLandingPageDefinition {
 }
 
 const contact = (queryParams: NonNullable<HomeCta['queryParams']>): HomeCta => ({
-  label: 'Porozmawiaj o zakresie',
+  label: 'Opisz proces',
   path: '/kontakt',
   queryParams,
 });
@@ -678,7 +679,29 @@ const serviceLandingPageDefinitions = [
   },
 ] as const satisfies readonly ServiceLandingPageDefinition[];
 
-export const serviceLandingPages = serviceLandingPageDefinitions.map((entry) => entry.content);
+export const serviceLandingPages = serviceLandingPageDefinitions.map(
+  (entry): ServiceLandingPageContent => {
+    const service = serviceCatalog.find((item) => item.path === entry.path)!;
+    const primaryCta = contact({ projectType: service.projectType, service: service.id });
+    return {
+      ...entry.content,
+      primaryCta,
+      hero: {
+        ...entry.content.hero,
+        primaryCta,
+        secondaryCta:
+          service.id === 'rag'
+            ? {
+                label: 'Zobacz symulację odpowiedzi',
+                path: '/demo-ai',
+                fragment: 'interactive-demo',
+              }
+            : { label: 'Zobacz zakres pierwszego etapu', path: '/demo-ai' },
+      },
+      relatedLinks: entry.content.relatedLinks.filter((link) => link.path !== '/kontakt'),
+    };
+  },
+);
 
 export const serviceLandingRouteMetadata = serviceLandingPageDefinitions.map(
   (entry): PublicRouteMetadata => ({

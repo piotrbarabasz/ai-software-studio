@@ -10,6 +10,9 @@ export type VisibleProjectType = Extract<
   | 'rag_chatbot_demo'
   | 'software_house_partnership'
   | 'other'
+  | 'voice_agent_demo'
+  | 'whatsapp_agent_management'
+  | 'ai_automation'
 >;
 
 export const projectTypeOptions = [
@@ -18,6 +21,9 @@ export const projectTypeOptions = [
   { value: 'backend_api', label: 'Integracja lub API' },
   { value: 'business_process_automation', label: 'Automatyzacja procesu' },
   { value: 'rag_chatbot_demo', label: 'Asystent AI lub RAG' },
+  { value: 'voice_agent_demo', label: 'Obsługa telefonów / Voice AI' },
+  { value: 'whatsapp_agent_management', label: 'WhatsApp i CRM' },
+  { value: 'ai_automation', label: 'AI do zadań wieloetapowych' },
   { value: 'software_house_partnership', label: 'Współpraca z software house’em lub MSP' },
   { value: 'other', label: 'Nie wiem / inny temat' },
 ] satisfies readonly SelectOption<VisibleProjectType>[];
@@ -30,10 +36,10 @@ const projectTypeQueryMap: Readonly<Record<ProjectType, VisibleProjectType>> = {
   rag_chatbot_demo: 'rag_chatbot_demo',
   software_house_partnership: 'software_house_partnership',
   other: 'other',
-  ai_automation: 'business_process_automation',
+  ai_automation: 'ai_automation',
   email_automation: 'business_process_automation',
-  voice_agent_demo: 'rag_chatbot_demo',
-  whatsapp_agent_management: 'rag_chatbot_demo',
+  voice_agent_demo: 'voice_agent_demo',
+  whatsapp_agent_management: 'whatsapp_agent_management',
   agent_management_panel: 'custom_web_app',
   dashboard_internal_tool: 'custom_web_app',
   external_integration: 'backend_api',

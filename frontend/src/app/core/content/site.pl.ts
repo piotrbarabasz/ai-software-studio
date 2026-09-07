@@ -1,3 +1,4 @@
+import { firstStageOffer } from './first-stage.pl';
 import { budgetRangeOptions, projectTypeOptions } from './contact-options.pl';
 import { publicBrand } from '../brand/public-brand.config';
 import type {
@@ -363,8 +364,7 @@ const legacyRedirects = [
   { from: '/systemy-agentowe', to: '/rozwiazania/systemy-agentowe' },
 ] as const;
 
-const contactNoCommitment =
-  'Wysłanie formularza nie jest zamówieniem, akceptacją wyceny ani automatycznym rozpoczęciem płatnej realizacji.';
+const contactNoCommitment = firstStageOffer.noCommitment;
 
 const primaryNavigation = [
   { label: 'Rozwiązania', path: '/rozwiazania' },
@@ -736,9 +736,9 @@ export const siteContent = {
   },
   demo: {
     path: '/demo-ai',
-    eyebrow: 'Demo i sprawdzenie wykonalności',
+    eyebrow: firstStageOffer.name,
     title: 'Zobacz jeden scenariusz swojej firmy w działającym demo',
-    lead: 'W siedem dni pokazujemy, co użytkownik zobaczy, jaką decyzję może podjąć i jakie informacje otrzyma. Potem porównujesz to z pełnym systemem produkcyjnym.',
+    lead: firstStageOffer.result,
     audienceTitle: 'Dla zespołów, które chcą sprawdzić jedną sytuację przed większą inwestycją',
     audienceProblems: [
       'powtarzalne pytania klientów lub zespołu',
@@ -750,7 +750,7 @@ export const siteContent = {
       'wybór jednej sytuacji do sprawdzenia',
       'ustalenie danych, użytkowników i założeń',
       'projekt widocznego przepływu',
-      'budowa klikalnego lub działającego demo',
+      'budowa uzgodnionego scenariusza i test jego działania',
       'prezentacja informacji potrzebnych do decyzji o kolejnym kroku',
     ],
     comparison: {
@@ -778,14 +778,14 @@ export const siteContent = {
       'Najpierw widać działający przebieg, potem zestaw informacji potrzebnych do decyzji o kolejnym kroku.',
     decision:
       'Na tej podstawie możesz przejść do walidacji, przygotować pierwszy etap albo zatrzymać temat przed większą inwestycją.',
-    interactiveCtaLabel: 'Uruchom przykładowe demo',
+    interactiveCtaLabel: 'Zobacz symulację',
     reportCta: { label: 'Zobacz przykładowy raport', path: '/przyklad-demo' },
     ctaLabel: 'Omów sytuację do sprawdzenia',
     interactiveDemo: {
       heading: 'Sprawdź przykładowy przepływ asystenta wiedzy',
-      simulationLabel: 'Interaktywna symulacja przepływu demo',
+      simulationLabel: firstStageOffer.simulation,
       disclaimer:
-        'To przykład doświadczenia użytkownika, a nie połączenie z produkcyjną bazą wiedzy.',
+        'Wybierasz gotową odpowiedź zapisaną w tej stronie. Pytanie pozostaje w Twojej przeglądarce.',
       questionsLabel: 'Wybierz przykładowe pytanie',
       emptyStateLabel: 'Wybierz pytanie, aby zobaczyć stały, przykładowy przebieg odpowiedzi.',
       checkingLabel: 'Sprawdzam materiały…',
@@ -796,7 +796,7 @@ export const siteContent = {
       handoffLabel: 'Przekazanie do pracownika',
       resetLabel: 'Rozpocznij ponownie',
       contactCta: {
-        label: 'Umów bezpłatną prezentację',
+        label: 'Opisz proces',
         path: '/kontakt',
         queryParams: { projectType: 'rag_chatbot_demo' },
       },
@@ -896,7 +896,7 @@ export const siteContent = {
           confidence: 'Wysoka - użytkownik jest kierowany do formularza kontaktowego.',
           status: 'answered',
           nextStep: {
-            label: 'Umów bezpłatną prezentację',
+            label: 'Opisz proces',
             path: '/kontakt',
             queryParams: { projectType: 'rag_chatbot_demo' },
           },
@@ -1061,7 +1061,7 @@ export const siteContent = {
       fallbackBody:
         'To demo korzysta z przygotowanych scenariuszy i nie łączy się z pełnym modelem AI ani danymi firmy. Podczas bezpłatnej prezentacji pokażemy, jak chatbot może odpowiadać na pytania z Twoich materiałów, korzystać z integracji i przekazywać sprawy człowiekowi.',
       fallbackCta: {
-        label: 'Umów bezpłatną prezentację',
+        label: 'Opisz proces',
         path: '/kontakt',
         queryParams: { projectType: 'rag_chatbot_demo' },
       },

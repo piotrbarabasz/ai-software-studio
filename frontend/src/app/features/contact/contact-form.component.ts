@@ -14,6 +14,7 @@ import {
   type VisibleProjectType,
 } from '../../core/content/contact-options.pl';
 import { siteContent } from '../../core/content/site.pl';
+import { serviceFromQuery, type ServiceContext } from '../../core/content/service-catalog.pl';
 import type { ContactPageContent } from '../../core/content/site-content.types';
 import { ContactApiService } from '../../services/contact-api.service';
 import type {
@@ -79,6 +80,8 @@ export class ContactFormComponent implements OnInit {
   status: 'idle' | 'success' | 'error' = 'idle';
   statusMessage = '';
   submissionSummary?: SubmissionSummary;
+  serviceContext?: ServiceContext;
+  serviceLabel?: string;
 
   get isPartnerContext(): boolean {
     return this.form.controls.projectType.value === 'software_house_partnership';
@@ -102,6 +105,9 @@ export class ContactFormComponent implements OnInit {
     }
 
     this.route.queryParamMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+      const service = serviceFromQuery(params.get('service'));
+      this.serviceContext = service?.id;
+      this.serviceLabel = service?.label;
       const requestedProjectType = projectTypeFromQuery(params.get('projectType'));
       if (!this.form.controls.projectType.dirty && requestedProjectType !== null) {
         this.form.controls.projectType.setValue(requestedProjectType, { emitEvent: false });
@@ -195,6 +201,7 @@ export class ContactFormComponent implements OnInit {
       email: raw.email.trim(),
       company: raw.company.trim() || null,
       projectType: this.isVisibleProjectType(raw.projectType) ? raw.projectType : 'other',
+      ...(this.serviceContext ? { serviceContext: this.serviceContext } : {}),
       budgetRange: this.isBudgetRange(raw.budgetRange) ? raw.budgetRange : 'not_sure',
       message: raw.message.trim(),
       consent: true,
