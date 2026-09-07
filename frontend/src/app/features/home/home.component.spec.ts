@@ -172,9 +172,9 @@ describe('HomeComponent', () => {
     const cards = Array.from(element.querySelectorAll<HTMLElement>('.evidence-teaser-card'));
 
     expect(element.querySelector('.evidence-teaser h2')?.textContent?.trim()).toBe(
-      'Zobacz działające elementy',
+      'Zobacz zamiast czytać.',
     );
-    expect(cards).toHaveSize(2);
+    expect(cards).toHaveSize(3);
     expect(
       cards.map((card) => ({
         type: card.querySelector('.evidence-type')?.textContent?.trim(),
@@ -185,20 +185,27 @@ describe('HomeComponent', () => {
       })),
     ).toEqual([
       {
-        type: 'Interaktywne demo',
-        title: 'Asystent wiedzy z obsługą pytań poza zakresem',
+        type: 'Try it',
+        title: 'Interaktywne demo',
         description:
           'Sprawdź odpowiedź ze źródłem oraz przekazanie pytania do człowieka, gdy brakuje danych.',
-        cta: 'Uruchom interaktywne demo',
+        cta: 'Uruchom demo →',
         href: '/demo-ai',
       },
       {
-        type: 'Przykładowy raport',
-        title: 'Raport decyzyjny po Demo w 7 dni',
+        type: 'Inspect it',
+        title: 'Przykładowy raport',
         description:
-          'Sprawdź zakres, scenariusze testowe, ryzyka, kryteria odbioru i rekomendację w jednym raporcie.',
-        cta: 'Zobacz przykładowy raport',
+          'Zobacz zakres, scenariusze testowe, ryzyka, kryteria odbioru i rekomendację dalszego kroku.',
+        cta: 'Zobacz raport →',
         href: '/przyklad-demo',
+      },
+      {
+        type: 'Explore it',
+        title: 'Protolume Lab',
+        description: 'Eksperymenty z RAG, agentami, ewaluacją i niezawodnością systemów AI.',
+        cta: 'Explore Lab →',
+        href: '/rd',
       },
     ]);
     expect(element.querySelector('.evidence-note')?.textContent?.trim()).toBe(
@@ -208,6 +215,34 @@ describe('HomeComponent', () => {
     expect(element.querySelector('.evidence-teaser')?.textContent).not.toContain(
       'Wymaga dodatkowej walidacji',
     );
+  });
+
+  it('keeps the proof section in the dark semantic color context', () => {
+    const element = createFixture();
+    const evidenceSection = element.querySelector('.evidence-teaser') as HTMLElement;
+    const evidenceHeading = element.querySelector('.evidence-teaser h2') as HTMLElement;
+    const evidenceLead = element.querySelector('.evidence-teaser .section-lead') as HTMLElement;
+    const evidenceCard = element.querySelector('.evidence-teaser-card') as HTMLElement;
+    const evidenceCardHeading = element.querySelector('.evidence-teaser-card h3') as HTMLElement;
+
+    expect(
+      contrastRatio(
+        getComputedStyle(evidenceHeading).color,
+        getComputedStyle(evidenceSection).backgroundColor,
+      ),
+    ).toBeGreaterThanOrEqual(4.5);
+    expect(
+      contrastRatio(
+        getComputedStyle(evidenceLead).color,
+        getComputedStyle(evidenceSection).backgroundColor,
+      ),
+    ).toBeGreaterThanOrEqual(4.5);
+    expect(
+      contrastRatio(
+        getComputedStyle(evidenceCardHeading).color,
+        getComputedStyle(evidenceCard).backgroundColor,
+      ),
+    ).toBeGreaterThanOrEqual(4.5);
   });
 
   it('integrates the four-step seven-day timeline at the existing homepage position', () => {
@@ -277,4 +312,35 @@ describe('HomeComponent', () => {
     expect(element.querySelector('a[href*="linkedin.com"]')).toBeNull();
     expect(element.querySelector('[class*="client-logo"], [class*="customer-logo"]')).toBeNull();
   });
+
+  function contrastRatio(foreground: string, background: string): number {
+    const [r1, g1, b1] = parseRgbColor(foreground);
+    const [r2, g2, b2] = parseRgbColor(background);
+
+    const foregroundLuminance = relativeLuminance(r1, g1, b1);
+    const backgroundLuminance = relativeLuminance(r2, g2, b2);
+    const lighter = Math.max(foregroundLuminance, backgroundLuminance);
+    const darker = Math.min(foregroundLuminance, backgroundLuminance);
+
+    return (lighter + 0.05) / (darker + 0.05);
+  }
+
+  function parseRgbColor(value: string): [number, number, number] {
+    const match = value.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+
+    if (!match) {
+      throw new Error(`Unexpected color value: ${value}`);
+    }
+
+    return [Number(match[1]), Number(match[2]), Number(match[3])];
+  }
+
+  function relativeLuminance(red: number, green: number, blue: number): number {
+    const channels = [red, green, blue].map((channel) => {
+      const normalized = channel / 255;
+      return normalized <= 0.03928 ? normalized / 12.92 : ((normalized + 0.055) / 1.055) ** 2.4;
+    });
+
+    return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+  }
 });

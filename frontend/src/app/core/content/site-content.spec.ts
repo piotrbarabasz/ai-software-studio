@@ -133,12 +133,20 @@ describe('Site content model', () => {
     ]);
     expect(siteContent.home.businessFlow.cta.path).toBe('/kontakt');
     expect(siteContent.home.businessFlow.cta.queryParams?.['projectType']).toBe('backend_api');
-    expect(siteContent.home.evidenceTeaser).toEqual({
-      eyebrow: 'Dowody pracy',
-      title: 'Zobacz działające elementy',
-      lead: 'Uruchom demonstrację, przejrzyj przykładowy rezultat i zobacz, co każdy materiał faktycznie potwierdza.',
-      note: 'To materiały demonstracyjne i projekt własny, a nie case study klienta.',
-    });
+    expect(siteContent.home.evidenceTeaser).toEqual(
+      jasmine.objectContaining({
+        eyebrow: 'Dowody pracy',
+        title: 'Zobacz zamiast czytać.',
+        lead: 'Uruchom działający element, przejrzyj rezultat albo zajrzyj do eksperymentów technicznych.',
+        note: 'To materiały demonstracyjne i projekt własny, a nie case study klienta.',
+      }),
+    );
+    expect(siteContent.home.evidenceTeaser.items).toHaveSize(3);
+    expect(siteContent.home.evidenceTeaser.items.map((item) => item.id)).toEqual([
+      'interactive-demo',
+      'example-report',
+      'protolume-lab',
+    ]);
     expect(siteContent.home.sevenDayDemo.deliverables).toEqual([
       'Opis wybranego procesu i jego granic',
       'Działające demo jednego scenariusza',
@@ -407,7 +415,7 @@ describe('Site content model', () => {
     expect(siteContent.home.evidenceTeaser).toEqual(
       jasmine.objectContaining({
         eyebrow: 'Dowody pracy',
-        title: 'Zobacz działające elementy',
+        title: 'Zobacz zamiast czytać.',
         note: 'To materiały demonstracyjne i projekt własny, a nie case study klienta.',
       }),
     );

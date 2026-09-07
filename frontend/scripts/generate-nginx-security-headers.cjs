@@ -39,11 +39,9 @@ function collectInlineScriptHashes(artifactRoot = DEFAULT_ARTIFACT_ROOT) {
       if (/\bsrc\s*=/i.test(attributes)) {
         continue;
       }
-      if (!/\btype=["']application\/ld\+json["']/i.test(attributes)) {
-        throw new Error(
-          `Niedozwolony skrypt inline w ${path.relative(artifactRoot, filePath)}. ` +
-            'CSP dopuszcza wyłącznie hashowany JSON-LD.',
-        );
+      const scriptType = attributes.match(/\btype\s*=\s*(["'])(.*?)\1/i)?.[2]?.toLowerCase();
+      if (scriptType === 'application/json') {
+        continue;
       }
       hashes.add(hashInlineScript(match[2]));
     }

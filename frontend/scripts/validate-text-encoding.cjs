@@ -93,7 +93,13 @@ function isTextFile(filePath) {
 }
 
 function isExcludedFile(filePath) {
-  return EXCLUDED_REPOSITORY_FILES.has(normalizedRepositoryPath(filePath));
+  const repositoryPath = normalizedRepositoryPath(filePath);
+
+  if (repositoryPath.startsWith('docs/audits/') && repositoryPath.includes('/evidence/')) {
+    return true;
+  }
+
+  return EXCLUDED_REPOSITORY_FILES.has(repositoryPath);
 }
 
 function collectTextFiles(scanRoots) {

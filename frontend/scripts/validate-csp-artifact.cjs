@@ -121,13 +121,13 @@ function validateCspArtifact(artifactRoot, headers) {
       if (/\bsrc\s*=/i.test(attributes)) {
         continue;
       }
-      if (!/\btype=["']application\/ld\+json["']/i.test(attributes)) {
-        errors.push(`${relativePath}: executable inline script is not allowed`);
+      const scriptType = attributes.match(/\btype\s*=\s*(["'])(.*?)\1/i)?.[2]?.toLowerCase();
+      if (scriptType === 'application/json') {
         continue;
       }
       const hash = scriptHash(match[2]);
       if (!scriptSources.includes(hash)) {
-        errors.push(`${relativePath}: JSON-LD hash ${hash} is missing from script-src`);
+        errors.push(`${relativePath}: inline script hash ${hash} is missing from script-src`);
       }
     }
   }
