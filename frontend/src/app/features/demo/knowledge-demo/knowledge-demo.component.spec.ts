@@ -25,10 +25,6 @@ describe('KnowledgeDemoComponent', () => {
     return element?.textContent?.replace(/\s+/g, ' ').trim() ?? '';
   }
 
-  function getCategoryButtons(element: HTMLElement): HTMLButtonElement[] {
-    return Array.from(element.querySelectorAll('.category-button')) as HTMLButtonElement[];
-  }
-
   function getQuestionButtons(element: HTMLElement): HTMLButtonElement[] {
     return Array.from(element.querySelectorAll('.question-button')) as HTMLButtonElement[];
   }
@@ -43,7 +39,11 @@ describe('KnowledgeDemoComponent', () => {
   }
 
   function clickCategory(element: HTMLElement, text: string): void {
-    buttonByText(getCategoryButtons(element), text).click();
+    const select = element.querySelector('#demo-category') as HTMLSelectElement;
+    select.value = Array.from(select.options).find((option) =>
+      option.textContent?.includes(text),
+    )!.value;
+    select.dispatchEvent(new Event('change'));
   }
 
   function clickQuestion(element: HTMLElement, text: string): void {
@@ -53,22 +53,16 @@ describe('KnowledgeDemoComponent', () => {
   it('renders the simulation shell, active category and accessibility metadata', () => {
     const fixture = createComponent();
     const element: HTMLElement = fixture.nativeElement;
-    const categories = getCategoryButtons(element);
+    const category = element.querySelector('#demo-category') as HTMLSelectElement;
     const questions = getQuestionButtons(element);
     const input = element.querySelector('#custom-question') as HTMLInputElement;
 
     expect(textContent(element.querySelector('.simulation-label'))).toBe(
       siteContent.demo.interactiveDemo.simulationLabel,
     );
-    expect(categories).toHaveSize(4);
-    expect(categories[0].getAttribute('aria-pressed')).toBe('true');
-    expect(
-      categories.slice(1).every((button) => button.getAttribute('aria-pressed') === 'false'),
-    ).toBeTrue();
+    expect(category.options.length).toBe(4);
+    expect(category.value).toBe(siteContent.demo.interactiveDemo.categories[0].id);
     expect(questions).toHaveSize(3);
-    expect(textContent(element.querySelector('.question-history'))).toContain(
-      siteContent.demo.interactiveDemo.categories[0].description,
-    );
     expect(textContent(element.querySelector('.question-list h3'))).toBe(
       siteContent.demo.interactiveDemo.questionsLabel,
     );
@@ -80,13 +74,9 @@ describe('KnowledgeDemoComponent', () => {
     );
     expect(input.maxLength).toBe(300);
     expect(input.autocomplete).toBe('off');
-    expect(element.querySelector('#knowledge-demo-result')?.getAttribute('aria-live')).toBe(
-      'polite',
-    );
-    expect(
-      categories.every((button) => button.getBoundingClientRect().height >= 44) &&
-        questions.every((button) => button.getBoundingClientRect().height >= 44),
-    ).toBeTrue();
+    expect(element.querySelector('[aria-live]')).toBeNull();
+    expect(category.getBoundingClientRect().height).toBeGreaterThanOrEqual(44);
+    expect(questions.every((button) => button.getBoundingClientRect().height >= 44)).toBeTrue();
   });
 
   it('changes category and resets the visible conversation state', () => {
@@ -116,9 +106,8 @@ describe('KnowledgeDemoComponent', () => {
 
     clickQuestion(element, 'Ile kosztuje wdrożenie chatbota?');
     fixture.detectChanges();
-    expect(textContent(element.querySelector('.checking-state'))).toBe(
-      siteContent.demo.interactiveDemo.checkingLabel,
-    );
+    expect(fixture.componentInstance.state).toBe('result');
+    expect(element.querySelector('.checking-state')).toBeNull();
     tick(250);
     fixture.detectChanges();
 
@@ -129,9 +118,9 @@ describe('KnowledgeDemoComponent', () => {
       'Koszt zależy od liczby scenariuszy',
     );
     expect(element.querySelectorAll('.sources li')).toHaveSize(2);
-    expect(textContent(element.querySelector('.confidence'))).toContain(
-      siteContent.demo.interactiveDemo.confidenceLabel,
-    );
+    expect(element.querySelector('.confidence')).toBeNull();
+    expect(element.querySelectorAll('.contact-cta')).toHaveSize(1);
+    expect(document.activeElement?.id).toBe('knowledge-demo-answer-title');
   }));
 
   it('shows handoff for the dedicated handoff scenario', fakeAsync(() => {
@@ -224,25 +213,21 @@ describe('KnowledgeDemoComponent', () => {
       'To pytanie wykracza poza zakres tej symulacji',
     );
     expect(element.querySelector('a[href="/kontakt?projectType=rag_chatbot_demo"]')).not.toBeNull();
-    expect(textContent(element.querySelector('.answer-card .reset-button'))).toBe(
-      'Wybierz przykładowe pytanie',
-    );
-    expect(element.querySelector('.demo-actions a[hidden]')).not.toBeNull();
+    expect(textContent(element.querySelector('.reset-button'))).toBe('Wybierz przykładowe pytanie');
+    expect(element.querySelectorAll('.contact-cta')).toHaveSize(1);
   });
 
-  it('resets to the selected category, ignores empty questions and clears stale timers', fakeAsync(() => {
+  it('resets to the selected category and ignores empty questions', fakeAsync(() => {
     const fixture = createComponent();
     const component = fixture.componentInstance;
     const element: HTMLElement = fixture.nativeElement;
-    const clearTimeoutSpy = spyOn(window, 'clearTimeout').and.callThrough();
 
     clickQuestion(element, 'Ile kosztuje wdrożenie chatbota?');
     fixture.detectChanges();
-    expect(component.state).toBe('checking');
+    expect(component.state).toBe('result');
 
     clickCategory(element, 'Wiedza firmowa');
     fixture.detectChanges();
-    expect(clearTimeoutSpy).toHaveBeenCalled();
     tick(300);
     fixture.detectChanges();
     expect(component.state).toBe('idle');

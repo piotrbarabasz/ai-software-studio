@@ -11,7 +11,7 @@ Local implementation is not a production deployment. See RESUME.md and BLOCKERS.
 | UX-005 | PARTIAL | e901b63 + follow-up | 207 Angular tests; production artifact; eight-width browser | 390px: height 10285 -> 3293, first card 1443 -> 318; B-006 |
 | UX-006 | PARTIAL | e901b63 + follow-up | No overlap at 921/1024/1440; breadcrumbs; native no-JS CTA | Local acceptance passed; B-006 |
 | UX-007 | NOT_STARTED | - | Acceptance criteria read | See BLOCKERS.md |
-| UX-008 | NOT_STARTED | - | Acceptance criteria read | See BLOCKERS.md |
+| UX-008 | PARTIAL | Current checkpoint | 207 tests; production build; 8 browser cases, no question requests; axe | B-005 physical screen reader; B-006 deployment; focus single announcement by design |
 | UX-009 | NOT_STARTED | - | Acceptance criteria read | See BLOCKERS.md |
 | UX-010 | NOT_STARTED | - | Acceptance criteria read | See BLOCKERS.md |
 | UX-011 | NOT_STARTED | - | Acceptance criteria read | See BLOCKERS.md |

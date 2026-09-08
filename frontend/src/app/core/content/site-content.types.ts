@@ -580,7 +580,6 @@ export interface KnowledgeDemoScenario {
   readonly keywords: readonly string[];
   readonly answer: string;
   readonly sources: readonly string[];
-  readonly confidence: string;
   readonly status: KnowledgeDemoScenarioStatus;
   readonly handoff?: string;
   readonly productionNote?: string;
@@ -593,11 +592,9 @@ export interface KnowledgeDemoContent {
   readonly disclaimer: string;
   readonly questionsLabel: string;
   readonly emptyStateLabel: string;
-  readonly checkingLabel: string;
   readonly questionLabel: string;
   readonly answerLabel: string;
   readonly sourcesLabel: string;
-  readonly confidenceLabel: string;
   readonly handoffLabel: string;
   readonly resetLabel: string;
   readonly contactCta: HomeCta;

@@ -622,11 +622,9 @@ export const siteContent = {
         'Wybierasz gotową odpowiedź zapisaną w tej stronie. Pytanie pozostaje w Twojej przeglądarce.',
       questionsLabel: 'Wybierz przykładowe pytanie',
       emptyStateLabel: 'Wybierz pytanie, aby zobaczyć stały, przykładowy przebieg odpowiedzi.',
-      checkingLabel: 'Sprawdzam materiały…',
       questionLabel: 'Pytanie',
       answerLabel: 'Odpowiedź asystenta',
-      sourcesLabel: 'Wykorzystane źródła',
-      confidenceLabel: 'Poziom pewności',
+      sourcesLabel: 'Materiały przykładowe scenariusza',
       handoffLabel: 'Przekazanie do pracownika',
       resetLabel: 'Rozpocznij ponownie',
       contactCta: {
@@ -677,7 +675,6 @@ export const siteContent = {
             'Przykładowy zakres demo: koszty zależą od scenariuszy, źródeł wiedzy i integracji',
             'Notatka sprzedażowa: start od jednego procesu ogranicza ryzyko',
           ],
-          confidence: 'Wysoka - odpowiedź opiera się na ustalonym zakresie demo.',
           status: 'answered',
         },
         {
@@ -692,7 +689,6 @@ export const siteContent = {
             'Przykładowy proces demo: wybór jednego procesu',
             'Przykładowy proces demo: lista ograniczeń i rekomendacja kolejnego kroku',
           ],
-          confidence: 'Wysoka - odpowiedź wynika z przygotowanego procesu.',
           status: 'answered',
         },
         {
@@ -711,7 +707,6 @@ export const siteContent = {
             'Przykładowe wdrożenie: osadzenie na stronie',
             'Przykładowe wdrożenie: dopasowanie wyglądu',
           ],
-          confidence: 'Wymaga walidacji zakresu i integracji.',
           status: 'answered',
         },
         {
@@ -727,7 +722,6 @@ export const siteContent = {
           answer:
             'Przejdź do formularza i krótko opisz proces, który chcesz usprawnić. Nie potrzebujesz gotowej specyfikacji.',
           sources: ['Przykładowy lejek demo: kontakt po wstępnym sprawdzeniu'],
-          confidence: 'Wysoka - użytkownik jest kierowany do formularza kontaktowego.',
           status: 'answered',
           nextStep: {
             label: 'Opisz proces',
@@ -747,7 +741,6 @@ export const siteContent = {
             'Zakres demo: jedna rozmowa obejmuje jeden proces',
             'Zakres demo: czas zależy od omawianego przypadku',
           ],
-          confidence: 'Nie podajemy z góry liczby minut; zależy od zakresu.',
           status: 'answered',
         },
         {
@@ -766,7 +759,6 @@ export const siteContent = {
             'Checklist demo: krótki opis problemu',
             'Checklist demo: kilka typowych pytań lub przykładów spraw',
           ],
-          confidence: 'Wysoka - odpowiedź opisuje minimalny zestaw informacji do rozmowy.',
           status: 'answered',
         },
         {
@@ -782,7 +774,6 @@ export const siteContent = {
           answer:
             'Może korzystać z zatwierdzonych FAQ, instrukcji, opisów usług, regulaminów i innych materiałów przekazanych do ustalonego zakresu.',
           sources: ['Przykładowe FAQ', 'Przykładowa instrukcja firmowa'],
-          confidence: 'Wysoka - odpowiedź opisuje dozwolony zakres materiałów w demo.',
           status: 'answered',
         },
         {
@@ -798,7 +789,6 @@ export const siteContent = {
           answer:
             'Tak. Odpowiedź może wskazywać dokument lub fragment materiału, na którym została oparta. Sposób prezentacji źródeł zależy od projektu.',
           sources: ['Przykładowy format odpowiedzi: wskazanie dokumentu lub fragmentu materiału'],
-          confidence: 'Wysoka - źródła są częścią scenariusza odpowiedzi.',
           status: 'answered',
         },
         {
@@ -817,7 +807,6 @@ export const siteContent = {
             'Zasada demo: chatbot nie wymyśla brakujących informacji',
             'Zasada demo: przekazanie sprawy do człowieka',
           ],
-          confidence: 'Brak wystarczających danych do pełnej odpowiedzi.',
           status: 'handoff',
           handoff: 'Sprawa zostaje oznaczona jako wymagająca odpowiedzi pracownika.',
         },
@@ -837,7 +826,6 @@ export const siteContent = {
             'Scenariusz obsługi: brak danych lub nietypowa sytuacja',
             'Scenariusz obsługi: prośba użytkownika o kontakt',
           ],
-          confidence: 'Wysoka - scenariusz opisuje jawny mechanizm przekazania sprawy.',
           status: 'handoff',
           handoff: 'Rozmowa zostaje przekazana pracownikowi.',
         },
@@ -857,7 +845,6 @@ export const siteContent = {
             'W pełnym wdrożeniu źródłem statusu może być CRM lub system zgłoszeń',
             'Symulacja nie łączy się z systemem produkcyjnym',
           ],
-          confidence: 'Wymaga integracji i ustalenia zasad dostępu.',
           status: 'answered',
           productionNote:
             'Wymaga integracji z systemem przechowującym status sprawy i ustalenia zasad dostępu.',
@@ -879,7 +866,6 @@ export const siteContent = {
             'Możliwa integracja zależy od systemu i API',
             'Zakres operacji trzeba zwalidować na procesie klienta',
           ],
-          confidence: 'Wymaga sprawdzenia dokumentacji i procesu klienta.',
           status: 'answered',
           productionNote:
             'Demo nie potwierdza gotowości konkretnej integracji bez sprawdzenia dokumentacji i procesu klienta.',

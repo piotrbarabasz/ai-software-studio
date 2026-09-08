@@ -17,10 +17,9 @@ UX-001..006 have local implementations. Commercial conditions (UX-003) and deplo
 * P0: 12 cold local runs CLS 0, no zero main/hydration errors; home axe eight widths and real no-JS passed. Local LCP not comparable to original network-throttled Lighthouse.
 
 ## Exact next action
-1. Check git and finish UX-005/006 checkpoint if uncommitted.
-2. UX-008: remove simulated latency/confidence, align DOM input/result sequence, mobile result focus with one accessible update; retain local-only matching/fallback/reset, categories and three initial examples.
-3. UX-009: central evidence registry/provenance/limits/publication gating. Then UX-007 shorten home, move evidence before repeated process descriptions, measure before/after.
-4. Continue UX-010..028 from BACKLOG.md. Commit every 1-3 coherent tasks with evidence/status updates.
+1. UX-008 implemented and checked: immediate prepared answers; category select with three questions; matching and fallback stay local; one contact CTA; after-render result-heading focus, reset to category; no simulated confidence/latency. 22 focused tests, 207 full tests, lint/format/build passed. Eight browser cases (360/390/430/1024 x two motion settings), result top ~110px, no interaction requests/errors/overflow, axe in reduced mode passed. Physical screen-reader validation remains B-005.
+2. UX-009: central evidence registry/provenance/limits/publication gating. Then UX-007 shorten home, move evidence before repeated process descriptions, measure before/after. Baseline in simulation-browser.json: 390px height 11808, proof top 5761, hero CTA bottom 525.
+3. Continue UX-010..028 from BACKLOG.md. Commit every 1-3 coherent tasks with evidence/status updates.
 
 ## Known failures / remaining gates
 No known failing local check. No deployment, final production-contract resolution, real container health smoke or comparable Lighthouse rerun. Default python is Anaconda 3.9: use backend/.venv/Scripts/python.exe (3.12). Not merge ready.
