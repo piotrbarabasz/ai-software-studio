@@ -28,3 +28,5 @@ For each new record:
 ## Absent artifacts
 
 Real RAG/provider evaluation (UX-010/011), CRM sandbox write (UX-012), Voice recording and rights (UX-013), official WhatsApp-to-CRM integration (UX-014), executed agent trace (UX-015), genuine owner photo (UX-018), and approved customer case studies (UX-027) are not established by this inventory. See BLOCKERS.md. Their absence must not generate a public proof button. The own-project engineering artifact and reproducible research note still need UX-016/017/019 work.
+
+CRM checkpoint: the dormant workflow, test-only adapter and unmounted result component are engineering scaffolds, not a fifth public evidence record. `backend/scripts/validate_crm_artifact.py` checks a future operator-reviewed package for metadata completeness, local files and hashes; passing it does not verify a write, media content or rights. Inspect the actual sandbox record and original channel event before adding a published artifact. No such package currently exists.

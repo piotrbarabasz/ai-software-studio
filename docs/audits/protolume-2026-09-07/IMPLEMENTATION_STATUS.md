@@ -13,11 +13,11 @@ Local implementation is not a production deployment. See RESUME.md and BLOCKERS.
 | UX-007 | PARTIAL | 2d50720 | Six sections; 8 widths axe/overflow; 390px height 11808 -> 6545 | Real CRM proof remains B-003; deployment B-006 |
 | UX-008 | PARTIAL | 2fb4c67 | Production build; 8 browser cases, no question requests; axe | B-005 physical screen reader; B-006 deployment; focus single announcement by design |
 | UX-009 | PARTIAL | 2d50720 + RAG checkpoint | Shared evidence registry/labels, provenance, publication gates; four current targets open | EVIDENCE_INVENTORY.md; owner/real-artifact inventory B-004; deployment B-006 |
-| UX-010 | PARTIAL | RAG checkpoint | 28 focused / 112 backend tests; lexical observation 10/12 with both failures; no model calls | B-002/B-005: dormant boundary, no real provider/API/currency budget; RAG_FOUNDATION.md |
-| UX-011 | PARTIAL | RAG checkpoint | Manual source example; one corpus; native section links; three FAQ; browser checks in RESUME.md | B-002: real proof and remote loading/error/retry remain open; B-005 physical screen reader; B-006 |
-| UX-012 | NOT_STARTED | - | Acceptance criteria read | See BLOCKERS.md |
+| UX-010 | PARTIAL | 9bbe8d5 | 28 focused / 112 backend tests; lexical observation 10/12 with both failures; no model calls | B-002/B-005: dormant boundary, no real provider/API/currency budget; RAG_FOUNDATION.md |
+| UX-011 | PARTIAL | 9bbe8d5 | Manual source example; one corpus; native section links; three FAQ; eight-width browser evidence | B-002: real proof and remote loading/error/retry remain open; B-005 physical screen reader; B-006 |
+| UX-012 | PARTIAL | CRM checkpoint | Revision-bound approval, missing fields, replay/concurrency/uncertain-write handling; 38 new backend cases; unmounted result view | B-003/B-005/B-006: no real CRM adapter/write, durable/authenticated execution or reviewed artifact; CRM_FOUNDATION.md |
 | UX-013 | NOT_STARTED | - | Acceptance criteria read | See BLOCKERS.md |
-| UX-014 | NOT_STARTED | - | Acceptance criteria read | See BLOCKERS.md |
+| UX-014 | PARTIAL | CRM checkpoint | Channel/account/event namespacing; receipt matching and readback; offline artifact completeness/integrity gate | B-003: official channel verification, customer mapping and real sandbox evidence still absent |
 | UX-015 | NOT_STARTED | - | Acceptance criteria read | See BLOCKERS.md |
 | UX-016 | NOT_STARTED | - | Acceptance criteria read | See BLOCKERS.md |
 | UX-017 | NOT_STARTED | - | Acceptance criteria read | See BLOCKERS.md |
@@ -28,7 +28,7 @@ Local implementation is not a production deployment. See RESUME.md and BLOCKERS.
 | UX-022 | IN_PROGRESS | Current checkpoint | Static Polish hero, no invented payload; no-JS header no longer blocks content | Remaining FAQ/zoom/all-route checks and physical screen reader B-005 |
 | UX-023 | NOT_STARTED | - | Acceptance criteria read | See BLOCKERS.md |
 | UX-024 | NOT_STARTED | - | Acceptance criteria read | See BLOCKERS.md |
-| UX-025 | PARTIAL | RAG checkpoint | Code-backed DATA_FLOW_MAP.md; no new external flow or consent change | B-005/B-006: owner/legal review, current settings/contracts, approved notice |
+| UX-025 | PARTIAL | 9bbe8d5 + CRM checkpoint | DATA_FLOW_MAP.md includes dormant CRM inputs/state, future adapter and private evidence package; no new external flow or consent change | B-005/B-006: owner/legal review, current settings/contracts, approved notice |
 | UX-026 | NOT_STARTED | - | Acceptance criteria read | See BLOCKERS.md |
 | UX-027 | NOT_STARTED | - | Acceptance criteria read | See BLOCKERS.md |
 | UX-028 | NOT_STARTED | - | Acceptance criteria read | See BLOCKERS.md |

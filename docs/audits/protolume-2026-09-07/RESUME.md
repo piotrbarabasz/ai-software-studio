@@ -1,46 +1,66 @@
 # Resume State
 
-## Current branch and baseline
+## Current branch
 
-`fix/audit-rag-foundation`, created from clean `master` at `0d38ef8` (user's merge of PR #56). Previous home/evidence work is `2d50720`; local simulation `2fb4c67`. No push, PR, merge or deployment performed during this checkpoint. Last observed production was 8386de6; current deployment after the user merge is unverified.
+`fix/audit-rag-foundation`, continuing from `9bbe8d5`; master baseline `0d38ef8` is the user's PR #56 merge. No push, PR, merge or deployment in the CRM checkpoint. Last observed production SHA was 8386de6; the current deployment is unverified.
 
-## Current checkpoint: UX-010/011/025
+## Last completed task
 
-* Shared public corpus with three actual document sections; bounded offline lexical retrieval and an explicitly disabled provider boundary. No RAG endpoint, adapter, credentials or new environment variable. Call reservations and exact retrieved-quote validation are implemented, but do not establish monetary cost control or model quality.
-* Fixed 12-case retrieval observation: 10 matched expectations; two paraphrase failures retained with per-case detail and file hashes. Zero model calls. The 28 boundary tests use doubles only. RAG_FOUNDATION.md separates implemented behavior from every open real-provider criterion.
-* RAG landing now has three manually prepared questions, a missing-information answer, exact source quotes, a real expandable document and JSON download. Two desktop columns, source/return focus on mobile, three topic-specific FAQ and compact scope. Clearly labelled simulation. Shared evidence registry now has four records in Studio; home keeps two.
-* Native citation links include the landing path: bare fragments resolved against Angular's root base and broke no-JS navigation; browser testing found this and the link was corrected.
-* DATA_FLOW_MAP.md inventories contact/API/SMTP/hosting/logs/limiter/simulations and prospective RAG/calendar/analytics. Public privacy text and consent/API remain unchanged pending actual owner/legal decisions.
+Independent UX-012/014 scaffolding and UX-025 data-map update. These tasks are PARTIAL, not actual CRM proof. Previous UX-010/011 checkpoint is `9bbe8d5`; its RAG is still a labelled manual simulation plus a dormant backend boundary.
 
-## Verification
+## Current task
 
-* Backend dev lock/editable install, ruff check/format and 112 pytest cases passed (28 focused RAG tests).
-* Fresh frontend npm ci, lint, format, Node suites and 200 Angular tests passed. After the native citation fix, all three source-component tests passed again.
-* Production npm build passed after the citation correction: prerendered routes and enforced CSP/SEO/legal/artifact validators. Build inputs use the previously published privacy text copy, not verified Secret Manager data or legal approval.
-* Contract CLI 60 and Cloud Build YAML 23 tests passed. Both Docker images built successfully, including a frontend rebuild after the native citation correction. The running nginx container returned 200 for the landing and matching JSON, enforced CSP, and true 404 with `noindex, follow`. The temporary container was stopped after inspection.
-* Existing `smoke:browser:ux` passed: hub, original simulation, home, four Studio targets and native no-JS. New `smoke:browser:rag` passed eight widths, opening/return focus, no interaction requests, absent-information state, axe with zero violations, source JSON equality, contact intent and fragment links with/without JavaScript. Desktop/mobile screenshots reviewed; mobile focused passage begins at 110px, below the header. See checkpoint evidence and BROWSER_VERIFICATION.md.
-* No backend production health/readiness smoke: actual non-secret SMTP settings are still missing (B-006). No final resolved production contract or deployed-version verification. Not merge/deployment ready.
+Close the CRM checkpoint and continue the remaining backlog. No implementation defect is intentionally deferred within the completed local scope.
+
+## Current hypothesis / root cause
+
+Real CRM/channel execution is absent because B-003 lacks the selected sandbox, official channel and permissions. Test-only adapters establish control logic, not integration. Actor labels do not authenticate approval; sandbox metadata does not enforce network isolation; process memory does not provide durable idempotency.
+
+## Files currently involved
+
+* `backend/app/crm/{models,workflow,artifacts}.py`: normalized bounded input; version-bound approval, replay/conflict handling, one in-flight write, uncertain result/readback and offline evidence checks. Default adapter absent; no endpoint/env/credentials.
+* `backend/scripts/validate_crm_artifact.py`, `backend/tests/unit/test_crm_{workflow,artifacts}.py`: private package integrity/metadata gate and 38 new tests with fixture adapters.
+* `frontend/src/app/shared/crm-run-result.component.*`: unmounted read-only three-step result scaffold, explicit missing/uncertain/local-test states; no public actions or API calls.
+* `CRM_FOUNDATION.md`, `DATA_FLOW_MAP.md`, status/blockers/inventory and `implementation-evidence/crm-checkpoint.json`: implemented scope, real-provider setup, unverified criteria and test observations.
+
+## Tests already passed
+
+* Backend dev lock/editable install, ruff lint/format, full pytest: **150 passed**. New CRM coverage: missing fields, revision approval, rejection, replay/conflicts/namespacing, concurrency, cancellation/timeout, ambiguous write readback, definite-no-write retry, matching receipts, artifact paths/hashes/metadata and sanitized CLI failures.
+* Fresh frontend npm ci, lint, format and all Node suites + **203 Angular tests**. Component tests verify escaping, missing/uncertain state and fixture-success labelling.
+* Production npm build and all enforced CSP/SEO/legal/artifact validators passed. Neither the unused CRM component nor fixture markers appear in emitted HTML/JS.
+* Deployment contract **60** and Cloud Build YAML **23** tests passed. Both Docker images built successfully. Python CLI syntax covered by lint/import/tests; no deployment scripts changed.
+* Prior RAG checkpoint: eight-width browser/axe, native no-JS and source focus; nginx 200 for landing/JSON and real 404 `noindex, follow`. No public-page layout changed in the CRM checkpoint, so those browser suites were not repeated.
+
+## Tests still required
+
+Actual CRM/official-channel execution, sandbox isolation and atomic idempotency across restart/workers, authenticated approval, extraction/customer/owner mapping, reviewed recordings/traces and mounted result browser/physical accessibility. B-003/B-005.
+
+Backend production container `/health` and `/ready` smoke remains B-006: missing actual non-secret SMTP settings. Final resolved production contract, verified Secret Manager legal input and deployed-version verification remain open. Local build uses the exact previously published privacy text copy; this is not legal approval. Not merge/deployment ready.
+
+## Known failing test / command
+
+No current failing local check. Required backend production smoke has not been run with guessed SMTP. No external messages or CRM records were sent/written. Real RAG observation still retains its two lexical paraphrase failures (10/12), separately from passing unit tests.
 
 ## Exact next action
 
-1. Confirm git status/history and finish this checkpoint only if subsequent uncommitted changes remain. Preserve unrelated work; restore only generated env/index templates before committing.
-2. Proceed to UX-012/014 and update UX-025 for the proposed CRM/channel flow. Read their BACKLOG.md criteria first. B-003 lacks the CRM sandbox and official channel: implement the independent domain model, approval/idempotency boundaries and deterministic adapter tests using test-only doubles; prepare setup instructions and an artifact publication gate. Do not expose fake writes, customer conversations, empty proof pages or fabricated screenshots as an integration.
-3. Continue UX-013/015..028 with safe independent work when real artifacts/owner answers are absent. Collect owner questions in BLOCKERS.md. Keep checkpoints every 1–3 coherent tasks; the final comprehensive report follows all 28 tasks.
-4. Revisit all routes, unused visual primitives/content, copy, performance, SEO, physical accessibility and full container/deployment gates at final review. UX-001..009 remain partial where production or real-artifact criteria are open.
+1. Inspect Git status/history; finish this checkpoint only if subsequent uncommitted changes remain. Preserve unrelated work.
+2. Read UX-013/015 acceptance criteria. Where B-004 audio/rights and B-002 provider are absent, implement only useful independent artifact/trace interfaces, gates, accessible presentation and setup guidance; never publish empty players or fake agent traces. Do not duplicate the CRM approval machinery or the existing RAG provider boundary without a concrete need.
+3. Then proceed to UX-016/017, which can use the real public-site repository/CI as an own-project artifact, followed by remaining UX-018..028. Keep owner questions in BLOCKERS.md and checkpoints every 1–3 coherent tasks. The final comprehensive report follows all 28 tasks.
 
-## Preserved earlier observations
+## Do not redo
 
-Home 390px: 11808 -> 6545px height; evidence section 5761 -> 1106px, actual cards 1987px, primary CTA bottom 482px. Hub 390px: 10285 -> 3293px, first card 1443 -> 318px. Earlier 12 local cold runs: CLS 0, no zero main/hydration errors. These engineering observations are not current production, conversion results or comparable to the original network-throttled Lighthouse LCP.
+* Earlier home, navigation, original simulation and RAG source fixes are committed. Preserve the four-record evidence registry (home displays two) and honest classification. No CRM proof record exists.
+* Preserve strict executable inline-JS rejection, `withNoIncrementalHydration()`, stable prebootstrap/no-JS navigation, non-sticky no-JS header, stable contact fallback DOM and fragment-aware focus/scroll offsets. RAG citations need the full landing path because of Angular's root base URL.
+* Never use `frontend/.public-legal-config.json` (pre-existing invented/corrupt values). Local child build: `powershell -NoProfile -File tmp/audit-implementation/build.ps1`. Do not run it concurrently with npm test/lint; they share generated legal content. Restore only generated env/index templates from the starting commit before committing.
+* Use `backend/.venv/Scripts/python.exe` (3.12), not default Anaconda 3.9. Docker Desktop may need starting. Current local image build labels use base 9bbe8d5 plus uncommitted checkpoint source, not a deployed revision.
+* Browser scripts and loopback server are documented in BROWSER_VERIFICATION.md; restart only the verified audit server on port 4400 after builds to reload CSP. Logs/results are under ignored `tmp/audit-implementation`.
+* Prior engineering metrics are preserved in committed evidence: home 390px 11808 -> 6545px height, proof section 5761 -> 1106px; hub 10285 -> 3293px, first card 1443 -> 318px; prior 12 local cold runs CLS 0. These are not production/conversion results or comparable LCP measurements.
+* Never guess commercial/legal facts, secrets, provider settings, real recordings or client outcomes. No new environment variable was introduced in these two checkpoints.
 
-## Tools and precautions
+## Last known good commit
 
-* `frontend/scripts/audit-*-browser.cjs`, `serve-audit-artifact.cjs`; npm `serve:browser:ux`, `smoke:browser:ux`, `smoke:browser:rag`. Loopback 4400; restart the verified audit process after rebuilding to reload CSP. Results/logs go to ignored `tmp/audit-implementation`; reviewed snapshots in `implementation-evidence/`.
-* Use Python `backend/.venv/Scripts/python.exe` (3.12), not default Anaconda 3.9. Docker Desktop may need starting. Local image build SHA is the base commit 0d38ef8 plus uncommitted checkpoint source; it is not a deployed revision.
-* Invoke local build in a child process: `powershell -NoProfile -File tmp/audit-implementation/build.ps1`. Its legal input is an exact copy of previously published text. Never use `frontend/.public-legal-config.json` (pre-existing invented/corrupt values).
-* Do not run npm build concurrently with npm test/lint: they share generated legal content. Restore only generated `frontend/src/environments/environment.prod.ts` and `frontend/src/index.html` from master before commit.
-* Preserve strict executable inline-JS rejection and `withNoIncrementalHydration()`. Keep CSS scripting media for stable prebootstrap/no-JS navigation, non-sticky no-JS header, stable contact fallback DOM and fragment-aware focus/scroll offsets.
-* PowerShell non-ASCII pipes require UTF-8 OutputEncoding; prefer apply_patch for Polish. Never guess SMTP, secrets, legal facts, commercial terms or real artifact outcomes.
+`9bbe8d5` for the preceding checkpoint; the following CRM checkpoint is identified by Git history. Current tests are recorded above and in `implementation-evidence/crm-checkpoint.json`.
 
-## Remaining blockers
+## Uncommitted work
 
-B-001 commercial rules; B-002 provider/budget/retention; B-003 CRM/channel sandbox; B-004 audio/photo/customer rights; B-005 privacy/calendar/research/physical screen reader; B-006 production non-secret SMTP, verified legal configuration and deployment/container verification. These do not block the independent next checkpoint.
+CRM checkpoint source/tests/docs are intended to be committed together. Generated env/index templates were restored. Check Git status for any changes added after this note.
