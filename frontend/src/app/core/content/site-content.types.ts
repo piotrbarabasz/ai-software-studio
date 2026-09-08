@@ -189,9 +189,30 @@ export interface OwnerProfile {
 
 export type WorkEvidenceId = 'knowledge-demo' | 'demo-report' | 'studio-application';
 
+export type EvidenceClassification =
+  'simulation' | 'own-project' | 'experiment' | 'client-deployment';
+
+export interface EvidenceMetric {
+  readonly name: string;
+  readonly value: number;
+  readonly unit: string;
+  readonly sampleSize: number;
+  readonly period: string;
+  readonly method: string;
+  readonly source: string;
+}
+
 export interface WorkEvidence {
   readonly id: WorkEvidenceId;
-  readonly typeLabel: string;
+  readonly classification: EvidenceClassification;
+  readonly services: readonly string[];
+  readonly dataOrigin: string;
+  readonly reviewedOn: string;
+  readonly version: string;
+  readonly confirmedScope: string;
+  readonly metrics: readonly EvidenceMetric[];
+  readonly publication: 'published' | 'draft' | 'pending-rights';
+  readonly rightsReference?: string;
   readonly title: string;
   readonly teaser: string;
   readonly problem: string;
@@ -205,7 +226,7 @@ export interface WorkEvidenceContent {
   readonly eyebrow: string;
   readonly title: string;
   readonly lead: string;
-  readonly items: readonly [WorkEvidence, WorkEvidence, WorkEvidence, ...WorkEvidence[]];
+  readonly items: readonly WorkEvidence[];
 }
 
 export interface TrustContent {
@@ -226,19 +247,10 @@ export interface HomeEvidenceTeaser {
   readonly title: string;
   readonly lead: string;
   readonly note: string;
-  readonly items: readonly [HomeProofItem, HomeProofItem, HomeProofItem];
+  readonly items: readonly WorkEvidence[];
 }
 
 export type HomeProofVisualKind = 'demo' | 'report' | 'lab';
-
-export interface HomeProofItem {
-  readonly id: string;
-  readonly eyebrow: string;
-  readonly title: string;
-  readonly description: string;
-  readonly visualKind: HomeProofVisualKind;
-  readonly cta: HomeCta;
-}
 
 export interface HomeClosingCta {
   readonly title: string;
@@ -320,22 +332,11 @@ export interface HomeUseCase {
 }
 
 export interface SolutionOffer {
-  readonly id:
-    | 'asystent-wiedzy'
-    | 'automatyzacja-wiadomosci-i-dokumentow'
-    | 'panel-operacyjny'
-    | 'system-agentowy'
-    | 'integracje-kanalow';
+  readonly id: string;
   readonly title: string;
   readonly summary: string;
   readonly problem: string;
-  readonly audience: string;
-  readonly capabilities: readonly string[];
-  readonly requiredInputs: readonly string[];
-  readonly demoScope: string;
-  readonly productionScope: readonly string[];
-  readonly primaryCta: HomeCta;
-  readonly optionalSecondaryCta?: HomeCta;
+  readonly path: PublicRoutePath;
 }
 
 export type ServiceLandingSlug =
@@ -404,7 +405,7 @@ export interface ServiceLandingPageContent {
   readonly closingTitle: string;
   readonly closingLead: string;
   readonly primaryCta: HomeCta;
-  readonly relatedLinks: readonly [HomeCta, HomeCta, HomeCta];
+  readonly relatedLinks: readonly HomeCta[];
   readonly serviceType: string;
   readonly hubAnchor: string;
 }
@@ -414,8 +415,6 @@ export interface SolutionsPageContent {
   readonly eyebrow: string;
   readonly title: string;
   readonly lead: string;
-  readonly scopeNotice: string;
-  readonly quickLinksLabel: string;
   readonly solutions: readonly SolutionOffer[];
   readonly closingCta: HomeClosingCta;
 }
@@ -447,28 +446,13 @@ export interface HomeSevenDayDemo {
   readonly cta: HomeCta;
 }
 
-export interface HomeBusinessFlowStep {
-  readonly id: string;
-  readonly kind: 'contact' | 'collect' | 'automate' | 'handoff' | 'system' | 'result';
-  readonly kicker: string;
-  readonly title: string;
-  readonly description: string;
-}
-
 export interface HomeBusinessFlow {
   readonly eyebrow: string;
   readonly title: string;
   readonly lead: string;
-  readonly results: readonly [string, string, string, string];
-  readonly cta: HomeCta;
-  readonly steps: readonly [
-    HomeBusinessFlowStep,
-    HomeBusinessFlowStep,
-    HomeBusinessFlowStep,
-    HomeBusinessFlowStep,
-    HomeBusinessFlowStep,
-    HomeBusinessFlowStep,
-  ];
+  readonly before: string;
+  readonly proposal: string;
+  readonly decision: string;
 }
 
 export interface HomeComparisonCard {
@@ -593,7 +577,6 @@ export interface KnowledgeDemoScenario {
   readonly keywords: readonly string[];
   readonly answer: string;
   readonly sources: readonly string[];
-  readonly confidence: string;
   readonly status: KnowledgeDemoScenarioStatus;
   readonly handoff?: string;
   readonly productionNote?: string;
@@ -606,11 +589,9 @@ export interface KnowledgeDemoContent {
   readonly disclaimer: string;
   readonly questionsLabel: string;
   readonly emptyStateLabel: string;
-  readonly checkingLabel: string;
   readonly questionLabel: string;
   readonly answerLabel: string;
   readonly sourcesLabel: string;
-  readonly confidenceLabel: string;
   readonly handoffLabel: string;
   readonly resetLabel: string;
   readonly contactCta: HomeCta;

@@ -1,0 +1,156 @@
+[
+  {
+    "width": 360,
+    "route": "/demo-ai",
+    "height": 5774,
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "width": 360,
+    "route": "/rozwiazania",
+    "height": 10846,
+    "overflow": false,
+    "firstCard": 1546.84375,
+    "errors": []
+  },
+  {
+    "width": 360,
+    "route": "/kontakt?projectType=voice_agent_demo&service=voice",
+    "height": 3005,
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "width": 390,
+    "route": "/demo-ai",
+    "height": 5530,
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "width": 390,
+    "route": "/rozwiazania",
+    "height": 10285,
+    "overflow": false,
+    "firstCard": 1442.53125,
+    "errors": []
+  },
+  {
+    "width": 390,
+    "route": "/kontakt?projectType=voice_agent_demo&service=voice",
+    "height": 2774,
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "width": 430,
+    "route": "/demo-ai",
+    "height": 5355,
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "width": 430,
+    "route": "/rozwiazania",
+    "height": 9918,
+    "overflow": false,
+    "firstCard": 1406.359375,
+    "errors": []
+  },
+  {
+    "width": 430,
+    "route": "/kontakt?projectType=voice_agent_demo&service=voice",
+    "height": 2706,
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "width": 768,
+    "route": "/demo-ai",
+    "height": 4878,
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "width": 768,
+    "route": "/rozwiazania",
+    "height": 7084,
+    "overflow": false,
+    "firstCard": 1176.703125,
+    "errors": []
+  },
+  {
+    "width": 768,
+    "route": "/kontakt?projectType=voice_agent_demo&service=voice",
+    "height": 2310,
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "width": 921,
+    "route": "/demo-ai",
+    "height": 4865,
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "width": 921,
+    "route": "/rozwiazania",
+    "height": 6854,
+    "overflow": false,
+    "firstCard": 1142.203125,
+    "errors": []
+  },
+  {
+    "width": 921,
+    "route": "/kontakt?projectType=voice_agent_demo&service=voice",
+    "height": 1718,
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "width": 1024,
+    "route": "/demo-ai",
+    "height": 4292,
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "width": 1024,
+    "route": "/rozwiazania",
+    "height": 7025,
+    "overflow": false,
+    "firstCard": 1203.9375,
+    "errors": []
+  },
+  {
+    "width": 1024,
+    "route": "/kontakt?projectType=voice_agent_demo&service=voice",
+    "height": 1709,
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "width": 1440,
+    "route": "/demo-ai",
+    "height": 4785,
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "width": 1440,
+    "route": "/rozwiazania",
+    "height": 7765,
+    "overflow": false,
+    "firstCard": 1409.6875,
+    "errors": []
+  },
+  {
+    "width": 1440,
+    "route": "/kontakt?projectType=voice_agent_demo&service=voice",
+    "height": 1828,
+    "overflow": false,
+    "errors": []
+  }
+]

@@ -1,6 +1,7 @@
 const crypto = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
+const { scriptAttributes } = require('./script-attributes.cjs');
 
 const DEFAULT_ARTIFACT_ROOT = path.resolve(__dirname, '../dist/aisoftware-studio/browser');
 const DEFAULT_HEADERS_PATH = path.resolve(__dirname, '../generated/nginx-security-headers.conf');
@@ -117,11 +118,15 @@ function validateCspArtifact(artifactRoot, headers) {
     }
 
     for (const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
-      const attributes = match[1];
-      if (/\bsrc\s*=/i.test(attributes)) {
+      const attributes = scriptAttributes(match[1]);
+      if (attributes.has('src')) {
         continue;
       }
-      if (!/\btype=["']application\/ld\+json["']/i.test(attributes)) {
+      const scriptType = attributes.get('type')?.toLowerCase();
+      if (scriptType === 'application/json') {
+        continue;
+      }
+      if (scriptType !== 'application/ld+json') {
         errors.push(`${relativePath}: executable inline script is not allowed`);
         continue;
       }

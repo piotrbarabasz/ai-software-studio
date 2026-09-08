@@ -1,4 +1,10 @@
 @if (status !== 'success') {
+  @if (serviceLabel) {
+    <p class="service-context">
+      Wybrana usługa: <strong>{{ serviceLabel }}</strong
+      >. Temat rozmowy możesz zmienić poniżej.
+    </p>
+  }
   <form
     class="contact-form"
     [formGroup]="form"

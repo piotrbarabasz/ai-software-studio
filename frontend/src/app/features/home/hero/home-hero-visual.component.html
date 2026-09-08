@@ -1,55 +1,26 @@
-<div
-  #workflowFrame
-  class="hero-workflow"
-  [class.is-in-view]="isInView()"
-  [class.is-reduced-motion]="motionPreferences.reducedMotion()"
-  aria-hidden="true"
-  data-hero-visual
->
-  <header class="workflow-header">
-    <span>LIVE PROCESS / 01</span>
-    <span class="workflow-status"><i></i> HUMAN CONTROL</span>
-  </header>
-
-  <div class="workflow-map">
-    <span>INPUT</span><i>→</i><span>DATA</span><i>→</i><span>AI / AUTO</span><i>→</i
-    ><span>HUMAN</span><i>→</i><span>SYSTEM</span><i>→</i><span>RESULT</span>
-  </div>
-
-  <div class="workflow-track">
-    <div class="hero-flow-stage" data-flow-stage="input">
-      <app-workflow-node [node]="emailNode" />
-    </div>
-
-    <app-workflow-connector class="hero-connector connector-ai" orientation="vertical" />
-
-    <div class="hero-flow-stage" data-flow-stage="ai">
-      <app-workflow-node [node]="aiNode" />
-    </div>
-
-    <div class="workflow-payload" data-flow-stage="payload">
-      <span><small>Company</small><strong>Acme</strong></span>
-      <span><small>Budget</small><strong>25 000 PLN</strong></span>
-      <span><small>Deadline</small><strong>14 days</strong></span>
-    </div>
-
-    <app-workflow-connector class="hero-connector connector-human" orientation="vertical" />
-
-    <div class="hero-flow-stage human-stage" data-flow-stage="human">
-      <app-workflow-node [node]="humanNode" />
-      <span class="approve-chip">Approve</span>
-    </div>
-
-    <app-workflow-connector class="hero-connector connector-system" orientation="vertical" />
-
-    <div class="workflow-result-row">
-      <div class="hero-flow-stage" data-flow-stage="system">
-        <app-workflow-node [node]="crmNode" />
+<figure class="hero-workflow" data-hero-visual>
+  <figcaption>Ilustracja przepływu · bez połączenia z CRM</figcaption>
+  <ol>
+    <li>
+      <span class="step-number" aria-hidden="true">01</span>
+      <div>
+        <h2>Wiadomość</h2>
+        <p>„Proszę o ofertę i termin realizacji”.</p>
       </div>
-      <app-workflow-connector class="hero-connector result-connector" />
-      <div class="hero-flow-stage" data-flow-stage="result">
-        <app-workflow-node [node]="doneNode" />
+    </li>
+    <li>
+      <span class="step-number" aria-hidden="true">02</span>
+      <div>
+        <h2>Propozycja</h2>
+        <p>Temat sprawy, dane do rekordu i szkic odpowiedzi.</p>
       </div>
-    </div>
-  </div>
-</div>
+    </li>
+    <li>
+      <span class="step-number" aria-hidden="true">03</span>
+      <div>
+        <h2>Twoja decyzja</h2>
+        <p>Sprawdzasz dane przed zapisaniem zmiany.</p>
+      </div>
+    </li>
+  </ol>
+</figure>

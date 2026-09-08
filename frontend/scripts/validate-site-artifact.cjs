@@ -18,7 +18,13 @@ const PRIMARY_NAVIGATION_ROUTES = [
   '/development',
   '/dla-software-house',
   '/studio',
-  '/kontakt',
+];
+const SERVICE_ROUTES = [
+  '/rozwiazania/automatyzacja-procesow',
+  '/rozwiazania/chatbot-ai-dla-firm',
+  '/rozwiazania/voice-ai-dla-firm',
+  '/rozwiazania/integracje-whatsapp-crm',
+  '/rozwiazania/systemy-agentowe',
 ];
 const REQUIRED_BRAND_ASSETS = [
   'favicon.svg',
@@ -332,6 +338,15 @@ function validateSiteArtifact(artifactRoot, environment) {
         }
       }
 
+      const contactCta = primaryNavigation.match(
+        /<a\b(?=[^>]*\bclass=["'][^"']*\bprimary-cta\b[^"']*["'])(?=[^>]*\bhref=["']\/kontakt(?:\?[^"']*)?["'])[^>]*>/i,
+      )?.[0];
+      if (!contactCta) {
+        errors.push(`${route}: primary navigation is missing a native link to /kontakt in its CTA`);
+      } else if (route === '/kontakt' && !/\baria-current=["']page["']/i.test(contactCta)) {
+        errors.push(`${route}: active contact CTA must have aria-current="page"`);
+      }
+
       if (PRIMARY_NAVIGATION_ROUTES.includes(route)) {
         const escapedRoute = route.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         const activeLinkPattern = new RegExp(
@@ -345,21 +360,20 @@ function validateSiteArtifact(artifactRoot, environment) {
     }
     if (route === '/rozwiazania') {
       for (const fragment of [
-        '#asystent-wiedzy',
-        '#automatyzacja-wiadomosci-i-dokumentow',
-        '#panel-operacyjny',
+        'asystent-wiedzy',
+        'automatyzacja-wiadomosci-i-dokumentow',
+        'panel-operacyjny',
+        'voice-ai',
+        'integracje-kanalow',
+        'system-agentowy',
       ]) {
-        if (!new RegExp(`<a\\b[^>]*\\bhref=["']${fragment}["']`, 'i').test(html)) {
-          errors.push(`${route}: missing native anchor link to ${fragment}`);
+        if (!new RegExp(`\\bid=["']${fragment}["']`, 'i').test(html)) {
+          errors.push(`${route}: missing legacy fragment target #${fragment}`);
         }
       }
-      for (const projectType of [
-        'rag_chatbot_demo',
-        'business_process_automation',
-        'custom_web_app',
-      ]) {
-        if (!html.includes(`/kontakt?projectType=${projectType}`)) {
-          errors.push(`${route}: missing contact CTA with projectType=${projectType}`);
+      for (const serviceRoute of SERVICE_ROUTES) {
+        if (!html.includes(`href="${serviceRoute}"`)) {
+          errors.push(`${route}: missing native service link to ${serviceRoute}`);
         }
       }
     }

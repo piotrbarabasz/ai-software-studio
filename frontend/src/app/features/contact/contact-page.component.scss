@@ -78,3 +78,8 @@ h1 {
     grid-template-columns: 1fr;
   }
 }
+@media (scripting: enabled) {
+  .no-script-contact {
+    display: none;
+  }
+}

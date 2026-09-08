@@ -67,10 +67,9 @@ describe('SiteShellComponent', () => {
     ).toEqual([
       { label: 'Rozwiązania', href: '/rozwiazania' },
       { label: 'Demo w 7 dni', href: '/demo-ai' },
-      { label: 'Wdrożenia', href: '/development' },
-      { label: 'Dla partnerów', href: '/dla-software-house' },
-      { label: 'O Protolume', href: '/studio' },
-      { label: 'Kontakt', href: '/kontakt' },
+      { label: 'Aplikacje i integracje', href: '/development' },
+      { label: 'Dla software house’ów', href: '/dla-software-house' },
+      { label: 'Studio', href: '/studio' },
     ]);
     expect(element.querySelectorAll('.primary-cta')).toHaveSize(1);
     expect(element.querySelector('.primary-cta')?.textContent?.trim()).toBe('Opisz proces');
@@ -111,7 +110,7 @@ describe('SiteShellComponent', () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 
-  it('keeps the server-rendered navigation available without JavaScript or inert', async () => {
+  it('keeps server-rendered navigation links and avoids inert before enhancement', async () => {
     await TestBed.configureTestingModule({
       imports: [SiteShellComponent],
       providers: [
@@ -133,9 +132,9 @@ describe('SiteShellComponent', () => {
     expect(fixture.componentInstance.isNavigationEnhanced).toBeFalse();
     expect(header.classList).not.toContain('is-enhanced');
     expect(toggle.getAttribute('aria-expanded')).toBeNull();
-    expect(getComputedStyle(toggle).display).toBe('none');
+    // Real no-JS CSS is verified with javaScriptEnabled:false in the browser smoke.
+    // PLATFORM_ID does not disable scripting in the Karma browser.
     expect(navigation.hasAttribute('inert')).toBeFalse();
-    expect(getComputedStyle(navigation).display).toBe('flex');
     expect(links).toHaveSize(siteContent.navigation.length);
     expect(links.every((link) => link.tabIndex === 0 && link.hasAttribute('href'))).toBeTrue();
   });
@@ -363,18 +362,16 @@ describe('SiteShellComponent', () => {
       fixture.detectChanges();
       const navigation = element.querySelector('#primary-navigation') as HTMLElement;
       const firstLink = navigation.querySelector('a') as HTMLAnchorElement;
-      expect(getComputedStyle(navigation).display)
-        .withContext(`no-JS navigation at ${width}px`)
-        .toBe('flex');
-      expect(getComputedStyle(navigation).flexDirection)
-        .withContext(`no-JS navigation layout at ${width}px`)
-        .toBe('column');
-      expect(navigation.clientWidth)
-        .withContext(`no-JS navigation width at ${width}px`)
-        .toBeGreaterThan(width / 2);
-      expect(firstLink.getBoundingClientRect().left)
-        .withContext(`no-JS first link position at ${width}px`)
-        .toBeLessThan(header.getBoundingClientRect().right);
+      // This is the pre-bootstrap state in a scripting-enabled browser.
+      expect(getComputedStyle(navigation).display).toBe('none');
+      fixture.componentInstance.isNavigationEnhanced = true;
+      fixture.componentInstance.isMobileNavigationOpen = true;
+      fixture.detectChanges();
+      expect(getComputedStyle(navigation).display).toBe('flex');
+      expect(navigation.clientWidth).toBeGreaterThan(width / 2);
+      expect(firstLink.getBoundingClientRect().left).toBeLessThan(
+        header.getBoundingClientRect().right,
+      );
       expect(header.scrollWidth)
         .withContext(`no-JS header at ${width}px`)
         .toBeLessThanOrEqual(header.clientWidth);
@@ -387,7 +384,7 @@ describe('SiteShellComponent', () => {
     }
   });
 
-  it('keeps all six primary links inside the header between 921px and 1200px', async () => {
+  it('keeps all five primary links inside the header between 921px and 1200px', async () => {
     await TestBed.configureTestingModule({
       imports: [SiteShellComponent],
       providers: [
@@ -404,7 +401,7 @@ describe('SiteShellComponent', () => {
     const navigation = element.querySelector('#primary-navigation') as HTMLElement;
     const links = navigation.querySelectorAll('.nav-links a');
 
-    expect(links).toHaveSize(6);
+    expect(links).toHaveSize(5);
     for (const width of [921, 1000, 1200]) {
       element.style.display = 'block';
       element.style.width = `${width}px`;

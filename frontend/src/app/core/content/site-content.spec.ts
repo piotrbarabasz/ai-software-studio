@@ -52,14 +52,7 @@ describe('Site content model', () => {
     expect(
       siteContent.solutions.solutions.every(
         (solution) =>
-          solution.problem &&
-          solution.audience &&
-          solution.capabilities.length > 0 &&
-          solution.requiredInputs.length > 0 &&
-          solution.demoScope &&
-          solution.productionScope.length > 0 &&
-          solution.primaryCta.path === '/kontakt' &&
-          solution.primaryCta.queryParams?.['projectType'],
+          solution.problem && solution.summary && solution.path.startsWith('/rozwiazania/'),
       ),
     ).toBeTrue();
     expect(siteContent.privacy.dataScopeItems[0]).toContain('Formularz zbiera');
@@ -68,21 +61,19 @@ describe('Site content model', () => {
 
   it('keeps homepage content focused on a short sales path with verifiable evidence', () => {
     expect(siteContent.home.hero.eyebrow).toBe('AI AUTOMATION STUDIO');
-    expect(siteContent.home.hero.title).toBe(
-      'Pokaż nam proces.\nW 7 dni pokażemy działającą automatyzację.',
-    );
-    expect(siteContent.home.hero.lead).toContain('jeden powtarzalny proces');
-    expect(siteContent.home.hero.lead).toContain('działające demo');
+    expect(siteContent.home.hero.title).toBe('Pokaż nam proces.\nW 7 dni pokażemy jego demo.');
+    expect(siteContent.home.hero.lead).toContain('jednego scenariusza');
+    expect(siteContent.home.hero.lead).toContain('przed pełnym wdrożeniem');
     expect(siteContent.home.hero.supportingLine).toBe(
       '1 proces · stały zakres · kontrola człowieka · wynik po 7 dniach',
     );
     expect(siteContent.home.hero.primaryCta.label).toBe('Opisz proces');
-    expect(siteContent.home.hero.secondaryCta.label).toBe('Zobacz demo →');
+    expect(siteContent.home.hero.secondaryCta.label).toBe('Zobacz symulację →');
     expect(siteContent.home.hero.secondaryCta.path).toBe('/demo-ai');
     expect(siteContent.home.trustStrip).toHaveSize(4);
     expect(siteContent.home.useCasesHeading).toEqual({
       eyebrow: 'Gdzie najczęściej znika czas?',
-      title: 'Trzy problemy, które warto przestać obsługiwać ręcznie',
+      title: 'Gdzie zespół wykonuje powtarzalną pracę?',
     });
     expect(siteContent.home.useCases).toHaveSize(3);
     expect(
@@ -117,28 +108,22 @@ describe('Site content model', () => {
       label: 'Zobacz wszystkie rozwiązania →',
       path: '/rozwiazania',
     });
-    expect(siteContent.home.businessFlow.steps).toEqual([
-      jasmine.objectContaining({ kind: 'contact', kicker: 'Input', title: 'Nowe zgłoszenie' }),
-      jasmine.objectContaining({ kind: 'collect', kicker: 'Data', title: 'Dane uporządkowane' }),
-      jasmine.objectContaining({ kind: 'automate', kicker: 'Automation', title: 'Reguły i AI' }),
-      jasmine.objectContaining({ kind: 'handoff', kicker: 'Human review' }),
-      jasmine.objectContaining({ kind: 'system', kicker: 'System' }),
-      jasmine.objectContaining({ kind: 'result', kicker: 'Result', title: 'Gotowy wynik' }),
+    expect(siteContent.home.businessFlow.before).toBeTruthy();
+    expect(siteContent.home.businessFlow.proposal).toBeTruthy();
+    expect(siteContent.home.businessFlow.decision).toBeTruthy();
+    expect(siteContent.home.evidenceTeaser).toEqual(
+      jasmine.objectContaining({
+        eyebrow: 'Materiały do sprawdzenia',
+        title: 'Zobacz zamiast czytać.',
+        lead: 'Wypróbuj interfejs i zobacz formę raportu przed rozmową o własnym procesie.',
+        note: 'To materiały demonstracyjne i projekt własny, a nie case study klienta.',
+      }),
+    );
+    expect(siteContent.home.evidenceTeaser.items).toHaveSize(2);
+    expect(siteContent.home.evidenceTeaser.items.map((item) => item.id)).toEqual([
+      'knowledge-demo',
+      'demo-report',
     ]);
-    expect(siteContent.home.businessFlow.results).toEqual([
-      'Mniej przepisywania.',
-      'Szybsza odpowiedź.',
-      'Mniej zagubionych spraw.',
-      'Jasny handoff.',
-    ]);
-    expect(siteContent.home.businessFlow.cta.path).toBe('/kontakt');
-    expect(siteContent.home.businessFlow.cta.queryParams?.['projectType']).toBe('backend_api');
-    expect(siteContent.home.evidenceTeaser).toEqual({
-      eyebrow: 'Dowody pracy',
-      title: 'Zobacz działające elementy',
-      lead: 'Uruchom demonstrację, przejrzyj przykładowy rezultat i zobacz, co każdy materiał faktycznie potwierdza.',
-      note: 'To materiały demonstracyjne i projekt własny, a nie case study klienta.',
-    });
     expect(siteContent.home.sevenDayDemo.deliverables).toEqual([
       'Opis wybranego procesu i jego granic',
       'Działające demo jednego scenariusza',
@@ -398,16 +383,15 @@ describe('Site content model', () => {
     expect(siteContent.navigation.map((item) => item.label)).toEqual([
       'Rozwiązania',
       'Demo w 7 dni',
-      'Wdrożenia',
-      'Dla partnerów',
-      'O Protolume',
-      'Kontakt',
+      'Aplikacje i integracje',
+      'Dla software house’ów',
+      'Studio',
     ]);
-    expect(siteContent.routes.find((route) => route.path === '/studio')?.label).toBe('O Protolume');
+    expect(siteContent.routes.find((route) => route.path === '/studio')?.label).toBe('Studio');
     expect(siteContent.home.evidenceTeaser).toEqual(
       jasmine.objectContaining({
-        eyebrow: 'Dowody pracy',
-        title: 'Zobacz działające elementy',
+        eyebrow: 'Materiały do sprawdzenia',
+        title: 'Zobacz zamiast czytać.',
         note: 'To materiały demonstracyjne i projekt własny, a nie case study klienta.',
       }),
     );
@@ -453,7 +437,7 @@ describe('Site content model', () => {
       'studio-application',
     ]);
     siteContent.trust.evidence.items.forEach((item) => {
-      expect(item.typeLabel.length).toBeGreaterThan(0);
+      expect(item.classification.length).toBeGreaterThan(0);
       expect(item.teaser.length).toBeGreaterThan(0);
       expect(item.problem.length).toBeGreaterThan(0);
       expect(item.built.length).toBeGreaterThan(0);
@@ -461,7 +445,7 @@ describe('Site content model', () => {
       expect(item.limitation.length).toBeGreaterThan(0);
       const liveLink = item.liveLink;
       expect(liveLink).toBeDefined();
-      if (!liveLink) {
+      if (liveLink?.kind !== 'internal') {
         return;
       }
       expect(liveLink.kind).toBe('internal');
@@ -476,12 +460,8 @@ describe('Site content model', () => {
     expect(siteContent.trust.evidence.items[2].liveLink).toEqual(
       jasmine.objectContaining({ kind: 'internal', path: '/' }),
     );
-    expect(siteContent.trust.evidence.items[0].limitation).toContain('stałych pytań i odpowiedzi');
-    expect(siteContent.trust.evidence.items[0].limitation).toContain('Wymaga dodatkowej walidacji');
-    expect(siteContent.trust.evidence.items[1].limitation).toContain(
-      'fikcyjny materiał demonstracyjny',
-    );
-    expect(siteContent.trust.evidence.items[1].limitation).toContain('Wymaga dodatkowej walidacji');
+    expect(siteContent.trust.evidence.items[0].limitation).toContain('Bez połączenia z modelem AI');
+    expect(siteContent.trust.evidence.items[1].limitation).toContain('Materiał fikcyjny');
     expect(siteContent.footer.summary).toBe(
       'Protolume — studio wdrożeń AI i automatyzacji prowadzone przez Piotra Barabasza.',
     );
@@ -498,15 +478,15 @@ describe('Site content model', () => {
   });
 
   it('keeps the key public boundaries visible without overstating outcomes', () => {
+    expect(siteContent.trust.evidence.items[1].limitation).toContain('Materiał fikcyjny');
     expect(siteContent.trust.evidence.items[1].limitation).toContain(
-      'fikcyjny materiał demonstracyjny',
-    );
-    expect(siteContent.trust.evidence.items[1].limitation).toContain('Wymaga dodatkowej walidacji');
-    expect(siteContent.demo.interactiveDemo.disclaimer).toContain(
-      'nie połączenie z produkcyjną bazą wiedzy',
+      'Nie dokumentuje uruchomionego CRM',
     );
     expect(siteContent.demo.interactiveDemo.disclaimer).toContain(
-      'przykład doświadczenia użytkownika',
+      'gotową odpowiedź zapisaną w tej stronie',
+    );
+    expect(siteContent.demo.interactiveDemo.disclaimer).toContain(
+      'Pytanie pozostaje w Twojej przeglądarce',
     );
     expect(siteContent.demoExample.fictionalNotice).toContain(
       'To fikcyjny scenariusz demonstracyjny',
@@ -576,7 +556,7 @@ describe('Site content model', () => {
     );
     expect(presentationScenario?.nextStep).toEqual(
       jasmine.objectContaining({
-        label: 'Umów bezpłatną prezentację',
+        label: 'Opisz proces',
         path: '/kontakt',
         queryParams: { projectType: 'rag_chatbot_demo' },
       }),

@@ -458,6 +458,10 @@ button {
   color: var(--text-primary);
 }
 
+.dark-section :focus-visible {
+  outline-color: var(--brand-200);
+}
+
 .eyebrow,
 .section-kicker {
   margin: 0 0 0.75rem;

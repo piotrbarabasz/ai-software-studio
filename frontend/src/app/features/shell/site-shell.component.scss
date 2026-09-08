@@ -42,6 +42,12 @@
   backdrop-filter: blur(16px) saturate(135%);
 }
 
+@media (scripting: none) {
+  .site-header {
+    position: relative;
+  }
+}
+
 .header-inner {
   display: flex;
   width: 100%;
@@ -179,12 +185,14 @@
 }
 
 .nav-links a:hover,
-.nav-links a.is-active {
+.nav-links a.is-active,
+.nav-links a.is-section-active {
   color: var(--text-dark);
 }
 
 .nav-links a:hover::after,
-.nav-links a.is-active::after {
+.nav-links a.is-active::after,
+.nav-links a.is-section-active::after {
   transform: scaleX(1);
   transform-origin: left;
 }
@@ -240,6 +248,18 @@
 }
 
 @media (max-width: 920px) {
+  // Match the enhanced layout before Angular starts. With scripting disabled,
+  // the existing expanded navigation remains available without a layout swap.
+  @media (scripting: enabled) {
+    .menu-toggle {
+      display: inline-flex;
+    }
+
+    .primary-nav {
+      display: none;
+    }
+  }
+
   .site-header,
   .header-inner {
     min-height: 68px;

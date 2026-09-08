@@ -90,8 +90,8 @@
       @for (item of trust.evidence.items; track item) {
         <article class="card-surface proof-card evidence-card" data-card-variant="proof-card">
           <div class="evidence-summary">
-            <p class="status-badge">{{ item.typeLabel }}</p>
             <h3>{{ item.title }}</h3>
+            <app-evidence-label [item]="item" />
             <p><strong>Problem:</strong> {{ item.problem }}</p>
             <p><strong>Co zostało zbudowane:</strong> {{ item.built }}</p>
           </div>
@@ -102,15 +102,24 @@
                 <li>{{ step }}</li>
               }
             </ul>
-            <div class="evidence-boundary">
-              <h4>Co nadal wymaga walidacji</h4>
-              <p>{{ item.limitation }}</p>
-            </div>
+            <details>
+              <summary>Pochodzenie i zakres materiału</summary>
+              <p>{{ item.dataOrigin }}</p>
+              <p>{{ item.confirmedScope }}</p>
+              <p>
+                Przegląd materiału:
+                <time [attr.datetime]="item.reviewedOn">{{ item.reviewedOn }}</time> · wersja
+                {{ item.version }}
+              </p>
+            </details>
             <div class="external-links">
               @if (isInternalWorkEvidenceLink(item.liveLink)) {
-                <a class="secondary-action" [routerLink]="item.liveLink.path">{{
-                  item.liveLink.label
-                }}</a>
+                <a
+                  class="secondary-action"
+                  [routerLink]="item.liveLink.path"
+                  [fragment]="item.liveLink.fragment"
+                  >{{ item.liveLink.label }}</a
+                >
               } @else if (isExternalWorkEvidenceLink(item.liveLink)) {
                 <a
                   class="secondary-action"

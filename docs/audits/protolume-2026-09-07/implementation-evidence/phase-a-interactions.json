@@ -1,0 +1,13 @@
+{
+  "hover": {
+    "color": "rgb(247, 247, 250)",
+    "background": "rgb(28, 33, 48)"
+  },
+  "focus": {
+    "color": "rgb(247, 247, 250)",
+    "outline": "rgb(221, 214, 254) solid 3px"
+  },
+  "anchor": 34.5,
+  "formFocus": "contact-form-error-summary",
+  "fields": 5
+}

@@ -44,6 +44,9 @@ VISIBLE_PROJECT_TYPES = {
     "rag_chatbot_demo",
     "software_house_partnership",
     "other",
+    "voice_agent_demo",
+    "whatsapp_agent_management",
+    "ai_automation",
 }
 
 
@@ -253,3 +256,18 @@ def test_contact_returns_delivery_failure(
             "Spróbuj ponownie później lub skontaktuj się bezpośrednio."
         ),
     }
+
+
+@pytest.mark.parametrize("context", ["automation", "rag", "voice", "whatsapp", "agents"])
+def test_contact_accepts_allowlisted_service_context(client, valid_contact_payload, context):
+    response = client.post(
+        "/api/contact", json={**valid_contact_payload, "serviceContext": context}
+    )
+    assert response.status_code == 202
+
+
+def test_contact_rejects_free_text_service_context(client, valid_contact_payload):
+    response = client.post(
+        "/api/contact", json={**valid_contact_payload, "serviceContext": "personal@example.org"}
+    )
+    assert response.status_code == 422

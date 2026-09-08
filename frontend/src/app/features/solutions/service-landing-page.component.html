@@ -1,4 +1,9 @@
 <div class="service-landing-page">
+  <nav class="breadcrumbs section-shell" aria-label="Ścieżka strony">
+    <a routerLink="/">Strona główna</a><span aria-hidden="true"> / </span>
+    <a routerLink="/rozwiazania">Rozwiązania</a><span aria-hidden="true"> / </span>
+    <span aria-current="page">{{ content.eyebrow }}</span>
+  </nav>
   <section class="hero section-shell" aria-labelledby="service-title" appRevealOnScroll>
     <p class="eyebrow">{{ content.eyebrow }}</p>
     <h1 id="service-title">{{ content.title }}</h1>
@@ -12,7 +17,11 @@
       >
         {{ content.hero.primaryCta.label }}
       </a>
-      <a class="secondary-action" [routerLink]="content.hero.secondaryCta.path">
+      <a
+        class="secondary-action"
+        [routerLink]="content.hero.secondaryCta.path"
+        [fragment]="content.hero.secondaryCta.fragment"
+      >
         {{ content.hero.secondaryCta.label }}
       </a>
     </div>

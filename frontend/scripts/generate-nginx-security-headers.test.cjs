@@ -111,3 +111,38 @@ test('rejects executable inline scripts instead of authorizing them by hash', ()
     fs.rmSync(root, { recursive: true, force: true });
   }
 });
+
+for (const attrs of [
+  '',
+  'type="module"',
+  'type="text/javascript"',
+  'data-type="application/json"',
+  'data-src="main.js"',
+  `title='type="application/json"'`,
+  'type="module" type="application/json"',
+]) {
+  test(`rejects executable script attributes: ${attrs}`, () => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), 'protolume-csp-regression-'));
+    try {
+      fs.writeFileSync(
+        path.join(root, 'index.html'),
+        `<script type="application/ld+json">{}</script><script ${attrs}>alert(1)</script>`,
+      );
+      assert.throws(() => collectInlineScriptHashes(root), /Niedozwolony skrypt inline/);
+    } finally {
+      fs.rmSync(root, { recursive: true, force: true });
+    }
+  });
+}
+test('hydration JSON is data and never adds a script authorization', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'protolume-csp-data-'));
+  try {
+    fs.writeFileSync(
+      path.join(root, 'index.html'),
+      '<script type="application/ld+json">{}</script><script type="application/json">{"hydration":true}</script>',
+    );
+    assert.deepEqual(collectInlineScriptHashes(root), [hashInlineScript('{}')]);
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});

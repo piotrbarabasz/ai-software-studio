@@ -37,7 +37,6 @@ function writeArtifact(root, environment, injectedText = '', extraFiles = []) {
     '/development',
     '/dla-software-house',
     '/studio',
-    '/kontakt',
   ];
   const routeBodies = {
     '/':
@@ -50,7 +49,13 @@ function writeArtifact(root, environment, injectedText = '', extraFiles = []) {
     '/przyklad-demo':
       '<h1>Od zapytania produktowego do odpowiedzi z kontrolą człowieka</h1><p>Fikcyjny scenariusz demonstracyjny.</p><p>Poza zakresem</p>',
     '/rozwiazania':
-      '<h1>Pięć sposobów na uporządkowanie konkretnego procesu</h1><a href="#asystent-wiedzy">Asystent</a><a href="#automatyzacja-wiadomosci-i-dokumentow">Automatyzacja</a><a href="#panel-operacyjny">Panel</a><a href="#system-agentowy">Agent</a><a href="#integracje-kanalow">Kanały</a><a href="/kontakt?projectType=rag_chatbot_demo">Kontakt</a><a href="/kontakt?projectType=business_process_automation">Kontakt</a><a href="/kontakt?projectType=custom_web_app">Kontakt</a><a href="/kontakt?projectType=backend_api">Kontakt</a>',
+      '<h1>Który proces chcesz usprawnić?</h1>' +
+      '<article id="asystent-wiedzy"><a href="/rozwiazania/chatbot-ai-dla-firm">Wiedza</a></article>' +
+      '<article id="automatyzacja-wiadomosci-i-dokumentow"><a href="/rozwiazania/automatyzacja-procesow">Wiadomości</a></article>' +
+      '<article id="voice-ai"><a href="/rozwiazania/voice-ai-dla-firm">Voice AI</a></article>' +
+      '<article id="integracje-kanalow"><a href="/rozwiazania/integracje-whatsapp-crm">CRM</a></article>' +
+      '<article id="system-agentowy"><a href="/rozwiazania/systemy-agentowe">Zadania</a></article>' +
+      '<section id="panel-operacyjny"><a href="/development">Aplikacje</a></section>',
     '/development': '<h1>Wdrożenia</h1>',
     '/dla-software-house':
       '<h1>Partner techniczny AI dla software house’ów i MSP</h1><a href="/kontakt?projectType=software_house_partnership">Kontakt</a>',
@@ -69,12 +74,14 @@ function writeArtifact(root, environment, injectedText = '', extraFiles = []) {
     const url = `${origin}${route === '/' ? '' : route}`;
     const robots =
       route === '/404' || !environment.indexingEnabled ? 'noindex, follow' : 'index, follow';
-    const navigation = primaryRoutes
-      .map(
-        (navigationRoute) =>
-          `<a href="${navigationRoute}"${route === navigationRoute ? ' aria-current="page"' : ''}>Link</a>`,
-      )
-      .join('');
+    const navigation =
+      primaryRoutes
+        .map(
+          (navigationRoute) =>
+            `<a href="${navigationRoute}"${route === navigationRoute ? ' aria-current="page"' : ''}>Link</a>`,
+        )
+        .join('') +
+      `<a class="primary-cta" href="/kontakt?projectType=mvp_prototype"${route === '/kontakt' ? ' aria-current="page"' : ''}>Opisz proces</a>`;
     const body = routeBodies[route] ?? '';
     fs.writeFileSync(
       path.join(directory, 'index.html'),
@@ -502,7 +509,10 @@ test('rejects prerendered navigation without native links and focus targets', (c
   const homePath = path.join(root, 'index.html');
   const inaccessibleHtml = fs
     .readFileSync(homePath, 'utf8')
-    .replace('<a href="/kontakt">Link</a>', '<span>Kontakt</span>')
+    .replace(
+      '<a class="primary-cta" href="/kontakt?projectType=mvp_prototype">Opisz proces</a>',
+      '<span>Kontakt</span>',
+    )
     .replace('href="#main-content"', 'href="#missing"')
     .replace('tabindex="-1"', '');
   fs.writeFileSync(homePath, inaccessibleHtml, 'utf8');
@@ -511,4 +521,48 @@ test('rejects prerendered navigation without native links and focus targets', (c
   assert.ok(errors.some((error) => error.includes('native link to /kontakt')));
   assert.ok(errors.some((error) => error.includes('working skip link')));
   assert.ok(errors.some((error) => error.includes('focusable main target')));
+});
+
+test('rejects missing legacy targets and service destinations in the compact catalog', (context) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'site-artifact-'));
+  context.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const environment = {
+    publicSiteUrl: 'https://protolume.pl',
+    indexingEnabled: true,
+    buildSha: 'abc1234',
+  };
+  writeArtifact(root, environment);
+  assert.deepEqual(validateSiteArtifact(root, environment), []);
+  const hubPath = path.join(root, 'rozwiazania/index.html');
+  fs.writeFileSync(
+    hubPath,
+    fs
+      .readFileSync(hubPath, 'utf8')
+      .replace('id="asystent-wiedzy"', 'id="renamed"')
+      .replace('href="/rozwiazania/voice-ai-dla-firm"', 'href="/demo-ai"'),
+  );
+  const errors = validateSiteArtifact(root, environment);
+  assert.ok(errors.some((error) => error.includes('legacy fragment target #asystent-wiedzy')));
+  assert.ok(
+    errors.some((error) => error.includes('native service link to /rozwiazania/voice-ai-dla-firm')),
+  );
+});
+
+test('requires current-page semantics on the contact CTA', (context) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'site-artifact-'));
+  context.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const environment = {
+    publicSiteUrl: 'https://protolume.pl',
+    indexingEnabled: true,
+    buildSha: 'abc1234',
+  };
+  writeArtifact(root, environment);
+  const contactPath = path.join(root, 'kontakt/index.html');
+  fs.writeFileSync(
+    contactPath,
+    fs.readFileSync(contactPath, 'utf8').replace(' aria-current="page"', ''),
+  );
+  assert.ok(
+    validateSiteArtifact(root, environment).some((error) => error.includes('active contact CTA')),
+  );
 });

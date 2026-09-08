@@ -128,7 +128,6 @@ describe('public routes', () => {
       '/development',
       '/dla-software-house',
       '/studio',
-      '/kontakt',
     ]);
   });
 

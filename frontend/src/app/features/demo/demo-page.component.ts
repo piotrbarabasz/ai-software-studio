@@ -4,10 +4,11 @@ import { RouterLink } from '@angular/router';
 import { siteContent } from '../../core/content/site.pl';
 import { RevealOnScrollDirective } from '../../shared/reveal/reveal-on-scroll.directive';
 import { KnowledgeDemoComponent } from './knowledge-demo/knowledge-demo.component';
+import { FirstStageTermsComponent } from '../../shared/first-stage-terms.component';
 
 @Component({
   selector: 'app-demo-page',
-  imports: [RevealOnScrollDirective, RouterLink, KnowledgeDemoComponent],
+  imports: [RevealOnScrollDirective, RouterLink, KnowledgeDemoComponent, FirstStageTermsComponent],
   templateUrl: './demo-page.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './demo-page.component.scss',

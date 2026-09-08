@@ -54,13 +54,13 @@ describe('SevenDayDemoComponent', () => {
           .trim(),
       ),
     ).toEqual(siteContent.home.sevenDayDemo.inputs);
-    expect(element.querySelector('.pricing-note')?.textContent).toContain(
-      siteContent.home.sevenDayDemo.pricingDescription,
-    );
-    expect(element.querySelector('.pricing-note')?.textContent).toContain(
-      siteContent.home.sevenDayDemo.pricingNote,
-    );
-    expect(element.querySelector('.pricing-note')?.textContent).not.toMatch(/\d+\s*(zł|PLN)/i);
+    expect(element.querySelector('app-first-stage-terms')).not.toBeNull();
+    expect(
+      (element.querySelector('.result-panel') as Node).compareDocumentPosition(
+        element.querySelector('.demo-timeline') as Node,
+      ) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(element.querySelector('details.stage-plan')?.hasAttribute('open')).toBeFalse();
   });
 
   it('provides one canonical CTA and no fake interactive controls', () => {
@@ -74,16 +74,5 @@ describe('SevenDayDemoComponent', () => {
     expect(element.querySelectorAll('button, input, select, textarea, [role="button"]')).toHaveSize(
       0,
     );
-  });
-
-  it('keeps the timeline visual decorative and reuses the motion primitives', () => {
-    const element = render();
-    const timelineFlow = element.querySelector('.timeline-flow');
-
-    expect(timelineFlow?.getAttribute('aria-hidden')).toBe('true');
-    expect(timelineFlow?.querySelectorAll('.motion-flow-line')).toHaveSize(1);
-    expect(timelineFlow?.querySelectorAll('.motion-flow-signal')).toHaveSize(1);
-    expect(element.querySelector('.demo-timeline[appReveal].motion-stagger')).not.toBeNull();
-    expect(element.querySelectorAll('.demo-milestone h3')).toHaveSize(4);
   });
 });

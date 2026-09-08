@@ -15,6 +15,7 @@
         <a
           class="secondary-action hero-secondary-action"
           [routerLink]="home.hero.secondaryCta.path"
+          [fragment]="home.hero.secondaryCta.fragment"
         >
           {{ home.hero.secondaryCta.label }}
         </a>
@@ -25,21 +26,37 @@
   </section>
 
   <section
-    class="trust-strip section-shell"
-    aria-labelledby="trust-strip-title"
-    data-home-section="trust"
+    class="evidence-teaser dark-section section-shell"
+    aria-labelledby="evidence-teaser-title"
+    data-home-section="evidence"
   >
-    <div class="section-panel trust-strip-panel">
-      <h2 id="trust-strip-title" class="visually-hidden">Dlaczego warto zacząć od sprawdzenia</h2>
-      <ul appReveal class="motion-stagger">
-        @for (item of home.trustStrip; track item.id) {
-          <li>
-            <span class="trust-icon" aria-hidden="true"></span>
-            <span>{{ item.title }}</span>
-          </li>
-        }
-      </ul>
+    <app-business-flow-section [flow]="home.businessFlow" />
+    <div appReveal class="section-heading reveal--subtle">
+      <p class="eyebrow">{{ home.evidenceTeaser.eyebrow }}</p>
+      <h2 id="evidence-teaser-title">{{ home.evidenceTeaser.title }}</h2>
+      <p class="section-lead">{{ home.evidenceTeaser.lead }}</p>
     </div>
+    <div class="evidence-teaser-grid">
+      @for (item of home.evidenceTeaser.items; track item.id) {
+        <article
+          class="card-surface proof-card evidence-teaser-card"
+          data-card-variant="proof-card"
+        >
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.teaser }}</p>
+          <app-evidence-label [item]="item" />
+          @if (item.liveLink?.kind === 'internal') {
+            <a
+              class="secondary-action"
+              [routerLink]="item.liveLink!.path"
+              [fragment]="item.liveLink!.fragment"
+              >{{ item.liveLink!.label }}</a
+            >
+          }
+        </article>
+      }
+    </div>
+    <p class="evidence-note" role="note">{{ home.evidenceTeaser.note }}</p>
   </section>
 
   <section
@@ -56,42 +73,22 @@
           <p class="section-lead">{{ home.useCasesHeading.lead }}</p>
         }
       </div>
-      <app-automation-bento [items]="home.useCases" />
+      <ul class="home-service-list">
+        @for (service of services; track service.id) {
+          <li>
+            <a [routerLink]="service.path"
+              ><strong>{{ service.label }}</strong
+              ><span>{{ service.problem }}</span></a
+            >
+          </li>
+        }
+      </ul>
       <div class="use-cases-footer">
         <a class="use-cases-link" [routerLink]="home.useCasesCta.path">
           {{ home.useCasesCta.label }}
         </a>
       </div>
     </div>
-  </section>
-
-  <app-business-flow-section data-home-section="flow" [flow]="home.businessFlow" />
-
-  <section
-    class="evidence-teaser dark-section section-shell"
-    aria-labelledby="evidence-teaser-title"
-    data-home-section="evidence"
-  >
-    <div appReveal class="section-heading reveal--subtle">
-      <p class="eyebrow">{{ home.evidenceTeaser.eyebrow }}</p>
-      <h2 id="evidence-teaser-title">{{ home.evidenceTeaser.title }}</h2>
-      <p class="section-lead">{{ home.evidenceTeaser.lead }}</p>
-    </div>
-    <div class="evidence-teaser-grid">
-      @for (item of home.evidenceTeaser.items; track item.id) {
-        <article
-          class="card-surface proof-card evidence-teaser-card"
-          data-card-variant="proof-card"
-        >
-          <p class="evidence-type">{{ item.eyebrow }}</p>
-          <h3>{{ item.title }}</h3>
-          <p>{{ item.description }}</p>
-          <app-home-proof-visual [visualKind]="item.visualKind" />
-          <a class="secondary-action" [routerLink]="item.cta.path">{{ item.cta.label }}</a>
-        </article>
-      }
-    </div>
-    <p class="evidence-note" role="note">{{ home.evidenceTeaser.note }}</p>
   </section>
 
   <app-seven-day-demo data-home-section="demo-scope" [demo]="home.sevenDayDemo" />

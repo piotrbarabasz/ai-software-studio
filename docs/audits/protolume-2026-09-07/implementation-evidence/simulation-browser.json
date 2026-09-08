@@ -1,0 +1,94 @@
+{
+  "results": [
+    {
+      "width": 360,
+      "reducedMotion": "reduce",
+      "answerTop": 109.5,
+      "requests": [],
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "reducedMotion": "reduce",
+      "answerTop": 110.03125,
+      "requests": [],
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 430,
+      "reducedMotion": "reduce",
+      "answerTop": 109.75,
+      "requests": [],
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "reducedMotion": "reduce",
+      "answerTop": 110.296875,
+      "requests": [],
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 360,
+      "reducedMotion": "no-preference",
+      "answerTop": 107.5,
+      "requests": [],
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "reducedMotion": "no-preference",
+      "answerTop": 110.03125,
+      "requests": [],
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 430,
+      "reducedMotion": "no-preference",
+      "answerTop": 109.75,
+      "requests": [],
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "reducedMotion": "no-preference",
+      "answerTop": 110.296875,
+      "requests": [],
+      "errors": [],
+      "overflow": false
+    }
+  ],
+  "homeBefore": [
+    {
+      "width": 360,
+      "height": 12174,
+      "proofTop": 5891.40625,
+      "ctaBottom": 639.984375
+    },
+    {
+      "width": 390,
+      "height": 11808,
+      "proofTop": 5761.34375,
+      "ctaBottom": 525.3125
+    },
+    {
+      "width": 430,
+      "height": 11552,
+      "proofTop": 5656.65625,
+      "ctaBottom": 496.890625
+    },
+    {
+      "width": 1024,
+      "height": 9511,
+      "proofTop": 5334.703125,
+      "ctaBottom": 631.65625
+    }
+  ]
+}

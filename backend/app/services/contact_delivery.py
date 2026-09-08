@@ -70,6 +70,7 @@ class EmailContactDelivery:
             f"Email: {inquiry.email}\n"
             f"Firma: {company}\n"
             f"Typ projektu: {project_type}\n"
+            f"Kontekst usługi: {inquiry.service_context or 'Nie podano'}\n"
             f"Budżet: {inquiry.budget_range.value}\n"
             f"Zgoda: {'tak' if inquiry.consent else 'nie'}\n"
             f"Czas zgłoszenia: {inquiry.submitted_at.isoformat()}\n\n"

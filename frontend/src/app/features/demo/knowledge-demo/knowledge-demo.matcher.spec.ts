@@ -28,7 +28,6 @@ describe('knowledge-demo.matcher', () => {
       keywords,
       answer: `${id} answer`,
       sources: [`${id} source`],
-      confidence: 'wysoka',
       status: 'answered',
     };
   }

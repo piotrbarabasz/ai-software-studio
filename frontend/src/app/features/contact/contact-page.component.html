@@ -22,7 +22,7 @@
     }
   </section>
   <section [attr.aria-label]="content.formLabel" appRevealOnScroll>
-    <noscript>
+    <div class="no-script-contact">
       <div class="noscript-contact" role="note">
         @if (content.directEmail) {
           <p>
@@ -33,7 +33,7 @@
           <p>{{ content.noScript.unavailable }}</p>
         }
       </div>
-    </noscript>
+    </div>
     <app-contact-form />
   </section>
 </div>

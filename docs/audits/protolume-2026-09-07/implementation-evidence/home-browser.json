@@ -1,0 +1,91 @@
+{
+  "metadata": {
+    "recordedAt": "2026-09-08T04:35:34.562Z",
+    "browser": "151.0.7922.34",
+    "axeInstalledVersion": "4.13.0"
+  },
+  "measurements": [
+    {
+      "width": 320,
+      "height": 7225,
+      "proofTop": 1258.859375,
+      "materialTop": 2232.953125,
+      "ctaBottom": 596.796875,
+      "overflow": false,
+      "heroAnimations": 0,
+      "violations": []
+    },
+    {
+      "width": 360,
+      "height": 6867,
+      "proofTop": 1186.96875,
+      "materialTop": 2078.109375,
+      "ctaBottom": 568.375,
+      "overflow": false,
+      "heroAnimations": 0,
+      "violations": []
+    },
+    {
+      "width": 390,
+      "height": 6545,
+      "proofTop": 1105.953125,
+      "materialTop": 1987.359375,
+      "ctaBottom": 482.203125,
+      "overflow": false,
+      "heroAnimations": 0,
+      "violations": []
+    },
+    {
+      "width": 430,
+      "height": 6413,
+      "proofTop": 1068.140625,
+      "materialTop": 1945.21875,
+      "ctaBottom": 482.28125,
+      "overflow": false,
+      "heroAnimations": 0,
+      "violations": []
+    },
+    {
+      "width": 768,
+      "height": 5151,
+      "proofTop": 1012.6875,
+      "materialTop": 1608.046875,
+      "ctaBottom": 483.6875,
+      "overflow": false,
+      "heroAnimations": 0,
+      "violations": []
+    },
+    {
+      "width": 921,
+      "height": 4591,
+      "proofTop": 941.28125,
+      "materialTop": 1540,
+      "ctaBottom": 637.375,
+      "overflow": false,
+      "heroAnimations": 0,
+      "violations": []
+    },
+    {
+      "width": 1024,
+      "height": 4691,
+      "proofTop": 952.625,
+      "materialTop": 1546.359375,
+      "ctaBottom": 649.578125,
+      "overflow": false,
+      "heroAnimations": 0,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "height": 5415,
+      "proofTop": 993.59375,
+      "materialTop": 1743.09375,
+      "ctaBottom": 688.109375,
+      "overflow": false,
+      "heroAnimations": 0,
+      "violations": []
+    }
+  ],
+  "errors": [],
+  "noJsDetails": true
+}

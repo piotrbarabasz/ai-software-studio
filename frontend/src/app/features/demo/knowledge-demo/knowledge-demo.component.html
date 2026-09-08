@@ -10,128 +10,24 @@
     <p class="disclaimer">{{ content.disclaimer }}</p>
   </header>
 
-  <div class="demo-layout">
-    <div class="scenario-picker">
-      <h3>Wybierz obszar</h3>
-      <div class="scenario-list">
-        @for (category of content.categories; track trackCategory($index, category)) {
-          <button
-            type="button"
-            class="category-button scenario-button"
-            [class.is-selected]="selectedCategoryId === category.id"
-            [attr.aria-pressed]="selectedCategoryId === category.id"
-            aria-controls="knowledge-demo-result"
-            (click)="selectCategory(category.id)"
-          >
-            {{ category.label }}
-          </button>
-        }
-      </div>
-      @if (selectedCategoryId) {
-        <p class="question-history">{{ selectedCategory?.description }}</p>
-      }
-    </div>
-
-    <div id="knowledge-demo-result" class="conversation" aria-live="polite" aria-atomic="true">
-      @if (state === 'idle') {
-        <p class="empty-state">{{ content.emptyStateLabel }}</p>
-      }
-
-      @if (state === 'checking') {
-        <p class="checking-state" role="status">
-          {{ content.checkingLabel }}
-        </p>
-      }
-
-      @if ((state === 'result' || state === 'fallback') && displayedQuestion) {
-        <p class="message message-user">
-          <strong>{{ content.questionLabel }}:</strong> {{ displayedQuestion }}
-        </p>
-      }
-
-      @if (state === 'result' && selectedScenario) {
-        <article class="message message-assistant answer-card">
-          <h3>{{ content.answerLabel }}</h3>
-          <p>{{ selectedScenario.answer }}</p>
-          <p class="confidence">
-            <strong>{{ content.confidenceLabel }}:</strong> {{ selectedScenario.confidence }}
-          </p>
-          @if (selectedScenario.sources.length) {
-            <div class="sources">
-              <h4>{{ content.sourcesLabel }}</h4>
-              <ul>
-                @for (source of selectedScenario.sources; track source) {
-                  <li>{{ source }}</li>
-                }
-              </ul>
-            </div>
-          }
-          @if (selectedScenario.handoff) {
-            <div class="handoff">
-              <h4>{{ content.handoffLabel }}</h4>
-              <p>{{ selectedScenario.handoff }}</p>
-            </div>
-          }
-          @if (selectedScenario.productionNote) {
-            <div class="handoff">
-              <h4>Ograniczenie wdrożeniowe</h4>
-              <p>{{ selectedScenario.productionNote }}</p>
-            </div>
-          }
-          @if (selectedScenario.nextStep) {
-            <div class="demo-actions">
-              <a
-                class="contact-cta"
-                [routerLink]="selectedScenario.nextStep.path"
-                [queryParams]="selectedScenario.nextStep.queryParams"
-                >{{ selectedScenario.nextStep.label }}</a
-              >
-            </div>
-          }
-        </article>
-      }
-
-      @if (state === 'fallback') {
-        <article class="message message-assistant answer-card">
-          <h3>{{ content.fallbackHeading }}</h3>
-          <p>{{ content.fallbackBody }}</p>
-          <div class="demo-actions">
-            <a
-              class="contact-cta"
-              [routerLink]="content.fallbackCta.path"
-              [queryParams]="content.fallbackCta.queryParams"
-              >{{ content.fallbackCta.label }}</a
-            >
-            <button
-              type="button"
-              class="reset-button"
-              (click)="selectCategory(selectedCategoryId ?? content.categories[0].id)"
-            >
-              {{ content.fallbackResetLabel }}
-            </button>
-          </div>
-        </article>
-      }
-    </div>
-  </div>
-
-  <div class="demo-actions">
-    <button type="button" class="reset-button" (click)="reset()" [disabled]="state === 'idle'">
-      {{ content.resetLabel }}
-    </button>
-    <a
-      class="contact-cta"
-      [routerLink]="content.contactCta.path"
-      [queryParams]="content.contactCta.queryParams"
-      [hidden]="state === 'fallback'"
-      >{{ content.contactCta.label }}</a
+  <div class="scenario-picker">
+    <label for="demo-category">Wybierz obszar</label>
+    <select
+      id="demo-category"
+      [value]="selectedCategoryId"
+      (change)="selectCategory($any($event.target).value)"
+      aria-controls="demo-questions"
     >
+      @for (category of content.categories; track category.id) {
+        <option [value]="category.id">{{ category.label }}</option>
+      }
+    </select>
   </div>
 
-  <div class="question-list">
+  <div id="demo-questions" class="question-list">
     <h3>{{ content.questionsLabel }}</h3>
     <div class="scenario-list">
-      @for (scenario of visibleScenarios; track trackScenario($index, scenario)) {
+      @for (scenario of visibleScenarios; track scenario.id) {
         <button
           type="button"
           class="question-button scenario-button"
@@ -157,10 +53,78 @@
       [placeholder]="content.customQuestionPlaceholder"
       [value]="customQuestion"
       (input)="updateCustomQuestion($event)"
+      aria-describedby="custom-question-help"
     />
-    <p class="section-copy">{{ content.customQuestionHelp }}</p>
+    <p id="custom-question-help" class="section-copy">{{ content.customQuestionHelp }}</p>
     <button type="submit" class="primary-action" [disabled]="!customQuestion.trim()">
       {{ content.customQuestionSubmitLabel }}
     </button>
   </form>
+
+  <div id="knowledge-demo-result" class="conversation">
+    @if (state === 'idle') {
+      <p class="empty-state">{{ content.emptyStateLabel }}</p>
+    }
+    @if (state === 'result' && selectedScenario) {
+      <article class="message message-assistant answer-card">
+        <h3 id="knowledge-demo-answer-title" tabindex="-1">{{ content.answerLabel }}</h3>
+        <p class="message-user">
+          <strong>{{ content.questionLabel }}:</strong> {{ displayedQuestion }}
+        </p>
+        <p>{{ selectedScenario.answer }}</p>
+        @if (selectedScenario.sources.length) {
+          <div class="sources">
+            <h4>{{ content.sourcesLabel }}</h4>
+            <ul>
+              @for (source of selectedScenario.sources; track source) {
+                <li>{{ source }}</li>
+              }
+            </ul>
+          </div>
+        }
+        @if (selectedScenario.handoff) {
+          <div class="handoff">
+            <h4>{{ content.handoffLabel }}</h4>
+            <p>{{ selectedScenario.handoff }}</p>
+          </div>
+        }
+        @if (selectedScenario.productionNote) {
+          <div class="handoff">
+            <h4>Ograniczenie wdrożeniowe</h4>
+            <p>{{ selectedScenario.productionNote }}</p>
+          </div>
+        }
+      </article>
+    }
+    @if (state === 'fallback') {
+      <article class="message message-assistant answer-card">
+        <h3 id="knowledge-demo-answer-title" tabindex="-1">{{ content.fallbackHeading }}</h3>
+        <p class="message-user">
+          <strong>{{ content.questionLabel }}:</strong> {{ displayedQuestion }}
+        </p>
+        <p>{{ content.fallbackBody }}</p>
+      </article>
+    }
+  </div>
+
+  <div class="demo-actions">
+    <button type="button" class="reset-button" (click)="reset()" [disabled]="state === 'idle'">
+      {{ state === 'fallback' ? content.fallbackResetLabel : content.resetLabel }}
+    </button>
+    @if (state === 'fallback') {
+      <a
+        class="contact-cta"
+        [routerLink]="content.fallbackCta.path"
+        [queryParams]="content.fallbackCta.queryParams"
+        >{{ content.fallbackCta.label }}</a
+      >
+    } @else {
+      <a
+        class="contact-cta"
+        [routerLink]="(selectedScenario?.nextStep ?? content.contactCta).path"
+        [queryParams]="(selectedScenario?.nextStep ?? content.contactCta).queryParams"
+        >{{ (selectedScenario?.nextStep ?? content.contactCta).label }}</a
+      >
+    }
+  </div>
 </section>

@@ -82,6 +82,24 @@ describe('ContactFormComponent', () => {
     );
   });
 
+  it('keeps allowlisted service context separate from a manually changed topic', () => {
+    projectTypeParams$.next(
+      convertToParamMap({ projectType: 'voice_agent_demo', service: 'voice' }),
+    );
+    const fixture = TestBed.createComponent(ContactFormComponent);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain('Obsługa telefonów / Voice AI');
+    fixture.componentInstance.form.controls.projectType.setValue('other');
+    fixture.componentInstance.form.controls.projectType.markAsDirty();
+    projectTypeParams$.next(
+      convertToParamMap({ projectType: 'voice_agent_demo', service: 'voice' }),
+    );
+    expect(fixture.componentInstance.form.controls.projectType.value).toBe('other');
+    expect(fixture.componentInstance.serviceContext).toBe('voice');
+    projectTypeParams$.next(convertToParamMap({ service: 'private@example.org' }));
+    expect(fixture.componentInstance.serviceContext).toBeUndefined();
+  });
+
   it('shows concise general guidance in the visible form', () => {
     const fixture = TestBed.createComponent(ContactFormComponent);
     fixture.detectChanges();
@@ -190,10 +208,10 @@ describe('ContactFormComponent', () => {
 
   it('maps legacy and unsupported contact query params to visible categories', () => {
     const legacyMappings = {
-      ai_automation: 'business_process_automation',
+      ai_automation: 'ai_automation',
       email_automation: 'business_process_automation',
-      voice_agent_demo: 'rag_chatbot_demo',
-      whatsapp_agent_management: 'rag_chatbot_demo',
+      voice_agent_demo: 'voice_agent_demo',
+      whatsapp_agent_management: 'whatsapp_agent_management',
       agent_management_panel: 'custom_web_app',
       dashboard_internal_tool: 'custom_web_app',
       external_integration: 'backend_api',
@@ -245,7 +263,7 @@ describe('ContactFormComponent', () => {
     );
   });
 
-  it('renders only the seven business project categories from shared contact content', () => {
+  it('renders the business categories including dedicated Voice and agent topics from shared contact content', () => {
     const fixture = TestBed.createComponent(ContactFormComponent);
     fixture.detectChanges();
 
@@ -261,6 +279,9 @@ describe('ContactFormComponent', () => {
       'backend_api',
       'business_process_automation',
       'rag_chatbot_demo',
+      'voice_agent_demo',
+      'whatsapp_agent_management',
+      'ai_automation',
       'software_house_partnership',
       'other',
     ]);
@@ -401,7 +422,7 @@ describe('ContactFormComponent', () => {
     fixture.componentInstance.submit();
 
     expect(api.submit).toHaveBeenCalledWith(jasmine.objectContaining({ budgetRange: 'not_sure' }));
-    expect(projectTypeOptions).toHaveSize(7);
+    expect(projectTypeOptions).toHaveSize(10);
   });
 
   it('shows and focuses the success path with a reset action and a home link', fakeAsync(() => {

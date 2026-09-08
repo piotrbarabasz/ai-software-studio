@@ -37,6 +37,9 @@ class ContactInquiry(BaseModel):
     email: EmailStr = Field(max_length=254)
     company: str | None = Field(default=None, max_length=160)
     project_type: ProjectType = Field(alias="projectType")
+    service_context: Literal["automation", "rag", "voice", "whatsapp", "agents"] | None = Field(
+        default=None, alias="serviceContext"
+    )
     budget_range: BudgetRange = Field(alias="budgetRange")
     message: str = Field(min_length=20, max_length=4000)
     consent: bool

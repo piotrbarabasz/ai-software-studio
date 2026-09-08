@@ -1,4 +1,4 @@
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, ViewportScroller } from '@angular/common';
 import {
   Component,
   DestroyRef,
@@ -34,6 +34,7 @@ import { ProtolumeLogoComponent } from '../../shared/brand/protolume-logo/protol
 })
 export class SiteShellComponent implements OnInit {
   private readonly router = inject(Router);
+  private readonly viewportScroller = inject(ViewportScroller);
   private readonly title = inject(Title);
   private readonly meta = inject(Meta);
   private readonly document = inject(DOCUMENT);
@@ -63,12 +64,21 @@ export class SiteShellComponent implements OnInit {
     return this.currentRouteKind === 'demo-example';
   }
 
+  get isServicePage(): boolean {
+    return this.currentRouteKind === 'service-landing';
+  }
+
   get isFullscreenNavigationOpen(): boolean {
     return this.isNavigationEnhanced && this.isMobileViewport && this.isMobileNavigationOpen;
   }
 
   ngOnInit(): void {
     if (this.isBrowser) {
+      this.viewportScroller.setOffset(() => [
+        0,
+        (this.document.querySelector('header.site-header')?.getBoundingClientRect().height ?? 68) +
+          16,
+      ]);
       this.isNavigationEnhanced = true;
       this.updateViewportState();
       this.initializeHeaderScrollState();
@@ -117,7 +127,8 @@ export class SiteShellComponent implements OnInit {
 
   focusMainContent(event?: Event): void {
     event?.preventDefault();
-    this.mainContent?.nativeElement.focus();
+    // Route focus must not undo the router's fragment/scroll restoration.
+    this.mainContent?.nativeElement.focus({ preventScroll: !event });
   }
 
   @HostListener('document:keydown', ['$event'])
@@ -330,7 +341,7 @@ export class SiteShellComponent implements OnInit {
             '@type': 'Service',
             name: solution.title,
             description: solution.summary,
-            url: `${absoluteSiteUrl('/rozwiazania')}#${solution.id}`,
+            url: absoluteSiteUrl(solution.path),
             provider: { '@id': serviceId },
           },
         })),
@@ -408,10 +419,20 @@ export class SiteShellComponent implements OnInit {
             name: 'Strona główna',
             item: absoluteSiteUrl('/'),
           },
+          ...(serviceLandingPage
+            ? [
+                {
+                  '@type': 'ListItem',
+                  position: 2,
+                  name: 'Rozwiązania',
+                  item: absoluteSiteUrl('/rozwiazania'),
+                },
+              ]
+            : []),
           {
             '@type': 'ListItem',
-            position: 2,
-            name: route.label,
+            position: serviceLandingPage ? 3 : 2,
+            name: serviceLandingPage?.eyebrow ?? route.label,
             item: absoluteSiteUrl(route.path),
           },
         ],

@@ -1,4 +1,12 @@
-import { Component, Input, DOCUMENT, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  Input,
+  DOCUMENT,
+  ChangeDetectionStrategy,
+  afterNextRender,
+  Injector,
+} from '@angular/core';
+import type { AfterRenderRef } from '@angular/core';
 import type { OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
@@ -9,7 +17,7 @@ import type {
 } from '../../../core/content/site-content.types';
 import { matchDemoScenario } from './knowledge-demo.matcher';
 
-type DemoViewState = 'idle' | 'checking' | 'result' | 'fallback';
+type DemoViewState = 'idle' | 'result' | 'fallback';
 
 @Component({
   selector: 'app-knowledge-demo',
@@ -20,6 +28,7 @@ type DemoViewState = 'idle' | 'checking' | 'result' | 'fallback';
 })
 export class KnowledgeDemoComponent implements OnChanges, OnDestroy {
   private readonly document = inject(DOCUMENT);
+  private readonly injector = inject(Injector);
 
   @Input({ required: true }) content!: KnowledgeDemoContent;
   @Input() compact = false;
@@ -29,7 +38,7 @@ export class KnowledgeDemoComponent implements OnChanges, OnDestroy {
   customQuestion = '';
   displayedQuestion = '';
   state: DemoViewState = 'idle';
-  private revealTimer?: ReturnType<typeof setTimeout>;
+  private pendingFocus?: AfterRenderRef;
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['content']) {
@@ -51,12 +60,8 @@ export class KnowledgeDemoComponent implements OnChanges, OnDestroy {
     return content.scenarios.filter((scenario) => scenario.categoryId === categoryId);
   }
 
-  get selectedCategory(): KnowledgeDemoContent['categories'][number] | undefined {
-    return this.content?.categories.find((category) => category.id === this.selectedCategoryId);
-  }
-
   selectCategory(categoryId: string): void {
-    this.clearRevealTimer();
+    this.pendingFocus?.destroy();
     this.selectedCategoryId = categoryId;
     this.selectedScenario = undefined;
     this.customQuestion = '';
@@ -68,21 +73,12 @@ export class KnowledgeDemoComponent implements OnChanges, OnDestroy {
     scenario: KnowledgeDemoScenario,
     displayedQuestion: string = scenario.question,
   ): void {
-    this.clearRevealTimer();
+    this.pendingFocus?.destroy();
     this.selectedCategoryId = scenario.categoryId;
     this.selectedScenario = scenario;
     this.displayedQuestion = displayedQuestion;
-    this.state = 'checking';
-
-    if (this.prefersReducedMotion()) {
-      this.state = 'result';
-      return;
-    }
-
-    this.revealTimer = setTimeout(() => {
-      this.state = 'result';
-      this.revealTimer = undefined;
-    }, 250);
+    this.state = 'result';
+    this.focusResult();
   }
 
   updateCustomQuestion(event: Event): void {
@@ -112,30 +108,24 @@ export class KnowledgeDemoComponent implements OnChanges, OnDestroy {
       return;
     }
 
-    this.clearRevealTimer();
+    this.pendingFocus?.destroy();
     this.selectedScenario = undefined;
     this.displayedQuestion = displayedQuestion;
     this.state = 'fallback';
+    this.focusResult();
   }
 
   reset(): void {
-    this.clearRevealTimer();
+    this.pendingFocus?.destroy();
     this.selectedScenario = undefined;
     this.customQuestion = '';
     this.displayedQuestion = '';
     this.state = 'idle';
+    this.focusAfterRender('demo-category');
   }
 
   ngOnDestroy(): void {
-    this.clearRevealTimer();
-  }
-
-  trackCategory(_index: number, category: { id: string }): string {
-    return category.id;
-  }
-
-  trackScenario(_index: number, scenario: KnowledgeDemoScenario): string {
-    return scenario.id;
+    this.pendingFocus?.destroy();
   }
 
   private ensureSelectedCategory(): void {
@@ -152,16 +142,22 @@ export class KnowledgeDemoComponent implements OnChanges, OnDestroy {
     }
   }
 
-  private clearRevealTimer(): void {
-    if (this.revealTimer !== undefined) {
-      clearTimeout(this.revealTimer);
-      this.revealTimer = undefined;
-    }
+  private focusResult(): void {
+    this.focusAfterRender('knowledge-demo-answer-title');
   }
 
-  private prefersReducedMotion(): boolean {
-    return (
-      this.document.defaultView?.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
+  private focusAfterRender(id: string): void {
+    this.pendingFocus?.destroy();
+    this.pendingFocus = afterNextRender(
+      {
+        write: () => {
+          const target = this.document.getElementById(id);
+          // One focus announcement; no competing live region or simulated delay.
+          target?.focus({ preventScroll: true });
+          target?.scrollIntoView({ block: 'start', behavior: 'instant' });
+        },
+      },
+      { injector: this.injector },
     );
   }
 }

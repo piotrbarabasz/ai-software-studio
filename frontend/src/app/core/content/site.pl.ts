@@ -1,3 +1,6 @@
+import { publishedEvidence } from './evidence.pl';
+import { serviceCatalog } from './service-catalog.pl';
+import { firstStageOffer } from './first-stage.pl';
 import { budgetRangeOptions, projectTypeOptions } from './contact-options.pl';
 import { publicBrand } from '../brand/public-brand.config';
 import type {
@@ -66,182 +69,15 @@ export const researchDirections = [
 const solutionsContent: SolutionsPageContent = {
   path: '/rozwiazania',
   eyebrow: 'Rozwiązania',
-  title: 'Pięć sposobów na uporządkowanie konkretnego procesu',
-  lead: 'Nie sprzedajemy jednego gotowego systemu z półki. Dobieramy ograniczony zakres do problemu firmy, sprawdzamy go w demo, a następnie planujemy właściwe wdrożenie.',
-  scopeNotice:
-    'Poniższe opisy pokazują możliwy kierunek rozwiązania. Finalny zakres zależy od procesu, danych, integracji i wymaganych zabezpieczeń.',
-  quickLinksLabel: 'Przejdź do rozwiązania',
-  solutions: [
-    {
-      id: 'asystent-wiedzy',
-      title: 'Asystent wiedzy',
-      summary:
-        'Pomaga pracownikom lub klientom szybciej znaleźć odpowiedź w zatwierdzonych materiałach firmy.',
-      problem:
-        'Wiedza jest rozproszona między dokumentami, instrukcjami, wiadomościami i doświadczeniem pracowników.',
-      audience:
-        'Dla zespołów, które regularnie odpowiadają na powtarzalne pytania albo pracują na rozproszonej dokumentacji.',
-      capabilities: [
-        'wyszukiwanie informacji w wybranych materiałach',
-        'odpowiedzi ze wskazaniem źródła',
-        'kontrola zakresu odpowiedzi',
-      ],
-      requiredInputs: [
-        'wybrany zestaw dokumentów lub instrukcji',
-        'przykładowe pytania użytkowników',
-        'zasady braku odpowiedzi poza zakresem',
-      ],
-      demoScope:
-        'Demo może pokazać pytania do ograniczonego zestawu materiałów, odpowiedzi ze źródłami oraz przekazanie sprawy do człowieka.',
-      productionScope: [
-        'bezpieczny indeks wiedzy',
-        'role i ochrona danych',
-        'monitoring jakości i kosztów',
-      ],
-      primaryCta: {
-        label: 'Porozmawiaj o asystencie wiedzy',
-        path: '/kontakt',
-        queryParams: { projectType: 'rag_chatbot_demo' },
-      },
-      optionalSecondaryCta: { label: 'Zobacz symulację asystenta', path: '/demo-ai' },
-    },
-    {
-      id: 'automatyzacja-wiadomosci-i-dokumentow',
-      title: 'Automatyzacja wiadomości i dokumentów',
-      summary:
-        'Ogranicza ręczne czytanie wiadomości, przepisywanie danych i przekazywanie spraw między osobami.',
-      problem:
-        'Pracownicy odczytują wiadomości lub dokumenty, kopiują informacje do innych narzędzi i ręcznie ustalają kolejny krok.',
-      audience:
-        'Dla zespołów obsługujących dużą liczbę powtarzalnych wiadomości, formularzy, zamówień, zgłoszeń lub dokumentów.',
-      capabilities: [
-        'rozpoznawanie rodzaju wiadomości lub dokumentu',
-        'wyciąganie danych',
-        'przypisanie sprawy',
-        'szkic odpowiedzi lub zadania',
-      ],
-      requiredInputs: [
-        'przykładowe wiadomości lub dokumenty',
-        'zasady klasyfikacji i wyjątków',
-        'miejsce docelowe wyników',
-      ],
-      demoScope:
-        'Demo może pokazać klasyfikację przykładowych wiadomości i zaproponowanie kolejnego kroku bez produkcyjnej skrzynki.',
-      productionScope: [
-        'integracje z systemem firmowym',
-        'ponowienia i audyt',
-        'zatwierdzanie działań przez człowieka',
-      ],
-      primaryCta: {
-        label: 'Porozmawiaj o automatyzacji',
-        path: '/kontakt',
-        queryParams: { projectType: 'business_process_automation' },
-      },
-    },
-    {
-      id: 'panel-operacyjny',
-      title: 'Panel operacyjny procesu',
-      summary: 'Pokazuje status spraw, odpowiedzialność i następny krok w jednym miejscu.',
-      problem:
-        'Informacje o procesie są rozproszone między e-mailem, komunikatorami, arkuszami i systemami.',
-      audience:
-        'Dla zespołów, które potrzebują wspólnego widoku procesu, a nie kolejnego dashboardu z wykresami.',
-      capabilities: [
-        'wspólny widok spraw i statusów',
-        'osoba odpowiedzialna',
-        'następny krok',
-        'historia zmian',
-      ],
-      requiredInputs: [
-        'etapy i statusy procesu',
-        'role i odpowiedzialności',
-        'źródła danych zespołu',
-      ],
-      demoScope:
-        'Demo może pokazać jeden proces na przykładowych danych z podstawowymi statusami i kolejnym krokiem.',
-      productionScope: [
-        'logowanie i uprawnienia',
-        'baza danych i integracje',
-        'monitoring i kopie bezpieczeństwa',
-      ],
-      primaryCta: {
-        label: 'Porozmawiaj o panelu procesu',
-        path: '/kontakt',
-        queryParams: { projectType: 'custom_web_app' },
-      },
-    },
-    {
-      id: 'system-agentowy',
-      title: 'System agentowy do realizacji zadań',
-      summary:
-        'Koordynuje kilka wyspecjalizowanych kroków lub agentów, zachowując kontrolę człowieka nad ważnymi decyzjami.',
-      problem:
-        'Złożone zadanie wymaga zebrania informacji, wykonania kilku operacji, sprawdzenia wyniku i przekazania decyzji między osobami lub systemami.',
-      audience:
-        'Dla zespołów, które chcą uporządkować wieloetapową pracę, a nie tylko wygenerować pojedynczą odpowiedź AI.',
-      capabilities: [
-        'podział zadania na kontrolowane etapy',
-        'przekazywanie wyniku między wyspecjalizowanymi agentami',
-        'wywoływanie uzgodnionych narzędzi lub API',
-        'weryfikacja wyniku przed kolejnym krokiem',
-        'zatwierdzenie człowieka w krytycznym punkcie',
-      ],
-      requiredInputs: [
-        'opis procesu i jego etapów',
-        'reguły decyzji oraz obsługi wyjątków',
-        'lista narzędzi lub systemów',
-        'miejsca wymagające zatwierdzenia człowieka',
-      ],
-      demoScope:
-        'Demo może pokazać jeden ograniczony przebieg zadania, role agentów, przekazywanie wyników oraz punkt kontroli człowieka.',
-      productionScope: [
-        'bezpieczne integracje i uprawnienia',
-        'limity kosztów oraz liczby operacji',
-        'monitoring, audyt i ponowienia',
-        'obsługa błędów i zatrzymanie procesu',
-      ],
-      primaryCta: {
-        label: 'Porozmawiaj o systemie agentowym',
-        path: '/kontakt',
-        queryParams: { projectType: 'business_process_automation' },
-      },
-    },
-    {
-      id: 'integracje-kanalow',
-      title: 'Integracje kanałów i komunikatorów',
-      summary:
-        'Łączy WhatsApp, e-mail, formularze i CRM z jednym kontrolowanym procesem obsługi spraw.',
-      problem:
-        'Wiadomości trafiają z wielu kanałów, a pracownicy ręcznie kopiują dane, zmieniają statusy i przekazują sprawy do innych narzędzi.',
-      audience: 'Dla zespołów obsługujących klientów lub operacje przez kilka kanałów komunikacji.',
-      capabilities: [
-        'odbieranie zdarzeń z wybranych kanałów',
-        'rozpoznanie rodzaju sprawy',
-        'przekazanie danych do właściwego procesu',
-        'aktualizacja statusu w CRM lub panelu',
-        'eskalacja do człowieka',
-      ],
-      requiredInputs: [
-        'lista kanałów i systemów',
-        'przykładowe wiadomości',
-        'zasady routingu i odpowiedzialności',
-        'dostępność API dostawców',
-      ],
-      demoScope:
-        'Demo może pokazać symulowany przepływ wiadomości z WhatsAppa, e-maila albo formularza do procesu i panelu statusów, bez wysyłania prawdziwych wiadomości.',
-      productionScope: [
-        'oficjalne API dostawców',
-        'zgody, szablony wiadomości i limity',
-        'audyt komunikacji',
-        'bezpieczeństwo danych oraz monitoring integracji',
-      ],
-      primaryCta: {
-        label: 'Porozmawiaj o integracjach',
-        path: '/kontakt',
-        queryParams: { projectType: 'backend_api' },
-      },
-    },
-  ],
+  title: 'Który proces chcesz usprawnić?',
+  lead: 'Wybierz sytuację podobną do pracy Twojego zespołu. Na stronie rozwiązania znajdziesz rezultat, zakres i sposób sprawdzenia.',
+  solutions: serviceCatalog.map((service) => ({
+    id: service.legacyAnchor,
+    title: service.label,
+    summary: service.result,
+    problem: service.problem,
+    path: service.path,
+  })),
   closingCta: {
     title: 'Nie wiesz, który kierunek pasuje do procesu?',
     lead: 'Opisz obecny sposób pracy. Pierwszym krokiem jest ustalenie problemu, a nie wybór technologii.',
@@ -286,14 +122,15 @@ const routeMetadata = [
     label: 'Rozwiązania',
     title: brandTitle('Rozwiązania AI i automatyzacji'),
     description: brandDescription(
-      'Asystent wiedzy, automatyzacja wiadomości i dokumentów, panel operacyjny procesu, system agentowy oraz integracje kanałów Protolume.',
+      serviceCatalog.map((service) => service.label).join(', ') +
+        ' — wybierz proces do usprawnienia.',
     ),
     kind: 'solutions',
   },
   ...serviceLandingRouteMetadata,
   {
     path: '/dla-software-house',
-    label: 'Dla partnerów',
+    label: 'Dla software house’ów',
     title: brandTitle('Partner AI dla software house’ów i MSP'),
     description:
       'Wsparcie software house’ów i MSP w realizacji modułów AI, automatyzacji, RAG, systemów agentowych i integracji API.',
@@ -301,7 +138,7 @@ const routeMetadata = [
   },
   {
     path: '/development',
-    label: 'Wdrożenia',
+    label: 'Aplikacje i integracje',
     title: brandTitle('Wdrożenia aplikacji, API i automatyzacji'),
     description: brandDescription(
       'Planowanie i realizacja aplikacji, API, integracji oraz automatyzacji w potwierdzonym zakresie.',
@@ -310,10 +147,10 @@ const routeMetadata = [
   },
   {
     path: '/studio',
-    label: 'O Protolume',
+    label: 'Studio',
     title: brandTitle(publicBrand.owner.name),
     description: brandDescription(
-      `Poznaj sposób współpracy z ${publicBrand.owner.name} oraz sprawdzalne przykłady pracy.`,
+      'Poznaj sposób współpracy z Piotrem Barabaszem oraz sprawdzalne przykłady pracy.',
     ),
 
     kind: 'studio',
@@ -363,16 +200,14 @@ const legacyRedirects = [
   { from: '/systemy-agentowe', to: '/rozwiazania/systemy-agentowe' },
 ] as const;
 
-const contactNoCommitment =
-  'Wysłanie formularza nie jest zamówieniem, akceptacją wyceny ani automatycznym rozpoczęciem płatnej realizacji.';
+const contactNoCommitment = firstStageOffer.noCommitment;
 
 const primaryNavigation = [
   { label: 'Rozwiązania', path: '/rozwiazania' },
   { label: 'Demo w 7 dni', path: '/demo-ai' },
-  { label: 'Wdrożenia', path: '/development' },
-  { label: 'Dla partnerów', path: '/dla-software-house' },
-  { label: 'O Protolume', path: '/studio' },
-  { label: 'Kontakt', path: '/kontakt' },
+  { label: 'Aplikacje i integracje', path: '/development' },
+  { label: 'Dla software house’ów', path: '/dla-software-house' },
+  { label: 'Studio', path: '/studio' },
 ] as const;
 
 const navigationLink = (path: (typeof primaryNavigation)[number]['path']) =>
@@ -420,7 +255,7 @@ export const siteContent = {
     ],
     studioLinks: [navigationLink('/studio'), { label: 'R&D Lab', path: '/rd' }],
     informationLinks: [
-      navigationLink('/kontakt'),
+      { label: 'Kontakt', path: '/kontakt' },
       { label: 'Polityka prywatności', path: '/polityka-prywatnosci' },
     ],
     copyright: 'Wszelkie prawa zastrzeżone.',
@@ -462,94 +297,25 @@ export const siteContent = {
       },
     },
     evidence: {
-      eyebrow: 'Co działa naprawdę',
-      title: 'Trzy dowody pracy, które możesz sprawdzić samodzielnie',
-      lead: 'Pokazujemy działające elementy, przykładowy rezultat i granice tego, co faktycznie potwierdzają.',
-      items: [
-        {
-          id: 'knowledge-demo',
-          typeLabel: 'Interaktywne demo',
-          title: 'Asystent wiedzy z obsługą pytań poza zakresem',
-          teaser:
-            'Sprawdź odpowiedź ze źródłem oraz przekazanie pytania do człowieka, gdy brakuje danych.',
-          problem:
-            'Jak szybko ocenić sposób rozmowy z asystentem wiedzy i obsługę pytań bez odpowiedzi?',
-          built:
-            'Interaktywna symulacja z trzema pytaniami, odpowiedziami ze wskazaniem przykładowych źródeł oraz przekazaniem sprawy do człowieka, gdy brakuje danych.',
-          verification: [
-            'Uruchom demo i wybierz jedno z trzech przykładowych pytań.',
-            'Sprawdź odpowiedź ze źródłami oraz scenariusz przekazania sprawy do człowieka.',
-            'Możesz samodzielnie uruchomić symulację i sprawdzić zachowanie dla pytań w zakresie i poza zakresem.',
-          ],
-          limitation:
-            'To demo korzysta ze stałych pytań i odpowiedzi. Wymaga dodatkowej walidacji na danych firmy, integracji z bazą wiedzy i gotowości produkcyjnej.',
-          liveLink: {
-            kind: 'internal',
-            label: 'Uruchom interaktywne demo',
-            path: '/demo-ai',
-          },
-        },
-        {
-          id: 'demo-report',
-          typeLabel: 'Przykładowy raport',
-          title: 'Raport decyzyjny po Demo w 7 dni',
-          teaser:
-            'Sprawdź zakres, scenariusze testowe, ryzyka, kryteria odbioru i rekomendację w jednym raporcie.',
-          problem:
-            'Jak pokazać interesariuszom, co dokładnie otrzymują po etapie demo i czego to jeszcze nie potwierdza?',
-          built:
-            'Fikcyjny raport demonstracyjny po siedmiu dniach z decyzją, zakresem, trzema scenariuszami testowymi, rejestrem ryzyk, przykładowymi kryteriami odbioru i planem pierwszego etapu.',
-          verification: [
-            'Przejrzyj sekcję streszczenia decyzji i porównaj ją z zakresem demo.',
-            'Sprawdź trzy scenariusze testowe, w tym sytuację poza zakresem i handoff.',
-            'Oceń przykładowe kryteria odbioru, rejestr ryzyk i plan pierwszego etapu.',
-          ],
-          limitation:
-            'To fikcyjny materiał demonstracyjny, a nie wynik projektu klienta. Wymaga dodatkowej walidacji danych i kryteriów dla konkretnej firmy.',
-          liveLink: {
-            kind: 'internal',
-            label: 'Zobacz przykładowy raport',
-            path: '/przyklad-demo',
-          },
-        },
-        {
-          id: 'studio-application',
-          typeLabel: 'Projekt własny',
-          title: `${publicBrand.name} jako działająca aplikacja`,
-          teaser: 'Sprawdź działającą stronę, formularz kontaktowy i opis procesu realizacji.',
-          problem:
-            'Jak połączyć wielostronicową ofertę, interaktywne demo i działający formularz w jednej aplikacji?',
-          built:
-            'Działająca wielostronicowa aplikacja z formularzem kontaktowym, interaktywnym demo i jasno opisanym procesem realizacji.',
-          verification: [
-            'Przejdź między publicznymi trasami i uruchom interaktywne demo.',
-            'Sprawdź działający formularz kontaktowy i opis kolejnych etapów współpracy.',
-            'Porównaj zakres demo z opisem kryteriów odbioru i zależności.',
-          ],
-          limitation:
-            'To projekt własny, a nie case study klienta. Nie potwierdza wyników biznesowych ani efektów wdrożeń u klientów.',
-          liveLink: {
-            kind: 'internal',
-            label: 'Otwórz działającą stronę',
-            path: '/',
-          },
-        },
-      ],
+      eyebrow: 'Materiały do sprawdzenia',
+      title: 'Sprawdź przykład i jego zakres',
+      lead: 'Symulacja, fikcyjny raport i własna aplikacja mają różne zastosowania. Przy każdym materiale podajemy, co potwierdza.',
+      items: publishedEvidence,
     },
   },
   home: {
     path: '/',
     hero: {
       eyebrow: 'AI AUTOMATION STUDIO',
-      title: 'Pokaż nam proces.\nW 7 dni pokażemy działającą automatyzację.',
-      lead: 'Bierzemy jeden powtarzalny proces — wiadomości, dokumenty, CRM albo wiedzę firmy — i budujemy jego działające demo przed pełnym wdrożeniem.',
+      title: 'Pokaż nam proces.\nW 7 dni pokażemy jego demo.',
+      lead: 'Automatyzujemy powtarzalną pracę z wiadomościami, dokumentami i systemami firmy. Zaczynamy od jednego scenariusza przed pełnym wdrożeniem.',
       supportingLine: '1 proces · stały zakres · kontrola człowieka · wynik po 7 dniach',
       primaryCta: {
         label: 'Opisz proces',
         path: '/kontakt',
         queryParams: { projectType: 'mvp_prototype' },
       },
-      secondaryCta: { label: 'Zobacz demo →', path: '/demo-ai' },
+      secondaryCta: { label: 'Zobacz symulację →', path: '/demo-ai', fragment: 'interactive-demo' },
     },
     trustTeaser: {
       title: 'Osoba odpowiedzialna za projekt',
@@ -561,39 +327,11 @@ export const siteContent = {
       cta: { label: 'Poznaj osobę odpowiedzialną', path: '/studio' },
     },
     evidenceTeaser: {
-      eyebrow: 'Dowody pracy',
+      eyebrow: 'Materiały do sprawdzenia',
       title: 'Zobacz zamiast czytać.',
-      lead: 'Uruchom działający element, przejrzyj rezultat albo zajrzyj do eksperymentów technicznych.',
+      lead: 'Wypróbuj interfejs i zobacz formę raportu przed rozmową o własnym procesie.',
       note: 'To materiały demonstracyjne i projekt własny, a nie case study klienta.',
-      items: [
-        {
-          id: 'interactive-demo',
-          eyebrow: 'Try it',
-          title: 'Interaktywne demo',
-          description:
-            'Sprawdź odpowiedź ze źródłem oraz przekazanie pytania do człowieka, gdy brakuje danych.',
-          visualKind: 'demo',
-          cta: { label: 'Uruchom demo →', path: '/demo-ai' },
-        },
-        {
-          id: 'example-report',
-          eyebrow: 'Inspect it',
-          title: 'Przykładowy raport',
-          description:
-            'Zobacz zakres, scenariusze testowe, ryzyka, kryteria odbioru i rekomendację dalszego kroku.',
-          visualKind: 'report',
-          cta: { label: 'Zobacz raport →', path: '/przyklad-demo' },
-        },
-        {
-          id: 'protolume-lab',
-          eyebrow: 'Explore it',
-          title: 'Protolume Lab',
-          description:
-            'Eksperymenty z RAG, agentami, ewaluacją i niezawodnością systemów AI.',
-          visualKind: 'lab',
-          cta: { label: 'Explore Lab →', path: '/rd' },
-        },
-      ],
+      items: publishedEvidence.filter((item) => item.id !== 'studio-application'),
     },
     closingCta: {
       title: 'Pokaż proces, który zabiera czas',
@@ -612,69 +350,19 @@ export const siteContent = {
     ],
     useCasesHeading: {
       eyebrow: 'Gdzie najczęściej znika czas?',
-      title: 'Trzy problemy, które warto przestać obsługiwać ręcznie',
+      title: 'Gdzie zespół wykonuje powtarzalną pracę?',
     },
     useCases: homeUseCases,
     useCasesCta: { label: 'Zobacz wszystkie rozwiązania →', path: '/rozwiazania' },
     businessFlow: {
-      eyebrow: 'Jak działa pełny proces',
-      title: 'Od wejścia do wyniku',
-      lead: 'Jeden kontrolowany przepływ od danych wejściowych do rezultatu w używanym systemie.',
-      results: [
-        'Mniej przepisywania.',
-        'Szybsza odpowiedź.',
-        'Mniej zagubionych spraw.',
-        'Jasny handoff.',
-      ],
-      cta: {
-        label: 'Sprawdź taki proces na swoim przykładzie',
-        path: '/kontakt',
-        queryParams: { projectType: 'backend_api' },
-      },
-      steps: [
-        {
-          id: 'customer-contact',
-          kind: 'contact',
-          kicker: 'Input',
-          title: 'Nowe zgłoszenie',
-          description: 'Wiadomość lub dokument rozpoczyna proces.',
-        },
-        {
-          id: 'data-collection',
-          kind: 'collect',
-          kicker: 'Data',
-          title: 'Dane uporządkowane',
-          description: 'System odczytuje potrzebne informacje.',
-        },
-        {
-          id: 'process-automation',
-          kind: 'automate',
-          kicker: 'Automation',
-          title: 'Reguły i AI',
-          description: 'Automatyzacja wykonuje uzgodnione kroki.',
-        },
-        {
-          id: 'human-control',
-          kind: 'handoff',
-          kicker: 'Human review',
-          title: 'Decyzja człowieka',
-          description: 'Ważne wyjątki wymagają akceptacji.',
-        },
-        {
-          id: 'system-update',
-          kind: 'system',
-          kicker: 'System',
-          title: 'Aktualizacja narzędzia',
-          description: 'Zweryfikowane dane trafiają do właściwego systemu.',
-        },
-        {
-          id: 'system-result',
-          kind: 'result',
-          kicker: 'Result',
-          title: 'Gotowy wynik',
-          description: 'Proces kończy się jednoznacznym statusem lub akcją.',
-        },
-      ],
+      eyebrow: 'Ilustracja procesu',
+      title: 'Tak może zmienić się obsługa jednego zapytania',
+      lead: 'Schemat proponowanego procesu. Nie uruchamia CRM i nie przedstawia wyniku wdrożenia.',
+      before: 'Pracownik czyta wiadomość, przepisuje dane i przygotowuje aktualizację sprawy.',
+      proposal:
+        'System proponuje temat, pola rekordu i szkic odpowiedzi. Pokazuje dane do sprawdzenia.',
+      decision:
+        'Pracownik poprawia lub zatwierdza propozycję. Dopiero po akceptacji może nastąpić zapis i przypisanie sprawy.',
     },
     sevenDayDemo: {
       eyebrow: 'Demo w 7 dni',
@@ -737,9 +425,9 @@ export const siteContent = {
   },
   demo: {
     path: '/demo-ai',
-    eyebrow: 'Demo i sprawdzenie wykonalności',
+    eyebrow: firstStageOffer.name,
     title: 'Zobacz jeden scenariusz swojej firmy w działającym demo',
-    lead: 'W siedem dni pokazujemy, co użytkownik zobaczy, jaką decyzję może podjąć i jakie informacje otrzyma. Potem porównujesz to z pełnym systemem produkcyjnym.',
+    lead: firstStageOffer.result,
     audienceTitle: 'Dla zespołów, które chcą sprawdzić jedną sytuację przed większą inwestycją',
     audienceProblems: [
       'powtarzalne pytania klientów lub zespołu',
@@ -751,7 +439,7 @@ export const siteContent = {
       'wybór jednej sytuacji do sprawdzenia',
       'ustalenie danych, użytkowników i założeń',
       'projekt widocznego przepływu',
-      'budowa klikalnego lub działającego demo',
+      'budowa uzgodnionego scenariusza i test jego działania',
       'prezentacja informacji potrzebnych do decyzji o kolejnym kroku',
     ],
     comparison: {
@@ -779,25 +467,23 @@ export const siteContent = {
       'Najpierw widać działający przebieg, potem zestaw informacji potrzebnych do decyzji o kolejnym kroku.',
     decision:
       'Na tej podstawie możesz przejść do walidacji, przygotować pierwszy etap albo zatrzymać temat przed większą inwestycją.',
-    interactiveCtaLabel: 'Uruchom przykładowe demo',
+    interactiveCtaLabel: 'Zobacz symulację',
     reportCta: { label: 'Zobacz przykładowy raport', path: '/przyklad-demo' },
     ctaLabel: 'Omów sytuację do sprawdzenia',
     interactiveDemo: {
       heading: 'Sprawdź przykładowy przepływ asystenta wiedzy',
-      simulationLabel: 'Interaktywna symulacja przepływu demo',
+      simulationLabel: firstStageOffer.simulation,
       disclaimer:
-        'To przykład doświadczenia użytkownika, a nie połączenie z produkcyjną bazą wiedzy.',
+        'Wybierasz gotową odpowiedź zapisaną w tej stronie. Pytanie pozostaje w Twojej przeglądarce.',
       questionsLabel: 'Wybierz przykładowe pytanie',
       emptyStateLabel: 'Wybierz pytanie, aby zobaczyć stały, przykładowy przebieg odpowiedzi.',
-      checkingLabel: 'Sprawdzam materiały…',
       questionLabel: 'Pytanie',
       answerLabel: 'Odpowiedź asystenta',
-      sourcesLabel: 'Wykorzystane źródła',
-      confidenceLabel: 'Poziom pewności',
+      sourcesLabel: 'Materiały przykładowe scenariusza',
       handoffLabel: 'Przekazanie do pracownika',
       resetLabel: 'Rozpocznij ponownie',
       contactCta: {
-        label: 'Umów bezpłatną prezentację',
+        label: 'Opisz proces',
         path: '/kontakt',
         queryParams: { projectType: 'rag_chatbot_demo' },
       },
@@ -844,7 +530,6 @@ export const siteContent = {
             'Przykładowy zakres demo: koszty zależą od scenariuszy, źródeł wiedzy i integracji',
             'Notatka sprzedażowa: start od jednego procesu ogranicza ryzyko',
           ],
-          confidence: 'Wysoka - odpowiedź opiera się na ustalonym zakresie demo.',
           status: 'answered',
         },
         {
@@ -859,7 +544,6 @@ export const siteContent = {
             'Przykładowy proces demo: wybór jednego procesu',
             'Przykładowy proces demo: lista ograniczeń i rekomendacja kolejnego kroku',
           ],
-          confidence: 'Wysoka - odpowiedź wynika z przygotowanego procesu.',
           status: 'answered',
         },
         {
@@ -878,7 +562,6 @@ export const siteContent = {
             'Przykładowe wdrożenie: osadzenie na stronie',
             'Przykładowe wdrożenie: dopasowanie wyglądu',
           ],
-          confidence: 'Wymaga walidacji zakresu i integracji.',
           status: 'answered',
         },
         {
@@ -894,10 +577,9 @@ export const siteContent = {
           answer:
             'Przejdź do formularza i krótko opisz proces, który chcesz usprawnić. Nie potrzebujesz gotowej specyfikacji.',
           sources: ['Przykładowy lejek demo: kontakt po wstępnym sprawdzeniu'],
-          confidence: 'Wysoka - użytkownik jest kierowany do formularza kontaktowego.',
           status: 'answered',
           nextStep: {
-            label: 'Umów bezpłatną prezentację',
+            label: 'Opisz proces',
             path: '/kontakt',
             queryParams: { projectType: 'rag_chatbot_demo' },
           },
@@ -914,7 +596,6 @@ export const siteContent = {
             'Zakres demo: jedna rozmowa obejmuje jeden proces',
             'Zakres demo: czas zależy od omawianego przypadku',
           ],
-          confidence: 'Nie podajemy z góry liczby minut; zależy od zakresu.',
           status: 'answered',
         },
         {
@@ -933,7 +614,6 @@ export const siteContent = {
             'Checklist demo: krótki opis problemu',
             'Checklist demo: kilka typowych pytań lub przykładów spraw',
           ],
-          confidence: 'Wysoka - odpowiedź opisuje minimalny zestaw informacji do rozmowy.',
           status: 'answered',
         },
         {
@@ -949,7 +629,6 @@ export const siteContent = {
           answer:
             'Może korzystać z zatwierdzonych FAQ, instrukcji, opisów usług, regulaminów i innych materiałów przekazanych do ustalonego zakresu.',
           sources: ['Przykładowe FAQ', 'Przykładowa instrukcja firmowa'],
-          confidence: 'Wysoka - odpowiedź opisuje dozwolony zakres materiałów w demo.',
           status: 'answered',
         },
         {
@@ -965,7 +644,6 @@ export const siteContent = {
           answer:
             'Tak. Odpowiedź może wskazywać dokument lub fragment materiału, na którym została oparta. Sposób prezentacji źródeł zależy od projektu.',
           sources: ['Przykładowy format odpowiedzi: wskazanie dokumentu lub fragmentu materiału'],
-          confidence: 'Wysoka - źródła są częścią scenariusza odpowiedzi.',
           status: 'answered',
         },
         {
@@ -984,7 +662,6 @@ export const siteContent = {
             'Zasada demo: chatbot nie wymyśla brakujących informacji',
             'Zasada demo: przekazanie sprawy do człowieka',
           ],
-          confidence: 'Brak wystarczających danych do pełnej odpowiedzi.',
           status: 'handoff',
           handoff: 'Sprawa zostaje oznaczona jako wymagająca odpowiedzi pracownika.',
         },
@@ -1004,7 +681,6 @@ export const siteContent = {
             'Scenariusz obsługi: brak danych lub nietypowa sytuacja',
             'Scenariusz obsługi: prośba użytkownika o kontakt',
           ],
-          confidence: 'Wysoka - scenariusz opisuje jawny mechanizm przekazania sprawy.',
           status: 'handoff',
           handoff: 'Rozmowa zostaje przekazana pracownikowi.',
         },
@@ -1024,7 +700,6 @@ export const siteContent = {
             'W pełnym wdrożeniu źródłem statusu może być CRM lub system zgłoszeń',
             'Symulacja nie łączy się z systemem produkcyjnym',
           ],
-          confidence: 'Wymaga integracji i ustalenia zasad dostępu.',
           status: 'answered',
           productionNote:
             'Wymaga integracji z systemem przechowującym status sprawy i ustalenia zasad dostępu.',
@@ -1046,7 +721,6 @@ export const siteContent = {
             'Możliwa integracja zależy od systemu i API',
             'Zakres operacji trzeba zwalidować na procesie klienta',
           ],
-          confidence: 'Wymaga sprawdzenia dokumentacji i procesu klienta.',
           status: 'answered',
           productionNote:
             'Demo nie potwierdza gotowości konkretnej integracji bez sprawdzenia dokumentacji i procesu klienta.',
@@ -1062,7 +736,7 @@ export const siteContent = {
       fallbackBody:
         'To demo korzysta z przygotowanych scenariuszy i nie łączy się z pełnym modelem AI ani danymi firmy. Podczas bezpłatnej prezentacji pokażemy, jak chatbot może odpowiadać na pytania z Twoich materiałów, korzystać z integracji i przekazywać sprawy człowiekowi.',
       fallbackCta: {
-        label: 'Umów bezpłatną prezentację',
+        label: 'Opisz proces',
         path: '/kontakt',
         queryParams: { projectType: 'rag_chatbot_demo' },
       },

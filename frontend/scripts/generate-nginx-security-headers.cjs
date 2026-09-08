@@ -1,6 +1,7 @@
 const crypto = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
+const { scriptAttributes } = require('./script-attributes.cjs');
 
 const { generatedDirectory, loadEnvironment } = require('./site-build-utils.cjs');
 
@@ -35,15 +36,16 @@ function collectInlineScriptHashes(artifactRoot = DEFAULT_ARTIFACT_ROOT) {
   for (const filePath of listHtmlFiles(artifactRoot)) {
     const html = fs.readFileSync(filePath, 'utf8');
     for (const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
-      const attributes = match[1];
-      if (/\bsrc\s*=/i.test(attributes)) {
+      const attributes = scriptAttributes(match[1]);
+      if (attributes.has('src')) {
         continue;
       }
-      if (!/\btype=["']application\/ld\+json["']/i.test(attributes)) {
-        throw new Error(
-          `Niedozwolony skrypt inline w ${path.relative(artifactRoot, filePath)}. ` +
-            'CSP dopuszcza wyłącznie hashowany JSON-LD.',
-        );
+      const scriptType = attributes.get('type')?.toLowerCase();
+      if (scriptType === 'application/json') {
+        continue;
+      }
+      if (scriptType !== 'application/ld+json') {
+        throw new Error(`Niedozwolony skrypt inline w ${path.relative(artifactRoot, filePath)}.`);
       }
       hashes.add(hashInlineScript(match[2]));
     }

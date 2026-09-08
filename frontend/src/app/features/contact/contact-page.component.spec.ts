@@ -37,7 +37,7 @@ describe('ContactPageComponent', () => {
     expect(fixture.nativeElement.querySelector('.direct-email a')?.getAttribute('href')).toBe(
       'mailto:sales@contact.test',
     );
-    const noScript = fixture.nativeElement.querySelector('noscript');
+    const noScript = fixture.nativeElement.querySelector('.no-script-contact');
     expect(noScript).not.toBeNull();
     expect(noScript?.textContent).toContain('sales@contact.test');
     expect(noScript?.innerHTML).toContain('mailto:sales@contact.test');

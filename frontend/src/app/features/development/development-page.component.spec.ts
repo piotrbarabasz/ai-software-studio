@@ -15,7 +15,7 @@ describe('DevelopmentPageComponent', () => {
     expect(fixture.nativeElement.textContent).toContain(
       'Najpierw potwierdzamy użytkowników, dane i rezultat pierwszego etapu',
     );
-    expect(fixture.nativeElement.querySelectorAll('.info-card')).toHaveSize(3);
+    expect(fixture.nativeElement.querySelectorAll('.info-card')).toHaveSize(6);
     expect(fixture.nativeElement.textContent).toContain('Panel operacyjny');
     expect(fixture.nativeElement.textContent).toContain('Asystent wiedzy');
     expect(fixture.nativeElement.textContent).toContain('Automatyzacja procesu');
