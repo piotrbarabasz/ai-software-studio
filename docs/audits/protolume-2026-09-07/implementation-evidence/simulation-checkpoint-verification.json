@@ -1,0 +1,99 @@
+{
+  "metadata": {
+    "recordedAt": "2026-09-08T04:35:20.437Z",
+    "browser": "151.0.7922.34",
+    "axeInstalledVersion": "4.13.0"
+  },
+  "results": [
+    {
+      "width": 360,
+      "reducedMotion": "reduce",
+      "answerTop": 109.5,
+      "requests": [],
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "reducedMotion": "reduce",
+      "answerTop": 110.03125,
+      "requests": [],
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 430,
+      "reducedMotion": "reduce",
+      "answerTop": 109.75,
+      "requests": [],
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "reducedMotion": "reduce",
+      "answerTop": 110.296875,
+      "requests": [],
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 360,
+      "reducedMotion": "no-preference",
+      "answerTop": 109.5,
+      "requests": [],
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "reducedMotion": "no-preference",
+      "answerTop": 110.03125,
+      "requests": [],
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 430,
+      "reducedMotion": "no-preference",
+      "answerTop": 109.75,
+      "requests": [],
+      "errors": [],
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "reducedMotion": "no-preference",
+      "answerTop": 110.296875,
+      "requests": [],
+      "errors": [],
+      "overflow": false
+    }
+  ],
+  "homeBefore": [
+    {
+      "width": 360,
+      "height": 6867,
+      "proofTop": 1186.96875,
+      "ctaBottom": 568.375
+    },
+    {
+      "width": 390,
+      "height": 6545,
+      "proofTop": 1105.953125,
+      "ctaBottom": 482.203125
+    },
+    {
+      "width": 430,
+      "height": 6413,
+      "proofTop": 1068.140625,
+      "ctaBottom": 482.28125
+    },
+    {
+      "width": 1024,
+      "height": 4691,
+      "proofTop": 952.625,
+      "ctaBottom": 649.578125
+    }
+  ]
+}

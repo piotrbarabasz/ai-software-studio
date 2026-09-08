@@ -51,12 +51,12 @@ describe('StudioPageComponent', () => {
     expect(element.querySelector('a[href*="github.com"]')).toBeNull();
     expect(element.querySelectorAll('.evidence-card')).toHaveSize(3);
     expect(element.querySelectorAll('.verification-list')).toHaveSize(3);
-    expect(element.querySelectorAll('.evidence-boundary')).toHaveSize(3);
-    expect(element.textContent).toContain('Asystent wiedzy z obsługą pytań poza zakresem');
-    expect(element.textContent).toContain('Raport decyzyjny po Demo w 7 dni');
-    expect(element.textContent).toContain('Otwórz działającą stronę');
+    expect(element.querySelectorAll('.evidence-limit')).toHaveSize(3);
+    expect(element.textContent).toContain('Symulacja asystenta wiedzy');
+    expect(element.textContent).toContain('Przykładowy raport decyzyjny');
+    expect(element.textContent).toContain('Otwórz aplikację');
     expect(element.textContent).toContain('Projekt własny');
-    expect(element.textContent).toContain('nie case study klienta');
+    expect(element.textContent).toContain('Nie dokumentuje uruchomionego CRM');
     expect(element.querySelector('.owner-image')).toBeNull();
     expect(element.querySelector('a[href*="linkedin.com"]')).toBeNull();
     expect(element.querySelector('a[href=""]')).toBeNull();

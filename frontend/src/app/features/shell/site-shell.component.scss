@@ -42,6 +42,12 @@
   backdrop-filter: blur(16px) saturate(135%);
 }
 
+@media (scripting: none) {
+  .site-header {
+    position: relative;
+  }
+}
+
 .header-inner {
   display: flex;
   width: 100%;

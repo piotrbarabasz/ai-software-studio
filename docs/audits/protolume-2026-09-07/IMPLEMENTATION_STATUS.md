@@ -10,9 +10,9 @@ Local implementation is not a production deployment. See RESUME.md and BLOCKERS.
 | UX-004 | PARTIAL | 3984faa | Five route-to-topic tests; manual choice preserved; 84 backend tests | Five service CTA browser tests + seven widths passed; B-006 |
 | UX-005 | PARTIAL | e901b63 + follow-up | 207 Angular tests; production artifact; eight-width browser | 390px: height 10285 -> 3293, first card 1443 -> 318; B-006 |
 | UX-006 | PARTIAL | e901b63 + follow-up | No overlap at 921/1024/1440; breadcrumbs; native no-JS CTA | Local acceptance passed; B-006 |
-| UX-007 | NOT_STARTED | - | Acceptance criteria read | See BLOCKERS.md |
+| UX-007 | PARTIAL | Current checkpoint | Six sections; 8 widths axe/overflow; 390px height 11808 -> 6545 | Real CRM proof remains B-003; deployment B-006 |
 | UX-008 | PARTIAL | Current checkpoint | 207 tests; production build; 8 browser cases, no question requests; axe | B-005 physical screen reader; B-006 deployment; focus single announcement by design |
-| UX-009 | NOT_STARTED | - | Acceptance criteria read | See BLOCKERS.md |
+| UX-009 | PARTIAL | Current checkpoint | Shared evidence registry/labels, provenance, publication gates; existing targets open | EVIDENCE_INVENTORY.md; owner/real-artifact inventory B-004; deployment B-006 |
 | UX-010 | NOT_STARTED | - | Acceptance criteria read | See BLOCKERS.md |
 | UX-011 | NOT_STARTED | - | Acceptance criteria read | See BLOCKERS.md |
 | UX-012 | NOT_STARTED | - | Acceptance criteria read | See BLOCKERS.md |
@@ -25,7 +25,7 @@ Local implementation is not a production deployment. See RESUME.md and BLOCKERS.
 | UX-019 | NOT_STARTED | - | Acceptance criteria read | See BLOCKERS.md |
 | UX-020 | NOT_STARTED | - | Acceptance criteria read | See BLOCKERS.md |
 | UX-021 | NOT_STARTED | - | Acceptance criteria read | See BLOCKERS.md |
-| UX-022 | NOT_STARTED | - | Acceptance criteria read | See BLOCKERS.md |
+| UX-022 | IN_PROGRESS | Current checkpoint | Static Polish hero, no invented payload; no-JS header no longer blocks content | Remaining FAQ/zoom/all-route checks and physical screen reader B-005 |
 | UX-023 | NOT_STARTED | - | Acceptance criteria read | See BLOCKERS.md |
 | UX-024 | NOT_STARTED | - | Acceptance criteria read | See BLOCKERS.md |
 | UX-025 | NOT_STARTED | - | Acceptance criteria read | See BLOCKERS.md |

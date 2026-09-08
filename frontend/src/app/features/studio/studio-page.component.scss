@@ -423,6 +423,13 @@
   gap: 0.65rem;
 }
 
+.evidence-details summary {
+  min-height: 44px;
+  padding-block: 0.65rem;
+  cursor: pointer;
+  font-weight: 700;
+}
+
 @media (max-width: 960px) {
   .hero,
   .card-grid,

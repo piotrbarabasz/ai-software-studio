@@ -17,197 +17,50 @@ describe('HomeComponent', () => {
     return fixture.nativeElement as HTMLElement;
   }
 
-  it('renders the productized seven-day hero, workflow and both CTAs', () => {
+  it('renders six sections with the example and evidence before the catalog and timeline', () => {
     const element = createFixture();
-    const actions = element.querySelector('.hero-actions');
-
-    expect(element.querySelectorAll('h1')).toHaveSize(1);
-    expect(element.querySelector('h1')?.textContent?.trim()).toBe(
-      'Pokaż nam proces.\nW 7 dni pokażemy działającą automatyzację.',
-    );
-    expect(element.querySelector('.hero-lead')?.textContent?.trim()).toBe(
-      'Bierzemy jeden powtarzalny proces — wiadomości, dokumenty, CRM albo wiedzę firmy — i budujemy jego działające demo przed pełnym wdrożeniem.',
-    );
-    expect(element.querySelector('.hero-supporting-line')?.textContent?.trim()).toBe(
-      '1 proces · stały zakres · kontrola człowieka · wynik po 7 dniach',
-    );
-    expect(element.querySelector('.hero-audience')).toBeNull();
-    expect(actions?.querySelectorAll('a')).toHaveSize(2);
-    expect(actions?.querySelector('a:first-child')).toHaveClass('primary-action');
-    expect(actions?.querySelector('a:last-child')).toHaveClass('secondary-action');
-    expect(
-      element.querySelector('a[href="/kontakt?projectType=mvp_prototype"]')?.textContent,
-    ).toContain('Opisz proces');
-    expect(element.querySelector('a[href="/demo-ai"]')?.textContent).toContain('Zobacz demo →');
-    expect(element.querySelector('.hero-process')).toBeNull();
-    expect(element.querySelector('app-home-hero-visual')).not.toBeNull();
-    expect(element.querySelector('[data-hero-visual]')?.getAttribute('aria-hidden')).toBe('true');
-    expect(element.querySelectorAll('[data-hero-visual] app-workflow-node')).toHaveSize(5);
-    expect(element.querySelector('spline-viewer')).toBeNull();
-    expect(
-      element.querySelectorAll(
-        '[data-hero-visual] a, [data-hero-visual] button, [data-hero-visual] input, [data-hero-visual] [tabindex]:not([tabindex="-1"])',
-      ),
-    ).toHaveSize(0);
-    expect(element.querySelectorAll('.hero img[src^="http"], .hero img[src^="//"]')).toHaveSize(0);
-  });
-
-  it('keeps IDs unique and primary hero content available with reduced motion', () => {
-    spyOn(window, 'matchMedia').and.callFake(
-      (query: string) =>
-        ({
-          matches: query === '(prefers-reduced-motion: reduce)',
-          media: query,
-        }) as MediaQueryList,
-    );
-    const element = createFixture();
-    const ids = Array.from(element.querySelectorAll<HTMLElement>('[id]'), (item) => item.id);
-
-    expect(new Set(ids).size).toBe(ids.length);
-    expect(element.querySelector('#hero-title')?.textContent).toContain('Pokaż nam proces');
-    expect(element.querySelectorAll('.hero-actions a')).toHaveSize(2);
-    expect(element.querySelector('[data-hero-visual]')).not.toBeNull();
-  });
-
-  it('renders the shortened homepage in the intended sales order', () => {
-    const element = createFixture();
-
     expect(
       Array.from(
         element.querySelectorAll<HTMLElement>('.home-page > [data-home-section]'),
         (section) => section.dataset['homeSection'],
       ),
-    ).toEqual([
-      'hero',
-      'trust',
-      'processes',
-      'flow',
-      'evidence',
-      'demo-scope',
-      'owner',
-      'closing-cta',
-    ]);
-    expect(element.querySelectorAll('.trust-strip li')).toHaveSize(4);
+    ).toEqual(['hero', 'evidence', 'processes', 'demo-scope', 'owner', 'closing-cta']);
+    expect(element.querySelectorAll('h1')).toHaveSize(1);
+    expect(element.querySelectorAll('.hero-actions a')).toHaveSize(2);
     expect(
-      Array.from(element.querySelectorAll<HTMLElement>('.trust-strip li'), (item) =>
-        item.textContent?.trim(),
-      ),
-    ).toEqual([
-      'Demo jednego procesu',
-      'Stały zakres przed startem',
-      'Kontrola człowieka',
-      'Poufność danych',
-    ]);
-
-    expect(element.querySelector('.use-cases .eyebrow')?.textContent?.trim()).toBe(
-      'Gdzie najczęściej znika czas?',
-    );
-    expect(element.querySelectorAll('.use-cases h2')).toHaveSize(1);
-    expect(element.querySelector('.use-cases h2')?.textContent?.trim()).toBe(
-      'Trzy problemy, które warto przestać obsługiwać ręcznie',
-    );
-    expect(element.querySelector('.use-cases .section-lead')).toBeNull();
-    const useCaseCards = Array.from(element.querySelectorAll<HTMLElement>('.problem-card'));
-    expect(useCaseCards).toHaveSize(3);
-    expect(element.querySelector('app-automation-bento')).not.toBeNull();
-    expect(element.querySelector('app-solution-carousel')).toBeNull();
-    expect(element.querySelector('#home-processes')).not.toBeNull();
-    expect(element.querySelector('.hero-scroll-link')).toBeNull();
-    expect(element.querySelectorAll('.problem-card h3')).toHaveSize(3);
-    expect(useCaseCards.map((card) => card.querySelector('h3')?.textContent?.trim())).toEqual([
-      'Wiadomości i dokumenty',
-      'Wiedza firmy',
-      'Obsługa spraw',
-    ]);
-    expect(
-      useCaseCards.map((card) => card.querySelector('.problem-copy')?.textContent?.trim()),
-    ).toEqual([
-      'Pracownik nie powinien przepisywać danych z maila do systemu.',
-      'Pracownik nie powinien przeszukiwać kilku dokumentów, żeby odpowiedzieć klientowi.',
-      'Klient nie powinien ginąć między WhatsAppem, mailem i CRM.',
-    ]);
-    expect(element.querySelectorAll('.problem-card a')).toHaveSize(0);
-    expect(element.querySelector('.use-cases-link')?.textContent).toContain(
-      'Zobacz wszystkie rozwiązania →',
-    );
-    expect(element.querySelector('.use-cases-link')?.getAttribute('href')).toBe('/rozwiazania');
-    expect(element.querySelectorAll('app-use-case-visual')).toHaveSize(0);
-    expect(element.querySelectorAll('app-automation-bento-visual')).toHaveSize(3);
-    expect(element.querySelectorAll('.problem-card [aria-hidden="true"]')).toHaveSize(6);
-    expect(element.querySelectorAll('[data-visual-kind="process-panel"]')).toHaveSize(1);
-    expect(element.querySelectorAll('[data-visual-kind="knowledge-assistant"]')).toHaveSize(1);
-    expect(element.querySelectorAll('[data-visual-kind="channel-integrations"]')).toHaveSize(1);
-    expect(element.querySelectorAll('.use-case-summary')).toHaveSize(0);
-    expect(element.querySelectorAll('img[src^="http"], img[src^="//"]')).toHaveSize(0);
-    expect(element.querySelector('app-knowledge-demo')).toBeNull();
-    expect(element.querySelectorAll('.business-flow-step')).toHaveSize(6);
-    expect(element.querySelector('.business-flow')?.textContent).toContain('Jasny handoff.');
-    expect(
-      element.querySelector('.business-flow a[href="/kontakt?projectType=backend_api"]'),
+      element.querySelector('.hero-actions a[href="/demo-ai#interactive-demo"]'),
     ).not.toBeNull();
-  });
-
-  it('keeps the hero immediate and opts only selected lower content into motion', () => {
-    const element = createFixture();
-    const hero = element.querySelector('.hero');
-    const revealElements = Array.from(element.querySelectorAll<HTMLElement>('[appReveal]'));
-
-    expect(hero?.hasAttribute('appReveal')).toBeFalse();
-    expect(hero?.classList).not.toContain('reveal');
-    expect(revealElements).toHaveSize(9);
-    expect(element.querySelector('.trust-strip ul[appReveal].motion-stagger')).not.toBeNull();
-    expect(element.querySelector('.use-cases .section-heading[appReveal]')).not.toBeNull();
-    expect(element.querySelector('.problem-grid[appReveal].motion-stagger')).not.toBeNull();
-    expect(element.querySelector('.evidence-teaser .section-heading[appReveal]')).not.toBeNull();
-    expect(element.querySelector('.seven-day-demo .demo-heading[appReveal]')).not.toBeNull();
-    expect(element.querySelector('.seven-day-demo .demo-timeline[appReveal]')).not.toBeNull();
-    expect(element.querySelector('.seven-day-demo .result-panel[appReveal]')).not.toBeNull();
-    expect(element.querySelector('.owner-card[appReveal]')).not.toBeNull();
-    expect(element.querySelector('.closing-cta[appReveal]')).not.toBeNull();
-    expect(element.querySelector('header [appReveal], footer [appReveal]')).toBeNull();
+    expect(
+      element.querySelector('.hero-actions a[href="/kontakt?projectType=mvp_prototype"]'),
+    ).not.toBeNull();
+    expect(element.querySelectorAll('.home-service-list a')).toHaveSize(5);
+    expect(element.querySelectorAll('.before-after article')).toHaveSize(3);
+    expect(
+      element.querySelector('.business-flow-steps, .workflow-payload, app-automation-bento'),
+    ).toBeNull();
+    const ids = Array.from(element.querySelectorAll<HTMLElement>('[id]'), (item) => item.id);
+    expect(new Set(ids).size).toBe(ids.length);
+    expect(element.querySelector('.hero[appReveal], spline-viewer')).toBeNull();
   });
 
   it('shows two verifiable work-evidence cards and one shared boundary note', () => {
     const element = createFixture();
     const cards = Array.from(element.querySelectorAll<HTMLElement>('.evidence-teaser-card'));
 
-    expect(element.querySelector('.evidence-teaser h2')?.textContent?.trim()).toBe(
+    expect(element.querySelector('#evidence-teaser-title')?.textContent?.trim()).toBe(
       'Zobacz zamiast czytać.',
     );
-    expect(cards).toHaveSize(3);
-    expect(
-      cards.map((card) => ({
-        type: card.querySelector('.evidence-type')?.textContent?.trim(),
-        title: card.querySelector('h3')?.textContent?.trim(),
-        description: card.querySelector('p:not(.evidence-type)')?.textContent?.trim(),
-        cta: card.querySelector('a')?.textContent?.trim(),
-        href: card.querySelector('a')?.getAttribute('href'),
-      })),
-    ).toEqual([
-      {
-        type: 'Try it',
-        title: 'Interaktywne demo',
-        description:
-          'Sprawdź odpowiedź ze źródłem oraz przekazanie pytania do człowieka, gdy brakuje danych.',
-        cta: 'Uruchom demo →',
-        href: '/demo-ai',
-      },
-      {
-        type: 'Inspect it',
-        title: 'Przykładowy raport',
-        description:
-          'Zobacz zakres, scenariusze testowe, ryzyka, kryteria odbioru i rekomendację dalszego kroku.',
-        cta: 'Zobacz raport →',
-        href: '/przyklad-demo',
-      },
-      {
-        type: 'Explore it',
-        title: 'Protolume Lab',
-        description: 'Eksperymenty z RAG, agentami, ewaluacją i niezawodnością systemów AI.',
-        cta: 'Explore Lab →',
-        href: '/rd',
-      },
+    expect(cards).toHaveSize(2);
+    expect(cards.map((card) => card.querySelector('a')?.getAttribute('href'))).toEqual([
+      '/demo-ai#interactive-demo',
+      '/przyklad-demo',
     ]);
+    expect(
+      cards.every(
+        (card) => card.querySelector('.evidence-type') && card.querySelector('.evidence-limit'),
+      ),
+    ).toBeTrue();
+    expect(element.querySelector('.evidence-teaser a[href="/rd"]')).toBeNull();
     expect(element.querySelector('.evidence-note')?.textContent?.trim()).toBe(
       'To materiały demonstracyjne i projekt własny, a nie case study klienta.',
     );

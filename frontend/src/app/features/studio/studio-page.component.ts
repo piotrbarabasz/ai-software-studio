@@ -9,10 +9,11 @@ import type {
   WorkEvidenceLink,
 } from '../../core/content/site-content.types';
 import { RevealOnScrollDirective } from '../../shared/reveal/reveal-on-scroll.directive';
+import { EvidenceLabelComponent } from '../../shared/evidence-label.component';
 
 @Component({
   selector: 'app-studio-page',
-  imports: [RevealOnScrollDirective, RouterLink],
+  imports: [RevealOnScrollDirective, RouterLink, EvidenceLabelComponent],
   templateUrl: './studio-page.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './studio-page.component.scss',
