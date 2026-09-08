@@ -54,6 +54,15 @@
       <a
         class="primary-cta"
         routerLink="/kontakt"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{
+          paths: 'exact',
+          queryParams: 'ignored',
+          fragment: 'ignored',
+          matrixParams: 'ignored',
+        }"
+        #contactLink="routerLinkActive"
+        [attr.aria-current]="contactLink.isActive ? 'page' : null"
         [queryParams]="{ projectType: 'mvp_prototype' }"
         (click)="closeNavigation()"
         >Opisz proces</a

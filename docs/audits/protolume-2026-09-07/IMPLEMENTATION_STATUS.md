@@ -8,8 +8,8 @@ Local implementation is not a production deployment. See RESUME.md and BLOCKERS.
 | UX-002 | PARTIAL | 6bb3e90 | 12 cold runs: CLS 0, no zero main, no hydration errors; real no-JS | B-006: production gates; fragments/form/no-JS verified locally |
 | UX-003 | PARTIAL | 3984faa | Central terms and shared component; 211 frontend tests | B-001; production build and seven-width browser passed |
 | UX-004 | PARTIAL | 3984faa | Five route-to-topic tests; manual choice preserved; 84 backend tests | Five service CTA browser tests + seven widths passed; B-006 |
-| UX-005 | IN_PROGRESS | - | Acceptance criteria read | See BLOCKERS.md |
-| UX-006 | IN_PROGRESS | - | Acceptance criteria read | See BLOCKERS.md |
+| UX-005 | PARTIAL | e901b63 + follow-up | 207 Angular tests; production artifact; eight-width browser | 390px: height 10285 -> 3293, first card 1443 -> 318; B-006 |
+| UX-006 | PARTIAL | e901b63 + follow-up | No overlap at 921/1024/1440; breadcrumbs; native no-JS CTA | Local acceptance passed; B-006 |
 | UX-007 | NOT_STARTED | - | Acceptance criteria read | See BLOCKERS.md |
 | UX-008 | NOT_STARTED | - | Acceptance criteria read | See BLOCKERS.md |
 | UX-009 | NOT_STARTED | - | Acceptance criteria read | See BLOCKERS.md |

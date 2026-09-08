@@ -1,0 +1,359 @@
+{
+  "measurements": [
+    {
+      "width": 320,
+      "height": 3548,
+      "firstCard": 344.28125,
+      "overflow": false,
+      "nav": [
+        {
+          "x": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        },
+        {
+          "x": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        },
+        {
+          "x": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        },
+        {
+          "x": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        },
+        {
+          "x": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        },
+        {
+          "x": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        }
+      ]
+    },
+    {
+      "width": 360,
+      "height": 3478,
+      "firstCard": 318.21875,
+      "overflow": false,
+      "nav": [
+        {
+          "x": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        },
+        {
+          "x": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        },
+        {
+          "x": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        },
+        {
+          "x": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        },
+        {
+          "x": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        },
+        {
+          "x": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 3293,
+      "firstCard": 318.453125,
+      "overflow": false,
+      "nav": [
+        {
+          "x": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        },
+        {
+          "x": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        },
+        {
+          "x": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        },
+        {
+          "x": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        },
+        {
+          "x": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        },
+        {
+          "x": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        }
+      ]
+    },
+    {
+      "width": 430,
+      "height": 3263,
+      "firstCard": 323.421875,
+      "overflow": false,
+      "nav": [
+        {
+          "x": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        },
+        {
+          "x": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        },
+        {
+          "x": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        },
+        {
+          "x": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        },
+        {
+          "x": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        },
+        {
+          "x": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        }
+      ]
+    },
+    {
+      "width": 768,
+      "height": 2551,
+      "firstCard": 318.8125,
+      "overflow": false,
+      "nav": [
+        {
+          "x": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        },
+        {
+          "x": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        },
+        {
+          "x": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        },
+        {
+          "x": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        },
+        {
+          "x": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        },
+        {
+          "x": 0,
+          "right": 0,
+          "top": 0,
+          "bottom": 0
+        }
+      ]
+    },
+    {
+      "width": 921,
+      "height": 2422,
+      "firstCard": 330.625,
+      "overflow": false,
+      "nav": [
+        {
+          "x": 294.984375,
+          "right": 368.765625,
+          "top": 15.5,
+          "bottom": 59.5
+        },
+        {
+          "x": 372.765625,
+          "right": 455.5625,
+          "top": 15.5,
+          "bottom": 59.5
+        },
+        {
+          "x": 459.5625,
+          "right": 582.90625,
+          "top": 15.5,
+          "bottom": 59.5
+        },
+        {
+          "x": 586.90625,
+          "right": 721.359375,
+          "top": 15.5,
+          "bottom": 59.5
+        },
+        {
+          "x": 725.359375,
+          "right": 769.359375,
+          "top": 15.5,
+          "bottom": 59.5
+        },
+        {
+          "x": 776.546875,
+          "right": 902.59375,
+          "top": 15.5,
+          "bottom": 59.5
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "height": 2396,
+      "firstCard": 341.03125,
+      "overflow": false,
+      "nav": [
+        {
+          "x": 395.921875,
+          "right": 469.703125,
+          "top": 15.5,
+          "bottom": 59.5
+        },
+        {
+          "x": 473.703125,
+          "right": 556.5,
+          "top": 15.5,
+          "bottom": 59.5
+        },
+        {
+          "x": 560.5,
+          "right": 683.84375,
+          "top": 15.5,
+          "bottom": 59.5
+        },
+        {
+          "x": 687.84375,
+          "right": 822.296875,
+          "top": 15.5,
+          "bottom": 59.5
+        },
+        {
+          "x": 826.296875,
+          "right": 870.296875,
+          "top": 15.5,
+          "bottom": 59.5
+        },
+        {
+          "x": 877.484375,
+          "right": 1003.53125,
+          "top": 15.5,
+          "bottom": 59.5
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "height": 2594,
+      "firstCard": 381.78125,
+      "overflow": false,
+      "nav": [
+        {
+          "x": 446.4375,
+          "right": 549.53125,
+          "top": 15.484375,
+          "bottom": 59.484375
+        },
+        {
+          "x": 563.125,
+          "right": 678.65625,
+          "top": 15.484375,
+          "bottom": 59.484375
+        },
+        {
+          "x": 692.25,
+          "right": 863.734375,
+          "top": 15.484375,
+          "bottom": 59.484375
+        },
+        {
+          "x": 877.328125,
+          "right": 1064.140625,
+          "top": 15.484375,
+          "bottom": 59.484375
+        },
+        {
+          "x": 1077.734375,
+          "right": 1134.28125,
+          "top": 15.484375,
+          "bottom": 59.484375
+        },
+        {
+          "x": 1154.28125,
+          "right": 1312,
+          "top": 15.109375,
+          "bottom": 59.875
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "breadcrumbs": "Strona główna\n/\nRozwiązania\n/\nAsystent wiedzy",
+  "noJs": true
+}
