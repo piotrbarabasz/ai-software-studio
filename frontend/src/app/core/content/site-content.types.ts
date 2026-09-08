@@ -187,7 +187,8 @@ export interface OwnerProfile {
   };
 }
 
-export type WorkEvidenceId = 'knowledge-demo' | 'demo-report' | 'studio-application';
+export type WorkEvidenceId =
+  'knowledge-demo' | 'demo-report' | 'studio-application' | 'rag-source-example';
 
 export type EvidenceClassification =
   'simulation' | 'own-project' | 'experiment' | 'client-deployment';
@@ -395,13 +396,7 @@ export interface ServiceLandingPageContent {
   readonly securityTitle: string;
   readonly securityPoints: readonly [string, string, string];
   readonly faqTitle: string;
-  readonly faqs: readonly [
-    ServiceLandingPageFaqItem,
-    ServiceLandingPageFaqItem,
-    ServiceLandingPageFaqItem,
-    ServiceLandingPageFaqItem,
-    ServiceLandingPageFaqItem,
-  ];
+  readonly faqs: readonly ServiceLandingPageFaqItem[];
   readonly closingTitle: string;
   readonly closingLead: string;
   readonly primaryCta: HomeCta;

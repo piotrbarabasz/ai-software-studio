@@ -45,7 +45,13 @@ describe('ServiceLandingPageComponent', () => {
     expect(element.querySelector('a[href="/przyklad-demo"]')).not.toBeNull();
     expect(element.querySelector('a[href="/rozwiazania#asystent-wiedzy"]')).not.toBeNull();
     expect(element.querySelectorAll('.flow-step')).toHaveSize(5);
-    expect(element.querySelectorAll('details')).toHaveSize(5);
+    expect(element.querySelectorAll('.faq-list details')).toHaveSize(3);
+    expect(element.querySelector('app-rag-source-example')).not.toBeNull();
+    expect(
+      element.querySelector('.hero a[href="/rozwiazania/chatbot-ai-dla-firm#rag-source-example"]'),
+    ).not.toBeNull();
+    expect(element.querySelector('.closing a[href="/przyklad-demo"]')).toBeNull();
+    expect(element.querySelector('.demo-grid')).toBeNull();
     expect(element.querySelectorAll('img, video, iframe, object, embed')).toHaveSize(0);
   });
 
@@ -58,6 +64,7 @@ describe('ServiceLandingPageComponent', () => {
     expect(fixture.componentInstance.content.path).toBe('/rozwiazania/systemy-agentowe');
     expect(fixture.componentInstance.content.serviceType).toBe('Systemy agentowe');
     expect(siteContent.serviceLandingPages).toHaveSize(5);
+    expect(element.querySelector('app-rag-source-example')).toBeNull();
   });
 
   it('renders without browser-only APIs during SSR', async () => {

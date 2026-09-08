@@ -7,6 +7,9 @@ Source: `frontend/src/app/core/content/evidence.pl.ts`. Home and Studio render t
 | knowledge-demo | Simulation | /demo-ai#interactive-demo | Local prepared responses, matching, fallback and reset | Retrieval, model quality, live document citations |
 | demo-report | Simulation | /przyklad-demo | Fictional decision-report structure | Executed CRM integration, customer delivery or measured savings |
 | studio-application | Own project | / | Navigable application and form interface; API/configuration in this repository | Production mail delivery from this revision, client results |
+| rag-source-example | Simulation | /rozwiazania/chatbot-ai-dla-firm#rag-source-example | Three manually prepared selections, exact quotations and inspectable public document sections | Real provider generation, semantic retrieval or model-quality evaluation |
+
+Studio lists all four published records. Home deliberately retains its two compact material cards. The new source example uses the same registry label and the corpus metadata; its existence does not satisfy real RAG proof. See RAG_FOUNDATION.md for the offline 12-case observation and its failures.
 
 No performance or commercial metric is published in these records. Internal browser timings in implementation-evidence are engineering observations, not customer outcome claims. R&D directions are not an evidence record and no longer appear as a working artifact on home.
 

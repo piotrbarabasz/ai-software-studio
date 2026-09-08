@@ -49,9 +49,9 @@ describe('StudioPageComponent', () => {
     expect(element.textContent).toContain('zespołach międzynarodowych');
     expect(element.textContent).toContain('Odpowiedzialność end-to-end');
     expect(element.querySelector('a[href*="github.com"]')).toBeNull();
-    expect(element.querySelectorAll('.evidence-card')).toHaveSize(3);
-    expect(element.querySelectorAll('.verification-list')).toHaveSize(3);
-    expect(element.querySelectorAll('.evidence-limit')).toHaveSize(3);
+    expect(element.querySelectorAll('.evidence-card')).toHaveSize(4);
+    expect(element.querySelectorAll('.verification-list')).toHaveSize(4);
+    expect(element.querySelectorAll('.evidence-limit')).toHaveSize(4);
     expect(element.textContent).toContain('Symulacja asystenta wiedzy');
     expect(element.textContent).toContain('Przykładowy raport decyzyjny');
     expect(element.textContent).toContain('Otwórz aplikację');

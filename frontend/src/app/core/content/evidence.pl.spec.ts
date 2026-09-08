@@ -3,8 +3,8 @@ import { canPublishEvidence, evidenceRegistry, publishedEvidence } from './evide
 describe('evidence publication', () => {
   const source = evidenceRegistry[0];
   it('exposes only inventoried materials with a destination and no invented metrics', () => {
-    expect(publishedEvidence).toHaveSize(3);
-    expect(new Set(publishedEvidence.map((item) => item.id)).size).toBe(3);
+    expect(publishedEvidence).toHaveSize(4);
+    expect(new Set(publishedEvidence.map((item) => item.id)).size).toBe(4);
     expect(publishedEvidence.every((item) => item.metrics.length === 0)).toBeTrue();
   });
   it('does not publish drafts, absent artifacts or unapproved client data', () => {

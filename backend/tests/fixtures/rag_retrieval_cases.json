@@ -1,0 +1,14 @@
+[
+  {"id":"simulation-model","kind":"in-scope","question":"Czy symulacja używa modelu AI?","expectedFirst":"rag-source-simulation"},
+  {"id":"simulation-privacy","kind":"in-scope","question":"Gdzie pozostaje pytanie wpisane w symulacji?","expectedFirst":"rag-source-simulation"},
+  {"id":"simulation-paraphrase","kind":"paraphrase","question":"Czy te odpowiedzi generuje sztuczna inteligencja?","expectedFirst":"rag-source-simulation"},
+  {"id":"simulation-diacritics","kind":"paraphrase","question":"Czy SYMULACJA laczy sie z MODELEM?","expectedFirst":"rag-source-simulation"},
+  {"id":"report-origin","kind":"in-scope","question":"Czy raport opisuje projekt klienta?","expectedFirst":"rag-source-report"},
+  {"id":"report-contents","kind":"in-scope","question":"Czy raport pokazuje ryzyka i rekomendację?","expectedFirst":"rag-source-report"},
+  {"id":"report-paraphrase","kind":"paraphrase","question":"Czy pokazujecie prawdziwy sukces przedsiębiorstwa?","expectedFirst":"rag-source-report"},
+  {"id":"form-validation","kind":"in-scope","question":"Czy formularz sprawdza wymagane pola?","expectedFirst":"rag-source-application"},
+  {"id":"form-delivery","kind":"in-scope","question":"Czy widok formularza potwierdza dostarczenie wiadomości?","expectedFirst":"rag-source-application"},
+  {"id":"unknown-price","kind":"missing-information","question":"Ile kosztuje wdrożenie?","expectedFirst":null},
+  {"id":"unknown-weather","kind":"out-of-scope","question":"Jaka będzie jutro pogoda?","expectedFirst":null},
+  {"id":"unknown-customer-count","kind":"missing-information","question":"Ilu macie klientów?","expectedFirst":null}
+]

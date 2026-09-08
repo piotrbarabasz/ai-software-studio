@@ -6,6 +6,7 @@ These checks operate only on the local production artifact at `http://127.0.0.1:
 2. Build the production artifact using the required public configuration and a verified legal source, following existing deployment documentation. Never substitute an invented administrator or pricing. Local tests may use the already published privacy text as documented in RESUME.md, but that is not Secret Manager verification or legal approval.
 3. Start `npm run serve:browser:ux` in frontend. It serves the artifact with the generated, enforced CSP on loopback only. Stop any prior process on this port that belongs to this audit before starting it. Restart after rebuilding so it reads the current CSP.
 4. In another shell in frontend, run `npm run smoke:browser:ux`.
+5. For the RAG source example, also run `npm run smoke:browser:rag`.
 
 Results and screenshots are written under ignored `tmp/audit-implementation/verification/`. Reviewed checkpoint snapshots are stored under `implementation-evidence/`; running the harness does not overwrite those baselines.
 
@@ -14,6 +15,7 @@ Results and screenshots are written under ignored `tmp/audit-implementation/veri
 | audit-hub-browser.cjs | Eight widths; first mobile card; navigation bounds/overlap; native no-JS contact; active-page semantics; visible/schema breadcrumb presence |
 | audit-simulation-browser.cjs | Four widths x two motion preferences; three questions; result focus/visibility; category/reset/fallback; one CTA; no requests during questions; component axe in reduced-motion cases |
 | audit-home-browser.cjs | Eight widths; page/evidence geometry; zero hero animations; page axe; screenshot snapshots; expandable plan; deep link; Studio artifact targets; real no-JS plan and service links |
+| audit-rag-browser.cjs | Eight widths; exact document/quote matching; source and return focus; missing-information state; no interaction requests; axe; downloaded JSON equality; contact intent; fresh citation fragments with/without JavaScript; native no-JS citation |
 
 The simulation script also records current home geometry. The original before-home-change values are preserved in `implementation-evidence/simulation-browser.json` and must not be replaced by a later rerun.
 

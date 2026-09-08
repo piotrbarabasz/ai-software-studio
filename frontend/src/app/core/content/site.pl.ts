@@ -331,7 +331,9 @@ export const siteContent = {
       title: 'Zobacz zamiast czytać.',
       lead: 'Wypróbuj interfejs i zobacz formę raportu przed rozmową o własnym procesie.',
       note: 'To materiały demonstracyjne i projekt własny, a nie case study klienta.',
-      items: publishedEvidence.filter((item) => item.id !== 'studio-application'),
+      items: publishedEvidence.filter((item) =>
+        ['knowledge-demo', 'demo-report'].includes(item.id),
+      ),
     },
     closingCta: {
       title: 'Pokaż proces, który zabiera czas',

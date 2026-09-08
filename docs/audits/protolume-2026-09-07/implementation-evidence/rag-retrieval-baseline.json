@@ -1,0 +1,203 @@
+{
+  "recordedAt": "2026-09-08T12:58:27.897749+00:00",
+  "method": "lexical-baseline-v1; first-hit correctness or empty result; author-written cases",
+  "corpusId": "protolume-materials-v1",
+  "corpusSha256": "091cb3a468b3b6cd56d6f6cf01a08580ace021225573304994069181cd9c03eb",
+  "casesSha256": "48f9b04b42f38caa462ab8e8ac3a77d50de3784ffdda129909230e8b0103a02c",
+  "sampleSize": 12,
+  "matchingCases": 10,
+  "failureIds": [
+    "simulation-paraphrase",
+    "report-paraphrase"
+  ],
+  "modelCalls": 0,
+  "limits": [
+    "Not a real RAG/provider quality evaluation or an independent dataset.",
+    "Lexical overlap can select irrelevant passages or miss paraphrases.",
+    "Model relevance, conflict recognition and injection resistance are untested.",
+    "Provider contract tests use doubles; they do not establish monetary cost bounds."
+  ],
+  "results": [
+    {
+      "id": "simulation-model",
+      "kind": "in-scope",
+      "question": "Czy symulacja używa modelu AI?",
+      "expectedFirst": "rag-source-simulation",
+      "actualFirst": "rag-source-simulation",
+      "matchedExpectation": true,
+      "retrieved": [
+        {
+          "id": "rag-source-simulation",
+          "sharedTerms": [
+            "model",
+            "symulac"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "simulation-privacy",
+      "kind": "in-scope",
+      "question": "Gdzie pozostaje pytanie wpisane w symulacji?",
+      "expectedFirst": "rag-source-simulation",
+      "actualFirst": "rag-source-simulation",
+      "matchedExpectation": true,
+      "retrieved": [
+        {
+          "id": "rag-source-simulation",
+          "sharedTerms": [
+            "pozostaje",
+            "pytan",
+            "symulac",
+            "wpisane"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "simulation-paraphrase",
+      "kind": "paraphrase",
+      "question": "Czy te odpowiedzi generuje sztuczna inteligencja?",
+      "expectedFirst": "rag-source-simulation",
+      "actualFirst": null,
+      "matchedExpectation": false,
+      "retrieved": []
+    },
+    {
+      "id": "simulation-diacritics",
+      "kind": "paraphrase",
+      "question": "Czy SYMULACJA laczy sie z MODELEM?",
+      "expectedFirst": "rag-source-simulation",
+      "actualFirst": "rag-source-simulation",
+      "matchedExpectation": true,
+      "retrieved": [
+        {
+          "id": "rag-source-simulation",
+          "sharedTerms": [
+            "laczy",
+            "model",
+            "symulac"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "report-origin",
+      "kind": "in-scope",
+      "question": "Czy raport opisuje projekt klienta?",
+      "expectedFirst": "rag-source-report",
+      "actualFirst": "rag-source-report",
+      "matchedExpectation": true,
+      "retrieved": [
+        {
+          "id": "rag-source-report",
+          "sharedTerms": [
+            "klient",
+            "opisuje",
+            "raport"
+          ]
+        },
+        {
+          "id": "rag-source-application",
+          "sharedTerms": [
+            "klient",
+            "projekt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "report-contents",
+      "kind": "in-scope",
+      "question": "Czy raport pokazuje ryzyka i rekomendację?",
+      "expectedFirst": "rag-source-report",
+      "actualFirst": "rag-source-report",
+      "matchedExpectation": true,
+      "retrieved": [
+        {
+          "id": "rag-source-report",
+          "sharedTerms": [
+            "pokazuje",
+            "raport",
+            "rekomendacje",
+            "ryzyka"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "report-paraphrase",
+      "kind": "paraphrase",
+      "question": "Czy pokazujecie prawdziwy sukces przedsiębiorstwa?",
+      "expectedFirst": "rag-source-report",
+      "actualFirst": null,
+      "matchedExpectation": false,
+      "retrieved": []
+    },
+    {
+      "id": "form-validation",
+      "kind": "in-scope",
+      "question": "Czy formularz sprawdza wymagane pola?",
+      "expectedFirst": "rag-source-application",
+      "actualFirst": "rag-source-application",
+      "matchedExpectation": true,
+      "retrieved": [
+        {
+          "id": "rag-source-application",
+          "sharedTerms": [
+            "formularz",
+            "pola",
+            "sprawdza",
+            "wymagane"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "form-delivery",
+      "kind": "in-scope",
+      "question": "Czy widok formularza potwierdza dostarczenie wiadomości?",
+      "expectedFirst": "rag-source-application",
+      "actualFirst": "rag-source-application",
+      "matchedExpectation": true,
+      "retrieved": [
+        {
+          "id": "rag-source-application",
+          "sharedTerms": [
+            "formularz",
+            "potwierdza",
+            "wiadomosci",
+            "widok"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "unknown-price",
+      "kind": "missing-information",
+      "question": "Ile kosztuje wdrożenie?",
+      "expectedFirst": null,
+      "actualFirst": null,
+      "matchedExpectation": true,
+      "retrieved": []
+    },
+    {
+      "id": "unknown-weather",
+      "kind": "out-of-scope",
+      "question": "Jaka będzie jutro pogoda?",
+      "expectedFirst": null,
+      "actualFirst": null,
+      "matchedExpectation": true,
+      "retrieved": []
+    },
+    {
+      "id": "unknown-customer-count",
+      "kind": "missing-information",
+      "question": "Ilu macie klientów?",
+      "expectedFirst": null,
+      "actualFirst": null,
+      "matchedExpectation": true,
+      "retrieved": []
+    }
+  ]
+}

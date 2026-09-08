@@ -1,4 +1,5 @@
 import type { EvidenceClassification, WorkEvidence } from './site-content.types';
+import documentSource from '../../../assets/rag/protolume-materials-v1.json';
 
 export const evidenceLabels: Readonly<Record<EvidenceClassification, string>> = {
   simulation: 'Symulacja',
@@ -8,6 +9,35 @@ export const evidenceLabels: Readonly<Record<EvidenceClassification, string>> = 
 };
 
 // Review dates identify a source/code inventory, not a customer deployment or measurement.
+export const ragSourceEvidence: WorkEvidence = {
+  id: 'rag-source-example',
+  classification: 'simulation',
+  services: ['rag'],
+  dataOrigin: documentSource.provenance,
+  reviewedOn: documentSource.reviewedOn,
+  version: documentSource.id,
+  confirmedScope: 'Przygotowana odpowiedź, otwierany dokument i przykład braku informacji.',
+  metrics: [],
+  publication: 'published',
+  title: 'Odpowiedź i dokument źródłowy',
+  teaser: 'Porównaj ręcznie przypisany cytat z pełną treścią dokumentu.',
+  problem: 'Jak użytkownik może samodzielnie sprawdzić podstawę odpowiedzi?',
+  built: 'Trzy przygotowane pytania oraz publiczny dokument z otwieranymi fragmentami.',
+  verification: [
+    'Wybierz pytanie.',
+    'Otwórz cytowany fragment.',
+    'Sprawdź przykład braku informacji.',
+  ],
+  limitation:
+    'Przykład przygotowany ręcznie. Nie uruchamia wyszukiwania ani modelu AI i nie potwierdza jakości RAG.',
+  liveLink: {
+    kind: 'internal',
+    path: '/rozwiazania/chatbot-ai-dla-firm',
+    fragment: 'rag-source-example',
+    label: 'Sprawdź przykład ze źródłem',
+  },
+};
+
 export const evidenceRegistry: readonly WorkEvidence[] = [
   {
     id: 'knowledge-demo',
@@ -86,6 +116,7 @@ export const evidenceRegistry: readonly WorkEvidence[] = [
       'Projekt własny. Interfejs nie potwierdza dostarczenia wiadomości ani wyników biznesowych klientów.',
     liveLink: { kind: 'internal', label: 'Otwórz aplikację', path: '/' },
   },
+  ragSourceEvidence,
 ];
 
 export function canPublishEvidence(item: WorkEvidence): boolean {

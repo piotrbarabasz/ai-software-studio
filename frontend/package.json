@@ -20,6 +20,7 @@
     "smoke:browser:partner": "node scripts/partner-browser-smoke.mjs",
     "smoke:browser:audit": "node scripts/partner-browser-smoke.mjs",
     "smoke:browser:ux": "node scripts/audit-hub-browser.cjs && node scripts/audit-simulation-browser.cjs && node scripts/audit-home-browser.cjs",
+    "smoke:browser:rag": "node scripts/audit-rag-browser.cjs",
     "serve:browser:ux": "node scripts/serve-audit-artifact.cjs",
     "validate:site:production": "node scripts/validate-public-site-config.cjs",
     "validate:site-artifact:production": "node scripts/validate-site-artifact.cjs",

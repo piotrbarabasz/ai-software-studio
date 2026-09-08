@@ -20,3 +20,8 @@
 
 ## Checkpoint update: UX-007/008/009
 The home structure, honest local simulation, and shared existing-artifact registry have been implemented and browser-checked. UX-007 still lacks an executed CRM example (B-003); the before/after panel is explicitly an illustration. UX-009 inventories existing sources only; missing audio, traces, customer material and publication rights remain B-002/B-003/B-004. No new owner answers or production credentials were received. Independent work on UX-010..028 can continue.
+
+## Checkpoint update: UX-010/011/025
+The offline bounded corpus/retrieval, disabled provider boundary and test-only generation doubles are implemented. The 12-case retrieval observation matched 10 cases and preserves both failures; no model was called. The RAG landing now has a clearly labelled manual example with an actual source document and missing-information state. This is not real RAG proof. B-002 still blocks provider selection, credentials, real quality testing, monetary budget and endpoint activation; RAG_FOUNDATION.md lists the remaining criteria.
+
+DATA_FLOW_MAP.md inventories contact/API/SMTP/hosting/logs/limiter/simulations and future RAG/analytics/calendar. B-005 still blocks confirmed legal/operational facts and the approved public notice. No consent or privacy text was guessed or changed. B-006 still blocks the required backend container health/readiness smoke with actual production non-secret SMTP settings and verification of the deployment. Last observed production SHA was 8386de6; the current deployed version has not been checked after the user's master merge.

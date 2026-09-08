@@ -435,6 +435,7 @@ describe('Site content model', () => {
       'knowledge-demo',
       'demo-report',
       'studio-application',
+      'rag-source-example',
     ]);
     siteContent.trust.evidence.items.forEach((item) => {
       expect(item.classification.length).toBeGreaterThan(0);
