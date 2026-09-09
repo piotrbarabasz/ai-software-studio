@@ -1,0 +1,79 @@
+{
+  "revision": "0d38ef8037ce28a0ae4f8a3f3f3df4af4a8524c5",
+  "reviewedOn": "2026-09-09",
+  "origin": "Own project: piotrbarabasz/ai-software-studio, merged PR #56",
+  "scope": "Runnable API tests and selected project source files; no credentials or live SMTP test",
+  "previews": [
+    {
+      "sourcePath": "frontend/src/app/features/contact/contact-form.component.ts",
+      "file": "frontend--src--app--features--contact--contact-form.component.ts.txt",
+      "sha256": "fbcdc74f8350979689ab832f42db7b6d26dccd8dd295a9a3e81d3f5680aa1818"
+    },
+    {
+      "sourcePath": "backend/app/api/contact.py",
+      "file": "backend--app--api--contact.py.txt",
+      "sha256": "371ab43c2389cbdf2b17fd9fc3691edf9b9de176c2391dff2b5bca584c834465"
+    },
+    {
+      "sourcePath": "backend/tests/integration/test_contact_delivery.py",
+      "file": "backend--tests--integration--test_contact_delivery.py.txt",
+      "sha256": "27579386ba9f4a12e3bc2b396384b8441eadc1579e264a50e6c68085b64a6b99"
+    },
+    {
+      "sourcePath": "backend/Dockerfile",
+      "file": "backend--Dockerfile.txt",
+      "sha256": "0d4e2fa885791957b2b17e1c45819d61d69af8603e74c1f54282431b54d4e176"
+    },
+    {
+      "sourcePath": "infra/gcp/cloudbuild.pr-checks.yaml",
+      "file": "infra--gcp--cloudbuild.pr-checks.yaml.txt",
+      "sha256": "cdceefca4d4670c69f54432f27fc91279ea93f8a3de701e84c503e5099cb90ed"
+    },
+    {
+      "sourcePath": "docs/gcp-runbook.md",
+      "file": "docs--gcp-runbook.md.txt",
+      "sha256": "6d735440f9f146e600eb6efe97381db9193802ce3ed704fcba9ea205116d9dc1"
+    }
+  ],
+  "patch": {
+    "file": "pr-56-hydration.patch",
+    "sha256": "c4d9d67b3b862e9a7929576713ff28da3eeec7b0f2896e9dc69554fe6b9c0946"
+  },
+  "archive": {
+    "file": "protolume-api.zip",
+    "sha256": "6f8f999c664afc8634047a6bf28bb66aa6a80b09ad550f46257b70801b5a198b",
+    "sourceFiles": [
+      "backend/Dockerfile",
+      "backend/app/__init__.py",
+      "backend/app/api/__init__.py",
+      "backend/app/api/contact.py",
+      "backend/app/api/health.py",
+      "backend/app/api/router.py",
+      "backend/app/core/__init__.py",
+      "backend/app/core/brand.py",
+      "backend/app/core/config.py",
+      "backend/app/core/cors.py",
+      "backend/app/main.py",
+      "backend/app/middleware/__init__.py",
+      "backend/app/middleware/request_size.py",
+      "backend/app/middleware/security_headers.py",
+      "backend/app/schemas/__init__.py",
+      "backend/app/schemas/contact.py",
+      "backend/app/services/__init__.py",
+      "backend/app/services/contact_delivery.py",
+      "backend/app/services/contact_intake.py",
+      "backend/pyproject.toml",
+      "backend/requirements-dev.lock",
+      "backend/requirements.lock",
+      "backend/tests/conftest.py",
+      "backend/tests/contract/test_contact_contract.py",
+      "backend/tests/integration/test_contact_delivery.py",
+      "docs/gcp-runbook.md",
+      "frontend/config/public-brand.json",
+      "frontend/src/app/core/content/contact-options.pl.ts",
+      "frontend/src/app/features/contact/contact-form.component.ts",
+      "frontend/src/app/services/contact-api.types.ts",
+      "infra/gcp/cloudbuild.pr-checks.yaml"
+    ]
+  }
+}

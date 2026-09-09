@@ -1,0 +1,56 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+.crm-run,
+header {
+  display: grid;
+  gap: 1rem;
+}
+.crm-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+li {
+  min-width: 0;
+  padding: 1.25rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-panel);
+  background: var(--surface);
+}
+h2,
+h3,
+p,
+dl {
+  margin: 0;
+}
+h3,
+p,
+dl,
+blockquote {
+  margin-bottom: 1rem;
+}
+blockquote {
+  margin-inline: 0;
+  white-space: pre-wrap;
+}
+dt {
+  font-weight: 700;
+}
+dd {
+  margin: 0 0 0.75rem;
+}
+p,
+dd,
+blockquote {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 900px) {
+  .crm-steps {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,51 +1,63 @@
 # Resume State
 
-## Current branch
-`fix/audit-p0-stability-accessibility`
+## Branch and publication
 
-## Last completed local work
-UX-001..009 have local implementations; none is a verified new production deployment. UX-022 also has the static Polish hero and non-sticky no-JS header fix. See IMPLEMENTATION_STATUS.md and BLOCKERS.md for incomplete acceptance criteria. Production remains 8386de6.
+Current branch: `fix/audit-rag-foundation`; implementation base `0934ac4` (CRM workflow checkpoint), following `9bbe8d5` (RAG). The user requested a local commit of this frontend/artifact/documentation checkpoint; it is the commit containing this RESUME update. No push, new PR, merge or deployment was performed.
 
-UX-005/006: one service catalog, native links/legacy fragments, section-active state and breadcrumbs; validator updated for the single native contact CTA (18aee28).
-UX-008: immediate local prepared responses, compact category select, three examples, one CTA, focus at answer heading and reset at category; no confidence/latency simulation (2fb4c67).
-UX-007/009 current checkpoint: six home sections, static illustrated hero, compact before/after, earlier evidence, five native service rows, deliverables before expandable timeline. Shared evidence registry/labels/provenance and publication gate; no unsupported R&D proof card. No-JS expanded header scrolls with content instead of blocking it.
+Read-only production check: 2026-09-09 at 02:29:39 UTC, home HTTP 200, public SHA `0d38ef8` (the user's earlier PR #56 merge). This is not the current local checkpoint. The previously tested local images retain build labels identifying base `0934ac4`; the evidence JSON records the source files as observed before this commit.
 
-## Current verification
-* Fresh npm ci, lint, format and all Node suites + 197 Angular tests passed. Removed obsolete tests for deleted animations/scrollytelling, retained content/accessibility constraints and added publication gates.
-* Production npm build passed after fresh install: 16 prerendered routes and all enforced CSP/SEO/legal/artifact validators.
-* npm run smoke:browser:ux passed via committed scripts and local enforced-CSP server: hub eight widths, simulation eight width/motion cases, home eight widths, axe, real no-JS and native details, fragment link and existing Studio artifact targets. Browser/tool versions are in checkpoint JSON metadata.
-* At 390px home height 11808 -> 6545px (about 45% shorter), example/evidence section starts 5761 -> 1106px; actual material cards now start at 1987px; hero primary CTA bottom 482px. Baseline simulation-browser.json is preserved. New home-browser.json and screenshots are reviewed.
-* At 390px hub height 10285 -> 3293px; first card 1443 -> 318px. Simulation answer heading top ~110px, no question requests/errors/overflow. Physical screen reader remains B-005.
-* Earlier backend: Python 3.12 venv lock/editable install, ruff/format, 84 pytest tests passed after optional allowlisted serviceContext. Earlier deployment contract 60 and Cloud Build YAML 23 tests passed.
-* P0 earlier 12 local cold runs: CLS 0, no zero main/hydration errors. Repeat final performance checks after remaining edits. Local LCP cannot be compared to original network-throttled Lighthouse.
+## Implemented continuation
+
+- UX-013/015: typed Voice/agent presentation contracts, review/publication and consistency checks; native audio/transcript and dependent trace views. Unmounted in public routes. Private loopback preview contains one second of silence and manually assigned steps only. Production build rejects these fixtures.
+- UX-016/017: shared inspectable own-project source, six exact code previews, real PR #56 hydration patch, API/test ZIP, instructions and hashes pinned to `0d38ef8`. Development/partner copy and hierarchy simplified. Existing GitHub-link rejection gate preserved via first-party downloads. Extracted API package passes 33 selected tests; no real email.
+- UX-018/020: one studio cooperation block, named owner, own project first, experience in native details. Shorter contact intro, visible minimum 20 characters, optional company/budget and unchanged consent/API behavior.
+- UX-019: real offline lexical observation from `9bbe8d5`, 10/12 matches (7/9 source questions, 3/3 outside scope), both failures public. Standalone ZIP reproduces the recorded result without network/model calls. Other R&D themes are plans.
+- UX-021: canonical `demo-report.pl.ts` feeds WWW and a four-page PDF. All scenarios are explicitly descriptions, not executed-system tests. One recommendation, native details, TOC, real download, preserved print. Manifest rejects stale content/renderer/fonts/PDF. All four rendered PDF pages reviewed, all substantive source text checked.
+- UX-022/023: FAQ target rows at least 44px; report/R&D metadata updated, JSON-LD fiction label retained; all-route local browser/SEO/link checks.
+- UX-024/026/027/028: concrete internal calendar/commercial decision document, case-study intake/publication template, measurement/lead/research/A-B plan. No calendar, tracker, price, client material or outreach activated.
+- UX-025: data map includes all new static downloads and remains a technical inventory, not legal approval.
+
+See IMPLEMENTATION_STATUS.md, VOICE_AGENT_ARTIFACTS.md, ENGINEERING_ARTIFACT.md, RESEARCH_AND_REPORT_ARTIFACTS.md and the three decision/template/measurement documents.
+
+## Validation
+
+- Backend dev-lock/editable install, ruff lint/format: passed; **150 pytest cases** passed. Backend application unchanged by this continuation.
+- Deployment contract **60** and Cloud Build YAML **23** tests passed.
+- Fresh frontend npm ci; lint, format:check, all Node suites and **221 Angular tests** passed. Production build passes existing and new artifact/CSP/SEO/legal gates.
+- Backend and frontend production Docker images built. Exact image ids are recorded in the final checkpoint JSON.
+- Private preview: eight widths, axe, actual silent-file play/pause/seek/end, real missing-file fallback, timeout/budget states and no initial media requests.
+- Engineering and studio/contact: eight widths each, axe/native details/no-JS, source downloads and topic preservation. All 422/429/503/network/success contact requests intercepted before dispatch; zero real inquiries.
+- Broad browser review: 15 prerendered pages, 120 layout cases and 45 axe scans, native HTML/schema/canonical/OG, unique metadata, internal links and anchors, true 404, actual PDF download. Additional emulated 720 CSS px with 2x pixel density; physical browser zoom/readers remain open.
+- Existing report browser/print smoke also passed. Generators pass ruff/format/syntax; delivered research ZIP reproduces all 12 outcomes. PDF has 4 pages and selectable Polish text, with full substantive-content comparison.
+- Final verification JSON/screenshots and image ids are saved in implementation-evidence/final-independent-checkpoint.json and adjacent files. Ignored raw command logs remain in tmp/audit-implementation. Nginx browser checks completed at 13:24 UTC. At 390px the final first contact input is y=418.8px (baseline 681.25px).
+
+## Remaining blockers — no guessed completion
+
+B-001: real free/paid stages, seven-day start, prices and NO-GO rules.
+B-002: real model/provider, approved budget/retention/credential references and real RAG/agent runs.
+B-003: CRM sandbox/official channel, authenticated/durable execution and actual integration evidence.
+B-004: voice recording/transcript/rights, authentic owner photo/current education status and customer source/permissions.
+B-005: operational/legal facts, calendar/measurement decision, GSC and participants, physical mobile and NVDA/VoiceOver/real browser zoom.
+B-006: actual non-secret SMTP settings, approved legal input from Secret Manager, resolved final production contract and required backend container /health and /ready smoke.
+
+The user was asked for CONTACT_RECIPIENT_EMAIL, CONTACT_FROM_EMAIL, SMTP_HOST, SMTP_PORT, SMTP_USERNAME and SMTP_USE_TLS, or a local config path. Subsequent “kontynuuj” messages supplied none of these values. Do not guess settings or request a password: the smoke uses its explicit test password. A frontend nginx pass does not substitute for backend smoke. Not MERGE_READY.
 
 ## Exact next action
-1. Inspect git status and finish current UX-007/009 checkpoint if still uncommitted; generated env/index templates must be restored before commit.
-2. Read UX-010/011 acceptance criteria and UX-025 data-flow dependencies. Provider/model/budget/retention/credentials remain B-002: implement safe disabled provider interfaces, bounded public corpus/retrieval, citation schema and evaluation harness without a public AI endpoint or invented model results. Record each untested provider criterion explicitly. The user authorized safe independent scaffolding under blockers.
-3. UX-011 may improve source-specific layout and use the honest simulation link; actual RAG proof remains blocked until UX-010 can run. Then continue UX-012..028. Do not stop the backlog just because provider, CRM, recording or owner inputs are absent.
-4. Keep checkpoints every 1-3 coherent tasks. Final review must revisit all routes, copy, dead code (old unused bento/business-flow/proof visual primitives and content remain), performance, SEO, physical accessibility, Docker and deployment gates.
 
-## Known failures / remaining gates
-No known failing current local check. No deployment or final production contract/container health smoke. Final Docker rebuilds required after all backend/frontend changes. Non-secret SMTP values and verified current legal Secret Manager data remain B-006. Commercial rules B-001, real CRM proof B-003, owner/photo/audio/customer rights B-004, privacy/calendar/research participants B-005. Not merge ready.
+1. Inspect Git status and final checkpoint evidence; preserve this committed continuation and any later user changes. Do not restart UX-013..028 from scratch.
+2. Independent final verification and evidence copying are complete. Avoid retesting unchanged parts without a reason. Review FINAL_IMPLEMENTATION_REPORT.md and final-independent-checkpoint.json for results and limits.
+3. Resolve remaining owner/provider/production inputs from actual supplied information. Repeated “continue” does not provide commercial/legal facts, publication rights or SMTP configuration.
+4. Only after real inputs: execute relevant activation/test/deployment gates and update task statuses from evidence. The independent local scope is implemented; actual integrations, field research, legal/commercial confirmation and publication remain partial.
+5. Review FINAL_IMPLEMENTATION_REPORT.md for the concise results and open acceptance criteria. No deployment is authorized by a fabricated config or fixture.
 
-## Files and reproducible tools
-BROWSER_VERIFICATION.md documents committed frontend/scripts/audit-*-browser.cjs and serve-audit-artifact.cjs. Frontend npm commands: serve:browser:ux (127.0.0.1:4400), smoke:browser:ux. axe-core 4.13.0 pinned as a dev dependency; unrelated lockfile deduplication was reverted. Results go to ignored tmp/audit-implementation/verification and do not overwrite committed baselines.
+## Reproduction and safeguards
 
-EVIDENCE_INVENTORY.md maps existing materials to confirmed claims and absent proof. Shared source is frontend/src/app/core/content/evidence.pl.ts. The metadata gate verifies completeness, not truth or legal permission.
+- `backend/.venv/Scripts/python.exe` is Python 3.12. Default Python is Anaconda 3.9. PDF tooling lives in `tmp/pdfs/.venv`; pinned commands are in RESEARCH_AND_REPORT_ARTIFACTS.md.
+- Never use pre-existing `frontend/.public-legal-config.json`: it contains invented/corrupt local values. Local build uses the exact previously published privacy text copy through `tmp/audit-implementation/build.ps1`, not legal approval.
+- Do not run production local build concurrently with npm lint/test: they share generated legal content. Restore only the generated production env/index template changes before committing; these were clean at the start.
+- Keep strict CSP/no executable inline JS, `withNoIncrementalHydration()`, stable no-JS navigation/contact fallback, route-aware scroll offsets, PUBLIC_SITE_INDEXING=true, exact contract CORS and true 404 noindex/follow. No deployment environment variable was added.
+- Source packages are genuine own-project code; four existing landing/studio registry entries remain. R&D has its own source-bound offline observation. No fake voice, CRM, agent execution, customer outcome or metric is published.
+- Browser scripts are documented in BROWSER_VERIFICATION.md. Use loopback; verify ownership before stopping a process/container. Docker Desktop may need starting hidden after a user pause.
+- PDF source is shared; run generator, content checker and visually inspect every page after changes. Current final output: `output/pdf/protolume-raport-demo.pdf`; public copy under frontend assets. Poppler was unavailable, so raster QA used PyMuPDF.
 
-Ignored build.ps1 uses an exact copy of current published privacy text, not legal approval/Secret Manager verification. Invoke in child PowerShell: powershell -NoProfile -File tmp/audit-implementation/build.ps1. Local server may need restart after builds to reload CSP. Logs in tmp/audit-implementation. Default Python is Anaconda 3.9; use backend/.venv/Scripts/python.exe (3.12).
-
-## Do not regress
-* Preserve executable inline JS rejection. Angular22 needs withNoIncrementalHydration() to disable default replay while keeping hydration.
-* CSS scripting media stabilizes prebootstrap menu and retains genuine no-JS. No-JS header must not remain sticky over expanded navigation. Contact fallback is stable DOM rather than Angular content in noscript.
-* Main focus preserves fragment scrolling; ViewportScroller accounts for sticky header.
-* Never use frontend/.public-legal-config.json: it contains pre-existing invented/corrupt local legal values.
-* Do not run npm build concurrently with npm test/lint (shared generated legal module).
-* Restore ONLY generated environment.prod.ts and index.html from master before commit; preserve user changes.
-* PowerShell non-ASCII pipes require UTF-8 OutputEncoding; prefer apply_patch.
-
-## Last known good local commits
-18aee28 hub/navigation, 2fb4c67 local simulation. Current home/evidence checkpoint is fully locally checked as above. No production or merge approval.
-
-## Uncommitted work
-The checkpoint includes UX-007/009 source, test harness, dev dependency, evidence and status files. No pending implementation fix is intentionally left outside it. Confirm git status for later changes; generated env/index templates were restored before committing.
+Final housekeeping: the generated environment.prod.ts and index.html changes were restored to the implementation base; both were clean before this work. No other source was restored. The owned audit server on 4400 and nginx container on 4403 were stopped after verification; images, built files and evidence remain available. A local commit was requested after verification; no push or deploy was performed. Checkpoint JSON fields describing an uncommitted working tree are historical observations from that verification.

@@ -16,13 +16,13 @@ describe('StudioPageComponent', () => {
     expect(
       fixture.nativeElement.querySelector('a[href="/kontakt?projectType=custom_web_app"]'),
     ).not.toBeNull();
-    expect(fixture.nativeElement.querySelector('.hero-panel .hero-cta-note')).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('.hero-actions .primary-action')).not.toBeNull();
     expect(fixture.nativeElement.textContent).toContain('Jak wygląda współpraca?');
     expect(fixture.nativeElement.textContent).toContain('Rozmawiasz bezpośrednio ze mną');
     expect(fixture.nativeElement.textContent).not.toMatch(/TODO|placeholder|tu będzie/i);
   });
 
-  it('shows the named owner and two verifiable, honestly labelled work-evidence items', async () => {
+  it('shows the named owner and four verifiable, honestly labelled work-evidence items', async () => {
     await TestBed.configureTestingModule({
       imports: [StudioPageComponent],
       providers: [provideRouter([])],
@@ -49,12 +49,14 @@ describe('StudioPageComponent', () => {
     expect(element.textContent).toContain('zespołach międzynarodowych');
     expect(element.textContent).toContain('Odpowiedzialność end-to-end');
     expect(element.querySelector('a[href*="github.com"]')).toBeNull();
-    expect(element.querySelectorAll('.evidence-card')).toHaveSize(3);
-    expect(element.querySelectorAll('.verification-list')).toHaveSize(3);
-    expect(element.querySelectorAll('.evidence-limit')).toHaveSize(3);
+    expect(element.querySelectorAll('.evidence-card')).toHaveSize(4);
+    expect(element.querySelectorAll('.verification-list')).toHaveSize(4);
+    expect(element.querySelectorAll('.evidence-limit')).toHaveSize(4);
     expect(element.textContent).toContain('Symulacja asystenta wiedzy');
     expect(element.textContent).toContain('Przykładowy raport decyzyjny');
-    expect(element.textContent).toContain('Otwórz aplikację');
+    expect(
+      element.querySelector('a[href="/development#przyklad-techniczny"]')?.textContent,
+    ).toContain('Sprawdź kod i testy');
     expect(element.textContent).toContain('Projekt własny');
     expect(element.textContent).toContain('Nie dokumentuje uruchomionego CRM');
     expect(element.querySelector('.owner-image')).toBeNull();
@@ -65,16 +67,11 @@ describe('StudioPageComponent', () => {
     expect(element.textContent).not.toMatch(/zespół Protolume/i);
     expect(element.textContent).not.toMatch(/referencje|nasi klienci|opinie klient/i);
 
-    expect(element.querySelectorAll('.verification-steps li')).toHaveSize(5);
-    expect(element.textContent).toContain('Jak możesz zweryfikować sposób pracy');
-    expect(element.textContent).toContain('Przejrzyj przykładowy raport');
-    expect(element.textContent).toContain('nie jest zamówieniem');
-    expect(element.querySelector('.verification-actions a[href="/demo-ai"]')).not.toBeNull();
-    expect(element.querySelector('.verification-actions a[href="/przyklad-demo"]')).not.toBeNull();
-    expect(element.querySelector('.verification-actions a[href="/development"]')).not.toBeNull();
-    expect(
-      element.querySelector('.verification-actions a[href="/kontakt?projectType=other"]'),
-    ).not.toBeNull();
+    expect(element.querySelector('.evidence-card h3')?.textContent).toContain('Protolume');
+    expect(element.querySelector('.verification-section')).toBeNull();
+    expect(element.querySelectorAll('.hero-panel')).toHaveSize(1);
+    expect(element.querySelectorAll('.owner-background summary')).toHaveSize(1);
+    expect(element.querySelector('.owner-background[open]')).toBeNull();
 
     const externalLinks = element.querySelectorAll<HTMLAnchorElement>('a[target="_blank"]');
     externalLinks.forEach((link) => {

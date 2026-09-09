@@ -1,0 +1,39 @@
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1rem;
+}
+.hero-cta-note {
+  flex-basis: 100%;
+  margin: 0;
+}
+.hero h1 {
+  max-width: 19ch;
+}
+.process-list {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.scope-details {
+  border-top: 1px solid var(--color-line);
+  padding-block: 0.5rem;
+}
+.scope-details summary {
+  min-height: 44px;
+  padding-block: 0.65rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.scope-details li {
+  margin-block: 0.5rem;
+}
+@media (max-width: 960px) {
+  .process-list {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 680px) {
+  .hero-actions a {
+    width: 100%;
+  }
+}

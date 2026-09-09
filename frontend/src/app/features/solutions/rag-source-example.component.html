@@ -1,0 +1,76 @@
+<section
+  id="rag-source-example"
+  class="rag-example section-shell"
+  aria-labelledby="rag-example-title"
+>
+  <header>
+    <p class="eyebrow">Przykład ze źródłem</p>
+    <h2 id="rag-example-title">Odpowiedź, którą możesz porównać z dokumentem</h2>
+    <app-evidence-label [item]="evidence" />
+  </header>
+  <div class="rag-example-layout">
+    <div class="rag-answer-panel">
+      <div class="rag-question-list" role="group" aria-label="Przykładowe pytania">
+        @for (example of examples; track example.question; let index = $index) {
+          <button
+            type="button"
+            [attr.aria-pressed]="selectedIndex === index"
+            aria-controls="rag-answer"
+            (click)="select(index)"
+          >
+            {{ example.question }}
+          </button>
+        }
+      </div>
+      <p class="rag-no-script">
+        Bez JavaScriptu możesz przeczytać pierwszy przykład i rozwinąć cały dokument poniżej.
+      </p>
+      <article id="rag-answer" class="card-surface">
+        <h3 id="rag-answer-title" tabindex="-1">
+          {{ passage ? 'Przygotowana odpowiedź — cytat' : 'Brak informacji w tym dokumencie' }}
+        </h3>
+        <p><strong>Pytanie:</strong> {{ selected.question }}</p>
+        @if (passage) {
+          <blockquote>{{ passage.text }}</blockquote>
+          <a
+            id="rag-source-link"
+            [href]="source.sourcePath + '#' + passage.id"
+            (click)="openSource($event)"
+            >Sprawdź źródło: {{ passage.title }}</a
+          >
+        } @else {
+          <p>
+            Dokument opisuje publiczne materiały Protolume i nie zawiera cennika. Na jego podstawie
+            nie można podać ceny wdrożenia.
+          </p>
+        }
+      </article>
+    </div>
+    <details id="rag-source-document" class="rag-source-document">
+      <summary>Otwórz cały dokument źródłowy</summary>
+      <div class="rag-document-content">
+        <h3>{{ source.title }}</h3>
+        <p>{{ source.provenance }}</p>
+        <p>
+          Wersja {{ source.version }} · przegląd
+          <time [attr.datetime]="source.reviewedOn">{{ source.reviewedOn }}</time>
+        </p>
+        @for (section of source.sections; track section.id) {
+          <section [id]="section.id" tabindex="-1" [attr.aria-labelledby]="section.id + '-title'">
+            <h4 [id]="section.id + '-title'">{{ section.title }}</h4>
+            <p>{{ section.text }}</p>
+            <a [routerLink]="section.relatedPath" [fragment]="section.relatedFragment"
+              >Otwórz opisany materiał: {{ section.title }}</a
+            >
+          </section>
+        }
+        <a href="/assets/rag/protolume-materials-v1.json" download="protolume-materials-v1.json"
+          >Pobierz dokument w JSON</a
+        >
+        <button class="rag-close-source" type="button" (click)="closeSource()">
+          Zamknij dokument i wróć do odpowiedzi
+        </button>
+      </div>
+    </details>
+  </div>
+</section>

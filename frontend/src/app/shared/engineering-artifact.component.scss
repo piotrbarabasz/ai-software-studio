@@ -1,0 +1,119 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+.engineering-artifact {
+  scroll-margin-top: 1rem;
+  display: grid;
+  gap: 1.25rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-panel);
+  padding: clamp(1.25rem, 3vw, 2rem);
+  background: var(--surface-card);
+}
+h2,
+h3,
+p {
+  margin: 0;
+}
+header {
+  display: grid;
+  gap: 0.75rem;
+}
+h2 {
+  max-width: 28ch;
+}
+p {
+  color: var(--color-muted);
+}
+.eyebrow {
+  color: var(--color-primary-strong);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.artifact-lead {
+  max-width: 70ch;
+}
+.artifact-flow,
+.artifact-files {
+  display: grid;
+  gap: 1rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.artifact-flow {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  background: var(--surface-brand);
+  border-radius: var(--radius-card);
+  padding: 1rem;
+}
+.artifact-flow li {
+  display: flex;
+  align-items: start;
+  gap: 0.75rem;
+  min-width: 0;
+}
+.artifact-flow span {
+  flex-shrink: 0;
+  white-space: nowrap;
+  font-weight: 800;
+  color: var(--color-primary-strong);
+}
+.artifact-flow p {
+  margin-top: 0.35rem;
+}
+h3 {
+  font-size: 1.05rem;
+}
+.artifact-files {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.artifact-files li {
+  min-width: 0;
+  display: grid;
+  align-content: start;
+  gap: 0.35rem;
+  border-bottom: 1px solid var(--color-line);
+  padding-block: 0.5rem;
+}
+a {
+  color: var(--color-primary-strong);
+  text-underline-offset: 0.2em;
+  overflow-wrap: anywhere;
+}
+.artifact-files a,
+.artifact-actions a {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+  min-height: 44px;
+  width: fit-content;
+  font-weight: 700;
+}
+.link-host {
+  font-weight: 400;
+}
+.artifact-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+}
+summary {
+  min-height: 44px;
+  padding-block: 0.65rem;
+  cursor: pointer;
+  font-weight: 700;
+}
+details p {
+  margin-top: 0.5rem;
+}
+@media (max-width: 680px) {
+  .artifact-flow,
+  .artifact-files {
+    grid-template-columns: 1fr;
+  }
+}

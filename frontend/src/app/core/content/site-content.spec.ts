@@ -180,10 +180,10 @@ describe('Site content model', () => {
   });
 
   it('defines Development as a scoped path that does not require a demo in every case', () => {
-    expect(siteContent.development.lead).toContain('Potem można planować wdrożenie');
-    expect(siteContent.development.readiness.points).toContain('potwierdzona potrzeba biznesowa');
-    expect(siteContent.development.preparation.points).toContain('kryteria odbioru');
-    expect(siteContent.development.preparation.points).toContain('elementy wyłączone z wyceny');
+    expect(siteContent.development.heroNextStep).toContain('Masz gotową specyfikację?');
+    expect(siteContent.development.scope.included).toContain(
+      'kryteria odbioru, testy i dokumentację',
+    );
     expect(siteContent.development.scope.excluded).toContain('nowe wymagania poza zakresem');
     expect(siteContent.development.scope.pricingNote).toContain(
       'Budżet w formularzu jest orientacyjny',
@@ -225,32 +225,26 @@ describe('Site content model', () => {
   it('defines a scoped software-house partnership offer without unsupported commitments', () => {
     const partner = siteContent.partner;
 
-    expect(partner.title).toBe('Partner techniczny AI dla software house’ów i MSP');
-    expect(partner.lead).toContain('jako podwykonawca, partner white-label');
+    expect(partner.lead).toContain('podwykonawstwo lub white-label');
     expect(partner.primaryCta).toEqual({
-      label: 'Porozmawiaj o współpracy',
+      label: 'Opisz moduł',
       path: '/kontakt',
       queryParams: { projectType: 'software_house_partnership' },
     });
     expect(partner.secondaryCta).toEqual({
-      label: 'Zobacz zakres techniczny',
+      label: 'Zobacz przykładowe przekazanie',
       path: '/dla-software-house',
-      fragment: 'zakres-techniczny',
+      fragment: 'przyklad-techniczny',
     });
     expect(partner.fitItems).toHaveSize(4);
     expect(partner.scopeItems).toHaveSize(5);
     expect(partner.models.map((model) => model.title)).toEqual([
-      'Ograniczony moduł',
-      'Technical discovery i demo',
-      'Wsparcie zespołu',
+      'Repozytorium i granice modułu',
+      'Zmiana do przeglądu',
+      'Odbiór i przekazanie',
     ]);
     expect(partner.rules).toHaveSize(5);
-    expect(partner.rulesLead).toContain('wspólnie ustalamy');
-    expect(partner.evidenceLinks.map((link) => link.path)).toEqual([
-      '/demo-ai',
-      '/przyklad-demo',
-      '/studio',
-    ]);
+    expect(partner.rulesLead).toContain('dla wybranego zakresu');
     expect(partner.faqs).toHaveSize(5);
     const partnerText = JSON.stringify(partner);
     expect(partnerText).not.toMatch(/zawsze podpisujemy NDA|nie przejmujemy klientów/i);
@@ -323,14 +317,14 @@ describe('Site content model', () => {
       'Przykładowy raport',
     );
     expect(siteContent.routes.find((route) => route.path === '/przyklad-demo')?.title).toBe(
-      'Przykładowy raport z Demo AI w 7 dni | Protolume',
+      'Przykładowy raport po demo - PDF | Protolume',
     );
     expect(
       siteContent.routes.find((route) => route.path === '/przyklad-demo')?.description,
-    ).toContain('zakres, scenariusze testowe, ryzyka, kryteria odbioru i rekomendacja');
+    ).toContain('opisane scenariusze, zakres, ryzyka i decyzja');
     expect(
       siteContent.routes.find((route) => route.path === '/przyklad-demo')?.description,
-    ).toContain('Nie case study klienta');
+    ).toContain('nie case study klienta');
     expect(siteContent.routes.find((route) => route.kind === 'home')).toEqual(
       jasmine.objectContaining({
         path: '/',
@@ -343,7 +337,7 @@ describe('Site content model', () => {
       'Zakres, proces i rezultat',
     );
     expect(siteContent.routes.find((route) => route.kind === 'development')?.description).toContain(
-      'aplikacji, API, integracji',
+      'API i integracje',
     );
     expect(siteContent.routes.find((route) => route.kind === 'partner')).toEqual(
       jasmine.objectContaining({
@@ -435,6 +429,7 @@ describe('Site content model', () => {
       'knowledge-demo',
       'demo-report',
       'studio-application',
+      'rag-source-example',
     ]);
     siteContent.trust.evidence.items.forEach((item) => {
       expect(item.classification.length).toBeGreaterThan(0);
@@ -458,7 +453,11 @@ describe('Site content model', () => {
       jasmine.objectContaining({ kind: 'internal', path: '/przyklad-demo' }),
     );
     expect(siteContent.trust.evidence.items[2].liveLink).toEqual(
-      jasmine.objectContaining({ kind: 'internal', path: '/' }),
+      jasmine.objectContaining({
+        kind: 'internal',
+        path: '/development',
+        fragment: 'przyklad-techniczny',
+      }),
     );
     expect(siteContent.trust.evidence.items[0].limitation).toContain('Bez połączenia z modelem AI');
     expect(siteContent.trust.evidence.items[1].limitation).toContain('Materiał fikcyjny');
@@ -585,21 +584,9 @@ describe('Site content model', () => {
     expect(demoText).not.toMatch(/\b\d+[.,]?\d*\s?(?:zł|pln|eur|usd)\b/i);
   });
 
-  it('offers five low-risk ways to verify the work before cooperation', () => {
-    expect(siteContent.studio.verification.steps).toHaveSize(5);
-    expect(siteContent.studio.verification.steps.join(' ')).toContain('Uruchom demo');
-    expect(siteContent.studio.verification.steps.join(' ')).toContain('przykładowy raport');
-    expect(siteContent.studio.verification.steps.join(' ')).toContain('kryteria odbioru');
-    expect(siteContent.studio.verification.steps.join(' ')).toContain('pierwszy etap');
-    expect(siteContent.studio.verification.steps[4]).toBe(siteContent.contact.noCommitment);
-    expect(siteContent.studio.verification.demoCta.path).toBe('/demo-ai');
-    expect(siteContent.studio.verification.reportCta.path).toBe('/przyklad-demo');
-    expect(siteContent.studio.verification.developmentCta.path).toBe('/development');
-    expect(siteContent.studio.verification.contactCta).toEqual(
-      jasmine.objectContaining({
-        path: '/kontakt',
-        queryParams: { projectType: 'other' },
-      }),
-    );
+  it('keeps one concrete cooperation block on the studio page', () => {
+    expect(siteContent.studio.collaboration.points).toHaveSize(3);
+    expect(siteContent.studio.collaboration.points.join(' ')).toContain('kryteria odbioru');
+    expect(siteContent.studio.collaboration.points.join(' ')).toContain('utrzymanie');
   });
 });

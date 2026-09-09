@@ -5,10 +5,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { siteContent } from '../../core/content/site.pl';
 import type { ServiceLandingPageContent } from '../../core/content/site-content.types';
 import { RevealOnScrollDirective } from '../../shared/reveal/reveal-on-scroll.directive';
+import { RagSourceExampleComponent } from './rag-source-example.component';
 
 @Component({
   selector: 'app-service-landing-page',
-  imports: [RouterLink, RevealOnScrollDirective],
+  imports: [RouterLink, RevealOnScrollDirective, RagSourceExampleComponent],
   templateUrl: './service-landing-page.component.html',
   styleUrl: './service-landing-page.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,

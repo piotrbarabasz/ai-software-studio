@@ -1,0 +1,43 @@
+<section class="crm-run">
+  <header>
+    <h2>Od wiadomości do wyniku zapisu</h2>
+    <p>
+      {{
+        run.origin === 'local-test'
+          ? 'Test lokalny — bez dowodu integracji z CRM.'
+          : 'Przebieg w sandboxie — dane demonstracyjne.'
+      }}
+    </p>
+  </header>
+  <ol class="crm-steps">
+    <li>
+      <h3>1. Wiadomość</h3>
+      <p>Kanał: {{ run.channel === 'email' ? 'E-mail' : 'WhatsApp' }}</p>
+      <blockquote>{{ run.message }}</blockquote>
+    </li>
+    <li>
+      <h3>2. Propozycja i sprawdzenie</h3>
+      <p>Wersja {{ run.revision }}</p>
+      <dl>
+        <dt>Klient</dt>
+        <dd>{{ run.customer || 'Brak — wymaga uzupełnienia' }}</dd>
+        <dt>Opis sprawy</dt>
+        <dd>{{ run.summary || 'Brak — wymaga uzupełnienia' }}</dd>
+        <dt>Osoba odpowiedzialna</dt>
+        <dd>{{ run.owner || 'Brak — wymaga uzupełnienia' }}</dd>
+        <dt>Proponowany status</dt>
+        <dd>Nowa sprawa</dd>
+        <dt>Zatwierdzenie wersji</dt>
+        <dd>{{ run.approvedBy || 'Brak zatwierdzenia' }}</dd>
+      </dl>
+    </li>
+    <li>
+      <h3>3. Wynik</h3>
+      <p class="crm-status">{{ statusText }}</p>
+      @if (run.result.stage === 'succeeded') {
+        <p class="crm-record">Identyfikator wyniku: {{ run.result.recordId }}</p>
+      }
+    </li>
+  </ol>
+  <p>Ten podgląd nie wysyła odpowiedzi do nadawcy wiadomości.</p>
+</section>

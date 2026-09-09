@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "protolume-materials-v1",
+  "title": "Co można sprawdzić w publicznych materiałach Protolume",
+  "version": "1",
+  "reviewedOn": "2026-09-08",
+  "sourcePath": "/rozwiazania/chatbot-ai-dla-firm",
+  "provenance": "Opis istniejących materiałów własnej aplikacji Protolume. Bez danych klientów i bez twierdzeń o ich wynikach.",
+  "sections": [
+    {
+      "id": "rag-source-simulation",
+      "title": "Lokalna symulacja",
+      "text": "Publiczna symulacja asystenta wiedzy korzysta z przygotowanych pytań i odpowiedzi. Nie łączy się z modelem AI i nie wyszukuje treści w dokumentach. Pytanie wpisane w symulacji pozostaje w przeglądarce. Nie jest wysyłane do dostawcy modelu ani zapisywane w pamięci trwałej aplikacji.",
+      "relatedPath": "/demo-ai",
+      "relatedFragment": "interactive-demo"
+    },
+    {
+      "id": "rag-source-report",
+      "title": "Przykładowy raport",
+      "text": "Przykładowy raport decyzyjny opisuje fikcyjny scenariusz. Pokazuje zakres, scenariusze sprawdzenia, ryzyka i rekomendację kolejnego kroku. Nie jest raportem z projektu klienta ani dowodem zapisu w CRM. Nie potwierdza zmierzonych oszczędności.",
+      "relatedPath": "/przyklad-demo"
+    },
+    {
+      "id": "rag-source-application",
+      "title": "Projekt własny",
+      "text": "Witryna Protolume jest własną aplikacją z publicznymi stronami, nawigacją i formularzem kontaktowym. Formularz sprawdza wymagane pola przed wysłaniem. Sam widok formularza nie potwierdza dostarczenia wiadomości e-mail. Ten dokument nie zawiera cennika ani danych o wynikach projektów klientów.",
+      "relatedPath": "/kontakt"
+    }
+  ]
+}

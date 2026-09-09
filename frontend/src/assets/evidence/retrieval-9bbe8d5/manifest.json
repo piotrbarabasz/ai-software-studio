@@ -1,0 +1,26 @@
+{
+  "revision": "9bbe8d5d9e7e1f539683647deda7751e695301ef",
+  "files": [
+    {
+      "file": "observation.json",
+      "sha256": "ee4662642327fce265f54b14f1b6147e4d9017d57b4e15489eb58ad3a2edd764"
+    },
+    {
+      "file": "README.md",
+      "sha256": "56423fe8db14220d5e7a9e0a5acd218d20ed1076a71b5479afb8b7844fe13086"
+    },
+    {
+      "file": "lexical-experiment.zip",
+      "sha256": "c76e1659772e3779ac387dee1385b83969eccd45a57f60310106497825940788"
+    }
+  ],
+  "sourceFiles": [
+    "backend/app/__init__.py",
+    "backend/app/rag/__init__.py",
+    "backend/app/rag/corpus.py",
+    "backend/app/rag/retrieval.py",
+    "backend/scripts/evaluate_rag.py",
+    "backend/tests/fixtures/rag_retrieval_cases.json",
+    "frontend/src/assets/rag/protolume-materials-v1.json"
+  ]
+}

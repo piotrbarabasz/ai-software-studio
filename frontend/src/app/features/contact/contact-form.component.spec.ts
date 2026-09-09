@@ -111,7 +111,7 @@ describe('ContactFormComponent', () => {
     expect(text).toContain('Co jest dziś wykonywane ręcznie?');
     expect(text).toContain('Kto korzysta z procesu?');
     expect(text).toContain('Jaki rezultat chcesz uzyskać?');
-    expect(text).toContain('Wyślij krótki opis');
+    expect(text).toContain('Wyślij opis');
     expect(text).not.toContain('Jaki moduł lub etap chcesz zlecić?');
     expect(text).not.toMatch(/\bintent\b|\bpayload\b|\bprojectType\b/i);
   });

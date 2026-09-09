@@ -15,6 +15,27 @@
       "sourceRoot": "src",
       "prefix": "app",
       "architect": {
+        "artifact-preview": {
+          "builder": "@angular/build:application",
+          "options": {
+            "outputPath": "dist/artifact-preview",
+            "index": "src/preview/index.html",
+            "browser": "src/preview/main.ts",
+            "polyfills": ["zone.js"],
+            "tsConfig": "tsconfig.preview.json",
+            "inlineStyleLanguage": "scss",
+            "styles": ["src/styles.scss"],
+            "assets": [
+              {
+                "glob": "player-silence.wav",
+                "input": "src/testing/fixtures",
+                "output": "/assets/demo-evidence"
+              }
+            ],
+            "optimization": false,
+            "outputHashing": "none"
+          }
+        },
         "build": {
           "builder": "@angular/build:application",
           "options": {

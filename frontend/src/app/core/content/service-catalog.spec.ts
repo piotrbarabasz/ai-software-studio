@@ -23,9 +23,9 @@ describe('Service contact intent', () => {
     expect(
       serviceLandingPages.find((page) => page.slug === 'chatbot-ai-dla-firm')?.hero.secondaryCta,
     ).toEqual({
-      label: 'Zobacz symulację odpowiedzi',
-      path: '/demo-ai',
-      fragment: 'interactive-demo',
+      label: 'Zobacz symulację ze źródłem',
+      path: '/rozwiazania/chatbot-ai-dla-firm',
+      fragment: 'rag-source-example',
     });
   });
 });

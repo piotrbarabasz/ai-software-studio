@@ -1,0 +1,193 @@
+{
+  "recordedAt": "2026-09-09T13:24:10.591Z",
+  "browser": "151.0.7922.34",
+  "baseUrl": "http://127.0.0.1:4403",
+  "cases": [
+    {
+      "route": "/studio",
+      "width": 320,
+      "height": 4652,
+      "visibleWords": 285,
+      "allWords": 453,
+      "firstEvidence": 1248.59375,
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "/studio",
+      "width": 360,
+      "height": 4421,
+      "visibleWords": 285,
+      "allWords": 453,
+      "firstEvidence": 1178.578125,
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "/studio",
+      "width": 390,
+      "height": 4236,
+      "visibleWords": 285,
+      "allWords": 453,
+      "firstEvidence": 1195.40625,
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "/studio",
+      "width": 430,
+      "height": 4071,
+      "visibleWords": 285,
+      "allWords": 453,
+      "firstEvidence": 1101.4375,
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "/studio",
+      "width": 768,
+      "height": 3570,
+      "visibleWords": 285,
+      "allWords": 453,
+      "firstEvidence": 979.640625,
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "/studio",
+      "width": 921,
+      "height": 3439,
+      "visibleWords": 285,
+      "allWords": 453,
+      "firstEvidence": 977.890625,
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "/studio",
+      "width": 1024,
+      "height": 2552,
+      "visibleWords": 285,
+      "allWords": 453,
+      "firstEvidence": 820.625,
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "/studio",
+      "width": 1440,
+      "height": 2668,
+      "visibleWords": 285,
+      "allWords": 453,
+      "firstEvidence": 873.984375,
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "/kontakt",
+      "width": 320,
+      "height": 2852,
+      "visibleWords": 146,
+      "allWords": 196,
+      "firstInput": 453.625,
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "/kontakt",
+      "width": 360,
+      "height": 2755,
+      "visibleWords": 146,
+      "allWords": 196,
+      "firstInput": 418.640625,
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "/kontakt",
+      "width": 390,
+      "height": 2566,
+      "visibleWords": 146,
+      "allWords": 196,
+      "firstInput": 418.796875,
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "/kontakt",
+      "width": 430,
+      "height": 2477,
+      "visibleWords": 146,
+      "allWords": 196,
+      "firstInput": 391.15625,
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "/kontakt",
+      "width": 768,
+      "height": 2145,
+      "visibleWords": 146,
+      "allWords": 196,
+      "firstInput": 407.625,
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "/kontakt",
+      "width": 921,
+      "height": 1792,
+      "visibleWords": 146,
+      "allWords": 196,
+      "firstInput": 189.734375,
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "/kontakt",
+      "width": 1024,
+      "height": 1763,
+      "visibleWords": 146,
+      "allWords": 196,
+      "firstInput": 196.078125,
+      "overflow": false,
+      "violations": []
+    },
+    {
+      "route": "/kontakt",
+      "width": 1440,
+      "height": 1861,
+      "visibleWords": 146,
+      "allWords": 196,
+      "firstInput": 221.03125,
+      "overflow": false,
+      "violations": []
+    }
+  ],
+  "failures": [
+    {
+      "status": 422,
+      "messagePreserved": true,
+      "focusOnSummary": true
+    },
+    {
+      "status": 429,
+      "messagePreserved": true,
+      "focusOnSummary": true
+    },
+    {
+      "status": 503,
+      "messagePreserved": true,
+      "focusOnSummary": true
+    },
+    {
+      "status": 0,
+      "messagePreserved": true,
+      "focusOnSummary": true
+    }
+  ],
+  "success": true,
+  "noJs": true,
+  "errors": [],
+  "externalContactRequestsSent": 0
+}

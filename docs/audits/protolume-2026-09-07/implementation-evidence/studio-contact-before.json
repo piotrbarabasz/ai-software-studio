@@ -1,0 +1,20 @@
+{
+  "recordedAt": "2026-09-09T08:17:39.624Z",
+  "source": "Local production build before UX-018/020 in current uncommitted checkpoint",
+  "rows": [
+    {
+      "path": "/studio",
+      "height": 8903,
+      "visibleWords": 642,
+      "allWords": 633,
+      "firstEvidence": 2511.046875
+    },
+    {
+      "path": "/kontakt",
+      "height": 2706,
+      "visibleWords": 165,
+      "allWords": 191,
+      "firstInput": 681.25
+    }
+  ]
+}

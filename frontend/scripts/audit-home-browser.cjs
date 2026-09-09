@@ -67,7 +67,7 @@ fs.mkdirSync('tmp/audit-implementation/verification', { recursive: true });
   await page.waitForURL('**/demo-ai#interactive-demo');
   assert.ok((await page.locator('#interactive-demo').boundingBox()).y < 200);
   await page.goto('http://127.0.0.1:4400/studio', { waitUntil: 'networkidle' });
-  assert.equal(await page.locator('.evidence-card app-evidence-label').count(), 3);
+  assert.equal(await page.locator('.evidence-card app-evidence-label').count(), 4);
   for (const link of await page.locator('.evidence-card a').all()) {
     const href = await link.getAttribute('href');
     const response = await page.request.get('http://127.0.0.1:4400' + href);
