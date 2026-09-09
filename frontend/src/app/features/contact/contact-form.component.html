@@ -99,6 +99,7 @@
         "
       ></textarea>
       <div id="message-hint" class="field-hint message-hint">
+        <p>{{ content.messageMinimumHint }}</p>
         <ul class="message-guidance" [attr.aria-label]="messageGuidanceLabel">
           @for (item of messageGuidance; track item) {
             <li>{{ item }}</li>

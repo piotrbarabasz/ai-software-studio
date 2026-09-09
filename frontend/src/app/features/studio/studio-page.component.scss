@@ -2,6 +2,50 @@
   display: block;
 }
 
+.studio-focused {
+  .hero h1 {
+    max-width: none;
+  }
+  .hero-panel h2 {
+    font-size: 1.35rem;
+    margin: 0;
+  }
+  .hero-panel p {
+    margin: 0;
+    color: var(--color-muted);
+  }
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+  .evidence-card {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .evidence-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .evidence-summary h3 {
+    font-size: 1.4rem;
+  }
+  .owner-background summary {
+    min-height: 44px;
+    padding-block: 0.65rem;
+    cursor: pointer;
+    font-weight: 700;
+  }
+  #evidence-title {
+    scroll-margin-top: 1rem;
+  }
+  @media (max-width: 960px) {
+    .evidence-list {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
 .studio-page {
   display: grid;
   gap: var(--space-section);

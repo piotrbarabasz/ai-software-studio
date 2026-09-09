@@ -1,0 +1,2288 @@
+{
+  "recordedAt": "2026-09-09T13:22:34.793Z",
+  "browser": "151.0.7922.34",
+  "baseUrl": "http://127.0.0.1:4403",
+  "pages": [
+    {
+      "route": "/",
+      "title": "Automatyzacje AI dla firm | Protolume",
+      "description": "Protolume automatyzuje ręczne procesy w MŚP i wspiera software house’y w realizacji modułów AI, integracji i systemów agentowych.",
+      "canonical": "https://protolume.pl/",
+      "robots": "index, follow",
+      "og": "https://protolume.pl",
+      "image": "https://protolume.pl/assets/protolume-social-preview.png",
+      "h1": [
+        "Pokaż nam proces.\nW 7 dni pokażemy jego demo."
+      ],
+      "schema": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@id": "https://protolume.pl#founder",
+              "@type": "Person",
+              "name": "Piotr Barabasz",
+              "jobTitle": "Właściciel i odpowiedzialny partner techniczny",
+              "description": "Prowadzę analizę procesu, decyzje techniczne, realizację, testy i odbiór ustalonego zakresu."
+            },
+            {
+              "@id": "https://protolume.pl#professional-service",
+              "@type": "ProfessionalService",
+              "name": "Protolume",
+              "url": "https://protolume.pl",
+              "description": "Samodzielnie prowadzone studio: studio wdrożeń ai i automatyzacji.",
+              "logo": "https://protolume.pl/assets/protolume-logo-horizontal-dark.svg",
+              "founder": {
+                "@id": "https://protolume.pl#founder"
+              },
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "contactType": "sales",
+                "url": "https://protolume.pl/kontakt",
+                "availableLanguage": "pl-PL",
+                "email": "kontakt@protolume.pl"
+              }
+            },
+            {
+              "@id": "https://protolume.pl#website",
+              "@type": "WebSite",
+              "name": "Protolume",
+              "url": "https://protolume.pl",
+              "inLanguage": "pl-PL",
+              "publisher": {
+                "@id": "https://protolume.pl#professional-service"
+              }
+            }
+          ]
+        }
+      ],
+      "words": 4181
+    },
+    {
+      "route": "/demo-ai",
+      "title": "Demo AI i sprawdzenie pomysłu | Protolume",
+      "description": "Zakres, proces i rezultat demo AI w 7 dni dla jednego scenariusza biznesowego. Protolume.",
+      "canonical": "https://protolume.pl/demo-ai",
+      "robots": "index, follow",
+      "og": "https://protolume.pl/demo-ai",
+      "image": "https://protolume.pl/assets/protolume-social-preview.png",
+      "h1": [
+        "Zobacz jeden scenariusz swojej firmy w działającym demo"
+      ],
+      "schema": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@id": "https://protolume.pl#founder",
+              "@type": "Person",
+              "name": "Piotr Barabasz",
+              "jobTitle": "Właściciel i odpowiedzialny partner techniczny",
+              "description": "Prowadzę analizę procesu, decyzje techniczne, realizację, testy i odbiór ustalonego zakresu."
+            },
+            {
+              "@id": "https://protolume.pl#professional-service",
+              "@type": "ProfessionalService",
+              "name": "Protolume",
+              "url": "https://protolume.pl",
+              "description": "Samodzielnie prowadzone studio: studio wdrożeń ai i automatyzacji.",
+              "logo": "https://protolume.pl/assets/protolume-logo-horizontal-dark.svg",
+              "founder": {
+                "@id": "https://protolume.pl#founder"
+              },
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "contactType": "sales",
+                "url": "https://protolume.pl/kontakt",
+                "availableLanguage": "pl-PL",
+                "email": "kontakt@protolume.pl"
+              }
+            },
+            {
+              "@id": "https://protolume.pl#website",
+              "@type": "WebSite",
+              "name": "Protolume",
+              "url": "https://protolume.pl",
+              "inLanguage": "pl-PL",
+              "publisher": {
+                "@id": "https://protolume.pl#professional-service"
+              }
+            },
+            {
+              "@id": "https://protolume.pl/demo-ai#service",
+              "@type": "Service",
+              "name": "Zobacz jeden scenariusz swojej firmy w działającym demo",
+              "description": "Jeden scenariusz, wynik uzgodnionych testów i rekomendacja dalszego kroku.",
+              "url": "https://protolume.pl/demo-ai",
+              "inLanguage": "pl-PL",
+              "provider": {
+                "@id": "https://protolume.pl#professional-service"
+              },
+              "serviceType": "Demo AI w 7 dni"
+            },
+            {
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Strona główna",
+                  "item": "https://protolume.pl"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Demo w 7 dni",
+                  "item": "https://protolume.pl/demo-ai"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "words": 2698
+    },
+    {
+      "route": "/przyklad-demo",
+      "title": "Przykładowy raport po demo - PDF | Protolume",
+      "description": "Fikcyjny raport po demo: opisane scenariusze, zakres, ryzyka i decyzja o kolejnym etapie. Wersja PDF do pobrania; nie case study klienta. Protolume.",
+      "canonical": "https://protolume.pl/przyklad-demo",
+      "robots": "index, follow",
+      "og": "https://protolume.pl/przyklad-demo",
+      "image": "https://protolume.pl/assets/protolume-social-preview.png",
+      "h1": [
+        "Zapytania produktowe: przykład raportu po demo"
+      ],
+      "schema": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@id": "https://protolume.pl#founder",
+              "@type": "Person",
+              "name": "Piotr Barabasz",
+              "jobTitle": "Właściciel i odpowiedzialny partner techniczny",
+              "description": "Prowadzę analizę procesu, decyzje techniczne, realizację, testy i odbiór ustalonego zakresu."
+            },
+            {
+              "@id": "https://protolume.pl#professional-service",
+              "@type": "ProfessionalService",
+              "name": "Protolume",
+              "url": "https://protolume.pl",
+              "description": "Samodzielnie prowadzone studio: studio wdrożeń ai i automatyzacji.",
+              "logo": "https://protolume.pl/assets/protolume-logo-horizontal-dark.svg",
+              "founder": {
+                "@id": "https://protolume.pl#founder"
+              },
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "contactType": "sales",
+                "url": "https://protolume.pl/kontakt",
+                "availableLanguage": "pl-PL",
+                "email": "kontakt@protolume.pl"
+              }
+            },
+            {
+              "@id": "https://protolume.pl#website",
+              "@type": "WebSite",
+              "name": "Protolume",
+              "url": "https://protolume.pl",
+              "inLanguage": "pl-PL",
+              "publisher": {
+                "@id": "https://protolume.pl#professional-service"
+              }
+            },
+            {
+              "@id": "https://protolume.pl/przyklad-demo#creative-work",
+              "@type": "CreativeWork",
+              "name": "Zapytania produktowe: przykład raportu po demo",
+              "description": "To fikcyjny scenariusz demonstracyjny. Nie jest case study klienta ani obietnicą gotowego wdrożenia produkcyjnego.",
+              "url": "https://protolume.pl/przyklad-demo",
+              "inLanguage": "pl-PL",
+              "author": {
+                "@id": "https://protolume.pl#founder"
+              },
+              "publisher": {
+                "@id": "https://protolume.pl#professional-service"
+              },
+              "isPartOf": {
+                "@id": "https://protolume.pl#website"
+              },
+              "about": {
+                "@type": "Thing",
+                "name": "Demo AI w 7 dni"
+              },
+              "genre": "Przykładowy materiał demonstracyjny"
+            },
+            {
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Strona główna",
+                  "item": "https://protolume.pl"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Przykładowy raport",
+                  "item": "https://protolume.pl/przyklad-demo"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "words": 6016
+    },
+    {
+      "route": "/rozwiazania",
+      "title": "Rozwiązania AI i automatyzacji | Protolume",
+      "description": "Wiadomości i dokumenty, Wiedza firmy, Obsługa telefonów / Voice AI, Rozmowy w CRM, Zadania wieloetapowe — wybierz proces do usprawnienia. Protolume.",
+      "canonical": "https://protolume.pl/rozwiazania",
+      "robots": "index, follow",
+      "og": "https://protolume.pl/rozwiazania",
+      "image": "https://protolume.pl/assets/protolume-social-preview.png",
+      "h1": [
+        "Który proces chcesz usprawnić?"
+      ],
+      "schema": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@id": "https://protolume.pl#founder",
+              "@type": "Person",
+              "name": "Piotr Barabasz",
+              "jobTitle": "Właściciel i odpowiedzialny partner techniczny",
+              "description": "Prowadzę analizę procesu, decyzje techniczne, realizację, testy i odbiór ustalonego zakresu."
+            },
+            {
+              "@id": "https://protolume.pl#professional-service",
+              "@type": "ProfessionalService",
+              "name": "Protolume",
+              "url": "https://protolume.pl",
+              "description": "Samodzielnie prowadzone studio: studio wdrożeń ai i automatyzacji.",
+              "logo": "https://protolume.pl/assets/protolume-logo-horizontal-dark.svg",
+              "founder": {
+                "@id": "https://protolume.pl#founder"
+              },
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "contactType": "sales",
+                "url": "https://protolume.pl/kontakt",
+                "availableLanguage": "pl-PL",
+                "email": "kontakt@protolume.pl"
+              }
+            },
+            {
+              "@id": "https://protolume.pl#website",
+              "@type": "WebSite",
+              "name": "Protolume",
+              "url": "https://protolume.pl",
+              "inLanguage": "pl-PL",
+              "publisher": {
+                "@id": "https://protolume.pl#professional-service"
+              }
+            },
+            {
+              "@id": "https://protolume.pl/rozwiazania#solutions",
+              "@type": "ItemList",
+              "name": "Rozwiązania Protolume",
+              "url": "https://protolume.pl/rozwiazania",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Wiadomości i dokumenty",
+                  "item": {
+                    "@type": "Service",
+                    "name": "Wiadomości i dokumenty",
+                    "description": "Dane i propozycja zmiany gotowe do sprawdzenia przed zapisem.",
+                    "url": "https://protolume.pl/rozwiazania/automatyzacja-procesow",
+                    "provider": {
+                      "@id": "https://protolume.pl#professional-service"
+                    }
+                  }
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Wiedza firmy",
+                  "item": {
+                    "@type": "Service",
+                    "name": "Wiedza firmy",
+                    "description": "Odpowiedź ze źródłem, które można sprawdzić.",
+                    "url": "https://protolume.pl/rozwiazania/chatbot-ai-dla-firm",
+                    "provider": {
+                      "@id": "https://protolume.pl#professional-service"
+                    }
+                  }
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "Obsługa telefonów / Voice AI",
+                  "item": {
+                    "@type": "Service",
+                    "name": "Obsługa telefonów / Voice AI",
+                    "description": "Zebrana sprawa i następne zadanie dla pracownika.",
+                    "url": "https://protolume.pl/rozwiazania/voice-ai-dla-firm",
+                    "provider": {
+                      "@id": "https://protolume.pl#professional-service"
+                    }
+                  }
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 4,
+                  "name": "Rozmowy w CRM",
+                  "item": {
+                    "@type": "Service",
+                    "name": "Rozmowy w CRM",
+                    "description": "Wiadomość powiązana z rekordem i odpowiedzialną osobą.",
+                    "url": "https://protolume.pl/rozwiazania/integracje-whatsapp-crm",
+                    "provider": {
+                      "@id": "https://protolume.pl#professional-service"
+                    }
+                  }
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 5,
+                  "name": "Zadania wieloetapowe",
+                  "item": {
+                    "@type": "Service",
+                    "name": "Zadania wieloetapowe",
+                    "description": "Wynik z przebiegiem kroków i akceptacją ważnej decyzji.",
+                    "url": "https://protolume.pl/rozwiazania/systemy-agentowe",
+                    "provider": {
+                      "@id": "https://protolume.pl#professional-service"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Strona główna",
+                  "item": "https://protolume.pl"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Rozwiązania",
+                  "item": "https://protolume.pl/rozwiazania"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "words": 1369
+    },
+    {
+      "route": "/rozwiazania/chatbot-ai-dla-firm",
+      "title": "Chatbot AI i asystent wiedzy dla firm | Protolume",
+      "description": "Pomagamy pracownikom i klientom szybciej znaleźć odpowiedź w zatwierdzonych materiałach, a sprawę bez danych przekazać do człowieka. Protolume.",
+      "canonical": "https://protolume.pl/rozwiazania/chatbot-ai-dla-firm",
+      "robots": "index, follow",
+      "og": "https://protolume.pl/rozwiazania/chatbot-ai-dla-firm",
+      "image": "https://protolume.pl/assets/protolume-social-preview.png",
+      "h1": [
+        "Chatbot AI i asystent wiedzy dla firm"
+      ],
+      "schema": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@id": "https://protolume.pl#founder",
+              "@type": "Person",
+              "name": "Piotr Barabasz",
+              "jobTitle": "Właściciel i odpowiedzialny partner techniczny",
+              "description": "Prowadzę analizę procesu, decyzje techniczne, realizację, testy i odbiór ustalonego zakresu."
+            },
+            {
+              "@id": "https://protolume.pl#professional-service",
+              "@type": "ProfessionalService",
+              "name": "Protolume",
+              "url": "https://protolume.pl",
+              "description": "Samodzielnie prowadzone studio: studio wdrożeń ai i automatyzacji.",
+              "logo": "https://protolume.pl/assets/protolume-logo-horizontal-dark.svg",
+              "founder": {
+                "@id": "https://protolume.pl#founder"
+              },
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "contactType": "sales",
+                "url": "https://protolume.pl/kontakt",
+                "availableLanguage": "pl-PL",
+                "email": "kontakt@protolume.pl"
+              }
+            },
+            {
+              "@id": "https://protolume.pl#website",
+              "@type": "WebSite",
+              "name": "Protolume",
+              "url": "https://protolume.pl",
+              "inLanguage": "pl-PL",
+              "publisher": {
+                "@id": "https://protolume.pl#professional-service"
+              }
+            },
+            {
+              "@id": "https://protolume.pl/rozwiazania/chatbot-ai-dla-firm#service",
+              "@type": "Service",
+              "name": "Chatbot AI i asystent wiedzy dla firm",
+              "description": "Pomagamy pracownikom i klientom szybciej znaleźć odpowiedź w zatwierdzonych materiałach, a sprawę bez danych przekazać do człowieka.",
+              "url": "https://protolume.pl/rozwiazania/chatbot-ai-dla-firm",
+              "inLanguage": "pl-PL",
+              "provider": {
+                "@id": "https://protolume.pl#professional-service"
+              },
+              "serviceType": "Chatbot AI i asystent wiedzy"
+            },
+            {
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Strona główna",
+                  "item": "https://protolume.pl"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Rozwiązania",
+                  "item": "https://protolume.pl/rozwiazania"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "Asystent wiedzy",
+                  "item": "https://protolume.pl/rozwiazania/chatbot-ai-dla-firm"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "words": 5383
+    },
+    {
+      "route": "/rozwiazania/voice-ai-dla-firm",
+      "title": "Voice AI dla firm | Protolume",
+      "description": "Tworzymy głosowy przepływ do kwalifikacji spraw, zbierania informacji i proponowania kolejnego kroku z jasnym przekazaniem do człowieka. Protolume.",
+      "canonical": "https://protolume.pl/rozwiazania/voice-ai-dla-firm",
+      "robots": "index, follow",
+      "og": "https://protolume.pl/rozwiazania/voice-ai-dla-firm",
+      "image": "https://protolume.pl/assets/protolume-social-preview.png",
+      "h1": [
+        "Voice AI dla firm"
+      ],
+      "schema": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@id": "https://protolume.pl#founder",
+              "@type": "Person",
+              "name": "Piotr Barabasz",
+              "jobTitle": "Właściciel i odpowiedzialny partner techniczny",
+              "description": "Prowadzę analizę procesu, decyzje techniczne, realizację, testy i odbiór ustalonego zakresu."
+            },
+            {
+              "@id": "https://protolume.pl#professional-service",
+              "@type": "ProfessionalService",
+              "name": "Protolume",
+              "url": "https://protolume.pl",
+              "description": "Samodzielnie prowadzone studio: studio wdrożeń ai i automatyzacji.",
+              "logo": "https://protolume.pl/assets/protolume-logo-horizontal-dark.svg",
+              "founder": {
+                "@id": "https://protolume.pl#founder"
+              },
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "contactType": "sales",
+                "url": "https://protolume.pl/kontakt",
+                "availableLanguage": "pl-PL",
+                "email": "kontakt@protolume.pl"
+              }
+            },
+            {
+              "@id": "https://protolume.pl#website",
+              "@type": "WebSite",
+              "name": "Protolume",
+              "url": "https://protolume.pl",
+              "inLanguage": "pl-PL",
+              "publisher": {
+                "@id": "https://protolume.pl#professional-service"
+              }
+            },
+            {
+              "@id": "https://protolume.pl/rozwiazania/voice-ai-dla-firm#service",
+              "@type": "Service",
+              "name": "Voice AI dla firm",
+              "description": "Tworzymy głosowy przepływ do kwalifikacji spraw, zbierania informacji i proponowania kolejnego kroku z jasnym przekazaniem do człowieka.",
+              "url": "https://protolume.pl/rozwiazania/voice-ai-dla-firm",
+              "inLanguage": "pl-PL",
+              "provider": {
+                "@id": "https://protolume.pl#professional-service"
+              },
+              "serviceType": "Voice AI"
+            },
+            {
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Strona główna",
+                  "item": "https://protolume.pl"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Rozwiązania",
+                  "item": "https://protolume.pl/rozwiazania"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "Obsługa głosowa",
+                  "item": "https://protolume.pl/rozwiazania/voice-ai-dla-firm"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "words": 3218
+    },
+    {
+      "route": "/rozwiazania/automatyzacja-procesow",
+      "title": "Automatyzacja procesów | Protolume",
+      "description": "Porządkujemy ręczne przepisywanie danych, przypisywanie spraw i zmianę statusów w jednym kontrolowanym przepływie. Protolume.",
+      "canonical": "https://protolume.pl/rozwiazania/automatyzacja-procesow",
+      "robots": "index, follow",
+      "og": "https://protolume.pl/rozwiazania/automatyzacja-procesow",
+      "image": "https://protolume.pl/assets/protolume-social-preview.png",
+      "h1": [
+        "Automatyzacja procesów"
+      ],
+      "schema": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@id": "https://protolume.pl#founder",
+              "@type": "Person",
+              "name": "Piotr Barabasz",
+              "jobTitle": "Właściciel i odpowiedzialny partner techniczny",
+              "description": "Prowadzę analizę procesu, decyzje techniczne, realizację, testy i odbiór ustalonego zakresu."
+            },
+            {
+              "@id": "https://protolume.pl#professional-service",
+              "@type": "ProfessionalService",
+              "name": "Protolume",
+              "url": "https://protolume.pl",
+              "description": "Samodzielnie prowadzone studio: studio wdrożeń ai i automatyzacji.",
+              "logo": "https://protolume.pl/assets/protolume-logo-horizontal-dark.svg",
+              "founder": {
+                "@id": "https://protolume.pl#founder"
+              },
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "contactType": "sales",
+                "url": "https://protolume.pl/kontakt",
+                "availableLanguage": "pl-PL",
+                "email": "kontakt@protolume.pl"
+              }
+            },
+            {
+              "@id": "https://protolume.pl#website",
+              "@type": "WebSite",
+              "name": "Protolume",
+              "url": "https://protolume.pl",
+              "inLanguage": "pl-PL",
+              "publisher": {
+                "@id": "https://protolume.pl#professional-service"
+              }
+            },
+            {
+              "@id": "https://protolume.pl/rozwiazania/automatyzacja-procesow#service",
+              "@type": "Service",
+              "name": "Automatyzacja procesów",
+              "description": "Porządkujemy ręczne przepisywanie danych, przypisywanie spraw i zmianę statusów w jednym kontrolowanym przepływie.",
+              "url": "https://protolume.pl/rozwiazania/automatyzacja-procesow",
+              "inLanguage": "pl-PL",
+              "provider": {
+                "@id": "https://protolume.pl#professional-service"
+              },
+              "serviceType": "Automatyzacja procesów"
+            },
+            {
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Strona główna",
+                  "item": "https://protolume.pl"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Rozwiązania",
+                  "item": "https://protolume.pl/rozwiazania"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "Przepływy i statusy",
+                  "item": "https://protolume.pl/rozwiazania/automatyzacja-procesow"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "words": 3111
+    },
+    {
+      "route": "/rozwiazania/integracje-whatsapp-crm",
+      "title": "Integracje WhatsApp i CRM | Protolume",
+      "description": "Łączymy WhatsApp, CRM, e-mail i formularze w jeden kontrolowany proces obsługi spraw z jasnym momentem przekazania do człowieka. Protolume.",
+      "canonical": "https://protolume.pl/rozwiazania/integracje-whatsapp-crm",
+      "robots": "index, follow",
+      "og": "https://protolume.pl/rozwiazania/integracje-whatsapp-crm",
+      "image": "https://protolume.pl/assets/protolume-social-preview.png",
+      "h1": [
+        "Integracje WhatsApp i CRM"
+      ],
+      "schema": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@id": "https://protolume.pl#founder",
+              "@type": "Person",
+              "name": "Piotr Barabasz",
+              "jobTitle": "Właściciel i odpowiedzialny partner techniczny",
+              "description": "Prowadzę analizę procesu, decyzje techniczne, realizację, testy i odbiór ustalonego zakresu."
+            },
+            {
+              "@id": "https://protolume.pl#professional-service",
+              "@type": "ProfessionalService",
+              "name": "Protolume",
+              "url": "https://protolume.pl",
+              "description": "Samodzielnie prowadzone studio: studio wdrożeń ai i automatyzacji.",
+              "logo": "https://protolume.pl/assets/protolume-logo-horizontal-dark.svg",
+              "founder": {
+                "@id": "https://protolume.pl#founder"
+              },
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "contactType": "sales",
+                "url": "https://protolume.pl/kontakt",
+                "availableLanguage": "pl-PL",
+                "email": "kontakt@protolume.pl"
+              }
+            },
+            {
+              "@id": "https://protolume.pl#website",
+              "@type": "WebSite",
+              "name": "Protolume",
+              "url": "https://protolume.pl",
+              "inLanguage": "pl-PL",
+              "publisher": {
+                "@id": "https://protolume.pl#professional-service"
+              }
+            },
+            {
+              "@id": "https://protolume.pl/rozwiazania/integracje-whatsapp-crm#service",
+              "@type": "Service",
+              "name": "Integracje WhatsApp i CRM",
+              "description": "Łączymy WhatsApp, CRM, e-mail i formularze w jeden kontrolowany proces obsługi spraw z jasnym momentem przekazania do człowieka.",
+              "url": "https://protolume.pl/rozwiazania/integracje-whatsapp-crm",
+              "inLanguage": "pl-PL",
+              "provider": {
+                "@id": "https://protolume.pl#professional-service"
+              },
+              "serviceType": "Integracje WhatsApp i CRM"
+            },
+            {
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Strona główna",
+                  "item": "https://protolume.pl"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Rozwiązania",
+                  "item": "https://protolume.pl/rozwiazania"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "Kanały obsługi",
+                  "item": "https://protolume.pl/rozwiazania/integracje-whatsapp-crm"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "words": 3138
+    },
+    {
+      "route": "/rozwiazania/systemy-agentowe",
+      "title": "Systemy agentowe | Protolume",
+      "description": "Budujemy wieloetapowe przepływy AI, które zbierają dane, wykonują operacje i przekazują decyzję człowiekowi w krytycznym punkcie. Protolume.",
+      "canonical": "https://protolume.pl/rozwiazania/systemy-agentowe",
+      "robots": "index, follow",
+      "og": "https://protolume.pl/rozwiazania/systemy-agentowe",
+      "image": "https://protolume.pl/assets/protolume-social-preview.png",
+      "h1": [
+        "Systemy agentowe"
+      ],
+      "schema": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@id": "https://protolume.pl#founder",
+              "@type": "Person",
+              "name": "Piotr Barabasz",
+              "jobTitle": "Właściciel i odpowiedzialny partner techniczny",
+              "description": "Prowadzę analizę procesu, decyzje techniczne, realizację, testy i odbiór ustalonego zakresu."
+            },
+            {
+              "@id": "https://protolume.pl#professional-service",
+              "@type": "ProfessionalService",
+              "name": "Protolume",
+              "url": "https://protolume.pl",
+              "description": "Samodzielnie prowadzone studio: studio wdrożeń ai i automatyzacji.",
+              "logo": "https://protolume.pl/assets/protolume-logo-horizontal-dark.svg",
+              "founder": {
+                "@id": "https://protolume.pl#founder"
+              },
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "contactType": "sales",
+                "url": "https://protolume.pl/kontakt",
+                "availableLanguage": "pl-PL",
+                "email": "kontakt@protolume.pl"
+              }
+            },
+            {
+              "@id": "https://protolume.pl#website",
+              "@type": "WebSite",
+              "name": "Protolume",
+              "url": "https://protolume.pl",
+              "inLanguage": "pl-PL",
+              "publisher": {
+                "@id": "https://protolume.pl#professional-service"
+              }
+            },
+            {
+              "@id": "https://protolume.pl/rozwiazania/systemy-agentowe#service",
+              "@type": "Service",
+              "name": "Systemy agentowe",
+              "description": "Budujemy wieloetapowe przepływy AI, które zbierają dane, wykonują operacje i przekazują decyzję człowiekowi w krytycznym punkcie.",
+              "url": "https://protolume.pl/rozwiazania/systemy-agentowe",
+              "inLanguage": "pl-PL",
+              "provider": {
+                "@id": "https://protolume.pl#professional-service"
+              },
+              "serviceType": "Systemy agentowe"
+            },
+            {
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Strona główna",
+                  "item": "https://protolume.pl"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Rozwiązania",
+                  "item": "https://protolume.pl/rozwiazania"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "Wieloetapowe zadania",
+                  "item": "https://protolume.pl/rozwiazania/systemy-agentowe"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "words": 3040
+    },
+    {
+      "route": "/dla-software-house",
+      "title": "Partner AI dla software house’ów i MSP | Protolume",
+      "description": "Wsparcie software house’ów i MSP w realizacji modułów AI, automatyzacji, RAG, systemów agentowych i integracji API.",
+      "canonical": "https://protolume.pl/dla-software-house",
+      "robots": "index, follow",
+      "og": "https://protolume.pl/dla-software-house",
+      "image": "https://protolume.pl/assets/protolume-social-preview.png",
+      "h1": [
+        "Moduły AI i integracje dla software house’ów"
+      ],
+      "schema": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@id": "https://protolume.pl#founder",
+              "@type": "Person",
+              "name": "Piotr Barabasz",
+              "jobTitle": "Właściciel i odpowiedzialny partner techniczny",
+              "description": "Prowadzę analizę procesu, decyzje techniczne, realizację, testy i odbiór ustalonego zakresu."
+            },
+            {
+              "@id": "https://protolume.pl#professional-service",
+              "@type": "ProfessionalService",
+              "name": "Protolume",
+              "url": "https://protolume.pl",
+              "description": "Samodzielnie prowadzone studio: studio wdrożeń ai i automatyzacji.",
+              "logo": "https://protolume.pl/assets/protolume-logo-horizontal-dark.svg",
+              "founder": {
+                "@id": "https://protolume.pl#founder"
+              },
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "contactType": "sales",
+                "url": "https://protolume.pl/kontakt",
+                "availableLanguage": "pl-PL",
+                "email": "kontakt@protolume.pl"
+              }
+            },
+            {
+              "@id": "https://protolume.pl#website",
+              "@type": "WebSite",
+              "name": "Protolume",
+              "url": "https://protolume.pl",
+              "inLanguage": "pl-PL",
+              "publisher": {
+                "@id": "https://protolume.pl#professional-service"
+              }
+            },
+            {
+              "@id": "https://protolume.pl/dla-software-house#service",
+              "@type": "Service",
+              "name": "Moduły AI i integracje dla software house’ów",
+              "description": "Wsparcie software house’ów i MSP w realizacji modułów AI, automatyzacji, RAG, systemów agentowych i integracji API.",
+              "url": "https://protolume.pl/dla-software-house",
+              "inLanguage": "pl-PL",
+              "provider": {
+                "@id": "https://protolume.pl#professional-service"
+              },
+              "serviceType": "Wsparcie techniczne AI dla software house’ów i MSP"
+            },
+            {
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Strona główna",
+                  "item": "https://protolume.pl"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Dla software house’ów",
+                  "item": "https://protolume.pl/dla-software-house"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "words": 4587
+    },
+    {
+      "route": "/development",
+      "title": "Wdrożenia aplikacji, API i automatyzacji | Protolume",
+      "description": "Aplikacje webowe, API i integracje dla zespołów. Sprawdź kod projektu własnego, testy i sposób przekazania rozwiązania. Protolume.",
+      "canonical": "https://protolume.pl/development",
+      "robots": "index, follow",
+      "og": "https://protolume.pl/development",
+      "image": "https://protolume.pl/assets/protolume-social-preview.png",
+      "h1": [
+        "Oprogramowanie do codziennej pracy zespołu"
+      ],
+      "schema": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@id": "https://protolume.pl#founder",
+              "@type": "Person",
+              "name": "Piotr Barabasz",
+              "jobTitle": "Właściciel i odpowiedzialny partner techniczny",
+              "description": "Prowadzę analizę procesu, decyzje techniczne, realizację, testy i odbiór ustalonego zakresu."
+            },
+            {
+              "@id": "https://protolume.pl#professional-service",
+              "@type": "ProfessionalService",
+              "name": "Protolume",
+              "url": "https://protolume.pl",
+              "description": "Samodzielnie prowadzone studio: studio wdrożeń ai i automatyzacji.",
+              "logo": "https://protolume.pl/assets/protolume-logo-horizontal-dark.svg",
+              "founder": {
+                "@id": "https://protolume.pl#founder"
+              },
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "contactType": "sales",
+                "url": "https://protolume.pl/kontakt",
+                "availableLanguage": "pl-PL",
+                "email": "kontakt@protolume.pl"
+              }
+            },
+            {
+              "@id": "https://protolume.pl#website",
+              "@type": "WebSite",
+              "name": "Protolume",
+              "url": "https://protolume.pl",
+              "inLanguage": "pl-PL",
+              "publisher": {
+                "@id": "https://protolume.pl#professional-service"
+              }
+            },
+            {
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Strona główna",
+                  "item": "https://protolume.pl"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Aplikacje i integracje",
+                  "item": "https://protolume.pl/development"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "words": 4233
+    },
+    {
+      "route": "/studio",
+      "title": "Piotr Barabasz | Protolume",
+      "description": "Poznaj sposób współpracy z Piotrem Barabaszem oraz sprawdzalne przykłady pracy. Protolume.",
+      "canonical": "https://protolume.pl/studio",
+      "robots": "index, follow",
+      "og": "https://protolume.pl/studio",
+      "image": "https://protolume.pl/assets/protolume-social-preview.png",
+      "h1": [
+        "Piotr Barabasz"
+      ],
+      "schema": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@id": "https://protolume.pl#founder",
+              "@type": "Person",
+              "name": "Piotr Barabasz",
+              "jobTitle": "Właściciel i odpowiedzialny partner techniczny",
+              "description": "Prowadzę analizę procesu, decyzje techniczne, realizację, testy i odbiór ustalonego zakresu."
+            },
+            {
+              "@id": "https://protolume.pl#professional-service",
+              "@type": "ProfessionalService",
+              "name": "Protolume",
+              "url": "https://protolume.pl",
+              "description": "Samodzielnie prowadzone studio: studio wdrożeń ai i automatyzacji.",
+              "logo": "https://protolume.pl/assets/protolume-logo-horizontal-dark.svg",
+              "founder": {
+                "@id": "https://protolume.pl#founder"
+              },
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "contactType": "sales",
+                "url": "https://protolume.pl/kontakt",
+                "availableLanguage": "pl-PL",
+                "email": "kontakt@protolume.pl"
+              }
+            },
+            {
+              "@id": "https://protolume.pl#website",
+              "@type": "WebSite",
+              "name": "Protolume",
+              "url": "https://protolume.pl",
+              "inLanguage": "pl-PL",
+              "publisher": {
+                "@id": "https://protolume.pl#professional-service"
+              }
+            },
+            {
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Strona główna",
+                  "item": "https://protolume.pl"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Studio",
+                  "item": "https://protolume.pl/studio"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "words": 4190
+    },
+    {
+      "route": "/rd",
+      "title": "R&D i eksperymenty | Protolume",
+      "description": "Odtwarzalny eksperyment wyszukiwania: autorskie pytania, metoda, niepowodzenia, pełny wynik i kod. Bez generowania odpowiedzi przez model AI. Protolume.",
+      "canonical": "https://protolume.pl/rd",
+      "robots": "index, follow",
+      "og": "https://protolume.pl/rd",
+      "image": "https://protolume.pl/assets/protolume-social-preview.png",
+      "h1": [
+        "Eksperyment z wynikiem, kodem i ograniczeniami"
+      ],
+      "schema": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@id": "https://protolume.pl#founder",
+              "@type": "Person",
+              "name": "Piotr Barabasz",
+              "jobTitle": "Właściciel i odpowiedzialny partner techniczny",
+              "description": "Prowadzę analizę procesu, decyzje techniczne, realizację, testy i odbiór ustalonego zakresu."
+            },
+            {
+              "@id": "https://protolume.pl#professional-service",
+              "@type": "ProfessionalService",
+              "name": "Protolume",
+              "url": "https://protolume.pl",
+              "description": "Samodzielnie prowadzone studio: studio wdrożeń ai i automatyzacji.",
+              "logo": "https://protolume.pl/assets/protolume-logo-horizontal-dark.svg",
+              "founder": {
+                "@id": "https://protolume.pl#founder"
+              },
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "contactType": "sales",
+                "url": "https://protolume.pl/kontakt",
+                "availableLanguage": "pl-PL",
+                "email": "kontakt@protolume.pl"
+              }
+            },
+            {
+              "@id": "https://protolume.pl#website",
+              "@type": "WebSite",
+              "name": "Protolume",
+              "url": "https://protolume.pl",
+              "inLanguage": "pl-PL",
+              "publisher": {
+                "@id": "https://protolume.pl#professional-service"
+              }
+            },
+            {
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Strona główna",
+                  "item": "https://protolume.pl"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "R&D",
+                  "item": "https://protolume.pl/rd"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "words": 3301
+    },
+    {
+      "route": "/kontakt",
+      "title": "Kontakt i rozmowa wstępna | Protolume",
+      "description": "Krótki formularz do rozmowy o demo w 7 dni, aplikacji, integracji lub automatyzacji. Protolume.",
+      "canonical": "https://protolume.pl/kontakt",
+      "robots": "index, follow",
+      "og": "https://protolume.pl/kontakt",
+      "image": "https://protolume.pl/assets/protolume-social-preview.png",
+      "h1": [
+        "Opisz proces lub potrzebne wsparcie"
+      ],
+      "schema": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@id": "https://protolume.pl#founder",
+              "@type": "Person",
+              "name": "Piotr Barabasz",
+              "jobTitle": "Właściciel i odpowiedzialny partner techniczny",
+              "description": "Prowadzę analizę procesu, decyzje techniczne, realizację, testy i odbiór ustalonego zakresu."
+            },
+            {
+              "@id": "https://protolume.pl#professional-service",
+              "@type": "ProfessionalService",
+              "name": "Protolume",
+              "url": "https://protolume.pl",
+              "description": "Samodzielnie prowadzone studio: studio wdrożeń ai i automatyzacji.",
+              "logo": "https://protolume.pl/assets/protolume-logo-horizontal-dark.svg",
+              "founder": {
+                "@id": "https://protolume.pl#founder"
+              },
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "contactType": "sales",
+                "url": "https://protolume.pl/kontakt",
+                "availableLanguage": "pl-PL",
+                "email": "kontakt@protolume.pl"
+              }
+            },
+            {
+              "@id": "https://protolume.pl#website",
+              "@type": "WebSite",
+              "name": "Protolume",
+              "url": "https://protolume.pl",
+              "inLanguage": "pl-PL",
+              "publisher": {
+                "@id": "https://protolume.pl#professional-service"
+              }
+            },
+            {
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Strona główna",
+                  "item": "https://protolume.pl"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Kontakt",
+                  "item": "https://protolume.pl/kontakt"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "words": 1530
+    },
+    {
+      "route": "/polityka-prywatnosci",
+      "title": "Polityka prywatności | Protolume",
+      "description": "Informacja o przetwarzaniu danych przekazywanych przez formularz kontaktowy. Protolume.",
+      "canonical": "https://protolume.pl/polityka-prywatnosci",
+      "robots": "index, follow",
+      "og": "https://protolume.pl/polityka-prywatnosci",
+      "image": "https://protolume.pl/assets/protolume-social-preview.png",
+      "h1": [
+        "Informacja o prywatności formularza kontaktowego"
+      ],
+      "schema": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@id": "https://protolume.pl#founder",
+              "@type": "Person",
+              "name": "Piotr Barabasz",
+              "jobTitle": "Właściciel i odpowiedzialny partner techniczny",
+              "description": "Prowadzę analizę procesu, decyzje techniczne, realizację, testy i odbiór ustalonego zakresu."
+            },
+            {
+              "@id": "https://protolume.pl#professional-service",
+              "@type": "ProfessionalService",
+              "name": "Protolume",
+              "url": "https://protolume.pl",
+              "description": "Samodzielnie prowadzone studio: studio wdrożeń ai i automatyzacji.",
+              "logo": "https://protolume.pl/assets/protolume-logo-horizontal-dark.svg",
+              "founder": {
+                "@id": "https://protolume.pl#founder"
+              },
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "contactType": "sales",
+                "url": "https://protolume.pl/kontakt",
+                "availableLanguage": "pl-PL",
+                "email": "kontakt@protolume.pl"
+              }
+            },
+            {
+              "@id": "https://protolume.pl#website",
+              "@type": "WebSite",
+              "name": "Protolume",
+              "url": "https://protolume.pl",
+              "inLanguage": "pl-PL",
+              "publisher": {
+                "@id": "https://protolume.pl#professional-service"
+              }
+            },
+            {
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Strona główna",
+                  "item": "https://protolume.pl"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Polityka prywatności",
+                  "item": "https://protolume.pl/polityka-prywatnosci"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "words": 1564
+    }
+  ],
+  "layout": [
+    {
+      "route": "/",
+      "width": 320,
+      "overflow": false,
+      "height": 7225,
+      "shortSummaries": []
+    },
+    {
+      "route": "/",
+      "width": 360,
+      "overflow": false,
+      "height": 6867,
+      "shortSummaries": []
+    },
+    {
+      "route": "/",
+      "width": 390,
+      "overflow": false,
+      "height": 6545,
+      "shortSummaries": []
+    },
+    {
+      "route": "/",
+      "width": 430,
+      "overflow": false,
+      "height": 6413,
+      "shortSummaries": []
+    },
+    {
+      "route": "/",
+      "width": 768,
+      "overflow": false,
+      "height": 5151,
+      "shortSummaries": []
+    },
+    {
+      "route": "/",
+      "width": 921,
+      "overflow": false,
+      "height": 4591,
+      "shortSummaries": []
+    },
+    {
+      "route": "/",
+      "width": 1024,
+      "overflow": false,
+      "height": 4691,
+      "shortSummaries": []
+    },
+    {
+      "route": "/",
+      "width": 1440,
+      "overflow": false,
+      "height": 5415,
+      "shortSummaries": []
+    },
+    {
+      "route": "/demo-ai",
+      "width": 320,
+      "overflow": false,
+      "height": 5788,
+      "shortSummaries": []
+    },
+    {
+      "route": "/demo-ai",
+      "width": 360,
+      "overflow": false,
+      "height": 5526,
+      "shortSummaries": []
+    },
+    {
+      "route": "/demo-ai",
+      "width": 390,
+      "overflow": false,
+      "height": 5299,
+      "shortSummaries": []
+    },
+    {
+      "route": "/demo-ai",
+      "width": 430,
+      "overflow": false,
+      "height": 5133,
+      "shortSummaries": []
+    },
+    {
+      "route": "/demo-ai",
+      "width": 768,
+      "overflow": false,
+      "height": 4683,
+      "shortSummaries": []
+    },
+    {
+      "route": "/demo-ai",
+      "width": 921,
+      "overflow": false,
+      "height": 4710,
+      "shortSummaries": []
+    },
+    {
+      "route": "/demo-ai",
+      "width": 1024,
+      "overflow": false,
+      "height": 4088,
+      "shortSummaries": []
+    },
+    {
+      "route": "/demo-ai",
+      "width": 1440,
+      "overflow": false,
+      "height": 4654,
+      "shortSummaries": []
+    },
+    {
+      "route": "/przyklad-demo",
+      "width": 320,
+      "overflow": false,
+      "height": 12454,
+      "shortSummaries": []
+    },
+    {
+      "route": "/przyklad-demo",
+      "width": 360,
+      "overflow": false,
+      "height": 11675,
+      "shortSummaries": []
+    },
+    {
+      "route": "/przyklad-demo",
+      "width": 390,
+      "overflow": false,
+      "height": 11267,
+      "shortSummaries": []
+    },
+    {
+      "route": "/przyklad-demo",
+      "width": 430,
+      "overflow": false,
+      "height": 10973,
+      "shortSummaries": []
+    },
+    {
+      "route": "/przyklad-demo",
+      "width": 768,
+      "overflow": false,
+      "height": 9096,
+      "shortSummaries": []
+    },
+    {
+      "route": "/przyklad-demo",
+      "width": 921,
+      "overflow": false,
+      "height": 8981,
+      "shortSummaries": []
+    },
+    {
+      "route": "/przyklad-demo",
+      "width": 1024,
+      "overflow": false,
+      "height": 8968,
+      "shortSummaries": []
+    },
+    {
+      "route": "/przyklad-demo",
+      "width": 1440,
+      "overflow": false,
+      "height": 7046,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania",
+      "width": 320,
+      "overflow": false,
+      "height": 3548,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania",
+      "width": 360,
+      "overflow": false,
+      "height": 3478,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania",
+      "width": 390,
+      "overflow": false,
+      "height": 3293,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania",
+      "width": 430,
+      "overflow": false,
+      "height": 3263,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania",
+      "width": 768,
+      "overflow": false,
+      "height": 2551,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania",
+      "width": 921,
+      "overflow": false,
+      "height": 2422,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania",
+      "width": 1024,
+      "overflow": false,
+      "height": 2396,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania",
+      "width": 1440,
+      "overflow": false,
+      "height": 2594,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/chatbot-ai-dla-firm",
+      "width": 320,
+      "overflow": false,
+      "height": 7096,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/chatbot-ai-dla-firm",
+      "width": 360,
+      "overflow": false,
+      "height": 6710,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/chatbot-ai-dla-firm",
+      "width": 390,
+      "overflow": false,
+      "height": 6400,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/chatbot-ai-dla-firm",
+      "width": 430,
+      "overflow": false,
+      "height": 6250,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/chatbot-ai-dla-firm",
+      "width": 768,
+      "overflow": false,
+      "height": 5213,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/chatbot-ai-dla-firm",
+      "width": 921,
+      "overflow": false,
+      "height": 5080,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/chatbot-ai-dla-firm",
+      "width": 1024,
+      "overflow": false,
+      "height": 5182,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/chatbot-ai-dla-firm",
+      "width": 1440,
+      "overflow": false,
+      "height": 5860,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/voice-ai-dla-firm",
+      "width": 320,
+      "overflow": false,
+      "height": 6865,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/voice-ai-dla-firm",
+      "width": 360,
+      "overflow": false,
+      "height": 6574,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/voice-ai-dla-firm",
+      "width": 390,
+      "overflow": false,
+      "height": 6328,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/voice-ai-dla-firm",
+      "width": 430,
+      "overflow": false,
+      "height": 6211,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/voice-ai-dla-firm",
+      "width": 768,
+      "overflow": false,
+      "height": 5036,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/voice-ai-dla-firm",
+      "width": 921,
+      "overflow": false,
+      "height": 4726,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/voice-ai-dla-firm",
+      "width": 1024,
+      "overflow": false,
+      "height": 4785,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/voice-ai-dla-firm",
+      "width": 1440,
+      "overflow": false,
+      "height": 5405,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/automatyzacja-procesow",
+      "width": 320,
+      "overflow": false,
+      "height": 7041,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/automatyzacja-procesow",
+      "width": 360,
+      "overflow": false,
+      "height": 6645,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/automatyzacja-procesow",
+      "width": 390,
+      "overflow": false,
+      "height": 6177,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/automatyzacja-procesow",
+      "width": 430,
+      "overflow": false,
+      "height": 6202,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/automatyzacja-procesow",
+      "width": 768,
+      "overflow": false,
+      "height": 5050,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/automatyzacja-procesow",
+      "width": 921,
+      "overflow": false,
+      "height": 4780,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/automatyzacja-procesow",
+      "width": 1024,
+      "overflow": false,
+      "height": 4877,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/automatyzacja-procesow",
+      "width": 1440,
+      "overflow": false,
+      "height": 5466,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/integracje-whatsapp-crm",
+      "width": 320,
+      "overflow": false,
+      "height": 6897,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/integracje-whatsapp-crm",
+      "width": 360,
+      "overflow": false,
+      "height": 6638,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/integracje-whatsapp-crm",
+      "width": 390,
+      "overflow": false,
+      "height": 6359,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/integracje-whatsapp-crm",
+      "width": 430,
+      "overflow": false,
+      "height": 6298,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/integracje-whatsapp-crm",
+      "width": 768,
+      "overflow": false,
+      "height": 5035,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/integracje-whatsapp-crm",
+      "width": 921,
+      "overflow": false,
+      "height": 4653,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/integracje-whatsapp-crm",
+      "width": 1024,
+      "overflow": false,
+      "height": 4728,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/integracje-whatsapp-crm",
+      "width": 1440,
+      "overflow": false,
+      "height": 5417,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/systemy-agentowe",
+      "width": 320,
+      "overflow": false,
+      "height": 6834,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/systemy-agentowe",
+      "width": 360,
+      "overflow": false,
+      "height": 6580,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/systemy-agentowe",
+      "width": 390,
+      "overflow": false,
+      "height": 6137,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/systemy-agentowe",
+      "width": 430,
+      "overflow": false,
+      "height": 6075,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/systemy-agentowe",
+      "width": 768,
+      "overflow": false,
+      "height": 5105,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/systemy-agentowe",
+      "width": 921,
+      "overflow": false,
+      "height": 4709,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/systemy-agentowe",
+      "width": 1024,
+      "overflow": false,
+      "height": 4833,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rozwiazania/systemy-agentowe",
+      "width": 1440,
+      "overflow": false,
+      "height": 5356,
+      "shortSummaries": []
+    },
+    {
+      "route": "/dla-software-house",
+      "width": 320,
+      "overflow": false,
+      "height": 6459,
+      "shortSummaries": []
+    },
+    {
+      "route": "/dla-software-house",
+      "width": 360,
+      "overflow": false,
+      "height": 6114,
+      "shortSummaries": []
+    },
+    {
+      "route": "/dla-software-house",
+      "width": 390,
+      "overflow": false,
+      "height": 5870,
+      "shortSummaries": []
+    },
+    {
+      "route": "/dla-software-house",
+      "width": 430,
+      "overflow": false,
+      "height": 5721,
+      "shortSummaries": []
+    },
+    {
+      "route": "/dla-software-house",
+      "width": 768,
+      "overflow": false,
+      "height": 4820,
+      "shortSummaries": []
+    },
+    {
+      "route": "/dla-software-house",
+      "width": 921,
+      "overflow": false,
+      "height": 4857,
+      "shortSummaries": []
+    },
+    {
+      "route": "/dla-software-house",
+      "width": 1024,
+      "overflow": false,
+      "height": 4337,
+      "shortSummaries": []
+    },
+    {
+      "route": "/dla-software-house",
+      "width": 1440,
+      "overflow": false,
+      "height": 4823,
+      "shortSummaries": []
+    },
+    {
+      "route": "/development",
+      "width": 320,
+      "overflow": false,
+      "height": 6860,
+      "shortSummaries": []
+    },
+    {
+      "route": "/development",
+      "width": 360,
+      "overflow": false,
+      "height": 6393,
+      "shortSummaries": []
+    },
+    {
+      "route": "/development",
+      "width": 390,
+      "overflow": false,
+      "height": 6163,
+      "shortSummaries": []
+    },
+    {
+      "route": "/development",
+      "width": 430,
+      "overflow": false,
+      "height": 6115,
+      "shortSummaries": []
+    },
+    {
+      "route": "/development",
+      "width": 768,
+      "overflow": false,
+      "height": 5227,
+      "shortSummaries": []
+    },
+    {
+      "route": "/development",
+      "width": 921,
+      "overflow": false,
+      "height": 5287,
+      "shortSummaries": []
+    },
+    {
+      "route": "/development",
+      "width": 1024,
+      "overflow": false,
+      "height": 4410,
+      "shortSummaries": []
+    },
+    {
+      "route": "/development",
+      "width": 1440,
+      "overflow": false,
+      "height": 4832,
+      "shortSummaries": []
+    },
+    {
+      "route": "/studio",
+      "width": 320,
+      "overflow": false,
+      "height": 4652,
+      "shortSummaries": []
+    },
+    {
+      "route": "/studio",
+      "width": 360,
+      "overflow": false,
+      "height": 4421,
+      "shortSummaries": []
+    },
+    {
+      "route": "/studio",
+      "width": 390,
+      "overflow": false,
+      "height": 4236,
+      "shortSummaries": []
+    },
+    {
+      "route": "/studio",
+      "width": 430,
+      "overflow": false,
+      "height": 4071,
+      "shortSummaries": []
+    },
+    {
+      "route": "/studio",
+      "width": 768,
+      "overflow": false,
+      "height": 3570,
+      "shortSummaries": []
+    },
+    {
+      "route": "/studio",
+      "width": 921,
+      "overflow": false,
+      "height": 3439,
+      "shortSummaries": []
+    },
+    {
+      "route": "/studio",
+      "width": 1024,
+      "overflow": false,
+      "height": 2552,
+      "shortSummaries": []
+    },
+    {
+      "route": "/studio",
+      "width": 1440,
+      "overflow": false,
+      "height": 2668,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rd",
+      "width": 320,
+      "overflow": false,
+      "height": 4669,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rd",
+      "width": 360,
+      "overflow": false,
+      "height": 4396,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rd",
+      "width": 390,
+      "overflow": false,
+      "height": 4228,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rd",
+      "width": 430,
+      "overflow": false,
+      "height": 4195,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rd",
+      "width": 768,
+      "overflow": false,
+      "height": 2865,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rd",
+      "width": 921,
+      "overflow": false,
+      "height": 2798,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rd",
+      "width": 1024,
+      "overflow": false,
+      "height": 2856,
+      "shortSummaries": []
+    },
+    {
+      "route": "/rd",
+      "width": 1440,
+      "overflow": false,
+      "height": 3081,
+      "shortSummaries": []
+    },
+    {
+      "route": "/kontakt",
+      "width": 320,
+      "overflow": false,
+      "height": 2852,
+      "shortSummaries": []
+    },
+    {
+      "route": "/kontakt",
+      "width": 360,
+      "overflow": false,
+      "height": 2755,
+      "shortSummaries": []
+    },
+    {
+      "route": "/kontakt",
+      "width": 390,
+      "overflow": false,
+      "height": 2566,
+      "shortSummaries": []
+    },
+    {
+      "route": "/kontakt",
+      "width": 430,
+      "overflow": false,
+      "height": 2477,
+      "shortSummaries": []
+    },
+    {
+      "route": "/kontakt",
+      "width": 768,
+      "overflow": false,
+      "height": 2145,
+      "shortSummaries": []
+    },
+    {
+      "route": "/kontakt",
+      "width": 921,
+      "overflow": false,
+      "height": 1792,
+      "shortSummaries": []
+    },
+    {
+      "route": "/kontakt",
+      "width": 1024,
+      "overflow": false,
+      "height": 1763,
+      "shortSummaries": []
+    },
+    {
+      "route": "/kontakt",
+      "width": 1440,
+      "overflow": false,
+      "height": 1861,
+      "shortSummaries": []
+    },
+    {
+      "route": "/polityka-prywatnosci",
+      "width": 320,
+      "overflow": false,
+      "height": 3765,
+      "shortSummaries": []
+    },
+    {
+      "route": "/polityka-prywatnosci",
+      "width": 360,
+      "overflow": false,
+      "height": 3667,
+      "shortSummaries": []
+    },
+    {
+      "route": "/polityka-prywatnosci",
+      "width": 390,
+      "overflow": false,
+      "height": 3474,
+      "shortSummaries": []
+    },
+    {
+      "route": "/polityka-prywatnosci",
+      "width": 430,
+      "overflow": false,
+      "height": 3317,
+      "shortSummaries": []
+    },
+    {
+      "route": "/polityka-prywatnosci",
+      "width": 768,
+      "overflow": false,
+      "height": 3093,
+      "shortSummaries": []
+    },
+    {
+      "route": "/polityka-prywatnosci",
+      "width": 921,
+      "overflow": false,
+      "height": 3117,
+      "shortSummaries": []
+    },
+    {
+      "route": "/polityka-prywatnosci",
+      "width": 1024,
+      "overflow": false,
+      "height": 3169,
+      "shortSummaries": []
+    },
+    {
+      "route": "/polityka-prywatnosci",
+      "width": 1440,
+      "overflow": false,
+      "height": 3291,
+      "shortSummaries": []
+    }
+  ],
+  "checkedInternalLinks": [
+    "/#main-content",
+    "/",
+    "/rozwiazania",
+    "/demo-ai",
+    "/development",
+    "/dla-software-house",
+    "/studio",
+    "/kontakt?projectType=mvp_prototype",
+    "/demo-ai#interactive-demo",
+    "/przyklad-demo",
+    "/rozwiazania/automatyzacja-procesow",
+    "/rozwiazania/chatbot-ai-dla-firm",
+    "/rozwiazania/voice-ai-dla-firm",
+    "/rozwiazania/integracje-whatsapp-crm",
+    "/rozwiazania/systemy-agentowe",
+    "/rd",
+    "/kontakt",
+    "/polityka-prywatnosci",
+    "/kontakt?projectType=rag_chatbot_demo",
+    "/assets/evidence/protolume-raport-demo.pdf",
+    "/przyklad-demo#scenarios-title",
+    "/przyklad-demo#scope-title",
+    "/przyklad-demo#risks-title",
+    "/przyklad-demo#plan-title",
+    "/kontakt?projectType=business_process_automation",
+    "/kontakt?projectType=rag_chatbot_demo&service=rag",
+    "/rozwiazania/chatbot-ai-dla-firm#rag-source-example",
+    "/rozwiazania/chatbot-ai-dla-firm#rag-source-simulation",
+    "/assets/rag/protolume-materials-v1.json",
+    "/rozwiazania#asystent-wiedzy",
+    "/kontakt?projectType=voice_agent_demo&service=voice",
+    "/rozwiazania#panel-operacyjny",
+    "/kontakt?projectType=business_process_automation&service=automation",
+    "/rozwiazania#automatyzacja-wiadomosci-i-dokumentow",
+    "/kontakt?projectType=whatsapp_agent_management&service=whatsapp",
+    "/rozwiazania#integracje-kanalow",
+    "/kontakt?projectType=ai_automation&service=agents",
+    "/rozwiazania#system-agentowy",
+    "/kontakt?projectType=software_house_partnership",
+    "/dla-software-house#przyklad-techniczny",
+    "/assets/evidence/engineering-0d38ef8/frontend--src--app--features--contact--contact-form.component.ts.txt",
+    "/assets/evidence/engineering-0d38ef8/backend--app--api--contact.py.txt",
+    "/assets/evidence/engineering-0d38ef8/backend--tests--integration--test_contact_delivery.py.txt",
+    "/assets/evidence/engineering-0d38ef8/backend--Dockerfile.txt",
+    "/assets/evidence/engineering-0d38ef8/infra--gcp--cloudbuild.pr-checks.yaml.txt",
+    "/assets/evidence/engineering-0d38ef8/docs--gcp-runbook.md.txt",
+    "/assets/evidence/engineering-0d38ef8/protolume-api.zip",
+    "/assets/evidence/protolume-engineering.md",
+    "/assets/evidence/engineering-0d38ef8/pr-56-hydration.patch",
+    "/assets/evidence/engineering-0d38ef8/source-manifest.json",
+    "/kontakt?projectType=custom_web_app",
+    "/development#przyklad-techniczny",
+    "/studio#evidence-title",
+    "/rd#eksperyment-wyszukiwania",
+    "/kontakt?projectType=backend_api",
+    "/assets/evidence/retrieval-9bbe8d5/lexical-experiment.zip",
+    "/assets/evidence/retrieval-9bbe8d5/observation.json",
+    "/assets/evidence/retrieval-9bbe8d5/README.md",
+    "/assets/evidence/retrieval-9bbe8d5/manifest.json",
+    "/assets/protolume-social-preview.png"
+  ],
+  "reflow": [
+    {
+      "route": "/",
+      "cssViewport": 720,
+      "deviceScaleFactor": 2,
+      "overflow": false
+    },
+    {
+      "route": "/demo-ai",
+      "cssViewport": 720,
+      "deviceScaleFactor": 2,
+      "overflow": false
+    },
+    {
+      "route": "/przyklad-demo",
+      "cssViewport": 720,
+      "deviceScaleFactor": 2,
+      "overflow": false
+    },
+    {
+      "route": "/rozwiazania",
+      "cssViewport": 720,
+      "deviceScaleFactor": 2,
+      "overflow": false
+    },
+    {
+      "route": "/rozwiazania/chatbot-ai-dla-firm",
+      "cssViewport": 720,
+      "deviceScaleFactor": 2,
+      "overflow": false
+    },
+    {
+      "route": "/rozwiazania/voice-ai-dla-firm",
+      "cssViewport": 720,
+      "deviceScaleFactor": 2,
+      "overflow": false
+    },
+    {
+      "route": "/rozwiazania/automatyzacja-procesow",
+      "cssViewport": 720,
+      "deviceScaleFactor": 2,
+      "overflow": false
+    },
+    {
+      "route": "/rozwiazania/integracje-whatsapp-crm",
+      "cssViewport": 720,
+      "deviceScaleFactor": 2,
+      "overflow": false
+    },
+    {
+      "route": "/rozwiazania/systemy-agentowe",
+      "cssViewport": 720,
+      "deviceScaleFactor": 2,
+      "overflow": false
+    },
+    {
+      "route": "/dla-software-house",
+      "cssViewport": 720,
+      "deviceScaleFactor": 2,
+      "overflow": false
+    },
+    {
+      "route": "/development",
+      "cssViewport": 720,
+      "deviceScaleFactor": 2,
+      "overflow": false
+    },
+    {
+      "route": "/studio",
+      "cssViewport": 720,
+      "deviceScaleFactor": 2,
+      "overflow": false
+    },
+    {
+      "route": "/rd",
+      "cssViewport": 720,
+      "deviceScaleFactor": 2,
+      "overflow": false
+    },
+    {
+      "route": "/kontakt",
+      "cssViewport": 720,
+      "deviceScaleFactor": 2,
+      "overflow": false
+    },
+    {
+      "route": "/polityka-prywatnosci",
+      "cssViewport": 720,
+      "deviceScaleFactor": 2,
+      "overflow": false
+    }
+  ],
+  "errors": [],
+  "pdfDownload": true,
+  "true404": true,
+  "nativeMetadata": true,
+  "limitations": [
+    "Emulated twofold pixel density and 720 CSS px, not physical browser zoom or a screen reader certification.",
+    "No real contact message, calendar event, model call or deployment performed."
+  ]
+}

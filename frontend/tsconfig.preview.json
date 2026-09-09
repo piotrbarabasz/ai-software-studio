@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": { "outDir": "./out-tsc/preview", "types": [] },
+  "files": ["src/preview/main.ts"],
+  "include": ["src/**/*.d.ts"]
+}

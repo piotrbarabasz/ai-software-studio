@@ -1,0 +1,68 @@
+@if (example; as item) {
+  <section class="artifact">
+    <header>
+      <h2>{{ item.title }}</h2>
+      <p class="artifact-label">
+        {{
+          item.review.origin === 'fixture'
+            ? 'Test techniczny odtwarzacza — nie jest nagraniem Voice AI.'
+            : 'Nagranie demonstracyjnego systemu'
+        }}
+      </p>
+      <p>{{ item.review.provenance }}</p>
+      <p>{{ item.editingNote }}</p>
+      <p>Data {{ item.review.recordedOn }} · wersja {{ item.review.version }}</p>
+    </header>
+    <div class="artifact-columns">
+      <div>
+        <audio
+          controls
+          preload="none"
+          [src]="item.audioPath"
+          [attr.aria-label]="item.title"
+          (error)="audioFailed = true"
+        >
+          Twoja przeglądarka nie obsługuje audio. Transkrypcja znajduje się poniżej.
+        </audio>
+        @if (audioFailed) {
+          <p role="status">
+            Nie udało się odtworzyć nagrania. Pełna transkrypcja i rezultat są nadal dostępne
+            poniżej.
+          </p>
+        }
+        <h3>Transkrypcja</h3>
+        <ol class="transcript" role="list">
+          @for (segment of item.transcript; track segment.id) {
+            <li>
+              <p>
+                <strong>{{ timestamp(segment.startSeconds) }} · {{ segment.speaker }}</strong>
+              </p>
+              <p>{{ segment.text }}</p>
+            </li>
+          }
+        </ol>
+      </div>
+      <div>
+        <h3>Rezultat dla pracownika</h3>
+        <dl>
+          @for (field of item.result; track $index) {
+            <dt>{{ field.label }}</dt>
+            <dd>
+              {{ field.value }}
+              <details>
+                <summary>Fragment rozmowy</summary>
+                <p>{{ sourceText(field.segmentId) }}</p>
+              </details>
+            </dd>
+          }
+        </dl>
+        @if (item.handoff; as handoff) {
+          <h3>Przekazanie człowiekowi</h3>
+          <p>{{ handoff.reason }}</p>
+          <p>{{ sourceText(handoff.segmentId) }}</p>
+        }
+      </div>
+    </div>
+    <p>{{ item.review.limitations }}</p>
+  </section>
+}

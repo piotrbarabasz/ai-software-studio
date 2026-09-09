@@ -1,0 +1,8 @@
+{
+  "pages": 4,
+  "requiredContentMatches": true,
+  "selectablePolishText": true,
+  "renderEngine": "PyMuPDF 1.28.2",
+  "renderNote": "Poppler unavailable locally; reviewed all four rendered page PNGs",
+  "visualReviewRequiredAfterEveryRegeneration": true
+}

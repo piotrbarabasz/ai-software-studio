@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-
 import { PartnerPageComponent } from './partner-page.component';
 
 describe('PartnerPageComponent', () => {
@@ -10,54 +9,42 @@ describe('PartnerPageComponent', () => {
       providers: [provideRouter([])],
     }).compileComponents();
   });
-
-  it('renders the dedicated B2B offer with one heading and the scoped contact CTA', () => {
+  it('keeps the partner inquiry and puts real source files before cooperation terms', () => {
     const fixture = TestBed.createComponent(PartnerPageComponent);
     fixture.detectChanges();
     const element: HTMLElement = fixture.nativeElement;
-
     expect(element.querySelectorAll('h1')).toHaveSize(1);
-    expect(element.querySelector('h1')?.textContent?.trim()).toBe(
-      'Partner techniczny AI dla software house’ów i MSP',
-    );
-    expect(element.textContent).toContain('Współpraca B2B');
-    expect(element.textContent).toContain('jako podwykonawca, partner white-label');
     expect(
-      element.querySelector('a[href="/kontakt?projectType=software_house_partnership"]'),
+      element.querySelector('a[href="/kontakt?projectType=software_house_partnership"]')
+        ?.textContent,
+    ).toContain('Opisz moduł');
+    expect(
+      element.querySelector('a[href="/dla-software-house#przyklad-techniczny"]'),
     ).not.toBeNull();
-    expect(element.querySelector('a[href="/dla-software-house#zakres-techniczny"]')).not.toBeNull();
+    expect(element.querySelector('#zakres-techniczny')).not.toBeNull();
+    expect(
+      element
+        .querySelector('#przyklad-techniczny')!
+        .compareDocumentPosition(element.querySelector('.rules-section')!) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(element.textContent).toContain('dostawców zarządzanych usług IT (MSP)');
+    expect(element.textContent).toContain('white-label');
+    expect(element.textContent).toContain('review');
+    expect(element.textContent).toContain('deployment');
   });
-
-  it('shows the complete technical scope, cooperation models, rules and FAQ', () => {
+  it('offers a code review and handover without presenting simulation as engineering proof', () => {
     const fixture = TestBed.createComponent(PartnerPageComponent);
     fixture.detectChanges();
     const element: HTMLElement = fixture.nativeElement;
-
-    expect(element.querySelectorAll('.hero-panel li')).toHaveSize(4);
-    expect(element.querySelectorAll('.scope-list li')).toHaveSize(5);
-    expect(element.querySelectorAll('.model-card')).toHaveSize(3);
-    expect(element.querySelectorAll('.rules-list li')).toHaveSize(5);
     expect(element.querySelectorAll('.faq-list details')).toHaveSize(5);
-    expect(element.textContent).toContain('Systemy agentowe z kontrolą człowieka');
-    expect(element.textContent).toContain('Technical discovery i demo');
-    expect(element.textContent).toContain('Zasady poufności');
-    expect(element.textContent).toContain('Czy współpraca może być white-label?');
-  });
-
-  it('links only to the verified demo, report and Studio evidence without unsupported claims', () => {
-    const fixture = TestBed.createComponent(PartnerPageComponent);
-    fixture.detectChanges();
-    const element: HTMLElement = fixture.nativeElement;
-    const evidencePaths = Array.from(
-      element.querySelectorAll<HTMLAnchorElement>('.evidence-links a'),
-      (link) => link.getAttribute('href'),
+    expect(element.querySelector('a[download="pr-56-hydration.patch"]')).not.toBeNull();
+    expect(element.querySelector('a[download="protolume-engineering.md"]')).not.toBeNull();
+    expect(element.textContent).toContain('Projekt własny');
+    expect(element.textContent).not.toContain('Uruchom działające demo');
+    expect(element.textContent).not.toMatch(
+      /zawsze podpisujemy NDA|nie przejmujemy klientów|nasi klienci/i,
     );
-    const text = element.textContent ?? '';
-
-    expect(evidencePaths).toEqual(['/demo-ai', '/przyklad-demo', '/studio']);
-    expect(element.querySelector('img')).toBeNull();
-    expect(text).not.toMatch(/nasi klienci|testimonial|zrealizowanych wdrożeń/i);
-    expect(text).not.toMatch(/zawsze podpisujemy NDA|nie przejmujemy klientów/i);
-    expect(text).not.toMatch(/\b\d+\s*(?:zł|PLN|EUR|USD|godzin)/i);
+    expect(element.querySelector('img,app-voice-example,app-agent-trace')).toBeNull();
   });
 });

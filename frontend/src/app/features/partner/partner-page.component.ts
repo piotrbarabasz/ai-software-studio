@@ -3,10 +3,11 @@ import { RouterLink } from '@angular/router';
 
 import { siteContent } from '../../core/content/site.pl';
 import { RevealOnScrollDirective } from '../../shared/reveal/reveal-on-scroll.directive';
+import { EngineeringArtifactComponent } from '../../shared/engineering-artifact.component';
 
 @Component({
   selector: 'app-partner-page',
-  imports: [RevealOnScrollDirective, RouterLink],
+  imports: [RevealOnScrollDirective, RouterLink, EngineeringArtifactComponent],
   templateUrl: './partner-page.component.html',
   styleUrl: './partner-page.component.scss',
   changeDetection: ChangeDetectionStrategy.Eager,

@@ -1,0 +1,74 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+.artifact,
+header {
+  display: grid;
+  gap: 1rem;
+}
+.artifact-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem;
+}
+.artifact-columns > div {
+  min-width: 0;
+}
+h2,
+h3,
+p,
+dl {
+  margin: 0 0 0.75rem;
+}
+.artifact-label,
+dt {
+  font-weight: 750;
+}
+.artifact-result {
+  padding: 1.25rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-panel);
+  background: var(--surface);
+}
+audio {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  margin-bottom: 1.25rem;
+}
+.transcript,
+.trace-steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.transcript > li,
+.trace-steps > li {
+  margin-bottom: 1rem;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 0.75rem;
+}
+dt {
+  margin-top: 1rem;
+}
+dd {
+  margin: 0 0 1rem;
+}
+summary {
+  min-height: 44px;
+  padding-block: 0.65rem;
+  cursor: pointer;
+  font-weight: 700;
+}
+p,
+li,
+dd,
+summary {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 760px) {
+  .artifact-columns {
+    grid-template-columns: 1fr;
+  }
+}

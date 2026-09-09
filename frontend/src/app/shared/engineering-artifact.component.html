@@ -1,0 +1,52 @@
+<section id="przyklad-techniczny" class="engineering-artifact" aria-labelledby="engineering-title">
+  <header>
+    <p class="eyebrow">Kod, który możesz sprawdzić</p>
+    <h2 id="engineering-title">{{ artifact.title }}</h2>
+    <app-evidence-label [item]="evidence" />
+    <p class="artifact-lead">{{ artifact.lead }}</p>
+  </header>
+  <ol class="artifact-flow" aria-label="Przepływ danych w kodzie" role="list">
+    @for (step of artifact.flow; track step.title; let index = $index) {
+      <li>
+        <span aria-hidden="true">0{{ index + 1 }}</span>
+        <div>
+          <h3>{{ step.title }}</h3>
+          <p>{{ step.description }}</p>
+        </div>
+      </li>
+    }
+  </ol>
+  <details class="source-files">
+    <summary>Przejrzyj 6 plików: formularz, API, testy i utrzymanie</summary>
+    <ul class="artifact-files" role="list">
+      @for (file of artifact.files; track file.href) {
+        <li>
+          <h3>{{ file.title }}</h3>
+          <p>{{ file.description }}</p>
+          <a [href]="file.href">{{ file.label }} <span class="link-host">· plik źródłowy</span></a>
+        </li>
+      }
+    </ul>
+  </details>
+  <div class="artifact-actions">
+    <a [href]="artifact.archive" download="protolume-api.zip"
+      >Pobierz API, testy i instrukcję (.zip)</a
+    >
+    <a [href]="artifact.instructions" download="protolume-engineering.md"
+      >Pobierz instrukcję i mapę plików (.md)</a
+    >
+    <a [href]="artifact.pullRequest" download="pr-56-hydration.patch"
+      >Pobierz fragment PR #56 (.patch)</a
+    >
+  </div>
+  <details>
+    <summary>Wersja źródeł i zakres przykładu</summary>
+    <p>{{ artifact.limitation }}</p>
+    <p>
+      Przegląd źródeł: {{ artifact.reviewedOn }}.
+      <a [href]="artifact.manifest"
+        >Wersja kodu {{ artifact.revision.slice(0, 7) }} i sumy kontrolne</a
+      >.
+    </p>
+  </details>
+</section>

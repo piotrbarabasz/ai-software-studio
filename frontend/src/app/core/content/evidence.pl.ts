@@ -1,5 +1,7 @@
 import type { EvidenceClassification, WorkEvidence } from './site-content.types';
 import documentSource from '../../../assets/rag/protolume-materials-v1.json';
+import { engineeringArtifact } from './engineering-artifact.pl';
+import { demoReportContent } from './demo-report.pl';
 
 export const evidenceLabels: Readonly<Record<EvidenceClassification, string>> = {
   simulation: 'Symulacja',
@@ -74,8 +76,8 @@ export const evidenceRegistry: readonly WorkEvidence[] = [
     classification: 'simulation',
     services: ['automation'],
     dataOrigin: 'Fikcyjny scenariusz zapytania produktowego i przykładowe kryteria decyzji.',
-    reviewedOn: '2026-09-08',
-    version: 'decision-report-v1',
+    reviewedOn: '2026-09-09',
+    version: demoReportContent.version,
     confirmedScope: 'Struktura rezultatu etapu: zakres, scenariusze, ryzyka i rekomendacja.',
     metrics: [],
     publication: 'published',
@@ -96,25 +98,30 @@ export const evidenceRegistry: readonly WorkEvidence[] = [
     id: 'studio-application',
     classification: 'own-project',
     services: ['development'],
-    dataOrigin: 'Własna aplikacja Protolume i jej publiczna treść.',
-    reviewedOn: '2026-09-08',
-    version: 'studio-application-v1',
-    confirmedScope: 'Wielostronicowy interfejs, formularz z walidacją i lokalna symulacja.',
+    dataOrigin: 'Własna aplikacja Protolume oraz publiczne repozytorium z mapą kodu i testów.',
+    reviewedOn: engineeringArtifact.reviewedOn,
+    version: engineeringArtifact.revision,
+    confirmedScope: 'Formularz Angular, API FastAPI, testy i konfiguracja uruchomienia.',
     metrics: [],
     publication: 'published',
-    title: 'Protolume jako działająca aplikacja',
-    teaser: 'Sprawdź publiczne strony, nawigację i formularz.',
+    title: 'Protolume: formularz, API i kod projektu',
+    teaser: 'Przejrzyj kod, testy i instrukcję lokalnej weryfikacji.',
     problem: 'Jak połączyć ofertę i obsługę zapytań w jednej aplikacji?',
     built:
       'Aplikacja Angular z API formularza oraz konfiguracją testów i wdrożenia w tym projekcie.',
     verification: [
-      'Przejdź między stronami.',
-      'Sprawdź nawigację klawiaturą.',
-      'Otwórz formularz i jego walidację bez wysyłania danych.',
+      'Otwórz mapę plików.',
+      'Porównaj API z testami dostarczenia.',
+      'Pobierz instrukcję uruchomienia testów.',
     ],
     limitation:
       'Projekt własny. Interfejs nie potwierdza dostarczenia wiadomości ani wyników biznesowych klientów.',
-    liveLink: { kind: 'internal', label: 'Otwórz aplikację', path: '/' },
+    liveLink: {
+      kind: 'internal',
+      label: 'Sprawdź kod i testy',
+      path: '/development',
+      fragment: 'przyklad-techniczny',
+    },
   },
   ragSourceEvidence,
 ];

@@ -37,7 +37,13 @@ describe('DemoExamplePageComponent', () => {
     expect(element.textContent).toContain('Co nadal wymaga walidacji');
     expect(element.querySelector('.risk-grid')).not.toBeNull();
     expect(element.querySelector('.scope-card--limit')).not.toBeNull();
-    expect(element.querySelector('.recommendation-card--main')).not.toBeNull();
+    expect(element.querySelector('.recommendation-card--main')).toBeNull();
+    expect(element.querySelectorAll('a[download="protolume-raport-demo.pdf"]')).toHaveSize(2);
+    expect(element.querySelector('.scenario-count')?.textContent).toContain(
+      'Opisane scenariusze: 3',
+    );
+    expect(element.textContent).toContain('Nie jest wynikiem testu rzeczywistego systemu');
+    expect(element.querySelectorAll('.report-toc a')).toHaveSize(4);
     expect(element.textContent).toContain('Założenia wejściowe');
     expect(element.textContent).toContain('Plan pierwszego etapu');
     expect(element.querySelector('button.print-action')).not.toBeNull();

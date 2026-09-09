@@ -18,6 +18,7 @@ const types = {
   '.svg': 'image/svg+xml',
   '.png': 'image/png',
   '.json': 'application/json',
+  '.txt': 'text/plain; charset=utf-8',
   '.xml': 'application/xml',
   '.pdf': 'application/pdf',
 };

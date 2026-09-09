@@ -8,6 +8,15 @@
 .contact-intro {
   align-self: start;
 }
+.contact-next {
+  margin-top: 1rem;
+}
+.contact-next summary {
+  min-height: 44px;
+  padding-block: 0.65rem;
+  cursor: pointer;
+  font-weight: 700;
+}
 h1 {
   margin: 0;
   font-size: clamp(2.2rem, 5vw, 4rem);
@@ -54,6 +63,9 @@ h1 {
 }
 .direct-email {
   margin-top: 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.4rem;
 }
 
 .noscript-contact {
@@ -76,6 +88,8 @@ h1 {
 @media (max-width: 860px) {
   .contact-page {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding-top: 1.5rem;
   }
 }
 @media (scripting: enabled) {

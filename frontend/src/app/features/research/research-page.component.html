@@ -1,55 +1,144 @@
-<div class="studio-page">
+<div class="studio-page research-focused">
   <section class="hero section-shell" appRevealOnScroll>
     <div class="hero-copy">
       <p class="eyebrow">{{ content.eyebrow }}</p>
       <h1>{{ content.title }}</h1>
       <p class="page-lead">{{ content.lead }}</p>
-      <div class="hero-actions" aria-label="Główne działanie">
+      <div class="hero-actions">
+        <a class="primary-action" routerLink="/rd" fragment="eksperyment-wyszukiwania"
+          >Przejrzyj wynik i metodę</a
+        >
         <a
-          class="primary-action"
+          class="secondary-action"
           routerLink="/kontakt"
           [queryParams]="{ projectType: 'backend_api' }"
           >Omów konkretny problem</a
         >
-        <p class="hero-cta-note">
-          Po wysłaniu opisu ustalimy, czy temat wymaga eksperymentu, demo czy planu prac.
-        </p>
       </div>
     </div>
   </section>
-  <section class="section-shell" aria-labelledby="directions-title" appRevealOnScroll>
-    <div class="section-heading">
-      <p class="eyebrow">Obszary</p>
-      <h2 id="directions-title">Eksperymenty prowadzone z jasno określoną granicą</h2>
-    </div>
-    <div class="card-grid">
-      @for (direction of content.directions; track direction) {
-        <article class="card-surface lab-card info-card" data-card-variant="lab-card">
-          @if (direction.status) {
-            <p class="panel-kicker">
-              {{ content.statusLabels[direction.status] }}
+  <section
+    id="eksperyment-wyszukiwania"
+    class="section-shell experiment"
+    aria-labelledby="experiment-title"
+  >
+    <header>
+      <p class="eyebrow">Eksperyment własny · wyszukiwanie bez modelu AI</p>
+      <h2 id="experiment-title">Czy wspólne słowa wystarczą do znalezienia źródła?</h2>
+    </header>
+    <p class="experiment-status">
+      Pomiar: <time [attr.datetime]="experiment.date">{{ experiment.date }}</time
+      >. Odtworzony z kodu 9 września 2026.
+    </p>
+    <dl class="experiment-metrics">
+      <div>
+        <dt>Przypadki zgodne z oczekiwaniem</dt>
+        <dd>
+          {{ experiment.observation.matchingCases }} / {{ experiment.observation.sampleSize }}
+        </dd>
+      </div>
+      <div>
+        <dt>Pytania z oczekiwanym źródłem</dt>
+        <dd>{{ experiment.sourceMatches }} / {{ experiment.sourceCases }}</dd>
+      </div>
+      <div>
+        <dt>Poprawny brak wyniku poza zakresem</dt>
+        <dd>{{ experiment.outsideMatches }} / {{ experiment.outsideCases }}</dd>
+      </div>
+    </dl>
+    <p>
+      Mały autorski zestaw, bez niezależnego zbioru testowego. Wynik dotyczy pierwszego znalezionego
+      fragmentu lub poprawnego braku wyniku; nie mierzy jakości odpowiedzi AI.
+    </p>
+    <div>
+      <h3>Co nie zadziałało</h3>
+      <ul class="experiment-failures">
+        @for (failure of experiment.failures; track failure.id) {
+          <li>
+            <strong>{{ failure.question }}</strong>
+            <p>
+              Nie znaleziono fragmentu. Oczekiwane źródło: <code>{{ failure.expectedFirst }}</code
+              >.
             </p>
-          }
-          <h3>{{ direction.area }}</h3>
-          <p>{{ direction.problem }}</p>
-          <p><strong>Cel:</strong> {{ direction.goal }}</p>
-          <p><strong>Potencjalna wartość:</strong> {{ direction.potentialBusinessUse }}</p>
-          <p><strong>Granica zastosowania:</strong> {{ direction.claimBoundary }}</p>
-        </article>
-      }
+          </li>
+        }
+      </ul>
+      <p>
+        W tych dwóch parafrazach podobieństwo słów nie wystarczyło. Kolejny krok to porównanie z
+        wyszukiwaniem semantycznym na osobnych pytaniach. Takiego porównania jeszcze nie wykonano.
+      </p>
+    </div>
+    <details>
+      <summary>Hipoteza, dane i ustawienia wyszukiwania</summary>
+      <p>
+        Hipoteza: wspólne słowa wystarczą do wskazania źródła również po przeformułowaniu pytania.
+        Punktem odniesienia jest prosty algorytm leksykalny, bez embeddingów i generowania
+        odpowiedzi.
+      </p>
+      <p>
+        Zbiór: trzy publiczne fragmenty Protolume o symulacji, raporcie i formularzu. Autor
+        przygotował {{ experiment.observation.sampleSize }} pytań oraz oczekiwane identyfikatory.
+        Ten sam niewielki materiał posłużył do opracowania algorytmu i obserwacji jego zachowania.
+      </p>
+      <p>
+        Ustawienia: normalizacja liter i polskich znaków, jawna lista pomijanych słów i początków
+        wyrazów. Próg pokrycia słów pytania: 40%; maksymalnie dwa wyniki. Ranking według liczby
+        wspólnych słów, remis według identyfikatora.
+      </p>
+      <p>
+        Ocena: pierwszy identyfikator musi być zgodny z oczekiwanym; dla pytania spoza zakresu
+        oczekiwany jest pusty wynik. Nie jest to Recall@k ani ocena odpowiedzi modelu.
+      </p>
+      <p>
+        Wywołania modelu: {{ experiment.observation.modelCalls }}. Czas, praca i koszt
+        infrastruktury nie były mierzone. Brak wywołań modelu nie oznacza zerowego kosztu całego
+        eksperymentu.
+      </p>
+    </details>
+    <details>
+      <summary>Odtwórz pomiar i sprawdź jego ograniczenia</summary>
+      <p>
+        Pobierz i rozpakuj paczkę. W Pythonie 3.11 lub nowszym uruchom
+        <code>python run.py --output rerun.json</code>. Nie wymaga kluczy, sieci ani dodatkowych
+        bibliotek.
+      </p>
+      <p>
+        Porównaj wyniki z raportem JSON, pomijając datę uruchomienia i dodane pole wersji źródeł.
+        Paczka zawiera pytania, korpus, algorytm i skrypt oceny z wersji
+        <code>{{ experiment.observation.sourceRevision.slice(0, 7) }}</code
+        >.
+      </p>
+      <p>
+        Nie sprawdzono generowania odpowiedzi, sprzeczności, instrukcji w dokumentach ani jakości na
+        danych klienta. Ten pomiar nie potwierdza skuteczności RAG w produkcji.
+      </p>
+    </details>
+    <div class="experiment-actions">
+      <a class="secondary-action" [href]="experiment.archive" download="lexical-experiment.zip"
+        >Pobierz kod i dane (.zip)</a
+      >
+      <a class="secondary-action" [href]="experiment.report">Wszystkie wyniki (.json)</a>
+      <a class="secondary-action" [href]="experiment.instructions">Instrukcja i metoda (.md)</a>
+      <a class="secondary-action" [href]="experiment.manifest">Wersja i sumy kontrolne</a>
     </div>
   </section>
-  <section
-    class="section-shell section-muted"
-    aria-labelledby="research-contact-title"
-    appRevealOnScroll
-  >
+  <section class="section-shell" aria-labelledby="directions-title">
     <div class="section-heading">
-      <p class="eyebrow">Granica R&D</p>
-      <h2 id="research-contact-title">Wynik eksperymentu nie zawsze jest gotowym produktem</h2>
+      <p class="eyebrow">Dalsze kierunki</p>
+      <h2 id="directions-title">Pytania do kolejnych eksperymentów</h2>
       <p class="page-lead">
-        Jeżeli chcesz omówić konkretny problem biznesowy, zacznij od kontaktu i osobnego zakresu.
+        Poniższe tematy są planami. Nie przedstawiają zakończonych wdrożeń ani potwierdzonych
+        wyników.
       </p>
+    </div>
+    <div class="card-grid">
+      @for (direction of content.directions; track direction.id) {
+        <article class="card-surface lab-card info-card" data-card-variant="lab-card">
+          <p class="panel-kicker">{{ content.statusLabels[direction.status] }}</p>
+          <h3>{{ direction.area }}</h3>
+          <p>{{ direction.goal }}</p>
+        </article>
+      }
     </div>
   </section>
 </div>

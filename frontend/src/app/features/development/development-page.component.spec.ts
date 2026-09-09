@@ -3,54 +3,33 @@ import { provideRouter } from '@angular/router';
 import { DevelopmentPageComponent } from './development-page.component';
 
 describe('DevelopmentPageComponent', () => {
-  it('renders the development page once', async () => {
+  it('puts inspectable work before planning and keeps a direct project inquiry', async () => {
     await TestBed.configureTestingModule({
       imports: [DevelopmentPageComponent],
       providers: [provideRouter([])],
     }).compileComponents();
     const fixture = TestBed.createComponent(DevelopmentPageComponent);
     fixture.detectChanges();
-
-    expect(fixture.nativeElement.querySelectorAll('h1')).toHaveSize(1);
-    expect(fixture.nativeElement.textContent).toContain(
-      'Najpierw potwierdzamy użytkowników, dane i rezultat pierwszego etapu',
-    );
-    expect(fixture.nativeElement.querySelectorAll('.info-card')).toHaveSize(6);
-    expect(fixture.nativeElement.textContent).toContain('Panel operacyjny');
-    expect(fixture.nativeElement.textContent).toContain('Asystent wiedzy');
-    expect(fixture.nativeElement.textContent).toContain('Automatyzacja procesu');
-    const headings = Array.from(
-      fixture.nativeElement.querySelectorAll('h2') as NodeListOf<HTMLElement>,
-      (heading) => heading.textContent?.trim(),
-    );
-    expect(headings.indexOf('Kiedy wdrożenie ma sens')).toBeLessThan(
-      headings.indexOf('Od rozproszonej pracy do konkretnego rezultatu'),
-    );
+    const element: HTMLElement = fixture.nativeElement;
+    expect(element.querySelectorAll('h1')).toHaveSize(1);
+    const proof = element.querySelector('#przyklad-techniczny')!;
+    expect(proof).not.toBeNull();
     expect(
-      fixture.nativeElement.querySelector('a[href="/kontakt?projectType=custom_web_app"]')
+      proof.compareDocumentPosition(element.querySelector('#scope-title')!) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(element.querySelector('a[href="/development#przyklad-techniczny"]')).not.toBeNull();
+    expect(
+      element.querySelector('.hero-copy a[href="/kontakt?projectType=custom_web_app"]')
         ?.textContent,
-    ).toContain('Opisz potrzebę wdrożenia');
-    expect(fixture.nativeElement.textContent).toContain(
-      'Planujesz aplikację, API, integrację albo automatyzację?',
-    );
+    ).toContain('Opisz projekt');
     expect(
-      fixture.nativeElement.querySelector(
-        '.development-cta a[href="/kontakt?projectType=custom_web_app"]',
-      ),
+      element.querySelector('.development-cta a[href="/kontakt?projectType=custom_web_app"]'),
     ).not.toBeNull();
-    expect(
-      fixture.nativeElement.querySelector(
-        '.hero-copy a.primary-action[href="/kontakt?projectType=custom_web_app"]',
-      ),
-    ).not.toBeNull();
-    expect(fixture.nativeElement.querySelector('.hero-copy .hero-cta-note')).not.toBeNull();
-    expect(fixture.nativeElement.querySelectorAll('.readiness-grid li')).toHaveSize(5);
-    expect(fixture.nativeElement.querySelectorAll('.preparation-grid li')).toHaveSize(8);
-    expect(fixture.nativeElement.querySelectorAll('.scope-card')).toHaveSize(2);
-    expect(fixture.nativeElement.textContent).toContain('Pierwszy etap i rzeczy wyceniane osobno');
-    expect(fixture.nativeElement.textContent).toContain('Wycena zależy od potwierdzonego zakresu');
-    expect(fixture.nativeElement.textContent).toContain('bezpieczeństwo oraz dostęp do danych');
-    expect(fixture.nativeElement.textContent).toContain('integracje i odpowiedzialności');
-    expect(fixture.nativeElement.querySelectorAll('.process-list li')).toHaveSize(5);
+    expect(element.querySelectorAll('#scope-title')).toHaveSize(1);
+    expect(element.querySelector('.readiness-grid,.preparation-grid')).toBeNull();
+    expect(element.textContent).toContain('utrzymanie, rozwój i dyżury');
+    expect(element.textContent).toContain('Masz gotową specyfikację?');
+    expect(element.querySelector('app-voice-example,app-agent-trace')).toBeNull();
   });
 });

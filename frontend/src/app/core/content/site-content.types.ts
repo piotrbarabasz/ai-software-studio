@@ -5,7 +5,8 @@ export interface SelectOption<TValue extends string> {
   readonly label: string;
 }
 
-export type ResearchDirectionStatus = 'experiment' | 'prototype' | 'validated-internally';
+export type ResearchDirectionStatus =
+  'planned' | 'experiment' | 'prototype' | 'validated-internally';
 
 export type StaticRoutePath =
   | '/'
@@ -484,13 +485,18 @@ export interface DemoExamplePageContent {
   readonly eyebrow: string;
   readonly title: string;
   readonly fictionalNotice: string;
+  readonly version: string;
+  readonly preparedOn: string;
+  readonly pdfPath: string;
+  readonly pdfLabel: string;
+  readonly scenarioStatusMeaning: string;
   readonly lead: string;
   readonly decisionSummary: {
     readonly status: 'Warunkowe GO do kolejnego etapu';
     readonly answer: string;
-    readonly unknowns: readonly [string, string];
+    readonly conditions: readonly [string, string, string];
+    readonly missingInformation: readonly [string, string, string];
     readonly nextStep: string;
-    readonly note: string;
   };
   readonly validationQuestion: string;
   readonly processTitle: string;
@@ -514,7 +520,7 @@ export interface DemoExamplePageContent {
       readonly input: string;
       readonly expectedBehavior: string;
       readonly demoBehavior: string;
-      readonly status: 'spełnione w demonstracji' | 'wymaga dalszej walidacji';
+      readonly status: 'ścieżka opisana w przykładzie';
     },
     {
       readonly id: string;
@@ -522,7 +528,7 @@ export interface DemoExamplePageContent {
       readonly input: string;
       readonly expectedBehavior: string;
       readonly demoBehavior: string;
-      readonly status: 'spełnione w demonstracji' | 'wymaga dalszej walidacji';
+      readonly status: 'ścieżka opisana w przykładzie';
     },
     {
       readonly id: string;
@@ -530,7 +536,7 @@ export interface DemoExamplePageContent {
       readonly input: string;
       readonly expectedBehavior: string;
       readonly demoBehavior: string;
-      readonly status: 'spełnione w demonstracji' | 'wymaga dalszej walidacji';
+      readonly status: 'ścieżka opisana w przykładzie';
     },
   ];
   readonly acceptanceCriteriaTitle: 'Przykładowe kryteria do uzgodnienia z klientem';
@@ -542,13 +548,6 @@ export interface DemoExamplePageContent {
     readonly mitigation: string;
     readonly verificationMoment: string;
   }[];
-  readonly recommendation: {
-    readonly decision: 'Warunkowe GO';
-    readonly rationale: string;
-    readonly conditions: readonly [string, string, string];
-    readonly missingInformation: readonly [string, string, string];
-    readonly note: string;
-  };
   readonly firstStageTitle: string;
   readonly firstStagePlan: readonly [string, string, string, string, string, string];
   readonly primaryCta: HomeCta;
@@ -645,10 +644,8 @@ export interface DevelopmentPageContent {
   readonly lead: string;
   readonly heroNextStep: string;
   readonly principles: readonly string[];
-  readonly readiness: DevelopmentReadiness;
   readonly outcomesTitle: string;
   readonly outcomes: readonly [DevelopmentOutcome, DevelopmentOutcome, DevelopmentOutcome];
-  readonly preparation: DevelopmentPreparation;
   readonly scope: DevelopmentScope;
   readonly processTitle: string;
   readonly deliverySteps: readonly DevelopmentProcessStep[];
@@ -685,9 +682,6 @@ export interface PartnerPageContent {
   readonly rulesTitle: string;
   readonly rulesLead: string;
   readonly rules: readonly [string, string, string, string, string];
-  readonly evidenceTitle: string;
-  readonly evidenceLead: string;
-  readonly evidenceLinks: readonly [HomeCta, HomeCta, HomeCta];
   readonly faqTitle: string;
   readonly faqs: readonly [
     PartnerFaqItem,
@@ -706,23 +700,9 @@ export interface StudioPageContent {
   readonly eyebrow: string;
   readonly title: string;
   readonly lead: string;
-  readonly principles: readonly string[];
-  readonly capabilities: readonly string[];
   readonly collaboration: {
     readonly title: string;
-    readonly lead: string;
     readonly points: readonly string[];
-  };
-  readonly engagementModel: readonly string[];
-  readonly verification: {
-    readonly eyebrow: string;
-    readonly title: string;
-    readonly lead: string;
-    readonly steps: readonly [string, string, string, string, string];
-    readonly demoCta: HomeCta;
-    readonly reportCta: HomeCta;
-    readonly developmentCta: HomeCta;
-    readonly contactCta: HomeCta;
   };
   readonly ctaLabel: string;
 }
@@ -750,6 +730,7 @@ export interface ContactPageContent {
   readonly nextSteps: readonly [string, string, string];
   readonly noSpecificationNeeded: string;
   readonly messageLabel: string;
+  readonly messageMinimumHint: string;
   readonly additionalInformationLabel: string;
   readonly messageGuidance: {
     readonly generalLabel: string;
