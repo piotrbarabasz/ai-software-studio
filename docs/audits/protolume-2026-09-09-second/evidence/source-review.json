@@ -1,0 +1,183 @@
+{
+  "reviewedMaster": "8ccc20c23c11f32f54d3e677455330e14f4eac3c",
+  "originalProduction": {
+    "totalFiles": 303,
+    "byPurpose": {
+      "config_and_other": 67,
+      "backend_source": 18,
+      "authoring_and_validation_scripts": 21,
+      "tests": 63,
+      "documentation_and_evidence": 12,
+      "frontend_source": 114,
+      "assets_and_fixtures": 8
+    }
+  },
+  "beforePr57": {
+    "totalFiles": 408,
+    "byPurpose": {
+      "config_and_other": 67,
+      "backend_source": 18,
+      "authoring_and_validation_scripts": 26,
+      "tests": 65,
+      "documentation_and_evidence": 102,
+      "frontend_source": 122,
+      "assets_and_fixtures": 8
+    }
+  },
+  "master": {
+    "totalFiles": 542,
+    "byPurpose": {
+      "config_and_other": 68,
+      "backend_source": 26,
+      "authoring_and_validation_scripts": 44,
+      "tests": 78,
+      "documentation_and_evidence": 153,
+      "assets_and_fixtures": 28,
+      "frontend_source": 145
+    }
+  },
+  "sinceOriginalAuditProduction": {
+    "changedFiles": 323,
+    "newFiles": 239,
+    "newFilesByPurpose": {
+      "backend_source": 8,
+      "authoring_and_validation_scripts": 23,
+      "tests": 15,
+      "documentation_and_evidence": 141,
+      "assets_and_fixtures": 20,
+      "frontend_source": 31,
+      "config_and_other": 1
+    },
+    "textLinesAdded": 57028,
+    "textLinesRemoved": 3932,
+    "binaryFilesChanged": 79
+  },
+  "inPr57": {
+    "changedFiles": 178,
+    "newFiles": 134,
+    "newFilesByPurpose": {
+      "backend_source": 8,
+      "authoring_and_validation_scripts": 18,
+      "tests": 13,
+      "documentation_and_evidence": 51,
+      "assets_and_fixtures": 20,
+      "frontend_source": 23,
+      "config_and_other": 1
+    },
+    "textLinesAdded": 11203,
+    "textLinesRemoved": 1011,
+    "binaryFilesChanged": 34
+  },
+  "frontEndScripts": [
+    "frontend/scripts/audit-artifact-preview.cjs",
+    "frontend/scripts/audit-engineering-browser.cjs",
+    "frontend/scripts/audit-final-browser.cjs",
+    "frontend/scripts/audit-home-browser.cjs",
+    "frontend/scripts/audit-hub-browser.cjs",
+    "frontend/scripts/audit-rag-browser.cjs",
+    "frontend/scripts/audit-simulation-browser.cjs",
+    "frontend/scripts/audit-studio-contact-browser.cjs",
+    "frontend/scripts/build_demo_report.py",
+    "frontend/scripts/build_engineering_artifact.py",
+    "frontend/scripts/build_research_artifact.py",
+    "frontend/scripts/check_demo_report.py",
+    "frontend/scripts/cloudbuild-config.test.cjs",
+    "frontend/scripts/demo-report-source.cjs",
+    "frontend/scripts/generate-nginx-security-headers.cjs",
+    "frontend/scripts/generate-nginx-security-headers.test.cjs",
+    "frontend/scripts/generate-seo-artifacts.cjs",
+    "frontend/scripts/nginx-config.test.cjs",
+    "frontend/scripts/partner-browser-smoke.mjs",
+    "frontend/scripts/report-browser-smoke.mjs",
+    "frontend/scripts/script-attributes.cjs",
+    "frontend/scripts/serve-artifact-preview.cjs",
+    "frontend/scripts/serve-audit-artifact.cjs",
+    "frontend/scripts/site-build-utils.cjs",
+    "frontend/scripts/site-build-utils.test.cjs",
+    "frontend/scripts/validate-csp-artifact.cjs",
+    "frontend/scripts/validate-csp-artifact.test.cjs",
+    "frontend/scripts/validate-demo-report.cjs",
+    "frontend/scripts/validate-demo-report.test.cjs",
+    "frontend/scripts/validate-engineering-artifact.cjs",
+    "frontend/scripts/validate-engineering-artifact.test.cjs",
+    "frontend/scripts/validate-preview-isolation.cjs",
+    "frontend/scripts/validate-preview-isolation.test.cjs",
+    "frontend/scripts/validate-production-artifact.cjs",
+    "frontend/scripts/validate-production-artifact.test.cjs",
+    "frontend/scripts/validate-public-legal-config.cjs",
+    "frontend/scripts/validate-public-legal-config.test.cjs",
+    "frontend/scripts/validate-public-site-config.cjs",
+    "frontend/scripts/validate-research-artifact.cjs",
+    "frontend/scripts/validate-research-artifact.test.cjs",
+    "frontend/scripts/validate-seo-artifacts.cjs",
+    "frontend/scripts/validate-site-artifact.cjs",
+    "frontend/scripts/validate-site-artifact.test.cjs",
+    "frontend/scripts/validate-static-routes.cjs",
+    "frontend/scripts/validate-text-encoding.cjs",
+    "frontend/scripts/validate-text-encoding.test.cjs",
+    "frontend/scripts/write-build-legal-config.cjs",
+    "frontend/scripts/write-local-test-legal-config.cjs",
+    "frontend/scripts/write-production-environment.cjs",
+    "frontend/scripts/write-production-environment.test.cjs",
+    "frontend/scripts/write-production-legal-config.cjs",
+    "frontend/scripts/write-production-legal-config.test.cjs"
+  ],
+  "auditDocumentation": [
+    "docs/audits/protolume-2026-09-07/AUDYT.md",
+    "docs/audits/protolume-2026-09-07/BACKLOG.md",
+    "docs/audits/protolume-2026-09-07/BLOCKERS.md",
+    "docs/audits/protolume-2026-09-07/BROWSER_VERIFICATION.md",
+    "docs/audits/protolume-2026-09-07/CASE_STUDY_TEMPLATE.md",
+    "docs/audits/protolume-2026-09-07/COMMERCIAL_AND_CALENDAR_DECISIONS.md",
+    "docs/audits/protolume-2026-09-07/CRM_FOUNDATION.md",
+    "docs/audits/protolume-2026-09-07/DATA_FLOW_MAP.md",
+    "docs/audits/protolume-2026-09-07/DOWODY.md",
+    "docs/audits/protolume-2026-09-07/ENGINEERING_ARTIFACT.md",
+    "docs/audits/protolume-2026-09-07/EVIDENCE_INVENTORY.md",
+    "docs/audits/protolume-2026-09-07/FINAL_IMPLEMENTATION_REPORT.md",
+    "docs/audits/protolume-2026-09-07/IMPLEMENTATION_STATUS.md",
+    "docs/audits/protolume-2026-09-07/RAG_FOUNDATION.md",
+    "docs/audits/protolume-2026-09-07/RESEARCH_AND_MEASUREMENT_PLAN.md",
+    "docs/audits/protolume-2026-09-07/RESEARCH_AND_REPORT_ARTIFACTS.md",
+    "docs/audits/protolume-2026-09-07/RESUME.md",
+    "docs/audits/protolume-2026-09-07/VOICE_AGENT_ARTIFACTS.md"
+  ],
+  "dormantAreas": {
+    "backend/app/rag": {
+      "files": 4,
+      "textLines": 304
+    },
+    "backend/app/crm": {
+      "files": 4,
+      "textLines": 427
+    },
+    "frontend/src/preview": {
+      "files": 2,
+      "textLines": 87
+    },
+    "frontend/src/testing": {
+      "files": 2,
+      "textLines": 119
+    }
+  },
+  "keyFileLines": {
+    "frontend/src/app/core/content/site.pl.ts": 1059,
+    "frontend/src/app/core/content/site-content.types.ts": 840,
+    "frontend/src/app/core/content/demo-artifacts.ts": 233,
+    "frontend/src/app/core/content/evidence.pl.ts": 152,
+    "frontend/scripts/build_demo_report.py": 253,
+    "frontend/scripts/build_engineering_artifact.py": 118,
+    "frontend/scripts/build_research_artifact.py": 109
+  },
+  "credentialPatternCandidates": [],
+  "secretScanLimit": "Selected key formats in current application/config files only; not a full history or secret-manager audit.",
+  "sourceFilesSha256": {
+    "frontend/src/app/core/content/site.pl.ts": "94a909cc71fd68ff8997eb514e199eefc5091774a424f515a9d4a93d57b3efdb",
+    "frontend/src/app/core/content/site-content.types.ts": "1a4f6ae1ce6ab13b8bd86492ee460cccfef7d76a7d8600c490c0c9848c1ee592",
+    "frontend/src/app/core/content/demo-artifacts.ts": "73885ad2b6da665a7b6b5c690a9e061ddaa6cbf5d87a72585a956136e4e180d9",
+    "frontend/src/app/core/content/evidence.pl.ts": "04241353c01c2120e0200668c54a6b2a907124b5f6b0b0994d920c813fccf04f",
+    "frontend/scripts/build_demo_report.py": "619e3b62f4b885613a88aee18b4f7407becaef7931d97c487a0aee24b4dfed53",
+    "frontend/scripts/build_engineering_artifact.py": "5a22c489ca073877374a0bc1036e921e9ce98d61963f17db02a05b2b92526534",
+    "frontend/scripts/build_research_artifact.py": "92a0fe75890b78b9030b6d2147051409825f70c35d1be0c4fe53b7c422651c3d"
+  }
+}

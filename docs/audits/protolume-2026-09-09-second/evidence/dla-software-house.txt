@@ -1,0 +1,98 @@
+WSPÓŁPRACA B2B
+
+Moduły AI i integracje dla software house’ów
+
+Dołączam do zespołu przy konkretnym module: od przeglądu repozytorium po kod, testy i przekazanie. Współpraca może obejmować podwykonawstwo lub white-label, także dla dostawców zarządzanych usług IT (MSP).
+
+Opisz moduł
+Zobacz przykładowe przekazanie
+
+DOPASOWANIE
+
+Kiedy współpraca ma sens
+Klient końcowy oczekuje funkcji AI, a zespół nie chce budować kompetencji od zera.
+Potrzebne jest szybkie demo lub technical discovery.
+Projekt wymaga RAG, automatyzacji dokumentów, agentów albo integracji API.
+Potrzebny jest właściciel techniczny ograniczonego modułu.
+
+KOD, KTÓRY MOŻESZ SPRAWDZIĆ
+
+Formularz i API: kod Protolume
+
+Projekt własny
+
+Projekt własny. Interfejs nie potwierdza dostarczenia wiadomości ani wyników biznesowych klientów.
+
+Formularz, obsługa zapytania, testy i konfiguracja uruchomienia. Przejrzyj pliki źródłowe albo pobierz paczkę API z instrukcją lokalnego uruchomienia testów.
+
+01
+Formularz
+
+Pola, walidacja i dostępne komunikaty błędów.
+
+02
+API
+
+Sprawdzenie danych, limit żądań i obsługa wyniku.
+
+03
+Dostarczenie
+
+Adapter SMTP oraz jawna obsługa niepowodzenia.
+
+Przejrzyj 6 plików: formularz, API, testy i utrzymanie
+Pobierz API, testy i instrukcję (.zip)
+Pobierz instrukcję i mapę plików (.md)
+Pobierz fragment PR #56 (.patch)
+Wersja źródeł i zakres przykładu
+
+TECHNOLOGIE PODPORZĄDKOWANE ZAKRESOWI
+
+Zakres wsparcia technicznego
+Asystenci wiedzy i RAG
+Automatyzacja wiadomości i dokumentów
+Systemy agentowe z kontrolą człowieka
+Integracje API, CRM i kanałów komunikacji
+Prototypy, testy, dokumentacja i przekazanie rozwiązania
+
+OD REPOZYTORIUM DO PRZEKAZANIA
+
+Jak dołączam do projektu
+Repozytorium i granice modułu
+
+Przegląd kodu, zależności, dostępu i kryteriów odbioru. Ustalamy punkt styku z zespołem oraz klientem końcowym.
+
+Zmiana do przeglądu
+
+Kod w osobnej gałęzi, testy i opis zmiany w PR. Zasady review oraz kontroli CI dopasowujemy do repozytorium partnera.
+
+Odbiór i przekazanie
+
+Weryfikacja uzgodnionych scenariuszy, instrukcja uruchomienia i dokumentacja. Przed publikacją wskazujemy osobę odpowiedzialną za deployment i utrzymanie.
+
+Zasady do ustalenia przed startem
+
+Jeden moduł, etap discovery lub wsparcie istniejącego zespołu. Warunki współpracy zapisujemy dla wybranego zakresu.
+
+Poufność i ewentualne NDA
+Kontakt z klientem końcowym
+Własność i przekazanie kodu
+Odpowiedzialność za deployment i utrzymanie
+Sposób odbioru i rozliczenia
+
+FAQ
+
+Pytania o współpracę partnerską
+Czy współpraca może być white-label?
+Czy można zlecić tylko jeden moduł?
+Czy pracujesz z istniejącym repozytorium?
+Jak wygląda przekazanie kodu i dokumentacji?
+Czy demo oznacza zobowiązanie do pełnego wdrożenia?
+
+NASTĘPNY KROK
+
+Jaki moduł odciąży Twój zespół?
+
+Opisz projekt, rolę partnera i etap prac. Pierwsza rozmowa służy sprawdzeniu dopasowania oraz ustaleniu możliwego następnego kroku.
+
+Opisz moduł

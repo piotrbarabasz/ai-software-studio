@@ -1,0 +1,49 @@
+{
+  "renderer": "PyMuPDF 1.28.2; Poppler unavailable; pdftopng installation failed on Windows",
+  "pages": [
+    {
+      "page": 1,
+      "rect": [
+        0.0,
+        0.0,
+        595.2755737304688,
+        841.8897705078125
+      ],
+      "text": "Protolume | Fikcyjny przykład - nie case study klienta\n1\nPROTOLUME / PRZYKŁADOWY RAPORT\nZapytania produktowe: przykład\nraportu po demo\nTo fikcyjny scenariusz demonstracyjny. Nie jest case study klienta\nani obietnicą gotowego wdrożenia produkcyjnego.\nWersja decision-report-v2 | Data opracowania: 2026-09-09\nPrzykład decyzji o dalszym etapie: zakres, trzy opisane ścieżki i ryzyka do sprawdzenia przed\npilotażem.\nOpisane scenariusze: 3. Testy rzeczywistego systemu: nie wykonano.\nStreszczenie decyzji\nWarunkowe GO do kolejnego etapu\nPrzykład przedstawia źródło odpowiedzi, szkic i punkt zatwierdzenia. Opis tych ścieżek pozwala\nustalić następny test; nie potwierdza działania integracji.\nNastępny krok\nWarto przejść do uzgodnienia danych, sandboxa integracji i zasad akceptacji przed szerszym\npilotażem.\nWarunki kolejnego etapu\n- ustalenie danych wejściowych i zasad ich jakości\n- sandbox integracji poczty oraz kontroli dostępu\n- jasny model odpowiedzialności i zatwierdzania\nBrakujące informacje\n- jakie materiały mają być źródłem prawdy\n- jakie role mogą zatwierdzać odpowiedź\n- jakie wolumeny i limity kosztowe są docelowe\nSpis treści: 1. Decyzja | 2. Scenariusze | 3. Proces i zakres | 4. Ryzyka i plan\n",
+      "links": 0
+    },
+    {
+      "page": 2,
+      "rect": [
+        0.0,
+        0.0,
+        595.2755737304688,
+        841.8897705078125
+      ],
+      "text": "Protolume | Fikcyjny przykład - nie case study klienta\n2\nScenariusze opisane w przykładzie\nStatus „ścieżka opisana w przykładzie” oznacza opis oczekiwanego przebiegu. Nie jest wynikiem testu rzeczywistego\nsystemu ani potwierdzeniem jakości.\nPytanie walidacyjne\nCzy operator może od wiadomości dojść do propozycji odpowiedzi, sprawdzić źródło i podjąć\ndecyzję o wysłaniu albo handoffie?\n1. Pytanie z pełną odpowiedzią w materiałach\nścieżka opisana w przykładzie\nWejście: Zapytanie o parametry produktu opisane w aktualnej instrukcji i cenniku.\nOczekiwane zachowanie: System wskazuje źródło, przygotowuje propozycję odpowiedzi i daje\noperatorowi możliwość zatwierdzenia.\nPrzebieg w fikcyjnym przykładzie: Operator widzi dokument źródłowy, szkic odpowiedzi i ekran\nzatwierdzenia przed wysłaniem.\n2. Pytanie wymagające zatwierdzenia\nścieżka opisana w przykładzie\nWejście: Zapytanie z niejednoznacznym wariantem, gdzie materiał sugeruje odpowiedź, ale\npotrzebna jest kontrola.\nOczekiwane zachowanie: System oznacza odpowiedź jako wymagającą zatwierdzenia i zatrzymuje\nwysyłkę do czasu decyzji człowieka.\nPrzebieg w fikcyjnym przykładzie: Operator widzi propozycję, źródło i przycisk przekazania do\nakceptacji bez automatycznej wysyłki.\n3. Pytanie poza zakresem wymagające handoffu\nścieżka opisana w przykładzie\nWejście: Zapytanie o nieudokumentowany wariant produktu lub warunek, którego nie ma w\nmateriałach.\nOczekiwane zachowanie: System nie udaje pewności, tylko przekazuje sprawę do handoffu z\ninformacją o braku danych.\nPrzebieg w fikcyjnym przykładzie: Pytanie trafia do handoffu z wyjaśnieniem, że nie ma podstaw do\nodpowiedzi automatycznej.\n",
+      "links": 0
+    },
+    {
+      "page": 3,
+      "rect": [
+        0.0,
+        0.0,
+        595.2755737304688,
+        841.8897705078125
+      ],
+      "text": "Protolume | Fikcyjny przykład - nie case study klienta\n3\nProces i zakres przykładu\nRole\n- Osoba obsługująca skrzynkę\n- Ekspert produktowy\n- Osoba zatwierdzająca odpowiedź\nRęczne kroki\n- ręczne czytanie wiadomości i rozpoznanie tematu\n- szukanie informacji w dokumentach\n- kopiowanie danych do odpowiedzi\n- przekazanie trudniejszych pytań właściwej osobie\nŹródła danych\n- e-maile produktowe\n- instrukcje i dokumentacja\n- wewnętrzna lista osób odpowiedzialnych\nMiejsca utraty czasu\n- przerzucanie informacji między skrzynką i dokumentami\n- brak jednego widoku statusu sprawy\nZałożenia wejściowe\n- skrzynka zawiera powtarzalne pytania produktowe\n- operator ma dostęp do materiałów źródłowych\n- istnieje osoba zatwierdzająca wysyłkę lub handoff\nZakres demo i elementy poza zakresem\n- jedna propozycja odpowiedzi i widoczny punkt akceptacji\n- przykładowy zestaw dokumentów i danych dla jednego procesu\n- kontrola człowieka przed wysłaniem albo handoffem\nCo nadal wymaga walidacji\n- produkcyjna integracja poczty i automatyczna wysyłka\n- pełny system uprawnień, audytu i monitoringu\n- generalizacja na wszystkie linie produktowe bez walidacji\n- obietnica wyniku biznesowego bez danych konkretnej firmy\n",
+      "links": 0
+    },
+    {
+      "page": 4,
+      "rect": [
+        0.0,
+        0.0,
+        595.2755737304688,
+        841.8897705078125
+      ],
+      "text": "Protolume | Fikcyjny przykład - nie case study klienta\n4\nRejestr ryzyk\nJakość dokumentów\nNieaktualne lub niejednoznaczne materiały mogą prowadzić do błędnych propozycji odpowiedzi.\nOgraniczenie: Wybrać zatwierdzony zestaw źródeł i ustalić właściciela dokumentów.\nWeryfikacja: Przed podłączeniem szerszego zestawu materiałów.\nDane osobowe\nWiadomości mogą zawierać dane wrażliwe lub identyfikujące klienta.\nOgraniczenie: Uzgodnić maskowanie, zasady retencji i ograniczony dostęp do treści.\nWeryfikacja: Przed testami na realnych wiadomościach.\nIntegracja poczty\nBłędna konfiguracja może skutkować brakiem pobrania lub wysyłki wiadomości.\nOgraniczenie: Najpierw uruchomić sandbox i sprawdzić scenariusze odbioru, kolejki i błędów.\nWeryfikacja: Przed jakąkolwiek integracją produkcyjną.\nBłędna klasyfikacja\nZapytanie może zostać przypisane do złego typu odpowiedzi albo do złego handoffu.\nOgraniczenie: Zdefiniować reguły klasyfikacji i zestaw pytań granicznych do testów.\nWeryfikacja: W testach jakości i w pilotażu.\nKoszt modeli\nPrzy większej liczbie spraw koszt przetwarzania może być wyższy niż zakładano.\nOgraniczenie: Limitować liczbę wywołań, monitorować zużycie i ustalić progi eskalacji.\nWeryfikacja: W sandboxie i po pierwszym tygodniu pilotażu.\nOdpowiedzialność człowieka\nBez jasnego zatwierdzenia nie wolno sugerować, że AI ponosi decyzję za zespół.\nOgraniczenie: Wprowadzić widoczny etap akceptacji i jasno opisać, kto zatwierdza wysyłkę.\nWeryfikacja: Przed startem pilotażu i przed odbiorem etapu.\nPrzykładowe kryteria do uzgodnienia z klientem\n- operator widzi źródło odpowiedzi\n- odpowiedź nie jest wysyłana bez zatwierdzenia\n- pytanie bez danych trafia do handoffu\n- status sprawy jest widoczny na każdym etapie\nPlan pierwszego etapu\n- warsztat danych\n- sandbox integracji\n- role i uprawnienia\n- testy jakości\n- monitoring\n- pilotaż\nZakres konkretnego etapu ustalamy osobno. Ten dokument przedstawia fikcyjny przykład.\n",
+      "links": 0
+    }
+  ]
+}

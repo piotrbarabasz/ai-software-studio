@@ -1,0 +1,120 @@
+Strona główna
+/
+Rozwiązania
+/
+Obsługa głosowa
+
+OBSŁUGA GŁOSOWA
+
+Voice AI dla firm
+
+Szybsza pierwsza odpowiedź i mniej ręcznego przepisywania rozmów.
+
+Pokazujemy ograniczony scenariusz rozmowy, w którym system zbiera informacje, proponuje następny krok i zatrzymuje się w odpowiednim momencie.
+
+Opisz proces
+Zobacz zakres pierwszego etapu
+
+Tworzymy głosowy przepływ do kwalifikacji spraw, zbierania informacji i proponowania kolejnego kroku z jasnym przekazaniem do człowieka.
+
+PROBLEM
+
+Kiedy Voice AI pomaga
+Zespół odbiera podobne telefony i zadaje te same pytania.
+Klienci chcą szybciej zostawić informacje poza godzinami pracy.
+Ważne dane trzeba później przepisywać do systemu ręcznie.
+Nie każdy telefon powinien kończyć się automatyczną decyzją.
+Pracownik powinien widzieć uporządkowany wynik rozmowy.
+
+JAK DZIAŁA ROZWIĄZANIE
+
+Jak działa rozwiązanie
+
+Rozmowa prowadzi przez kilka prostych kroków, a ważny moment przekazania do człowieka pozostaje jawny.
+
+1
+Połączenie
+
+Klient lub pracownik rozpoczyna rozmowę telefoniczną.
+
+2
+Zebranie informacji
+
+System zadaje kilka pytań i zapisuje najważniejsze dane.
+
+3
+Kwalifikacja
+
+Model porządkuje sprawę i ocenia, jaki powinien być następny krok.
+
+4
+Kontrola
+
+Gdy temat wymaga decyzji człowieka, system nie udaje pełnej autonomii.
+
+5
+Człowiek
+
+Pracownik otrzymuje uporządkowany wynik i przejmuje sprawę.
+
+DEMO
+
+Co można sprawdzić w demo
+
+Demo pokazuje scenariusz rozmowy, a nie gotową usługę telefoniczną dla każdego procesu.
+
+Zakres
+krótki scenariusz rozmowy
+zbieranie danych wejściowych
+decyzja o przekazaniu do człowieka
+przykładowy wynik dla pracownika
+Kryteria
+czy rozmowa pozostaje zrozumiała bez znajomości AI
+czy widać przekazanie sprawy do człowieka
+czy wynik jest uporządkowany, a nie przypadkowy
+Dane wejściowe
+typowe pytania z infolinii
+zasady kwalifikacji spraw
+dane, które wolno zbierać
+Ograniczenia
+demo nie oznacza gotowej konfiguracji telefonicznej
+integracja zależy od używanego systemu i operatora
+finalny zakres wymaga osobnej weryfikacji danych i procesu
+
+INTEGRACJE
+
+Integracje
+
+Wskazujemy tylko technologie możliwe do wdrożenia w potwierdzonym zakresie.
+
+centrala telefoniczna lub dostawca VoIP
+CRM lub system zgłoszeń
+panel operacyjny do dalszej obsługi
+
+BEZPIECZEŃSTWO I PRYWATNOŚĆ
+
+Bezpieczeństwo i prywatność
+zbieramy tylko dane potrzebne do kwalifikacji
+nie publikujemy nagrań ani danych klienta
+człowiek przejmuje sprawę w jawnie opisanym momencie
+
+FAQ
+
+Najczęstsze pytania
+Czy Voice AI zastępuje dział obsługi?
+Czy to działa z każdym numerem telefonu?
+Czy system zapisuje dane rozmowy?
+Czy potrzebny jest gotowy skrypt rozmowy?
+Czy mogę najpierw zobaczyć demo?
+
+NASTĘPNY KROK
+
+Chcesz sprawdzić Voice AI na swoim procesie?
+
+Najpierw opisujemy przebieg rozmowy, potem sprawdzamy, gdzie kończy się automatyzacja.
+
+Opisz proces
+Zobacz przykładowy raport
+Wróć do katalogu
+
+Wróć do huba rozwiązań.

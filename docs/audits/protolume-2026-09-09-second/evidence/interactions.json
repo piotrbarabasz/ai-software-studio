@@ -1,0 +1,468 @@
+{
+  "recordedAt": "2026-09-09T21:08:51.852Z",
+  "browser": "151.0.7922.34",
+  "bootstrap": [
+    {
+      "route": "/",
+      "run": 1,
+      "cpuThrottle": 4,
+      "network": "unthrottled, fresh browser context",
+      "samples": 86,
+      "zeroMainAfterH1": [],
+      "cls": 0,
+      "shifts": [],
+      "lcp": {
+        "time": 3392,
+        "size": 51620,
+        "tag": "H1"
+      },
+      "errors": []
+    },
+    {
+      "route": "/",
+      "run": 2,
+      "cpuThrottle": 4,
+      "network": "unthrottled, fresh browser context",
+      "samples": 242,
+      "zeroMainAfterH1": [],
+      "cls": 0,
+      "shifts": [],
+      "lcp": {
+        "time": 724,
+        "size": 51620,
+        "tag": "H1"
+      },
+      "errors": []
+    },
+    {
+      "route": "/",
+      "run": 3,
+      "cpuThrottle": 4,
+      "network": "unthrottled, fresh browser context",
+      "samples": 248,
+      "zeroMainAfterH1": [],
+      "cls": 0,
+      "shifts": [],
+      "lcp": {
+        "time": 648,
+        "size": 51620,
+        "tag": "H1"
+      },
+      "errors": []
+    },
+    {
+      "route": "/kontakt",
+      "run": 1,
+      "cpuThrottle": 4,
+      "network": "unthrottled, fresh browser context",
+      "samples": 245,
+      "zeroMainAfterH1": [],
+      "cls": 0,
+      "shifts": [],
+      "lcp": {
+        "time": 556,
+        "size": 26244,
+        "tag": "P"
+      },
+      "errors": []
+    },
+    {
+      "route": "/kontakt",
+      "run": 2,
+      "cpuThrottle": 4,
+      "network": "unthrottled, fresh browser context",
+      "samples": 246,
+      "zeroMainAfterH1": [],
+      "cls": 0,
+      "shifts": [],
+      "lcp": {
+        "time": 508,
+        "size": 26244,
+        "tag": "P"
+      },
+      "errors": []
+    },
+    {
+      "route": "/kontakt",
+      "run": 3,
+      "cpuThrottle": 4,
+      "network": "unthrottled, fresh browser context",
+      "samples": 240,
+      "zeroMainAfterH1": [],
+      "cls": 0,
+      "shifts": [],
+      "lcp": {
+        "time": 536,
+        "size": 26244,
+        "tag": "P"
+      },
+      "errors": []
+    },
+    {
+      "route": "/rozwiazania/chatbot-ai-dla-firm",
+      "run": 1,
+      "cpuThrottle": 4,
+      "network": "unthrottled, fresh browser context",
+      "samples": 247,
+      "zeroMainAfterH1": [],
+      "cls": 0,
+      "shifts": [],
+      "lcp": {
+        "time": 640,
+        "size": 31500,
+        "tag": "P"
+      },
+      "errors": []
+    },
+    {
+      "route": "/rozwiazania/chatbot-ai-dla-firm",
+      "run": 2,
+      "cpuThrottle": 4,
+      "network": "unthrottled, fresh browser context",
+      "samples": 247,
+      "zeroMainAfterH1": [],
+      "cls": 0,
+      "shifts": [],
+      "lcp": {
+        "time": 572,
+        "size": 31500,
+        "tag": "P"
+      },
+      "errors": []
+    },
+    {
+      "route": "/rozwiazania/chatbot-ai-dla-firm",
+      "run": 3,
+      "cpuThrottle": 4,
+      "network": "unthrottled, fresh browser context",
+      "samples": 246,
+      "zeroMainAfterH1": [],
+      "cls": 0,
+      "shifts": [],
+      "lcp": {
+        "time": 564,
+        "size": 31500,
+        "tag": "P"
+      },
+      "errors": []
+    }
+  ],
+  "checks": [
+    {
+      "name": "keyboard-menu-skip-link",
+      "passed": true,
+      "states": [
+        {
+          "width": 360,
+          "expanded": "true",
+          "mainInert": true,
+          "focus": "Rozwiązania",
+          "overflow": "hidden"
+        },
+        {
+          "width": 390,
+          "expanded": "true",
+          "mainInert": true,
+          "focus": "Rozwiązania",
+          "overflow": "hidden"
+        },
+        {
+          "width": 430,
+          "expanded": "true",
+          "mainInert": true,
+          "focus": "Rozwiązania",
+          "overflow": "hidden"
+        },
+        {
+          "width": 768,
+          "expanded": "true",
+          "mainInert": true,
+          "focus": "Rozwiązania",
+          "overflow": "hidden"
+        }
+      ]
+    },
+    {
+      "name": "contact-context /rozwiazania/chatbot-ai-dla-firm",
+      "passed": false,
+      "error": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('main a').filter({ hasText: 'Otwórz opisany materiał: Projekt własny' }).first()\u001b[22m\n\u001b[2m    - locator resolved to <a href=\"/kontakt\" _ngcontent-ng-c1806495119=\"\">Otwórz opisany materiał: Projekt własny</a>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    58 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n"
+    },
+    {
+      "name": "contact-context /rozwiazania/voice-ai-dla-firm",
+      "passed": true,
+      "ctas": [
+        {
+          "text": "Opisz proces",
+          "href": "/kontakt?projectType=voice_agent_demo&service=voice"
+        },
+        {
+          "text": "Opisz proces",
+          "href": "/kontakt?projectType=voice_agent_demo&service=voice"
+        }
+      ],
+      "visited": [
+        {
+          "url": "https://protolume.pl/kontakt?projectType=voice_agent_demo&service=voice",
+          "projectType": "voice_agent_demo",
+          "context": " Wybrana usługa: Obsługa telefonów / Voice AI. Temat rozmowy możesz zmienić poniżej. ",
+          "firstInput": 504.140625,
+          "canonical": "https://protolume.pl/kontakt"
+        }
+      ]
+    },
+    {
+      "name": "contact-context /rozwiazania/integracje-whatsapp-crm",
+      "passed": true,
+      "ctas": [
+        {
+          "text": "Opisz proces",
+          "href": "/kontakt?projectType=whatsapp_agent_management&service=whatsapp"
+        },
+        {
+          "text": "Opisz proces",
+          "href": "/kontakt?projectType=whatsapp_agent_management&service=whatsapp"
+        }
+      ],
+      "visited": [
+        {
+          "url": "https://protolume.pl/kontakt?projectType=whatsapp_agent_management&service=whatsapp",
+          "projectType": "whatsapp_agent_management",
+          "context": " Wybrana usługa: Rozmowy w CRM. Temat rozmowy możesz zmienić poniżej. ",
+          "firstInput": 504.140625,
+          "canonical": "https://protolume.pl/kontakt"
+        }
+      ]
+    },
+    {
+      "name": "contact-context /rozwiazania/automatyzacja-procesow",
+      "passed": true,
+      "ctas": [
+        {
+          "text": "Opisz proces",
+          "href": "/kontakt?projectType=business_process_automation&service=automation"
+        },
+        {
+          "text": "Opisz proces",
+          "href": "/kontakt?projectType=business_process_automation&service=automation"
+        }
+      ],
+      "visited": [
+        {
+          "url": "https://protolume.pl/kontakt?projectType=business_process_automation&service=automation",
+          "projectType": "business_process_automation",
+          "context": " Wybrana usługa: Wiadomości i dokumenty. Temat rozmowy możesz zmienić poniżej. ",
+          "firstInput": 504.140625,
+          "canonical": "https://protolume.pl/kontakt"
+        }
+      ]
+    },
+    {
+      "name": "contact-context /rozwiazania/systemy-agentowe",
+      "passed": true,
+      "ctas": [
+        {
+          "text": "Opisz proces",
+          "href": "/kontakt?projectType=ai_automation&service=agents"
+        },
+        {
+          "text": "Opisz proces",
+          "href": "/kontakt?projectType=ai_automation&service=agents"
+        }
+      ],
+      "visited": [
+        {
+          "url": "https://protolume.pl/kontakt?projectType=ai_automation&service=agents",
+          "projectType": "ai_automation",
+          "context": " Wybrana usługa: Zadania wieloetapowe. Temat rozmowy możesz zmienić poniżej. ",
+          "firstInput": 504.140625,
+          "canonical": "https://protolume.pl/kontakt"
+        }
+      ]
+    },
+    {
+      "name": "contact-context /development",
+      "passed": true,
+      "ctas": [
+        {
+          "text": "Opisz projekt",
+          "href": "/kontakt?projectType=custom_web_app"
+        },
+        {
+          "text": "Opisz projekt",
+          "href": "/kontakt?projectType=custom_web_app"
+        }
+      ],
+      "visited": [
+        {
+          "url": "https://protolume.pl/kontakt?projectType=custom_web_app",
+          "projectType": "custom_web_app",
+          "context": null,
+          "firstInput": 418.796875,
+          "canonical": "https://protolume.pl/kontakt"
+        }
+      ]
+    },
+    {
+      "name": "contact-context /dla-software-house",
+      "passed": true,
+      "ctas": [
+        {
+          "text": "Opisz moduł",
+          "href": "/kontakt?projectType=software_house_partnership"
+        },
+        {
+          "text": "Opisz moduł",
+          "href": "/kontakt?projectType=software_house_partnership"
+        }
+      ],
+      "visited": [
+        {
+          "url": "https://protolume.pl/kontakt?projectType=software_house_partnership",
+          "projectType": "software_house_partnership",
+          "context": null,
+          "firstInput": 418.796875,
+          "canonical": "https://protolume.pl/kontakt"
+        }
+      ]
+    },
+    {
+      "name": "manual-contact-topic",
+      "passed": true,
+      "selected": "custom_web_app",
+      "context": " Wybrana usługa: Obsługa telefonów / Voice AI. Temat rozmowy możesz zmienić poniżej. "
+    },
+    {
+      "name": "demo-known-fallback-reset-focus",
+      "passed": true,
+      "known": {
+        "text": "Odpowiedź asystenta\n\nPytanie: Ile kosztuje wdrożenie chatbota?\n\nKoszt zależy od liczby scenariuszy, źródeł wiedzy, integracji i wymaganych zabezpieczeń. Pierwszym krokiem może być demo jednego procesu, które pozwala sprawdzić kierunek przed pełnym wdrożeniem.\n\nMateriały przykładowe scenariusza\nPrzykładowy zakres demo: koszty zależą od scenariuszy, źródeł wiedzy i integracji\nNotatka sprzedażowa: start od jednego procesu ogranicza ryzyko",
+        "box": {
+          "x": 52.59375,
+          "y": 110.03125,
+          "width": 238.40625,
+          "height": 37.65625
+        }
+      },
+      "fallback": {
+        "text": "To pytanie wykracza poza zakres tej symulacji\n\nPytanie: Czy sprzedajecie rowery górskie?\n\nTo demo korzysta z przygotowanych scenariuszy i nie łączy się z pełnym modelem AI ani danymi firmy. Podczas bezpłatnej prezentacji pokażemy, jak chatbot może odpowiadać na pytania z Twoich materiałów, korzystać z integracji i przekazywać sprawy człowiekowi.",
+        "contactLinks": 1
+      },
+      "requests": []
+    },
+    {
+      "name": "rag-citation-focus-and-unknown",
+      "passed": true,
+      "opened": "",
+      "focused": "rag-source-simulation",
+      "unknown": "Brak informacji w tym dokumencie\n\nPytanie: Ile kosztuje wdrożenie?\n\nDokument opisuje publiczne materiały Protolume i nie zawiera cennika. Na jego podstawie nie można podać ceny wdrożenia."
+    },
+    {
+      "name": "contact-validation-errors-and-success-intercepted",
+      "passed": true,
+      "invalid": [
+        {
+          "id": "name",
+          "describedBy": "name-error"
+        },
+        {
+          "id": "email",
+          "describedBy": "email-error"
+        },
+        {
+          "id": "projectType",
+          "describedBy": "project-type-error"
+        },
+        {
+          "id": "message",
+          "describedBy": "message-hint message-error"
+        },
+        {
+          "id": "consent",
+          "describedBy": "consent-error"
+        }
+      ],
+      "failures": [
+        {
+          "status": 422,
+          "message": "Formularz wymaga uwagi.\n\nUzupełnij wymagane pola i popraw zaznaczone błędy."
+        },
+        {
+          "status": 429,
+          "message": "Formularz wymaga uwagi.\n\nZbyt wiele prób wysłania formularza. Spróbuj ponownie za chwilę."
+        },
+        {
+          "status": 503,
+          "message": "Formularz wymaga uwagi.\n\nNie udało się teraz przyjąć wiadomości. Spróbuj ponownie później."
+        },
+        {
+          "status": 0,
+          "message": "Formularz wymaga uwagi.\n\nFormularz jest chwilowo niedostępny. Spróbuj ponownie później lub użyj kontaktu bezpośredniego, gdy będzie dostępny."
+        }
+      ],
+      "success": "Wiadomość została odebrana\n\nDziękuję. Wiadomość została przyjęta.\n\nWysłany opis\nKontakt\nTest audytu\nTemat rozmowy\nAplikacja albo panel\nOpis\nTest interfejsu audytu. Żądanie zostaje przechwycone lokalnie.\n\nNa podstawie opisu wskażemy właściwą ścieżkę: demo, walidację, plan prac albo wdrożenie.\n\nJeśli wolisz, możesz również skontaktować się bezpośrednio: kontakt@protolume.pl\n\nWróć na stronę główną\nWyślij kolejne zapytanie"
+    },
+    {
+      "name": "native-details-code-download-and-pdf",
+      "passed": false,
+      "error": "apiResponse.body: Response has been disposed"
+    },
+    {
+      "name": "links-anchors-and-production-asset-hashes",
+      "passed": true,
+      "broken": [],
+      "downloadMatches": 15
+    }
+  ],
+  "blockedNonReadRequests": [],
+  "formRequestsIntercepted": 5,
+  "actualContactRequestsSent": 0,
+  "backend": [
+    {
+      "route": "/health",
+      "status": 200,
+      "body": {
+        "status": "ok",
+        "buildSha": "8ccc20c"
+      },
+      "headers": {
+        "content-type": "application/json",
+        "cache-control": "no-store",
+        "content-security-policy": "default-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
+        "permissions-policy": "camera=(), geolocation=(), microphone=(), payment=(), usb=()",
+        "referrer-policy": "no-referrer",
+        "strict-transport-security": "max-age=31536000",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-cloud-trace-context": "cc2b98f9bc4550975820497f228123e3;o=1",
+        "date": "Wed, 09 Sep 2026 21:11:34 GMT",
+        "server": "Google Frontend",
+        "content-length": "36",
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      }
+    },
+    {
+      "route": "/ready",
+      "status": 200,
+      "body": {
+        "status": "ready",
+        "service": "marketing-api"
+      },
+      "headers": {
+        "content-type": "application/json",
+        "cache-control": "no-store",
+        "content-security-policy": "default-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
+        "permissions-policy": "camera=(), geolocation=(), microphone=(), payment=(), usb=()",
+        "referrer-policy": "no-referrer",
+        "strict-transport-security": "max-age=31536000",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-cloud-trace-context": "dbc2dc63ce1e10595820497f228125ae",
+        "date": "Wed, 09 Sep 2026 21:11:34 GMT",
+        "server": "Google Frontend",
+        "content-length": "44",
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000"
+      }
+    }
+  ],
+  "completedAt": "2026-09-09T21:11:33.910Z"
+}

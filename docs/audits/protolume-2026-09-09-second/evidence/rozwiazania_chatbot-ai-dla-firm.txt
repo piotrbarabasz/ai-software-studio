@@ -1,0 +1,122 @@
+Strona główna
+/
+Rozwiązania
+/
+Asystent wiedzy
+
+ASYSTENT WIEDZY
+
+Chatbot AI i asystent wiedzy dla firm
+
+Mniej czasu na szukanie odpowiedzi i mniej powtarzalnych pytań.
+
+Budujemy ograniczone demo oparte na wybranych materiałach. Pokazujemy, gdzie asystent odpowiada sam, a kiedy przekazuje sprawę dalej.
+
+Opisz proces
+Zobacz symulację ze źródłem
+
+Pomagamy pracownikom i klientom szybciej znaleźć odpowiedź w zatwierdzonych materiałach, a sprawę bez danych przekazać do człowieka.
+
+PRZYKŁAD ZE ŹRÓDŁEM
+
+Odpowiedź, którą możesz porównać z dokumentem
+
+Symulacja
+
+Przykład przygotowany ręcznie. Nie uruchamia wyszukiwania ani modelu AI i nie potwierdza jakości RAG.
+
+Bez JavaScriptu możesz przeczytać pierwszy przykład i rozwinąć cały dokument poniżej.
+
+Przygotowana odpowiedź — cytat
+
+Pytanie: Czy symulacja korzysta z modelu AI?
+
+Publiczna symulacja asystenta wiedzy korzysta z przygotowanych pytań i odpowiedzi. Nie łączy się z modelem AI i nie wyszukuje treści w dokumentach. Pytanie wpisane w symulacji pozostaje w przeglądarce. Nie jest wysyłane do dostawcy modelu ani zapisywane w pamięci trwałej aplikacji.
+Sprawdź źródło: Lokalna symulacja
+Otwórz cały dokument źródłowy
+
+PROBLEM
+
+Kiedy chatbot AI ma sens
+Wiedza jest rozproszona między dokumentami, notatkami i wiadomościami.
+Zespół odpowiada w kółko na podobne pytania od klientów lub pracowników.
+Brakuje jednego miejsca, w którym da się sprawdzić źródło odpowiedzi.
+Sprawy bez danych trafiają do niewłaściwej osoby lub wracają kilka razy.
+Nowe osoby uczą się procesu długo, bo wiedza nie jest uporządkowana.
+
+JAK DZIAŁA ROZWIĄZANIE
+
+Jak działa rozwiązanie
+
+Przepływ pozostaje prosty: wejście, wyszukanie, odpowiedź, kontrola i przekazanie sprawy.
+
+1
+Materiały wejściowe
+
+Dobieramy kilka zatwierdzonych dokumentów, instrukcji lub FAQ.
+
+2
+Wyszukanie
+
+Asystent znajduje pasujące fragmenty i buduje odpowiedź tylko w zakresie.
+
+3
+Odpowiedź
+
+Użytkownik widzi krótką odpowiedź z podstawą w źródłach.
+
+4
+Kontrola
+
+Gdy brakuje danych albo pytanie wychodzi poza zakres, sprawa nie jest domykana automatycznie.
+
+5
+Człowiek
+
+Pracownik przejmuje temat i decyduje o dalszym kroku.
+
+DEMO
+
+Co można sprawdzić w demo
+
+Powyższa symulacja pokazuje interfejs. Osobny etap na Twoich dokumentach wymaga ustalenia zakresu i sprawdzenia jakości.
+
+Do własnego demo potrzebne są zatwierdzone dokumenty, przykładowe pytania i zasady dostępu. Sprawdzamy odpowiedzi, odnośniki do źródeł i zachowanie przy braku danych.
+
+Zakres i warunki sprawdzenia na Twoich materiałach
+
+INTEGRACJE
+
+Integracje
+
+Używamy tylko rzeczywiście potrzebnych narzędzi i nie obiecujemy gotowej integracji bez potwierdzenia zakresu.
+
+baza wiedzy lub dokumenty firmowe
+formularz kontaktowy lub kolejka spraw
+CRM albo panel operacyjny po stronie klienta
+
+BEZPIECZEŃSTWO I PRYWATNOŚĆ
+
+Bezpieczeństwo i prywatność
+minimalizujemy dane wejściowe do niezbędnego zakresu
+nie publikujemy materiałów klienta na publicznej stronie
+moment przekazania do człowieka jest jawny
+
+FAQ
+
+Najczęstsze pytania
+Skąd pochodzi odpowiedź i jak sprawdzę źródło?
+Co się dzieje po aktualizacji dokumentu?
+Kto może zobaczyć dokumenty firmowe?
+
+NASTĘPNY KROK
+
+Chcesz sprawdzić takiego asystenta na swoich materiałach?
+
+Najpierw ustalamy zakres, a dopiero potem wybieramy technologię i integracje.
+
+Opisz proces
+Wypróbuj symulację własnego pytania
+Wróć do katalogu
+
+Wróć do huba rozwiązań.

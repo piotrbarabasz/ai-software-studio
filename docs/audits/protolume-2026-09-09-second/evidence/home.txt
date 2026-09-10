@@ -1,0 +1,122 @@
+AI AUTOMATION STUDIO
+
+Pokaż nam proces.
+W 7 dni pokażemy jego demo.
+
+Automatyzujemy powtarzalną pracę z wiadomościami, dokumentami i systemami firmy. Zaczynamy od jednego scenariusza przed pełnym wdrożeniem.
+
+Opisz proces
+Zobacz symulację →
+Ilustracja przepływu · bez połączenia z CRM
+01
+Wiadomość
+
+„Proszę o ofertę i termin realizacji”.
+
+02
+Propozycja
+
+Temat sprawy, dane do rekordu i szkic odpowiedzi.
+
+03
+Twoja decyzja
+
+Sprawdzasz dane przed zapisaniem zmiany.
+
+1 proces · stały zakres · kontrola człowieka · wynik po 7 dniach
+
+ILUSTRACJA PROCESU
+
+Tak może zmienić się obsługa jednego zapytania
+
+Schemat proponowanego procesu. Nie uruchamia CRM i nie przedstawia wyniku wdrożenia.
+
+Przed — ręczna obsługa
+
+Pracownik czyta wiadomość, przepisuje dane i przygotowuje aktualizację sprawy.
+
+Po — propozycja zmiany
+
+System proponuje temat, pola rekordu i szkic odpowiedzi. Pokazuje dane do sprawdzenia.
+
+Decyzja pracownika
+
+Pracownik poprawia lub zatwierdza propozycję. Dopiero po akceptacji może nastąpić zapis i przypisanie sprawy.
+
+MATERIAŁY DO SPRAWDZENIA
+
+Zobacz zamiast czytać.
+
+Wypróbuj interfejs i zobacz formę raportu przed rozmową o własnym procesie.
+
+Symulacja asystenta wiedzy
+
+Wybierz pytanie i zobacz przygotowaną odpowiedź lub informację o braku przykładu.
+
+Symulacja
+
+Bez połączenia z modelem AI i bez wyszukiwania w dokumentach. To przykład interfejsu, nie test jakości RAG.
+
+Otwórz symulację
+Przykładowy raport decyzyjny
+
+Przejrzyj zakres, scenariusze, ryzyka i rekomendację dalszego kroku.
+
+Symulacja
+
+Materiał fikcyjny. Nie dokumentuje uruchomionego CRM, projektu klienta ani zmierzonych oszczędności.
+
+Otwórz przykładowy raport
+
+To materiały demonstracyjne i projekt własny, a nie case study klienta.
+
+GDZIE NAJCZĘŚCIEJ ZNIKA CZAS?
+
+Gdzie zespół wykonuje powtarzalną pracę?
+Wiadomości i dokumenty
+Przepisujesz dane z wiadomości do systemu.
+Wiedza firmy
+Szukasz odpowiedzi w rozproszonych materiałach.
+Obsługa telefonów / Voice AI
+Powtarzalne rozmowy zajmują czas zespołu.
+Rozmowy w CRM
+Konwersacja kończy się bez właściciela i statusu sprawy.
+Zadania wieloetapowe
+Zadanie wymaga danych i działań w kilku systemach.
+Zobacz wszystkie rozwiązania →
+
+DEMO W 7 DNI
+
+Od procesu do działającego demo w 7 dni
+Po 7 dniach
+Opis wybranego procesu i jego granic
+Działające demo jednego scenariusza
+Lista ryzyk, danych i wymaganych integracji
+Rekomendacja kolejnego kroku
+
+Przed rozpoczęciem ustalamy dane, zakres działania i kryteria sprawdzenia. Termin i warunki startu potwierdzamy przy ustalaniu zakresu.
+
+Wycena przed rozpoczęciem prac. Wysłanie opisu nie rozpoczyna płatnej realizacji.
+
+Wycena i decyzja po pierwszym etapie
+Plan etapu i materiały na start
+Zobacz zakres pierwszego etapu
+Pokaż mi proces
+
+OSOBA ODPOWIEDZIALNA
+
+Osoba odpowiedzialna za projekt
+
+Piotr Barabasz — Właściciel i odpowiedzialny partner techniczny
+
+Prowadzę analizę procesu, decyzje techniczne, realizację, testy i odbiór ustalonego zakresu.
+
+4+ lata doświadczenia komercyjnego
+AI, integracje i aplikacje webowe
+Bezpośrednia odpowiedzialność od analizy do odbioru
+Poznaj osobę odpowiedzialną
+Pokaż proces, który zabiera czas
+
+Krótki opis wystarczy, żeby ustalić, czy kolejnym krokiem powinno być Demo w 7 dni.
+
+Opisz proces

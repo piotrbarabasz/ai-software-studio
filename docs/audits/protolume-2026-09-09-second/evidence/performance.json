@@ -1,0 +1,2091 @@
+[
+  {
+    "name": "home-1",
+    "route": "/",
+    "date": "2026-09-09T21:04:51.655Z",
+    "version": "13.4.1",
+    "settings": {
+      "output": [
+        "json",
+        "html"
+      ],
+      "maxWaitForFcp": 30000,
+      "maxWaitForLoad": 45000,
+      "pauseAfterFcpMs": 1000,
+      "pauseAfterLoadMs": 1000,
+      "networkQuietThresholdMs": 1000,
+      "cpuQuietThresholdMs": 1000,
+      "formFactor": "mobile",
+      "throttling": {
+        "rttMs": 150,
+        "throughputKbps": 1638.4,
+        "requestLatencyMs": 562.5,
+        "downloadThroughputKbps": 1474.5600000000002,
+        "uploadThroughputKbps": 675,
+        "cpuSlowdownMultiplier": 4
+      },
+      "throttlingMethod": "simulate",
+      "screenEmulation": {
+        "mobile": true,
+        "width": 412,
+        "height": 823,
+        "deviceScaleFactor": 1.75,
+        "disabled": false
+      },
+      "emulatedUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36",
+      "auditMode": false,
+      "gatherMode": false,
+      "clearStorageTypes": [
+        "file_systems",
+        "shader_cache",
+        "service_workers",
+        "cache_storage"
+      ],
+      "disableStorageReset": false,
+      "debugNavigation": false,
+      "channel": "node",
+      "usePassiveGathering": false,
+      "disableFullPageScreenshot": false,
+      "skipAboutBlank": false,
+      "blankPage": "about:blank",
+      "ignoreStatusCode": false,
+      "locale": "en-US",
+      "blockedUrlPatterns": null,
+      "additionalTraceCategories": null,
+      "extraHeaders": null,
+      "precomputedLanternData": null,
+      "onlyAudits": null,
+      "onlyCategories": [
+        "performance",
+        "accessibility",
+        "best-practices",
+        "seo"
+      ],
+      "skipAudits": null
+    },
+    "score": {
+      "performance": 0.98,
+      "accessibility": 1,
+      "best-practices": 1,
+      "seo": 1
+    },
+    "metrics": {
+      "first-contentful-paint": {
+        "value": 1686.7514999999999,
+        "display": "1.7 s"
+      },
+      "largest-contentful-paint": {
+        "value": 1686.7514999999999,
+        "display": "1.7 s"
+      },
+      "cumulative-layout-shift": {
+        "value": 0,
+        "display": "0"
+      },
+      "total-blocking-time": {
+        "value": 126.5,
+        "display": "130 ms"
+      },
+      "speed-index": {
+        "value": 1686.7514999999999,
+        "display": "1.7 s"
+      },
+      "total-byte-weight": {
+        "value": 196379,
+        "display": "Total size was 192 KiB"
+      },
+      "bootup-time": {
+        "value": 335.4479999999981,
+        "display": "0.3 s"
+      }
+    },
+    "findings": [
+      {
+        "id": "first-contentful-paint",
+        "title": "First Contentful Paint",
+        "display": "1.7 s"
+      },
+      {
+        "id": "largest-contentful-paint",
+        "title": "Largest Contentful Paint",
+        "display": "1.7 s"
+      },
+      {
+        "id": "total-blocking-time",
+        "title": "Total Blocking Time",
+        "display": "130 ms"
+      },
+      {
+        "id": "max-potential-fid",
+        "title": "Max Potential First Input Delay",
+        "display": "180 ms"
+      },
+      {
+        "id": "unused-javascript",
+        "title": "Reduce unused JavaScript",
+        "display": "Est savings of 22 KiB",
+        "details": {
+          "type": "opportunity",
+          "headings": [
+            {
+              "key": "url",
+              "valueType": "url",
+              "subItemsHeading": {
+                "key": "source",
+                "valueType": "code"
+              },
+              "label": "URL"
+            },
+            {
+              "key": "totalBytes",
+              "valueType": "bytes",
+              "subItemsHeading": {
+                "key": "sourceBytes"
+              },
+              "label": "Transfer Size"
+            },
+            {
+              "key": "wastedBytes",
+              "valueType": "bytes",
+              "subItemsHeading": {
+                "key": "sourceWastedBytes"
+              },
+              "label": "Est Savings"
+            }
+          ],
+          "items": [
+            {
+              "url": "https://protolume.pl/chunk-LDCICZZO.js",
+              "totalBytes": 58224,
+              "wastedBytes": 22061,
+              "wastedPercent": 37.889743207782836
+            }
+          ],
+          "overallSavingsMs": 0,
+          "overallSavingsBytes": 22061,
+          "sortedBy": [
+            "wastedBytes"
+          ],
+          "debugData": {
+            "type": "debugdata",
+            "metricSavings": {
+              "FCP": 0,
+              "LCP": 0
+            }
+          }
+        }
+      },
+      {
+        "id": "cache-insight",
+        "title": "Use efficient cache lifetimes",
+        "display": "Est savings of 3 KiB",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "url",
+              "valueType": "url",
+              "label": "Request"
+            },
+            {
+              "key": "cacheLifetimeMs",
+              "valueType": "ms",
+              "label": "Cache TTL",
+              "displayUnit": "duration"
+            },
+            {
+              "key": "totalBytes",
+              "valueType": "bytes",
+              "label": "Transfer Size",
+              "displayUnit": "kb",
+              "granularity": 1
+            }
+          ],
+          "items": [
+            {
+              "url": "https://protolume.pl/assets/protolume-logo-horizontal-light.svg",
+              "cacheLifetimeMs": 86400000,
+              "totalBytes": 4414,
+              "wastedBytes": 1765.6000000000001
+            },
+            {
+              "url": "https://protolume.pl/assets/protolume-logo-horizontal-dark.svg",
+              "cacheLifetimeMs": 86400000,
+              "totalBytes": 4137,
+              "wastedBytes": 1654.8000000000002
+            }
+          ],
+          "sortedBy": [
+            "wastedBytes"
+          ],
+          "skipSumming": [
+            "cacheLifetimeMs"
+          ],
+          "debugData": {
+            "type": "debugdata",
+            "wastedBytes": 3420.4000000000005
+          }
+        }
+      },
+      {
+        "id": "network-dependency-tree-insight",
+        "title": "Network dependency tree",
+        "details": {
+          "type": "list",
+          "items": [
+            {
+              "type": "list-section",
+              "value": {
+                "type": "network-tree",
+                "chains": {
+                  "BAD137733DAC11122DC7D94102EFC719": {
+                    "url": "https://protolume.pl/",
+                    "navStartToEndTime": 317,
+                    "transferSize": 12299,
+                    "isLongest": true,
+                    "children": {
+                      "19404.11": {
+                        "url": "https://protolume.pl/main-4QZ62LCK.js",
+                        "navStartToEndTime": 449,
+                        "transferSize": 9885,
+                        "isLongest": true,
+                        "children": {
+                          "19404.24": {
+                            "url": "https://protolume.pl/chunk-GCVAIU32.js",
+                            "navStartToEndTime": 560,
+                            "transferSize": 7207,
+                            "isLongest": true,
+                            "children": {
+                              "19404.28": {
+                                "url": "https://protolume.pl/chunk-BNPBH6VX.js",
+                                "navStartToEndTime": 601,
+                                "transferSize": 2348,
+                                "isLongest": true,
+                                "children": {}
+                              },
+                              "19404.27": {
+                                "url": "https://protolume.pl/chunk-DGYLMOBY.js",
+                                "navStartToEndTime": 595,
+                                "transferSize": 2439,
+                                "children": {}
+                              },
+                              "19404.26": {
+                                "url": "https://protolume.pl/chunk-TG7VIV42.js",
+                                "navStartToEndTime": 591,
+                                "transferSize": 2246,
+                                "children": {}
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "19404.10": {
+                        "url": "https://protolume.pl/polyfills-5CFQRCPP.js",
+                        "navStartToEndTime": 451,
+                        "transferSize": 13947,
+                        "children": {}
+                      },
+                      "19404.2": {
+                        "url": "https://protolume.pl/styles-ZLC4RW3W.css",
+                        "navStartToEndTime": 345,
+                        "transferSize": 5988,
+                        "children": {}
+                      }
+                    }
+                  }
+                },
+                "longestChain": {
+                  "duration": 601
+                }
+              }
+            },
+            {
+              "type": "list-section",
+              "title": "Preconnected origins",
+              "description": "[preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/) hints help the browser establish a connection earlier in the page load, saving time when the first request for that origin is made. The following are the origins that the page preconnected to.",
+              "value": {
+                "type": "text",
+                "value": "no origins were preconnected"
+              }
+            },
+            {
+              "type": "list-section",
+              "title": "Preconnect candidates",
+              "description": "Add [preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/) hints to your most important origins, but try to use no more than 4.",
+              "value": {
+                "type": "text",
+                "value": "No additional origins are good candidates for preconnecting"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "render-blocking-insight",
+        "title": "Render-blocking requests",
+        "display": "Est savings of 110 ms",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "url",
+              "valueType": "url",
+              "label": "URL"
+            },
+            {
+              "key": "totalBytes",
+              "valueType": "bytes",
+              "label": "Transfer Size"
+            },
+            {
+              "key": "wastedMs",
+              "valueType": "timespanMs",
+              "label": "Duration"
+            }
+          ],
+          "items": [
+            {
+              "url": "https://protolume.pl/styles-ZLC4RW3W.css",
+              "totalBytes": 5988,
+              "wastedMs": 150
+            }
+          ]
+        }
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "name": "home-2",
+    "route": "/",
+    "date": "2026-09-09T21:05:01.073Z",
+    "version": "13.4.1",
+    "settings": {
+      "output": [
+        "json",
+        "html"
+      ],
+      "maxWaitForFcp": 30000,
+      "maxWaitForLoad": 45000,
+      "pauseAfterFcpMs": 1000,
+      "pauseAfterLoadMs": 1000,
+      "networkQuietThresholdMs": 1000,
+      "cpuQuietThresholdMs": 1000,
+      "formFactor": "mobile",
+      "throttling": {
+        "rttMs": 150,
+        "throughputKbps": 1638.4,
+        "requestLatencyMs": 562.5,
+        "downloadThroughputKbps": 1474.5600000000002,
+        "uploadThroughputKbps": 675,
+        "cpuSlowdownMultiplier": 4
+      },
+      "throttlingMethod": "simulate",
+      "screenEmulation": {
+        "mobile": true,
+        "width": 412,
+        "height": 823,
+        "deviceScaleFactor": 1.75,
+        "disabled": false
+      },
+      "emulatedUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36",
+      "auditMode": false,
+      "gatherMode": false,
+      "clearStorageTypes": [
+        "file_systems",
+        "shader_cache",
+        "service_workers",
+        "cache_storage"
+      ],
+      "disableStorageReset": false,
+      "debugNavigation": false,
+      "channel": "node",
+      "usePassiveGathering": false,
+      "disableFullPageScreenshot": false,
+      "skipAboutBlank": false,
+      "blankPage": "about:blank",
+      "ignoreStatusCode": false,
+      "locale": "en-US",
+      "blockedUrlPatterns": null,
+      "additionalTraceCategories": null,
+      "extraHeaders": null,
+      "precomputedLanternData": null,
+      "onlyAudits": null,
+      "onlyCategories": [
+        "performance",
+        "accessibility",
+        "best-practices",
+        "seo"
+      ],
+      "skipAudits": null
+    },
+    "score": {
+      "performance": 0.98,
+      "accessibility": 1,
+      "best-practices": 1,
+      "seo": 1
+    },
+    "metrics": {
+      "first-contentful-paint": {
+        "value": 1661.1354999999999,
+        "display": "1.7 s"
+      },
+      "largest-contentful-paint": {
+        "value": 1661.1354999999999,
+        "display": "1.7 s"
+      },
+      "cumulative-layout-shift": {
+        "value": 0,
+        "display": "0"
+      },
+      "total-blocking-time": {
+        "value": 112.5,
+        "display": "110 ms"
+      },
+      "speed-index": {
+        "value": 1661.1354999999999,
+        "display": "1.7 s"
+      },
+      "total-byte-weight": {
+        "value": 196732,
+        "display": "Total size was 192 KiB"
+      },
+      "bootup-time": {
+        "value": 303.9519999999976,
+        "display": "0.3 s"
+      }
+    },
+    "findings": [
+      {
+        "id": "first-contentful-paint",
+        "title": "First Contentful Paint",
+        "display": "1.7 s"
+      },
+      {
+        "id": "largest-contentful-paint",
+        "title": "Largest Contentful Paint",
+        "display": "1.7 s"
+      },
+      {
+        "id": "total-blocking-time",
+        "title": "Total Blocking Time",
+        "display": "110 ms"
+      },
+      {
+        "id": "max-potential-fid",
+        "title": "Max Potential First Input Delay",
+        "display": "160 ms"
+      },
+      {
+        "id": "interactive",
+        "title": "Time to Interactive",
+        "display": "2.0 s"
+      },
+      {
+        "id": "unused-javascript",
+        "title": "Reduce unused JavaScript",
+        "display": "Est savings of 22 KiB",
+        "details": {
+          "type": "opportunity",
+          "headings": [
+            {
+              "key": "url",
+              "valueType": "url",
+              "subItemsHeading": {
+                "key": "source",
+                "valueType": "code"
+              },
+              "label": "URL"
+            },
+            {
+              "key": "totalBytes",
+              "valueType": "bytes",
+              "subItemsHeading": {
+                "key": "sourceBytes"
+              },
+              "label": "Transfer Size"
+            },
+            {
+              "key": "wastedBytes",
+              "valueType": "bytes",
+              "subItemsHeading": {
+                "key": "sourceWastedBytes"
+              },
+              "label": "Est Savings"
+            }
+          ],
+          "items": [
+            {
+              "url": "https://protolume.pl/chunk-LDCICZZO.js",
+              "totalBytes": 58251,
+              "wastedBytes": 22071,
+              "wastedPercent": 37.889743207782836
+            }
+          ],
+          "overallSavingsMs": 0,
+          "overallSavingsBytes": 22071,
+          "sortedBy": [
+            "wastedBytes"
+          ],
+          "debugData": {
+            "type": "debugdata",
+            "metricSavings": {
+              "FCP": 0,
+              "LCP": 0
+            }
+          }
+        }
+      },
+      {
+        "id": "cache-insight",
+        "title": "Use efficient cache lifetimes",
+        "display": "Est savings of 3 KiB",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "url",
+              "valueType": "url",
+              "label": "Request"
+            },
+            {
+              "key": "cacheLifetimeMs",
+              "valueType": "ms",
+              "label": "Cache TTL",
+              "displayUnit": "duration"
+            },
+            {
+              "key": "totalBytes",
+              "valueType": "bytes",
+              "label": "Transfer Size",
+              "displayUnit": "kb",
+              "granularity": 1
+            }
+          ],
+          "items": [
+            {
+              "url": "https://protolume.pl/assets/protolume-logo-horizontal-dark.svg",
+              "cacheLifetimeMs": 86400000,
+              "totalBytes": 4387,
+              "wastedBytes": 1754.8000000000002
+            },
+            {
+              "url": "https://protolume.pl/assets/protolume-logo-horizontal-light.svg",
+              "cacheLifetimeMs": 86400000,
+              "totalBytes": 4348,
+              "wastedBytes": 1739.2
+            }
+          ],
+          "sortedBy": [
+            "wastedBytes"
+          ],
+          "skipSumming": [
+            "cacheLifetimeMs"
+          ],
+          "debugData": {
+            "type": "debugdata",
+            "wastedBytes": 3494
+          }
+        }
+      },
+      {
+        "id": "network-dependency-tree-insight",
+        "title": "Network dependency tree",
+        "details": {
+          "type": "list",
+          "items": [
+            {
+              "type": "list-section",
+              "value": {
+                "type": "network-tree",
+                "chains": {
+                  "135EF645732F156BE93F95B345E04F16": {
+                    "url": "https://protolume.pl/",
+                    "navStartToEndTime": 196,
+                    "transferSize": 12290,
+                    "isLongest": true,
+                    "children": {
+                      "23168.11": {
+                        "url": "https://protolume.pl/main-4QZ62LCK.js",
+                        "navStartToEndTime": 318,
+                        "transferSize": 10241,
+                        "isLongest": true,
+                        "children": {
+                          "23168.24": {
+                            "url": "https://protolume.pl/chunk-GCVAIU32.js",
+                            "navStartToEndTime": 423,
+                            "transferSize": 7312,
+                            "isLongest": true,
+                            "children": {
+                              "23168.27": {
+                                "url": "https://protolume.pl/chunk-DGYLMOBY.js",
+                                "navStartToEndTime": 455,
+                                "transferSize": 2169,
+                                "isLongest": true,
+                                "children": {}
+                              },
+                              "23168.28": {
+                                "url": "https://protolume.pl/chunk-BNPBH6VX.js",
+                                "navStartToEndTime": 453,
+                                "transferSize": 2246,
+                                "children": {}
+                              },
+                              "23168.26": {
+                                "url": "https://protolume.pl/chunk-TG7VIV42.js",
+                                "navStartToEndTime": 451,
+                                "transferSize": 2616,
+                                "children": {}
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "23168.10": {
+                        "url": "https://protolume.pl/polyfills-5CFQRCPP.js",
+                        "navStartToEndTime": 317,
+                        "transferSize": 14042,
+                        "children": {}
+                      },
+                      "23168.2": {
+                        "url": "https://protolume.pl/styles-ZLC4RW3W.css",
+                        "navStartToEndTime": 225,
+                        "transferSize": 6015,
+                        "children": {}
+                      }
+                    }
+                  }
+                },
+                "longestChain": {
+                  "duration": 455
+                }
+              }
+            },
+            {
+              "type": "list-section",
+              "title": "Preconnected origins",
+              "description": "[preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/) hints help the browser establish a connection earlier in the page load, saving time when the first request for that origin is made. The following are the origins that the page preconnected to.",
+              "value": {
+                "type": "text",
+                "value": "no origins were preconnected"
+              }
+            },
+            {
+              "type": "list-section",
+              "title": "Preconnect candidates",
+              "description": "Add [preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/) hints to your most important origins, but try to use no more than 4.",
+              "value": {
+                "type": "text",
+                "value": "No additional origins are good candidates for preconnecting"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "render-blocking-insight",
+        "title": "Render-blocking requests",
+        "display": "Est savings of 150 ms",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "url",
+              "valueType": "url",
+              "label": "URL"
+            },
+            {
+              "key": "totalBytes",
+              "valueType": "bytes",
+              "label": "Transfer Size"
+            },
+            {
+              "key": "wastedMs",
+              "valueType": "timespanMs",
+              "label": "Duration"
+            }
+          ],
+          "items": [
+            {
+              "url": "https://protolume.pl/styles-ZLC4RW3W.css",
+              "totalBytes": 6015,
+              "wastedMs": 150
+            }
+          ]
+        }
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "name": "home-3",
+    "route": "/",
+    "date": "2026-09-09T21:05:10.219Z",
+    "version": "13.4.1",
+    "settings": {
+      "output": [
+        "json",
+        "html"
+      ],
+      "maxWaitForFcp": 30000,
+      "maxWaitForLoad": 45000,
+      "pauseAfterFcpMs": 1000,
+      "pauseAfterLoadMs": 1000,
+      "networkQuietThresholdMs": 1000,
+      "cpuQuietThresholdMs": 1000,
+      "formFactor": "mobile",
+      "throttling": {
+        "rttMs": 150,
+        "throughputKbps": 1638.4,
+        "requestLatencyMs": 562.5,
+        "downloadThroughputKbps": 1474.5600000000002,
+        "uploadThroughputKbps": 675,
+        "cpuSlowdownMultiplier": 4
+      },
+      "throttlingMethod": "simulate",
+      "screenEmulation": {
+        "mobile": true,
+        "width": 412,
+        "height": 823,
+        "deviceScaleFactor": 1.75,
+        "disabled": false
+      },
+      "emulatedUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36",
+      "auditMode": false,
+      "gatherMode": false,
+      "clearStorageTypes": [
+        "file_systems",
+        "shader_cache",
+        "service_workers",
+        "cache_storage"
+      ],
+      "disableStorageReset": false,
+      "debugNavigation": false,
+      "channel": "node",
+      "usePassiveGathering": false,
+      "disableFullPageScreenshot": false,
+      "skipAboutBlank": false,
+      "blankPage": "about:blank",
+      "ignoreStatusCode": false,
+      "locale": "en-US",
+      "blockedUrlPatterns": null,
+      "additionalTraceCategories": null,
+      "extraHeaders": null,
+      "precomputedLanternData": null,
+      "onlyAudits": null,
+      "onlyCategories": [
+        "performance",
+        "accessibility",
+        "best-practices",
+        "seo"
+      ],
+      "skipAudits": null
+    },
+    "score": {
+      "performance": 0.98,
+      "accessibility": 1,
+      "best-practices": 1,
+      "seo": 1
+    },
+    "metrics": {
+      "first-contentful-paint": {
+        "value": 1660.816,
+        "display": "1.7 s"
+      },
+      "largest-contentful-paint": {
+        "value": 1660.816,
+        "display": "1.7 s"
+      },
+      "cumulative-layout-shift": {
+        "value": 0,
+        "display": "0"
+      },
+      "total-blocking-time": {
+        "value": 108,
+        "display": "110 ms"
+      },
+      "speed-index": {
+        "value": 1660.816,
+        "display": "1.7 s"
+      },
+      "total-byte-weight": {
+        "value": 195743,
+        "display": "Total size was 191 KiB"
+      },
+      "bootup-time": {
+        "value": 297.9399999999973,
+        "display": "0.3 s"
+      }
+    },
+    "findings": [
+      {
+        "id": "first-contentful-paint",
+        "title": "First Contentful Paint",
+        "display": "1.7 s"
+      },
+      {
+        "id": "largest-contentful-paint",
+        "title": "Largest Contentful Paint",
+        "display": "1.7 s"
+      },
+      {
+        "id": "total-blocking-time",
+        "title": "Total Blocking Time",
+        "display": "110 ms"
+      },
+      {
+        "id": "max-potential-fid",
+        "title": "Max Potential First Input Delay",
+        "display": "160 ms"
+      },
+      {
+        "id": "interactive",
+        "title": "Time to Interactive",
+        "display": "2.0 s"
+      },
+      {
+        "id": "unused-javascript",
+        "title": "Reduce unused JavaScript",
+        "display": "Est savings of 22 KiB",
+        "details": {
+          "type": "opportunity",
+          "headings": [
+            {
+              "key": "url",
+              "valueType": "url",
+              "subItemsHeading": {
+                "key": "source",
+                "valueType": "code"
+              },
+              "label": "URL"
+            },
+            {
+              "key": "totalBytes",
+              "valueType": "bytes",
+              "subItemsHeading": {
+                "key": "sourceBytes"
+              },
+              "label": "Transfer Size"
+            },
+            {
+              "key": "wastedBytes",
+              "valueType": "bytes",
+              "subItemsHeading": {
+                "key": "sourceWastedBytes"
+              },
+              "label": "Est Savings"
+            }
+          ],
+          "items": [
+            {
+              "url": "https://protolume.pl/chunk-LDCICZZO.js",
+              "totalBytes": 58332,
+              "wastedBytes": 22102,
+              "wastedPercent": 37.889743207782836
+            }
+          ],
+          "overallSavingsMs": 0,
+          "overallSavingsBytes": 22102,
+          "sortedBy": [
+            "wastedBytes"
+          ],
+          "debugData": {
+            "type": "debugdata",
+            "metricSavings": {
+              "FCP": 0,
+              "LCP": 0
+            }
+          }
+        }
+      },
+      {
+        "id": "cache-insight",
+        "title": "Use efficient cache lifetimes",
+        "display": "Est savings of 3 KiB",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "url",
+              "valueType": "url",
+              "label": "Request"
+            },
+            {
+              "key": "cacheLifetimeMs",
+              "valueType": "ms",
+              "label": "Cache TTL",
+              "displayUnit": "duration"
+            },
+            {
+              "key": "totalBytes",
+              "valueType": "bytes",
+              "label": "Transfer Size",
+              "displayUnit": "kb",
+              "granularity": 1
+            }
+          ],
+          "items": [
+            {
+              "url": "https://protolume.pl/assets/protolume-logo-horizontal-light.svg",
+              "cacheLifetimeMs": 86400000,
+              "totalBytes": 4349,
+              "wastedBytes": 1739.6000000000001
+            },
+            {
+              "url": "https://protolume.pl/assets/protolume-logo-horizontal-dark.svg",
+              "cacheLifetimeMs": 86400000,
+              "totalBytes": 4133,
+              "wastedBytes": 1653.2
+            }
+          ],
+          "sortedBy": [
+            "wastedBytes"
+          ],
+          "skipSumming": [
+            "cacheLifetimeMs"
+          ],
+          "debugData": {
+            "type": "debugdata",
+            "wastedBytes": 3392.8
+          }
+        }
+      },
+      {
+        "id": "network-dependency-tree-insight",
+        "title": "Network dependency tree",
+        "details": {
+          "type": "list",
+          "items": [
+            {
+              "type": "list-section",
+              "value": {
+                "type": "network-tree",
+                "chains": {
+                  "03BCCFD903D5C8EA4863CEAF4FBA2194": {
+                    "url": "https://protolume.pl/",
+                    "navStartToEndTime": 154,
+                    "transferSize": 12290,
+                    "isLongest": true,
+                    "children": {
+                      "27680.11": {
+                        "url": "https://protolume.pl/main-4QZ62LCK.js",
+                        "navStartToEndTime": 280,
+                        "transferSize": 9877,
+                        "isLongest": true,
+                        "children": {
+                          "27680.24": {
+                            "url": "https://protolume.pl/chunk-GCVAIU32.js",
+                            "navStartToEndTime": 383,
+                            "transferSize": 7575,
+                            "isLongest": true,
+                            "children": {
+                              "27680.27": {
+                                "url": "https://protolume.pl/chunk-DGYLMOBY.js",
+                                "navStartToEndTime": 412,
+                                "transferSize": 2059,
+                                "isLongest": true,
+                                "children": {}
+                              },
+                              "27680.28": {
+                                "url": "https://protolume.pl/chunk-BNPBH6VX.js",
+                                "navStartToEndTime": 411,
+                                "transferSize": 2337,
+                                "children": {}
+                              },
+                              "27680.26": {
+                                "url": "https://protolume.pl/chunk-TG7VIV42.js",
+                                "navStartToEndTime": 408,
+                                "transferSize": 2255,
+                                "children": {}
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "27680.10": {
+                        "url": "https://protolume.pl/polyfills-5CFQRCPP.js",
+                        "navStartToEndTime": 279,
+                        "transferSize": 13949,
+                        "children": {}
+                      },
+                      "27680.2": {
+                        "url": "https://protolume.pl/styles-ZLC4RW3W.css",
+                        "navStartToEndTime": 186,
+                        "transferSize": 6289,
+                        "children": {}
+                      }
+                    }
+                  }
+                },
+                "longestChain": {
+                  "duration": 412
+                }
+              }
+            },
+            {
+              "type": "list-section",
+              "title": "Preconnected origins",
+              "description": "[preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/) hints help the browser establish a connection earlier in the page load, saving time when the first request for that origin is made. The following are the origins that the page preconnected to.",
+              "value": {
+                "type": "text",
+                "value": "no origins were preconnected"
+              }
+            },
+            {
+              "type": "list-section",
+              "title": "Preconnect candidates",
+              "description": "Add [preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/) hints to your most important origins, but try to use no more than 4.",
+              "value": {
+                "type": "text",
+                "value": "No additional origins are good candidates for preconnecting"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "render-blocking-insight",
+        "title": "Render-blocking requests",
+        "display": "Est savings of 150 ms",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "url",
+              "valueType": "url",
+              "label": "URL"
+            },
+            {
+              "key": "totalBytes",
+              "valueType": "bytes",
+              "label": "Transfer Size"
+            },
+            {
+              "key": "wastedMs",
+              "valueType": "timespanMs",
+              "label": "Duration"
+            }
+          ],
+          "items": [
+            {
+              "url": "https://protolume.pl/styles-ZLC4RW3W.css",
+              "totalBytes": 6289,
+              "wastedMs": 150
+            }
+          ]
+        }
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "name": "contact",
+    "route": "/kontakt",
+    "date": "2026-09-09T21:05:19.041Z",
+    "version": "13.4.1",
+    "settings": {
+      "output": [
+        "json",
+        "html"
+      ],
+      "maxWaitForFcp": 30000,
+      "maxWaitForLoad": 45000,
+      "pauseAfterFcpMs": 1000,
+      "pauseAfterLoadMs": 1000,
+      "networkQuietThresholdMs": 1000,
+      "cpuQuietThresholdMs": 1000,
+      "formFactor": "mobile",
+      "throttling": {
+        "rttMs": 150,
+        "throughputKbps": 1638.4,
+        "requestLatencyMs": 562.5,
+        "downloadThroughputKbps": 1474.5600000000002,
+        "uploadThroughputKbps": 675,
+        "cpuSlowdownMultiplier": 4
+      },
+      "throttlingMethod": "simulate",
+      "screenEmulation": {
+        "mobile": true,
+        "width": 412,
+        "height": 823,
+        "deviceScaleFactor": 1.75,
+        "disabled": false
+      },
+      "emulatedUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36",
+      "auditMode": false,
+      "gatherMode": false,
+      "clearStorageTypes": [
+        "file_systems",
+        "shader_cache",
+        "service_workers",
+        "cache_storage"
+      ],
+      "disableStorageReset": false,
+      "debugNavigation": false,
+      "channel": "node",
+      "usePassiveGathering": false,
+      "disableFullPageScreenshot": false,
+      "skipAboutBlank": false,
+      "blankPage": "about:blank",
+      "ignoreStatusCode": false,
+      "locale": "en-US",
+      "blockedUrlPatterns": null,
+      "additionalTraceCategories": null,
+      "extraHeaders": null,
+      "precomputedLanternData": null,
+      "onlyAudits": null,
+      "onlyCategories": [
+        "performance",
+        "accessibility",
+        "best-practices",
+        "seo"
+      ],
+      "skipAudits": null
+    },
+    "score": {
+      "performance": 0.99,
+      "accessibility": 1,
+      "best-practices": 1,
+      "seo": 1
+    },
+    "metrics": {
+      "first-contentful-paint": {
+        "value": 1662.1390000000001,
+        "display": "1.7 s"
+      },
+      "largest-contentful-paint": {
+        "value": 1662.1390000000001,
+        "display": "1.7 s"
+      },
+      "cumulative-layout-shift": {
+        "value": 0,
+        "display": "0"
+      },
+      "total-blocking-time": {
+        "value": 72,
+        "display": "70 ms"
+      },
+      "speed-index": {
+        "value": 1662.1390000000001,
+        "display": "1.7 s"
+      },
+      "total-byte-weight": {
+        "value": 200910,
+        "display": "Total size was 196 KiB"
+      },
+      "bootup-time": {
+        "value": 383.276,
+        "display": "0.4 s"
+      }
+    },
+    "findings": [
+      {
+        "id": "first-contentful-paint",
+        "title": "First Contentful Paint",
+        "display": "1.7 s"
+      },
+      {
+        "id": "largest-contentful-paint",
+        "title": "Largest Contentful Paint",
+        "display": "1.7 s"
+      },
+      {
+        "id": "total-blocking-time",
+        "title": "Total Blocking Time",
+        "display": "70 ms"
+      },
+      {
+        "id": "max-potential-fid",
+        "title": "Max Potential First Input Delay",
+        "display": "100 ms"
+      },
+      {
+        "id": "interactive",
+        "title": "Time to Interactive",
+        "display": "2.1 s"
+      },
+      {
+        "id": "cache-insight",
+        "title": "Use efficient cache lifetimes",
+        "display": "Est savings of 3 KiB",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "url",
+              "valueType": "url",
+              "label": "Request"
+            },
+            {
+              "key": "cacheLifetimeMs",
+              "valueType": "ms",
+              "label": "Cache TTL",
+              "displayUnit": "duration"
+            },
+            {
+              "key": "totalBytes",
+              "valueType": "bytes",
+              "label": "Transfer Size",
+              "displayUnit": "kb",
+              "granularity": 1
+            }
+          ],
+          "items": [
+            {
+              "url": "https://protolume.pl/assets/protolume-logo-horizontal-light.svg",
+              "cacheLifetimeMs": 86400000,
+              "totalBytes": 4311,
+              "wastedBytes": 1724.4
+            },
+            {
+              "url": "https://protolume.pl/assets/protolume-logo-horizontal-dark.svg",
+              "cacheLifetimeMs": 86400000,
+              "totalBytes": 4183,
+              "wastedBytes": 1673.2
+            }
+          ],
+          "sortedBy": [
+            "wastedBytes"
+          ],
+          "skipSumming": [
+            "cacheLifetimeMs"
+          ],
+          "debugData": {
+            "type": "debugdata",
+            "wastedBytes": 3397.6000000000004
+          }
+        }
+      },
+      {
+        "id": "forced-reflow-insight",
+        "title": "Forced reflow",
+        "details": {
+          "type": "list",
+          "items": [
+            {
+              "type": "table",
+              "headings": [
+                {
+                  "key": "source",
+                  "valueType": "source-location",
+                  "label": "Source"
+                },
+                {
+                  "key": "reflowTime",
+                  "valueType": "ms",
+                  "granularity": 1,
+                  "label": "Total reflow time"
+                }
+              ],
+              "items": [
+                {
+                  "source": {
+                    "type": "text",
+                    "value": "[unattributed]"
+                  },
+                  "reflowTime": 47.14
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "network-dependency-tree-insight",
+        "title": "Network dependency tree",
+        "details": {
+          "type": "list",
+          "items": [
+            {
+              "type": "list-section",
+              "value": {
+                "type": "network-tree",
+                "chains": {
+                  "9134DCDA01304F9D328FA6A5223F3A77": {
+                    "url": "https://protolume.pl/kontakt",
+                    "navStartToEndTime": 242,
+                    "transferSize": 9727,
+                    "isLongest": true,
+                    "children": {
+                      "15220.11": {
+                        "url": "https://protolume.pl/main-4QZ62LCK.js",
+                        "navStartToEndTime": 349,
+                        "transferSize": 9886,
+                        "isLongest": true,
+                        "children": {
+                          "15220.24": {
+                            "url": "https://protolume.pl/chunk-K6RX5GMC.js",
+                            "navStartToEndTime": 467,
+                            "transferSize": 18754,
+                            "isLongest": true,
+                            "children": {
+                              "15220.26": {
+                                "url": "https://protolume.pl/chunk-BNPBH6VX.js",
+                                "navStartToEndTime": 495,
+                                "transferSize": 2595,
+                                "isLongest": true,
+                                "children": {}
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "15220.10": {
+                        "url": "https://protolume.pl/polyfills-5CFQRCPP.js",
+                        "navStartToEndTime": 348,
+                        "transferSize": 14043,
+                        "children": {}
+                      },
+                      "15220.2": {
+                        "url": "https://protolume.pl/styles-ZLC4RW3W.css",
+                        "navStartToEndTime": 267,
+                        "transferSize": 6015,
+                        "children": {}
+                      }
+                    }
+                  }
+                },
+                "longestChain": {
+                  "duration": 495
+                }
+              }
+            },
+            {
+              "type": "list-section",
+              "title": "Preconnected origins",
+              "description": "[preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/) hints help the browser establish a connection earlier in the page load, saving time when the first request for that origin is made. The following are the origins that the page preconnected to.",
+              "value": {
+                "type": "text",
+                "value": "no origins were preconnected"
+              }
+            },
+            {
+              "type": "list-section",
+              "title": "Preconnect candidates",
+              "description": "Add [preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/) hints to your most important origins, but try to use no more than 4.",
+              "value": {
+                "type": "text",
+                "value": "No additional origins are good candidates for preconnecting"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "render-blocking-insight",
+        "title": "Render-blocking requests",
+        "display": "Est savings of 150 ms",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "url",
+              "valueType": "url",
+              "label": "URL"
+            },
+            {
+              "key": "totalBytes",
+              "valueType": "bytes",
+              "label": "Transfer Size"
+            },
+            {
+              "key": "wastedMs",
+              "valueType": "timespanMs",
+              "label": "Duration"
+            }
+          ],
+          "items": [
+            {
+              "url": "https://protolume.pl/styles-ZLC4RW3W.css",
+              "totalBytes": 6015,
+              "wastedMs": 150
+            }
+          ]
+        }
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "name": "rag",
+    "route": "/rozwiazania/chatbot-ai-dla-firm",
+    "date": "2026-09-09T21:05:27.718Z",
+    "version": "13.4.1",
+    "settings": {
+      "output": [
+        "json",
+        "html"
+      ],
+      "maxWaitForFcp": 30000,
+      "maxWaitForLoad": 45000,
+      "pauseAfterFcpMs": 1000,
+      "pauseAfterLoadMs": 1000,
+      "networkQuietThresholdMs": 1000,
+      "cpuQuietThresholdMs": 1000,
+      "formFactor": "mobile",
+      "throttling": {
+        "rttMs": 150,
+        "throughputKbps": 1638.4,
+        "requestLatencyMs": 562.5,
+        "downloadThroughputKbps": 1474.5600000000002,
+        "uploadThroughputKbps": 675,
+        "cpuSlowdownMultiplier": 4
+      },
+      "throttlingMethod": "simulate",
+      "screenEmulation": {
+        "mobile": true,
+        "width": 412,
+        "height": 823,
+        "deviceScaleFactor": 1.75,
+        "disabled": false
+      },
+      "emulatedUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36",
+      "auditMode": false,
+      "gatherMode": false,
+      "clearStorageTypes": [
+        "file_systems",
+        "shader_cache",
+        "service_workers",
+        "cache_storage"
+      ],
+      "disableStorageReset": false,
+      "debugNavigation": false,
+      "channel": "node",
+      "usePassiveGathering": false,
+      "disableFullPageScreenshot": false,
+      "skipAboutBlank": false,
+      "blankPage": "about:blank",
+      "ignoreStatusCode": false,
+      "locale": "en-US",
+      "blockedUrlPatterns": null,
+      "additionalTraceCategories": null,
+      "extraHeaders": null,
+      "precomputedLanternData": null,
+      "onlyAudits": null,
+      "onlyCategories": [
+        "performance",
+        "accessibility",
+        "best-practices",
+        "seo"
+      ],
+      "skipAudits": null
+    },
+    "score": {
+      "performance": 0.97,
+      "accessibility": 1,
+      "best-practices": 1,
+      "seo": 1
+    },
+    "metrics": {
+      "first-contentful-paint": {
+        "value": 1661.2820000000002,
+        "display": "1.7 s"
+      },
+      "largest-contentful-paint": {
+        "value": 1811.2820000000002,
+        "display": "1.8 s"
+      },
+      "cumulative-layout-shift": {
+        "value": 0,
+        "display": "0"
+      },
+      "total-blocking-time": {
+        "value": 165,
+        "display": "170 ms"
+      },
+      "speed-index": {
+        "value": 1661.2820000000002,
+        "display": "1.7 s"
+      },
+      "total-byte-weight": {
+        "value": 192292,
+        "display": "Total size was 188 KiB"
+      },
+      "bootup-time": {
+        "value": 385.8719999999993,
+        "display": "0.4 s"
+      }
+    },
+    "findings": [
+      {
+        "id": "first-contentful-paint",
+        "title": "First Contentful Paint",
+        "display": "1.7 s"
+      },
+      {
+        "id": "largest-contentful-paint",
+        "title": "Largest Contentful Paint",
+        "display": "1.8 s"
+      },
+      {
+        "id": "total-blocking-time",
+        "title": "Total Blocking Time",
+        "display": "170 ms"
+      },
+      {
+        "id": "max-potential-fid",
+        "title": "Max Potential First Input Delay",
+        "display": "220 ms"
+      },
+      {
+        "id": "unused-javascript",
+        "title": "Reduce unused JavaScript",
+        "display": "Est savings of 22 KiB",
+        "details": {
+          "type": "opportunity",
+          "headings": [
+            {
+              "key": "url",
+              "valueType": "url",
+              "subItemsHeading": {
+                "key": "source",
+                "valueType": "code"
+              },
+              "label": "URL"
+            },
+            {
+              "key": "totalBytes",
+              "valueType": "bytes",
+              "subItemsHeading": {
+                "key": "sourceBytes"
+              },
+              "label": "Transfer Size"
+            },
+            {
+              "key": "wastedBytes",
+              "valueType": "bytes",
+              "subItemsHeading": {
+                "key": "sourceWastedBytes"
+              },
+              "label": "Est Savings"
+            }
+          ],
+          "items": [
+            {
+              "url": "https://protolume.pl/chunk-LDCICZZO.js",
+              "totalBytes": 58341,
+              "wastedBytes": 22059,
+              "wastedPercent": 37.810677331011014
+            }
+          ],
+          "overallSavingsMs": 150,
+          "overallSavingsBytes": 22059,
+          "sortedBy": [
+            "wastedBytes"
+          ],
+          "debugData": {
+            "type": "debugdata",
+            "metricSavings": {
+              "FCP": 0,
+              "LCP": 150
+            }
+          }
+        }
+      },
+      {
+        "id": "cache-insight",
+        "title": "Use efficient cache lifetimes",
+        "display": "Est savings of 3 KiB",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "url",
+              "valueType": "url",
+              "label": "Request"
+            },
+            {
+              "key": "cacheLifetimeMs",
+              "valueType": "ms",
+              "label": "Cache TTL",
+              "displayUnit": "duration"
+            },
+            {
+              "key": "totalBytes",
+              "valueType": "bytes",
+              "label": "Transfer Size",
+              "displayUnit": "kb",
+              "granularity": 1
+            }
+          ],
+          "items": [
+            {
+              "url": "https://protolume.pl/assets/protolume-logo-horizontal-dark.svg",
+              "cacheLifetimeMs": 86400000,
+              "totalBytes": 4397,
+              "wastedBytes": 1758.8000000000002
+            },
+            {
+              "url": "https://protolume.pl/assets/protolume-logo-horizontal-light.svg",
+              "cacheLifetimeMs": 86400000,
+              "totalBytes": 4348,
+              "wastedBytes": 1739.2
+            }
+          ],
+          "sortedBy": [
+            "wastedBytes"
+          ],
+          "skipSumming": [
+            "cacheLifetimeMs"
+          ],
+          "debugData": {
+            "type": "debugdata",
+            "wastedBytes": 3498
+          }
+        }
+      },
+      {
+        "id": "network-dependency-tree-insight",
+        "title": "Network dependency tree",
+        "details": {
+          "type": "list",
+          "items": [
+            {
+              "type": "list-section",
+              "value": {
+                "type": "network-tree",
+                "chains": {
+                  "91FF1888443A4A5A48B77A6B17DA81D0": {
+                    "url": "https://protolume.pl/rozwiazania/chatbot-ai-dla-firm",
+                    "navStartToEndTime": 250,
+                    "transferSize": 11086,
+                    "isLongest": true,
+                    "children": {
+                      "10948.11": {
+                        "url": "https://protolume.pl/main-4QZ62LCK.js",
+                        "navStartToEndTime": 409,
+                        "transferSize": 9954,
+                        "isLongest": true,
+                        "children": {
+                          "10948.24": {
+                            "url": "https://protolume.pl/chunk-ZG6AEHZ2.js",
+                            "navStartToEndTime": 530,
+                            "transferSize": 7222,
+                            "isLongest": true,
+                            "children": {
+                              "10948.27": {
+                                "url": "https://protolume.pl/chunk-BNPBH6VX.js",
+                                "navStartToEndTime": 558,
+                                "transferSize": 2273,
+                                "isLongest": true,
+                                "children": {}
+                              },
+                              "10948.26": {
+                                "url": "https://protolume.pl/chunk-DGYLMOBY.js",
+                                "navStartToEndTime": 556,
+                                "transferSize": 2129,
+                                "children": {}
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "10948.10": {
+                        "url": "https://protolume.pl/polyfills-5CFQRCPP.js",
+                        "navStartToEndTime": 407,
+                        "transferSize": 13981,
+                        "children": {}
+                      },
+                      "10948.2": {
+                        "url": "https://protolume.pl/styles-ZLC4RW3W.css",
+                        "navStartToEndTime": 277,
+                        "transferSize": 6015,
+                        "children": {}
+                      }
+                    }
+                  }
+                },
+                "longestChain": {
+                  "duration": 558
+                }
+              }
+            },
+            {
+              "type": "list-section",
+              "title": "Preconnected origins",
+              "description": "[preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/) hints help the browser establish a connection earlier in the page load, saving time when the first request for that origin is made. The following are the origins that the page preconnected to.",
+              "value": {
+                "type": "text",
+                "value": "no origins were preconnected"
+              }
+            },
+            {
+              "type": "list-section",
+              "title": "Preconnect candidates",
+              "description": "Add [preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/) hints to your most important origins, but try to use no more than 4.",
+              "value": {
+                "type": "text",
+                "value": "No additional origins are good candidates for preconnecting"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "render-blocking-insight",
+        "title": "Render-blocking requests",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "url",
+              "valueType": "url",
+              "label": "URL"
+            },
+            {
+              "key": "totalBytes",
+              "valueType": "bytes",
+              "label": "Transfer Size"
+            },
+            {
+              "key": "wastedMs",
+              "valueType": "timespanMs",
+              "label": "Duration"
+            }
+          ],
+          "items": [
+            {
+              "url": "https://protolume.pl/styles-ZLC4RW3W.css",
+              "totalBytes": 6015,
+              "wastedMs": 150
+            }
+          ]
+        }
+      }
+    ],
+    "warnings": []
+  },
+  {
+    "name": "home-desktop",
+    "route": "/",
+    "date": "2026-09-09T21:05:36.770Z",
+    "version": "13.4.1",
+    "settings": {
+      "output": [
+        "json",
+        "html"
+      ],
+      "maxWaitForFcp": 30000,
+      "maxWaitForLoad": 45000,
+      "pauseAfterFcpMs": 1000,
+      "pauseAfterLoadMs": 1000,
+      "networkQuietThresholdMs": 1000,
+      "cpuQuietThresholdMs": 1000,
+      "formFactor": "desktop",
+      "throttling": {
+        "rttMs": 40,
+        "throughputKbps": 10240,
+        "requestLatencyMs": 562.5,
+        "downloadThroughputKbps": 1474.5600000000002,
+        "uploadThroughputKbps": 675,
+        "cpuSlowdownMultiplier": 1
+      },
+      "throttlingMethod": "simulate",
+      "screenEmulation": {
+        "mobile": false,
+        "width": 1440,
+        "height": 1000,
+        "deviceScaleFactor": 1,
+        "disabled": false
+      },
+      "emulatedUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36",
+      "auditMode": false,
+      "gatherMode": false,
+      "clearStorageTypes": [
+        "file_systems",
+        "shader_cache",
+        "service_workers",
+        "cache_storage"
+      ],
+      "disableStorageReset": false,
+      "debugNavigation": false,
+      "channel": "node",
+      "usePassiveGathering": false,
+      "disableFullPageScreenshot": false,
+      "skipAboutBlank": false,
+      "blankPage": "about:blank",
+      "ignoreStatusCode": false,
+      "locale": "en-US",
+      "blockedUrlPatterns": null,
+      "additionalTraceCategories": null,
+      "extraHeaders": null,
+      "precomputedLanternData": null,
+      "onlyAudits": null,
+      "onlyCategories": [
+        "performance",
+        "accessibility",
+        "best-practices",
+        "seo"
+      ],
+      "skipAudits": null
+    },
+    "score": {
+      "performance": 1,
+      "accessibility": 1,
+      "best-practices": 1,
+      "seo": 1
+    },
+    "metrics": {
+      "first-contentful-paint": {
+        "value": 371.318,
+        "display": "0.4 s"
+      },
+      "largest-contentful-paint": {
+        "value": 371.318,
+        "display": "0.4 s"
+      },
+      "cumulative-layout-shift": {
+        "value": 0,
+        "display": "0"
+      },
+      "total-blocking-time": {
+        "value": 0,
+        "display": "0 ms"
+      },
+      "speed-index": {
+        "value": 380.0783390852043,
+        "display": "0.4 s"
+      },
+      "total-byte-weight": {
+        "value": 196447,
+        "display": "Total size was 192 KiB"
+      },
+      "bootup-time": {
+        "value": 73.33899999999937,
+        "display": "0.1 s"
+      }
+    },
+    "findings": [
+      {
+        "id": "unused-javascript",
+        "title": "Reduce unused JavaScript",
+        "display": "Est savings of 22 KiB",
+        "details": {
+          "type": "opportunity",
+          "headings": [
+            {
+              "key": "url",
+              "valueType": "url",
+              "subItemsHeading": {
+                "key": "source",
+                "valueType": "code"
+              },
+              "label": "URL"
+            },
+            {
+              "key": "totalBytes",
+              "valueType": "bytes",
+              "subItemsHeading": {
+                "key": "sourceBytes"
+              },
+              "label": "Transfer Size"
+            },
+            {
+              "key": "wastedBytes",
+              "valueType": "bytes",
+              "subItemsHeading": {
+                "key": "sourceWastedBytes"
+              },
+              "label": "Est Savings"
+            }
+          ],
+          "items": [
+            {
+              "url": "https://protolume.pl/chunk-LDCICZZO.js",
+              "totalBytes": 58332,
+              "wastedBytes": 22102,
+              "wastedPercent": 37.889743207782836
+            }
+          ],
+          "overallSavingsMs": 0,
+          "overallSavingsBytes": 22102,
+          "sortedBy": [
+            "wastedBytes"
+          ],
+          "debugData": {
+            "type": "debugdata",
+            "metricSavings": {
+              "FCP": 0,
+              "LCP": 0
+            }
+          }
+        }
+      },
+      {
+        "id": "cache-insight",
+        "title": "Use efficient cache lifetimes",
+        "display": "Est savings of 3 KiB",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "url",
+              "valueType": "url",
+              "label": "Request"
+            },
+            {
+              "key": "cacheLifetimeMs",
+              "valueType": "ms",
+              "label": "Cache TTL",
+              "displayUnit": "duration"
+            },
+            {
+              "key": "totalBytes",
+              "valueType": "bytes",
+              "label": "Transfer Size",
+              "displayUnit": "kb",
+              "granularity": 1
+            }
+          ],
+          "items": [
+            {
+              "url": "https://protolume.pl/assets/protolume-logo-horizontal-light.svg",
+              "cacheLifetimeMs": 86400000,
+              "totalBytes": 4410,
+              "wastedBytes": 1764
+            },
+            {
+              "url": "https://protolume.pl/assets/protolume-logo-horizontal-dark.svg",
+              "cacheLifetimeMs": 86400000,
+              "totalBytes": 4388,
+              "wastedBytes": 1755.2
+            }
+          ],
+          "sortedBy": [
+            "wastedBytes"
+          ],
+          "skipSumming": [
+            "cacheLifetimeMs"
+          ],
+          "debugData": {
+            "type": "debugdata",
+            "wastedBytes": 3519.2
+          }
+        }
+      },
+      {
+        "id": "network-dependency-tree-insight",
+        "title": "Network dependency tree",
+        "details": {
+          "type": "list",
+          "items": [
+            {
+              "type": "list-section",
+              "value": {
+                "type": "network-tree",
+                "chains": {
+                  "E8D3DC0F4B58FBC3407C50F6937FE8CC": {
+                    "url": "https://protolume.pl/",
+                    "navStartToEndTime": 157,
+                    "transferSize": 12290,
+                    "isLongest": true,
+                    "children": {
+                      "20432.11": {
+                        "url": "https://protolume.pl/main-4QZ62LCK.js",
+                        "navStartToEndTime": 273,
+                        "transferSize": 9966,
+                        "isLongest": true,
+                        "children": {
+                          "20432.24": {
+                            "url": "https://protolume.pl/chunk-GCVAIU32.js",
+                            "navStartToEndTime": 407,
+                            "transferSize": 7581,
+                            "isLongest": true,
+                            "children": {
+                              "20432.28": {
+                                "url": "https://protolume.pl/chunk-BNPBH6VX.js",
+                                "navStartToEndTime": 436,
+                                "transferSize": 2250,
+                                "isLongest": true,
+                                "children": {}
+                              },
+                              "20432.26": {
+                                "url": "https://protolume.pl/chunk-TG7VIV42.js",
+                                "navStartToEndTime": 435,
+                                "transferSize": 2629,
+                                "children": {}
+                              },
+                              "20432.27": {
+                                "url": "https://protolume.pl/chunk-DGYLMOBY.js",
+                                "navStartToEndTime": 432,
+                                "transferSize": 2154,
+                                "children": {}
+                              }
+                            }
+                          }
+                        }
+                      },
+                      "20432.10": {
+                        "url": "https://protolume.pl/polyfills-5CFQRCPP.js",
+                        "navStartToEndTime": 271,
+                        "transferSize": 13953,
+                        "children": {}
+                      },
+                      "20432.2": {
+                        "url": "https://protolume.pl/styles-ZLC4RW3W.css",
+                        "navStartToEndTime": 179,
+                        "transferSize": 6015,
+                        "children": {}
+                      }
+                    }
+                  }
+                },
+                "longestChain": {
+                  "duration": 436
+                }
+              }
+            },
+            {
+              "type": "list-section",
+              "title": "Preconnected origins",
+              "description": "[preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/) hints help the browser establish a connection earlier in the page load, saving time when the first request for that origin is made. The following are the origins that the page preconnected to.",
+              "value": {
+                "type": "text",
+                "value": "no origins were preconnected"
+              }
+            },
+            {
+              "type": "list-section",
+              "title": "Preconnect candidates",
+              "description": "Add [preconnect](https://developer.chrome.com/docs/lighthouse/performance/uses-rel-preconnect/) hints to your most important origins, but try to use no more than 4.",
+              "value": {
+                "type": "text",
+                "value": "No additional origins are good candidates for preconnecting"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "render-blocking-insight",
+        "title": "Render-blocking requests",
+        "details": {
+          "type": "table",
+          "headings": [
+            {
+              "key": "url",
+              "valueType": "url",
+              "label": "URL"
+            },
+            {
+              "key": "totalBytes",
+              "valueType": "bytes",
+              "label": "Transfer Size"
+            },
+            {
+              "key": "wastedMs",
+              "valueType": "timespanMs",
+              "label": "Duration"
+            }
+          ],
+          "items": [
+            {
+              "url": "https://protolume.pl/styles-ZLC4RW3W.css",
+              "totalBytes": 6015
+            }
+          ]
+        }
+      }
+    ],
+    "warnings": []
+  }
+]

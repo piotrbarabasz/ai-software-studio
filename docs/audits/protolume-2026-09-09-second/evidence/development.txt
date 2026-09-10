@@ -1,0 +1,122 @@
+APLIKACJE I INTEGRACJE
+
+Oprogramowanie do codziennej pracy zespołu
+
+Buduję aplikacje webowe, API i połączenia między systemami. Od panelu dla pracowników po obsługę procesu — z kodem, testami i instrukcją dalszej pracy.
+
+Opisz projekt
+Zobacz kod i przekazanie
+
+Masz gotową specyfikację? Możemy zacząć od przeglądu zakresu.
+
+CO OTRZYMUJESZ
+
+działającą część aplikacji lub integrację według uzgodnionego zakresu
+kod i testy scenariuszy odbioru
+instrukcję uruchomienia oraz ustalony plan przekazania
+
+KOD, KTÓRY MOŻESZ SPRAWDZIĆ
+
+Formularz i API: kod Protolume
+
+Projekt własny
+
+Projekt własny. Interfejs nie potwierdza dostarczenia wiadomości ani wyników biznesowych klientów.
+
+Formularz, obsługa zapytania, testy i konfiguracja uruchomienia. Przejrzyj pliki źródłowe albo pobierz paczkę API z instrukcją lokalnego uruchomienia testów.
+
+01
+Formularz
+
+Pola, walidacja i dostępne komunikaty błędów.
+
+02
+API
+
+Sprawdzenie danych, limit żądań i obsługa wyniku.
+
+03
+Dostarczenie
+
+Adapter SMTP oraz jawna obsługa niepowodzenia.
+
+Przejrzyj 6 plików: formularz, API, testy i utrzymanie
+Pobierz API, testy i instrukcję (.zip)
+Pobierz instrukcję i mapę plików (.md)
+Pobierz fragment PR #56 (.patch)
+Wersja źródeł i zakres przykładu
+
+REZULTATY
+
+Od rozproszonej pracy do konkretnego rezultatu
+Panel operacyjny
+
+Docelowy sposób pracy: Zespół widzi status spraw w jednym miejscu.
+
+aplikacja webowa dla zespołu
+role użytkowników
+dane lub integracje pierwszego etapu
+
+Ważna zależność: Wymaga ustalenia źródła prawdy i uprawnień.
+
+Asystent wiedzy
+
+Docelowy sposób pracy: Użytkownik dostaje odpowiedź z materiałów albo sprawa trafia do człowieka.
+
+przygotowanie i wyszukiwanie wiedzy
+interfejs rozmowy
+przekazanie pytania do człowieka
+
+Ważna zależność: Jakość zależy od aktualnych materiałów źródłowych.
+
+Automatyzacja procesu
+
+Docelowy sposób pracy: Powtarzalne działania przebiegają w ustalonej kolejności z widocznym statusem.
+
+formularz, API lub zdarzenie
+integracje między systemami
+statusy, powiadomienia i wyjątki
+
+Ważna zależność: Wymaga dostępu do systemów i punktu przekazania człowiekowi.
+
+ZAKRES I WYCENA
+
+Zakres, odbiór i koszt w jednym ustaleniu
+
+Podstawą wyceny jest pierwszy użyteczny rezultat: dla kogo działa, z jakich danych korzysta i jak sprawdzimy jego odbiór.
+
+Co ustalamy przed startem
+użytkowników, scenariusze i rezultat pierwszej wersji
+interfejs, API, źródła danych i integracje
+uprawnienia oraz wymagania bezpieczeństwa
+kryteria odbioru, testy i dokumentację
+odpowiedzialność za publikację, monitoring i utrzymanie
+Nie wchodzą automatycznie w wycenę
+
+Wycena zależy od potwierdzonego zakresu. Budżet w formularzu jest orientacyjny; zmiana zakresu może zmienić wycenę i harmonogram.
+
+PROCES
+
+Od celu do kodu, który można przejąć
+1
+Cel i pierwszy rezultat
+
+Wybieramy scenariusz, granice aplikacji i kryteria odbioru.
+
+2
+Implementacja z punktami kontrolnymi
+
+Pokazujemy kolejne elementy i sprawdzamy ich działanie.
+
+3
+Odbiór i przekazanie
+
+Sprawdzamy scenariusze i przekazujemy kod, testy oraz instrukcje. Dalsze utrzymanie uzgadniamy osobno.
+
+NASTĘPNY KROK
+
+Planujesz aplikację, API, integrację albo automatyzację?
+
+Opisz obecną sytuację, użytkowników i oczekiwany rezultat. Jeśli zakres jest gotowy, przejdziemy dalej.
+
+Opisz projekt

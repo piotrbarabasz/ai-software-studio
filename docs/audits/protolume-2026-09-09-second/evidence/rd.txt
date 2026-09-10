@@ -1,0 +1,71 @@
+R&D
+
+Eksperyment z wynikiem, kodem i ograniczeniami
+
+Sprawdzam proste założenia przed rozbudową rozwiązania. Poniżej możesz odtworzyć pomiar wyszukiwania i zobaczyć również nieudane przypadki.
+
+Przejrzyj wynik i metodę
+Omów konkretny problem
+
+EKSPERYMENT WŁASNY · WYSZUKIWANIE BEZ MODELU AI
+
+Czy wspólne słowa wystarczą do znalezienia źródła?
+
+Pomiar: 2026-09-08. Odtworzony z kodu 9 września 2026.
+
+Przypadki zgodne z oczekiwaniem
+10 / 12
+Pytania z oczekiwanym źródłem
+7 / 9
+Poprawny brak wyniku poza zakresem
+3 / 3
+
+Mały autorski zestaw, bez niezależnego zbioru testowego. Wynik dotyczy pierwszego znalezionego fragmentu lub poprawnego braku wyniku; nie mierzy jakości odpowiedzi AI.
+
+Co nie zadziałało
+Czy te odpowiedzi generuje sztuczna inteligencja?
+
+Nie znaleziono fragmentu. Oczekiwane źródło: rag-source-simulation.
+
+Czy pokazujecie prawdziwy sukces przedsiębiorstwa?
+
+Nie znaleziono fragmentu. Oczekiwane źródło: rag-source-report.
+
+W tych dwóch parafrazach podobieństwo słów nie wystarczyło. Kolejny krok to porównanie z wyszukiwaniem semantycznym na osobnych pytaniach. Takiego porównania jeszcze nie wykonano.
+
+Hipoteza, dane i ustawienia wyszukiwania
+Odtwórz pomiar i sprawdź jego ograniczenia
+Pobierz kod i dane (.zip)
+Wszystkie wyniki (.json)
+Instrukcja i metoda (.md)
+Wersja i sumy kontrolne
+
+DALSZE KIERUNKI
+
+Pytania do kolejnych eksperymentów
+
+Poniższe tematy są planami. Nie przedstawiają zakończonych wdrożeń ani potwierdzonych wyników.
+
+PLAN EKSPERYMENTU
+
+Kontrola kosztów agentów
+
+Sprawdzić, jak monitorować koszt, jakość i zachowanie modeli w praktyce.
+
+PLAN EKSPERYMENTU
+
+Ewaluacja RAG
+
+Wypracować wzorce oceny odpowiedzi oraz jakości indeksów wiedzy.
+
+PLAN EKSPERYMENTU
+
+Orkiestracja przez komunikatory
+
+Sprawdzić, jak zarządzać zadaniami i zatwierdzeniami przez komunikatory.
+
+PLAN EKSPERYMENTU
+
+Automatyczna ocena odpowiedzi
+
+Uprościć walidację odpowiedzi i proponować lepsze wzorce orkiestracji.

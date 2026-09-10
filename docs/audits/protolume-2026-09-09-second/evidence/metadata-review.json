@@ -1,0 +1,30 @@
+{
+  "recordedAt": "2026-09-10T09:10:05.907Z",
+  "cors": [
+    {
+      "origin": "https://protolume.pl",
+      "status": 200,
+      "allowOrigin": "https://protolume.pl",
+      "body": {
+        "status": "ok",
+        "buildSha": "8ccc20c"
+      }
+    },
+    {
+      "origin": "https://audit-origin.example.test",
+      "status": 200,
+      "allowOrigin": null,
+      "body": {
+        "status": "ok",
+        "buildSha": "8ccc20c"
+      }
+    }
+  ],
+  "og": {
+    "status": 200,
+    "mime": "image/png",
+    "bytes": 328101,
+    "width": 1200,
+    "height": 630
+  }
+}

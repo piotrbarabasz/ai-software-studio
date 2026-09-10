@@ -1,0 +1,1221 @@
+{
+  "recordedAt": "2026-09-09T21:19:50.802Z",
+  "checks": [
+    {
+      "name": "rag-visible-sales-cta-context",
+      "passed": true,
+      "links": [
+        {
+          "text": "Opisz proces",
+          "href": "/kontakt?projectType=rag_chatbot_demo&service=rag"
+        },
+        {
+          "text": "Opisz proces",
+          "href": "/kontakt?projectType=rag_chatbot_demo&service=rag"
+        }
+      ],
+      "visited": [
+        {
+          "url": "https://protolume.pl/kontakt?projectType=rag_chatbot_demo&service=rag",
+          "firstInput": 504.140625
+        }
+      ],
+      "corrects": "interactions.json selector included a hidden source reference to /kontakt; this is not a sales CTA failure"
+    },
+    {
+      "name": "native-details-code-download-and-pdf",
+      "passed": true,
+      "sourceMime": "text/plain",
+      "sourceBytes": 8360,
+      "mailFallback": "Formularz wymaga JavaScriptu. Możesz wysłać opis bezpośrednio na publiczny adres: kontakt@protolume.pl",
+      "honeypot": {
+        "tabindex": -1,
+        "ariaHidden": "true"
+      },
+      "pdfFilename": "protolume-raport-demo.pdf",
+      "corrects": "interactions.json attempted response.body after disposing the browser context; captured before close here"
+    },
+    {
+      "name": "header-cta-context-and-unknown-query",
+      "passed": true,
+      "headerLinks": [
+        {
+          "text": "Opisz proces",
+          "href": "/kontakt?projectType=mvp_prototype"
+        }
+      ],
+      "unknownProjectType": "other",
+      "unknownServiceVisible": 0,
+      "canonical": "https://protolume.pl/kontakt"
+    },
+    {
+      "name": "home-proof-contrast-normal-motion-and-readable-sections",
+      "passed": true,
+      "data": [
+        {
+          "route": "/",
+          "width": 390,
+          "animations": [
+            {
+              "state": "running",
+              "iterations": 1
+            },
+            {
+              "state": "running",
+              "iterations": 1
+            },
+            {
+              "state": "running",
+              "iterations": 1
+            },
+            {
+              "state": "running",
+              "iterations": 1
+            },
+            {
+              "state": "running",
+              "iterations": 1
+            }
+          ],
+          "headings": [
+            {
+              "text": "Wiadomość",
+              "color": "rgb(247, 247, 250)",
+              "backgrounds": [
+                "rgb(8, 10, 16)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "17.6px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Propozycja",
+              "color": "rgb(247, 247, 250)",
+              "backgrounds": [
+                "rgb(8, 10, 16)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "17.6px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Twoja decyzja",
+              "color": "rgb(247, 247, 250)",
+              "backgrounds": [
+                "rgb(8, 10, 16)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "17.6px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Tak może zmienić się obsługa jednego zapytania",
+              "color": "rgb(247, 247, 250)",
+              "backgrounds": [
+                "rgb(16, 19, 28)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "39px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Przed — ręczna obsługa",
+              "color": "rgb(247, 247, 250)",
+              "backgrounds": [
+                "rgb(16, 19, 28)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "17.6px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Po — propozycja zmiany",
+              "color": "rgb(247, 247, 250)",
+              "backgrounds": [
+                "rgb(16, 19, 28)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "17.6px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Decyzja pracownika",
+              "color": "rgb(247, 247, 250)",
+              "backgrounds": [
+                "rgb(16, 19, 28)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "17.6px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Zobacz zamiast czytać.",
+              "color": "rgb(247, 247, 250)",
+              "backgrounds": [
+                "rgb(16, 19, 28)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "39px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Symulacja asystenta wiedzy",
+              "color": "rgb(247, 247, 250)",
+              "backgrounds": [
+                "rgb(28, 33, 48)",
+                "rgb(16, 19, 28)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "20px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Przykładowy raport decyzyjny",
+              "color": "rgb(247, 247, 250)",
+              "backgrounds": [
+                "rgb(28, 33, 48)",
+                "rgb(16, 19, 28)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "20px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Gdzie zespół wykonuje powtarzalną pracę?",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "39px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Od procesu do działającego demo w 7 dni",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "39px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Po 7 dniach",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "18.4px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Osoba odpowiedzialna za projekt",
+              "color": "rgb(16, 19, 28)",
+              "backgrounds": [
+                "rgb(244, 241, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "39px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Pokaż proces, który zabiera czas",
+              "color": "rgb(247, 247, 250)",
+              "backgrounds": [
+                "rgb(16, 19, 28)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "39px",
+              "fontWeight": "700"
+            }
+          ]
+        },
+        {
+          "route": "/",
+          "width": 1440,
+          "animations": [
+            {
+              "state": "running",
+              "iterations": 1
+            },
+            {
+              "state": "running",
+              "iterations": 1
+            },
+            {
+              "state": "running",
+              "iterations": 1
+            },
+            {
+              "state": "running",
+              "iterations": 1
+            },
+            {
+              "state": "running",
+              "iterations": 1
+            }
+          ],
+          "headings": [
+            {
+              "text": "Wiadomość",
+              "color": "rgb(247, 247, 250)",
+              "backgrounds": [
+                "rgb(8, 10, 16)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "17.6px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Propozycja",
+              "color": "rgb(247, 247, 250)",
+              "backgrounds": [
+                "rgb(8, 10, 16)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "17.6px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Twoja decyzja",
+              "color": "rgb(247, 247, 250)",
+              "backgrounds": [
+                "rgb(8, 10, 16)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "17.6px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Tak może zmienić się obsługa jednego zapytania",
+              "color": "rgb(247, 247, 250)",
+              "backgrounds": [
+                "rgb(16, 19, 28)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "64.8px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Przed — ręczna obsługa",
+              "color": "rgb(247, 247, 250)",
+              "backgrounds": [
+                "rgb(16, 19, 28)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "17.6px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Po — propozycja zmiany",
+              "color": "rgb(247, 247, 250)",
+              "backgrounds": [
+                "rgb(16, 19, 28)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "17.6px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Decyzja pracownika",
+              "color": "rgb(247, 247, 250)",
+              "backgrounds": [
+                "rgb(16, 19, 28)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "17.6px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Zobacz zamiast czytać.",
+              "color": "rgb(247, 247, 250)",
+              "backgrounds": [
+                "rgb(16, 19, 28)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "64.8px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Symulacja asystenta wiedzy",
+              "color": "rgb(247, 247, 250)",
+              "backgrounds": [
+                "rgb(28, 33, 48)",
+                "rgb(16, 19, 28)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "26.4px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Przykładowy raport decyzyjny",
+              "color": "rgb(247, 247, 250)",
+              "backgrounds": [
+                "rgb(28, 33, 48)",
+                "rgb(16, 19, 28)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "26.4px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Gdzie zespół wykonuje powtarzalną pracę?",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "64.8px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Od procesu do działającego demo w 7 dni",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "64.8px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Po 7 dniach",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "18.4px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Osoba odpowiedzialna za projekt",
+              "color": "rgb(16, 19, 28)",
+              "backgrounds": [
+                "rgb(244, 241, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "64.8px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Pokaż proces, który zabiera czas",
+              "color": "rgb(247, 247, 250)",
+              "backgrounds": [
+                "rgb(16, 19, 28)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "64.8px",
+              "fontWeight": "700"
+            }
+          ]
+        },
+        {
+          "route": "/development",
+          "width": 390,
+          "animations": [
+            {
+              "state": "running",
+              "iterations": 1
+            },
+            {
+              "state": "running",
+              "iterations": 1
+            },
+            {
+              "state": "running",
+              "iterations": 1
+            }
+          ],
+          "headings": [
+            {
+              "text": "Formularz i API: kod Protolume",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "39px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Formularz",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(244, 241, 255)",
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "16.8px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "API",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(244, 241, 255)",
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "16.8px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Dostarczenie",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(244, 241, 255)",
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "16.8px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Od rozproszonej pracy do konkretnego rezultatu",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "28.8px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Panel operacyjny",
+              "color": "rgb(16, 19, 28)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "18.8428px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Asystent wiedzy",
+              "color": "rgb(16, 19, 28)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "18.8428px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Automatyzacja procesu",
+              "color": "rgb(16, 19, 28)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "18.8428px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Zakres, odbiór i koszt w jednym ustaleniu",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "28.8px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Od celu do kodu, który można przejąć",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(244, 241, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "28.8px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Cel i pierwszy rezultat",
+              "color": "rgb(16, 19, 28)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(244, 241, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "18.8428px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Implementacja z punktami kontrolnymi",
+              "color": "rgb(16, 19, 28)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(244, 241, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "18.8428px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Odbiór i przekazanie",
+              "color": "rgb(16, 19, 28)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(244, 241, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "18.8428px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Planujesz aplikację, API, integrację albo automatyzację?",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "39px",
+              "fontWeight": "700"
+            }
+          ]
+        },
+        {
+          "route": "/dla-software-house",
+          "width": 1440,
+          "animations": [
+            {
+              "state": "running",
+              "iterations": 1
+            },
+            {
+              "state": "running",
+              "iterations": 1
+            },
+            {
+              "state": "running",
+              "iterations": 1
+            }
+          ],
+          "headings": [
+            {
+              "text": "Kiedy współpraca ma sens",
+              "color": "rgb(16, 19, 28)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "32px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Formularz i API: kod Protolume",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "64.8px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Formularz",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(244, 241, 255)",
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "16.8px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "API",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(244, 241, 255)",
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "16.8px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Dostarczenie",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(244, 241, 255)",
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "16.8px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Zakres wsparcia technicznego",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "50.4px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Jak dołączam do projektu",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(244, 241, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "50.4px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Repozytorium i granice modułu",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(244, 241, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "19.89px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Zmiana do przeglądu",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(244, 241, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "19.89px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Odbiór i przekazanie",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(244, 241, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "19.89px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Pytania o współpracę partnerską",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(244, 241, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "50.4px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Jaki moduł odciąży Twój zespół?",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "50.4px",
+              "fontWeight": "700"
+            }
+          ]
+        },
+        {
+          "route": "/studio",
+          "width": 390,
+          "animations": [],
+          "headings": [
+            {
+              "text": "Jak wygląda współpraca?",
+              "color": "rgb(16, 19, 28)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "21.6px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Sprawdź przykład i jego zakres",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "28.8px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Protolume: formularz, API i kod projektu",
+              "color": "rgb(16, 19, 28)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "22.4px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Symulacja asystenta wiedzy",
+              "color": "rgb(16, 19, 28)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "22.4px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Przykładowy raport decyzyjny",
+              "color": "rgb(16, 19, 28)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "22.4px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Odpowiedź i dokument źródłowy",
+              "color": "rgb(16, 19, 28)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "22.4px",
+              "fontWeight": "700"
+            }
+          ]
+        },
+        {
+          "route": "/rd",
+          "width": 1440,
+          "animations": [],
+          "headings": [
+            {
+              "text": "Czy wspólne słowa wystarczą do znalezienia źródła?",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "64.8px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Co nie zadziałało",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "19.89px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Pytania do kolejnych eksperymentów",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "52px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Kontrola kosztów agentów",
+              "color": "rgb(16, 19, 28)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "19.89px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Ewaluacja RAG",
+              "color": "rgb(16, 19, 28)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "19.89px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Orkiestracja przez komunikatory",
+              "color": "rgb(16, 19, 28)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "19.89px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Automatyczna ocena odpowiedzi",
+              "color": "rgb(16, 19, 28)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "19.89px",
+              "fontWeight": "700"
+            }
+          ]
+        },
+        {
+          "route": "/przyklad-demo",
+          "width": 390,
+          "animations": [],
+          "headings": [
+            {
+              "text": "Warunkowe GO do kolejnego etapu",
+              "color": "rgb(247, 247, 250)",
+              "backgrounds": [
+                "rgb(104, 71, 245)",
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "24px",
+              "fontWeight": "800"
+            },
+            {
+              "text": "Scenariusze opisane w przykładzie",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "28.8px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Pytanie z pełną odpowiedzią w materiałach",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "18.8428px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Pytanie wymagające zatwierdzenia",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "18.8428px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Pytanie poza zakresem wymagające handoffu",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "18.8428px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Jedno pytanie, które miało odpowiedzieć demo",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "28.8px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Obecny punkt wyjścia",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "28.8px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Role",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "18.8428px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Ręczne kroki",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "18.8428px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Źródła danych",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "18.8428px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Główne miejsca utraty czasu",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "18.8428px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Założenia wejściowe",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "18.8428px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Zakres demo i elementy poza zakresem",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "28.8px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Najpierw wartość i rezultat",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "18.8428px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Co nadal wymaga walidacji",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "color(srgb 0.976784 0.979686 0.991294)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "18.8428px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Przykładowe kryteria do uzgodnienia z klientem",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "28.8px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Rejestr ryzyk",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "28.8px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Jakość dokumentów",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "18.8428px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Dane osobowe",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "18.8428px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Integracja poczty",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "18.8428px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Błędna klasyfikacja",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "18.8428px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Koszt modeli",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "18.8428px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Odpowiedzialność człowieka",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "18.8428px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Plan pierwszego etapu",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "28.8px",
+              "fontWeight": "700"
+            },
+            {
+              "text": "Zachowaj raport lub opisz podobny proces",
+              "color": "rgb(17, 19, 26)",
+              "backgrounds": [
+                "rgb(255, 255, 255)",
+                "rgb(247, 248, 252)",
+                "rgb(247, 248, 252)"
+              ],
+              "fontSize": "39px",
+              "fontWeight": "700"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "studio-education-and-report-print",
+      "passed": true,
+      "education": "Doświadczenie i wykształcenie4+ lata doświadczenia w tworzeniu oprogramowaniaDoświadczenie komercyjne obejmuje analizę, implementację oraz dostarczanie działających rozwiązań.Politechnika Wrocławska — zaufana sztuczna inteligencjaUkończony program studiów magisterskich w obszarze zaufanej sztucznej inteligencji; praca dyplomowa jest ukończona i oczekuje na obronę. Wcześniej ukończone studia inżynierskie na kierunku Mechatronika.Doświadczenie w zespołach międzynarodowychPraca w międzynarodowych i interdyscyplinarnych zespołach, w tym współpraca z zespołem z Londynu oraz interesariuszami biznesowymi i technicznymi.Odpowiedzialność end-to-endBezpośredni kontakt, analiza procesu, decyzje techniczne, realizacja, testy i odbiór ustalonego zakresu pozostają po jednej stronie odpowiedzialności.",
+      "print": {
+        "bodyOverflow": false,
+        "headerDisplay": "none",
+        "mainText": "PRZYKŁADOWY REZULTAT\n\nZapytania produktowe: przykład raportu po demo\n\nTo fikcyjny scenariusz demonstracyjny. Nie jest case study klienta ani obietnicą gotowego wdrożenia produkcyjnego.\n\nWersja decision-report-v2 · 2026-09-09\n\nPrzykład decyzji o dalszym etapie: zakres, trzy opisane ścieżki i ryzyka do sprawdzenia przed pilotażem.\n\nOpisane scenariusze: 3. Testy rzeczywistego systemu: nie wykonano.\n\nSTRESZCZENIE DECYZJI\n\nWARUNKOWE GO DO KOLEJNEGO ETAPU\n\nPrzykład przedstawia źródło odpowiedzi, szkic i punkt zatwierdzenia. Opis tych ścieżek pozwala ustalić następny test; nie potwierdza działania integracji.\n\nNastępny krok: Warto przejść do uzgodnienia danych, sandboxa integracji i zasad akceptacji przed szerszym pilotażem.\n\nWarunki kolejnego etapu i brakujące informacje\nWarunki\nustalenie danych wejściowych i zasad ich jakości\nsandbox integracji poczty oraz kontroli dostępu\njasny model odpowiedzialności i zatwierdzania\nBrakujące informacje\njakie materiały mają być źródłem prawdy\njakie role mogą zatwierdzać odpowiedź\njakie wolumeny i limity kosztowe są docelowe\n\nSCENARIUSZE\n\nScenariusze opisane w przykładzie\n\nStatus „ścieżka opisana w przykładzie” oznacza opis oczekiwanego przebiegu. Nie jest wynikiem testu rzeczywistego systemu ani potwierdzeniem jakości.\n\nPytanie z pełną odpowiedzią w materiałach\n\nŚCIEŻKA OPISANA W PRZYKŁADZIE\n\nWejście\nZapytanie o parametry produktu opisane w aktualnej instrukcji i cenniku.\nOczekiwane zachowanie\nSystem wskazuje źródło, przygotowuje propozycję odpowiedzi i daje operatorowi możliwość zatwierdzenia.\nPrzebieg w fikcyjnym przykładzie\nOperator widzi dokument źródłowy, szkic odpowiedzi i ekran zatwierdzenia przed wysłaniem.\nPytanie wymagające zatwierdzenia\n\nŚCIEŻKA OPISANA W PRZYKŁADZIE\n\nWejście\nZapytanie z niejednoznacznym wariantem, gdzie materiał sugeruje odpowiedź, ale potrzebna jest kontrola.\nOczekiwane zachowanie\nSystem oznacza odpowiedź jako wymagającą zatwierdzenia i zatrzymuje wysyłkę do czasu decyzji człowieka.\nPrzebieg w fikcyjnym przykładzie\nOperator widzi propozycję, źródło i przycisk przekazania do akceptacji bez automatycznej wysyłki.\nPytanie poza zakresem wymagające handoffu\n\nŚCIEŻKA OPISANA W PRZYKŁADZIE\n\nWejście\nZapytanie o nieudokumentowany wariant produktu lub warunek, którego nie ma w materiałach.\nOczekiwane zachowanie\nSystem nie udaje pewności, tylko przekazuje sprawę do handoffu z informacją o braku danych.\nPrzebieg w fikcyjnym przykładzie\nPytanie trafia do handoffu z wyjaśnieniem, że nie ma podstaw do odpowiedzi automatycznej.\n\nPYTANIE WALIDACYJNE\n\nJedno pytanie, które miało odpowiedzieć demo\n\nCzy operator może od wiadomości dojść do propozycji odpowiedzi, sprawdzić źródło i podjąć decyzję o wysłaniu albo handoffie?\n\nPUNKT WYJŚCIA\n\nObecny punkt wyjścia\nRole\nOsoba obsługująca skrzynkę\nEkspert produktowy\nOsoba zatwierdzająca odpowiedź\nRęczne kroki\nręczne czytanie wiadomości i rozpoznanie tematu\nszukanie informacji w dokumentach\nkopiowanie danych do odpowiedzi\nprzekazanie trudniejszych pytań właściwej osobie\nŹródła danych\ne-maile produktowe\ninstrukcje i dokumentacja\nwewnętrzna lista osób odpowiedzialnych\nGłówne miejsca utraty czasu\nprzerzucanie informacji między skrzynką i dokumentami\nbrak jednego widoku statusu sprawy\nZałożenia wejściowe\nskrzynka zawiera powtarzalne pytania produktowe\noperator ma dostęp do materiałów źródłowych\nistnieje osoba zatwierdzająca wysyłkę lub handoff\n\nZAKRES DEMO\n\nZakres demo i elementy poza zakresem\nNajpierw wartość i rezultat\njedna propozycja odpowiedzi i widoczny punkt akceptacji\nprzykładowy zestaw dokumentów i danych dla jednego procesu\nkontrola człowieka przed wysłaniem albo handoffem\nCo nadal wymaga walidacji\nprodukcyjna integracja poczty i automatyczna wysyłka\npełny system uprawnień, audytu i monitoringu\ngeneralizacja na wszystkie linie produktowe bez walidacji\nobietnica wyniku biznesowego bez danych konkretnej firmy\n\nPRZYKŁADOWE KRYTERIA DO UZGODNIENIA Z KLIENTEM\n\nPrzykładowe kryteria do uzgodnienia z klientem\noperator widzi źródło odpowiedzi\nodpowiedź nie jest wysyłana bez zatwierdzenia\npytanie bez danych trafia do handoffu\nstatus sprawy jest widoczny na każdym etapie\n\nREJESTR RYZYK\n\nRejestr ryzyk\nJakość dokumentów\n\nZnaczenie: Nieaktualne lub niejednoznaczne materiały mogą prowadzić do błędnych propozycji odpowiedzi.\n\nProponowane ograniczenie ryzyka: Wybrać zatwierdzony zestaw źródeł i ustalić właściciela dokumentów.\n\nWeryfikacja: Przed podłączeniem szerszego zestawu materiałów.\n\nDane osobowe\n\nZnaczenie: Wiadomości mogą zawierać dane wrażliwe lub identyfikujące klienta.\n\nProponowane ograniczenie ryzyka: Uzgodnić maskowanie, zasady retencji i ograniczony dostęp do treści.\n\nWeryfikacja: Przed testami na realnych wiadomościach.\n\nIntegracja poczty\n\nZnaczenie: Błędna konfiguracja może skutkować brakiem pobrania lub wysyłki wiadomości.\n\nProponowane ograniczenie ryzyka: Najpierw uruchomić sandbox i sprawdzić scenariusze odbioru, kolejki i błędów.\n\nWeryfikacja: Przed jakąkolwiek integracją produkcyjną.\n\nBłędna klasyfikacja\n\nZnaczenie: Zapytanie może zostać przypisane do złego typu odpowiedzi albo do złego handoffu.\n\nProponowane ograniczenie ryzyka: Zdefiniować reguły klasyfikacji i zestaw pytań granicznych do testów.\n\nWeryfikacja: W testach jakości i w pilotażu.\n\nKoszt modeli\n\nZnaczenie: Przy większej liczbie spraw koszt przetwarzania może być wyższy niż zakładano.\n\nProponowane ograniczenie ryzyka: Limitować liczbę wywołań, monitorować zużycie i ustalić progi eskalacji.\n\nWeryfikacja: W sandboxie i po pierwszym tygodniu pilotażu.\n\nOdpowiedzialność człowieka\n\nZnaczenie: Bez jasnego zatwierdzenia nie wolno sugerować, że AI ponosi decyzję za zespół.\n\nProponowane ograniczenie ryzyka: Wprowadzić widoczny etap akceptacji i jasno opisać, kto zatwierdza wysyłkę.\n\nWeryfikacja: Przed startem pilotażu i przed odbiorem etapu.\n\nPLAN PIERWSZEGO ETAPU\n\nPlan pierwszego etapu\n1\nwarsztat danych\n2\nsandbox integracji\n3\nrole i uprawnienia\n4\ntesty jakości\n5\nmonitoring\n6\npilotaż\nZachowaj raport lub opisz podobny proces\n\nPDF zawiera ten sam fikcyjny przykład. Zakres konkretnego etapu ustalamy osobno.",
+        "details": [
+          {
+            "summary": "Warunki kolejnego etapu i brakujące informacje",
+            "open": false
+          }
+        ]
+      }
+    }
+  ],
+  "blockedWrites": [],
+  "completedAt": "2026-09-09T21:20:04.440Z"
+}

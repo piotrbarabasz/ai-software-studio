@@ -1,0 +1,9 @@
+{
+  "recordedAt": "2026-09-10T09:10:50.099Z",
+  "status": 200,
+  "masterSha": "8ccc20c23c11f32f54d3e677455330e14f4eac3c",
+  "productionDeclaredSha": "8ccc20c",
+  "homeSha256": "0b564e6b759c82c0b26e1b1e9bf8bf59a6b7c5c1f85be73f7b8796f24ee14fe8",
+  "sameMasterAsMainAudit": true,
+  "sameHomeBytesAsMainAudit": true
+}

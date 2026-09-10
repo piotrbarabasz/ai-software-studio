@@ -1,0 +1,72 @@
+O PROTOLUME
+
+Piotr Barabasz
+
+Właściciel i odpowiedzialny partner techniczny
+
+Prowadzę analizę procesu, decyzje techniczne, realizację, testy i odbiór ustalonego zakresu.
+
+Opisz planowane wdrożenie
+Zobacz przykłady pracy
+Jak wygląda współpraca?
+Rozmawiasz bezpośrednio ze mną. Przed startem ustalamy zakres, cenę i kryteria odbioru.
+Pokazuję postępy na krótkich przeglądach. Decyzje i ograniczenia zapisujemy na bieżąco.
+Przed uruchomieniem ustalamy testy, bezpieczeństwo i odpowiedzialność za utrzymanie.
+
+Dane i kod pozostają prywatne.
+
+MATERIAŁY DO SPRAWDZENIA
+
+Sprawdź przykład i jego zakres
+
+Symulacja, fikcyjny raport i własna aplikacja mają różne zastosowania. Przy każdym materiale podajemy, co potwierdza.
+
+Protolume: formularz, API i kod projektu
+
+Projekt własny
+
+Projekt własny. Interfejs nie potwierdza dostarczenia wiadomości ani wyników biznesowych klientów.
+
+Problem: Jak połączyć ofertę i obsługę zapytań w jednej aplikacji?
+
+Co zostało zbudowane: Aplikacja Angular z API formularza oraz konfiguracją testów i wdrożenia w tym projekcie.
+
+Jak sprawdzić ten materiał
+Sprawdź kod i testy
+Symulacja asystenta wiedzy
+
+Symulacja
+
+Bez połączenia z modelem AI i bez wyszukiwania w dokumentach. To przykład interfejsu, nie test jakości RAG.
+
+Problem: Jak pokazać rozmowę z asystentem i zachowanie poza zakresem?
+
+Co zostało zbudowane: Lokalna symulacja z kategoriami pytań i dopasowaniem do przygotowanych odpowiedzi.
+
+Jak sprawdzić ten materiał
+Otwórz symulację
+Przykładowy raport decyzyjny
+
+Symulacja
+
+Materiał fikcyjny. Nie dokumentuje uruchomionego CRM, projektu klienta ani zmierzonych oszczędności.
+
+Problem: Jak przed startem poznać formę podsumowania etapu demo?
+
+Co zostało zbudowane: Fikcyjny raport demonstracyjny z przykładową decyzją i kryteriami odbioru.
+
+Jak sprawdzić ten materiał
+Otwórz przykładowy raport
+Odpowiedź i dokument źródłowy
+
+Symulacja
+
+Przykład przygotowany ręcznie. Nie uruchamia wyszukiwania ani modelu AI i nie potwierdza jakości RAG.
+
+Problem: Jak użytkownik może samodzielnie sprawdzić podstawę odpowiedzi?
+
+Co zostało zbudowane: Trzy przygotowane pytania oraz publiczny dokument z otwieranymi fragmentami.
+
+Jak sprawdzić ten materiał
+Sprawdź przykład ze źródłem
+Doświadczenie i wykształcenie

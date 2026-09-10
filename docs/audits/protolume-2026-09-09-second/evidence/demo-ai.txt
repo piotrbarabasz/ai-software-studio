@@ -1,0 +1,78 @@
+DEMO JEDNEGO PROCESU W 7 DNI
+
+Zobacz jeden scenariusz swojej firmy w działającym demo
+
+Jeden scenariusz, wynik uzgodnionych testów i rekomendacja dalszego kroku.
+
+Przed rozpoczęciem ustalamy dane, zakres działania i kryteria sprawdzenia. Termin i warunki startu potwierdzamy przy ustalaniu zakresu.
+
+Wycena przed rozpoczęciem prac. Wysłanie opisu nie rozpoczyna płatnej realizacji.
+
+Wycena i decyzja po pierwszym etapie
+Omów sytuację do sprawdzenia
+Zobacz przykładowy raport
+
+DLA KOGO
+
+Dla zespołów, które chcą sprawdzić jedną sytuację przed większą inwestycją
+powtarzalne pytania klientów lub zespołu
+ręczne przekazywanie spraw między ludźmi i narzędziami
+brak jednego widoku statusów, danych lub decyzji
+
+SIEDEM DNI
+
+Jak powstaje demo jednego scenariusza
+wybór jednej sytuacji do sprawdzenia
+ustalenie danych, użytkowników i założeń
+projekt widocznego przepływu
+budowa uzgodnionego scenariusza i test jego działania
+prezentacja informacji potrzebnych do decyzji o kolejnym kroku
+
+Symulacja — przygotowane przykłady, bez połączenia z modelem AI.
+
+Sprawdź przykładowy przepływ asystenta wiedzy
+
+Wybierasz gotową odpowiedź zapisaną w tej stronie. Pytanie pozostaje w Twojej przeglądarce.
+
+Wybierz obszar
+Oferta i sprzedaż
+Bezpłatna prezentacja
+Wiedza firmowa
+Obsługa i przekazanie sprawy
+Wybierz przykładowe pytanie
+Ile kosztuje wdrożenie chatbota?
+Jak wygląda przygotowanie demo?
+Czy chatbot może działać na mojej stronie?
+Zadaj własne pytanie
+
+Nie wpisuj danych osobowych ani poufnych. Pytanie jest analizowane wyłącznie w przeglądarce i nie jest wysyłane.
+
+Sprawdź pytanie
+
+Wybierz pytanie, aby zobaczyć stały, przykładowy przebieg odpowiedzi.
+
+Rozpocznij ponownie
+Opisz proces
+
+GRANICE ZAKRESU
+
+Demo a system produkcyjny
+Demo w siedem dni
+widok jednego scenariusza
+decyzja o kolejnym kroku
+informacje o danych, źródłach i ograniczeniach
+System produkcyjny
+pełne integracje i dane
+testy, bezpieczeństwo i monitoring
+zakres rozwijany zgodnie z potrzebami zespołu
+
+PO PRZEGLĄDZIE DEMO
+
+Co otrzymujesz po siedmiu dniach
+
+Najpierw widać działający przebieg, potem zestaw informacji potrzebnych do decyzji o kolejnym kroku.
+
+Na tej podstawie możesz przejść do walidacji, przygotować pierwszy etap albo zatrzymać temat przed większą inwestycją.
+
+Omów sytuację do sprawdzenia
+Zobacz przykładowy raport
