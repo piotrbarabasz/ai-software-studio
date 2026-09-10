@@ -36,3 +36,7 @@
 *.webp binary
 *.woff binary
 *.woff2 binary
+
+# Preserve trailing spaces in the verbatim source patch and third-party license.
+frontend/src/assets/evidence/engineering-0d38ef8/pr-56-hydration.patch whitespace=-blank-at-eol
+frontend/scripts/pdf-fonts/LICENSE_DEJAVU whitespace=-blank-at-eol

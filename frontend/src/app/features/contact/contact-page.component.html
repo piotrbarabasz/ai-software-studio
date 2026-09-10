@@ -3,17 +3,6 @@
     <p class="eyebrow">{{ content.eyebrow }}</p>
     <h1>{{ content.title }}</h1>
     <p class="page-lead">{{ content.lead }}</p>
-    <ol class="next-steps" aria-label="Co wydarzy się dalej">
-      @for (step of content.nextSteps; track step; let index = $index) {
-        <li>
-          <span aria-hidden="true">{{ index + 1 }}</span
-          >{{ step }}
-        </li>
-      }
-    </ol>
-    <div class="contact-assurances">
-      <p>{{ content.noSpecificationNeeded }}</p>
-    </div>
     @if (content.directEmail) {
       <p class="direct-email">
         <strong>{{ content.directEmailLabel }}:</strong>
@@ -35,5 +24,16 @@
       </div>
     </div>
     <app-contact-form />
+    <details class="contact-next">
+      <summary>Co wydarzy się po wysłaniu opisu?</summary>
+      <ol class="next-steps" aria-label="Co wydarzy się dalej">
+        @for (step of content.nextSteps; track step; let index = $index) {
+          <li>
+            <span aria-hidden="true">{{ index + 1 }}</span
+            >{{ step }}
+          </li>
+        }
+      </ol>
+    </details>
   </section>
 </div>

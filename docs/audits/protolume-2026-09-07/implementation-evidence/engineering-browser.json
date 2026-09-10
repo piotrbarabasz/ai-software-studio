@@ -1,0 +1,187 @@
+{
+  "recordedAt": "2026-09-09T13:23:52.953Z",
+  "browser": "151.0.7922.34",
+  "baseUrl": "http://127.0.0.1:4403",
+  "cases": [
+    {
+      "path": "/development",
+      "width": 320,
+      "height": 6860,
+      "proofTop": 897.203125,
+      "laterTop": 3779.3125,
+      "overflow": false,
+      "duplicateIds": [],
+      "violations": [],
+      "proofAnchor": true
+    },
+    {
+      "path": "/development",
+      "width": 360,
+      "height": 6393,
+      "proofTop": 873.03125,
+      "laterTop": 3496.671875,
+      "overflow": false,
+      "duplicateIds": [],
+      "violations": [],
+      "proofAnchor": true
+    },
+    {
+      "path": "/development",
+      "width": 390,
+      "height": 6163,
+      "proofTop": 869.484375,
+      "laterTop": 3397.6875,
+      "overflow": false,
+      "duplicateIds": [],
+      "violations": [],
+      "proofAnchor": true
+    },
+    {
+      "path": "/development",
+      "width": 430,
+      "height": 6115,
+      "proofTop": 876.4375,
+      "laterTop": 3408.859375,
+      "overflow": false,
+      "duplicateIds": [],
+      "violations": [],
+      "proofAnchor": true
+    },
+    {
+      "path": "/development",
+      "width": 768,
+      "height": 5227,
+      "proofTop": 733.4375,
+      "laterTop": 2840.0625,
+      "overflow": false,
+      "duplicateIds": [],
+      "violations": [],
+      "proofAnchor": true
+    },
+    {
+      "path": "/development",
+      "width": 921,
+      "height": 5287,
+      "proofTop": 789.078125,
+      "laterTop": 2956.296875,
+      "overflow": false,
+      "duplicateIds": [],
+      "violations": [],
+      "proofAnchor": true
+    },
+    {
+      "path": "/development",
+      "width": 1024,
+      "height": 4410,
+      "proofTop": 621.0625,
+      "laterTop": 2237.453125,
+      "overflow": false,
+      "duplicateIds": [],
+      "violations": [],
+      "proofAnchor": true
+    },
+    {
+      "path": "/development",
+      "width": 1440,
+      "height": 4832,
+      "proofTop": 732.3125,
+      "laterTop": 2365.125,
+      "overflow": false,
+      "duplicateIds": [],
+      "violations": [],
+      "proofAnchor": true
+    },
+    {
+      "path": "/dla-software-house",
+      "width": 320,
+      "height": 6459,
+      "proofTop": 1156.734375,
+      "laterTop": 2994.53125,
+      "overflow": false,
+      "duplicateIds": [],
+      "violations": [],
+      "proofAnchor": true
+    },
+    {
+      "path": "/dla-software-house",
+      "width": 360,
+      "height": 6114,
+      "proofTop": 1080.703125,
+      "laterTop": 2794.6875,
+      "overflow": false,
+      "duplicateIds": [],
+      "violations": [],
+      "proofAnchor": true
+    },
+    {
+      "path": "/dla-software-house",
+      "width": 390,
+      "height": 5870,
+      "proofTop": 1073.046875,
+      "laterTop": 2715.78125,
+      "overflow": false,
+      "duplicateIds": [],
+      "violations": [],
+      "proofAnchor": true
+    },
+    {
+      "path": "/dla-software-house",
+      "width": 430,
+      "height": 5721,
+      "proofTop": 985.375,
+      "laterTop": 2608.78125,
+      "overflow": false,
+      "duplicateIds": [],
+      "violations": [],
+      "proofAnchor": true
+    },
+    {
+      "path": "/dla-software-house",
+      "width": 768,
+      "height": 4820,
+      "proofTop": 761.125,
+      "laterTop": 2042.5,
+      "overflow": false,
+      "duplicateIds": [],
+      "violations": [],
+      "proofAnchor": true
+    },
+    {
+      "path": "/dla-software-house",
+      "width": 921,
+      "height": 4857,
+      "proofTop": 813.625,
+      "laterTop": 2126.921875,
+      "overflow": false,
+      "duplicateIds": [],
+      "violations": [],
+      "proofAnchor": true
+    },
+    {
+      "path": "/dla-software-house",
+      "width": 1024,
+      "height": 4337,
+      "proofTop": 599.609375,
+      "laterTop": 1840.34375,
+      "overflow": false,
+      "duplicateIds": [],
+      "violations": [],
+      "proofAnchor": true
+    },
+    {
+      "path": "/dla-software-house",
+      "width": 1440,
+      "height": 4823,
+      "proofTop": 704.53125,
+      "laterTop": 2010.921875,
+      "overflow": false,
+      "duplicateIds": [],
+      "violations": [],
+      "proofAnchor": true
+    }
+  ],
+  "errors": [],
+  "downloadMatchesSource": true,
+  "nativeNoJs": true,
+  "contactContext": true
+}

@@ -1,0 +1,23 @@
+[
+  {
+    "path": "/rozwiazania/chatbot-ai-dla-firm",
+    "status": 200,
+    "contentType": "text/html",
+    "cspPresent": true,
+    "robots": null
+  },
+  {
+    "path": "/assets/rag/protolume-materials-v1.json",
+    "status": 200,
+    "contentType": "application/json",
+    "cspPresent": true,
+    "robots": null
+  },
+  {
+    "path": "/audit-route-does-not-exist",
+    "status": 404,
+    "contentType": "text/html",
+    "cspPresent": true,
+    "robots": "noindex, follow"
+  }
+]

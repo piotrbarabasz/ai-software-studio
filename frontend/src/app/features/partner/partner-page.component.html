@@ -34,6 +34,8 @@
     </aside>
   </section>
 
+  <div class="section-shell"><app-engineering-artifact /></div>
+
   <section
     id="zakres-techniczny"
     class="section-shell"
@@ -53,47 +55,33 @@
 
   <section class="section-shell section-muted" aria-labelledby="models-title" appRevealOnScroll>
     <div class="section-heading">
-      <p class="eyebrow">Elastyczny zakres odpowiedzialności</p>
+      <p class="eyebrow">Od repozytorium do przekazania</p>
       <h2 id="models-title">{{ content.modelsTitle }}</h2>
     </div>
-    <div class="model-grid">
+    <ol class="model-grid workflow-list" role="list">
       @for (model of content.models; track model.title) {
-        <article class="card-surface info-card model-card" data-card-variant="info-card">
+        <li class="model-card">
           <h3>{{ model.title }}</h3>
           <p>{{ model.description }}</p>
-        </article>
+        </li>
       }
-    </div>
-  </section>
-
-  <section class="section-shell rules-section" aria-labelledby="rules-title" appRevealOnScroll>
-    <div class="section-heading">
-      <p class="eyebrow">Przed rozpoczęciem</p>
-      <h2 id="rules-title">{{ content.rulesTitle }}</h2>
-      <p class="page-lead">{{ content.rulesLead }}</p>
-    </div>
-    <ul class="rules-list">
-      @for (rule of content.rules; track rule) {
-        <li>{{ rule }}</li>
-      }
-    </ul>
+    </ol>
   </section>
 
   <section
-    class="section-shell evidence-section"
-    aria-labelledby="evidence-title"
+    class="section-shell rules-section"
+    aria-label="Uzgodnienia współpracy"
     appRevealOnScroll
   >
-    <div class="section-heading">
-      <p class="eyebrow">Dowody pracy</p>
-      <h2 id="evidence-title">{{ content.evidenceTitle }}</h2>
-      <p class="page-lead">{{ content.evidenceLead }}</p>
-    </div>
-    <div class="evidence-links">
-      @for (link of content.evidenceLinks; track link.path) {
-        <a class="secondary-action" [routerLink]="link.path">{{ link.label }}</a>
-      }
-    </div>
+    <details class="cooperation-details" open>
+      <summary>{{ content.rulesTitle }}</summary>
+      <p class="page-lead">{{ content.rulesLead }}</p>
+      <ul class="rules-list">
+        @for (rule of content.rules; track rule) {
+          <li>{{ rule }}</li>
+        }
+      </ul>
+    </details>
   </section>
 
   <section

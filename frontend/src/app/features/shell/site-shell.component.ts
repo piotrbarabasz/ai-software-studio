@@ -395,7 +395,7 @@ export class SiteShellComponent implements OnInit {
         '@id': `${siteSeo.origin}/przyklad-demo#creative-work`,
         '@type': 'CreativeWork',
         name: siteContent.demoExample.title,
-        description: `${siteContent.demoExample.fictionalNotice} ${siteContent.demoExample.decisionSummary.note}`,
+        description: siteContent.demoExample.fictionalNotice,
         url: absoluteSiteUrl('/przyklad-demo'),
         inLanguage: 'pl-PL',
         author: { '@id': `${siteSeo.origin}#founder` },

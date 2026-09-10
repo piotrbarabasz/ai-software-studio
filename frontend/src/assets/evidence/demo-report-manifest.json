@@ -1,0 +1,13 @@
+{
+  "version": "decision-report-v2",
+  "preparedOn": "2026-09-09",
+  "contentSha256": "07bb3611d72484189aa0fdd812b88e79200407b48e5667234d9f86479dd24971",
+  "rendererSha256": "619e3b62f4b885613a88aee18b4f7407becaef7931d97c487a0aee24b4dfed53",
+  "fonts": {
+    "DejaVuSans.ttf": "3fdf69cabf06049ea70a00b5919340e2ce1e6d02b0cc3c4b44fb6801bd1e0d22",
+    "DejaVuSans-Bold.ttf": "b184b89e3c1075f22f6b71575b6fc20d4972b3cfd3b23322ca6fd596dcaef167"
+  },
+  "pdfSha256": "72210db10b313bdc5065407f62eed685b0a1e37541119c0b0d16268e00f41aa2",
+  "generator": "ReportLab 5.0.1",
+  "pdf": "protolume-raport-demo.pdf"
+}

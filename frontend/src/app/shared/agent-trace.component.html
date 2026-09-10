@@ -1,0 +1,61 @@
+@if (trace; as item) {
+  <section class="artifact">
+    <header>
+      <h2>{{ item.task }}</h2>
+      <p class="artifact-label">
+        {{
+          item.review.origin === 'fixture'
+            ? 'Przykład testowy interfejsu — nie przedstawia wykonania agenta.'
+            : 'Zapis wykonania zadania'
+        }}
+      </p>
+      <p>{{ item.review.provenance }}</p>
+      <p>Data {{ item.review.recordedOn }} · wersja {{ item.review.version }}</p>
+    </header>
+    <div class="artifact-result">
+      <h3>Wynik: {{ stateLabel(item.state) }}</h3>
+      <p>{{ item.result }}</p>
+    </div>
+    <details>
+      <summary>Dlaczego w tym zadaniu użyto AI</summary>
+      <p>{{ item.whyAi }}</p>
+    </details>
+    <h3>Przebieg</h3>
+    <ol class="trace-steps" role="list">
+      @for (step of item.steps; track step.id) {
+        <li>
+          <details>
+            <summary>{{ step.title }} · {{ stateLabel(step.state) }}</summary>
+            <p>{{ step.summary }}</p>
+            <p>Przedział od początku przebiegu: {{ step.startedMs }}–{{ step.endedMs }} ms</p>
+            @if (step.dependsOn.length) {
+              <p>Wymagane wcześniejsze kroki:</p>
+              <ul>
+                @for (id of step.dependsOn; track id) {
+                  <li>{{ stepTitle(id) }}</li>
+                }
+              </ul>
+            }
+            @if (step.changesExternalState) {
+              <p>Ten krok dotyczy zmiany w systemie zewnętrznym.</p>
+            }
+            @if (step.approvalStepId) {
+              <p>Akceptacja: {{ stepTitle(step.approvalStepId) }}</p>
+            }
+          </details>
+        </li>
+      }
+    </ol>
+    <details>
+      <summary>Źródła pomiarów i identyfikator wykonania</summary>
+      <p>{{ item.executionReference }}</p>
+      <p>Pomiar czasu: {{ item.timingSource }}</p>
+      @if (item.cost; as cost) {
+        <p>Koszt: {{ cost.value }} {{ cost.currency }} · źródło: {{ cost.source }}</p>
+      } @else {
+        <p>Koszt nie został zmierzony.</p>
+      }
+    </details>
+    <p>{{ item.review.limitations }}</p>
+  </section>
+}

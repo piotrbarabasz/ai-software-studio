@@ -21,6 +21,9 @@ import { EvidenceLabelComponent } from '../../shared/evidence-label.component';
 export class StudioPageComponent {
   readonly content = siteContent.studio;
   readonly trust: TrustContent = siteContent.trust;
+  readonly evidenceItems = [...this.trust.evidence.items].sort(
+    (a, b) => Number(b.id === 'studio-application') - Number(a.id === 'studio-application'),
+  );
 
   protected isInternalWorkEvidenceLink(link: WorkEvidenceLink | undefined): link is InternalLink {
     return link?.kind === 'internal';

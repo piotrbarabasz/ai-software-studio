@@ -1,0 +1,23 @@
+{
+  "recordedAt": "2026-09-08T17:59:57.375419+00:00",
+  "baseCommit": "9bbe8d5d9e7e1f539683647deda7751e695301ef",
+  "includesUncommittedCrmCheckpoint": true,
+  "backendTests": 150,
+  "angularTests": 203,
+  "deploymentContractTests": 60,
+  "cloudBuildYamlTests": 23,
+  "backendLintFormat": "passed",
+  "frontendCiLintFormatNodeSuites": "passed",
+  "productionBuild": "passed",
+  "backendDockerBuild": "passed",
+  "frontendDockerBuild": "passed",
+  "publicArtifactContainsCrmScaffoldOrFixture": false,
+  "limits": [
+    "CRM tests use fixture adapters only; zero real CRM writes or official channel events.",
+    "Result component is not mounted; actual integration browser and physical accessibility checks remain open.",
+    "Artifact gate checks metadata and hashes, not actual execution, media validity or publication rights.",
+    "Build uses previously published legal text copy, not verified Secret Manager data.",
+    "Required production backend health/readiness smoke remains blocked by actual non-secret SMTP configuration.",
+    "No deployment or production verification performed."
+  ]
+}

@@ -82,7 +82,8 @@ const serviceLandingPageDefinitions = [
         },
       ] as const,
       demoTitle: 'Co można sprawdzić w demo',
-      demoLead: 'Demo pokazuje jeden ograniczony zakres, a nie pełne wdrożenie produkcyjne.',
+      demoLead:
+        'Powyższa symulacja pokazuje interfejs. Osobny etap na Twoich dokumentach wymaga ustalenia zakresu i sprawdzenia jakości.',
       demoScope: [
         'trzy przykładowe pytania',
         'odpowiedzi ze wskazaniem źródła',
@@ -121,29 +122,22 @@ const serviceLandingPageDefinitions = [
       faqTitle: 'Najczęstsze pytania',
       faqs: [
         {
-          question: 'Czy chatbot odpowiada na wszystko?',
+          question: 'Skąd pochodzi odpowiedź i jak sprawdzę źródło?',
           answer:
-            'Nie. Działa tylko w ustalonym zakresie i przekazuje sprawę do człowieka, gdy brakuje danych albo pytanie wykracza poza scenariusz.',
+            'W przykładzie na tej stronie cytat jest przypisany ręcznie do fragmentu publicznego dokumentu. Otwórz źródło i porównaj treść. W docelowym RAG trzeba osobno sprawdzić trafność wyszukiwania i odpowiedzi modelu.',
         },
         {
-          question: 'Czy demo oznacza gotowe wdrożenie?',
-          answer: 'Nie. Demo pokazuje kierunek i granice rozwiązania, a nie pełną produkcję.',
-        },
-        {
-          question: 'Czy muszę mieć dużą bazę wiedzy?',
+          question: 'Co się dzieje po aktualizacji dokumentu?',
           answer:
-            'Nie. Na start wystarczy ograniczony zestaw materiałów i jasno zdefiniowany zakres odpowiedzi.',
+            'Nowa wersja źródła wymaga odświeżenia indeksu i ponowienia uzgodnionych testów. Wybór sposobu aktualizacji oraz odpowiedzialnej osoby jest częścią zakresu projektu.',
         },
         {
-          question: 'Czy można zostawić decyzję człowiekowi?',
-          answer: 'Tak. Handoff jest jawny i jest częścią projektu od początku.',
-        },
-        {
-          question: 'Czy potrzebna jest integracja z każdym systemem?',
-          answer: 'Nie. Dobieramy tylko te integracje, które są realnie potrzebne do procesu.',
+          question: 'Kto może zobaczyć dokumenty firmowe?',
+          answer:
+            'Zakres dostępu trzeba ustalić przed integracją. Asystent powinien korzystać wyłącznie z materiałów dostępnych danemu użytkownikowi. Publiczny przykład na tej stronie zawiera tylko treści Protolume, bez dokumentów klientów.',
         },
       ] as const,
-      closingTitle: 'Chcesz sprawdzić taki asystent na swoich materiałach?',
+      closingTitle: 'Chcesz sprawdzić takiego asystenta na swoich materiałach?',
       closingLead: 'Najpierw ustalamy zakres, a dopiero potem wybieramy technologię i integracje.',
       primaryCta: contact({ projectType: 'rag_chatbot_demo' }),
       relatedLinks: [
@@ -692,13 +686,23 @@ export const serviceLandingPages = serviceLandingPageDefinitions.map(
         secondaryCta:
           service.id === 'rag'
             ? {
-                label: 'Zobacz symulację odpowiedzi',
-                path: '/demo-ai',
-                fragment: 'interactive-demo',
+                label: 'Zobacz symulację ze źródłem',
+                path: '/rozwiazania/chatbot-ai-dla-firm',
+                fragment: 'rag-source-example',
               }
             : { label: 'Zobacz zakres pierwszego etapu', path: '/demo-ai' },
       },
-      relatedLinks: entry.content.relatedLinks.filter((link) => link.path !== '/kontakt'),
+      relatedLinks:
+        service.id === 'rag'
+          ? [
+              {
+                label: 'Wypróbuj symulację własnego pytania',
+                path: '/demo-ai',
+                fragment: 'interactive-demo',
+              },
+              { label: 'Wróć do katalogu', path: '/rozwiazania' },
+            ]
+          : entry.content.relatedLinks.filter((link) => link.path !== '/kontakt'),
     };
   },
 );

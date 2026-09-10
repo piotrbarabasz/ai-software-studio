@@ -1,0 +1,62 @@
+{
+  "recordedAt": "2026-09-09T02:17:56.715Z",
+  "browser": "151.0.7922.34",
+  "axe": "4.13.0",
+  "scope": "private mechanical fixtures; 1 second silence, no speech or model execution",
+  "cases": [
+    {
+      "width": 320,
+      "initialMediaRequests": 0,
+      "violations": [],
+      "overflow": false
+    },
+    {
+      "width": 360,
+      "initialMediaRequests": 0,
+      "violations": [],
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "initialMediaRequests": 0,
+      "violations": [],
+      "overflow": false
+    },
+    {
+      "width": 430,
+      "initialMediaRequests": 0,
+      "violations": [],
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "initialMediaRequests": 0,
+      "violations": [],
+      "overflow": false
+    },
+    {
+      "width": 921,
+      "initialMediaRequests": 0,
+      "violations": [],
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "initialMediaRequests": 0,
+      "violations": [],
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "initialMediaRequests": 0,
+      "violations": [],
+      "overflow": false
+    }
+  ],
+  "keyboardPlayPause": true,
+  "seekingAndEnd": true,
+  "missingAudioTranscriptFallback": true,
+  "timeoutAndBudgetPresentation": true,
+  "errors": [],
+  "cspErrors": []
+}

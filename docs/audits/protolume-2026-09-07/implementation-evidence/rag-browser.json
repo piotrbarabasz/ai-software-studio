@@ -1,0 +1,61 @@
+{
+  "metadata": {
+    "recordedAt": "2026-09-08T13:04:43.117Z",
+    "browser": "151.0.7922.34",
+    "axe": "4.13.0"
+  },
+  "cases": [
+    {
+      "width": 320,
+      "reducedMotion": "reduce",
+      "violations": [],
+      "interactionRequests": 0
+    },
+    {
+      "width": 360,
+      "reducedMotion": "reduce",
+      "violations": [],
+      "interactionRequests": 0
+    },
+    {
+      "width": 390,
+      "reducedMotion": "reduce",
+      "violations": [],
+      "interactionRequests": 0
+    },
+    {
+      "width": 430,
+      "reducedMotion": "reduce",
+      "violations": [],
+      "interactionRequests": 0
+    },
+    {
+      "width": 768,
+      "reducedMotion": "reduce",
+      "violations": [],
+      "interactionRequests": 0
+    },
+    {
+      "width": 921,
+      "reducedMotion": "reduce",
+      "violations": [],
+      "interactionRequests": 0
+    },
+    {
+      "width": 1024,
+      "reducedMotion": "reduce",
+      "violations": [],
+      "interactionRequests": 0
+    },
+    {
+      "width": 1440,
+      "reducedMotion": "reduce",
+      "violations": [],
+      "interactionRequests": 0
+    }
+  ],
+  "errors": [],
+  "directFragmentsWithAndWithoutJs": true,
+  "jsonMatches": true,
+  "contactIntent": true
+}

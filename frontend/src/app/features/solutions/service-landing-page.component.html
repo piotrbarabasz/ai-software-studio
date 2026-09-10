@@ -28,6 +28,10 @@
     <p class="service-note">{{ content.description }}</p>
   </section>
 
+  @if (content.slug === 'chatbot-ai-dla-firm') {
+    <app-rag-source-example />
+  }
+
   <section class="section-shell" aria-labelledby="problem-title" appRevealOnScroll>
     <div class="section-heading">
       <p class="eyebrow">Problem</p>
@@ -69,40 +73,56 @@
       <h2 id="demo-title">{{ content.demoTitle }}</h2>
       <p class="section-lead">{{ content.demoLead }}</p>
     </div>
-    <div class="demo-grid">
-      <article class="card-surface info-card" data-card-variant="info-card">
-        <h3>Zakres</h3>
-        <ul class="bullet-list">
-          @for (item of content.demoScope; track item) {
-            <li>{{ item }}</li>
-          }
-        </ul>
-      </article>
-      <article class="card-surface info-card" data-card-variant="info-card">
-        <h3>Kryteria</h3>
-        <ul class="bullet-list">
-          @for (item of content.demoCriteria; track item) {
-            <li>{{ item }}</li>
-          }
-        </ul>
-      </article>
-      <article class="card-surface info-card" data-card-variant="info-card">
-        <h3>Dane wejściowe</h3>
-        <ul class="bullet-list">
-          @for (item of content.demoInputs; track item) {
-            <li>{{ item }}</li>
-          }
-        </ul>
-      </article>
-      <article class="card-surface info-card" data-card-variant="info-card">
-        <h3>Ograniczenia</h3>
+    @if (content.slug === 'chatbot-ai-dla-firm') {
+      <p>
+        Do własnego demo potrzebne są zatwierdzone dokumenty, przykładowe pytania i zasady dostępu.
+        Sprawdzamy odpowiedzi, odnośniki do źródeł i zachowanie przy braku danych.
+      </p>
+      <details class="rag-scope-details">
+        <summary>Zakres i warunki sprawdzenia na Twoich materiałach</summary>
         <ul class="bullet-list">
           @for (item of content.demoLimitations; track item) {
             <li>{{ item }}</li>
           }
         </ul>
-      </article>
-    </div>
+        <a routerLink="/demo-ai">Zobacz warunki pierwszego etapu</a>
+      </details>
+    } @else {
+      <div class="demo-grid">
+        <article class="card-surface info-card" data-card-variant="info-card">
+          <h3>Zakres</h3>
+          <ul class="bullet-list">
+            @for (item of content.demoScope; track item) {
+              <li>{{ item }}</li>
+            }
+          </ul>
+        </article>
+        <article class="card-surface info-card" data-card-variant="info-card">
+          <h3>Kryteria</h3>
+          <ul class="bullet-list">
+            @for (item of content.demoCriteria; track item) {
+              <li>{{ item }}</li>
+            }
+          </ul>
+        </article>
+        <article class="card-surface info-card" data-card-variant="info-card">
+          <h3>Dane wejściowe</h3>
+          <ul class="bullet-list">
+            @for (item of content.demoInputs; track item) {
+              <li>{{ item }}</li>
+            }
+          </ul>
+        </article>
+        <article class="card-surface info-card" data-card-variant="info-card">
+          <h3>Ograniczenia</h3>
+          <ul class="bullet-list">
+            @for (item of content.demoLimitations; track item) {
+              <li>{{ item }}</li>
+            }
+          </ul>
+        </article>
+      </div>
+    }
   </section>
 
   <section class="section-shell" aria-labelledby="integrations-title" appRevealOnScroll>

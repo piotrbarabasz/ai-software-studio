@@ -1,49 +1,88 @@
 <div class="demo-example-page">
-  <section
-    class="hero section-shell report-hero"
-    aria-labelledby="demo-example-title"
-    appRevealOnScroll
-  >
+  <section class="hero section-shell report-hero" aria-labelledby="demo-example-title">
     <div class="hero-copy">
       <p class="eyebrow">{{ content.eyebrow }}</p>
-      <p class="fictional-notice" role="note">{{ content.fictionalNotice }}</p>
-      <p class="status-pill">{{ content.decisionSummary.status }}</p>
       <h1 id="demo-example-title">{{ content.title }}</h1>
+      <p class="fictional-notice" role="note">{{ content.fictionalNotice }}</p>
+      <p>
+        Wersja {{ content.version }} ·
+        <time [attr.datetime]="content.preparedOn">{{ content.preparedOn }}</time>
+      </p>
       <p class="page-lead">{{ content.lead }}</p>
+      <p class="scenario-count">
+        Opisane scenariusze: {{ content.scenarios.length }}. Testy rzeczywistego systemu: nie
+        wykonano.
+      </p>
       <div class="hero-actions" aria-label="Działania dla przykładu demo">
-        <a
-          class="primary-action"
-          [routerLink]="content.primaryCta.path"
-          [queryParams]="content.primaryCta.queryParams"
-        >
-          {{ content.primaryCta.label }}
-        </a>
-        <a class="secondary-action" [routerLink]="content.demoCta.path">
-          {{ content.demoCta.label }}
-        </a>
-        <button type="button" class="print-action" (click)="printReport()">
-          {{ content.printLabel }}
-        </button>
+        <a class="primary-action" [href]="content.pdfPath" download="protolume-raport-demo.pdf">{{
+          content.pdfLabel
+        }}</a>
       </div>
     </div>
-
     <aside class="summary-card" aria-labelledby="decision-summary-title">
       <p class="eyebrow">Streszczenie decyzji</p>
-      <h2 id="decision-summary-title">{{ content.decisionSummary.status }}</h2>
+      <h2 id="decision-summary-title" class="status-pill">{{ content.decisionSummary.status }}</h2>
       <p class="summary-answer">{{ content.decisionSummary.answer }}</p>
-      <div class="summary-block">
-        <h3>Czego nadal nie wiadomo</h3>
+      <p class="summary-next-step">
+        <strong>Następny krok:</strong> {{ content.decisionSummary.nextStep }}
+      </p>
+      <details>
+        <summary>Warunki kolejnego etapu i brakujące informacje</summary>
+        <h3>Warunki</h3>
         <ul>
-          @for (item of content.decisionSummary.unknowns; track item) {
+          @for (item of content.decisionSummary.conditions; track item) {
             <li>{{ item }}</li>
           }
         </ul>
-      </div>
-      <p class="summary-next-step">
-        <strong>Rekomendowany kolejny krok:</strong> {{ content.decisionSummary.nextStep }}
-      </p>
-      <p class="summary-note" role="note">{{ content.decisionSummary.note }}</p>
+        <h3>Brakujące informacje</h3>
+        <ul>
+          @for (item of content.decisionSummary.missingInformation; track item) {
+            <li>{{ item }}</li>
+          }
+        </ul>
+      </details>
     </aside>
+  </section>
+  <nav class="section-shell report-toc" aria-label="Spis treści raportu">
+    <a routerLink="/przyklad-demo" fragment="scenarios-title">Scenariusze</a>
+    <a routerLink="/przyklad-demo" fragment="scope-title">Zakres</a>
+    <a routerLink="/przyklad-demo" fragment="risks-title">Ryzyka</a>
+    <a routerLink="/przyklad-demo" fragment="plan-title">Plan etapu</a>
+  </nav>
+  <section
+    class="content-section section-shell"
+    aria-labelledby="scenarios-title"
+    appRevealOnScroll
+  >
+    <div class="section-heading">
+      <p class="eyebrow">Scenariusze</p>
+      <h2 id="scenarios-title">Scenariusze opisane w przykładzie</h2>
+    </div>
+    <p class="section-copy">{{ content.scenarioStatusMeaning }}</p>
+    <div class="scenario-grid">
+      @for (scenario of content.scenarios; track scenario.id) {
+        <article class="scenario-card">
+          <div class="scenario-card__header">
+            <h3>{{ scenario.title }}</h3>
+            <p class="scenario-status">{{ scenario.status }}</p>
+          </div>
+          <dl class="scenario-facts">
+            <div>
+              <dt>Wejście</dt>
+              <dd>{{ scenario.input }}</dd>
+            </div>
+            <div>
+              <dt>Oczekiwane zachowanie</dt>
+              <dd>{{ scenario.expectedBehavior }}</dd>
+            </div>
+            <div>
+              <dt>Przebieg w fikcyjnym przykładzie</dt>
+              <dd>{{ scenario.demoBehavior }}</dd>
+            </div>
+          </dl>
+        </article>
+      }
+    </div>
   </section>
 
   <section
@@ -115,10 +154,6 @@
     <div class="section-heading">
       <p class="eyebrow">Zakres demo</p>
       <h2 id="scope-title">{{ content.scope.includedTitle }}</h2>
-      <p class="section-copy">
-        Najpierw pokazano, jaką wartość i rezultat da się zobaczyć w ograniczonym demo. Dopiero
-        potem pokazano, czego to demo nie obejmuje.
-      </p>
     </div>
     <div class="scope-grid">
       <article class="scope-card scope-card--value">
@@ -137,41 +172,6 @@
           }
         </ul>
       </article>
-    </div>
-  </section>
-
-  <section
-    class="content-section section-shell"
-    aria-labelledby="scenarios-title"
-    appRevealOnScroll
-  >
-    <div class="section-heading">
-      <p class="eyebrow">Scenariusze testowe</p>
-      <h2 id="scenarios-title">Co pokazano w demonstracji</h2>
-    </div>
-    <div class="scenario-grid">
-      @for (scenario of content.scenarios; track scenario.id) {
-        <article class="scenario-card">
-          <div class="scenario-card__header">
-            <h3>{{ scenario.title }}</h3>
-            <p class="scenario-status">{{ scenario.status }}</p>
-          </div>
-          <dl class="scenario-facts">
-            <div>
-              <dt>Wejście</dt>
-              <dd>{{ scenario.input }}</dd>
-            </div>
-            <div>
-              <dt>Oczekiwane zachowanie</dt>
-              <dd>{{ scenario.expectedBehavior }}</dd>
-            </div>
-            <div>
-              <dt>Zachowanie pokazane w demo</dt>
-              <dd>{{ scenario.demoBehavior }}</dd>
-            </div>
-          </dl>
-        </article>
-      }
     </div>
   </section>
 
@@ -204,40 +204,6 @@
     </div>
   </section>
 
-  <section
-    class="content-section section-shell"
-    aria-labelledby="recommendation-title"
-    appRevealOnScroll
-  >
-    <div class="section-heading">
-      <p class="eyebrow">Rekomendacja</p>
-      <h2 id="recommendation-title">{{ content.recommendation.decision }}</h2>
-    </div>
-    <div class="recommendation-grid">
-      <article class="recommendation-card recommendation-card--main">
-        <p class="status-pill">{{ content.recommendation.decision }}</p>
-        <p>{{ content.recommendation.rationale }}</p>
-        <p class="recommendation-note" role="note">{{ content.recommendation.note }}</p>
-      </article>
-      <article class="recommendation-card">
-        <h3>Warunki rozpoczęcia kolejnego etapu</h3>
-        <ul>
-          @for (item of content.recommendation.conditions; track item) {
-            <li>{{ item }}</li>
-          }
-        </ul>
-      </article>
-      <article class="recommendation-card">
-        <h3>Lista brakujących informacji</h3>
-        <ul>
-          @for (item of content.recommendation.missingInformation; track item) {
-            <li>{{ item }}</li>
-          }
-        </ul>
-      </article>
-    </div>
-  </section>
-
   <section class="content-section section-shell" aria-labelledby="plan-title" appRevealOnScroll>
     <div class="section-heading">
       <p class="eyebrow">Plan pierwszego etapu</p>
@@ -255,26 +221,28 @@
 
   <section class="closing-cta section-shell" aria-labelledby="closing-title">
     <div class="closing-copy">
-      <p class="eyebrow">Wersja do zapisania jako PDF</p>
-      <h2 id="closing-title">Przekaż raport dalej albo zachowaj go w pliku</h2>
+      <h2 id="closing-title">Zachowaj raport lub opisz podobny proces</h2>
       <p class="section-copy">
-        Użyj drukowania systemowego, aby zapisać ten raport jako PDF bez dodatkowych narzędzi.
+        PDF zawiera ten sam fikcyjny przykład. Zakres konkretnego etapu ustalamy osobno.
       </p>
     </div>
     <div class="hero-actions report-actions">
+      <a
+        class="secondary-action"
+        [routerLink]="content.primaryCta.path"
+        [queryParams]="content.primaryCta.queryParams"
+        >{{ content.primaryCta.label }}</a
+      >
       <button type="button" class="print-action" (click)="printReport()">
         {{ content.printLabel }}
       </button>
-      <a
-        class="primary-action"
-        [routerLink]="content.primaryCta.path"
-        [queryParams]="content.primaryCta.queryParams"
-      >
-        {{ content.primaryCta.label }}
-      </a>
-      <a class="secondary-action" [routerLink]="content.demoCta.path">
-        {{ content.demoCta.label }}
-      </a>
+
+      <a class="primary-action" [href]="content.pdfPath" download="protolume-raport-demo.pdf">{{
+        content.pdfLabel
+      }}</a>
+      <a class="secondary-action" [routerLink]="content.demoCta.path">{{
+        content.demoCta.label
+      }}</a>
     </div>
   </section>
 </div>

@@ -1,9 +1,8 @@
-<div class="studio-page">
+<div class="studio-page studio-focused">
   <section class="hero section-shell" appRevealOnScroll>
     <div class="hero-copy">
       <p class="eyebrow">{{ content.eyebrow }}</p>
-      <h1>{{ content.title }}</h1>
-      <p class="page-lead">{{ content.lead }}</p>
+      <h1 id="studio-owner-name">{{ trust.owner.name }}</h1>
       <article
         class="hero-owner"
         [class.has-image]="trust.owner.image"
@@ -22,58 +21,30 @@
         }
         <div>
           <p class="owner-role">{{ trust.owner.role }}</p>
-          <h2 id="studio-owner-name">{{ trust.owner.name }}</h2>
-          <p>{{ trust.owner.bio }}</p>
+          <p class="page-lead">{{ trust.owner.bio }}</p>
         </div>
       </article>
+      <div class="hero-actions">
+        <a
+          class="primary-action"
+          routerLink="/kontakt"
+          [queryParams]="{ projectType: 'custom_web_app' }"
+          >{{ content.ctaLabel }}</a
+        >
+        <a class="secondary-action" routerLink="/studio" fragment="evidence-title"
+          >Zobacz przykłady pracy</a
+        >
+      </div>
     </div>
-    <aside
-      class="card-surface info-card hero-panel"
-      data-card-variant="info-card"
-      aria-label="Zasady współpracy"
-    >
-      <p class="panel-kicker">Zasady współpracy</p>
+    <aside class="card-surface info-card hero-panel" aria-label="Jak wygląda współpraca">
+      <h2>{{ content.collaboration.title }}</h2>
       <ul>
-        @for (item of content.principles; track item) {
-          <li>{{ item }}</li>
+        @for (point of content.collaboration.points; track point) {
+          <li>{{ point }}</li>
         }
       </ul>
-      <p class="hero-cta-note">
-        Po wysłaniu opisu ustalimy, czy kolejnym krokiem jest demo czy plan pierwszego etapu.
-      </p>
-      <a
-        class="primary-action"
-        routerLink="/kontakt"
-        [queryParams]="{ projectType: 'custom_web_app' }"
-      >
-        {{ content.ctaLabel }}
-      </a>
+      <p>{{ trust.owner.privacyNotice }}</p>
     </aside>
-  </section>
-
-  <section class="section-shell owner-section" aria-labelledby="owner-title" appRevealOnScroll>
-    <div class="section-heading">
-      <p class="eyebrow">{{ trust.ownerSectionEyebrow }}</p>
-      <h2 id="owner-title">{{ trust.ownerSectionTitle }}</h2>
-    </div>
-    <article class="card-surface info-card owner-card" data-card-variant="info-card">
-      <div class="owner-copy">
-        <p class="accountability">{{ trust.owner.privacyNotice }}</p>
-        <p class="accountability">{{ trust.owner.accountability.statement }}</p>
-        <p>{{ trust.owner.accountability.detail }}</p>
-        <div class="verified-capabilities">
-          <h3>Co możesz sprawdzić na stronie</h3>
-          <dl>
-            @for (capability of trust.owner.verifiedCapabilities; track capability) {
-              <div>
-                <dt>{{ capability.label }}</dt>
-                <dd>{{ capability.evidence }}</dd>
-              </div>
-            }
-          </dl>
-        </div>
-      </div>
-    </article>
   </section>
 
   <section
@@ -87,7 +58,7 @@
       <p class="page-lead">{{ trust.evidence.lead }}</p>
     </div>
     <div class="evidence-list">
-      @for (item of trust.evidence.items; track item) {
+      @for (item of evidenceItems; track item) {
         <article class="card-surface proof-card evidence-card" data-card-variant="proof-card">
           <div class="evidence-summary">
             <h3>{{ item.title }}</h3>
@@ -96,14 +67,13 @@
             <p><strong>Co zostało zbudowane:</strong> {{ item.built }}</p>
           </div>
           <div class="evidence-details">
-            <h4>Co można samodzielnie sprawdzić</h4>
-            <ul class="verification-list">
-              @for (step of item.verification; track step) {
-                <li>{{ step }}</li>
-              }
-            </ul>
             <details>
-              <summary>Pochodzenie i zakres materiału</summary>
+              <summary>Jak sprawdzić ten materiał</summary>
+              <ul class="verification-list">
+                @for (step of item.verification; track step) {
+                  <li>{{ step }}</li>
+                }
+              </ul>
               <p>{{ item.dataOrigin }}</p>
               <p>{{ item.confirmedScope }}</p>
               <p>
@@ -137,86 +107,19 @@
     </div>
   </section>
 
-  <section
-    class="section-shell verification-section section-muted"
-    aria-labelledby="verification-title"
-    appRevealOnScroll
-  >
-    <div class="section-heading">
-      <p class="eyebrow">{{ content.verification.eyebrow }}</p>
-      <h2 id="verification-title">{{ content.verification.title }}</h2>
-      <p class="page-lead">{{ content.verification.lead }}</p>
-    </div>
-    <ol class="verification-steps">
-      @for (step of content.verification.steps; track step; let index = $index) {
-        <li>
-          <span>{{ index + 1 }}</span>
-          <p>{{ step }}</p>
-        </li>
-      }
-    </ol>
-    <div class="verification-actions" aria-label="Sposoby weryfikacji">
-      <a class="secondary-action" [routerLink]="content.verification.demoCta.path">{{
-        content.verification.demoCta.label
-      }}</a>
-      <a class="secondary-action" [routerLink]="content.verification.reportCta.path">{{
-        content.verification.reportCta.label
-      }}</a>
-      <a class="secondary-action" [routerLink]="content.verification.developmentCta.path">{{
-        content.verification.developmentCta.label
-      }}</a>
-      <a
-        class="primary-action"
-        [routerLink]="content.verification.contactCta.path"
-        [queryParams]="content.verification.contactCta.queryParams"
-        >{{ content.verification.contactCta.label }}</a
-      >
-    </div>
-  </section>
-
-  <section
-    class="section-shell collaboration"
-    aria-labelledby="collaboration-title"
-    appRevealOnScroll
-  >
-    <div class="section-heading">
-      <p class="eyebrow">Współpraca</p>
-      <h2 id="collaboration-title">{{ content.collaboration.title }}</h2>
-      <p class="page-lead">{{ content.collaboration.lead }}</p>
-    </div>
-    <ul class="bullet-grid">
-      @for (point of content.collaboration.points; track point) {
-        <li>{{ point }}</li>
-      }
-    </ul>
-  </section>
-
-  <section class="section-shell" aria-labelledby="capabilities-title" appRevealOnScroll>
-    <div class="section-heading">
-      <p class="eyebrow">Kompetencje</p>
-      <h2 id="capabilities-title">Zakres techniczny dobierany do problemu</h2>
-    </div>
-    <div class="card-grid">
-      @for (capability of content.capabilities; track capability) {
-        <article class="card-surface info-card" data-card-variant="info-card">
-          <h3>{{ capability }}</h3>
-        </article>
-      }
-    </div>
-  </section>
-
-  <section class="section-shell section-muted" aria-labelledby="approach-title" appRevealOnScroll>
-    <div class="section-heading">
-      <p class="eyebrow">Sposób pracy</p>
-      <h2 id="approach-title">Małe iteracje i jasne granice odpowiedzialności</h2>
-    </div>
-    <ol class="process-list">
-      @for (item of content.engagementModel; track item; let index = $index) {
-        <li class="card-surface process-card" data-card-variant="process-card">
-          <span class="step-number">{{ index + 1 }}</span>
-          <p>{{ item }}</p>
-        </li>
-      }
-    </ol>
+  <section class="section-shell owner-section" aria-label="Doświadczenie i wykształcenie">
+    <details class="owner-background">
+      <summary>Doświadczenie i wykształcenie</summary>
+      <div class="verified-capabilities">
+        <dl>
+          @for (capability of trust.owner.verifiedCapabilities; track capability) {
+            <div>
+              <dt>{{ capability.label }}</dt>
+              <dd>{{ capability.evidence }}</dd>
+            </div>
+          }
+        </dl>
+      </div>
+    </details>
   </section>
 </div>
