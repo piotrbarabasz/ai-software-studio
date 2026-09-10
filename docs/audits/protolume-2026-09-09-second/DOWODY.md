@@ -84,7 +84,7 @@ Eksperyment R&D uruchomiono Pythonem 3.12 po sprawdzeniu kodu i bezpiecznym rozp
 
 Tabele poniżej wygenerowano bezpośrednio z nowych plików JSON i jawnie przepisanej tabeli bazowej poprzedniego audytu. Wysokość to `document.documentElement.scrollHeight`; nie jest miarą konwersji.
 
-### Wysoko?ci wszystkich 15 tras
+### Wysokości wszystkich 15 tras
 
 | Trasa | 390 dawniej | 390 obecnie | 1440 dawniej | 1440 obecnie |
 | --- | ---: | ---: | ---: | ---: |
@@ -104,7 +104,7 @@ Tabele poniżej wygenerowano bezpośrednio z nowych plików JSON i jawnie przepi
 | `/kontakt` | 2689 | 2566 | 1737 | 1861 |
 | `/polityka-prywatnosci` | 3457 | 3474 | 3291 | 3291 |
 
-### Sze?? nowych przebieg?w Lighthouse
+### Sześć nowych przebiegów Lighthouse
 
 | Przebieg | Performance | LCP ms | CLS | TBT ms | Transfer KiB |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -115,16 +115,16 @@ Tabele poniżej wygenerowano bezpośrednio z nowych plików JSON i jawnie przepi
 | rag | 97 | 1811.3 | 0.000 | 165.0 | 187.8 |
 | home-desktop | 100 | 371.3 | 0.000 | 0.0 | 191.8 |
 
-### R?cznie obliczony kontrast dawnego problemu
+### Ręcznie obliczony kontrast dawnego problemu
 
-- H2: tekst RGB(247,247,250), t?o RGB(16,19,28): **17,35:1**.
-- H3 kart: ten sam tekst, t?o RGB(28,33,48): **15,00:1**.
-- Warto?ci dotycz? tych nieprzezroczystych powierzchni, nie wszystkich stan?w gradient?w/nawigacji. Dane CSS s? w `followup.json`.
+- H2: tekst RGB(247,247,250), tło RGB(16,19,28): **17,35:1**.
+- H3 kart: ten sam tekst, tło RGB(28,33,48): **15,00:1**.
+- Wartości dotyczą tych nieprzezroczystych powierzchni, nie wszystkich stanów gradientów/nawigacji. Dane CSS są w `followup.json`.
 
-### Integralno?? pobranego PDF
+### Integralność pobranego PDF
 
 SHA-256 pobranego pliku: `72210db10b313bdc5065407f62eed685b0a1e37541119c0b0d16268e00f41aa2`.
 
 ## Przygotowanie do commita
 
-Przy zapisie w Git ujednolicono ko?ce linii plik?w tekstowych do LF i usuni?to ko?cowe bia?e znaki w sze?ciu wygenerowanych raportach Lighthouse HTML. Dane pomiar?w nie zosta?y zmienione. Manifest SHA-256 odpowiada plikom po tej normalizacji.
+Przy zapisie w Git ujednolicono końce linii plików tekstowych do LF i usunięto końcowe białe znaki w sześciu wygenerowanych raportach Lighthouse HTML. Dane pomiarów nie zostały zmienione. Manifest SHA-256 odpowiada plikom po tej normalizacji.
