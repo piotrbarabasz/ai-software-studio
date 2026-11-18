@@ -64,8 +64,13 @@ fs.mkdirSync('tmp/audit-implementation/verification', { recursive: true });
   const afterExpand = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth);
   assert.equal(afterExpand, false);
   await page.locator('.hero-secondary-action').click();
-  await page.waitForURL('**/demo-ai#interactive-demo');
-  assert.ok((await page.locator('#interactive-demo').boundingBox()).y < 200);
+  await page.waitForURL('**/#home-processes');
+  assert.ok((await page.locator('#home-processes').boundingBox()).y < 200);
+  assert.equal(await page.locator('.home-pillar').count(), 3);
+  await page.locator('.hero-actions .primary-action').click();
+  await page.waitForURL('**/kontakt');
+  assert.ok(await page.locator('app-contact-page').isVisible());
+
   await page.goto('http://127.0.0.1:4400/studio', { waitUntil: 'networkidle' });
   assert.equal(await page.locator('.evidence-card app-evidence-label').count(), 4);
   for (const link of await page.locator('.evidence-card a').all()) {
@@ -78,7 +83,8 @@ fs.mkdirSync('tmp/audit-implementation/verification', { recursive: true });
     viewport: { width: 390, height: 844 },
   });
   await nojs.goto('http://127.0.0.1:4400/');
-  assert.equal(await nojs.locator('.home-service-list a').count(), 5);
+  assert.equal(await nojs.locator('.home-pillar').count(), 3);
+  assert.equal(await nojs.locator('.home-pillar a').count(), 3);
   await nojs.locator('.stage-plan summary').click();
   assert.ok(await nojs.locator('.demo-milestone').first().isVisible());
   assert.deepEqual(errors, []);

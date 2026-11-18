@@ -7,7 +7,8 @@ describe('static hero illustration', () => {
     const fixture = TestBed.createComponent(HomeHeroVisualComponent);
     fixture.detectChanges();
     const element: HTMLElement = fixture.nativeElement;
-    expect(element.querySelector('figcaption')?.textContent).toContain('Ilustracja przepływu');
+    expect(element.querySelector('figcaption')?.textContent).toContain('Przykładowy sposób pracy');
+    expect(element.textContent).toContain('Automatyzacja, integracja, aplikacja lub AI');
     expect(element.querySelectorAll('li')).toHaveSize(3);
     expect(element.textContent).not.toMatch(/LIVE PROCESS|Acme|25 000|CRM updated/);
     expect(element.querySelector('spline-viewer, canvas, button, input')).toBeNull();

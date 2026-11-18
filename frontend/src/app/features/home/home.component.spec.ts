@@ -17,23 +17,40 @@ describe('HomeComponent', () => {
     return fixture.nativeElement as HTMLElement;
   }
 
-  it('renders six sections with the example and evidence before the catalog and timeline', () => {
+  it('renders the service pillars before evidence and the seven-day demo', () => {
     const element = createFixture();
     expect(
       Array.from(
         element.querySelectorAll<HTMLElement>('.home-page > [data-home-section]'),
         (section) => section.dataset['homeSection'],
       ),
-    ).toEqual(['hero', 'evidence', 'processes', 'demo-scope', 'owner', 'closing-cta']);
+    ).toEqual(['hero', 'processes', 'evidence', 'demo-scope', 'owner', 'closing-cta']);
     expect(element.querySelectorAll('h1')).toHaveSize(1);
     expect(element.querySelectorAll('.hero-actions a')).toHaveSize(2);
+    expect(element.querySelector('.hero-actions a[href="/#home-processes"]')).not.toBeNull();
+    expect(element.querySelector('.hero-actions a[href="/kontakt"]')).not.toBeNull();
+    expect(element.querySelectorAll('.home-pillar')).toHaveSize(3);
     expect(
-      element.querySelector('.hero-actions a[href="/demo-ai#interactive-demo"]'),
-    ).not.toBeNull();
+      Array.from(
+        element.querySelectorAll<HTMLElement>('.home-pillar h3'),
+        (heading) => heading.textContent?.trim(),
+      ),
+    ).toEqual([
+      'Automatyzacje procesów',
+      'Aplikacje i integracje',
+      'AI tam, gdzie ma sens',
+    ]);
     expect(
-      element.querySelector('.hero-actions a[href="/kontakt?projectType=mvp_prototype"]'),
-    ).not.toBeNull();
-    expect(element.querySelectorAll('.home-service-list a')).toHaveSize(5);
+      Array.from(
+        element.querySelectorAll<HTMLAnchorElement>('.home-pillar a'),
+        (link) => link.getAttribute('href'),
+      ),
+    ).toEqual([
+      '/rozwiazania/automatyzacja-procesow',
+      '/development',
+      '/rozwiazania',
+    ]);
+    expect(element.querySelector('.home-service-list')).toBeNull();
     expect(element.querySelectorAll('.before-after article')).toHaveSize(3);
     expect(
       element.querySelector('.business-flow-steps, .workflow-payload, app-automation-bento'),
@@ -48,7 +65,7 @@ describe('HomeComponent', () => {
     const cards = Array.from(element.querySelectorAll<HTMLElement>('.evidence-teaser-card'));
 
     expect(element.querySelector('#evidence-teaser-title')?.textContent?.trim()).toBe(
-      'Zobacz zamiast czytać.',
+      'Zobacz, jak pracujemy.',
     );
     expect(cards).toHaveSize(2);
     expect(cards.map((card) => card.querySelector('a')?.getAttribute('href'))).toEqual([
@@ -143,12 +160,11 @@ describe('HomeComponent', () => {
       'Poznaj osobę odpowiedzialną',
     );
     expect(element.querySelector('.closing-cta h2')?.textContent?.trim()).toBe(
-      'Pokaż proces, który zabiera czas',
+      'Masz proces do usprawnienia albo pomysł na aplikację?',
     );
     expect(
-      element.querySelector('.closing-cta a[href="/kontakt?projectType=mvp_prototype"]')
-        ?.textContent,
-    ).toContain('Opisz proces');
+      element.querySelector('.closing-cta a[href="/kontakt"]')?.textContent,
+    ).toContain('Porozmawiajmy o projekcie');
   });
 
   it('keeps the complete homepage free of unsupported statistics', () => {

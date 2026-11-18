@@ -26,6 +26,53 @@
   </section>
 
   <section
+    id="home-processes"
+    class="use-cases section-shell"
+    aria-labelledby="use-cases-title"
+    data-home-section="processes"
+  >
+    <div class="use-cases-panel">
+      <div appReveal class="section-heading reveal--subtle">
+        <p class="eyebrow">{{ home.useCasesHeading.eyebrow }}</p>
+        <h2 id="use-cases-title">{{ home.useCasesHeading.title }}</h2>
+        @if (home.useCasesHeading.lead) {
+          <p class="section-lead">{{ home.useCasesHeading.lead }}</p>
+        }
+      </div>
+      <div class="home-pillar-grid">
+        @for (pillar of home.useCases; track pillar.id) {
+          <article
+            class="card-surface home-pillar"
+            data-card-variant="solution-card"
+            [attr.data-pillar-kind]="pillar.visualKind"
+          >
+            <p class="pillar-number" aria-hidden="true">{{ pillar.number }}</p>
+            <h3>{{ pillar.title }}</h3>
+            <p class="pillar-problem">{{ pillar.problem }}</p>
+            @if (pillar.outcome) {
+              <p class="pillar-outcome"><strong>Co robimy:</strong> {{ pillar.outcome }}</p>
+            }
+            @if (pillar.cta) {
+              <a
+                class="secondary-action"
+                [routerLink]="pillar.cta.path"
+                [fragment]="pillar.cta.fragment"
+              >
+                {{ pillar.cta.label }}
+              </a>
+            }
+          </article>
+        }
+      </div>
+      <div class="use-cases-footer">
+        <a class="use-cases-link" [routerLink]="home.useCasesCta.path">
+          {{ home.useCasesCta.label }}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section
     class="evidence-teaser dark-section section-shell"
     aria-labelledby="evidence-teaser-title"
     data-home-section="evidence"
@@ -57,38 +104,6 @@
       }
     </div>
     <p class="evidence-note" role="note">{{ home.evidenceTeaser.note }}</p>
-  </section>
-
-  <section
-    id="home-processes"
-    class="use-cases section-shell"
-    aria-labelledby="use-cases-title"
-    data-home-section="processes"
-  >
-    <div class="use-cases-panel">
-      <div appReveal class="section-heading reveal--subtle">
-        <p class="eyebrow">{{ home.useCasesHeading.eyebrow }}</p>
-        <h2 id="use-cases-title">{{ home.useCasesHeading.title }}</h2>
-        @if (home.useCasesHeading.lead) {
-          <p class="section-lead">{{ home.useCasesHeading.lead }}</p>
-        }
-      </div>
-      <ul class="home-service-list">
-        @for (service of services; track service.id) {
-          <li>
-            <a [routerLink]="service.path"
-              ><strong>{{ service.label }}</strong
-              ><span>{{ service.problem }}</span></a
-            >
-          </li>
-        }
-      </ul>
-      <div class="use-cases-footer">
-        <a class="use-cases-link" [routerLink]="home.useCasesCta.path">
-          {{ home.useCasesCta.label }}
-        </a>
-      </div>
-    </div>
   </section>
 
   <app-seven-day-demo data-home-section="demo-scope" [demo]="home.sevenDayDemo" />
