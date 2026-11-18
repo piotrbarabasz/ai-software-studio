@@ -184,7 +184,7 @@ steps:
 
   - id: cloud-run-iam-audit
     name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
-    entrypoint: python3
+    entrypoint: /usr/lib/google-cloud-sdk/platform/bundledpythonunix/bin/python3
     waitFor: ["backend-image-smoke", "frontend-image-smoke"]
     args:
       - scripts/gcp/audit_cloud_run_iam.py
@@ -209,7 +209,7 @@ steps:
 
   - id: backend-deploy
     name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
-    entrypoint: python3
+    entrypoint: /usr/lib/google-cloud-sdk/platform/bundledpythonunix/bin/python3
     waitFor: ["backend-push", "frontend-push"]
     args:
       - scripts/gcp/deploy_cloud_run.py
@@ -227,7 +227,7 @@ steps:
 
   - id: frontend-deploy
     name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
-    entrypoint: python3
+    entrypoint: /usr/lib/google-cloud-sdk/platform/bundledpythonunix/bin/python3
     waitFor: ["backend-deploy"]
     args:
       - scripts/gcp/deploy_cloud_run.py
