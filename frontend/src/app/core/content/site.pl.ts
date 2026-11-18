@@ -981,8 +981,7 @@ export const siteContent = {
     path: '/kontakt',
     eyebrow: 'Kontakt',
     title: 'Masz pomysł albo problem do rozwiązania?',
-    lead:
-      'Napisz do nas. Wystarczą imię i e-mail — nie musisz mieć gotowego opisu ani specyfikacji.',
+    lead: 'Napisz do nas. Wystarczą imię i e-mail. Nie potrzebujesz specyfikacji.',
     nextSteps: [
       'Sprawdzam, jakie informacje są potrzebne do dalszej rozmowy.',
       'Wskażę właściwą ścieżkę: demo, walidację, plan prac albo wdrożenie.',
