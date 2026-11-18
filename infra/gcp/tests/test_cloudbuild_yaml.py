@@ -553,7 +553,7 @@ class CloudBuildYamlTest(unittest.TestCase):
                 self.assertNotIn("deploy_cloud_run.py", source)
                 self.assertNotIn("gcloud run deploy", source)
 
-    def test_cloud_sdk_steps_use_bundled_python_instead_of_removed_system_python(self) -> None:
+    def test_cloud_sdk_steps_use_bundled_python(self) -> None:
         config = load_config("cloudbuild.deploy.yaml")
         cloud_sdk_steps = {
             step["id"]: step
