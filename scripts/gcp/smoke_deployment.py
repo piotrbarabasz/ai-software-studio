@@ -38,10 +38,9 @@ PLACEHOLDER_BUILD_SHAS = {"unknown", "local", "test"}
 PRIMARY_NAVIGATION_LINKS = (
     ("/rozwiazania", "Rozwiązania"),
     ("/demo-ai", "Demo w 7 dni"),
-    ("/development", "Wdrożenia"),
-    ("/dla-software-house", "Dla partnerów"),
-    ("/studio", "O Protolume"),
-    ("/kontakt", "Kontakt"),
+    ("/development", "Aplikacje i integracje"),
+    ("/dla-software-house", "Dla software house’ów"),
+    ("/studio", "Studio"),
 )
 PRIMARY_NAVIGATION_CTA = (
     "/kontakt",
@@ -82,6 +81,7 @@ class SeoMetadataParser(HTMLParser):
         self.build_sha: str | None = None
         self.headings: list[tuple[str, str]] = []
         self.hrefs: list[str] = []
+        self.ids: set[str] = set()
         self.primary_navigation_links: list[tuple[str, str]] = []
         self.primary_navigation_ctas: list[tuple[str, str]] = []
         self.primary_navigation_count = 0
@@ -89,7 +89,7 @@ class SeoMetadataParser(HTMLParser):
         self.form_names: set[str] = set()
         self.has_form = False
         self.has_interactive_demo = False
-        self.use_case_card_count = 0
+        self.home_pillar_count = 0
         self._visible_text_parts: list[str] = []
         self._text_stack: list[str] = []
         self._ignored_text_depth = 0
@@ -120,6 +120,8 @@ class SeoMetadataParser(HTMLParser):
             self.build_sha = attributes.get("content")
         if "href" in attributes:
             self.hrefs.append(attributes["href"])
+        if attributes.get("id"):
+            self.ids.add(attributes["id"])
         if tag_name == "form":
             self.has_form = True
         if tag_name == "footer":
@@ -141,8 +143,8 @@ class SeoMetadataParser(HTMLParser):
             self._nav_links_depth += 1
         if "interactive-demo" in classes:
             self.has_interactive_demo = True
-        if "use-case-card" in classes:
-            self.use_case_card_count += 1
+        if "home-pillar" in classes:
+            self.home_pillar_count += 1
         if tag_name in {"script", "style"}:
             self._ignored_text_depth += 1
         if tag_name in {"h1", "h2", "h3"}:
@@ -455,9 +457,9 @@ def _check_public_routes(
             for phrase in ("Automatyzujemy ręczne procesy", "MŚP"):
                 if phrase.lower() not in h1.lower():
                     errors.append(f"public route /: h1 must contain {phrase!r}")
-            if parser.use_case_card_count != 5:
+            if parser.home_pillar_count != 3:
                 errors.append(
-                    f"public route /: expected 5 solution cards, received {parser.use_case_card_count}"
+                    f"public route /: expected 3 home pillars, received {parser.home_pillar_count}"
                 )
             if not any(
                 _normalized_path(href) == "/przyklad-demo" for href in parser.hrefs
@@ -471,15 +473,13 @@ def _check_public_routes(
                     "public route /: expected primary contact CTA with projectType=mvp_prototype"
                 )
             visible_text = parser.visible_text.casefold()
-            for phrase in ("Rozwiązania", "Wdrożenia", "O Protolume"):
+            for phrase in ("Rozwiązania", "Aplikacje i integracje", "Studio"):
                 if phrase.casefold() not in visible_text:
                     errors.append(f"public route /: visible copy is missing {phrase!r}")
             for title in (
-                "Obsługa powtarzalnych pytań",
-                "Kwalifikacja rozmów i zgłoszeń",
-                "Przetwarzanie wiadomości i dokumentów",
-                "Realizacja wieloetapowych zadań",
-                "Obsługa wielu kanałów w jednym procesie",
+                "Automatyzacje procesów",
+                "Aplikacje i integracje",
+                "AI tam, gdzie ma sens",
             ):
                 if title.casefold() not in visible_text:
                     errors.append(f"public route /: visible copy is missing {title!r}")
@@ -521,24 +521,28 @@ def _check_public_routes(
             if not any(_normalized_path(href) == "/demo-ai" for href in parser.hrefs):
                 errors.append("public route /przyklad-demo: expected a link to /demo-ai, received none")
         elif path == "/rozwiazania":
-            for fragment in (
-                "#asystent-wiedzy",
-                "#automatyzacja-wiadomosci-i-dokumentow",
-                "#panel-operacyjny",
-                "#system-agentowy",
-                "#integracje-kanalow",
+            for element_id in (
+                "asystent-wiedzy",
+                "automatyzacja-wiadomosci-i-dokumentow",
+                "panel-operacyjny",
+                "voice-ai",
+                "system-agentowy",
+                "integracje-kanalow",
             ):
-                if fragment not in parser.hrefs:
-                    errors.append(f"public route /rozwiazania: expected anchor {fragment}, received none")
-            for project_type in (
-                "rag_chatbot_demo",
-                "business_process_automation",
-                "custom_web_app",
-                "backend_api",
-            ):
-                if not any(f"/kontakt?projectType={project_type}" in href for href in parser.hrefs):
+                if element_id not in parser.ids:
                     errors.append(
-                        f"public route /rozwiazania: expected contact CTA projectType={project_type}, received none"
+                        f"public route /rozwiazania: expected section id {element_id!r}, received none"
+                    )
+            for service_path in (
+                "/rozwiazania/automatyzacja-procesow",
+                "/rozwiazania/chatbot-ai-dla-firm",
+                "/rozwiazania/voice-ai-dla-firm",
+                "/rozwiazania/integracje-whatsapp-crm",
+                "/rozwiazania/systemy-agentowe",
+            ):
+                if not any(_normalized_path(href) == service_path for href in parser.hrefs):
+                    errors.append(
+                        f"public route /rozwiazania: expected service link {service_path}, received none"
                     )
         elif path == "/kontakt":
             if not parser.has_form:
