@@ -15,6 +15,20 @@ Jeśli chcesz szybko sprawdzić gotowość techniczną, uruchom:
 python scripts/seo/check-production-indexability.py --site-url https://protolume.pl
 ```
 
+## Read-only kontrola SEO wdrożonej wersji
+
+Po wdrożeniu Cloud Build automatycznie uruchamia:
+- smoke test API, CORS, publicznych tras, formularza, 404, robots i sitemap;
+- kontrolę SEO wszystkich tras, metadanych, nagłówków, canonical, Open Graph/Twitter, JSON-LD, sitemap oraz zgodności SHA frontendu z wydaniem.
+
+Jeżeli potrzebujesz uruchomić kontrolę ręcznie, użyj SHA faktycznie wdrożonej wersji (z rekordu release lub meta `protolume-build-sha` na stronie głównej). Nie podstawiaj bieżącego HEAD, jeśli nie jest wersją produkcyjną:
+
+```powershell
+python scripts/gcp/seo_live_check.py --site-url https://protolume.pl --expected-build-sha <SHA-WDROZENIA> --attempts 12 --retry-delay-seconds 5
+```
+
+Kontrola wykonuje wyłącznie żądania GET. Nie wysyła formularza, nie zmienia ustawień Search Console i nie zgłasza URL-i do indeksowania.
+
 ## Najważniejsze URL-e
 
 Te adresy warto zgłosić ręcznie i potem obserwować w inspekcji URL:
