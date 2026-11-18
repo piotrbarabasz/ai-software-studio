@@ -59,53 +59,75 @@ describe('Site content model', () => {
     expect(siteContent.privacy.transmissionDescription).toContain('API formularza');
   });
 
-  it('keeps homepage content focused on a short sales path with verifiable evidence', () => {
-    expect(siteContent.home.hero.eyebrow).toBe('AI AUTOMATION STUDIO');
-    expect(siteContent.home.hero.title).toBe('Pokaż nam proces.\nW 7 dni pokażemy jego demo.');
-    expect(siteContent.home.hero.lead).toContain('jednego scenariusza');
-    expect(siteContent.home.hero.lead).toContain('przed pełnym wdrożeniem');
+  it('keeps homepage content focused on three service pillars and a low-friction sales path', () => {
+    expect(siteContent.home.hero.eyebrow).toBe('PROTOLUME · TECHNOLOGIA DLA FIRM');
+    expect(siteContent.home.hero.title).toBe('Ty rozwijasz biznes.\\nMy zajmujemy się technologią.');
+    expect(siteContent.home.hero.lead).toContain('automatyzacje, aplikacje oraz integracje');
+    expect(siteContent.home.hero.lead).toContain('AI wykorzystujemy tam, gdzie naprawdę pomaga');
     expect(siteContent.home.hero.supportingLine).toBe(
-      '1 proces · stały zakres · kontrola człowieka · wynik po 7 dniach',
+      'Od usprawnienia jednego procesu po rozwój aplikacji i systemów.',
     );
-    expect(siteContent.home.hero.primaryCta.label).toBe('Opisz proces');
-    expect(siteContent.home.hero.secondaryCta.label).toBe('Zobacz symulację →');
-    expect(siteContent.home.hero.secondaryCta.path).toBe('/demo-ai');
+    expect(siteContent.home.hero.primaryCta).toEqual({
+      label: 'Opowiedz, czego potrzebujesz',
+      path: '/kontakt',
+    });
+    expect(siteContent.home.hero.secondaryCta).toEqual({
+      label: 'Zobacz, w czym pomagamy',
+      path: '/',
+      fragment: 'home-processes',
+    });
     expect(siteContent.home.trustStrip).toHaveSize(4);
     expect(siteContent.home.useCasesHeading).toEqual({
-      eyebrow: 'Gdzie najczęściej znika czas?',
-      title: 'Gdzie zespół wykonuje powtarzalną pracę?',
+      eyebrow: 'W czym pomagamy',
+      title: 'Trzy obszary. Jeden cel: technologia, która rozwiązuje konkretny problem.',
+      lead: 'Nie zaczynamy od technologii. Najpierw poznajemy potrzebę, potem dobieramy sposób realizacji.',
     });
     expect(siteContent.home.useCases).toHaveSize(3);
     expect(
-      siteContent.home.useCases.map(({ number, title, problem, visualKind }) => ({
+      siteContent.home.useCases.map(({ number, title, problem, outcome, cta, visualKind }) => ({
         number,
         title,
         problem,
+        outcome,
+        cta,
         visualKind,
       })),
     ).toEqual([
       {
         number: '01',
-        title: 'Wiadomości i dokumenty',
-        problem: 'Pracownik nie powinien przepisywać danych z maila do systemu.',
-        visualKind: 'process-panel',
+        title: 'Automatyzacje procesów',
+        problem:
+          'Powtarzalne wiadomości, ręczne przepisywanie danych i pilnowanie statusów zabierają czas zespołu.',
+        outcome:
+          'Łączymy narzędzia i porządkujemy przebieg spraw — z kontrolą człowieka tam, gdzie jest potrzebna.',
+        cta: {
+          label: 'Zobacz automatyzacje',
+          path: '/rozwiazania/automatyzacja-procesow',
+        },
+        visualKind: 'message-workflow',
       },
       {
         number: '02',
-        title: 'Wiedza firmy',
+        title: 'Aplikacje i integracje',
         problem:
-          'Pracownik nie powinien przeszukiwać kilku dokumentów, żeby odpowiedzieć klientowi.',
-        visualKind: 'knowledge-assistant',
+          'Gotowe narzędzia nie obejmują całego procesu albo nie wymieniają między sobą danych.',
+        outcome: 'Tworzymy aplikacje webowe, API i integracje dopasowane do sposobu pracy firmy.',
+        cta: { label: 'Zobacz aplikacje i integracje', path: '/development' },
+        visualKind: 'process-panel',
       },
       {
         number: '03',
-        title: 'Obsługa spraw',
-        problem: 'Klient nie powinien ginąć między WhatsAppem, mailem i CRM.',
-        visualKind: 'channel-integrations',
+        title: 'AI tam, gdzie ma sens',
+        problem:
+          'Zespół szuka odpowiedzi w wielu źródłach lub ręcznie przekazuje zadania między narzędziami.',
+        outcome:
+          'Budujemy asystentów i systemy agentowe, które wspierają pracowników i pozostawiają krytyczne decyzje pod kontrolą człowieka.',
+        cta: { label: 'Zobacz rozwiązania AI', path: '/rozwiazania' },
+        visualKind: 'knowledge-assistant',
       },
     ]);
     expect(siteContent.home.useCasesCta).toEqual({
-      label: 'Zobacz wszystkie rozwiązania →',
+      label: 'Poznaj wszystkie rozwiązania',
       path: '/rozwiazania',
     });
     expect(siteContent.home.businessFlow.before).toBeTruthy();
@@ -114,8 +136,8 @@ describe('Site content model', () => {
     expect(siteContent.home.evidenceTeaser).toEqual(
       jasmine.objectContaining({
         eyebrow: 'Materiały do sprawdzenia',
-        title: 'Zobacz zamiast czytać.',
-        lead: 'Wypróbuj interfejs i zobacz formę raportu przed rozmową o własnym procesie.',
+        title: 'Zobacz, jak pracujemy.',
+        lead: 'Uruchom demonstrację i przejrzyj przykładowy rezultat, zanim opowiesz nam o własnej potrzebie.',
         note: 'To materiały demonstracyjne i projekt własny, a nie case study klienta.',
       }),
     );
@@ -163,7 +185,7 @@ describe('Site content model', () => {
       cta: { label: 'Poznaj osobę odpowiedzialną', path: '/studio' },
     });
     expect(siteContent.home.hero.primaryCta.path).toBe('/kontakt');
-    expect(siteContent.home.hero.primaryCta.queryParams?.['projectType']).toBe('mvp_prototype');
+    expect(siteContent.home.hero.primaryCta.queryParams).toBeUndefined();
     for (const removedField of [
       'problemsHeading',
       'problemGroups',
@@ -328,9 +350,9 @@ describe('Site content model', () => {
     expect(siteContent.routes.find((route) => route.kind === 'home')).toEqual(
       jasmine.objectContaining({
         path: '/',
-        title: 'Automatyzacje AI dla firm | Protolume',
+        title: 'Automatyzacje, aplikacje i integracje dla firm | Protolume',
         description:
-          'Protolume automatyzuje ręczne procesy w MŚP i wspiera software house’y w realizacji modułów AI, integracji i systemów agentowych.',
+          'Projektujemy automatyzacje procesów, aplikacje webowe i integracje. Dobieramy technologię do celu — AI wykorzystujemy tam, gdzie naprawdę pomaga. Protolume.',
       }),
     );
     expect(siteContent.routes.find((route) => route.kind === 'demo')?.description).toContain(
@@ -385,7 +407,7 @@ describe('Site content model', () => {
     expect(siteContent.home.evidenceTeaser).toEqual(
       jasmine.objectContaining({
         eyebrow: 'Materiały do sprawdzenia',
-        title: 'Zobacz zamiast czytać.',
+        title: 'Zobacz, jak pracujemy.',
         note: 'To materiały demonstracyjne i projekt własny, a nie case study klienta.',
       }),
     );
