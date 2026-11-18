@@ -313,7 +313,7 @@ export const siteContent = {
       eyebrow: 'Materiały do sprawdzenia',
       title: 'Projekty własne i demonstracje — zobacz, co można sprawdzić',
       lead:
-        'Pokazujemy własną aplikację i trzy materiały demonstracyjne. Każdy ma opis zakresu, źródła i ograniczeń; nie są to historie wdrożeń klientów.'
+        'Pokazujemy własną aplikację i trzy materiały demonstracyjne. Każdy ma opis zakresu, źródła i ograniczeń; nie są to historie wdrożeń klientów.',
       items: publishedEvidence,
     },
   },
