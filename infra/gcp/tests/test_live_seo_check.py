@@ -206,6 +206,25 @@ class FakeSeoDeployment:
 
 
 class LiveSeoCheckTest(unittest.TestCase):
+    def test_social_preview_contract_matches_public_brand_config(self) -> None:
+        brand = json.loads(
+            (
+                REPOSITORY_ROOT
+                / "frontend"
+                / "config"
+                / "public-brand.json"
+            ).read_text(encoding="utf-8")
+        )
+
+        self.assertEqual(
+            seo.SOCIAL_PREVIEW_PATH,
+            brand["assets"]["socialPreviewPath"],
+        )
+        self.assertEqual(
+            seo.SOCIAL_PREVIEW_TYPE,
+            brand["assets"]["socialPreviewType"],
+        )
+
     def test_public_routes_match_the_versioned_prerender_manifest(self) -> None:
         routes = tuple(
             route
