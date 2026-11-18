@@ -128,10 +128,9 @@ export class ContactFormComponent implements OnInit {
           this.statusMessage = this.content.messages.success;
           this.submissionSummary = {
             name: inquiry.name,
-            projectType:
-              inquiry.projectType === 'other'
-                ? undefined
-                : this.projectTypeLabel(inquiry.projectType),
+            ...(inquiry.projectType === 'other'
+              ? {}
+              : { projectType: this.projectTypeLabel(inquiry.projectType) }),
             message: this.messagePreview(this.form.controls.message.value.trim()),
           };
           this.resetForm();
