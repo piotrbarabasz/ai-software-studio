@@ -618,7 +618,7 @@ def main() -> int:
         )
         if not errors:
             print(
-                "Read-only live SEO check passed: public routes, unique titles/descriptions, H1, canonical, Open Graph/Twitter, JSON-LD, robots, sitemap and build provenance are correct."
+                "Read-only live SEO check passed: public routes, unique titles/descriptions, H1, canonical, Open Graph/Twitter, JSON-LD, robots, sitemap, published PNG social preview and build provenance are correct."
             )
             return 0
     except ValueError as exc:
