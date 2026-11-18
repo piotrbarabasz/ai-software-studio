@@ -131,12 +131,19 @@ describe('public routes', () => {
     ]);
   });
 
-  it('keeps the shortened homepage cards focused on problems and links to all solutions once', () => {
+  it('keeps the three homepage service pillars linked to existing offer pages', () => {
     expect(siteContent.home.useCases).toHaveSize(3);
-    expect(siteContent.home.useCases.every((item) => item.cta === undefined)).toBeTrue();
-    expect(siteContent.home.useCasesCta.path).toBe('/rozwiazania');
+    expect(siteContent.home.useCases.every((item) => item.cta !== undefined)).toBeTrue();
+    expect(siteContent.home.useCases.map((item) => item.cta?.path)).toEqual([
+      '/rozwiazania/automatyzacja-procesow',
+      '/development',
+      '/rozwiazania',
+    ]);
     expect(
-      siteContent.routes.some((route) => route.path === siteContent.home.useCasesCta.path),
-    ).toBe(true);
+      siteContent.home.useCases.every((item) =>
+        siteContent.routes.some((route) => route.path === item.cta?.path),
+      ),
+    ).toBeTrue();
+    expect(siteContent.home.useCasesCta.path).toBe('/rozwiazania');
   });
 });
