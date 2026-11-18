@@ -38,8 +38,8 @@ PUBLIC_ROUTES = tuple(
 def json_ld_home(origin: str, *, extra: dict[str, object] | None = None) -> str:
     graph: list[dict[str, object]] = [
         {
-            "@id": f"{origin}#organization",
-            "@type": "Organization",
+            "@id": f"{origin}#professional-service",
+            "@type": "ProfessionalService",
             "name": "Protolume",
             "url": origin,
         },
@@ -248,6 +248,46 @@ class LiveSeoCheckTest(unittest.TestCase):
             with self.subTest(route=route):
                 self.assertTrue(deployment.page_title(route))
                 self.assertTrue(deployment.page_description(route))
+
+    def test_live_checker_uses_the_organization_subtype_rendered_by_angular(self) -> None:
+        angular_source = (
+            REPOSITORY_ROOT
+            / "frontend"
+            / "src"
+            / "app"
+            / "features"
+            / "shell"
+            / "site-shell.component.ts"
+        ).read_text(encoding="utf-8")
+        self.assertIn("'@type': 'ProfessionalService'", angular_source)
+        self.assertIn("#professional-service", angular_source)
+
+        homepage = json.loads(json_ld_home("https://protolume.pl"))
+        graph = homepage["@graph"]
+        self.assertIn("ProfessionalService", [node["@type"] for node in graph])
+
+    def test_live_checker_rejects_homepage_without_professional_service(self) -> None:
+        deployment = FakeSeoDeployment(
+            mutator=lambda path, response: seo.Response(
+                response.status,
+                response.headers,
+                response.body.replace(
+                    b'"@type":"ProfessionalService"',
+                    b'"@type":"Thing"',
+                )
+                if path == "/"
+                else response.body,
+            )
+        )
+
+        errors = seo.run_checks(
+            "https://protolume.pl",
+            expected_build_sha=EXPECTED_BUILD_SHA,
+            timeout_seconds=2,
+            request=deployment,
+        )
+
+        self.assertIn("public route /: ProfessionalService JSON-LD is missing", errors)
 
     def test_valid_live_seo_check_passes_for_the_expected_release(self) -> None:
         deployment = FakeSeoDeployment()
@@ -562,8 +602,8 @@ class LiveSeoCheckTest(unittest.TestCase):
                 response.status,
                 response.headers,
                 response.body.replace(
-                    b'"@type":"Organization"',
-                    b'"@type":"Organization","aggregateRating":{"@type":"AggregateRating","ratingValue":"5","price":"100","numberOfClients":12}',
+                    b'"@type":"ProfessionalService"',
+                    b'"@type":"ProfessionalService","aggregateRating":{"@type":"AggregateRating","ratingValue":"5","price":"100","numberOfClients":12}',
                 )
                 if path == "/"
                 else response.body,

@@ -384,8 +384,10 @@ def _validate_page(
             for document in json_ld_documents
             for node in _iter_json_ld_nodes(document)
         ]
-        if "Organization" not in types:
-            errors.append("public route /: Organization JSON-LD is missing")
+        # Match the actual Angular graph. ProfessionalService is a subtype
+        # of Organization in Schema.org; don't require a second Organization node.
+        if "ProfessionalService" not in types:
+            errors.append("public route /: ProfessionalService JSON-LD is missing")
         if "WebSite" not in types:
             errors.append("public route /: WebSite JSON-LD is missing")
 
