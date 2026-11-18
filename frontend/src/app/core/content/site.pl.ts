@@ -94,9 +94,10 @@ const routeMetadata = [
     path: '/',
     label: 'Start',
 
-    title: brandTitle('Automatyzacje AI dla firm'),
-    description:
-      'Protolume automatyzuje ręczne procesy w MŚP i wspiera software house’y w realizacji modułów AI, integracji i systemów agentowych.',
+    title: brandTitle('Automatyzacje, aplikacje i integracje dla firm'),
+    description: brandDescription(
+      'Projektujemy automatyzacje procesów, aplikacje webowe i integracje. Dobieramy technologię do celu — AI wykorzystujemy tam, gdzie naprawdę pomaga.',
+    ),
     kind: 'home',
   },
   {
@@ -215,25 +216,37 @@ const navigationLink = (path: (typeof primaryNavigation)[number]['path']) =>
 
 const homeUseCases: readonly HomeUseCase[] = [
   {
-    id: 'messages-documents',
+    id: 'process-automation',
     number: '01',
-    title: 'Wiadomości i dokumenty',
-    problem: 'Pracownik nie powinien przepisywać danych z maila do systemu.',
+    title: 'Automatyzacje procesów',
+    problem:
+      'Powtarzalne wiadomości, ręczne przepisywanie danych i pilnowanie statusów zabierają czas zespołu.',
+    outcome:
+      'Łączymy narzędzia i porządkujemy przebieg spraw — z kontrolą człowieka tam, gdzie jest potrzebna.',
+    cta: { label: 'Zobacz automatyzacje', path: '/rozwiazania/automatyzacja-procesow' },
+    visualKind: 'message-workflow',
+  },
+  {
+    id: 'applications-integrations',
+    number: '02',
+    title: 'Aplikacje i integracje',
+    problem:
+      'Gotowe narzędzia nie obejmują całego procesu albo nie wymieniają między sobą danych.',
+    outcome:
+      'Tworzymy aplikacje webowe, API i integracje dopasowane do sposobu pracy firmy.',
+    cta: { label: 'Zobacz aplikacje i integracje', path: '/development' },
     visualKind: 'process-panel',
   },
   {
-    id: 'company-knowledge',
-    number: '02',
-    title: 'Wiedza firmy',
-    problem: 'Pracownik nie powinien przeszukiwać kilku dokumentów, żeby odpowiedzieć klientowi.',
-    visualKind: 'knowledge-assistant',
-  },
-  {
-    id: 'case-handling',
+    id: 'ai-in-workflows',
     number: '03',
-    title: 'Obsługa spraw',
-    problem: 'Klient nie powinien ginąć między WhatsAppem, mailem i CRM.',
-    visualKind: 'channel-integrations',
+    title: 'AI tam, gdzie ma sens',
+    problem:
+      'Zespół szuka odpowiedzi w wielu źródłach lub ręcznie przekazuje zadania między narzędziami.',
+    outcome:
+      'Budujemy asystentów i systemy agentowe, które wspierają pracowników i pozostawiają krytyczne decyzje pod kontrolą człowieka.',
+    cta: { label: 'Zobacz rozwiązania AI', path: '/rozwiazania' },
+    visualKind: 'knowledge-assistant',
   },
 ];
 
@@ -306,16 +319,19 @@ export const siteContent = {
   home: {
     path: '/',
     hero: {
-      eyebrow: 'AI AUTOMATION STUDIO',
-      title: 'Pokaż nam proces.\nW 7 dni pokażemy jego demo.',
-      lead: 'Automatyzujemy powtarzalną pracę z wiadomościami, dokumentami i systemami firmy. Zaczynamy od jednego scenariusza przed pełnym wdrożeniem.',
-      supportingLine: '1 proces · stały zakres · kontrola człowieka · wynik po 7 dniach',
+      eyebrow: 'PROTOLUME · TECHNOLOGIA DLA FIRM',
+      title: 'Ty rozwijasz biznes.\nMy zajmujemy się technologią.',
+      lead: 'Projektujemy i wdrażamy automatyzacje, aplikacje oraz integracje. Dobieramy technologię do celu — AI wykorzystujemy tam, gdzie naprawdę pomaga.',
+      supportingLine: 'Od usprawnienia jednego procesu po rozwój aplikacji i systemów.',
       primaryCta: {
-        label: 'Opisz proces',
+        label: 'Opowiedz, czego potrzebujesz',
         path: '/kontakt',
-        queryParams: { projectType: 'mvp_prototype' },
       },
-      secondaryCta: { label: 'Zobacz symulację →', path: '/demo-ai', fragment: 'interactive-demo' },
+      secondaryCta: {
+        label: 'Zobacz, w czym pomagamy',
+        path: '/',
+        fragment: 'home-processes',
+      },
     },
     trustTeaser: {
       title: 'Osoba odpowiedzialna za projekt',
@@ -328,20 +344,19 @@ export const siteContent = {
     },
     evidenceTeaser: {
       eyebrow: 'Materiały do sprawdzenia',
-      title: 'Zobacz zamiast czytać.',
-      lead: 'Wypróbuj interfejs i zobacz formę raportu przed rozmową o własnym procesie.',
+      title: 'Zobacz, jak pracujemy.',
+      lead: 'Uruchom demonstrację i przejrzyj przykładowy rezultat, zanim opowiesz nam o własnej potrzebie.',
       note: 'To materiały demonstracyjne i projekt własny, a nie case study klienta.',
       items: publishedEvidence.filter((item) =>
         ['knowledge-demo', 'demo-report'].includes(item.id),
       ),
     },
     closingCta: {
-      title: 'Pokaż proces, który zabiera czas',
-      lead: 'Krótki opis wystarczy, żeby ustalić, czy kolejnym krokiem powinno być Demo w 7 dni.',
+      title: 'Masz proces do usprawnienia albo pomysł na aplikację?',
+      lead: 'Opowiedz, co chcesz osiągnąć. Wspólnie ustalimy, czy potrzebna jest automatyzacja, integracja, aplikacja czy rozwiązanie z AI.',
       primaryCta: {
-        label: 'Opisz proces',
+        label: 'Porozmawiajmy o projekcie',
         path: '/kontakt',
-        queryParams: { projectType: 'mvp_prototype' },
       },
     },
     trustStrip: [
@@ -351,11 +366,12 @@ export const siteContent = {
       { id: 'client-confidentiality', title: 'Poufność danych' },
     ],
     useCasesHeading: {
-      eyebrow: 'Gdzie najczęściej znika czas?',
-      title: 'Gdzie zespół wykonuje powtarzalną pracę?',
+      eyebrow: 'W czym pomagamy',
+      title: 'Trzy obszary. Jeden cel: technologia, która rozwiązuje konkretny problem.',
+      lead: 'Nie zaczynamy od technologii. Najpierw poznajemy potrzebę, potem dobieramy sposób realizacji.',
     },
     useCases: homeUseCases,
-    useCasesCta: { label: 'Zobacz wszystkie rozwiązania →', path: '/rozwiazania' },
+    useCasesCta: { label: 'Poznaj wszystkie rozwiązania', path: '/rozwiazania' },
     businessFlow: {
       eyebrow: 'Ilustracja procesu',
       title: 'Tak może zmienić się obsługa jednego zapytania',
