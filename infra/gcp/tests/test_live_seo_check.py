@@ -273,7 +273,7 @@ class LiveSeoCheckTest(unittest.TestCase):
             errors,
         )
 
-    def test_live_checker_rejects_missing_or_duplicate_h1(self) -> None:
+    def test_live_checker_rejects_missing_h1(self) -> None:
         deployment = FakeSeoDeployment(
             mutator=lambda path, response: seo.Response(
                 response.status,
@@ -293,6 +293,32 @@ class LiveSeoCheckTest(unittest.TestCase):
 
         self.assertIn(
             "public route /studio: expected exactly one h1, received 0",
+            errors,
+        )
+
+    def test_live_checker_rejects_duplicate_h1(self) -> None:
+        deployment = FakeSeoDeployment(
+            mutator=lambda path, response: seo.Response(
+                response.status,
+                response.headers,
+                response.body.replace(
+                    b"</main>",
+                    b"<h1>Drugi naglowek</h1></main>",
+                )
+                if path == "/studio"
+                else response.body,
+            )
+        )
+
+        errors = seo.run_checks(
+            "https://protolume.pl",
+            expected_build_sha=EXPECTED_BUILD_SHA,
+            timeout_seconds=2,
+            request=deployment,
+        )
+
+        self.assertIn(
+            "public route /studio: expected exactly one h1, received 2",
             errors,
         )
 
