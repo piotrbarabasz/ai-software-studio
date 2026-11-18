@@ -70,8 +70,7 @@ const solutionsContent: SolutionsPageContent = {
   path: '/rozwiazania',
   eyebrow: 'Oferta Protolume',
   title: 'Co możemy usprawnić lub zbudować dla Twojej firmy?',
-  lead:
-    'Możesz mieć konkretny pomysł albo tylko wiedzieć, co dziś nie działa. Zaczniemy od rozmowy, a rozwiązanie dopasujemy do celu.',
+  lead: 'Możesz mieć konkretny pomysł albo tylko wiedzieć, co dziś nie działa. Zaczniemy od rozmowy, a rozwiązanie dopasujemy do celu.',
   solutions: serviceCatalog.map((service) => ({
     id: service.legacyAnchor,
     title: service.label,
@@ -81,8 +80,7 @@ const solutionsContent: SolutionsPageContent = {
   })),
   closingCta: {
     title: 'Nie musisz wiedzieć, od czego zacząć.',
-    lead:
-      'Napisz, co chcesz zmienić lub stworzyć. Razem określimy pierwszy krok, możliwy zakres i sposób realizacji.',
+    lead: 'Napisz, co chcesz zmienić lub stworzyć. Razem określimy pierwszy krok, możliwy zakres i sposób realizacji.',
     primaryCta: {
       label: 'Porozmawiajmy o potrzebie',
       path: '/kontakt',
@@ -230,10 +228,8 @@ const homeUseCases: readonly HomeUseCase[] = [
     id: 'applications-integrations',
     number: '02',
     title: 'Aplikacje i integracje',
-    problem:
-      'Gotowe narzędzia nie obejmują całego procesu albo nie wymieniają między sobą danych.',
-    outcome:
-      'Tworzymy aplikacje webowe, API i integracje dopasowane do sposobu pracy firmy.',
+    problem: 'Gotowe narzędzia nie obejmują całego procesu albo nie wymieniają między sobą danych.',
+    outcome: 'Tworzymy aplikacje webowe, API i integracje dopasowane do sposobu pracy firmy.',
     cta: { label: 'Zobacz aplikacje i integracje', path: '/development' },
     visualKind: 'process-panel',
   },
@@ -312,8 +308,7 @@ export const siteContent = {
     evidence: {
       eyebrow: 'Materiały do sprawdzenia',
       title: 'Projekty własne i demonstracje — zobacz, co można sprawdzić',
-      lead:
-        'Pokazujemy własną aplikację i trzy materiały demonstracyjne. Każdy ma opis zakresu, źródła i ograniczeń; nie są to historie wdrożeń klientów.',
+      lead: 'Pokazujemy własną aplikację i trzy materiały demonstracyjne. Każdy ma opis zakresu, źródła i ograniczeń; nie są to historie wdrożeń klientów.',
       items: publishedEvidence,
     },
   },
@@ -347,8 +342,7 @@ export const siteContent = {
       eyebrow: 'Materiały do sprawdzenia',
       title: 'Zobacz, jak pracujemy.',
       lead: 'Uruchom demonstrację i przejrzyj przykładowy rezultat, zanim opowiesz nam o własnej potrzebie.',
-      note:
-        'Te dwa materiały są symulacjami. Własną aplikację i pozostałe przykłady pokazujemy osobno — to nie są case studies klientów.'
+      note: 'Te dwa materiały są symulacjami. Własną aplikację i pozostałe przykłady pokazujemy osobno — to nie są case studies klientów.',
       items: publishedEvidence.filter((item) =>
         ['knowledge-demo', 'demo-report'].includes(item.id),
       ),
@@ -788,8 +782,7 @@ export const siteContent = {
     path: '/dla-software-house',
     eyebrow: 'Współpraca B2B',
     title: 'Wsparcie technologiczne dla software house’ów i MSP',
-    lead:
-      'Potrzebujesz pomocy przy aplikacji, integracji lub AI? Dołączam do określonego etapu prac — od rozpoznania potrzeb po kod i przekazanie. Możliwe jest podwykonawstwo lub white-label.',
+    lead: 'Potrzebujesz pomocy przy aplikacji, integracji lub AI? Dołączam do określonego etapu prac — od rozpoznania potrzeb po kod i przekazanie. Możliwe jest podwykonawstwo lub white-label.',
     primaryCta: {
       label: 'Porozmawiajmy o współpracy',
       path: '/kontakt',
@@ -880,8 +873,7 @@ export const siteContent = {
     path: '/development',
     eyebrow: 'Aplikacje i integracje',
     title: 'Zamieniamy pomysły w działające aplikacje',
-    lead:
-      'Masz pomysł na własne narzędzie albo dość pracy w kilku systemach? Projektuję aplikacje webowe, panele i integracje dopasowane do rzeczywistych potrzeb firmy.',
+    lead: 'Masz pomysł na własne narzędzie albo dość pracy w kilku systemach? Projektuję aplikacje webowe, panele i integracje dopasowane do rzeczywistych potrzeb firmy.',
     heroNextStep:
       'Nie potrzebujesz gotowej specyfikacji. Wystarczy pomysł, problem albo przykład obecnej pracy.',
     principles: [
@@ -952,7 +944,8 @@ export const siteContent = {
     deliverySteps: [
       {
         title: 'Rozmawiamy o potrzebie',
-        description: 'Ustalamy, kto będzie korzystał z rozwiązania i co powinno działać w pierwszej wersji.',
+        description:
+          'Ustalamy, kto będzie korzystał z rozwiązania i co powinno działać w pierwszej wersji.',
       },
       {
         title: 'Projektujemy i budujemy',
@@ -966,8 +959,7 @@ export const siteContent = {
     ],
     closingCta: {
       title: 'Masz pomysł? Sprawdźmy, jak może działać.',
-      lead:
-        'Nie musisz mieć gotowej listy funkcji. Opowiedz o celu lub problemie, a zakres i wycenę ustalimy przed rozpoczęciem prac.',
+      lead: 'Nie musisz mieć gotowej listy funkcji. Opowiedz o celu lub problemie, a zakres i wycenę ustalimy przed rozpoczęciem prac.',
       primaryCta: {
         label: 'Porozmawiajmy o aplikacji',
         path: '/kontakt',
