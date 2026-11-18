@@ -107,6 +107,7 @@ class FakeSeoDeployment:
             "/rozwiazania/automatyzacja-procesow": "Automatyzacja procesów | Protolume",
             "/rozwiazania/integracje-whatsapp-crm": "Integracje WhatsApp i CRM | Protolume",
             "/rozwiazania/systemy-agentowe": "Systemy agentowe | Protolume",
+            "/dla-software-house": "Dla software house’ów | Protolume",
             "/development": "Wdrożenia | Protolume",
             "/studio": "O Protolume | Protolume",
             "/rd": "R&D | Protolume",
@@ -126,6 +127,7 @@ class FakeSeoDeployment:
             "/rozwiazania/automatyzacja-procesow": "Automatyzacja procesów Protolume.",
             "/rozwiazania/integracje-whatsapp-crm": "Integracje WhatsApp i CRM Protolume.",
             "/rozwiazania/systemy-agentowe": "Systemy agentowe Protolume.",
+            "/dla-software-house": "Współpraca ze software house’ami i MSP przy aplikacjach, integracjach i AI.",
             "/development": "Wdrożenia Protolume.",
             "/studio": "O Protolume i współpracy.",
             "/rd": "Badania i eksperymenty Protolume.",
@@ -238,6 +240,14 @@ class LiveSeoCheckTest(unittest.TestCase):
         )
 
         self.assertEqual(routes, PUBLIC_ROUTES)
+
+    def test_fake_deployment_defines_metadata_for_every_prerendered_route(self) -> None:
+        deployment = FakeSeoDeployment()
+
+        for route in PUBLIC_ROUTES:
+            with self.subTest(route=route):
+                self.assertTrue(deployment.page_title(route))
+                self.assertTrue(deployment.page_description(route))
 
     def test_valid_live_seo_check_passes_for_the_expected_release(self) -> None:
         deployment = FakeSeoDeployment()
