@@ -457,7 +457,7 @@ def _validate_social_preview(
         errors.append(
             f"public social preview: content type must be {SOCIAL_PREVIEW_TYPE}"
         )
-    if not response.body.startswith(b"\\x89PNG\\r\\n\\x1a\\n"):
+    if not response.body.startswith(b"\x89PNG\r\n\x1a\n"):
         errors.append("public social preview: response is not a PNG image")
     return errors
 
