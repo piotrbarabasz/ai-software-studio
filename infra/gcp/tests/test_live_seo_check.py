@@ -127,7 +127,7 @@ class FakeSeoDeployment:
             "/rozwiazania/automatyzacja-procesow": "Automatyzacja procesów Protolume.",
             "/rozwiazania/integracje-whatsapp-crm": "Integracje WhatsApp i CRM Protolume.",
             "/rozwiazania/systemy-agentowe": "Systemy agentowe Protolume.",
-            "/dla-software-house": "Współpraca ze software house’ami i MSP przy aplikacjach, integracjach i AI.",
+            "/dla-software-house": "Aplikacje, integracje i AI dla software house’ów oraz MSP.",
             "/development": "Wdrożenia Protolume.",
             "/studio": "O Protolume i współpracy.",
             "/rd": "Badania i eksperymenty Protolume.",
