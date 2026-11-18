@@ -14,7 +14,7 @@ describe('StudioPageComponent', () => {
 
     expect(fixture.nativeElement.querySelectorAll('h1')).toHaveSize(1);
     expect(
-      fixture.nativeElement.querySelector('a[href="/kontakt?projectType=custom_web_app"]'),
+      fixture.nativeElement.querySelector('.hero-actions a[href="/kontakt"]'),
     ).not.toBeNull();
     expect(fixture.nativeElement.querySelector('.hero-actions .primary-action')).not.toBeNull();
     expect(fixture.nativeElement.textContent).toContain('Jak wygląda współpraca?');
@@ -50,6 +50,16 @@ describe('StudioPageComponent', () => {
     expect(element.textContent).toContain('Odpowiedzialność end-to-end');
     expect(element.querySelector('a[href*="github.com"]')).toBeNull();
     expect(element.querySelectorAll('.evidence-card')).toHaveSize(4);
+    expect(element.querySelectorAll('.evidence-card--featured')).toHaveSize(1);
+    expect(element.querySelector('.evidence-card--featured')?.getAttribute('data-evidence-kind'))
+      .toBe('own-project');
+    expect(element.querySelectorAll('.evidence-card[data-evidence-kind="simulation"]')).toHaveSize(3);
+    expect(element.querySelectorAll('.evidence-scope')).toHaveSize(4);
+    expect(element.querySelector('.evidence-intro')?.textContent).toContain(
+      'nie opisy wdrożeń klientów',
+    );
+    expect(element.querySelector('.examples-contact a[href="/kontakt"]')?.textContent)
+      .toContain('Opowiedz o potrzebie');
     expect(element.querySelectorAll('.verification-list')).toHaveSize(4);
     expect(element.querySelectorAll('.evidence-limit')).toHaveSize(4);
     expect(element.textContent).toContain('Symulacja asystenta wiedzy');
