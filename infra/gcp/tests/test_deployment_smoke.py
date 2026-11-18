@@ -508,7 +508,7 @@ class DeploymentSmokeTest(unittest.TestCase):
         ).read_text(encoding="utf-8")
         self.assertIn('routerLink="/kontakt"', shell)
         self.assertIn("[queryParams]=\"{ projectType: 'mvp_prototype' }\"", shell)
-        self.assertIn(">Opisz proces</a>", shell)
+        self.assertIn(">Opisz proces</a", shell)
 
     def test_missing_primary_navigation_link_is_reported(self) -> None:
         deployment = FakeDeployment(robots_tag="index, follow")
