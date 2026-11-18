@@ -44,14 +44,16 @@
       <p class="eyebrow">Przykłady zastosowań</p>
       <h2 id="services-section-title">Zobacz konkretne sytuacje, które możemy usprawnić.</h2>
       <p class="page-lead">
-        Nie musisz wybierać rozwiązania samodzielnie. Te przykłady pokazują możliwości,
-        a właściwy zakres ustalimy podczas rozmowy.
+        Nie musisz wybierać rozwiązania samodzielnie. Te przykłady pokazują możliwości, a właściwy
+        zakres ustalimy podczas rozmowy.
       </p>
     </div>
     <div class="solutions-list">
       @for (solution of content.solutions; track solution.id) {
         <article class="solution-card card-surface" [id]="solution.id">
-          <h3><a [routerLink]="solution.path">{{ solution.title }}</a></h3>
+          <h3>
+            <a [routerLink]="solution.path">{{ solution.title }}</a>
+          </h3>
           <p>{{ solution.problem }}</p>
           <p class="solution-result"><strong>Możliwy rezultat:</strong> {{ solution.summary }}</p>
         </article>
