@@ -78,7 +78,9 @@
   font-weight: 750;
 }
 
-.budget-field {
+.additional-information-fields {
+  display: grid;
+  gap: 0.9rem;
   margin-top: 0.85rem;
 }
 
