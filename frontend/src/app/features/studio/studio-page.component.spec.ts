@@ -53,7 +53,9 @@ describe('StudioPageComponent', () => {
     expect(element.querySelectorAll('.evidence-card--featured')).toHaveSize(1);
     expect(element.querySelector('.evidence-card--featured')?.getAttribute('data-evidence-kind'))
       .toBe('own-project');
-    expect(element.querySelectorAll('.evidence-card[data-evidence-kind="simulation"]')).toHaveSize(3);
+    expect(
+      element.querySelectorAll('.evidence-card[data-evidence-kind="simulation"]'),
+    ).toHaveSize(3);
     expect(element.querySelectorAll('.evidence-scope')).toHaveSize(4);
     expect(element.querySelector('.evidence-intro')?.textContent).toContain(
       'nie opisy wdrożeń klientów',
