@@ -136,6 +136,9 @@ class FakeSeoDeployment:
 
     def build_html(self, origin: str, path: str) -> str:
         canonical = origin if path == "/" else f"{origin}{path}"
+        title = self.page_title(path)
+        description = self.page_description(path)
+        social_image = f"{origin}/assets/protolume-social-preview.png"
         json_ld = ""
         if path == "/":
             json_ld = f'<script type="application/ld+json">{json_ld_home(origin)}</script>'
@@ -144,10 +147,19 @@ class FakeSeoDeployment:
         build_sha = f'<meta name="protolume-build-sha" content="{self.homepage_sha}">' if path == "/" else ""
         return (
             "<html><head>"
-            f"<title>{self.page_title(path)}</title>"
-            f'<meta name="description" content="{self.page_description(path)}">'
+            f"<title>{title}</title>"
+            f'<meta name="description" content="{description}">'
             f'<link rel="canonical" href="{canonical}">'
             '<meta name="robots" content="index, follow">'
+            f'<meta property="og:title" content="{title}">'
+            f'<meta property="og:description" content="{description}">'
+            f'<meta property="og:url" content="{canonical}">'
+            f'<meta property="og:image" content="{social_image}">'
+            '<meta property="og:image:type" content="image/png">'
+            '<meta name="twitter:card" content="summary_large_image">'
+            f'<meta name="twitter:title" content="{title}">'
+            f'<meta name="twitter:description" content="{description}">'
+            f'<meta name="twitter:image" content="{social_image}">'
             f"{build_sha}"
             f"{json_ld}"
             "</head><body><main><h1>Treść</h1></main></body></html>"
@@ -260,6 +272,101 @@ class LiveSeoCheckTest(unittest.TestCase):
             "public route /rozwiazania: canonical URL does not match the public origin",
             errors,
         )
+
+    def test_live_checker_rejects_missing_or_duplicate_h1(self) -> None:
+        deployment = FakeSeoDeployment(
+            mutator=lambda path, response: seo.Response(
+                response.status,
+                response.headers,
+                response.body.replace(b"<h1>Treść</h1>", b"")
+                if path == "/studio"
+                else response.body,
+            )
+        )
+
+        errors = seo.run_checks(
+            "https://protolume.pl",
+            expected_build_sha=EXPECTED_BUILD_SHA,
+            timeout_seconds=2,
+            request=deployment,
+        )
+
+        self.assertIn(
+            "public route /studio: expected exactly one h1, received 0",
+            errors,
+        )
+
+    def test_live_checker_rejects_duplicate_meta_descriptions(self) -> None:
+        deployment = FakeSeoDeployment(
+            mutator=lambda path, response: seo.Response(
+                response.status,
+                response.headers,
+                response.body.replace(
+                    b"Demo AI Protolume.",
+                    b"Startowa strona Protolume.",
+                )
+                if path == "/demo-ai"
+                else response.body,
+            )
+        )
+
+        errors = seo.run_checks(
+            "https://protolume.pl",
+            expected_build_sha=EXPECTED_BUILD_SHA,
+            timeout_seconds=2,
+            request=deployment,
+        )
+
+        self.assertIn("public routes: meta descriptions must be unique", errors)
+
+    def test_live_checker_rejects_mismatched_open_graph_and_twitter_metadata(self) -> None:
+        deployment = FakeSeoDeployment(
+            mutator=lambda path, response: seo.Response(
+                response.status,
+                response.headers,
+                response.body.replace(
+                    b'<meta property="og:url" content="https://protolume.pl/studio">',
+                    b'<meta property="og:url" content="https://wrong.example/studio">',
+                )
+                if path == "/studio"
+                else response.body,
+            )
+        )
+
+        errors = seo.run_checks(
+            "https://protolume.pl",
+            expected_build_sha=EXPECTED_BUILD_SHA,
+            timeout_seconds=2,
+            request=deployment,
+        )
+
+        self.assertIn(
+            "public route /studio: Open Graph URL does not match the canonical URL",
+            errors,
+        )
+
+    def test_live_checker_rejects_duplicate_titles(self) -> None:
+        deployment = FakeSeoDeployment(
+            mutator=lambda path, response: seo.Response(
+                response.status,
+                response.headers,
+                response.body.replace(
+                    b"<title>Demo AI | Protolume</title>",
+                    b"<title>Start | Protolume</title>",
+                )
+                if path == "/demo-ai"
+                else response.body,
+            )
+        )
+
+        errors = seo.run_checks(
+            "https://protolume.pl",
+            expected_build_sha=EXPECTED_BUILD_SHA,
+            timeout_seconds=2,
+            request=deployment,
+        )
+
+        self.assertIn("public routes: titles must be unique", errors)
 
     def test_live_checker_rejects_a_stale_build_sha(self) -> None:
         deployment = FakeSeoDeployment(homepage_sha="def5678")
