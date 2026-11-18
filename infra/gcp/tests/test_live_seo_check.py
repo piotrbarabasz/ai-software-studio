@@ -297,6 +297,26 @@ class LiveSeoCheckTest(unittest.TestCase):
             errors,
         )
 
+    def test_live_checker_rejects_a_social_preview_without_a_png_signature(self) -> None:
+        deployment = FakeSeoDeployment(
+            mutator=lambda path, response: seo.Response(
+                response.status,
+                response.headers,
+                b"not a PNG",
+            )
+            if path == seo.SOCIAL_PREVIEW_PATH
+            else response
+        )
+
+        errors = seo.run_checks(
+            "https://protolume.pl",
+            expected_build_sha=EXPECTED_BUILD_SHA,
+            timeout_seconds=2,
+            request=deployment,
+        )
+
+        self.assertIn("public social preview: response is not a PNG image", errors)
+
     def test_live_checker_rejects_noindex_headers(self) -> None:
         deployment = FakeSeoDeployment(
             mutator=lambda path, response: seo.Response(
