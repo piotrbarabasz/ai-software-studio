@@ -34,6 +34,7 @@ Testy pokrywają brakujący H1, duplikaty title/description i błędne Open Grap
 - Cloud Build po istniejącym `deployment-read-only-smoke` uruchamia nowy `production-seo-live-check` z oczekiwanym `$SHORT_SHA`.
 - Testy `test_live_seo_check.py` są dodane do kroku testów kontraktów wdrożeniowych.
 - Kontrola jest read-only: GET do stron, robots, sitemap; bez POST, bez wysyłania formularza i bez modyfikacji Search Console.
+- Bramka raportuje błąd release po deployu, ale nie wykonuje automatycznego rollbacku rewizji. W razie błędu trzeba sprawdzić logi i podjąć kontrolowaną decyzję o revert/redeploy.
 - `docs/seo-indexing-runbook.md` opisuje ręczne uruchomienie kontroli dla faktycznie wdrożonego SHA.
 
 ## 3. Analityka — decyzja świadomie odroczona
