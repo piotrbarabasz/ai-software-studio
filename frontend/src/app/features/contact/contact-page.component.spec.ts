@@ -35,7 +35,9 @@ describe('ContactPageComponent', () => {
         .compareDocumentPosition(element.querySelector('.contact-next')!) &
         Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
-    expect(element.querySelector('#message-hint')?.textContent).toContain('Możesz zostawić to pole puste');
+    expect(element.querySelector('#message-hint')?.textContent).toContain(
+      'Możesz zostawić to pole puste',
+    );
     expect(element.querySelector('#message')?.getAttribute('aria-describedby')).toContain(
       'message-hint',
     );
