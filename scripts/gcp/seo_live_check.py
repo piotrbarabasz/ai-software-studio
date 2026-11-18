@@ -271,7 +271,7 @@ def _validate_page(
     request: Callable[[urllib.request.Request, float], Response],
     timeout_seconds: float,
     expected_build_sha: str | None,
-) -> tuple[list[str], str | None, str | None]:
+) -> tuple[list[str], str | None, str | None, str | None]:
     try:
         response = _get(origin, route, request, timeout_seconds)
     except Exception:
