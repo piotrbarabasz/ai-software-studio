@@ -17,7 +17,7 @@ describe('PartnerPageComponent', () => {
     expect(
       element.querySelector('a[href="/kontakt?projectType=software_house_partnership"]')
         ?.textContent,
-    ).toContain('Opisz moduł');
+    ).toContain('Porozmawiajmy o współpracy');
     expect(
       element.querySelector('a[href="/dla-software-house#przyklad-techniczny"]'),
     ).not.toBeNull();

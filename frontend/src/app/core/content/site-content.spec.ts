@@ -48,6 +48,11 @@ describe('Site content model', () => {
       siteContent.serviceLandingPages.every((page) => page.path.startsWith('/rozwiazania/')),
     ).toBeTrue();
     expect(siteContent.solutions.solutions).toHaveSize(5);
+    expect(siteContent.solutions.title).toBe('Co możemy usprawnić lub zbudować dla Twojej firmy?');
+    expect(siteContent.solutions.closingCta.primaryCta).toEqual({
+      label: 'Porozmawiajmy o potrzebie',
+      path: '/kontakt',
+    });
     expect(new Set(siteContent.solutions.solutions.map((solution) => solution.id)).size).toBe(5);
     expect(
       siteContent.solutions.solutions.every(
@@ -202,13 +207,13 @@ describe('Site content model', () => {
   });
 
   it('defines Development as a scoped path that does not require a demo in every case', () => {
-    expect(siteContent.development.heroNextStep).toContain('Masz gotową specyfikację?');
+    expect(siteContent.development.heroNextStep).toContain('Nie potrzebujesz gotowej specyfikacji.');
     expect(siteContent.development.scope.included).toContain(
       'kryteria odbioru, testy i dokumentację',
     );
     expect(siteContent.development.scope.excluded).toContain('nowe wymagania poza zakresem');
     expect(siteContent.development.scope.pricingNote).toContain(
-      'Budżet w formularzu jest orientacyjny',
+      'nie jest to warunek pierwszej rozmowy',
     );
     expect(siteContent.development.closingCta.primaryCta).toEqual(
       jasmine.objectContaining({
@@ -249,7 +254,7 @@ describe('Site content model', () => {
 
     expect(partner.lead).toContain('podwykonawstwo lub white-label');
     expect(partner.primaryCta).toEqual({
-      label: 'Opisz moduł',
+      label: 'Porozmawiajmy o współpracy',
       path: '/kontakt',
       queryParams: { projectType: 'software_house_partnership' },
     });

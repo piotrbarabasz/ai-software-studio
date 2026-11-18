@@ -68,9 +68,10 @@ export const researchDirections = [
 
 const solutionsContent: SolutionsPageContent = {
   path: '/rozwiazania',
-  eyebrow: 'Rozwiązania',
-  title: 'Który proces chcesz usprawnić?',
-  lead: 'Wybierz sytuację podobną do pracy Twojego zespołu. Na stronie rozwiązania znajdziesz rezultat, zakres i sposób sprawdzenia.',
+  eyebrow: 'Oferta Protolume',
+  title: 'Co możemy usprawnić lub zbudować dla Twojej firmy?',
+  lead:
+    'Możesz mieć konkretny pomysł albo tylko wiedzieć, co dziś nie działa. Zaczniemy od rozmowy, a rozwiązanie dopasujemy do celu.',
   solutions: serviceCatalog.map((service) => ({
     id: service.legacyAnchor,
     title: service.label,
@@ -79,12 +80,12 @@ const solutionsContent: SolutionsPageContent = {
     path: service.path,
   })),
   closingCta: {
-    title: 'Nie wiesz, który kierunek pasuje do procesu?',
-    lead: 'Opisz obecny sposób pracy. Pierwszym krokiem jest ustalenie problemu, a nie wybór technologii.',
+    title: 'Nie musisz wiedzieć, od czego zacząć.',
+    lead:
+      'Napisz, co chcesz zmienić lub stworzyć. Razem określimy pierwszy krok, możliwy zakres i sposób realizacji.',
     primaryCta: {
-      label: 'Opisz proces',
+      label: 'Porozmawiajmy o potrzebie',
       path: '/kontakt',
-      queryParams: { projectType: 'mvp_prototype' },
     },
   },
 };
@@ -121,10 +122,9 @@ const routeMetadata = [
   {
     path: '/rozwiazania',
     label: 'Rozwiązania',
-    title: brandTitle('Rozwiązania AI i automatyzacji'),
+    title: brandTitle('Oferta: automatyzacje, aplikacje i AI'),
     description: brandDescription(
-      serviceCatalog.map((service) => service.label).join(', ') +
-        ' — wybierz proces do usprawnienia.',
+      'Automatyzujemy procesy, budujemy aplikacje i wdrażamy AI. Zobacz przykłady zastosowań i porozmawiajmy o Twoim pomyśle.',
     ),
     kind: 'solutions',
   },
@@ -780,10 +780,11 @@ export const siteContent = {
   partner: {
     path: '/dla-software-house',
     eyebrow: 'Współpraca B2B',
-    title: 'Moduły AI i integracje dla software house’ów',
-    lead: 'Dołączam do zespołu przy konkretnym module: od przeglądu repozytorium po kod, testy i przekazanie. Współpraca może obejmować podwykonawstwo lub white-label, także dla dostawców zarządzanych usług IT (MSP).',
+    title: 'Wsparcie technologiczne dla software house’ów i MSP',
+    lead:
+      'Potrzebujesz pomocy przy aplikacji, integracji lub AI? Dołączam do określonego etapu prac — od rozpoznania potrzeb po kod i przekazanie. Możliwe jest podwykonawstwo lub white-label.',
     primaryCta: {
-      label: 'Opisz moduł',
+      label: 'Porozmawiajmy o współpracy',
       path: '/kontakt',
       queryParams: { projectType: 'software_house_partnership' },
     },
@@ -792,7 +793,7 @@ export const siteContent = {
       path: '/dla-software-house',
       fragment: 'przyklad-techniczny',
     },
-    fitTitle: 'Kiedy współpraca ma sens',
+    fitTitle: 'Kiedy warto mnie zaangażować',
     fitItems: [
       'Klient końcowy oczekuje funkcji AI, a zespół nie chce budować kompetencji od zera.',
       'Potrzebne jest szybkie demo lub technical discovery.',
@@ -863,23 +864,25 @@ export const siteContent = {
           'Demo służy ocenie wykonalności ograniczonego scenariusza. Ewentualne wdrożenie wymaga osobnego uzgodnienia zakresu, odpowiedzialności, wyceny i kryteriów odbioru.',
       },
     ],
-    closingTitle: 'Jaki moduł odciąży Twój zespół?',
+    closingTitle: 'Potrzebujesz wsparcia przy konkretnym projekcie?',
     closingLead:
-      'Opisz projekt, rolę partnera i etap prac. Pierwsza rozmowa służy sprawdzeniu dopasowania oraz ustaleniu możliwego następnego kroku.',
+      'Nie musisz mieć gotowego opisu modułu. Porozmawiajmy o celu, obecnym etapie i zakresie, który warto wydzielić do realizacji.',
     serviceType: 'Wsparcie techniczne AI dla software house’ów i MSP',
   },
   development: {
     path: '/development',
     eyebrow: 'Aplikacje i integracje',
-    title: 'Oprogramowanie do codziennej pracy zespołu',
-    lead: 'Buduję aplikacje webowe, API i połączenia między systemami. Od panelu dla pracowników po obsługę procesu — z kodem, testami i instrukcją dalszej pracy.',
-    heroNextStep: 'Masz gotową specyfikację? Możemy zacząć od przeglądu zakresu.',
+    title: 'Zamieniamy pomysły w działające aplikacje',
+    lead:
+      'Masz pomysł na własne narzędzie albo dość pracy w kilku systemach? Projektuję aplikacje webowe, panele i integracje dopasowane do rzeczywistych potrzeb firmy.',
+    heroNextStep:
+      'Nie potrzebujesz gotowej specyfikacji. Wystarczy pomysł, problem albo przykład obecnej pracy.',
     principles: [
       'działającą część aplikacji lub integrację według uzgodnionego zakresu',
       'kod i testy scenariuszy odbioru',
       'instrukcję uruchomienia oraz ustalony plan przekazania',
     ],
-    outcomesTitle: 'Od rozproszonej pracy do konkretnego rezultatu',
+    outcomesTitle: 'Co możemy wspólnie stworzyć?',
     outcomes: [
       {
         title: 'Panel operacyjny',
@@ -893,28 +896,28 @@ export const siteContent = {
         dependency: 'Wymaga ustalenia źródła prawdy i uprawnień.',
       },
       {
-        title: 'Asystent wiedzy',
-        startingPoint: 'Odpowiedzi są rozproszone w dokumentach i wiadomościach.',
+        title: 'Aplikacja dla klientów',
+        startingPoint: 'Klienci muszą dzwonić lub pisać, aby załatwić prostą sprawę.',
         targetWorkflow:
-          'Użytkownik dostaje odpowiedź z materiałów albo sprawa trafia do człowieka.',
+          'Klient sam zgłasza potrzebę, sprawdza status lub korzysta z usługi w aplikacji.',
         solutionElements: [
-          'przygotowanie i wyszukiwanie wiedzy',
-          'interfejs rozmowy',
-          'przekazanie pytania do człowieka',
+          'formularz lub portal klienta',
+          'dostęp do własnych spraw i danych',
+          'statusy i powiadomienia',
         ],
-        dependency: 'Jakość zależy od aktualnych materiałów źródłowych.',
+        dependency: 'Zakres zależy od danych, uprawnień i sposobu logowania.',
       },
       {
-        title: 'Automatyzacja procesu',
-        startingPoint: 'Formularze, wiadomości i systemy wymagają ręcznego przekazywania danych.',
+        title: 'Integracja firmowych systemów',
+        startingPoint: 'Dane trzeba przenosić między aplikacjami ręcznie.',
         targetWorkflow:
-          'Powtarzalne działania przebiegają w ustalonej kolejności z widocznym statusem.',
+          'Informacje trafiają do właściwych narzędzi zgodnie z uzgodnionymi regułami.',
         solutionElements: [
-          'formularz, API lub zdarzenie',
-          'integracje między systemami',
-          'statusy, powiadomienia i wyjątki',
+          'połączenia API i przesyłanie danych',
+          'obsługa błędów i wyjątków',
+          'monitorowanie przebiegu procesu',
         ],
-        dependency: 'Wymaga dostępu do systemów i punktu przekazania człowiekowi.',
+        dependency: 'Wymaga sprawdzenia dostępnych API oraz zakresu uprawnień.',
       },
     ],
     scope: {
@@ -936,17 +939,17 @@ export const siteContent = {
         'utrzymanie, rozwój i dyżury',
       ],
       pricingNote:
-        'Wycena zależy od potwierdzonego zakresu. Budżet w formularzu jest orientacyjny; zmiana zakresu może zmienić wycenę i harmonogram.',
+        'Wycena powstaje po omówieniu celu i zakresu. Możesz podać budżet orientacyjny, ale nie jest to warunek pierwszej rozmowy.',
     },
-    processTitle: 'Od celu do kodu, który można przejąć',
+    processTitle: 'Od rozmowy do działającego rozwiązania',
     deliverySteps: [
       {
-        title: 'Cel i pierwszy rezultat',
-        description: 'Wybieramy scenariusz, granice aplikacji i kryteria odbioru.',
+        title: 'Rozmawiamy o potrzebie',
+        description: 'Ustalamy, kto będzie korzystał z rozwiązania i co powinno działać w pierwszej wersji.',
       },
       {
-        title: 'Implementacja z punktami kontrolnymi',
-        description: 'Pokazujemy kolejne elementy i sprawdzamy ich działanie.',
+        title: 'Projektujemy i budujemy',
+        description: 'Pracujemy etapami, pokazujemy postępy i sprawdzamy uzgodnione scenariusze.',
       },
       {
         title: 'Odbiór i przekazanie',
@@ -955,10 +958,11 @@ export const siteContent = {
       },
     ],
     closingCta: {
-      title: 'Planujesz aplikację, API, integrację albo automatyzację?',
-      lead: 'Opisz obecną sytuację, użytkowników i oczekiwany rezultat. Jeśli zakres jest gotowy, przejdziemy dalej.',
+      title: 'Masz pomysł? Sprawdźmy, jak może działać.',
+      lead:
+        'Nie musisz mieć gotowej listy funkcji. Opowiedz o celu lub problemie, a zakres i wycenę ustalimy przed rozpoczęciem prac.',
       primaryCta: {
-        label: 'Opisz projekt',
+        label: 'Porozmawiajmy o aplikacji',
         path: '/kontakt',
         queryParams: { projectType: 'custom_web_app' },
       },

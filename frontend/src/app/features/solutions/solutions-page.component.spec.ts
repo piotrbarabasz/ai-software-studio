@@ -14,8 +14,21 @@ describe('SolutionsPageComponent', () => {
     const element = fixture.nativeElement as HTMLElement;
     expect(element.querySelectorAll('h1')).toHaveSize(1);
     expect(element.querySelectorAll('article.solution-card')).toHaveSize(5);
+    expect(element.querySelectorAll('article.solutions-pillar')).toHaveSize(3);
+    expect(
+      Array.from(
+        element.querySelectorAll<HTMLAnchorElement>('.solutions-pillar a'),
+        (link) => link.getAttribute('href'),
+      ),
+    ).toEqual([
+      '/rozwiazania/automatyzacja-procesow',
+      '/development',
+      '/rozwiazania',
+    ]);
+    expect(element.querySelector('.solutions-hero a')?.getAttribute('href')).toBe('/kontakt');
+    expect(element.textContent).toContain('Nie musisz wybierać rozwiązania samodzielnie.');
     expect(element.querySelectorAll('.landing-links,.quick-links')).toHaveSize(0);
-    const links = Array.from(element.querySelectorAll<HTMLAnchorElement>('article h2 a'));
+    const links = Array.from(element.querySelectorAll<HTMLAnchorElement>('.solution-card h3 a'));
     expect(links.map((link) => link.getAttribute('href'))).toEqual(
       serviceCatalog.map((service) => service.path),
     );
@@ -25,6 +38,7 @@ describe('SolutionsPageComponent', () => {
       expect(card.textContent).toContain(service.result);
     }
     expect(element.querySelector('#panel-operacyjny a')?.getAttribute('href')).toBe('/development');
+    expect(element.querySelector('#panel-operacyjny')?.classList).toContain('solutions-pillar');
     expect(element.querySelector('.solutions-closing a')?.getAttribute('href')).toContain(
       '/kontakt',
     );

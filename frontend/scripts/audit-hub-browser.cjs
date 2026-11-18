@@ -25,7 +25,7 @@ fs.mkdirSync('tmp/audit-implementation/verification', { recursive: true });
       });
       return {
         height: document.documentElement.scrollHeight,
-        firstCard: document.querySelector('.solution-card').getBoundingClientRect().top,
+        firstCard: document.querySelector('.solutions-pillar').getBoundingClientRect().top,
         overflow: document.documentElement.scrollWidth > innerWidth,
         nav,
       };
@@ -64,7 +64,9 @@ fs.mkdirSync('tmp/audit-implementation/verification', { recursive: true });
   });
   await nojs.goto('http://127.0.0.1:4400/rozwiazania');
   assert.ok(await nojs.locator('.primary-cta').isVisible());
-  assert.equal(await nojs.locator('.solution-card h2 a').count(), 5);
+  assert.equal(await nojs.locator('.solutions-pillar').count(), 3);
+  assert.equal(await nojs.locator('.solution-card h3 a').count(), 5);
+  assert.equal(await nojs.locator('#panel-operacyjny a[href="/development"]').count(), 1);
   assert.deepEqual(errors, []);
   fs.writeFileSync(
     'tmp/audit-implementation/verification/hub-browser.json',
