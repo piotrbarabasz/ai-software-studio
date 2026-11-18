@@ -347,7 +347,8 @@ export const siteContent = {
       eyebrow: 'Materiały do sprawdzenia',
       title: 'Zobacz, jak pracujemy.',
       lead: 'Uruchom demonstrację i przejrzyj przykładowy rezultat, zanim opowiesz nam o własnej potrzebie.',
-      note: 'To materiały demonstracyjne i projekt własny, a nie case study klienta.',
+      note:
+        'Te dwa materiały są symulacjami. Własną aplikację i pozostałe przykłady pokazujemy osobno — to nie są case studies klientów.'
       items: publishedEvidence.filter((item) =>
         ['knowledge-demo', 'demo-report'].includes(item.id),
       ),
