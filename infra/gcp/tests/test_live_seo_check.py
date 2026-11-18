@@ -366,7 +366,7 @@ class LiveSeoCheckTest(unittest.TestCase):
             mutator=lambda path, response: seo.Response(
                 response.status,
                 response.headers,
-                response.body.replace(b"<h1>Treść</h1>", b"")
+                response.body.replace("<h1>Treść</h1>".encode("utf-8"), b"")
                 if path == "/studio"
                 else response.body,
             )
