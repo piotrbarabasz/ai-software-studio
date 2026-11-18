@@ -27,6 +27,7 @@ PUBLIC_SITE_HOST = "protolume.pl"
 PUBLIC_SITE_ORIGIN = f"https://{PUBLIC_SITE_HOST}"
 URL_PATTERN = re.compile(r"https?://[^\s\"'<>]+", re.IGNORECASE)
 SOCIAL_PREVIEW_PATH = "/assets/protolume-social-preview.png"
+SOCIAL_PREVIEW_TYPE = "image/png"
 ALLOWED_JSON_LD_URLS = {"https://schema.org", "http://schema.org"}
 
 
@@ -342,7 +343,7 @@ def _validate_page(
         errors.append(f"public route {route}: Open Graph URL does not match the canonical URL")
     if parser.open_graph_image != expected_social_image:
         errors.append(f"public route {route}: Open Graph image does not match the approved social preview")
-    if parser.open_graph_image_type != "image/png":
+    if parser.open_graph_image_type != SOCIAL_PREVIEW_TYPE:
         errors.append(f"public route {route}: Open Graph image type must be image/png")
     if parser.twitter_card != "summary_large_image":
         errors.append(f"public route {route}: Twitter card must be summary_large_image")
