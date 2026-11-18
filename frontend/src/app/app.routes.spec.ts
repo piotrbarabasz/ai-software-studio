@@ -93,7 +93,7 @@ describe('public routes', () => {
     await fixture.whenStable();
 
     const text = fixture.nativeElement.textContent as string;
-    expect(text).toContain('Opisz proces lub potrzebne wsparcie');
+    expect(text).toContain('Masz pomysł albo problem do rozwiązania?');
     expect(text).toContain('Nie potrzebujesz specyfikacji.');
     expect(text).not.toMatch(/\bintent\b|\bpayload\b|\bprojectType\b/i);
   });
