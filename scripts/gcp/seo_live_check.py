@@ -275,18 +275,18 @@ def _validate_page(
     try:
         response = _get(origin, route, request, timeout_seconds)
     except Exception:
-        return [f"public route {route}: request failed"], None, None
+        return [f"public route {route}: request failed"], None, None, None
 
     if response.status != 200:
-        return [f"public route {route}: expected HTTP 200, received {response.status}"], None, None
+        return [f"public route {route}: expected HTTP 200, received {response.status}"], None, None, None
 
     if len(response.body) > MAX_RESPONSE_BYTES:
-        return [f"public route {route}: response exceeds the live-check size limit"], None, None
+        return [f"public route {route}: response exceeds the live-check size limit"], None, None, None
 
     try:
         parser = _parse_html(response.body)
     except UnicodeDecodeError:
-        return [f"public route {route}: response is not valid UTF-8 HTML"], None, None
+        return [f"public route {route}: response is not valid UTF-8 HTML"], None, None, None
 
     canonical = origin if route == "/" else f"{origin}{route}"
     expected_social_image = f"{origin}{SOCIAL_PREVIEW_PATH}"
@@ -303,8 +303,12 @@ def _validate_page(
         errors.append(
             f"public route {route}: expected exactly one non-empty meta description, received {parser.description_count}"
         )
-    if parser.canonical_count != 1 or parser.canonical != canonical:
-        errors.append(f"public route {route}: canonical URL must appear exactly once and match the public origin")
+    if parser.canonical_count != 1:
+        errors.append(
+            f"public route {route}: expected exactly one canonical URL, received {parser.canonical_count}"
+        )
+    if parser.canonical != canonical:
+        errors.append(f"public route {route}: canonical URL does not match the public origin")
 
     robots = (parser.robots or "").strip().lower()
     if robots != "index, follow":
