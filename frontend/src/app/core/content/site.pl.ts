@@ -311,8 +311,9 @@ export const siteContent = {
     },
     evidence: {
       eyebrow: 'Materiały do sprawdzenia',
-      title: 'Sprawdź przykład i jego zakres',
-      lead: 'Symulacja, fikcyjny raport i własna aplikacja mają różne zastosowania. Przy każdym materiale podajemy, co potwierdza.',
+      title: 'Projekty własne i demonstracje — zobacz, co można sprawdzić',
+      lead:
+        'Pokazujemy własną aplikację i trzy materiały demonstracyjne. Każdy ma opis zakresu, źródła i ograniczeń; nie są to historie wdrożeń klientów.'
       items: publishedEvidence,
     },
   },
@@ -346,10 +347,16 @@ export const siteContent = {
       eyebrow: 'Materiały do sprawdzenia',
       title: 'Zobacz, jak pracujemy.',
       lead: 'Uruchom demonstrację i przejrzyj przykładowy rezultat, zanim opowiesz nam o własnej potrzebie.',
-      note: 'To materiały demonstracyjne i projekt własny, a nie case study klienta.',
+      note:
+        'Te dwa materiały są symulacjami. Własną aplikację i pozostałe przykłady pokazujemy osobno — to nie są case studies klientów.'
       items: publishedEvidence.filter((item) =>
         ['knowledge-demo', 'demo-report'].includes(item.id),
       ),
+      allExamplesCta: {
+        label: 'Zobacz projekt własny i wszystkie przykłady',
+        path: '/studio',
+        fragment: 'evidence-title',
+      },
     },
     closingCta: {
       title: 'Masz proces do usprawnienia albo pomysł na aplikację?',
@@ -775,7 +782,7 @@ export const siteContent = {
         'Przed uruchomieniem ustalamy testy, bezpieczeństwo i odpowiedzialność za utrzymanie.',
       ],
     },
-    ctaLabel: 'Opisz planowane wdrożenie',
+    ctaLabel: 'Porozmawiajmy o pomyśle',
   },
   partner: {
     path: '/dla-software-house',

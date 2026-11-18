@@ -143,7 +143,13 @@ describe('Site content model', () => {
         eyebrow: 'Materiały do sprawdzenia',
         title: 'Zobacz, jak pracujemy.',
         lead: 'Uruchom demonstrację i przejrzyj przykładowy rezultat, zanim opowiesz nam o własnej potrzebie.',
-        note: 'To materiały demonstracyjne i projekt własny, a nie case study klienta.',
+        note:
+          'Te dwa materiały są symulacjami. Własną aplikację i pozostałe przykłady pokazujemy osobno — to nie są case studies klientów.',
+        allExamplesCta: {
+          label: 'Zobacz projekt własny i wszystkie przykłady',
+          path: '/studio',
+          fragment: 'evidence-title',
+        },
       }),
     );
     expect(siteContent.home.evidenceTeaser.items).toHaveSize(2);
@@ -413,7 +419,13 @@ describe('Site content model', () => {
       jasmine.objectContaining({
         eyebrow: 'Materiały do sprawdzenia',
         title: 'Zobacz, jak pracujemy.',
-        note: 'To materiały demonstracyjne i projekt własny, a nie case study klienta.',
+        note:
+          'Te dwa materiały są symulacjami. Własną aplikację i pozostałe przykłady pokazujemy osobno — to nie są case studies klientów.',
+        allExamplesCta: {
+          label: 'Zobacz projekt własny i wszystkie przykłady',
+          path: '/studio',
+          fragment: 'evidence-title',
+        },
       }),
     );
     expect(siteContent.home.trustStrip.map((item) => item.id)).toEqual([

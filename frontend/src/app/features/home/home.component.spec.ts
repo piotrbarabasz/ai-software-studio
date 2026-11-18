@@ -79,8 +79,11 @@ describe('HomeComponent', () => {
     ).toBeTrue();
     expect(element.querySelector('.evidence-teaser a[href="/rd"]')).toBeNull();
     expect(element.querySelector('.evidence-note')?.textContent?.trim()).toBe(
-      'To materiały demonstracyjne i projekt własny, a nie case study klienta.',
+      'Te dwa materiały są symulacjami. Własną aplikację i pozostałe przykłady pokazujemy osobno — to nie są case studies klientów.',
     );
+    expect(
+      element.querySelector('.all-examples-link')?.getAttribute('href'),
+    ).toBe('/studio#evidence-title');
     expect(element.querySelectorAll('.evidence-boundary')).toHaveSize(0);
     expect(element.querySelector('.evidence-teaser')?.textContent).not.toContain(
       'Wymaga dodatkowej walidacji',

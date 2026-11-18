@@ -250,6 +250,7 @@ export interface HomeEvidenceTeaser {
   readonly lead: string;
   readonly note: string;
   readonly items: readonly WorkEvidence[];
+  readonly allExamplesCta: HomeCta;
 }
 
 export type HomeProofVisualKind = 'demo' | 'report' | 'lab';
