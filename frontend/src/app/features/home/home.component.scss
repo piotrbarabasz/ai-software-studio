@@ -309,6 +309,17 @@
   color: var(--text-muted) !important;
   font-size: 0.85rem !important;
 }
+.all-examples-link {
+  justify-self: start;
+  border-color: var(--border-on-dark);
+  background: transparent;
+  color: var(--text-on-dark);
+}
+.all-examples-link:hover,
+.all-examples-link:focus-visible {
+  background: var(--surface-card);
+  color: var(--text-primary);
+}
 .owner-card-panel,
 .closing-cta-panel {
   display: flex;
@@ -386,6 +397,7 @@
   .hero-actions a,
   .home-pillar .secondary-action,
   .evidence-teaser-card .secondary-action,
+  .all-examples-link,
   .owner-card-panel .secondary-action,
   .closing-cta-panel .primary-action {
     width: 100%;
