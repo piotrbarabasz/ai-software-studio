@@ -128,7 +128,9 @@ describe('ContactFormComponent', () => {
     );
     expect(text).toContain('O czym chcesz porozmawiać?');
     expect(text).not.toContain('Jaki moduł lub etap chcesz zlecić?');
-    expect(fixture.nativeElement.querySelector('.additional-information')?.hasAttribute('open')).toBeFalse();
+    expect(
+      fixture.nativeElement.querySelector('.additional-information')?.hasAttribute('open'),
+    ).toBeFalse();
   });
 
   it('preselects the quick-validation intent from an allowlisted query param', () => {
