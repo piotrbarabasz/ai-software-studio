@@ -311,8 +311,9 @@ export const siteContent = {
     },
     evidence: {
       eyebrow: 'Materiały do sprawdzenia',
-      title: 'Sprawdź przykład i jego zakres',
-      lead: 'Symulacja, fikcyjny raport i własna aplikacja mają różne zastosowania. Przy każdym materiale podajemy, co potwierdza.',
+      title: 'Projekty własne i demonstracje — zobacz, co można sprawdzić',
+      lead:
+        'Pokazujemy własną aplikację i trzy materiały demonstracyjne. Każdy ma opis zakresu, źródła i ograniczeń; nie są to historie wdrożeń klientów.'
       items: publishedEvidence,
     },
   },
@@ -350,6 +351,11 @@ export const siteContent = {
       items: publishedEvidence.filter((item) =>
         ['knowledge-demo', 'demo-report'].includes(item.id),
       ),
+      allExamplesCta: {
+        label: 'Zobacz projekt własny i wszystkie przykłady',
+        path: '/studio',
+        fragment: 'evidence-title',
+      },
     },
     closingCta: {
       title: 'Masz proces do usprawnienia albo pomysł na aplikację?',
@@ -775,7 +781,7 @@ export const siteContent = {
         'Przed uruchomieniem ustalamy testy, bezpieczeństwo i odpowiedzialność za utrzymanie.',
       ],
     },
-    ctaLabel: 'Opisz planowane wdrożenie',
+    ctaLabel: 'Porozmawiajmy o pomyśle',
   },
   partner: {
     path: '/dla-software-house',
