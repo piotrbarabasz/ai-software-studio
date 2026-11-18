@@ -28,7 +28,6 @@
         <a
           class="primary-action"
           routerLink="/kontakt"
-          [queryParams]="{ projectType: 'custom_web_app' }"
           >{{ content.ctaLabel }}</a
         >
         <a class="secondary-action" routerLink="/studio" fragment="evidence-title"
@@ -57,25 +56,36 @@
       <h2 id="evidence-title">{{ trust.evidence.title }}</h2>
       <p class="page-lead">{{ trust.evidence.lead }}</p>
     </div>
+    <p class="evidence-intro" role="note">
+      Poniżej znajduje się jeden projekt własny oraz trzy symulacje. To materiały do samodzielnego
+      sprawdzenia — nie opisy wdrożeń klientów ani obietnice wyników biznesowych.
+    </p>
     <div class="evidence-list">
-      @for (item of evidenceItems; track item) {
-        <article class="card-surface proof-card evidence-card" data-card-variant="proof-card">
+      @for (item of evidenceItems; track item.id) {
+        <article
+          class="card-surface proof-card evidence-card"
+          [class.evidence-card--featured]="item.classification === 'own-project'"
+          [attr.data-evidence-kind]="item.classification"
+          data-card-variant="proof-card"
+        >
           <div class="evidence-summary">
             <h3>{{ item.title }}</h3>
             <app-evidence-label [item]="item" />
-            <p><strong>Problem:</strong> {{ item.problem }}</p>
-            <p><strong>Co zostało zbudowane:</strong> {{ item.built }}</p>
+            <p><strong>Jaki problem pokazuje:</strong> {{ item.problem }}</p>
+            <p><strong>Co przygotowano:</strong> {{ item.built }}</p>
+            <p class="evidence-scope">
+              <strong>Co możesz sprawdzić:</strong> {{ item.confirmedScope }}
+            </p>
           </div>
           <div class="evidence-details">
             <details>
-              <summary>Jak sprawdzić ten materiał</summary>
+              <summary>Jak sprawdzić ten materiał i skąd pochodzą dane</summary>
               <ul class="verification-list">
                 @for (step of item.verification; track step) {
                   <li>{{ step }}</li>
                 }
               </ul>
               <p>{{ item.dataOrigin }}</p>
-              <p>{{ item.confirmedScope }}</p>
               <p>
                 Przegląd materiału:
                 <time [attr.datetime]="item.reviewedOn">{{ item.reviewedOn }}</time> · wersja
@@ -104,6 +114,13 @@
           </div>
         </article>
       }
+    </div>
+    <div class="examples-contact">
+      <div>
+        <h3>Chcesz sprawdzić podobny pomysł w swojej firmie?</h3>
+        <p>Nie potrzebujesz gotowej specyfikacji. Porozmawiamy o problemie i możliwym pierwszym kroku.</p>
+      </div>
+      <a class="primary-action" routerLink="/kontakt">Opowiedz o potrzebie</a>
     </div>
   </section>
 
