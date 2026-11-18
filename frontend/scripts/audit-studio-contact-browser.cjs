@@ -101,8 +101,10 @@ const baseUrl = process.env.AUDIT_BASE_URL || 'http://127.0.0.1:4400';
     // Every request is intercepted before dispatch; no contact reaches a real API.
     let responseStatus = 422;
     let count = 0;
+    const submittedPayloads = [];
     await page.route('**/api/contact', async (route) => {
       count++;
+      submittedPayloads.push(route.request().postDataJSON());
       if (responseStatus === 0) return route.abort('failed');
       return route.fulfill({
         status: responseStatus,
@@ -140,6 +142,24 @@ const baseUrl = process.env.AUDIT_BASE_URL || 'http://127.0.0.1:4400';
     await page.locator('button[type="submit"]').click();
     await expect(page.locator('.contact-success')).toBeFocused();
     assert.equal(await page.locator('.contact-form').count(), 0);
+
+    // A visitor can request a conversation without choosing a topic or describing the project.
+    await page.locator('.contact-success button').click();
+    await page.locator('#name').fill('Test bez opisu');
+    await page.locator('#email').fill('blank-message@example.test');
+    await page.locator('#consent').check();
+    const beforeBlank = count;
+    await page.locator('button[type="submit"]').click();
+    await expect.poll(() => count).toBe(beforeBlank + 1);
+    await expect(page.locator('.contact-success')).toBeFocused();
+    const blankPayload = submittedPayloads.at(-1);
+    assert.equal(blankPayload.projectType, 'other');
+    assert.equal(blankPayload.budgetRange, 'not_sure');
+    assert.equal(
+      blankPayload.message,
+      'Zgłoszenie bez opisu. Proszę o kontakt w sprawie możliwej współpracy.',
+    );
+    assert.ok((await page.locator('.submission-summary').innerText()).includes('Bez opisu'));
     assert.deepEqual(errors, []);
     fs.writeFileSync(
       path.join(output, 'studio-contact-browser.json'),
