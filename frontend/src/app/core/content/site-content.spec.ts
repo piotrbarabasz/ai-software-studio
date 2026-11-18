@@ -143,8 +143,7 @@ describe('Site content model', () => {
         eyebrow: 'Materiały do sprawdzenia',
         title: 'Zobacz, jak pracujemy.',
         lead: 'Uruchom demonstrację i przejrzyj przykładowy rezultat, zanim opowiesz nam o własnej potrzebie.',
-        note:
-          'Te dwa materiały są symulacjami. Własną aplikację i pozostałe przykłady pokazujemy osobno — to nie są case studies klientów.',
+        note: 'Te dwa materiały są symulacjami. Własną aplikację i pozostałe przykłady pokazujemy osobno — to nie są case studies klientów.',
         allExamplesCta: {
           label: 'Zobacz projekt własny i wszystkie przykłady',
           path: '/studio',
@@ -213,7 +212,9 @@ describe('Site content model', () => {
   });
 
   it('defines Development as a scoped path that does not require a demo in every case', () => {
-    expect(siteContent.development.heroNextStep).toContain('Nie potrzebujesz gotowej specyfikacji.');
+    expect(siteContent.development.heroNextStep).toContain(
+      'Nie potrzebujesz gotowej specyfikacji.',
+    );
     expect(siteContent.development.scope.included).toContain(
       'kryteria odbioru, testy i dokumentację',
     );
@@ -419,8 +420,7 @@ describe('Site content model', () => {
       jasmine.objectContaining({
         eyebrow: 'Materiały do sprawdzenia',
         title: 'Zobacz, jak pracujemy.',
-        note:
-          'Te dwa materiały są symulacjami. Własną aplikację i pozostałe przykłady pokazujemy osobno — to nie są case studies klientów.',
+        note: 'Te dwa materiały są symulacjami. Własną aplikację i pozostałe przykłady pokazujemy osobno — to nie są case studies klientów.',
         allExamplesCta: {
           label: 'Zobacz projekt własny i wszystkie przykłady',
           path: '/studio',
