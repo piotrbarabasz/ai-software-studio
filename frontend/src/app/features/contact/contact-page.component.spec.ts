@@ -19,9 +19,9 @@ describe('ContactPageComponent', () => {
 
     expect(fixture.nativeElement.querySelectorAll('h1')).toHaveSize(1);
     expect(fixture.nativeElement.querySelector('app-contact-form')).not.toBeNull();
-    expect(fixture.nativeElement.textContent).toContain('Opisz proces lub potrzebne wsparcie');
+    expect(fixture.nativeElement.textContent).toContain('Masz pomysł albo problem do rozwiązania?');
     expect(fixture.nativeElement.textContent).toContain(
-      'Wystarczą 2–3 zdania o procesie i oczekiwanym rezultacie.',
+      'Wystarczą imię i e-mail',
     );
     expect(fixture.nativeElement.textContent).toContain('Nie potrzebujesz specyfikacji.');
     expect(fixture.nativeElement.textContent).toContain(
@@ -35,7 +35,7 @@ describe('ContactPageComponent', () => {
         .compareDocumentPosition(element.querySelector('.contact-next')!) &
         Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
-    expect(element.querySelector('#message-hint')?.textContent).toContain('Minimum 20 znaków');
+    expect(element.querySelector('#message-hint')?.textContent).toContain('Możesz zostawić to pole puste');
     expect(element.querySelector('#message')?.getAttribute('aria-describedby')).toContain(
       'message-hint',
     );
