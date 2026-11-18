@@ -35,7 +35,10 @@ const baseUrl = process.env.AUDIT_BASE_URL || 'http://127.0.0.1:4400';
         assert.equal(geometry.overflow, false);
         if (route === '/kontakt') {
           if (width === 390) assert.ok(geometry.firstInput <= 450, JSON.stringify(geometry));
-          assert.match(await page.locator('#message-hint').innerText(), /Możesz zostawić to pole puste/);
+          assert.match(
+            await page.locator('#message-hint').innerText(),
+            /Możesz zostawić to pole puste/,
+          );
           assert.equal(await page.locator('#message').getAttribute('required'), null);
           assert.equal(await page.locator('#company').getAttribute('required'), null);
           assert.equal(await page.locator('#name').getAttribute('autocomplete'), 'name');
