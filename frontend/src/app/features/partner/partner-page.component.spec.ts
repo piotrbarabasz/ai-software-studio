@@ -28,7 +28,7 @@ describe('PartnerPageComponent', () => {
         .compareDocumentPosition(element.querySelector('.rules-section')!) &
         Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
-    expect(element.textContent).toContain('dostawców zarządzanych usług IT (MSP)');
+    expect(element.textContent).toContain('software house’ów i MSP');
     expect(element.textContent).toContain('white-label');
     expect(element.textContent).toContain('review');
     expect(element.textContent).toContain('deployment');
