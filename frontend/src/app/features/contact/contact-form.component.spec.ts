@@ -452,8 +452,9 @@ describe('ContactFormComponent', () => {
     );
     fixture.detectChanges();
     expect(fixture.nativeElement.textContent).toContain('Bez opisu — prośba o kontakt.');
-    expect(fixture.nativeElement.querySelector('.submission-summary')?.textContent)
-      .not.toContain('Temat rozmowy');
+    expect(fixture.nativeElement.querySelector('.submission-summary')?.textContent).not.toContain(
+      'Temat rozmowy',
+    );
   });
 
   it('still requires explicit contact consent and rejects too-short nonempty messages', () => {

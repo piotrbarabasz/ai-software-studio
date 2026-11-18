@@ -31,25 +31,15 @@ describe('HomeComponent', () => {
     expect(element.querySelector('.hero-actions a[href="/kontakt"]')).not.toBeNull();
     expect(element.querySelectorAll('.home-pillar')).toHaveSize(3);
     expect(
-      Array.from(
-        element.querySelectorAll<HTMLElement>('.home-pillar h3'),
-        (heading) => heading.textContent?.trim(),
+      Array.from(element.querySelectorAll<HTMLElement>('.home-pillar h3'), (heading) =>
+        heading.textContent?.trim(),
       ),
-    ).toEqual([
-      'Automatyzacje procesów',
-      'Aplikacje i integracje',
-      'AI tam, gdzie ma sens',
-    ]);
+    ).toEqual(['Automatyzacje procesów', 'Aplikacje i integracje', 'AI tam, gdzie ma sens']);
     expect(
-      Array.from(
-        element.querySelectorAll<HTMLAnchorElement>('.home-pillar a'),
-        (link) => link.getAttribute('href'),
+      Array.from(element.querySelectorAll<HTMLAnchorElement>('.home-pillar a'), (link) =>
+        link.getAttribute('href'),
       ),
-    ).toEqual([
-      '/rozwiazania/automatyzacja-procesow',
-      '/development',
-      '/rozwiazania',
-    ]);
+    ).toEqual(['/rozwiazania/automatyzacja-procesow', '/development', '/rozwiazania']);
     expect(element.querySelector('.home-service-list')).toBeNull();
     expect(element.querySelectorAll('.before-after article')).toHaveSize(3);
     expect(
@@ -81,9 +71,9 @@ describe('HomeComponent', () => {
     expect(element.querySelector('.evidence-note')?.textContent?.trim()).toBe(
       'Te dwa materiały są symulacjami. Własną aplikację i pozostałe przykłady pokazujemy osobno — to nie są case studies klientów.',
     );
-    expect(
-      element.querySelector('.all-examples-link')?.getAttribute('href'),
-    ).toBe('/studio#evidence-title');
+    expect(element.querySelector('.all-examples-link')?.getAttribute('href')).toBe(
+      '/studio#evidence-title',
+    );
     expect(element.querySelectorAll('.evidence-boundary')).toHaveSize(0);
     expect(element.querySelector('.evidence-teaser')?.textContent).not.toContain(
       'Wymaga dodatkowej walidacji',
@@ -165,9 +155,9 @@ describe('HomeComponent', () => {
     expect(element.querySelector('.closing-cta h2')?.textContent?.trim()).toBe(
       'Masz proces do usprawnienia albo pomysł na aplikację?',
     );
-    expect(
-      element.querySelector('.closing-cta a[href="/kontakt"]')?.textContent,
-    ).toContain('Porozmawiajmy o projekcie');
+    expect(element.querySelector('.closing-cta a[href="/kontakt"]')?.textContent).toContain(
+      'Porozmawiajmy o projekcie',
+    );
   });
 
   it('keeps the complete homepage free of unsupported statistics', () => {
