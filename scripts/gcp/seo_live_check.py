@@ -26,6 +26,8 @@ PLACEHOLDER_BUILD_SHAS = {"unknown", "local", "test"}
 PUBLIC_SITE_HOST = "protolume.pl"
 PUBLIC_SITE_ORIGIN = f"https://{PUBLIC_SITE_HOST}"
 URL_PATTERN = re.compile(r"https?://[^\s\"'<>]+", re.IGNORECASE)
+SOCIAL_PREVIEW_PATH = "/assets/protolume-social-preview.png"
+SOCIAL_PREVIEW_TYPE = "image/png"
 ALLOWED_JSON_LD_URLS = {"https://schema.org", "http://schema.org"}
 
 
@@ -44,6 +46,20 @@ class SeoPageParser(HTMLParser):
         self.canonical: str | None = None
         self.robots: str | None = None
         self.build_sha: str | None = None
+        self.title_count = 0
+        self.h1_count = 0
+        self.description_count = 0
+        self.canonical_count = 0
+        self.meta_counts: dict[str, int] = {}
+        self.open_graph_title: str | None = None
+        self.open_graph_description: str | None = None
+        self.open_graph_url: str | None = None
+        self.open_graph_image: str | None = None
+        self.open_graph_image_type: str | None = None
+        self.twitter_card: str | None = None
+        self.twitter_title: str | None = None
+        self.twitter_description: str | None = None
+        self.twitter_image: str | None = None
         self.script_blocks: list[str] = []
         self.hrefs: list[str] = []
         self._capture_title = False
@@ -56,20 +72,44 @@ class SeoPageParser(HTMLParser):
         attributes = {name.lower(): value or "" for name, value in attrs}
 
         if tag_name == "title":
+            self.title_count += 1
             self._capture_title = True
+        if tag_name == "h1":
+            self.h1_count += 1
         if tag_name == "meta":
             name = attributes.get("name", "").lower()
             property_name = attributes.get("property", "").lower()
             content = attributes.get("content")
+            if name or property_name:
+                key = f"name:{name}" if name else f"property:{property_name}"
+                self.meta_counts[key] = self.meta_counts.get(key, 0) + 1
             if name == "description":
+                self.description_count += 1
                 self.description = content
             elif name == "robots":
                 self.robots = content
             elif name == "protolume-build-sha":
                 self.build_sha = content
-            elif property_name == "og:description" and self.description is None:
-                self.description = content
+            elif name == "twitter:card":
+                self.twitter_card = content
+            elif name == "twitter:title":
+                self.twitter_title = content
+            elif name == "twitter:description":
+                self.twitter_description = content
+            elif name == "twitter:image":
+                self.twitter_image = content
+            if property_name == "og:title":
+                self.open_graph_title = content
+            elif property_name == "og:description":
+                self.open_graph_description = content
+            elif property_name == "og:url":
+                self.open_graph_url = content
+            elif property_name == "og:image":
+                self.open_graph_image = content
+            elif property_name == "og:image:type":
+                self.open_graph_image_type = content
         if tag_name == "link" and "canonical" in attributes.get("rel", "").lower().split():
+            self.canonical_count += 1
             self.canonical = attributes.get("href")
         if "href" in attributes:
             self.hrefs.append(attributes["href"])
@@ -232,25 +272,42 @@ def _validate_page(
     request: Callable[[urllib.request.Request, float], Response],
     timeout_seconds: float,
     expected_build_sha: str | None,
-) -> tuple[list[str], str | None, str | None]:
+) -> tuple[list[str], str | None, str | None, str | None]:
     try:
         response = _get(origin, route, request, timeout_seconds)
     except Exception:
-        return [f"public route {route}: request failed"], None, None
+        return [f"public route {route}: request failed"], None, None, None
 
     if response.status != 200:
-        return [f"public route {route}: expected HTTP 200, received {response.status}"], None, None
+        return [f"public route {route}: expected HTTP 200, received {response.status}"], None, None, None
 
     if len(response.body) > MAX_RESPONSE_BYTES:
-        return [f"public route {route}: response exceeds the live-check size limit"], None, None
+        return [f"public route {route}: response exceeds the live-check size limit"], None, None, None
 
     try:
         parser = _parse_html(response.body)
     except UnicodeDecodeError:
-        return [f"public route {route}: response is not valid UTF-8 HTML"], None, None
+        return [f"public route {route}: response is not valid UTF-8 HTML"], None, None, None
 
     canonical = origin if route == "/" else f"{origin}{route}"
+    expected_social_image = f"{origin}{SOCIAL_PREVIEW_PATH}"
     errors: list[str] = []
+    if parser.title_count != 1 or not parser.title:
+        errors.append(
+            f"public route {route}: expected exactly one non-empty title, received {parser.title_count}"
+        )
+    if parser.h1_count != 1:
+        errors.append(
+            f"public route {route}: expected exactly one h1, received {parser.h1_count}"
+        )
+    if parser.description_count != 1 or not parser.description:
+        errors.append(
+            f"public route {route}: expected exactly one non-empty meta description, received {parser.description_count}"
+        )
+    if parser.canonical_count != 1:
+        errors.append(
+            f"public route {route}: expected exactly one canonical URL, received {parser.canonical_count}"
+        )
     if parser.canonical != canonical:
         errors.append(f"public route {route}: canonical URL does not match the public origin")
 
@@ -262,10 +319,40 @@ def _validate_page(
     if "noindex" in x_robots:
         errors.append(f"public route {route}: X-Robots-Tag must not contain noindex")
 
-    if not parser.title or not parser.title.strip():
-        errors.append(f"public route {route}: missing title")
-    if not parser.description or not parser.description.strip():
-        errors.append(f"public route {route}: missing meta description")
+    required_meta = (
+        "property:og:title",
+        "property:og:description",
+        "property:og:url",
+        "property:og:image",
+        "property:og:image:type",
+        "name:twitter:card",
+        "name:twitter:title",
+        "name:twitter:description",
+        "name:twitter:image",
+    )
+    for key in required_meta:
+        if parser.meta_counts.get(key, 0) != 1:
+            errors.append(
+                f"public route {route}: expected exactly one {key.replace(':', ' ')} tag"
+            )
+    if parser.open_graph_title != parser.title:
+        errors.append(f"public route {route}: Open Graph title does not match the page title")
+    if parser.open_graph_description != parser.description:
+        errors.append(f"public route {route}: Open Graph description does not match the meta description")
+    if parser.open_graph_url != canonical:
+        errors.append(f"public route {route}: Open Graph URL does not match the canonical URL")
+    if parser.open_graph_image != expected_social_image:
+        errors.append(f"public route {route}: Open Graph image does not match the approved social preview")
+    if parser.open_graph_image_type != SOCIAL_PREVIEW_TYPE:
+        errors.append(f"public route {route}: Open Graph image type must be image/png")
+    if parser.twitter_card != "summary_large_image":
+        errors.append(f"public route {route}: Twitter card must be summary_large_image")
+    if parser.twitter_title != parser.title:
+        errors.append(f"public route {route}: Twitter title does not match the page title")
+    if parser.twitter_description != parser.description:
+        errors.append(f"public route {route}: Twitter description does not match the meta description")
+    if parser.twitter_image != expected_social_image:
+        errors.append(f"public route {route}: Twitter image does not match the approved social preview")
 
     build_sha: str | None = None
     if route == "/":
@@ -287,7 +374,7 @@ def _validate_page(
     try:
         json_ld_documents = _find_json_ld_documents(parser)
     except json.JSONDecodeError:
-        return [f"public route {route}: JSON-LD is not valid JSON"], parser.title, build_sha
+        return [f"public route {route}: JSON-LD is not valid JSON"], parser.title, parser.description, build_sha
     errors.extend(_json_ld_url_errors(json_ld_documents, route))
     errors.extend(_json_ld_forbidden_key_errors(json_ld_documents, route))
 
@@ -336,7 +423,43 @@ def _validate_page(
                         "public route /rozwiazania: ItemList must expose exactly five Service entries"
                     )
 
-    return errors, parser.title, build_sha
+    return errors, parser.title, parser.description, build_sha
+
+
+
+def _validate_social_preview(
+    origin: str,
+    request: Callable[[urllib.request.Request, float], Response],
+    timeout_seconds: float,
+) -> list[str]:
+    try:
+        response = _get(origin, SOCIAL_PREVIEW_PATH, request, timeout_seconds)
+    except Exception:
+        return ["public social preview: request failed"]
+
+    errors: list[str] = []
+    if response.status != 200:
+        errors.append(
+            f"public social preview: expected HTTP 200, received {response.status}"
+        )
+    if len(response.body) > MAX_RESPONSE_BYTES:
+        errors.append("public social preview: response exceeds the live-check size limit")
+
+    content_type = next(
+        (
+            value
+            for key, value in response.headers.items()
+            if key.lower() == "content-type"
+        ),
+        "",
+    ).split(";", 1)[0].strip().lower()
+    if content_type != SOCIAL_PREVIEW_TYPE:
+        errors.append(
+            f"public social preview: content type must be {SOCIAL_PREVIEW_TYPE}"
+        )
+    if not response.body.startswith(b"\x89PNG\r\n\x1a\n"):
+        errors.append("public social preview: response is not a PNG image")
+    return errors
 
 
 def _validate_robots(
@@ -424,8 +547,9 @@ def run_checks(
     errors: list[str] = []
     titles: dict[str, str] = {}
 
+    descriptions: dict[str, str] = {}
     for route in _public_routes():
-        route_errors, title, _ = _validate_page(
+        route_errors, title, description, _ = _validate_page(
             origin,
             route,
             request,
@@ -435,12 +559,17 @@ def run_checks(
         errors.extend(route_errors)
         if title:
             titles[route] = title
+        if description:
+            descriptions[route] = description
 
     if len(set(titles.values())) != len(titles):
         errors.append("public routes: titles must be unique")
+    if len(set(descriptions.values())) != len(descriptions):
+        errors.append("public routes: meta descriptions must be unique")
 
     errors.extend(_validate_robots(origin, request, timeout_seconds))
     errors.extend(_validate_sitemap(origin, request, timeout_seconds))
+    errors.extend(_validate_social_preview(origin, request, timeout_seconds))
     return errors
 
 
@@ -489,7 +618,7 @@ def main() -> int:
         )
         if not errors:
             print(
-                "Read-only live SEO check passed: homepage, solutions, discovery files, canonical URLs, JSON-LD and build provenance are correct."
+                "Read-only live SEO check passed: public routes, unique titles/descriptions, H1, canonical, Open Graph/Twitter, JSON-LD, robots, sitemap, published PNG social preview and build provenance are correct."
             )
             return 0
     except ValueError as exc:

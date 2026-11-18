@@ -474,6 +474,7 @@ class CloudBuildYamlTest(unittest.TestCase):
             )
         self.assertIn("backend-deploy", ancestors("frontend-deploy"))
         self.assertIn("frontend-deploy", ancestors("deployment-read-only-smoke"))
+        self.assertIn("deployment-read-only-smoke", ancestors("production-seo-live-check"))
         self.assertNotIn("images", config)
 
     def test_post_deploy_smoke_is_read_only_and_checks_indexing(self) -> None:
@@ -492,6 +493,33 @@ class CloudBuildYamlTest(unittest.TestCase):
         self.assertIn('method="GET"', smoke_source)
         self.assertIn('method="OPTIONS"', smoke_source)
         self.assertNotIn('method="POST"', smoke_source)
+
+        seo_step = next(
+            step
+            for step in config["steps"]
+            if step["id"] == "production-seo-live-check"
+        )
+        seo_arguments = " ".join(str(argument) for argument in seo_step["args"])
+        self.assertEqual(seo_step["waitFor"], ["deployment-read-only-smoke"])
+        self.assertIn("seo_live_check.py", seo_arguments)
+        self.assertIn("--expected-build-sha=$SHORT_SHA", seo_arguments)
+        self.assertIn("--attempts=12", seo_arguments)
+        self.assertIn("--retry-delay-seconds=5", seo_arguments)
+        seo_source = (SCRIPT_ROOT / "seo_live_check.py").read_text(encoding="utf-8")
+        self.assertIn('method="GET"', seo_source)
+        self.assertNotIn('method="POST"', seo_source)
+        self.assertNotIn('method="OPTIONS"', seo_source)
+
+    def test_deployment_contract_checks_run_the_live_seo_test_suite(self) -> None:
+        config = load_config("cloudbuild.deploy.yaml")
+        step = next(
+            step
+            for step in config["steps"]
+            if step["id"] == "deployment-contract-tests"
+        )
+        command = " ".join(str(argument) for argument in step["args"])
+        self.assertIn("test_deployment*.py", command)
+        self.assertIn("test_live_seo_check.py", command)
 
     def test_pr_checks_are_noindex_and_cannot_deploy_or_read_secrets(self) -> None:
         config = load_config("cloudbuild.pr-checks.yaml")
