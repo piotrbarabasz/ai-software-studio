@@ -26,9 +26,9 @@ describe('AutomationBentoComponent', () => {
       ['01', '02', '03'],
     );
     expect(cards.map((card) => card.querySelector('h3')?.textContent?.trim())).toEqual([
-      'Wiadomości i dokumenty',
-      'Wiedza firmy',
-      'Obsługa spraw',
+      'Automatyzacje procesów',
+      'Aplikacje i integracje',
+      'AI tam, gdzie ma sens',
     ]);
     expect(cards.map((card) => card.querySelector('.problem-copy')?.textContent?.trim())).toEqual(
       siteContent.home.useCases.map((item) => item.problem),
@@ -40,9 +40,9 @@ describe('AutomationBentoComponent', () => {
     const cards = Array.from(element.querySelectorAll<HTMLElement>('.problem-card'));
 
     expect(cards.map((card) => card.dataset['visualKind'])).toEqual([
+      'message-workflow',
       'process-panel',
       'knowledge-assistant',
-      'channel-integrations',
     ]);
     expect(element.querySelectorAll('app-automation-bento-visual')).toHaveSize(3);
     expect(element.querySelectorAll('.problem-flow[aria-hidden="true"]')).toHaveSize(3);
