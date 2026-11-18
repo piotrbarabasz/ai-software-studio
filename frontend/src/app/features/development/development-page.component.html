@@ -12,7 +12,7 @@
           >{{ content.closingCta.primaryCta.label }}</a
         >
         <a class="secondary-action" routerLink="/development" fragment="przyklad-techniczny"
-          >Zobacz kod i przekazanie</a
+          >Zobacz przykład realizacji</a
         >
         <p class="hero-cta-note">{{ content.heroNextStep }}</p>
       </div>
@@ -31,8 +31,6 @@
     </aside>
   </section>
 
-  <div class="section-shell"><app-engineering-artifact /></div>
-
   <section class="section-shell" aria-labelledby="outcomes-title" appRevealOnScroll>
     <div class="section-heading">
       <p class="eyebrow">Rezultaty</p>
@@ -42,6 +40,7 @@
       @for (outcome of content.outcomes; track outcome) {
         <article class="card-surface solution-card info-card" data-card-variant="solution-card">
           <h3>{{ outcome.title }}</h3>
+          <p><strong>Obecny problem:</strong> {{ outcome.startingPoint }}</p>
           <p><strong>Docelowy sposób pracy:</strong> {{ outcome.targetWorkflow }}</p>
           <ul class="outcome-elements">
             @for (element of outcome.solutionElements; track element) {
@@ -55,6 +54,8 @@
       }
     </div>
   </section>
+
+  <div class="section-shell"><app-engineering-artifact /></div>
 
   <section class="section-shell" aria-labelledby="scope-title" appRevealOnScroll>
     <div class="section-heading">
