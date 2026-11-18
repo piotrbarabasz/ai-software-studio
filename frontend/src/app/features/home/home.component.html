@@ -104,6 +104,13 @@
       }
     </div>
     <p class="evidence-note" role="note">{{ home.evidenceTeaser.note }}</p>
+    <a
+      class="secondary-action all-examples-link"
+      [routerLink]="home.evidenceTeaser.allExamplesCta.path"
+      [fragment]="home.evidenceTeaser.allExamplesCta.fragment"
+    >
+      {{ home.evidenceTeaser.allExamplesCta.label }}
+    </a>
   </section>
 
   <app-seven-day-demo data-home-section="demo-scope" [demo]="home.sevenDayDemo" />
