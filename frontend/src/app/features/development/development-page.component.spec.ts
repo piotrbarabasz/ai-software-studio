@@ -3,7 +3,7 @@ import { provideRouter } from '@angular/router';
 import { DevelopmentPageComponent } from './development-page.component';
 
 describe('DevelopmentPageComponent', () => {
-  it('puts inspectable work before planning and keeps a direct project inquiry', async () => {
+  it('shows business outcomes before technical proof and keeps a direct inquiry', async () => {
     await TestBed.configureTestingModule({
       imports: [DevelopmentPageComponent],
       providers: [provideRouter([])],
