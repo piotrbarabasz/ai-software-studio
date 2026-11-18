@@ -4,6 +4,7 @@ import contextlib
 import io
 import importlib.util
 import json
+import re
 import sys
 import unittest
 import unittest.mock
@@ -29,29 +30,26 @@ smoke = load_script()
 
 EXPECTED_BUILD_SHA = "abc1234"
 HOME_USE_CASES = (
-    ("Obsługa powtarzalnych pytań", "chatbot-ai-dla-firm"),
-    ("Kwalifikacja rozmów i zgłoszeń", "voice-ai-dla-firm"),
-    ("Przetwarzanie wiadomości i dokumentów", "automatyzacja-procesow"),
-    ("Realizacja wieloetapowych zadań", "systemy-agentowe"),
-    ("Obsługa wielu kanałów w jednym procesie", "integracje-whatsapp-crm"),
+    ("Automatyzacje procesów", "/rozwiazania/automatyzacja-procesow"),
+    ("Aplikacje i integracje", "/development"),
+    ("AI tam, gdzie ma sens", "/rozwiazania"),
 )
 
 
 PRIMARY_NAVIGATION = (
     ("/rozwiazania", "Rozwiązania"),
     ("/demo-ai", "Demo w 7 dni"),
-    ("/development", "Wdrożenia"),
-    ("/dla-software-house", "Dla partnerów"),
-    ("/studio", "O Protolume"),
-    ("/kontakt", "Kontakt"),
+    ("/development", "Aplikacje i integracje"),
+    ("/dla-software-house", "Dla software house’ów"),
+    ("/studio", "Studio"),
 )
 
 FOOTER_LINKS = (
+    ("/rozwiazania", "Rozwiązania"),
     ("/demo-ai", "Demo w 7 dni"),
     ("/przyklad-demo", "Przykładowy raport"),
-    ("/development", "Wdrożenia"),
-    ("/dla-software-house", "Dla partnerów"),
-    ("/studio", "O Protolume"),
+    ("/development", "Aplikacje i integracje"),
+    ("/dla-software-house", "Dla software house’ów"),
 )
 
 
@@ -113,10 +111,10 @@ def homepage_html(
 ) -> str:
     use_case_cards = "".join(
         (
-            f'<article class="use-case-card">'
+            f'<article class="home-pillar">'
             f'<h3>{title}</h3>'
             f'<p>{title} wspiera konkretny proces.</p>'
-            f'<a href="/rozwiazania#{slug}">Poznaj rozwiązanie</a>'
+            f'<a href="{slug}">Poznaj rozwiązanie</a>'
             '</article>'
         )
         for title, slug in HOME_USE_CASES
@@ -125,7 +123,7 @@ def homepage_html(
         '<h1>Automatyzujemy ręczne procesy w MŚP</h1>'
         '<p>Budujemy działające demo jednego przepływu, nie pełną transformację całej firmy.</p>'
         '<section class="hero-proofs">'
-        '<p>Rozwiązania</p><p>Wdrożenia</p><p>O Protolume</p><p>Przykładowy raport</p>'
+        '<p>Rozwiązania</p><p>Aplikacje i integracje</p><p>Studio</p><p>Przykładowy raport</p>'
         '<a href="/przyklad-demo">Zobacz przykładowy raport</a>'
         '</section>'
         '<a href="/kontakt?projectType=mvp_prototype">Opisz proces do sprawdzenia</a>'
@@ -168,17 +166,18 @@ def route_html(
         )
     elif path == "/rozwiazania":
         body = (
-            '<h1>Rozwiązania</h1>'
-            '<p>Asystent wiedzy i automatyzacja procesu.</p>'
-            '<a href="#asystent-wiedzy">Asystent</a>'
-            '<a href="#automatyzacja-wiadomosci-i-dokumentow">Automatyzacja</a>'
-            '<a href="#panel-operacyjny">Panel</a>'
-            '<a href="#system-agentowy">Agenci</a>'
-            '<a href="#integracje-kanalow">Kanały</a>'
-            '<a href="/kontakt?projectType=rag_chatbot_demo">Kontakt</a>'
-            '<a href="/kontakt?projectType=business_process_automation">Kontakt</a>'
-            '<a href="/kontakt?projectType=custom_web_app">Kontakt</a>'
-            '<a href="/kontakt?projectType=backend_api">Kontakt</a>'
+            '<h1>Co możemy usprawnić lub zbudować dla Twojej firmy?</h1>'
+            '<article id="panel-operacyjny"></article>'
+            '<article id="asystent-wiedzy"></article>'
+            '<article id="automatyzacja-wiadomosci-i-dokumentow"></article>'
+            '<article id="voice-ai"></article>'
+            '<article id="system-agentowy"></article>'
+            '<article id="integracje-kanalow"></article>'
+            '<a href="/rozwiazania/automatyzacja-procesow">Wiadomości i dokumenty</a>'
+            '<a href="/rozwiazania/chatbot-ai-dla-firm">Wiedza firmy</a>'
+            '<a href="/rozwiazania/voice-ai-dla-firm">Obsługa telefonów</a>'
+            '<a href="/rozwiazania/integracje-whatsapp-crm">Rozmowy w CRM</a>'
+            '<a href="/rozwiazania/systemy-agentowe">Zadania wieloetapowe</a>'
         )
     elif path == "/rozwiazania/chatbot-ai-dla-firm":
         body = (
@@ -212,7 +211,7 @@ def route_html(
         )
     elif path == "/development":
         body = (
-            '<h1>Wdrożenia</h1>'
+            '<h1>Aplikacje i integracje</h1>'
             '<p>Najpierw potwierdzamy użytkowników, dane i rezultat pierwszego etapu.</p>'
         )
     elif path == "/dla-software-house":
@@ -472,12 +471,44 @@ class DeploymentSmokeTest(unittest.TestCase):
             [("/kontakt?projectType=mvp_prototype", "Opisz proces")],
         )
 
-    def test_primary_navigation_cta_is_not_counted_as_a_seventh_link(self) -> None:
+    def test_primary_navigation_cta_is_not_counted_as_a_sixth_link(self) -> None:
         parser = smoke.SeoMetadataParser()
         parser.feed(render_site_shell("/studio", "<h1>Studio</h1>"))
 
         self.assertEqual(parser.primary_navigation_links, list(PRIMARY_NAVIGATION))
         self.assertEqual(len(parser.primary_navigation_ctas), 1)
+
+    def test_primary_navigation_contract_matches_angular_site_content(self) -> None:
+        site_content = (
+            REPOSITORY_ROOT / "frontend" / "src" / "app" / "core" / "content" / "site.pl.ts"
+        ).read_text(encoding="utf-8")
+        match = re.search(
+            r"const primaryNavigation = \[(.*?)\] as const;",
+            site_content,
+            re.DOTALL,
+        )
+        self.assertIsNotNone(match)
+        actual = tuple(
+            (path, label)
+            for label, path in re.findall(
+                r"\{\s*label:\s*'([^']+)',\s*path:\s*'([^']+)'\s*\}",
+                match.group(1),
+            )
+        )
+        self.assertEqual(actual, smoke.PRIMARY_NAVIGATION_LINKS)
+
+        shell = (
+            REPOSITORY_ROOT
+            / "frontend"
+            / "src"
+            / "app"
+            / "features"
+            / "shell"
+            / "site-shell.component.html"
+        ).read_text(encoding="utf-8")
+        self.assertIn('routerLink="/kontakt"', shell)
+        self.assertIn("[queryParams]=\"{ projectType: 'mvp_prototype' }\"", shell)
+        self.assertIn(">Opisz proces</a>", shell)
 
     def test_missing_primary_navigation_link_is_reported(self) -> None:
         deployment = FakeDeployment(robots_tag="index, follow")
@@ -492,7 +523,7 @@ class DeploymentSmokeTest(unittest.TestCase):
                 deployment,
                 "/studio",
                 lambda body: body.decode("utf-8")
-                .replace('<a href="/kontakt">Kontakt</a>', "", 1)
+                .replace('<a href="/studio">Studio</a>', "", 1)
                 .encode("utf-8"),
             ),
         )
@@ -536,7 +567,7 @@ class DeploymentSmokeTest(unittest.TestCase):
                 deployment,
                 "/development",
                 lambda body: body.decode("utf-8")
-                .replace('>Wdrożenia<', '>Development<', 1)
+                .replace('>Aplikacje i integracje<', '>Development<', 1)
                 .encode("utf-8"),
             ),
         )
@@ -584,9 +615,9 @@ class DeploymentSmokeTest(unittest.TestCase):
                 deployment,
                 "/studio",
                 lambda body: body.replace(
-                    b'<a href="/kontakt">Kontakt</a>',
-                    b'<a href="/kontakt">Kontakt</a>'
-                    b'<a href="/kontakt">Kontakt</a>',
+                    b'<a href="/studio">Studio</a>',
+                    b'<a href="/studio">Studio</a>'
+                    b'<a href="/studio">Studio</a>',
                     1,
                 ),
             ),
