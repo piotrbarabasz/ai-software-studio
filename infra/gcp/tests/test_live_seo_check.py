@@ -180,7 +180,7 @@ class FakeSeoDeployment:
             body = self.build_html(origin, path).encode("utf-8")
         elif path == seo.SOCIAL_PREVIEW_PATH:
             headers = {"content-type": seo.SOCIAL_PREVIEW_TYPE}
-            body = b"\\x89PNG\\r\\n\\x1a\\n"
+            body = b"\x89PNG\r\n\x1a\n"
         elif path == "/robots.txt":
             body = (
                 "User-agent: *\nAllow: /\n\n"
