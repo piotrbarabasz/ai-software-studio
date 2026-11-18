@@ -426,6 +426,42 @@ def _validate_page(
     return errors, parser.title, parser.description, build_sha
 
 
+
+def _validate_social_preview(
+    origin: str,
+    request: Callable[[urllib.request.Request, float], Response],
+    timeout_seconds: float,
+) -> list[str]:
+    try:
+        response = _get(origin, SOCIAL_PREVIEW_PATH, request, timeout_seconds)
+    except Exception:
+        return ["public social preview: request failed"]
+
+    errors: list[str] = []
+    if response.status != 200:
+        errors.append(
+            f"public social preview: expected HTTP 200, received {response.status}"
+        )
+    if len(response.body) > MAX_RESPONSE_BYTES:
+        errors.append("public social preview: response exceeds the live-check size limit")
+
+    content_type = next(
+        (
+            value
+            for key, value in response.headers.items()
+            if key.lower() == "content-type"
+        ),
+        "",
+    ).split(";", 1)[0].strip().lower()
+    if content_type != SOCIAL_PREVIEW_TYPE:
+        errors.append(
+            f"public social preview: content type must be {SOCIAL_PREVIEW_TYPE}"
+        )
+    if not response.body.startswith(b"\\x89PNG\\r\\n\\x1a\\n"):
+        errors.append("public social preview: response is not a PNG image")
+    return errors
+
+
 def _validate_robots(
     origin: str,
     request: Callable[[urllib.request.Request, float], Response],
@@ -533,6 +569,7 @@ def run_checks(
 
     errors.extend(_validate_robots(origin, request, timeout_seconds))
     errors.extend(_validate_sitemap(origin, request, timeout_seconds))
+    errors.extend(_validate_social_preview(origin, request, timeout_seconds))
     return errors
 
 
