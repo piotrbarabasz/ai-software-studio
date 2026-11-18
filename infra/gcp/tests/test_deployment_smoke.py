@@ -510,6 +510,70 @@ class DeploymentSmokeTest(unittest.TestCase):
         self.assertIn("[queryParams]=\"{ projectType: 'mvp_prototype' }\"", shell)
         self.assertIn(">Opisz proces</a", shell)
 
+    def test_home_smoke_requires_the_three_current_pillars(self) -> None:
+        deployment = FakeDeployment(robots_tag="index, follow")
+
+        errors = smoke.run_checks(
+            "https://api.run.app",
+            "https://protolume.pl",
+            expect_noindex=False,
+            expected_build_sha=EXPECTED_BUILD_SHA,
+            timeout_seconds=2,
+            request=mutate_public_route(
+                deployment,
+                "/",
+                lambda body: body.replace(b'class="home-pillar"', b'class="home-card"', 1),
+            ),
+        )
+
+        self.assertIn("public route /: expected 3 home pillars, received 2", errors)
+
+    def test_missing_solution_section_id_is_reported(self) -> None:
+        deployment = FakeDeployment(robots_tag="index, follow")
+
+        errors = smoke.run_checks(
+            "https://api.run.app",
+            "https://protolume.pl",
+            expect_noindex=False,
+            expected_build_sha=EXPECTED_BUILD_SHA,
+            timeout_seconds=2,
+            request=mutate_public_route(
+                deployment,
+                "/rozwiazania",
+                lambda body: body.replace(b'id="voice-ai"', b"", 1),
+            ),
+        )
+
+        self.assertIn(
+            "public route /rozwiazania: expected section id 'voice-ai', received none",
+            errors,
+        )
+
+    def test_missing_service_card_link_is_reported(self) -> None:
+        deployment = FakeDeployment(robots_tag="index, follow")
+
+        errors = smoke.run_checks(
+            "https://api.run.app",
+            "https://protolume.pl",
+            expect_noindex=False,
+            expected_build_sha=EXPECTED_BUILD_SHA,
+            timeout_seconds=2,
+            request=mutate_public_route(
+                deployment,
+                "/rozwiazania",
+                lambda body: body.replace(
+                    b'href="/rozwiazania/systemy-agentowe"',
+                    b'href="/rozwiazania"',
+                    1,
+                ),
+            ),
+        )
+
+        self.assertIn(
+            "public route /rozwiazania: expected service link /rozwiazania/systemy-agentowe, received none",
+            errors,
+        )
+
     def test_missing_primary_navigation_link_is_reported(self) -> None:
         deployment = FakeDeployment(robots_tag="index, follow")
 
