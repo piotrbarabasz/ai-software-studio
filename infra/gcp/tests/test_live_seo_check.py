@@ -178,6 +178,9 @@ class FakeSeoDeployment:
             status, body = 404, b"missing"
         elif path in PUBLIC_ROUTES:
             body = self.build_html(origin, path).encode("utf-8")
+        elif path == seo.SOCIAL_PREVIEW_PATH:
+            headers = {"content-type": seo.SOCIAL_PREVIEW_TYPE}
+            body = b"\\x89PNG\\r\\n\\x1a\\n"
         elif path == "/robots.txt":
             body = (
                 "User-agent: *\nAllow: /\n\n"
@@ -247,6 +250,52 @@ class LiveSeoCheckTest(unittest.TestCase):
         )
 
         self.assertEqual(errors, [])
+
+    def test_live_checker_rejects_a_missing_social_preview(self) -> None:
+        deployment = FakeSeoDeployment(
+            mutator=lambda path, response: seo.Response(
+                404,
+                response.headers,
+                b"missing",
+            )
+            if path == seo.SOCIAL_PREVIEW_PATH
+            else response
+        )
+
+        errors = seo.run_checks(
+            "https://protolume.pl",
+            expected_build_sha=EXPECTED_BUILD_SHA,
+            timeout_seconds=2,
+            request=deployment,
+        )
+
+        self.assertIn(
+            "public social preview: expected HTTP 200, received 404",
+            errors,
+        )
+
+    def test_live_checker_rejects_a_social_preview_with_the_wrong_content_type(self) -> None:
+        deployment = FakeSeoDeployment(
+            mutator=lambda path, response: seo.Response(
+                response.status,
+                {"content-type": "text/html"},
+                response.body,
+            )
+            if path == seo.SOCIAL_PREVIEW_PATH
+            else response
+        )
+
+        errors = seo.run_checks(
+            "https://protolume.pl",
+            expected_build_sha=EXPECTED_BUILD_SHA,
+            timeout_seconds=2,
+            request=deployment,
+        )
+
+        self.assertIn(
+            "public social preview: content type must be image/png",
+            errors,
+        )
 
     def test_live_checker_rejects_noindex_headers(self) -> None:
         deployment = FakeSeoDeployment(
