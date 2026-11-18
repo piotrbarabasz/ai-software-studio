@@ -497,7 +497,7 @@ describe('ContactFormComponent', () => {
     tick();
 
     expect(fixture.nativeElement.textContent).toContain('Wiadomość została odebrana');
-    expect(fixture.nativeElement.textContent).toContain('Wysłany opis');
+    expect(fixture.nativeElement.textContent).toContain('Twoje zgłoszenie');
     expect(fixture.nativeElement.textContent).toContain('Jan Kowalski');
     expect(fixture.nativeElement.textContent).toContain('Chcemy sprawdzić jeden proces');
     const success = fixture.nativeElement.querySelector(
