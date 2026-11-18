@@ -252,7 +252,7 @@ describe('Site content model', () => {
     );
     expect(siteContent.contact.directEmail).toBe('sales@contact.test');
     expect(siteContent.contact.budgetHint).toContain('opcjonalny');
-    expect(siteContent.contact.formNextStep).toContain('Po wysłaniu opisu');
+    expect(siteContent.contact.formNextStep).toContain('Po otrzymaniu wiadomości');
     expect(siteContent.contact.success.summaryTitle).toBe('Twoje zgłoszenie');
   });
 
@@ -537,7 +537,7 @@ describe('Site content model', () => {
       'odpowiedź nie jest wysyłana bez zatwierdzenia',
     );
     expect(siteContent.development.scope.pricingNote).toContain(
-      'Wycena zależy od potwierdzonego zakresu',
+      'Wycena powstaje po omówieniu celu i zakresu',
     );
   });
 
