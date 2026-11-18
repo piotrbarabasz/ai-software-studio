@@ -511,15 +511,17 @@ class CloudBuildYamlTest(unittest.TestCase):
         self.assertNotIn('method="OPTIONS"', seo_source)
 
     def test_deployment_contract_checks_run_the_live_seo_test_suite(self) -> None:
-        config = load_config("cloudbuild.deploy.yaml")
-        step = next(
-            step
-            for step in config["steps"]
-            if step["id"] == "deployment-contract-tests"
-        )
-        command = " ".join(str(argument) for argument in step["args"])
-        self.assertIn("test_deployment*.py", command)
-        self.assertIn("test_live_seo_check.py", command)
+        for config_name in ("cloudbuild.pr-checks.yaml", "cloudbuild.deploy.yaml"):
+            with self.subTest(config=config_name):
+                config = load_config(config_name)
+                step = next(
+                    step
+                    for step in config["steps"]
+                    if step["id"] == "deployment-contract-tests"
+                )
+                command = " ".join(str(argument) for argument in step["args"])
+                self.assertIn("test_deployment*.py", command)
+                self.assertIn("test_live_seo_check.py", command)
 
     def test_pr_checks_are_noindex_and_cannot_deploy_or_read_secrets(self) -> None:
         config = load_config("cloudbuild.pr-checks.yaml")
