@@ -16,15 +16,10 @@ describe('SolutionsPageComponent', () => {
     expect(element.querySelectorAll('article.solution-card')).toHaveSize(5);
     expect(element.querySelectorAll('article.solutions-pillar')).toHaveSize(3);
     expect(
-      Array.from(
-        element.querySelectorAll<HTMLAnchorElement>('.solutions-pillar a'),
-        (link) => link.getAttribute('href'),
+      Array.from(element.querySelectorAll<HTMLAnchorElement>('.solutions-pillar a'), (link) =>
+        link.getAttribute('href'),
       ),
-    ).toEqual([
-      '/rozwiazania/automatyzacja-procesow',
-      '/development',
-      '/rozwiazania',
-    ]);
+    ).toEqual(['/rozwiazania/automatyzacja-procesow', '/development', '/rozwiazania']);
     expect(element.querySelector('.solutions-hero a')?.getAttribute('href')).toBe('/kontakt');
     expect(element.textContent).toContain('Nie musisz wybierać rozwiązania samodzielnie.');
     expect(element.querySelectorAll('.landing-links,.quick-links')).toHaveSize(0);
