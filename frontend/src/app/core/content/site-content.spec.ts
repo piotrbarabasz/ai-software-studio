@@ -195,7 +195,7 @@ describe('Site content model', () => {
       cta: { label: 'Poznaj osobę odpowiedzialną', path: '/studio' },
     });
     expect(siteContent.home.hero.primaryCta.path).toBe('/kontakt');
-    expect(siteContent.home.hero.primaryCta.queryParams).toBeUndefined();
+    expect('queryParams' in siteContent.home.hero.primaryCta).toBeFalse();
     for (const removedField of [
       'problemsHeading',
       'problemGroups',
