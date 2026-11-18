@@ -1,64 +1,122 @@
 .solutions-page {
   display: grid;
-  gap: 2rem;
+  gap: clamp(3rem, 6vw, 5rem);
   padding-block: 2rem var(--space-section);
 }
-.solutions-hero {
+
+.solutions-hero,
+.solutions-pillars,
+.services-section {
   display: grid;
-  gap: 0.75rem;
+  gap: 1.25rem;
 }
+
 .solutions-hero h1 {
-  max-width: 21ch;
+  max-width: 24ch;
   margin: 0;
 }
-.solutions-hero p {
-  margin: 0;
+
+.solutions-hero .page-lead,
+.services-section .page-lead {
   max-width: 65ch;
+  margin: 0;
 }
+
+.solutions-hero .primary-action {
+  justify-self: start;
+  margin-top: 0.5rem;
+}
+
+.solutions-pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.solutions-pillar {
+  grid-template-rows: auto auto 1fr auto;
+  gap: 1rem;
+  scroll-margin-top: 6rem;
+}
+
+.solutions-pillar h3 {
+  margin: 0;
+  font-size: clamp(1.25rem, 1.75vw, 1.6rem);
+}
+
+.solutions-pillar p {
+  margin: 0;
+}
+
+.solutions-pillar .pillar-outcome {
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.solutions-pillar .secondary-action {
+  justify-self: start;
+  align-self: end;
+}
+
 .solutions-list {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
+  gap: 0.85rem;
 }
+
 .solution-card {
-  display: grid;
   align-content: start;
-  gap: 0.8rem;
-  padding: 1.5rem;
+  gap: 0.65rem;
+  padding: 1.25rem;
   scroll-margin-top: 6rem;
+  box-shadow: none;
 }
-.solution-card h2 {
-  font-size: clamp(1.3rem, 2vw, 1.7rem);
+
+.solution-card h3 {
+  margin: 0;
+  font-size: clamp(1.1rem, 1.5vw, 1.35rem);
 }
-.solution-card h2 a {
+
+.solution-card h3 a {
   color: inherit;
 }
-.solution-card p,
-.solution-card h2 {
+
+.solution-card p {
   margin: 0;
 }
-.solution-card .secondary-action {
-  justify-self: start;
+
+.solution-result {
+  font-size: 0.94rem;
 }
-.applications-path,
+
 .solutions-closing {
   display: grid;
   gap: 1rem;
 }
-.applications-path p,
+
 .solutions-closing p {
-  max-width: 70ch;
+  max-width: 65ch;
   margin: 0;
 }
-.solutions-closing .primary-action,
-.applications-path .secondary-action {
+
+.solutions-closing .primary-action {
   justify-self: start;
 }
+
+@media (max-width: 900px) {
+  .solutions-pillars-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 @media (max-width: 700px) {
   .solutions-list {
     grid-template-columns: minmax(0, 1fr);
   }
-  .solution-card {
-    padding: 1.25rem;
+
+  .solutions-hero .primary-action,
+  .solutions-pillar .secondary-action,
+  .solutions-closing .primary-action {
+    width: 100%;
   }
 }
