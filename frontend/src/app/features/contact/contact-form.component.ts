@@ -36,9 +36,14 @@ type ContactFormControls = {
 
 interface SubmissionSummary {
   readonly name: string;
-  readonly projectType: string;
+  readonly projectType?: string;
   readonly message: string;
 }
+
+// The existing API requires a 20+ character message. Explicitly identify
+// requests made without a description until the backend contract is versioned.
+const CONTACT_WITHOUT_DESCRIPTION =
+  'Zgłoszenie bez opisu. Proszę o kontakt w sprawie możliwej współpracy.';
 
 @Component({
   selector: 'app-contact-form',
@@ -65,13 +70,9 @@ export class ContactFormComponent implements OnInit {
     ]),
     email: this.fb.control('', [Validators.required, Validators.email, Validators.maxLength(254)]),
     company: this.fb.control('', [Validators.maxLength(160)]),
-    projectType: this.fb.control('', [Validators.required]),
+    projectType: this.fb.control(''),
     budgetRange: this.fb.control(''),
-    message: this.fb.control('', [
-      Validators.required,
-      Validators.minLength(20),
-      Validators.maxLength(4000),
-    ]),
+    message: this.fb.control('', [Validators.minLength(20), Validators.maxLength(4000)]),
     consent: this.fb.control(false, [Validators.requiredTrue]),
     website: this.fb.control(''),
   });
@@ -82,22 +83,6 @@ export class ContactFormComponent implements OnInit {
   submissionSummary?: SubmissionSummary;
   serviceContext?: ServiceContext;
   serviceLabel?: string;
-
-  get isPartnerContext(): boolean {
-    return this.form.controls.projectType.value === 'software_house_partnership';
-  }
-
-  get messageGuidance(): readonly [string, string, string] {
-    return this.isPartnerContext
-      ? this.content.messageGuidance.partner
-      : this.content.messageGuidance.general;
-  }
-
-  get messageGuidanceLabel(): string {
-    return this.isPartnerContext
-      ? this.content.messageGuidance.partnerLabel
-      : this.content.messageGuidance.generalLabel;
-  }
 
   ngOnInit(): void {
     if (!this.route) {
@@ -143,8 +128,10 @@ export class ContactFormComponent implements OnInit {
           this.statusMessage = this.content.messages.success;
           this.submissionSummary = {
             name: inquiry.name,
-            projectType: this.projectTypeLabel(inquiry.projectType),
-            message: this.messagePreview(inquiry.message),
+            ...(inquiry.projectType === 'other'
+              ? {}
+              : { projectType: this.projectTypeLabel(inquiry.projectType) }),
+            message: this.messagePreview(this.form.controls.message.value.trim()),
           };
           this.resetForm();
           this.focusStatusMessage('success');
@@ -203,7 +190,7 @@ export class ContactFormComponent implements OnInit {
       projectType: this.isVisibleProjectType(raw.projectType) ? raw.projectType : 'other',
       ...(this.serviceContext ? { serviceContext: this.serviceContext } : {}),
       budgetRange: this.isBudgetRange(raw.budgetRange) ? raw.budgetRange : 'not_sure',
-      message: raw.message.trim(),
+      message: raw.message.trim() || CONTACT_WITHOUT_DESCRIPTION,
       consent: true,
       website: raw.website.trim(),
     };
@@ -217,6 +204,10 @@ export class ContactFormComponent implements OnInit {
 
   private messagePreview(message: string): string {
     const maximumLength = 240;
+
+    if (!message) {
+      return 'Bez opisu — prośba o kontakt.';
+    }
 
     return message.length <= maximumLength
       ? message

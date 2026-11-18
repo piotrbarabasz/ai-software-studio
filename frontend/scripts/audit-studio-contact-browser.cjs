@@ -35,7 +35,11 @@ const baseUrl = process.env.AUDIT_BASE_URL || 'http://127.0.0.1:4400';
         assert.equal(geometry.overflow, false);
         if (route === '/kontakt') {
           if (width === 390) assert.ok(geometry.firstInput <= 450, JSON.stringify(geometry));
-          assert.match(await page.locator('#message-hint').innerText(), /Minimum 20 znaków/);
+          assert.match(
+            await page.locator('#message-hint').innerText(),
+            /Możesz zostawić to pole puste/,
+          );
+          assert.equal(await page.locator('#message').getAttribute('required'), null);
           assert.equal(await page.locator('#company').getAttribute('required'), null);
           assert.equal(await page.locator('#name').getAttribute('autocomplete'), 'name');
           assert.equal(await page.locator('#email').getAttribute('autocomplete'), 'email');
@@ -100,8 +104,10 @@ const baseUrl = process.env.AUDIT_BASE_URL || 'http://127.0.0.1:4400';
     // Every request is intercepted before dispatch; no contact reaches a real API.
     let responseStatus = 422;
     let count = 0;
+    const submittedPayloads = [];
     await page.route('**/api/contact', async (route) => {
       count++;
+      submittedPayloads.push(route.request().postDataJSON());
       if (responseStatus === 0) return route.abort('failed');
       return route.fulfill({
         status: responseStatus,
@@ -117,7 +123,9 @@ const baseUrl = process.env.AUDIT_BASE_URL || 'http://127.0.0.1:4400';
     await page.goto(baseUrl + '/kontakt', { waitUntil: 'networkidle' });
     await page.locator('#name').fill('Test lokalny');
     await page.locator('#email').fill('browser-check@example.test');
+    await page.locator('.additional-information summary').click();
     await page.locator('#projectType').selectOption('custom_web_app');
+    await page.locator('.additional-information summary').click();
     const message = 'Lokalny test zachowania formularza. Nie wysyłaj tego opisu do odbiorcy.';
     await page.locator('#message').fill(message);
     await page.locator('#consent').check();
@@ -137,6 +145,24 @@ const baseUrl = process.env.AUDIT_BASE_URL || 'http://127.0.0.1:4400';
     await page.locator('button[type="submit"]').click();
     await expect(page.locator('.contact-success')).toBeFocused();
     assert.equal(await page.locator('.contact-form').count(), 0);
+
+    // A visitor can request a conversation without choosing a topic or describing the project.
+    await page.locator('.contact-success button').click();
+    await page.locator('#name').fill('Test bez opisu');
+    await page.locator('#email').fill('blank-message@example.test');
+    await page.locator('#consent').check();
+    const beforeBlank = count;
+    await page.locator('button[type="submit"]').click();
+    await expect.poll(() => count).toBe(beforeBlank + 1);
+    await expect(page.locator('.contact-success')).toBeFocused();
+    const blankPayload = submittedPayloads.at(-1);
+    assert.equal(blankPayload.projectType, 'other');
+    assert.equal(blankPayload.budgetRange, 'not_sure');
+    assert.equal(
+      blankPayload.message,
+      'Zgłoszenie bez opisu. Proszę o kontakt w sprawie możliwej współpracy.',
+    );
+    assert.ok((await page.locator('.submission-summary').innerText()).includes('Bez opisu'));
     assert.deepEqual(errors, []);
     fs.writeFileSync(
       path.join(output, 'studio-contact-browser.json'),

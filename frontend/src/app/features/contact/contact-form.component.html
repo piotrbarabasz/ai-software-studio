@@ -1,8 +1,8 @@
 @if (status !== 'success') {
   @if (serviceLabel) {
     <p class="service-context">
-      Wybrana usługa: <strong>{{ serviceLabel }}</strong
-      >. Temat rozmowy możesz zmienić poniżej.
+      Temat ze strony, z której przechodzisz: <strong>{{ serviceLabel }}</strong>.
+      Możesz go zmienić w dodatkowych informacjach.
     </p>
   }
   <form
@@ -13,7 +13,7 @@
     novalidate
   >
     <div class="field">
-      <label for="name">Imię i nazwisko <span aria-hidden="true">*</span></label>
+      <label for="name">Imię <span aria-hidden="true">*</span></label>
       <input
         id="name"
         name="name"
@@ -44,74 +44,85 @@
         <p id="email-error" class="field-error">{{ errorFor('email') }}</p>
       }
     </div>
-    <div class="field">
-      <label for="company">Firma <span class="optional-label">(opcjonalnie)</span></label>
-      <input
-        id="company"
-        name="company"
-        type="text"
-        autocomplete="organization"
-        formControlName="company"
-        [attr.aria-invalid]="isInvalid('company')"
-        [attr.aria-describedby]="isInvalid('company') ? 'company-error' : null"
-      />
-      @if (isInvalid('company')) {
-        <p id="company-error" class="field-error">
-          {{ errorFor('company') }}
-        </p>
-      }
-    </div>
-    <div class="field">
-      <label for="projectType">Czego dotyczy rozmowa? <span aria-hidden="true">*</span></label>
-      <select
-        id="projectType"
-        name="projectType"
-        formControlName="projectType"
-        required
-        [attr.aria-invalid]="isInvalid('projectType')"
-        [attr.aria-describedby]="isInvalid('projectType') ? 'project-type-error' : null"
-      >
-        <option value="">Wybierz najbliższą opcję</option>
-        @for (option of content.projectTypes; track option) {
-          <option [value]="option.value">
-            {{ option.label }}
-          </option>
-        }
-      </select>
-      @if (isInvalid('projectType')) {
-        <p id="project-type-error" class="field-error">
-          {{ errorFor('projectType') }}
-        </p>
-      }
-    </div>
+
     <div class="field field-full">
-      <label for="message">{{ content.messageLabel }} <span aria-hidden="true">*</span></label>
+      <label for="message">
+        {{ content.messageLabel }} <span class="optional-label">(opcjonalnie)</span>
+      </label>
       <textarea
         id="message"
         name="message"
-        rows="6"
+        rows="4"
         maxlength="4000"
         formControlName="message"
-        required
+        placeholder="Np. chcę połączyć dwa systemy albo stworzyć aplikację."
         [attr.aria-invalid]="isInvalid('message')"
         [attr.aria-describedby]="
           isInvalid('message') ? 'message-hint message-error' : 'message-hint'
         "
       ></textarea>
-      <div id="message-hint" class="field-hint message-hint">
-        <p>{{ content.messageMinimumHint }}</p>
-        <ul class="message-guidance" [attr.aria-label]="messageGuidanceLabel">
-          @for (item of messageGuidance; track item) {
-            <li>{{ item }}</li>
-          }
-        </ul>
-      </div>
+      <p id="message-hint" class="field-hint">
+        {{ content.messageMinimumHint }}
+      </p>
       @if (isInvalid('message')) {
-        <p id="message-error" class="field-error">
-          {{ errorFor('message') }}
-        </p>
+        <p id="message-error" class="field-error">{{ errorFor('message') }}</p>
       }
     </div>
+
+    <details class="additional-information field-full">
+      <summary>{{ content.additionalInformationLabel }}</summary>
+      <div class="additional-information-fields">
+        <div class="field">
+          <label for="company">Firma <span class="optional-label">(opcjonalnie)</span></label>
+          <input
+            id="company"
+            name="company"
+            type="text"
+            autocomplete="organization"
+            formControlName="company"
+            [attr.aria-invalid]="isInvalid('company')"
+            [attr.aria-describedby]="isInvalid('company') ? 'company-error' : null"
+          />
+          @if (isInvalid('company')) {
+            <p id="company-error" class="field-error">{{ errorFor('company') }}</p>
+          }
+        </div>
+        <div class="field">
+          <label for="projectType">
+            Temat rozmowy <span class="optional-label">(opcjonalnie)</span>
+          </label>
+          <select
+            id="projectType"
+            name="projectType"
+            formControlName="projectType"
+            [attr.aria-invalid]="isInvalid('projectType')"
+          >
+            <option value="">Nie wiem jeszcze / nie wybieram</option>
+            @for (option of content.projectTypes; track option) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+        </div>
+        <div class="field">
+          <label for="budgetRange">
+            Budżet orientacyjny <span class="optional-label">(opcjonalnie)</span>
+          </label>
+          <select
+            id="budgetRange"
+            name="budgetRange"
+            formControlName="budgetRange"
+            aria-describedby="budget-range-hint"
+          >
+            <option value="">Nie wybieram teraz</option>
+            @for (option of content.budgetRanges; track option) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+          <p id="budget-range-hint" class="field-hint">{{ content.budgetHint }}</p>
+        </div>
+      </div>
+    </details>
+
     <div class="honeypot" aria-hidden="true">
       <label for="website">Strona internetowa</label>
       <input
@@ -141,38 +152,10 @@
         <span aria-hidden="true">{{ content.consentAfterLink }}</span>
       </div>
       @if (isInvalid('consent')) {
-        <p id="consent-error" class="field-error">
-          {{ errorFor('consent') }}
-        </p>
+        <p id="consent-error" class="field-error">{{ errorFor('consent') }}</p>
       }
     </div>
     <p class="form-legal-note">{{ content.noCommitment }}</p>
-    <details class="additional-information field-full">
-      <summary>{{ content.additionalInformationLabel }}</summary>
-      <div class="field budget-field">
-        <label for="budgetRange">Budżet orientacyjny</label>
-        <select
-          id="budgetRange"
-          name="budgetRange"
-          formControlName="budgetRange"
-          [attr.aria-invalid]="isInvalid('budgetRange')"
-          aria-describedby="budget-range-hint"
-        >
-          <option value="">Nie wybieram teraz</option>
-          @for (option of content.budgetRanges; track option) {
-            <option [value]="option.value">
-              {{ option.label }}
-            </option>
-          }
-        </select>
-        <p id="budget-range-hint" class="field-hint">{{ content.budgetHint }}</p>
-        @if (isInvalid('budgetRange')) {
-          <p id="budget-range-error" class="field-error">
-            {{ errorFor('budgetRange') }}
-          </p>
-        }
-      </div>
-    </details>
     @if (status === 'error' && statusMessage) {
       <div
         #errorSummary
@@ -215,10 +198,12 @@
             <dt>Kontakt</dt>
             <dd>{{ submissionSummary.name }}</dd>
           </div>
-          <div>
-            <dt>Temat rozmowy</dt>
-            <dd>{{ submissionSummary.projectType }}</dd>
-          </div>
+          @if (submissionSummary.projectType) {
+            <div>
+              <dt>Temat rozmowy</dt>
+              <dd>{{ submissionSummary.projectType }}</dd>
+            </div>
+          }
           <div>
             <dt>Opis</dt>
             <dd>{{ submissionSummary.message }}</dd>

@@ -100,23 +100,24 @@ describe('ContactFormComponent', () => {
     expect(fixture.componentInstance.serviceContext).toBeUndefined();
   });
 
-  it('shows concise general guidance in the visible form', () => {
+  it('offers a short first-contact form without a mandatory brief', () => {
     const fixture = TestBed.createComponent(ContactFormComponent);
     fixture.detectChanges();
+    const element: HTMLElement = fixture.nativeElement;
+    const text = element.textContent as string;
 
-    const text = fixture.nativeElement.textContent as string;
-
-    expect(text).toContain('Czego dotyczy rozmowa?');
-    expect(text).toContain('Opisz obecny proces lub potrzebne wsparcie');
-    expect(text).toContain('Co jest dziś wykonywane ręcznie?');
-    expect(text).toContain('Kto korzysta z procesu?');
-    expect(text).toContain('Jaki rezultat chcesz uzyskać?');
-    expect(text).toContain('Wyślij opis');
+    expect(text).toContain('O czym chcesz porozmawiać?');
+    expect(text).toContain('Możesz zostawić to pole puste');
+    expect(text).toContain('Wyślij zapytanie');
+    expect(text).not.toContain('Co jest dziś wykonywane ręcznie?');
     expect(text).not.toContain('Jaki moduł lub etap chcesz zlecić?');
+    expect(element.querySelector('textarea#message')?.hasAttribute('required')).toBeFalse();
+    expect(element.querySelector('select#projectType')?.hasAttribute('required')).toBeFalse();
+    expect(element.querySelector('.additional-information')?.hasAttribute('open')).toBeFalse();
     expect(text).not.toMatch(/\bintent\b|\bpayload\b|\bprojectType\b/i);
   });
 
-  it('preselects the partner category and shows partner-specific guidance', () => {
+  it('preserves the partner category without exposing a mandatory technical questionnaire', () => {
     projectTypeParams$.next(convertToParamMap({ projectType: 'software_house_partnership' }));
     const fixture = TestBed.createComponent(ContactFormComponent);
     fixture.detectChanges();
@@ -125,10 +126,11 @@ describe('ContactFormComponent', () => {
     expect(fixture.componentInstance.form.controls.projectType.value).toBe(
       'software_house_partnership',
     );
-    expect(text).toContain('Jaki moduł lub etap chcesz zlecić?');
-    expect(text).toContain('Jaki jest obecny stos i stan projektu?');
-    expect(text).toContain('Jakiego modelu współpracy potrzebujesz?');
-    expect(text).not.toContain('Co jest dziś wykonywane ręcznie?');
+    expect(text).toContain('O czym chcesz porozmawiać?');
+    expect(text).not.toContain('Jaki moduł lub etap chcesz zlecić?');
+    expect(
+      fixture.nativeElement.querySelector('.additional-information')?.hasAttribute('open'),
+    ).toBeFalse();
   });
 
   it('preselects the quick-validation intent from an allowlisted query param', () => {
@@ -302,6 +304,8 @@ describe('ContactFormComponent', () => {
       'organization',
     );
     expect((element.querySelector('#budgetRange') as HTMLSelectElement).required).toBeFalse();
+    expect((element.querySelector('#projectType') as HTMLSelectElement).required).toBeFalse();
+    expect((element.querySelector('#message') as HTMLTextAreaElement).required).toBeFalse();
     const additionalInformation = element.querySelector(
       'details.additional-information',
     ) as HTMLDetailsElement;
@@ -311,6 +315,8 @@ describe('ContactFormComponent', () => {
       'Dodatkowe informacje — opcjonalnie',
     );
     expect(additionalInformation.querySelector('#budgetRange')).not.toBeNull();
+    expect(additionalInformation.querySelector('#company')).not.toBeNull();
+    expect(additionalInformation.querySelector('#projectType')).not.toBeNull();
     expect(element.querySelector('#message')?.getAttribute('aria-describedby')).toBe(
       'message-hint',
     );
@@ -398,12 +404,8 @@ describe('ContactFormComponent', () => {
     expect(fixture.componentInstance.form.controls.budgetRange.valid).toBeTrue();
     expect(fixture.nativeElement.textContent).toContain('Budżet orientacyjny');
     expect(fixture.nativeElement.textContent).toContain('Jeszcze nie wiem');
-    expect(fixture.nativeElement.textContent).toContain(
-      'Opisz obecny proces lub potrzebne wsparcie',
-    );
-    expect(fixture.nativeElement.textContent).toContain('Co jest dziś wykonywane ręcznie?');
-    expect(fixture.nativeElement.textContent).toContain('Kto korzysta z procesu?');
-    expect(fixture.nativeElement.textContent).toContain('Jaki rezultat chcesz uzyskać?');
+    expect(fixture.nativeElement.textContent).toContain('O czym chcesz porozmawiać?');
+    expect(fixture.nativeElement.textContent).toContain('Możesz zostawić to pole puste');
     expect(fixture.nativeElement.querySelector('#message')?.getAttribute('aria-describedby')).toBe(
       'message-hint',
     );
@@ -423,6 +425,56 @@ describe('ContactFormComponent', () => {
 
     expect(api.submit).toHaveBeenCalledWith(jasmine.objectContaining({ budgetRange: 'not_sure' }));
     expect(projectTypeOptions).toHaveSize(10);
+  });
+
+  it('sends a clearly marked contact request when the topic and message are blank', () => {
+    projectTypeParams$.next(convertToParamMap({}));
+    const fixture = TestBed.createComponent(ContactFormComponent);
+    fixture.detectChanges();
+    const api = TestBed.inject(ContactApiService) as jasmine.SpyObj<ContactApiService>;
+
+    fixture.componentInstance.form.patchValue({
+      name: 'Anna',
+      email: 'anna@example.com',
+      message: '',
+      consent: true,
+    });
+    expect(fixture.componentInstance.form.valid).toBeTrue();
+    fixture.componentInstance.submit();
+    expect(api.submit).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        name: 'Anna',
+        projectType: 'other',
+        budgetRange: 'not_sure',
+        message: 'Zgłoszenie bez opisu. Proszę o kontakt w sprawie możliwej współpracy.',
+        consent: true,
+      }),
+    );
+    fixture.detectChanges();
+    expect(fixture.nativeElement.textContent).toContain('Bez opisu — prośba o kontakt.');
+    expect(fixture.nativeElement.querySelector('.submission-summary')?.textContent)
+      .not.toContain('Temat rozmowy');
+  });
+
+  it('still requires explicit contact consent and rejects too-short nonempty messages', () => {
+    projectTypeParams$.next(convertToParamMap({}));
+    const fixture = TestBed.createComponent(ContactFormComponent);
+    fixture.detectChanges();
+    const api = TestBed.inject(ContactApiService) as jasmine.SpyObj<ContactApiService>;
+
+    fixture.componentInstance.form.patchValue({
+      name: 'Anna',
+      email: 'anna@example.com',
+      message: 'Cześć',
+    });
+    expect(fixture.componentInstance.form.invalid).toBeTrue();
+    fixture.componentInstance.form.controls.consent.setValue(true);
+    expect(fixture.componentInstance.form.controls.message.invalid).toBeTrue();
+    fixture.componentInstance.form.controls.message.setValue('');
+    expect(fixture.componentInstance.form.valid).toBeTrue();
+    fixture.componentInstance.form.controls.consent.setValue(false);
+    fixture.componentInstance.submit();
+    expect(api.submit).not.toHaveBeenCalled();
   });
 
   it('shows and focuses the success path with a reset action and a home link', fakeAsync(() => {

@@ -170,7 +170,7 @@ const routeMetadata = [
     label: 'Kontakt',
     title: brandTitle('Kontakt i rozmowa wstępna'),
     description: brandDescription(
-      'Krótki formularz do rozmowy o demo w 7 dni, aplikacji, integracji lub automatyzacji.',
+      'Skontaktuj się z Protolume w sprawie aplikacji, automatyzacji lub pomysłu. Wystarczą imię i e-mail — bez gotowej specyfikacji.',
     ),
     kind: 'contact',
   },
@@ -984,16 +984,17 @@ export const siteContent = {
   contact: {
     path: '/kontakt',
     eyebrow: 'Kontakt',
-    title: 'Opisz proces lub potrzebne wsparcie',
-    lead: 'Wystarczą 2–3 zdania o procesie i oczekiwanym rezultacie. Nie potrzebujesz specyfikacji.',
+    title: 'Masz pomysł albo problem do rozwiązania?',
+    lead: 'Napisz do nas. Wystarczą imię i e-mail. Nie potrzebujesz specyfikacji.',
     nextSteps: [
       'Sprawdzam, jakie informacje są potrzebne do dalszej rozmowy.',
       'Wskażę właściwą ścieżkę: demo, walidację, plan prac albo wdrożenie.',
       'Dalsze ustalenia są przed płatną realizacją.',
     ],
     noSpecificationNeeded: 'Nie potrzebujesz specyfikacji.',
-    messageLabel: 'Opisz obecny proces lub potrzebne wsparcie',
-    messageMinimumHint: 'Minimum 20 znaków, maksymalnie 4000.',
+    messageLabel: 'O czym chcesz porozmawiać?',
+    messageMinimumHint:
+      'Możesz zostawić to pole puste — wyślemy prośbę o kontakt. Jeśli wpisujesz opis, podaj co najmniej 20 znaków.',
     additionalInformationLabel: 'Dodatkowe informacje — opcjonalnie',
     messageGuidance: {
       generalLabel: 'Pomoc do opisu procesu',
@@ -1019,13 +1020,13 @@ export const siteContent = {
         'Formularz wymaga JavaScriptu. Publiczny alternatywny adres kontaktowy nie jest obecnie skonfigurowany — wróć po włączeniu JavaScriptu.',
     },
     formLabel: 'Formularz kontaktowy',
-    formNextStep: 'Po wysłaniu opisu potwierdzimy jego przyjęcie i wskażemy właściwy kolejny krok.',
+    formNextStep: 'Po otrzymaniu wiadomości ustalimy z Tobą najlepszy następny krok.',
     budgetHint: 'Budżet jest opcjonalny. Jeśli go nie znasz, zostaw pole puste.',
     consent: 'Wyrażam zgodę na kontakt w sprawie tego zapytania zgodnie z',
     consentLinkLabel: 'polityką prywatności',
 
     consentAfterLink: '.',
-    submit: 'Wyślij opis',
+    submit: 'Wyślij zapytanie',
     submitting: 'Wysyłanie...',
     messages: {
       success: 'Dziękuję. Wiadomość została przyjęta.',
@@ -1037,9 +1038,9 @@ export const siteContent = {
     },
     success: {
       title: 'Wiadomość została odebrana',
-      summaryTitle: 'Wysłany opis',
+      summaryTitle: 'Twoje zgłoszenie',
       nextStep:
-        'Na podstawie opisu wskażemy właściwą ścieżkę: demo, walidację, plan prac albo wdrożenie.',
+        'Skontaktujemy się w sprawie możliwego następnego kroku. Nie musisz przygotowywać specyfikacji.',
       homeCta: { label: 'Wróć na stronę główną', path: '/' },
       anotherInquiryLabel: 'Wyślij kolejne zapytanie',
       directEmailLead: 'Jeśli wolisz, możesz również skontaktować się bezpośrednio:',
@@ -1057,7 +1058,7 @@ export const siteContent = {
     administratorTitle: 'Administrator i kontakt',
     dataScopeTitle: 'Zakres zbieranych danych',
     dataScopeItems: [
-      'Formularz zbiera imię i nazwisko, adres e-mail, opcjonalną nazwę firmy, rodzaj projektu, opcjonalny budżet oraz treść wiadomości.',
+      'Formularz zbiera imię lub imię i nazwisko oraz adres e-mail. Nazwa firmy, temat projektu, budżet i opis są opcjonalne; gdy nie wpisano opisu, przekazywana jest informacja o prośbie o kontakt.',
     ],
     transmissionTitle: 'Sposób przesyłania danych',
     transmissionDescription:

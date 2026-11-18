@@ -225,7 +225,7 @@ describe('Site content model', () => {
 
   it('keeps contact guidance low-pressure and explicit about the next step', () => {
     expect(siteContent.contact.noSpecificationNeeded).toBe('Nie potrzebujesz specyfikacji.');
-    expect(siteContent.contact.messageLabel).toBe('Opisz obecny proces lub potrzebne wsparcie');
+    expect(siteContent.contact.messageLabel).toBe('O czym chcesz porozmawiać?');
     expect(siteContent.contact.additionalInformationLabel).toBe(
       'Dodatkowe informacje — opcjonalnie',
     );
@@ -246,7 +246,7 @@ describe('Site content model', () => {
     expect(siteContent.contact.directEmail).toBe('sales@contact.test');
     expect(siteContent.contact.budgetHint).toContain('opcjonalny');
     expect(siteContent.contact.formNextStep).toContain('Po wysłaniu opisu');
-    expect(siteContent.contact.success.summaryTitle).toBe('Wysłany opis');
+    expect(siteContent.contact.success.summaryTitle).toBe('Twoje zgłoszenie');
   });
 
   it('defines a scoped software-house partnership offer without unsupported commitments', () => {
