@@ -20,9 +20,7 @@ describe('ContactPageComponent', () => {
     expect(fixture.nativeElement.querySelectorAll('h1')).toHaveSize(1);
     expect(fixture.nativeElement.querySelector('app-contact-form')).not.toBeNull();
     expect(fixture.nativeElement.textContent).toContain('Masz pomysł albo problem do rozwiązania?');
-    expect(fixture.nativeElement.textContent).toContain(
-      'Wystarczą imię i e-mail',
-    );
+    expect(fixture.nativeElement.textContent).toContain('Wystarczą imię i e-mail');
     expect(fixture.nativeElement.textContent).toContain('Nie potrzebujesz specyfikacji.');
     expect(fixture.nativeElement.textContent).toContain(
       'Wysłanie formularza nie jest zamówieniem, akceptacją wyceny',
