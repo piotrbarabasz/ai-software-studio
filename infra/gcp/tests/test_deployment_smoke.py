@@ -120,7 +120,7 @@ def homepage_html(
         for title, slug in HOME_USE_CASES
     )
     body = (
-        '<h1>Automatyzujemy ręczne procesy w MŚP</h1>'
+        '<h1>Ty rozwijasz biznes. My zajmujemy się technologią.</h1>'
         '<p>Budujemy działające demo jednego przepływu, nie pełną transformację całej firmy.</p>'
         '<section class="hero-proofs">'
         '<p>Rozwiązania</p><p>Aplikacje i integracje</p><p>Studio</p><p>Przykładowy raport</p>'
