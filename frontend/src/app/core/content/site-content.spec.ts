@@ -59,7 +59,7 @@ describe('Site content model', () => {
     expect(siteContent.privacy.transmissionDescription).toContain('API formularza');
   });
 
-  it('keeps homepage content focused on three service pillars and a low-friction sales path', () => {
+  it('keeps homepage content focused on three pillars and an easy contact path', () => {
     expect(siteContent.home.hero.eyebrow).toBe('PROTOLUME · TECHNOLOGIA DLA FIRM');
     expect(siteContent.home.hero.title).toBe('Ty rozwijasz biznes.\nMy zajmujemy się technologią.');
     expect(siteContent.home.hero.lead).toContain('automatyzacje, aplikacje oraz integracje');
