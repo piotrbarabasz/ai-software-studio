@@ -28,7 +28,9 @@ Rozszerzono `scripts/gcp/seo_live_check.py`. Dla każdej publicznej trasy wymaga
 - `index, follow`, zgodności z originem `https://protolume.pl`, poprawnych danych JSON-LD i braku niezweryfikowanych danych typu rating/price;
 - spójnego build SHA, robots.txt i sitemap.xml.
 
-Testy pokrywają brakujący H1, duplikaty title/description i błędne Open Graph URL.
+Testy pokrywają brakujący/duplikowany H1, duplikaty title/description, błędne Open Graph URL oraz brakujący, błędnie typowany lub nie-PNG asset social preview.
+
+Live check pobiera także zatwierdzony obraz social preview i sprawdza HTTP 200, MIME oraz sygnaturę PNG.
 
 ### C. Release gate
 - Cloud Build po istniejącym `deployment-read-only-smoke` uruchamia nowy `production-seo-live-check` z oczekiwanym `$SHORT_SHA`.
