@@ -61,7 +61,7 @@ describe('Site content model', () => {
 
   it('keeps homepage content focused on three service pillars and a low-friction sales path', () => {
     expect(siteContent.home.hero.eyebrow).toBe('PROTOLUME · TECHNOLOGIA DLA FIRM');
-    expect(siteContent.home.hero.title).toBe('Ty rozwijasz biznes.\\nMy zajmujemy się technologią.');
+    expect(siteContent.home.hero.title).toBe('Ty rozwijasz biznes.\nMy zajmujemy się technologią.');
     expect(siteContent.home.hero.lead).toContain('automatyzacje, aplikacje oraz integracje');
     expect(siteContent.home.hero.lead).toContain('AI wykorzystujemy tam, gdzie naprawdę pomaga');
     expect(siteContent.home.hero.supportingLine).toBe(
