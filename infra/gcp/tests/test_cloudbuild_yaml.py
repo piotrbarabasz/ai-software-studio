@@ -553,6 +553,28 @@ class CloudBuildYamlTest(unittest.TestCase):
                 self.assertNotIn("deploy_cloud_run.py", source)
                 self.assertNotIn("gcloud run deploy", source)
 
+    def test_cloud_sdk_steps_use_bundled_python_instead_of_removed_system_python(self) -> None:
+        config = load_config("cloudbuild.deploy.yaml")
+        cloud_sdk_steps = {
+            step["id"]: step
+            for step in config["steps"]
+            if step["name"] == "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"
+        }
+        expected_scripts = {
+            "cloud-run-iam-audit": "scripts/gcp/audit_cloud_run_iam.py",
+            "backend-deploy": "scripts/gcp/deploy_cloud_run.py",
+            "frontend-deploy": "scripts/gcp/deploy_cloud_run.py",
+        }
+        self.assertEqual(set(cloud_sdk_steps), set(expected_scripts))
+        for step_id, script in expected_scripts.items():
+            with self.subTest(step=step_id):
+                step = cloud_sdk_steps[step_id]
+                self.assertEqual(
+                    step["entrypoint"],
+                    "/usr/lib/google-cloud-sdk/platform/bundledpythonunix/bin/python3",
+                )
+                self.assertEqual(step["args"][0], script)
+
     def test_routine_deploy_does_not_mutate_iam_or_allow_manual_tag(self) -> None:
         source = (GCP_ROOT / "cloudbuild.deploy.yaml").read_text(encoding="utf-8")
 
