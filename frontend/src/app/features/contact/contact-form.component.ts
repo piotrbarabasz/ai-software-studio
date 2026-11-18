@@ -84,10 +84,6 @@ export class ContactFormComponent implements OnInit {
   serviceContext?: ServiceContext;
   serviceLabel?: string;
 
-  get isPartnerContext(): boolean {
-    return this.form.controls.projectType.value === 'software_house_partnership';
-  }
-
   ngOnInit(): void {
     if (!this.route) {
       return;
