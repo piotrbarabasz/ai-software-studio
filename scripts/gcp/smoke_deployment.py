@@ -454,7 +454,7 @@ def _check_public_routes(
             h1 = " ".join(text for tag, text in parser.headings if tag == "h1")
             if not h1:
                 errors.append("public route /: expected an h1 element, received none")
-            for phrase in ("Automatyzujemy ręczne procesy", "MŚP"):
+            for phrase in ("Ty rozwijasz biznes.", "My zajmujemy się technologią."):
                 if phrase.lower() not in h1.lower():
                     errors.append(f"public route /: h1 must contain {phrase!r}")
             if parser.home_pillar_count != 3:
