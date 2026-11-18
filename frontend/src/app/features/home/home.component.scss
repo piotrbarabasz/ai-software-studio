@@ -57,7 +57,7 @@
   margin: 0;
 }
 .hero h1 {
-  max-width: 14ch;
+  max-width: 18ch;
   margin: 0;
   font-size: clamp(2.75rem, 4.5vw, 4.8rem);
   line-height: 0.98;
@@ -131,31 +131,39 @@
   justify-content: flex-end;
   padding-top: 0.25rem;
 }
-.home-service-list {
+.home-pillar-grid {
   display: grid;
-  gap: 0.75rem;
-  padding: 0;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+.home-pillar {
+  min-height: 100%;
+  grid-template-rows: auto auto auto 1fr auto;
+  gap: 0.9rem;
+}
+.home-pillar h3 {
   margin: 0;
-  list-style: none;
+  font-size: clamp(1.25rem, 1.8vw, 1.55rem);
 }
-.home-service-list a {
-  display: grid;
-  grid-template-columns: minmax(10rem, 0.7fr) minmax(0, 1.3fr);
-  gap: 0.5rem 1.5rem;
-  padding: 1rem;
-  min-height: 44px;
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-control);
-  color: var(--text-primary);
-  text-decoration: none;
+.home-pillar p {
+  margin: 0;
 }
-.home-service-list a:hover {
-  background: var(--surface-brand);
+.pillar-number {
+  color: var(--color-primary);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
 }
-@media (max-width: 600px) {
-  .home-service-list a {
-    grid-template-columns: 1fr;
-  }
+.pillar-problem {
+  color: var(--text-secondary);
+}
+.pillar-outcome {
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--border-subtle);
+}
+.home-pillar .secondary-action {
+  justify-self: start;
+  margin-top: 0.25rem;
 }
 .use-cases-link {
   display: inline-flex;
@@ -370,11 +378,13 @@
 }
 @media (max-width: 760px) {
   .trust-strip ul,
-  .evidence-teaser-grid {
+  .evidence-teaser-grid,
+  .home-pillar-grid {
     grid-template-columns: minmax(0, 1fr);
   }
   .hero-actions,
   .hero-actions a,
+  .home-pillar .secondary-action,
   .evidence-teaser-card .secondary-action,
   .owner-card-panel .secondary-action,
   .closing-cta-panel .primary-action {
