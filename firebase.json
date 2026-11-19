@@ -1,0 +1,217 @@
+{
+  "hosting": {
+    "public": "landing/dist",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "redirects": [
+      {
+        "source": "/demo-w-7-dni",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/demo-w-7-dni/",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/demo-ai",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/demo-ai/",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/przyklad-demo",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/przyklad-demo/",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/produkty",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/produkty/",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/produkty/**",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/rozwiazania",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/rozwiazania/",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/rozwiazania/**",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/chatbot-ai-dla-firm",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/chatbot-ai-dla-firm/",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/voice-ai-dla-firm",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/voice-ai-dla-firm/",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/automatyzacja-procesow",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/automatyzacja-procesow/",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/integracje-whatsapp-crm",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/integracje-whatsapp-crm/",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/systemy-agentowe",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/systemy-agentowe/",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/dla-software-house",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/dla-software-house/",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/development",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/development/",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/studio",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/studio/",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/rd",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/rd/",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/kontakt",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/kontakt/",
+        "destination": "/",
+        "type": 301
+      }
+    ],
+    "headers": [
+      {
+        "source": "**",
+        "headers": [
+          {
+            "key": "Content-Security-Policy",
+            "value": "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' https://formspree.io; form-action 'self' https://formspree.io mailto:; font-src 'self'; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; upgrade-insecure-requests"
+          },
+          {
+            "key": "Referrer-Policy",
+            "value": "strict-origin-when-cross-origin"
+          },
+          {
+            "key": "X-Content-Type-Options",
+            "value": "nosniff"
+          },
+          {
+            "key": "X-Frame-Options",
+            "value": "DENY"
+          },
+          {
+            "key": "Permissions-Policy",
+            "value": "camera=(), microphone=(), geolocation=()"
+          }
+        ]
+      },
+      {
+        "source": "**/*.html",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, max-age=0, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "/index.html",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, max-age=0, must-revalidate"
+          }
+        ]
+      }
+    ]
+  }
+}
