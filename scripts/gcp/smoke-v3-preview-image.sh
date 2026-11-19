@@ -53,7 +53,11 @@ fi
 grep -qi '^X-Robots-Tag: noindex, nofollow' "$work_dir/home.headers"
 grep -q 'name="robots" content="noindex, nofollow"' "$work_dir/home.body"
 grep -q 'data-endpoint=""' "$work_dir/home.body"
-grep -q 'Sprawdźmy, jak' "$work_dir/home.body"
+grep -q 'Automatyzacje AI dla firm' "$work_dir/home.body"
+grep -q 'id="obszary"' "$work_dir/home.body"
+grep -q 'id="wspolpraca"' "$work_dir/home.body"
+grep -q 'id="rozwiazania"' "$work_dir/home.body"
+grep -q 'id="kontakt"' "$work_dir/home.body"
 
 fetch "/polityka-prywatnosci/" "privacy"
 [ "$(status "$work_dir/privacy.headers")" = "200" ]

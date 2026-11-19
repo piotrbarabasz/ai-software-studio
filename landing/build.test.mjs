@@ -9,22 +9,45 @@ function read(path) {
   return readFileSync(new URL('./dist/' + path, import.meta.url), 'utf8');
 }
 
-test('preview is a single page with a non-deceptive mailto fallback', () => {
+test('preview is a minimal one-page offer with clear areas and honest contact fallback', () => {
   build('preview', {});
   const html = read('index.html');
   const policy = read('polityka-prywatnosci/index.html');
   const robots = read('robots.txt');
 
   assert.equal((html.match(/<h1\b/g) || []).length, 1);
-  assert.match(html, /Sprawdźmy, jak/);
-  assert.match(html, /Piotr Barabasz/);
+  assert.match(html, /Automatyzacje AI dla firm, które tracą czas/);
+  assert.match(html, /<main id="main-content"/);
+  assert.match(html, /id="obszary"/);
+  assert.match(html, /id="wspolpraca"/);
+  assert.match(html, /id="rozwiazania"/);
+  assert.match(html, /id="kontakt"/);
+
+  // Six concrete automation areas, three collaboration steps, four deliverable types.
+  assert.equal((html.match(/<article class="area-card">/g) || []).length, 6);
+  assert.equal((html.match(/<li class="step">/g) || []).length, 3);
+  assert.equal((html.match(/<li class="solution-item">/g) || []).length, 4);
+  assert.match(html, /Obsługa zapytań i wiadomości/);
+  assert.match(html, /Leady i zgłoszenia/);
+  assert.match(html, /Dokumenty i dane/);
+  assert.match(html, /Zadania wieloetapowe/);
+  assert.match(html, /Integracje i kanały/);
+  assert.match(html, /Wiedza firmy/);
+  assert.match(html, /Dedykowane aplikacje/);
+
+  assert.match(html, /href="#obszary"/);
+  assert.match(html, /href="#kontakt"/);
+  assert.doesNotMatch(html, /<nav\b|class="identity"|zaufani[ae]|case stud(?:y|ies)|portfolio|demo w 7 dni/i);
+  assert.match(html, /Piotr Barabasz/); // Footer attribution, not a trust section.
+
   assert.match(html, /id="contact-form"/);
+  assert.match(html, /name="name"/);
+  assert.match(html, /name="email"/);
   assert.match(html, /name="message"/);
   assert.match(html, /data-endpoint=""/);
   assert.match(html, /action="#"/);
   assert.match(html, /noindex, nofollow/);
   assert.doesNotMatch(html, /__FORM_|__ROBOTS__/);
-  assert.doesNotMatch(html, /demo w 7 dni|nasza oferta|portfolio|CRM|FastAPI/i);
   assert.match(policy, /Wersja robocza/);
   assert.match(policy, /noindex, nofollow/);
   assert.match(robots, /Disallow: \//);
