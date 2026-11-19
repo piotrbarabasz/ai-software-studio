@@ -1,0 +1,106 @@
+# MANUAL ONLY. Do not attach this config to deploy-prod or another push trigger.
+# Builds Protolume v3 as a preview-only image and deploys a tagged revision of
+# the EXISTING Cloud Run frontend service with --no-traffic (0% domain traffic).
+substitutions:
+  _PROJECT_ID: "ai-software-studio-501918"
+  _REGION: "europe-central2"
+  _ARTIFACT_REPO: "aisoftware-studio"
+  _FRONTEND_SERVICE: "aisoftware-studio-web"
+  _PREVIEW_IMAGE_NAME: "protolume-v3-review"
+  _PREVIEW_TAG: "v3-review"
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+steps:
+  - id: preview-guard-tests
+    name: python:3.12-slim
+    entrypoint: python
+    args:
+      - -m
+      - unittest
+      - discover
+      - -s
+      - scripts/gcp/tests
+      - -p
+      - test_v3_cloudrun_preview_guard.py
+
+  - id: static-v3-checks
+    name: node:22.22.3-bookworm-slim
+    entrypoint: sh
+    waitFor: ["preview-guard-tests"]
+    args:
+      - -c
+      - >-
+        node --test landing/build.test.mjs landing/deployment.test.mjs
+        scripts/protolume.test.mjs scripts/v3-cloudrun-preview.test.mjs &&
+        node landing/build.mjs --preview &&
+        node landing/verify-dist.mjs --preview
+
+  - id: existing-service-baseline
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: /usr/lib/google-cloud-sdk/platform/bundledpythonunix/bin/python3
+    waitFor: ["static-v3-checks"]
+    args:
+      - scripts/gcp/v3_cloudrun_preview_guard.py
+      - before
+      - "--project=$_PROJECT_ID"
+      - "--region=$_REGION"
+      - "--service=$_FRONTEND_SERVICE"
+      - "--tag=$_PREVIEW_TAG"
+
+  - id: v3-preview-image-build
+    name: gcr.io/cloud-builders/docker
+    waitFor: ["existing-service-baseline"]
+    args:
+      - build
+      - -f
+      - landing/Dockerfile.cloudrun
+      - -t
+      - "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_PREVIEW_IMAGE_NAME:$BUILD_ID"
+      - .
+
+  - id: v3-preview-container-smoke
+    name: gcr.io/cloud-builders/docker
+    entrypoint: sh
+    waitFor: ["v3-preview-image-build"]
+    args:
+      - -c
+      - >-
+        sh scripts/gcp/smoke-v3-preview-image.sh
+        "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_PREVIEW_IMAGE_NAME:$BUILD_ID"
+
+  - id: v3-preview-image-push
+    name: gcr.io/cloud-builders/docker
+    waitFor: ["v3-preview-container-smoke"]
+    args:
+      - push
+      - "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_PREVIEW_IMAGE_NAME:$BUILD_ID"
+
+  - id: v3-preview-deploy-zero-traffic
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: gcloud
+    waitFor: ["v3-preview-image-push"]
+    args:
+      - run
+      - deploy
+      - "$_FRONTEND_SERVICE"
+      - "--project=$_PROJECT_ID"
+      - "--region=$_REGION"
+      - --platform=managed
+      - "--image=$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_PREVIEW_IMAGE_NAME:$BUILD_ID"
+      - --no-traffic
+      - "--tag=$_PREVIEW_TAG"
+      - --quiet
+
+  - id: verify-live-traffic-unchanged
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: /usr/lib/google-cloud-sdk/platform/bundledpythonunix/bin/python3
+    waitFor: ["v3-preview-deploy-zero-traffic"]
+    args:
+      - scripts/gcp/v3_cloudrun_preview_guard.py
+      - after
+      - "--project=$_PROJECT_ID"
+      - "--region=$_REGION"
+      - "--service=$_FRONTEND_SERVICE"
+      - "--tag=$_PREVIEW_TAG"

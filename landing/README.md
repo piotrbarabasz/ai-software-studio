@@ -55,21 +55,15 @@ Linux/macOS:
 
 **Fail-closed:** produkcyjny build kończy się błędem bez obu konfiguracji, przy niewłaściwym endpointcie HTTPS lub nieprawidłowych danych prawnych.
 
-## Hosting i migracja — oddzielne działanie po zatwierdzeniu
+## Cloud Run Preview na istniejącym hostingu
 
-Ręczne pipeline'y preview/live, wymagania IAM i checklistę cutover/rollback opisuje docs/protolume-v3-static-deployment.md.
+Obecna architektura to Cloud Run, usługa `aisoftware-studio-web` w projekcie `ai-software-studio-501918`. Nie tworzymy nowego Firebase ani nie zmieniamy DNS.
 
+Po review tego PR: `make preview` (na Windows bez GNU Make: `node scripts/protolume.mjs preview`) buduje testową rewizję z **0% ruchu**, tagiem `v3-review` i osobnym URL. Nie wykonuje deploymentu produkcyjnego v3.
 
-Plik firebase.json w głównym katalogu opisuje nową witrynę na Firebase Hosting, nagłówki bezpieczeństwa oraz przekierowania starych URL-i na /.
+Przeczytaj `docs/protolume-v3-cloudrun-preview.md` przed uruchomieniem. Użyj konta z uprawnieniami do tego projektu — lokalny `.env` nie nadaje IAM.
 
-1. Potwierdź dostęp do Firebase Hosting w wybranym projekcie GCP i dodaj docelową domenę.
-2. Zweryfikuj ręcznie wygląd na desktop/mobile, formularz, politykę prywatności, CSP i wszystkie przekierowania.
-3. Sprawdź w Search Console ruch do historycznych URL-i. Jeśli jakiś adres ma istotny ruch, oceń skutki przekierowania na stronę główną (zamiast mechanicznego 301).
-4. Przetestuj produkcyjny build i realną dostawę co najmniej dwóch zapytań: pusty opis i wypełniony opis, plus błędny e-mail i błąd dostawcy.
-5. Dopiero po odrębnej zgodzie wykonaj zmianę DNS/hostingu. Obecny trigger Cloud Build na push do master wdraża **stare** usługi Cloud Run — trzeba go wyłączyć/przestawić przed zmianą sposobu publikacji; samo zmergowanie kodu strony nie przełącza hostingu.
-6. Po potwierdzeniu ruchu i dostaw kontaktowych usuń starą usługę FastAPI, zbędne sekrety SMTP/konfigurację wdrożenia i osierocone testy oraz stare komponenty ze starego frontendu w osobnym porządkującym PR.
-
-**Ten PR nie wykonuje merge, deploymentu, migracji domeny ani usuwania zasobów.**
+Starszy plan Firebase i pliki `firebase.json` / `cloudbuild.landing-preview.yaml` pozostają jako historyczna alternatywa, nie są aktualną ścieżką release. `make release` jest zablokowane do czasu osobnej akceptacji formularza, polityki prywatności i planu cutover.
 
 ## Akceptacja
 

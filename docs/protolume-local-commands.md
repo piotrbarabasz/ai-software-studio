@@ -1,83 +1,46 @@
-# Protolume — lokalne .env i krótkie komendy
+# Protolume v3 — lokalne .env i polecenia
 
-Cel: bez przełączania globalnego konta GCP między Tripse a Protolume, bez ręcznego wpisywania długich poleceń i bez osobnych instrukcji dla Bash/PowerShell.
+**Aktualny kierunek: istniejący Cloud Run, nie Firebase Hosting.**
+Zatwierdzony projekt z logów produkcyjnego deployu: ai-software-studio-501918, usługa aisoftware-studio-web, region europe-central2.
 
-## Pierwsze uruchomienie (Windows PowerShell)
+## Pierwsze uruchomienie w PowerShell
 
-W katalogu D:\Projects\ai-software-studio (po git pull origin master):
-
-    Copy-Item .env.example .env
+    cd D:\Projects\ai-software-studio
+    git pull origin master
+    if (!(Test-Path .env)) { Copy-Item .env.example .env }
     notepad .env
 
-Domyślny szablon:
+Przykładowa konfiguracja (bez danych tajnych):
 
     GCP_PROJECT_ID=ai-software-studio-501918
     GCP_ACCOUNT=kontakt@protolume.pl
     GCP_REGION=europe-central2
-    FIREBASE_PREVIEW_CHANNEL=protolume-v3-review
+    CLOUD_RUN_PREVIEW_TAG=v3-review
     FORM_ENDPOINT=
     PUBLIC_LEGAL_CONFIG_PATH=
 
-Nie wpisuj tu haseł, kluczy JSON, tokenów, pełnych danych prawnych ani sekretów SMTP. .env jest lokalny i ignorowany przez Git i gcloud. W Cloud Build konfiguracja prawna nadal pochodzi z Secret Manager.
+**Ważne:** jeśli twój lokalny plik .env pochodzi z poprzedniego PR i ma jeszcze FIREBASE_PREVIEW_CHANNEL, usuń tę linię i wpisz CLOUD_RUN_PREVIEW_TAG=v3-review. Runner zachowuje domyślny v3-review również dla starego lokalnego .env.
 
-Upewnij się, że konto jest zalogowane w gcloud:
+GCP_ACCOUNT musi wskazywać konto **mające prawo uruchamiać Cloud Build w tym projekcie**. Sam plik .env nie nadaje IAM. Jeżeli kontakt@protolume.pl nadal nie ma dostępu, najpierw nadaj minimalne role uprawnionemu użytkownikowi lub użyj już uprawnionego konta.
 
-    gcloud auth login kontakt@protolume.pl
+## Krótkie komendy
 
-## Użycie z GNU Make
+| GNU Make | Bez Make (Windows/PowerShell) | Działanie |
+| --- | --- | --- |
+| make check | node scripts/protolume.mjs check | Testy bez GCP |
+| make preview-local | node scripts/protolume.mjs preview-local | Lokalny katalog landing/dist |
+| make doctor | node scripts/protolume.mjs doctor | Read-only projekt i bucket Cloud Build |
+| make preview | node scripts/protolume.mjs preview | Ręczny build + Cloud Run v3 w oddzielnej rewizji **0% ruchu** |
+| make build-production | node scripts/protolume.mjs build-production | Tylko lokalny build wymagający legal JSON i Formspree |
+| make release | node scripts/protolume.mjs release | **ZABLOKOWANE** do osobnej akceptacji produkcyjnej |
 
-    make help
-    make doctor
-    make check
-    make preview-local
-    make preview
+Nie musisz przełączać aktywnego gcloud project przy zmianie pracy między Tripse i Protolume; skrypt do każdego `gcloud` przekazuje jawne `--project` i `--account`.
 
-**Na Windows GNU Make nie zawsze jest zainstalowany.** Jeśli PowerShell zgłosi, że make nie istnieje, skorzystaj z równoważnych poleceń Node 22+ (bez instalowania Make):
+## Ochrona
 
-    node scripts/protolume.mjs help
-    node scripts/protolume.mjs doctor
-    node scripts/protolume.mjs check
-    node scripts/protolume.mjs preview-local
-    node scripts/protolume.mjs preview
+- .env jest ignorowany przez Git oraz wykluczony ze źródłowego uploadu Cloud Build. Nie przechowuj tam tokenów, haseł ani JSON ze szczegółami prawnymi.
+- make preview nie dotyka Firebase Hosting, domeny ani ruchu prod; Cloud Build wdraża nową rewizję usługi z `--no-traffic --tag=v3-review` i weryfikuje stan.
+- Główny trigger deploy-prod pozostaje pod starym Angular/FastAPI; merge kodu na master uruchamia jego dotychczasową ścieżkę.
+- make release nie publikuje do Firebase ani Cloud Run. Formspree + RODO + cutover będą osobnym krokiem.
 
-Skrypt odczytuje lokalny plik .env i przekazuje do każdego wywołania gcloud jawne flagi --account oraz --project. **Nie zmienia globalnej aktywnej konfiguracji gcloud** (nawet jeśli ta wskazuje tripse-ai).
-
-- doctor: odczyt projektu i sprawdzenie uprawnień do domyślnego bucketu Cloud Build; może zwrócić błąd, jeśli konto nie ma IAM lub bucket nie istnieje.
-- check: lokalne testy (bez GCP).
-- preview-local: generowanie landing/dist w trybie noindex, bez GCP.
-- preview: testy + lokalny podgląd + ręczne wysłanie źródeł do Cloud Build, wyłącznie preview channel Firebase; nie zmienia protolume.pl.
-- build-production: lokalny, niepublikowany build produkcyjny; wymaga poprawnego FORM_ENDPOINT i zatwierdzonego pliku legal JSON pod PUBLIC_LEGAL_CONFIG_PATH.
-- release: **operacja produkcyjna** — wymaga istniejącego Formspree, przejścia testów oraz ręcznego wpisania ciągu PUBLISH_PROTOLUME_V3_LIVE w interaktywnym terminalu. Nie uruchamia się automatycznie w CI. W Cloud Build pozostają dodatkowe blokady sekretu/RODO.
-
-Wszystkie komendy mają jasno określone środowisko. Parametr GCP_REGION dokumentuje region dotychczasowego Cloud Run, ale obecne buildy statyczne nie wymagają jawnego przekazywania regionu do Cloud Build.
-
-## Gdy doctor lub preview nie działa z powodu IAM
-
-Komunikat z wcześniejszej próby:
-
-    forbidden from accessing bucket ai-software-studio-501918_cloudbuild
-
-nie wynikał z braku .env. Nowy wrapper nie nadaje uprawnień i nie tworzy bucketu. Sprawdź IAM dla kontakt@protolume.pl: serviceusage.services.use, Cloud Build submit, uprawnienia do bucketu źródłowego i czy bucket rzeczywiście istnieje. Należy użyć uprawnień minimalnych koniecznych dla konta, nie nadawać ról na ślepo.
-
-Zweryfikuj najpierw:
-
-    make doctor
-
-lub:
-
-    node scripts/protolume.mjs doctor
-
-Dopiero po naprawie IAM:
-
-    make preview
-
-## Zasady bezpieczeństwa
-
-- .env nie jest komitowany; gcloud source staging respektuje .gcloudignore i .gitignore.
-- FORM_ENDPOINT nie jest kluczem tajnym, ale musi wskazywać prawdziwy Formspree.
-- Brak pliku .env albo błędne konto/projekt zatrzymują komendę — bez przechodzenia na aktywny projekt gcloud.
-- Deployment live nie następuje przy merge PR ani automatycznie po push na master.
-- Publikacja live do Firebase Hosting i zmiana DNS protolume.pl to dwa osobne kroki.
-- Nie uruchamiaj make release bez osobnej świadomej zgody na wdrożenie produkcyjne.
-
-Powiązana dokumentacja: docs/protolume-v3-static-deployment.md.
+Szczegóły operacyjne: docs/protolume-v3-cloudrun-preview.md.
