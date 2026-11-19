@@ -66,3 +66,11 @@ test('git ignores the real .env and tracks the .env.example template', () => {
   assert.match(template, /GCP_ACCOUNT=kontakt@protolume\.pl/);
   assert.doesNotMatch(template, /password\s*=|secret\s*=|api_key\s*=/i);
 });
+
+test('Cloud Build staging explicitly excludes .env and generated legal files', () => {
+  const ignore = readFileSync(new URL('../.gcloudignore', import.meta.url), 'utf8');
+  assert.match(ignore, /#!include:\.gitignore/);
+  assert.match(ignore, /^\.env$/m);
+  assert.match(ignore, /^\.env\.\*$/m);
+  assert.match(ignore, /frontend\/\.public-legal-config\.json/);
+});
