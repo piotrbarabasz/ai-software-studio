@@ -14,7 +14,6 @@ const PREVIEW_TAG = 'v3-review';
 const PROJECT_PATTERN = /^[a-z][a-z0-9-]{4,28}[a-z0-9]$/;
 const ACCOUNT_PATTERN = /^[A-Za-z0-9.+_-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 const REGION_PATTERN = /^[a-z]+-[a-z]+[0-9]$/;
-const CHANNEL_PATTERN = /^[a-z][a-z0-9-]{0,62}$/;
 const FORMSPREE_PATTERN = /^https:\/\/formspree\.io\/f\/[A-Za-z0-9]+$/;
 
 export function parseEnv(source) {
