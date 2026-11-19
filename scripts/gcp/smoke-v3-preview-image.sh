@@ -24,7 +24,10 @@ fetch() {
   path="$1"
   name="$2"
   docker run --rm --network "container:$container" curlimages/curl:8.10.1 \
-    --silent --show-error --max-time 10 -D "$work_dir/$name.headers" \
+    --silent --show-error --max-time 10 --dump-header - --output /dev/null \
+    "http://127.0.0.1:8080$path" | tr -d '\r' >"$work_dir/$name.headers"
+  docker run --rm --network "container:$container" curlimages/curl:8.10.1 \
+    --silent --show-error --max-time 10 --output - \
     "http://127.0.0.1:8080$path" >"$work_dir/$name.body"
 }
 
