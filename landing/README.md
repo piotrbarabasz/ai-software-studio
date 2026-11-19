@@ -45,6 +45,9 @@ Linux/macOS:
 
 ## Hosting i migracja — oddzielne działanie po zatwierdzeniu
 
+Ręczne pipeline'y preview/live, wymagania IAM i checklistę cutover/rollback opisuje docs/protolume-v3-static-deployment.md.
+
+
 Plik firebase.json w głównym katalogu opisuje nową witrynę na Firebase Hosting, nagłówki bezpieczeństwa oraz przekierowania starych URL-i na /.
 
 1. Potwierdź dostęp do Firebase Hosting w wybranym projekcie GCP i dodaj docelową domenę.
