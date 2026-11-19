@@ -43,7 +43,7 @@
       );
       // This opens a mail client; it does NOT confirm message delivery.
       window.location.href = 'mailto:' + fallbackEmail + '?subject=' + subject + '&body=' + body;
-      setStatus('Otworzono aplikację pocztową. Wyślij wiadomość w swojej poczcie.');
+      setStatus('Jeśli otworzyła się poczta, wyślij w niej wiadomość. Gdy nie działa, napisz na ' + fallbackEmail + '.');
       return;
     }
 
