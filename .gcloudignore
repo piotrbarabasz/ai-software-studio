@@ -1,0 +1,9 @@
+.gcloudignore
+.git/
+.gitignore
+#!include:.gitignore
+# Explicit defense in depth: local environment and generated legal input must not be staged.
+.env
+.env.*
+!.env.example
+frontend/.public-legal-config.json
