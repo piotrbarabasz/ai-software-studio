@@ -1,0 +1,29 @@
+# Manual only. No GitHub/Cloud Build trigger is configured for this file.
+# Builds a noindex preview without any real Formspree endpoint or private legal data.
+substitutions:
+  _PROJECT_ID: "ai-software-studio-501918"
+  _CHANNEL_ID: "protolume-v3-review"
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+steps:
+  - id: static-preview-tests
+    name: node:22.22.3-bookworm-slim
+    entrypoint: sh
+    args:
+      - -c
+      - >-
+        node --test landing/build.test.mjs landing/deployment.test.mjs &&
+        node landing/build.mjs --preview &&
+        node landing/verify-dist.mjs --preview
+
+  - id: publish-firebase-preview-only
+    name: us-docker.pkg.dev/firebase-cli/us/firebase:15.36.0
+    waitFor: ["static-preview-tests"]
+    args:
+      - hosting:channel:deploy
+      - "$_CHANNEL_ID"
+      - "--project=$_PROJECT_ID"
+      - "--expires=7d"
+      - "--non-interactive"
