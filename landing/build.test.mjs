@@ -44,7 +44,7 @@ test('production build includes verified legal details and configured form endpo
   const configPath = join(tmp, 'legal.json');
   const legal = {
     administrator: {
-      name: 'Firma Testowa Jan Kowalski',
+      name: 'Firma Ćwiczeniowa Jan Kowalski',
       correspondenceAddress: 'Ulica Długa 3, 00-001 Warszawa',
     },
     processing: {
@@ -67,7 +67,7 @@ test('production build includes verified legal details and configured form endpo
     assert.match(read('index.html'), /https:\/\/formspree.io\/f\/abcxyz123/);
     assert.match(read('index.html'), /index, follow/);
     assert.match(read('polityka-prywatnosci/index.html'), /Formspree/);
-    assert.match(read('polityka-prywatnosci/index.html'), /Firma Testowa Jan Kowalski/);
+    assert.match(read('polityka-prywatnosci/index.html'), /Firma Ćwiczeniowa Jan Kowalski/);
     assert.match(read('robots.txt'), /Allow: \//);
   } finally {
     rmSync(tmp, { recursive: true, force: true });
