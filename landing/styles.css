@@ -91,8 +91,7 @@ h1 span { color: #6847f5; }
   padding: clamp(1.35rem, 3.2vw, 2.45rem);
 }
 h2 { font-size: clamp(1.55rem, 2.3vw, 2rem); line-height: 1.2; letter-spacing: -.04em; }
-.contact-lead { margin-top: .65rem; margin-bottom: 1.75rem; font-size: .93rem; line-height: 1.5; color: #707482; }
-#contact-form { display: grid; gap: 1.15rem; }
+#contact-form { display: grid; gap: 1.15rem; margin-top: 1.75rem; }
 .field { display: grid; gap: .47rem; }
 label { font-size: .82rem; font-weight: 650; }
 .optional { color: #858a98; font-weight: 450; }
