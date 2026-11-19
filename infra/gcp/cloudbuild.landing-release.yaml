@@ -35,7 +35,7 @@ steps:
     args:
       - -c
       - >-
-        node --test landing/build.test.mjs landing/deployment.test.mjs &&
+        node --test landing/build.test.mjs landing/deployment.test.mjs scripts/protolume.test.mjs &&
         node landing/build.mjs --production &&
         node landing/verify-dist.mjs --production
 
