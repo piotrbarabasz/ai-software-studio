@@ -45,6 +45,19 @@ steps:
     args:
       - -c
       - >-
-        node --test landing/build.test.mjs landing/deployment.test.mjs scripts/protolume.test.mjs &&
+        node --test landing/build.test.mjs landing/deployment.test.mjs scripts/protolume.test.mjs scripts/v3-cloudrun-preview.test.mjs &&
         node landing/build.mjs --preview &&
         node landing/verify-dist.mjs --preview
+
+  - id: landing-v3-cloudrun-guard-tests
+    name: python:3.12-slim
+    entrypoint: python
+    waitFor: ["preview-config-preflight"]
+    args:
+      - -m
+      - unittest
+      - discover
+      - -s
+      - scripts/gcp/tests
+      - -p
+      - test_v3_cloudrun_preview_guard.py
