@@ -1,4 +1,8 @@
-# Protolume v3 — migracja na statyczny Hosting
+# [HISTORYCZNE / NIE URUCHAMIAĆ] Protolume v3 — wariant Firebase Hosting
+
+**Ten plan został zastąpiony przez wdrożenie testowej rewizji na istniejącym Cloud Run.** Nie wykonuj opisanych tutaj komend Firebase preview/live; aktualna procedura: [Cloud Run preview](protolume-v3-cloudrun-preview.md). Domena `protolume.pl` i obecny trigger `deploy-prod` zostają bez zmian.
+
+---
 
 **Status: przygotowana infrastruktura, bez produkcyjnego deploymentu.**
 
