@@ -44,8 +44,20 @@ def check_after(service: dict, baseline: list[tuple[str, int]]) -> str:
         entry for entry in service.get("status", {}).get("traffic", [])
         if entry.get("tag") == TAG
     ]
-    if len(tagged) != 1 or int(tagged[0].get("percent", -1)) != 0:
-        raise ValueError("Preview revision must have exactly one tag with zero traffic.")
+    if len(tagged) != 1:
+        observed = [
+            {"tag": entry.get("tag"), "revisionName": entry.get("revisionName"),
+             "percent": entry.get("percent", 0)}
+            for entry in service.get("status", {}).get("traffic", [])
+        ]
+        raise ValueError(
+            f"Preview revision must have exactly one tag with zero traffic; "
+            f"found {len(tagged)} matching entries. Traffic status: {observed}"
+        )
+    # Cloud Run's API defaults the percent of a tagged revision to zero.
+    # In JSON responses the field can therefore be omitted entirely.
+    if int(tagged[0].get("percent", 0)) != 0:
+        raise ValueError("Preview tag is unexpectedly receiving production traffic.")
     revision = str(tagged[0].get("revisionName", ""))
     if not revision:
         raise ValueError("Preview revision is missing its identifier.")
