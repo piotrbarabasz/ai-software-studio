@@ -37,3 +37,13 @@ steps:
         "-c",
         "cd frontend && npm ci && npm run format:check && npm run lint && npm test -- --karma-config=karma.ci.conf.cjs --browsers=ChromeHeadlessCI && npm run build:development",
       ]
+
+  - id: landing-v3-checks
+    name: node:22.22.3-bookworm-slim
+    entrypoint: sh
+    waitFor: ["preview-config-preflight"]
+    args:
+      - -c
+      - >-
+        node --test landing/build.test.mjs &&
+        node landing/build.mjs --preview
