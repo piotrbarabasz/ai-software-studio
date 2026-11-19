@@ -10,6 +10,18 @@ Ten katalog zawiera nową, niezależną **statyczną** stronę Protolume:
 
 Stary frontend/, backend/ i obecny Cloud Build/Cloud Run **nie są przełączane ani kasowane w tym PR**. Implementacja nowej strony jest odseparowana, aby można ją było przetestować przed migracją ruchu i wyłączeniem starego API.
 
+## Krótkie komendy na Windows i Linux
+
+Skopiuj .env.example do lokalnego .env i używaj Makefile lub bezpośrednio Node:
+
+    make check
+    make preview-local
+    make doctor
+    make preview
+
+Bez GNU Make na Windows: `node scripts/protolume.mjs preview`.
+Pełna instrukcja i kwestie uprawnień: docs/protolume-local-commands.md.
+
 ## Podgląd lokalny
 
 Z katalogu głównego repozytorium:

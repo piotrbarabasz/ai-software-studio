@@ -4,6 +4,10 @@
 
 Nowa wizytówka jest w katalogu landing/. Stara aplikacja Angular/FastAPI i pipeline infra/gcp/cloudbuild.deploy.yaml pozostają bez zmian. Merge tego PR sam nie aktualizuje protolume.pl.
 
+## Zalecana obsługa lokalna
+
+Zamiast ręcznego przełączania aktywnego konta/projektu `gcloud`, używaj `.env` i `make preview` (na Windows bez GNU Make: `node scripts/protolume.mjs preview`). Szczegóły: docs/protolume-local-commands.md. Poniższe surowe komendy pozostają jako alternatywa.
+
 ## 1. Warunki wstępne
 
 - Projekt GCP: ai-software-studio-501918, planowany serwis: Firebase Hosting.
