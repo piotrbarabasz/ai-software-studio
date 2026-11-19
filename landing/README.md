@@ -1,14 +1,18 @@
-# Protolume v3 — jedna wizytówka
+# Protolume v3 — prosty landing z konkretnymi obszarami automatyzacji
 
-Ten katalog zawiera nową, niezależną **statyczną** stronę Protolume:
-- jeden ekran informacyjno-kontaktowy (na telefonach naturalnie przewijany),
-- logo z istniejących zasobów marki,
-- krótka informacja o Piotrze Barabaszu,
-- trzy pola: imię, e-mail i opcjonalna wiadomość,
-- polityka prywatności budowana z istniejącej, zatwierdzonej konfiguracji,
-- brak własnego backendu, bazy danych, Angular runtime, CMS i analityki śledzącej.
+Ten katalog zawiera niezależną, **statyczną stronę Protolume**. Jest to pojedynczy, przewijany landing z pięcioma sekcjami:
 
-Stary frontend/, backend/ i obecny Cloud Build/Cloud Run **nie są przełączane ani kasowane w tym PR**. Implementacja nowej strony jest odseparowana, aby można ją było przetestować przed migracją ruchu i wyłączeniem starego API.
+1. Hero — jasna informacja o AI, automatyzacjach i aplikacjach, dwa odnośniki do sekcji strony.
+2. Co można zautomatyzować — sześć krótkich obszarów z przykładami problemów.
+3. Jak wygląda współpraca — trzy proste kroki.
+4. Co mogę stworzyć — cztery typy rozwiązań.
+5. Kontakt — imię lub firma, e-mail i opcjonalny krótki opis.
+
+**Nie ma osobnej sekcji o właścicielu / zaufaniu**, portfolio, demo ani nawigacji do wielu podstron. Nazwisko właściciela jest jedynie w stopce. Jedyną dodatkową stroną jest polityka prywatności.
+
+Strona wykorzystuje logo marki, ma dostępne pola i stany formularza, nie zawiera Angular runtime, backendu ani analityki śledzącej. W trybie preview formularz otwiera klienta pocztowego; produkcyjny build wymaga skonfigurowanej usługi Formspree i zatwierdzonych danych prawnych.
+
+**Ważne:** zmiana samego landingu nie przełącza ruchu produkcyjnego. Istniejący Cloud Build `deploy-prod` nadal publikuje Angular / FastAPI. Testowa rewizja v3 z `v3-review` jest wdrażana osobnym, ręcznym pipeline'em z 0% ruchu produkcyjnego.
 
 ## Krótkie komendy na Windows i Linux
 
@@ -67,9 +71,10 @@ Starszy plan Firebase i pliki `firebase.json` / `cloudbuild.landing-preview.yaml
 
 ## Akceptacja
 
-- Jedna strona, bez nawigacji, kart usług, portfolio, dodatkowych CTA i wymyślonych dowodów.
-- Działa responsywnie; widoczne focus states i komunikaty dostępne dla czytników.
-- Formularz nie uznaje wysyłki za sukces przed odpowiedzią 2xx usługi.
-- Bez integracji użytkownika: jawne przejście na e-mail, nie fałszywe wysłanie.
-- Polityka prywatności z zatwierdzonego konfiguratora, bez fikcyjnych danych w buildzie produkcyjnym.
-- Obecne produkcyjne środowisko pozostaje bez zmian do osobnej decyzji.
+- Pięć sekcji w kolejności: hero → obszary → współpraca → typy rozwiązań → kontakt.
+- Dokładnie sześć obszarów, trzy kroki i cztery typy rozwiązań — bez rozbudowanego katalogu.
+- Brak osobnego bloku zaufania, portfolio, case studies i nawigacji wielostronicowej.
+- Działa responsywnie; widoczne focus states, semantyczne nagłówki i komunikaty dostępne dla czytników.
+- Formularz nie uznaje wysyłki za sukces przed odpowiedzią 2xx usługi; bez integracji jasno otwiera klienta e-mail.
+- Polityka prywatności z zatwierdzonej konfiguracji, bez fikcyjnych danych w buildzie produkcyjnym.
+- Obecna produkcja pozostaje bez zmian do osobnego review i zgody na publikację v3.
