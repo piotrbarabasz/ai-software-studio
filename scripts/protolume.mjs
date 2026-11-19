@@ -5,11 +5,11 @@ import { spawnSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, isAbsolute, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createInterface } from 'node:readline/promises';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const ENV_PATH = join(ROOT, '.env');
-const APPROVAL = 'PUBLISH_PROTOLUME_V3_LIVE';
+const PREVIEW_PROJECT = 'ai-software-studio-501918';
+const PREVIEW_TAG = 'v3-review';
 
 const PROJECT_PATTERN = /^[a-z][a-z0-9-]{4,28}[a-z0-9]$/;
 const ACCOUNT_PATTERN = /^[A-Za-z0-9.+_-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
@@ -53,20 +53,21 @@ export function validateConfig(config, { release = false } = {}) {
   if (!REGION_PATTERN.test(config.GCP_REGION || '')) {
     errors.push('GCP_REGION musi mieć format regionu GCP, np. europe-central2.');
   }
-  if (!CHANNEL_PATTERN.test(config.FIREBASE_PREVIEW_CHANNEL || '')) {
-    errors.push('FIREBASE_PREVIEW_CHANNEL musi być bezpieczną nazwą kanału preview.');
+  if ((config.CLOUD_RUN_PREVIEW_TAG || PREVIEW_TAG) !== PREVIEW_TAG) {
+    errors.push('CLOUD_RUN_PREVIEW_TAG musi pozostać v3-review dla testowej rewizji.');
   }
   if (config.FORM_ENDPOINT && !FORMSPREE_PATTERN.test(config.FORM_ENDPOINT)) {
     errors.push('FORM_ENDPOINT musi mieć postać https://formspree.io/f/ID.');
   }
-  if (release && !config.FORM_ENDPOINT) {
-    errors.push('Release wymaga prawdziwego FORM_ENDPOINT w .env.');
+  if (release) {
+    errors.push('Release Cloud Run v3 jest zablokowany do osobnej akceptacji i konfiguracji prawnej.');
   }
   return errors;
 }
 
 export function buildGcloudArgs(command, config) {
-  const errors = validateConfig(config, { release: command === 'release' });
+  if (command === 'release') throw new Error('Brak ścieżki release Cloud Run v3: aktywna pozostaje stara produkcja.');
+  const errors = validateConfig(config);
   if (errors.length) throw new Error(errors.join('\n'));
 
   const common = [
@@ -76,20 +77,14 @@ export function buildGcloudArgs(command, config) {
   ];
 
   if (command === 'preview') {
+    if (config.GCP_PROJECT_ID !== PREVIEW_PROJECT || config.GCP_REGION !== 'europe-central2') {
+      throw new Error('Preview Cloud Run może działać tylko w istniejącym projekcie Protolume i regionie europe-central2.');
+    }
     return [
       ...common,
-      '--config=infra/gcp/cloudbuild.landing-preview.yaml',
+      '--config=infra/gcp/cloudbuild.landing-cloudrun-preview.yaml',
       '--substitutions=_PROJECT_ID=' + config.GCP_PROJECT_ID +
-        ',_CHANNEL_ID=' + config.FIREBASE_PREVIEW_CHANNEL,
-    ];
-  }
-  if (command === 'release') {
-    return [
-      ...common,
-      '--config=infra/gcp/cloudbuild.landing-release.yaml',
-      '--substitutions=_PROJECT_ID=' + config.GCP_PROJECT_ID +
-        ',_FORM_ENDPOINT=' + config.FORM_ENDPOINT +
-        ',_RELEASE_APPROVAL=' + APPROVAL,
+        ',_REGION=' + config.GCP_REGION + ',_PREVIEW_TAG=' + PREVIEW_TAG,
     ];
   }
   throw new Error('Nieobsługiwana komenda Cloud Build: ' + command);
@@ -118,7 +113,7 @@ function run(executable, args, { env = process.env } = {}) {
 
 function check() {
   run(process.execPath, [
-    '--test', 'landing/build.test.mjs', 'landing/deployment.test.mjs', 'scripts/protolume.test.mjs',
+    '--test', 'landing/build.test.mjs', 'landing/deployment.test.mjs', 'scripts/protolume.test.mjs', 'scripts/v3-cloudrun-preview.test.mjs',
   ]);
 }
 
@@ -135,29 +130,13 @@ function printHelp() {
     '  make doctor           sprawdź GCP i uprawnienia do bucketu Cloud Build',
     '  make check            testy statycznej strony i konfiguracji',
     '  make preview-local    zbuduj lokalny podgląd, bez GCP',
-    '  make preview          wyślij build na tymczasowy Firebase Preview',
+    '  make preview          Cloud Run: nowa rewizja v3 z 0% ruchu na istniejącej usłudze',
     '  make build-production lokalny build produkcyjny, bez publikacji',
-    '  make release          RĘCZNE wydanie live, wymaga wpisania potwierdzenia',
+    '  make release          ZABLOKOWANE do osobnej akceptacji produkcyjnego v3',
     '',
     'Bez GNU Make: node scripts/protolume.mjs <komenda>',
     'Konfiguracja: .env (skopiuj z .env.example, plik jest ignorowany przez Git).',
   ].join('\n'));
-}
-
-async function confirmRelease() {
-  if (!process.stdin.isTTY || !process.stdout.isTTY) {
-    throw new Error('Release musi być potwierdzony ręcznie w interaktywnym terminalu.');
-  }
-  console.log('UWAGA: ta operacja publikuje na kanale LIVE Firebase Hosting.');
-  console.log('Nie przełącza automatycznie DNS protolume.pl, ale może zmienić stronę');
-  console.log('na domenach już podłączonych do Firebase Hosting.');
-  const reader = createInterface({ input: process.stdin, output: process.stdout });
-  try {
-    const answer = await reader.question('Wpisz dokładnie ' + APPROVAL + ', aby kontynuować: ');
-    if (answer !== APPROVAL) throw new Error('Release anulowany: brak wymaganego potwierdzenia.');
-  } finally {
-    reader.close();
-  }
 }
 
 export async function main(command) {
@@ -175,8 +154,12 @@ export async function main(command) {
     return;
   }
 
+  if (command === 'release') {
+    throw new Error('Release Cloud Run v3 jest obecnie ZABLOKOWANY. Zatwierdź najpierw formularz, RODO i plan przełączenia ruchu.');
+  }
+
   const config = loadEnv();
-  const errors = validateConfig(config, { release: command === 'release' });
+  const errors = validateConfig(config);
   if (errors.length) throw new Error(errors.join('\n'));
 
   console.log('Projekt GCP: ' + config.GCP_PROJECT_ID);
@@ -221,15 +204,8 @@ export async function main(command) {
   if (command === 'preview') {
     check();
     previewLocal();
-    console.log('Uruchamiam wyłącznie Firebase Preview (' + config.FIREBASE_PREVIEW_CHANNEL + ').');
+    console.log('Przygotowuję Cloud Run v3: osobna rewizja, tag v3-review, 0% ruchu domeny.');
     run('gcloud', buildGcloudArgs('preview', config));
-    return;
-  }
-
-  if (command === 'release') {
-    check();
-    await confirmRelease();
-    run('gcloud', buildGcloudArgs('release', config));
     return;
   }
 
