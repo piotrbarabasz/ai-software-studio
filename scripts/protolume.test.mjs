@@ -7,7 +7,7 @@ const valid = {
   GCP_PROJECT_ID: 'ai-software-studio-501918',
   GCP_ACCOUNT: 'kontakt@protolume.pl',
   GCP_REGION: 'europe-central2',
-  FIREBASE_PREVIEW_CHANNEL: 'protolume-v3-review',
+  CLOUD_RUN_PREVIEW_TAG: 'v3-review',
   FORM_ENDPOINT: '',
 };
 
@@ -31,13 +31,14 @@ test('rejects ambiguous duplicate dotenv keys and malformed lines', () => {
   assert.throws(() => parseEnv('X="unterminated'), /Niedomknięty/);
 });
 
-test('preview command binds Protolume account, project and channel explicitly', () => {
+test('preview command binds existing Cloud Run project and zero-traffic workflow', () => {
   assert.deepEqual(validateConfig(valid), []);
   const args = buildGcloudArgs('preview', valid);
   assert.ok(args.includes('--account=kontakt@protolume.pl'));
   assert.ok(args.includes('--project=ai-software-studio-501918'));
-  assert.ok(args.includes('--config=infra/gcp/cloudbuild.landing-preview.yaml'));
-  assert.ok(args.some((a) => a.includes('_CHANNEL_ID=protolume-v3-review')));
+  assert.ok(args.includes('--config=infra/gcp/cloudbuild.landing-cloudrun-preview.yaml'));
+  assert.ok(args.some((a) => a.includes('_PREVIEW_TAG=v3-review')));
+  assert.ok(args.some((a) => a.includes('_REGION=europe-central2')));
   assert.ok(!args.some((a) => a.includes('landing-release')));
   assert.ok(!args.some((a) => a.includes('PUBLISH_PROTOLUME')));
 });
@@ -45,18 +46,14 @@ test('preview command binds Protolume account, project and channel explicitly', 
 test('invalid config is rejected instead of falling back to active Tripse account/project', () => {
   assert.ok(validateConfig({ ...valid, GCP_PROJECT_ID: 'tripse-ai', GCP_ACCOUNT: '' }).length);
   assert.ok(validateConfig({ ...valid, GCP_ACCOUNT: 'name & whoami' }).length);
-  assert.ok(validateConfig({ ...valid, FIREBASE_PREVIEW_CHANNEL: 'preview & rm -rf' }).length);
+  assert.ok(validateConfig({ ...valid, CLOUD_RUN_PREVIEW_TAG: 'preview & rm -rf' }).length);
+  assert.throws(() => buildGcloudArgs('preview', { ...valid, GCP_PROJECT_ID: 'tripse-ai' }), /istniejącym projekcie/);
   assert.ok(validateConfig({ ...valid, FORM_ENDPOINT: 'http://formspree.io/f/test' }).length);
 });
 
-test('live command requires form endpoint and preserves separate approval gate', () => {
+test('obsolete Firebase live command is hard-disabled', () => {
   assert.ok(validateConfig(valid, { release: true }).length);
-  assert.throws(() => buildGcloudArgs('release', valid), /FORM_ENDPOINT/);
-  const args = buildGcloudArgs('release', {
-    ...valid, FORM_ENDPOINT: 'https://formspree.io/f/abcDEF123',
-  });
-  assert.ok(args.includes('--config=infra/gcp/cloudbuild.landing-release.yaml'));
-  assert.ok(args.some((a) => a.includes('_RELEASE_APPROVAL=PUBLISH_PROTOLUME_V3_LIVE')));
+  assert.throws(() => buildGcloudArgs('release', { ...valid, FORM_ENDPOINT: 'https://formspree.io/f/abcDEF123' }), /Brak ścieżki release/);
 });
 
 test('git ignores the real .env and tracks the .env.example template', () => {
