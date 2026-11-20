@@ -82,7 +82,7 @@ Starszy plan Firebase i pliki `firebase.json` / `cloudbuild.landing-preview.yaml
 - Dokładnie sześć obszarów, trzy kroki i cztery typy rozwiązań — bez rozbudowanego katalogu.
 - Brak osobnego bloku zaufania, portfolio, case studies i nawigacji wielostronicowej.
 - Działa responsywnie; widoczne focus states, semantyczne nagłówki i komunikaty dostępne dla czytników.
-- Formularz nie uznaje wysyłki za sukces przed odpowiedzią 2xx usługi; bez integracji jasno otwiera klienta e-mail.
+- Formularz nie uznaje wysyłki za sukces przed odpowiedzią 2xx usługi; bez integracji jednoznacznie wyłącza wysyłanie i wyświetla adres kontaktowy.
 - Polityka prywatności z zatwierdzonej konfiguracji, bez fikcyjnych danych w buildzie produkcyjnym.
 - Obecna produkcja pozostaje bez zmian do osobnego review i zgody na publikację v3.
 
@@ -134,7 +134,7 @@ Animacje powstają według [Figma V3 Desktop](https://www.figma.com/design/m2Lee
 
 Sekcja \`#kontakt\` odwzorowuje [V3 Desktop](https://www.figma.com/design/m2LeessPiyWNgREo4RG9jR?node-id=11-28) oraz [Mobile](https://www.figma.com/design/m2LeessPiyWNgREo4RG9jR?node-id=12-67): jasnofioletowe tło, krótki opis i prosty formularz. Pozostawiamy **tylko trzy pola**, z czego opis jest opcjonalny. Dekoracyjna ikona pochodzi z lokalnego sprite Lucide, a nie z emoji.
 
-- **Preview, bez \`FORM_ENDPOINT\`:** przycisk zmienia etykietę na „Otwórz e-mail”. Zostaje otwarty \`mailto:\` z podsumowaniem pól; komunikat nie udaje, że wiadomość została wysłana. Jeśli użytkownik nie ma skonfigurowanego klienta pocztowego, pokazujemy adres kontaktowy.
+- **Preview, bez \`FORM_ENDPOINT\`:** przycisk „Wyślij wiadomość” jest nieaktywny, a status wyjaśnia brak dostępności formularza i pokazuje adres kontaktowy. Nie uruchamiamy aplikacji pocztowej i nie udajemy sukcesu.
 - **Formspree (po jawnej konfiguracji i zatwierdzeniu polityki):** dane są normalizowane przez \`trim()\`, opcjonalna wiadomość otrzymuje neutralną treść, a wysyłka następuje dopiero po poprawnej walidacji. Pola nie są resetowane w przypadku błędu.
 - Wbudowana walidacja HTML jest zachowana. Sprawdzamy ponadto imię/nazwę firmy po usunięciu białych znaków, obsługujemy atrybut \`aria-invalid\`, a błędne pola mogą otrzymać fokus. Wskaźnik \`aria-busy\` i blokada przycisku zapobiegają ponownemu kliknięciu podczas wysyłania.
 - **Antyspam:** pole \`_gotcha\` jest nadal obecne, a wypełniony honeypot jest ignorowany bez wysyłki.
