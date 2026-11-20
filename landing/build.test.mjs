@@ -87,6 +87,34 @@ test('sticky section navigation and self-hosted Lucide icons use consistent bran
   assert.match(html, /Wyślij wiadomość/);
 });
 
+test('UI-001 matches Figma V3 hero structure while retaining static build guarantees', () => {
+  build('preview', {});
+  const html = read('index.html');
+  const css = read('styles.css');
+  const icons = read('assets/icons.svg');
+
+  assert.match(html, /class="header-brand"/);
+  assert.match(html, /class="hero-copy"/);
+  assert.match(html, /class="hero-visual" aria-hidden="true"/);
+  assert.match(html, /class="hero-visual__card hero-visual__card--input"/);
+  assert.match(html, /class="hero-visual__card hero-visual__card--output"/);
+  assert.match(html, /Dane wejściowe/);
+  assert.match(html, /Mniej ręcznej pracy/);
+  assert.match(html, /class="hero-note"/);
+  assert.match(html, /src="\/assets\/protolume-logo-horizontal-dark\.svg"/);
+  assert.equal((html.match(/<h1\b/g) || []).length, 1);
+  assert.match(html, /href="#obszary"/);
+  assert.match(html, /href="#kontakt"/);
+  assert.match(icons, /id="icon-file-text"/);
+  assert.match(icons, /id="icon-zap"/);
+  assert.match(css, /--color-brand:\s*#6946f5/);
+  assert.match(css, /--color-page:\s*#f9fafd/);
+  assert.match(css, /\.hero\s*\{[^}]*display:\s*grid/);
+  assert.match(css, /@media \(max-width: 540px\)/);
+  assert.match(css, /@media \(prefers-reduced-motion: reduce\)/);
+  assert.doesNotMatch(html, /<script[^>]+(?:three|gsap|motion)(?:\.min)?\.js/i);
+});
+
 test('production build rejects missing contact and legal provider configuration', () => {
   assert.throws(() => build('production', {}), /FORM_ENDPOINT/);
   assert.throws(() => build('production', { FORM_ENDPOINT: 'https://example.org/collect' }), /Formspree/);

@@ -85,3 +85,17 @@ Starszy plan Firebase i pliki `firebase.json` / `cloudbuild.landing-preview.yaml
 - Formularz nie uznaje wysyłki za sukces przed odpowiedzią 2xx usługi; bez integracji jasno otwiera klienta e-mail.
 - Polityka prywatności z zatwierdzonej konfiguracji, bez fikcyjnych danych w buildzie produkcyjnym.
 - Obecna produkcja pozostaje bez zmian do osobnego review i zgody na publikację v3.
+
+
+## UI-001 — Figma V3: design system, header i hero
+
+Pierwszy etap redesignu odtwarza górną część strony według makiet [desktop 1440](https://www.figma.com/design/m2LeessPiyWNgREo4RG9jR?node-id=11-28) oraz [mobile 390](https://www.figma.com/design/m2LeessPiyWNgREo4RG9jR?node-id=12-67).
+
+- Semantyczne tokeny kolorów i zaokrągleń w CSS.
+- Hero zachowuje ten sam przekaz, pojedynczy H1, dwa CTA i kotwice do istniejących sekcji.
+- Dekoracyjny diagram „dane wejściowe → AI → rezultat” oparty wyłącznie na HTML/CSS i lokalnym sprite Lucide; diagram jest \`aria-hidden\`, bo odzwierciedla treść widoczną tekstowo.
+- Mobilny navbar ogranicza widoczne linki do kontaktu; pozostałe sekcje są dostępne przez przewijanie i CTA w Hero.
+- Wszystkie dalsze sekcje, formularz i bezpieczeństwo preview pozostają bez zmian do kolejnych PR.
+- Scroll reveal i zaawansowane animacje zostaną dodane w MOTION-001. W UI-001 są tylko lekkie reakcje hover respektujące preferencję reduced motion.
+- Brak dodatkowych bibliotek JavaScript, CDN, emoji i nowego backendu.
+
