@@ -1,12 +1,13 @@
 #!/bin/sh
 set -eu
 
-if [ "$#" -ne 1 ]; then
-  echo "Usage: smoke-v3-preview-image.sh IMAGE" >&2
+if [ "$#" -lt 1 ] || [ "$#" -gt 2 ]; then
+  echo "Usage: smoke-v3-preview-image.sh IMAGE [FORM_ENDPOINT_OR_NOT_CONFIGURED]" >&2
   exit 2
 fi
 
 image=$1
+form_endpoint=${2:-NOT_CONFIGURED}
 container="v3-preview-smoke-${BUILD_ID:-local}-$$"
 work_dir=$(mktemp -d)
 
@@ -52,7 +53,13 @@ fi
 
 grep -qi '^X-Robots-Tag: noindex, nofollow' "$work_dir/home.headers"
 grep -q 'name="robots" content="noindex, nofollow"' "$work_dir/home.body"
-grep -q 'data-endpoint=""' "$work_dir/home.body"
+if [ "$form_endpoint" = "NOT_CONFIGURED" ]; then
+  grep -q 'data-endpoint=""' "$work_dir/home.body"
+  grep -q 'id="contact-submit" type="submit" disabled' "$work_dir/home.body"
+else
+  grep -Fq "data-endpoint=\"$form_endpoint\"" "$work_dir/home.body"
+  ! grep -q 'id="contact-submit" type="submit" disabled' "$work_dir/home.body"
+fi
 grep -q 'Automatyzacje AI dla firm' "$work_dir/home.body"
 grep -q 'id="obszary"' "$work_dir/home.body"
 grep -q 'id="wspolpraca"' "$work_dir/home.body"
@@ -74,7 +81,12 @@ grep -q 'ISC License' "$work_dir/license.body"
 
 fetch "/polityka-prywatnosci/" "privacy"
 [ "$(status "$work_dir/privacy.headers")" = "200" ]
-grep -q 'Wersja robocza' "$work_dir/privacy.body"
+if [ "$form_endpoint" = "NOT_CONFIGURED" ]; then
+  grep -q 'Wersja robocza' "$work_dir/privacy.body"
+else
+  grep -q 'Formspree' "$work_dir/privacy.body"
+  ! grep -q 'Wersja robocza' "$work_dir/privacy.body"
+fi
 
 fetch "/robots.txt" "robots"
 [ "$(status "$work_dir/robots.headers")" = "200" ]
@@ -87,4 +99,4 @@ fetch "/__v3_missing__" "missing"
 [ "$(status "$work_dir/missing.headers")" = "404" ]
 grep -qi '^X-Robots-Tag: noindex, nofollow' "$work_dir/missing.headers"
 
-echo "V3 container smoke passed: HTTP 200, noindex headers, mailto fallback, privacy, robots, redirects, 404."
+echo "V3 container smoke passed: HTTP 200, noindex, contact mode, privacy, robots, redirects, 404."
