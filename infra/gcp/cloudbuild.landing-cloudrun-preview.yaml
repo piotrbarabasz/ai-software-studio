@@ -38,10 +38,10 @@ steps:
       - -c
       - |
         set -eu
-        if [ "$PREVIEW_FORM_ENDPOINT" = "NOT_CONFIGURED" ]; then
+        if [ "$$PREVIEW_FORM_ENDPOINT" = "NOT_CONFIGURED" ]; then
           echo "Contact form is disabled in this preview."
         else
-          case "$PREVIEW_FORM_ENDPOINT" in
+          case "$$PREVIEW_FORM_ENDPOINT" in
             https://formspree.io/f/*) ;;
             *) echo "BLOCKED: preview requires a Formspree HTTPS endpoint" >&2; exit 1 ;;
           esac
@@ -63,10 +63,10 @@ steps:
         set -eu
         node --test landing/build.test.mjs landing/form.test.mjs landing/motion.test.mjs landing/deployment.test.mjs \
           scripts/protolume.test.mjs scripts/v3-cloudrun-preview.test.mjs
-        if [ "$PREVIEW_FORM_ENDPOINT" = "NOT_CONFIGURED" ]; then
+        if [ "$$PREVIEW_FORM_ENDPOINT" = "NOT_CONFIGURED" ]; then
           node landing/build.mjs --preview
         else
-          FORM_ENDPOINT="$PREVIEW_FORM_ENDPOINT" \
+          FORM_ENDPOINT="$$PREVIEW_FORM_ENDPOINT" \
             PUBLIC_LEGAL_CONFIG_PATH=frontend/.public-legal-config.json \
             node landing/build.mjs --preview
         fi
