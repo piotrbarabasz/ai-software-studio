@@ -1,0 +1,98 @@
+/* MOTION-001 — restrained transitions based on the Figma V3 motion handoff.
+ * The default state is ALWAYS visible: no opacity: 0 or transform outside
+ * these finite keyframes, so failures or disabled JS cannot hide content.
+ */
+@keyframes hero-rise {
+  from { opacity: 0; transform: translate3d(0, 24px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes hero-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes hero-scale {
+  from { opacity: 0; transform: scale(.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes hero-input {
+  from { opacity: 0; transform: translate3d(-36px, 0, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes hero-output {
+  from { opacity: 0; transform: translate3d(36px, 0, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero .eyebrow {
+    animation: hero-rise 600ms cubic-bezier(.22, 1, .36, 1) 0ms both;
+  }
+  .hero h1 {
+    animation: hero-rise 720ms cubic-bezier(.22, 1, .36, 1) 110ms both;
+  }
+  .hero h1 > span {
+    display: inline;
+    animation: hero-fade 680ms ease-out 220ms both;
+  }
+  .hero .lead {
+    animation: hero-fade 550ms ease-out 350ms both;
+  }
+  .hero .supporting {
+    animation: hero-fade 550ms ease-out 450ms both;
+  }
+  .hero-actions {
+    animation: hero-rise 600ms cubic-bezier(.22, 1, .36, 1) 490ms both;
+  }
+  .hero-visual {
+    animation: hero-scale 800ms cubic-bezier(.22, 1, .36, 1) 170ms both;
+  }
+  .hero-visual__card--input {
+    animation: hero-input 700ms cubic-bezier(.22, 1, .36, 1) 460ms both;
+  }
+  .hero-visual__card--output {
+    animation: hero-output 700ms cubic-bezier(.22, 1, .36, 1) 590ms both;
+  }
+  .hero-note {
+    animation: hero-fade 550ms ease-out 600ms both;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .area-card,
+  .solution-item,
+  .step {
+    transition: transform 200ms ease-out, border-color 200ms ease-out;
+  }
+  .area-card:hover,
+  .solution-item:hover {
+    transform: translate3d(0, -2px, 0);
+    border-color: #d8cff8;
+  }
+  .step:hover {
+    transform: translate3d(0, -2px, 0);
+    border-color: #7462a7;
+  }
+}
+
+/* Preserve accessible immediate feedback and prevent smooth scrolling when
+   the OS requests less movement. The intersection script also opts out. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .hero .eyebrow,
+  .hero h1,
+  .hero h1 > span,
+  .hero .lead,
+  .hero .supporting,
+  .hero-actions,
+  .hero-visual,
+  .hero-visual__card--input,
+  .hero-visual__card--output,
+  .hero-note {
+    animation: none !important;
+    opacity: 1;
+  }
+}
