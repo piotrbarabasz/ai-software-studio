@@ -37,8 +37,10 @@ test('preview is a minimal one-page offer with clear areas and honest contact fa
 
   assert.match(html, /href="#obszary"/);
   assert.match(html, /href="#kontakt"/);
-  assert.doesNotMatch(html, /<nav\b|class="identity"|zaufani[ae]|case stud(?:y|ies)|portfolio|demo w 7 dni/i);
-  assert.match(html, /Piotr Barabasz/); // Footer attribution, not a trust section.
+  assert.doesNotMatch(html, /class="identity"|zaufani[ae]|case stud(?:y|ies)|portfolio|demo w 7 dni/i);
+  assert.match(html, /<nav class="site-nav" aria-label="Nawigacja po stronie">/);
+  assert.match(html, /Napisz do nas/);
+  assert.match(html, /Co tworzymy\?/);
 
   assert.match(html, /id="contact-form"/);
   assert.match(html, /name="name"/);
@@ -51,6 +53,38 @@ test('preview is a minimal one-page offer with clear areas and honest contact fa
   assert.match(policy, /Wersja robocza/);
   assert.match(policy, /noindex, nofollow/);
   assert.match(robots, /Disallow: \//);
+});
+
+test('sticky section navigation and self-hosted Lucide icons use consistent brand voice', () => {
+  build('preview', {});
+  const html = read('index.html');
+  const sprite = read('assets/icons.svg');
+  const license = read('assets/LUCIDE-LICENSE.txt');
+  const css = read('styles.css');
+
+  for (const target of ['obszary', 'wspolpraca', 'rozwiazania', 'kontakt']) {
+    assert.match(html, new RegExp('<a[^>]+href="#' + target + '"'));
+    assert.match(html, new RegExp('id="' + target + '"'));
+  }
+  assert.equal((html.match(/<nav\b/g) || []).length, 1);
+  assert.match(css, /\.header\s*\{[^}]*position: sticky/);
+  assert.match(css, /scroll-padding-top/);
+  assert.match(css, /prefers-reduced-motion/);
+  assert.match(css, /@media \(max-width: 540px\)/);
+
+  const referenced = [...html.matchAll(/href="\/assets\/icons\.svg#(icon-[a-z0-9-]+)"/g)]
+    .map((match) => match[1]);
+  assert.ok(referenced.length >= 14, 'Expected icons in CTA, cards, navigation, and solutions');
+  for (const id of referenced) {
+    assert.ok(sprite.includes('id="' + id + '"'), 'Unbundled Lucide icon: ' + id);
+  }
+  assert.match(license, /ISC License/);
+  assert.match(license, /Lucide Icons and Contributors/);
+  assert.doesNotMatch(html, /Projektuję|Napisz do mnie|Co mogę stworzyć|Pokaż mi proces/i);
+  assert.doesNotMatch(html, /Piotr Barabasz|<span aria-hidden="true">[↗↓]/);
+  assert.match(html, /Projektujemy rozwiązania/);
+  assert.match(html, /Opowiedz nam, co zabiera czas/);
+  assert.match(html, /Wyślij wiadomość/);
 });
 
 test('production build rejects missing contact and legal provider configuration', () => {
