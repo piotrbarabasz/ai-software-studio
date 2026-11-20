@@ -54,7 +54,22 @@ export function verifyArtifact(mode, root = defaultRoot) {
     if (!index.includes('name="robots" content="noindex, nofollow"')) problems.push('Preview landing page is indexable');
     if (!privacy.includes('noindex, nofollow')) problems.push('Preview privacy page is indexable');
     if (!robots.includes('Disallow: /')) problems.push('Preview robots do not disallow indexing');
-    if (!index.includes('data-endpoint=""')) problems.push('Preview is unexpectedly connected to a live form');
+    const connectedPreview = /data-endpoint="https:\/\/formspree\.io\/f\/[A-Za-z0-9]+"/.test(index);
+    if (connectedPreview) {
+      // Live submissions require a real, approved privacy policy even on a noindex tag.
+      if (/Wersja robocza|nie jest polityką prywatności przeznaczoną do publikacji/.test(privacy)) {
+        problems.push('Preview with a live form must have an approved privacy policy');
+      }
+      if (!privacy.includes('Formspree')) problems.push('Live preview policy must disclose Formspree');
+      if (index.includes('id="contact-submit" type="submit" disabled')) {
+        problems.push('Preview with a live form unexpectedly disables submission');
+      }
+    } else {
+      if (!index.includes('data-endpoint=""')) problems.push('Preview has an unexpected form endpoint');
+      if (!index.includes('id="contact-submit" type="submit" disabled')) {
+        problems.push('Unconfigured preview must disable the contact form');
+      }
+    }
   } else {
     if (!index.includes('name="robots" content="index, follow"')) problems.push('Production landing page is noindex');
     if (!privacy.includes('index, follow')) problems.push('Production privacy page is noindex');
