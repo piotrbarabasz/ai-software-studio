@@ -16,7 +16,11 @@ export function verifyArtifact(mode, root = defaultRoot) {
   const privacy = readIfExists(root, 'polityka-prywatnosci/index.html');
   const robots = readIfExists(root, 'robots.txt');
   const sitemap = readIfExists(root, 'sitemap.xml');
-  const files = ['styles.css', 'form.js', 'assets/favicon.svg', 'assets/protolume-logo-horizontal-dark.svg'];
+  const files = [
+    'styles.css', 'form.js', 'assets/favicon.svg',
+    'assets/protolume-logo-horizontal-dark.svg', 'assets/icons.svg',
+    'assets/LUCIDE-LICENSE.txt',
+  ];
   for (const name of files) {
     if (!existsSync(join(root, name))) problems.push('Missing static asset: ' + name);
   }
@@ -27,7 +31,20 @@ export function verifyArtifact(mode, root = defaultRoot) {
   if (!index || !privacy || !robots || !sitemap) return problems;
 
   if ((index.match(/<h1\b/g) || []).length !== 1) problems.push('The landing page must have one H1');
-  if (!index.includes('Piotr Barabasz')) problems.push('Owner identity is missing');
+  if (!index.includes('Protolume')) problems.push('Brand identity is missing');
+  const sprite = readIfExists(root, 'assets/icons.svg');
+  if (sprite) {
+    for (const match of index.matchAll(/href="\/assets\/icons\.svg#(icon-[a-z0-9-]+)"/g)) {
+      if (!sprite.includes('id="' + match[1] + '"')) {
+        problems.push('Lucide icon missing from bundled sprite: ' + match[1]);
+      }
+    }
+  }
+  for (const section of ['obszary', 'wspolpraca', 'rozwiazania', 'kontakt']) {
+    if (!index.includes('href="#' + section + '"') || !index.includes('id="' + section + '"')) {
+      problems.push('Navigation section is missing or broken: ' + section);
+    }
+  }
   if (!index.includes('name="email"') || !index.includes('name="name"') ||
       !index.includes('name="message"')) problems.push('Required contact form fields are missing');
   if (!index.includes('href="/polityka-prywatnosci/"')) problems.push('Missing privacy policy link');
