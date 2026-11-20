@@ -106,20 +106,21 @@ function harness({ endpoint = '', name = 'Firma ABC', email = 'firma@example.com
   };
 }
 
-test('preview labels CTA as opening email and never claims a message was sent', async () => {
-  const app = harness({ endpoint: '', name: '  Firma ABC ', email: ' firma@example.com ', message: 'Pomysł na aplikację' });
-  assert.equal(app.label.textContent, 'Otwórz e-mail');
+test('unconfigured preview disables submission and never opens an email client', async () => {
+  const app = harness({ endpoint: '', name: ' Firma ABC ', email: ' firma@example.com ' });
+  assert.equal(app.label.textContent, 'Wyślij wiadomość');
+  assert.equal(app.button.disabled, true);
+  assert.match(app.status.textContent, /Wysyłanie formularza jest chwilowo niedostępne/);
+  assert.equal(app.status.classList.contains('is-error'), true);
   await app.submit();
   assert.equal(app.requests, 0);
   assert.equal(app.resets, 0);
-  assert.match(app.window.location.href, /^mailto:kontakt@protolume\.pl\?subject=/);
-  assert.match(decodeURIComponent(app.window.location.href), /Imię: Firma ABC/);
-  assert.match(decodeURIComponent(app.window.location.href), /E-mail: firma@example.com/);
+  assert.equal(app.window.location.href, '');
   assert.doesNotMatch(app.status.textContent, /Wiadomość wysłana/);
 });
 
 test('whitespace-only name fails after trimming, focuses field and clears on input', async () => {
-  const app = harness({ name: '  ' });
+  const app = harness({ endpoint: 'https://formspree.io/f/abc123', name: '  ' });
   await app.submit();
   assert.equal(app.requests, 0);
   assert.equal(app.fields.name.focused, true);
@@ -132,7 +133,7 @@ test('whitespace-only name fails after trimming, focuses field and clears on inp
 });
 
 test('native invalid event marks field without sending', async () => {
-  const app = harness({ email: 'bad-address' });
+  const app = harness({ endpoint: 'https://formspree.io/f/abc123', email: 'bad-address' });
   app.invalid(app.fields.email);
   assert.equal(app.fields.email.attributes.get('aria-invalid'), 'true');
   await app.submit();
