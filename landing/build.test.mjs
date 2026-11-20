@@ -112,7 +112,7 @@ test('UI-001 matches Figma V3 hero structure while retaining static build guaran
   assert.match(css, /\.hero\s*\{[^}]*display:\s*grid/);
   assert.match(css, /@media \(max-width: 540px\)/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)/);
-  assert.doesNotMatch(html, /<script[^>]+(?:three|gsap|motion)(?:\.min)?\.js/i);
+  assert.doesNotMatch(html, /<script[^>]+(?:three|gsap)(?:\.min)?\.js/i);
 });
 
 
@@ -172,6 +172,30 @@ test('UI-002 preserves all 6+3+4 content items with semantic numbering and Lucid
     assert.ok(sprite.includes('id="' + match[1] + '"'), 'Missing Lucide icon: ' + match[1]);
   }
   assert.doesNotMatch(html, /[\u{1F300}-\u{1FAFF}]/u);
+});
+
+
+test('MOTION-001 bundles local animated enhancements without changing the static content', () => {
+  build('preview', {});
+  const html = read('index.html');
+  const motionStyles = read('motion.css');
+  const motionScript = read('motion.js');
+  const baseStyles = read('styles.css');
+
+  assert.match(html, /<link rel="stylesheet" href="\/motion.css">/);
+  assert.match(html, /<script src="\/motion.js" defer><\/script>/);
+  assert.match(html, /<script src="\/form.js" defer><\/script>/);
+  assert.doesNotMatch(html, /https?:\/\/[^"']+\.(?:js|css)/);
+  assert.match(motionStyles, /@keyframes hero-rise/);
+  assert.match(motionStyles, /@media \(prefers-reduced-motion: reduce\)/);
+  assert.match(motionScript, /IntersectionObserver/);
+  assert.match(motionScript, /animation\.cancel\(\)/);
+  assert.match(motionScript, /fill: 'none'/);
+  assert.match(baseStyles, /scroll-padding-top/);
+  assert.match(html, /id="contact-form"/);
+  assert.equal((html.match(/<article class="area-card">/g) || []).length, 6);
+  assert.equal((html.match(/<li class="step">/g) || []).length, 3);
+  assert.equal((html.match(/<li class="solution-item">/g) || []).length, 4);
 });
 
 test('production build rejects missing contact and legal provider configuration', () => {

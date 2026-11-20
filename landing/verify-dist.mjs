@@ -17,7 +17,7 @@ export function verifyArtifact(mode, root = defaultRoot) {
   const robots = readIfExists(root, 'robots.txt');
   const sitemap = readIfExists(root, 'sitemap.xml');
   const files = [
-    'styles.css', 'form.js', 'assets/favicon.svg',
+    'styles.css', 'motion.css', 'form.js', 'motion.js', 'assets/favicon.svg',
     'assets/protolume-logo-horizontal-dark.svg', 'assets/icons.svg',
     'assets/LUCIDE-LICENSE.txt',
   ];

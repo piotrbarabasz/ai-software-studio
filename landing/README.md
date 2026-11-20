@@ -114,3 +114,17 @@ Drugi etap redesignu zgodnego z [Figmą V3 Desktop](https://www.figma.com/design
 
 Testy automatyczne w \`landing/build.test.mjs\` weryfikują liczbę i numerację elementów, referencje do Lucide, breakpointy, zachowanie formularza i nawigacji.
 
+
+
+## MOTION-001 — dostępne i lekkie animacje V3
+
+Animacje powstają według [Figma V3 Desktop](https://www.figma.com/design/m2LeessPiyWNgREo4RG9jR?node-id=11-28) i [Mobile](https://www.figma.com/design/m2LeessPiyWNgREo4RG9jR?node-id=12-67). Są **progresywnym ulepszeniem**, a nie warunkiem wyświetlenia treści.
+
+- \`motion.css\`: skończone animacje wejścia Hero (nagłówek, lead, wizualizacja AI, kartki wejścia/rezultatu), hover tylko dla \`hover: hover\` i \`pointer: fine\`, obsługa \`prefers-reduced-motion: reduce\`.
+- \`motion.js\`: natywne Web Animations API + \`IntersectionObserver\` dla sześciu kart obszarów, trzech kroków współpracy, czterech kafelków rozwiązań i formularza; opóźnienia między elementami.
+- Strona jest **zawsze widoczna domyślnie** — bez klas ukrywających elementy przed inicjalizacją JS; przeglądarki bez API pokazują wszystkie treści. Przy przełączeniu preferencji reduced-motion trwające animacje są anulowane.
+- Kotwice są natywne, nie przechwytujemy scrollowania JavaScriptem. Płynne przewijanie działa wyłącznie, jeżeli system nie prosi o ograniczenie ruchu.
+- Assety CSS/JS są samodzielnie hostowane w \`landing/dist\`, bez bibliotek zewnętrznych, CDN, nowych ikon ani zmian backendu.
+- \`motion.test.mjs\` testuje mechanikę reveal i degradację bez API; \`node scripts/protolume.mjs check\` uruchamia również te testy.
+- Formularz zachowuje dotychczasową obsługę i ograniczenia preview; Motion **nie** symuluje powodzenia wysyłki.
+
