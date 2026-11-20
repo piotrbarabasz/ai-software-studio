@@ -415,7 +415,8 @@ h2 {
   transition: background .18s ease;
 }
 .submit:hover { background: var(--color-brand-hover); border-color: var(--color-brand-hover); }
-.submit:disabled { opacity: .72; cursor: wait; }
+.submit:disabled { opacity: .72; cursor: not-allowed; }
+#contact-form[aria-busy="true"] .submit:disabled { cursor: wait; }
 .submit .icon { width: 1.1rem; height: 1.1rem; }
 .status {
   min-height: 1.25rem;
