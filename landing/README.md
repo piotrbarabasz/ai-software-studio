@@ -5,10 +5,14 @@ Ten katalog zawiera niezależną, **statyczną stronę Protolume**. Jest to poje
 1. Hero — jasna informacja o AI, automatyzacjach i aplikacjach, dwa odnośniki do sekcji strony.
 2. Co można zautomatyzować — sześć krótkich obszarów z przykładami problemów.
 3. Jak wygląda współpraca — trzy proste kroki.
-4. Co mogę stworzyć — cztery typy rozwiązań.
+4. Co tworzymy — cztery typy rozwiązań.
 5. Kontakt — imię lub firma, e-mail i opcjonalny krótki opis.
 
-**Nie ma osobnej sekcji o właścicielu / zaufaniu**, portfolio, demo ani nawigacji do wielu podstron. Nazwisko właściciela jest jedynie w stopce. Jedyną dodatkową stroną jest polityka prywatności.
+Strona ma **lekki, przyklejony do górnej krawędzi navbar** z czterema kotwicami (Obszary, Współpraca, Rozwiązania, Kontakt). Na telefonach nawigacja zawija się pod logo, a przewijanie do sekcji uwzględnia wysokość nagłówka oraz preferencję ograniczonego ruchu.
+
+Ikony pochodzą z biblioteki **[Lucide](https://lucide.dev)** (licencja ISC). W repozytorium jest lekki zestaw SVG `landing/icons.svg` oraz `landing/LUCIDE-LICENSE.txt`; generator kopiuje oba pliki do `landing/dist/assets/`, bez CDN i bez dodatkowych zależności runtime. Użyte strzałki w CTA, ikony obszarów automatyzacji i typów rozwiązań należą do jednego zestawu.
+
+Komunikacja publiczna jest spójna w imieniu marki Protolume („Projektujemy”, „Co tworzymy?”, „Napisz do nas”, „Opowiedz nam”). **Nie ma osobnej sekcji o właścicielu / zaufaniu**, portfolio, demo ani nawigacji do wielu podstron. Jedyną dodatkową stroną jest polityka prywatności.
 
 Strona wykorzystuje logo marki, ma dostępne pola i stany formularza, nie zawiera Angular runtime, backendu ani analityki śledzącej. W trybie preview formularz otwiera klienta pocztowego; produkcyjny build wymaga skonfigurowanej usługi Formspree i zatwierdzonych danych prawnych.
 
@@ -72,6 +76,9 @@ Starszy plan Firebase i pliki `firebase.json` / `cloudbuild.landing-preview.yaml
 ## Akceptacja
 
 - Pięć sekcji w kolejności: hero → obszary → współpraca → typy rozwiązań → kontakt.
+- Nawigacja do czterech sekcji z czytelnymi stanami focus, zachowaniem responsive i przewijaniem przy sticky header.
+- Ikony wyłącznie z lokalnie dostarczanego pakietu Lucide; brak emoji i zewnętrznych zależności CDN.
+- Spójne brzmienie w imieniu marki Protolume, bez pierwszej osoby liczby pojedynczej.
 - Dokładnie sześć obszarów, trzy kroki i cztery typy rozwiązań — bez rozbudowanego katalogu.
 - Brak osobnego bloku zaufania, portfolio, case studies i nawigacji wielostronicowej.
 - Działa responsywnie; widoczne focus states, semantyczne nagłówki i komunikaty dostępne dla czytników.
