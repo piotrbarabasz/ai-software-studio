@@ -19,8 +19,13 @@
 
   if (!nameField || !emailField || !messageField || !honeypotField) return;
 
-  // A no-endpoint preview opens a mail client. It does not send anything.
-  if (!endpoint && label) label.textContent = 'Otwórz e-mail';
+  // No configured provider: keep the form unavailable, never open mail software.
+  // A genuine Formspree endpoint is required to accept messages in-page.
+  if (!endpoint) {
+    button.disabled = true;
+    status.textContent = 'Wysyłanie formularza jest chwilowo niedostępne. Napisz bezpośrednio na ' + fallbackEmail + '.';
+    status.classList.toggle('is-error', true);
+  }
 
   function setStatus(text, error = false) {
     status.textContent = text;
@@ -72,21 +77,6 @@
 
     // Discard previous feedback before starting a new attempt.
     setStatus('');
-
-    if (!endpoint) {
-      const subject = encodeURIComponent('Zapytanie ze strony Protolume');
-      const body = encodeURIComponent(
-        'Imię: ' + name + '\nE-mail: ' + email + '\n\n' +
-        (message || 'Proszę o kontakt.')
-      );
-      try {
-        window.location.href = 'mailto:' + fallbackEmail + '?subject=' + subject + '&body=' + body;
-        setStatus('Jeśli otworzyła się poczta, wyślij w niej wiadomość. Jeśli nie, napisz na ' + fallbackEmail + '.');
-      } catch {
-        setStatus('Nie udało się otworzyć poczty. Napisz bezpośrednio na ' + fallbackEmail + '.', true);
-      }
-      return;
-    }
 
     button.disabled = true;
     form.setAttribute('aria-busy', 'true');

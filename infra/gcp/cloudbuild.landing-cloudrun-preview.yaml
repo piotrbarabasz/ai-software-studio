@@ -8,6 +8,7 @@ substitutions:
   _FRONTEND_SERVICE: "aisoftware-studio-web"
   _PREVIEW_IMAGE_NAME: "protolume-v3-review"
   _PREVIEW_TAG: "v3-review"
+  _FORM_ENDPOINT: "NOT_CONFIGURED"  # explicit opt-in; public Formspree ID, not an API secret
 
 options:
   logging: CLOUD_LOGGING_ONLY
@@ -25,16 +26,50 @@ steps:
       - -p
       - test_v3_cloudrun_preview_guard.py
 
+  # A real inbox can be tested only with an approved public privacy configuration.
+  # Default path does not read secrets and cannot submit the contact form.
+  - id: prepare-preview-contact
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: sh
+    waitFor: ["preview-guard-tests"]
+    env:
+      - "PREVIEW_FORM_ENDPOINT=$_FORM_ENDPOINT"
+    args:
+      - -c
+      - |
+        set -eu
+        if [ "$$PREVIEW_FORM_ENDPOINT" = "NOT_CONFIGURED" ]; then
+          echo "Contact form is disabled in this preview."
+        else
+          case "$$PREVIEW_FORM_ENDPOINT" in
+            https://formspree.io/f/*) ;;
+            *) echo "BLOCKED: preview requires a Formspree HTTPS endpoint" >&2; exit 1 ;;
+          esac
+          # Access by the Cloud Build service account is required. Never print JSON.
+          gcloud secrets versions access latest \
+            --secret=aisoftware-studio-public-legal-config \
+            --project=$_PROJECT_ID > frontend/.public-legal-config.json
+        fi
+
   - id: static-v3-checks
     name: node:22.22.3-bookworm-slim
     entrypoint: sh
-    waitFor: ["preview-guard-tests"]
+    waitFor: ["prepare-preview-contact"]
+    env:
+      - "PREVIEW_FORM_ENDPOINT=$_FORM_ENDPOINT"
     args:
       - -c
-      - >-
-        node --test landing/build.test.mjs landing/deployment.test.mjs
-        scripts/protolume.test.mjs scripts/v3-cloudrun-preview.test.mjs &&
-        node landing/build.mjs --preview &&
+      - |
+        set -eu
+        node --test landing/build.test.mjs landing/form.test.mjs landing/motion.test.mjs landing/deployment.test.mjs \
+          scripts/protolume.test.mjs scripts/v3-cloudrun-preview.test.mjs
+        if [ "$$PREVIEW_FORM_ENDPOINT" = "NOT_CONFIGURED" ]; then
+          node landing/build.mjs --preview
+        else
+          FORM_ENDPOINT="$$PREVIEW_FORM_ENDPOINT" \
+            PUBLIC_LEGAL_CONFIG_PATH=frontend/.public-legal-config.json \
+            node landing/build.mjs --preview
+        fi
         node landing/verify-dist.mjs --preview
 
   - id: existing-service-baseline
@@ -69,6 +104,7 @@ steps:
       - >-
         sh scripts/gcp/smoke-v3-preview-image.sh
         "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_PREVIEW_IMAGE_NAME:$BUILD_ID"
+        "$_FORM_ENDPOINT"
 
   - id: v3-preview-image-push
     name: gcr.io/cloud-builders/docker

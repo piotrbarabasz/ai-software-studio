@@ -48,6 +48,8 @@ test('preview is a minimal one-page offer with clear areas and honest contact fa
   assert.match(html, /name="message"/);
   assert.match(html, /data-endpoint=""/);
   assert.match(html, /action="#"/);
+  assert.match(html, /id="contact-submit" type="submit" disabled/);
+  assert.doesNotMatch(read('form.js'), /window\.location\.href/);
   assert.match(html, /noindex, nofollow/);
   assert.doesNotMatch(html, /__FORM_|__ROBOTS__/);
   assert.match(policy, /Wersja robocza/);
@@ -230,11 +232,23 @@ test('CONTACT-001 keeps a minimal accessible form and preserves existing contact
   assert.match(formJS, /form\.setAttribute\('aria-busy', 'true'\)/);
   assert.match(formJS, /if \(button\.disabled\) return/);
   assert.match(formJS, /nameField\.setCustomValidity/);
-  assert.match(formJS, /mailto:/);
+  assert.doesNotMatch(formJS, /window\.location\.href|mailto:/);
+  assert.match(formJS, /if \(!endpoint\) \{/);
   assert.equal((html.match(/<h1\b/g) || []).length, 1);
   assert.equal((html.match(/<article class="area-card">/g) || []).length, 6);
   assert.equal((html.match(/<li class="step">/g) || []).length, 3);
   assert.equal((html.match(/<li class="solution-item">/g) || []).length, 4);
+});
+
+test('configured preview refuses collection without approved legal configuration', () => {
+  assert.throws(
+    () => build('preview', { FORM_ENDPOINT: 'https://formspree.io/f/abcxyz123' }),
+    /PUBLIC_LEGAL_CONFIG_PATH/,
+  );
+  assert.throws(
+    () => build('preview', { FORM_ENDPOINT: 'https://example.com/steal' }),
+    /Formspree/,
+  );
 });
 
 test('production build rejects missing contact and legal provider configuration', () => {
@@ -267,6 +281,16 @@ test('production build includes verified legal details and configured form endpo
   };
   try {
     writeFileSync(configPath, JSON.stringify(legal));
+    // A noindex preview can collect real submissions only with validated policy.
+    build('preview', {
+      FORM_ENDPOINT: 'https://formspree.io/f/abcxyz123',
+      PUBLIC_LEGAL_CONFIG_PATH: configPath,
+    });
+    assert.match(read('index.html'), /data-endpoint="https:\/\/formspree.io\/f\/abcxyz123"/);
+    assert.doesNotMatch(read('index.html'), /id="contact-submit" type="submit" disabled/);
+    assert.match(read('index.html'), /noindex, nofollow/);
+    assert.match(read('polityka-prywatnosci/index.html'), /Formspree/);
+    assert.doesNotMatch(read('polityka-prywatnosci/index.html'), /Wersja robocza/);
     build('production', {
       FORM_ENDPOINT: 'https://formspree.io/f/abcxyz123',
       PUBLIC_LEGAL_CONFIG_PATH: configPath,

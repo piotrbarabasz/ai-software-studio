@@ -26,7 +26,7 @@ function listSection(title, items) {
 }
 
 function legalDocument(config, production) {
-  const summary = production
+  const summary = config
     ? 'Informacje dotyczące danych przesłanych przez formularz kontaktowy na stronie Protolume.'
     : 'Wersja robocza do przeglądu. Przed publikacją konieczna jest zweryfikowana konfiguracja prawna.';
   const contents = config ? [
@@ -65,14 +65,14 @@ export function build(mode = 'preview', config = process.env) {
     throw new Error('FORM_ENDPOINT must be an HTTPS Formspree form URL (https://formspree.io/f/...).');
   }
   if (production && !endpoint) throw new Error('Production build requires FORM_ENDPOINT.');
-  if (production && !config.PUBLIC_LEGAL_CONFIG_PATH) {
-    throw new Error('Production build requires PUBLIC_LEGAL_CONFIG_PATH.');
+  if (endpoint && !config.PUBLIC_LEGAL_CONFIG_PATH) {
+    throw new Error('A configured contact form requires PUBLIC_LEGAL_CONFIG_PATH, including in preview.');
   }
-  const legal = production
+  const legal = endpoint
     ? readAndValidatePublicLegalConfig(config.PUBLIC_LEGAL_CONFIG_PATH, { mode: 'production' })
     : null;
 
-  if (production) {
+  if (endpoint) {
     const suppliers = [
       ...legal.processing.recipients,
       ...legal.processing.infrastructureProviders,
@@ -91,6 +91,7 @@ export function build(mode = 'preview', config = process.env) {
   index = index
     .replace('__FORM_ACTION__', escapeHtml(endpoint || '#'))
     .replace('__FORM_ENDPOINT__', escapeHtml(endpoint))
+    .replace('__FORM_DISABLED__', endpoint ? '' : 'disabled')
     .replace('__ROBOTS__', production ? 'index, follow' : 'noindex, nofollow');
   writeFileSync(join(output, 'index.html'), index);
   cpSync(join(here, 'styles.css'), join(output, 'styles.css'));

@@ -31,7 +31,7 @@ Nowa wersja powstaje z `landing/` i działa w istniejącej usłudze Cloud Run ja
 - Na aktualnym `master` wykonaj `git pull origin master`.
 - Sprawdź, które konto Google ma uprawnienia w **ai-software-studio-501918**: do ręcznego Cloud Build submit, źródłowego bucketu Cloud Build, Artifact Registry oraz Cloud Run Admin (dla konta serwisowego wykonującego build). Wcześniej `kontakt@protolume.pl` otrzymało brak dostępu — `.env` tego nie naprawia.
 - Konto wywołujące CLI wybierz świadomie w lokalnym `.env`: `GCP_ACCOUNT=...`; identyfikator projektu zostaje `ai-software-studio-501918`.
-- Nie wstawiaj tokenów do `.env`, nie ustawiaj `FORM_ENDPOINT` dla preview i nie aktualizuj prawnego JSON w tym kroku.
+- Nie wstawiaj tokenów do `.env`. Publiczny `FORM_ENDPOINT` możesz podać **tylko** dla testu rzeczywistej wysyłki, po zatwierdzeniu odbiorcy Formspree i danych prawnych w Secret Manager.
 
 Zamiast uruchamiania błędnie skonfigurowanego projektu Firebase wykorzystujemy istniejące Cloud Run.
 
@@ -71,7 +71,7 @@ Zwróć uwagę na `status.traffic`: `v3-review` musi mieć `percent: 0`, a poprz
 
 Sprawdź wygląd desktop/mobile, `/polityka-prywatnosci/`, `/robots.txt`, 404, historyczne URL-e i przycisk formularza. Preview ma **noindex + Disallow: /**, ale link z tagiem nadal może być dostępny publicznie. Nie dodawaj do niego danych klientów.
 
-Preview nie wysyła danych do Formspree: przycisk otwiera klienta pocztowego (`mailto:`). Strona polityki w preview jest jawnie robocza — **nie publikuj jej jako polityki produkcyjnej**.
+Domyślny preview **nie wysyła danych i nie otwiera klienta pocztowego**: przycisk jest nieaktywny, a polityka prywatności pozostaje robocza. Opcjonalny preview z rzeczywistym `FORM_ENDPOINT` wymaga wcześniej zatwierdzonej polityki pobranej z Secret Manager i korzysta z Formspree bez opuszczania strony. Nadal obowiązuje `noindex` i `--no-traffic`.
 
 ## Dlaczego nie wdrażamy v3 od razu live
 
@@ -87,3 +87,16 @@ Preview nie wysyła danych do Formspree: przycisk otwiera klienta pocztowego (`m
 Preview deployment tworzy nową rewizję, ale nie zmienia podziału ruchu dla `protolume.pl`. Gdyby kontrola podziału ruchu nie przeszła, **nie uruchamiaj kolejnych deployów**, sprawdź `Cloud Run → Revisions → Traffic` i przywróć poprzednią wersję na podstawie zapisanego stanu. Usunięcie tagu `v3-review` jest opcjonalnym, osobnym działaniem po review.
 
 Starsze pliki `firebase.json`, `cloudbuild.landing-preview.yaml` i `cloudbuild.landing-release.yaml` pozostają w repo jako historyczna alternatywa, ale **nie są ścieżką rekomendowaną** dla Protolume v3.
+
+## Ręczny test formularza — wariant z Formspree
+
+Wersja przeglądowa **nie może wysyłać e-maili przez samo podanie adresu**. Aby przetestować prawdziwą integrację:
+
+- Formularz w Formspree musi mieć **zweryfikowanego odbiorcę \`kontakt@protolume.pl\`** i aktywną akcję powiadomienia \`Send Email\`.
+- Zatwierdzony JSON publicznej polityki powinien istnieć w sekrecie \`aisoftware-studio-public-legal-config\` w projekcie \`ai-software-studio-501918\`. Konto Cloud Build musi móc czytać wersję tego sekretu.
+- W lokalnym \`.env\` ustaw publiczne \`FORM_ENDPOINT=https://formspree.io/f/TWOJ_ID\` i wykonaj \`node scripts/protolume.mjs preview\`. Nie wstawiaj zmyślonego ID i nie przesyłaj JSON polityki do logów.
+- Pipeline buduje statyczne \`landing/dist\` po walidacji, potem pakuje **wyłącznie publiczne zasoby** do obrazu Nginx; \`.public-legal-config.json\` jest wykluczony z kontekstu Docker.
+- Smoke sprawdza obecność endpointu, zatwierdzonej polityki, \`noindex\` i brak zmiany produkcyjnego ruchu. Żeby potwierdzić rzeczywistą dostawę, ręcznie wyślij test i sprawdź odbiór e-maila.
+
+Przy braku \`FORM_ENDPOINT\` działa pierwotny przepływ testowy: noindex, draft policy, **przycisk disabled**, bez wysyłania i bez \`mailto:\` na kliknięcie przycisku.
+

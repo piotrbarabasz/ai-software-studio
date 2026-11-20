@@ -10,6 +10,9 @@ tmp
 **/node_modules
 **/.angular
 **/dist
+# The statically verified website is the only dist folder copied into the V3 image.
+!landing/dist/
+!landing/dist/**
 **/coverage
 **/__pycache__
 **/*.pyc

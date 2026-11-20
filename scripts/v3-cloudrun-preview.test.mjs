@@ -38,19 +38,33 @@ test('manual pipeline deploys a tagged revision to the existing Cloud Run servic
   assert.deepEqual(positions, [...positions].sort((a, b) => a - b));
 });
 
-test('preview image cannot accidentally include the production form or legal policy', () => {
+test('preview image serves previously verified artifacts; direct sending requires approved legal data', () => {
   const dockerfile = read('landing/Dockerfile.cloudrun');
   const nginx = read('landing/nginx.cloudrun.conf');
-  assert.match(dockerfile, /node landing\/build\.mjs --preview/);
-  assert.match(dockerfile, /node landing\/verify-dist\.mjs --preview/);
-  assert.doesNotMatch(dockerfile, /--production|FORM_ENDPOINT|PUBLIC_LEGAL_CONFIG_PATH/);
+  const yaml = read('infra/gcp/cloudbuild.landing-cloudrun-preview.yaml');
+  const ignore = read('.dockerignore');
+
+  assert.match(dockerfile, /COPY landing\/dist\//);
+  assert.doesNotMatch(dockerfile, /COPY frontend\/|--production|PUBLIC_LEGAL_CONFIG_PATH/);
   assert.match(dockerfile, /EXPOSE 8080/);
   assert.match(nginx, /X-Robots-Tag "noindex, nofollow" always/);
-  assert.match(nginx, /Content-Security-Policy/);
+  assert.match(nginx, /connect-src 'self' https:\/\/formspree\.io/);
+  assert.match(nginx, /form-action 'self' https:\/\/formspree\.io/);
+  assert.doesNotMatch(nginx, /form-action [^;]*mailto:/);
   assert.match(nginx, /location = \/polityka-prywatnosci/);
   assert.match(nginx, /location \^~ \/polityka-prywatnosci\//);
   assert.match(nginx, /return 302 \/;/);
   assert.doesNotMatch(nginx, /proxy_pass|fastcgi_pass/);
+  assert.match(ignore, /^!landing\/dist\/\*\*$/m);
+  assert.match(ignore, /^\*\*\/\.public-legal-config\.json$/m);
+
+  assert.match(yaml, /_FORM_ENDPOINT: "NOT_CONFIGURED"/);
+  assert.match(yaml, /id: prepare-preview-contact/);
+  assert.match(yaml, /secrets versions access latest/);
+  assert.match(yaml, /aisoftware-studio-public-legal-config/);
+  assert.match(yaml, /PUBLIC_LEGAL_CONFIG_PATH=frontend\/\.public-legal-config\.json/);
+  assert.match(yaml, /node landing\/verify-dist\.mjs --preview/);
+  assert.match(yaml, /--no-traffic/);
 });
 
 test('legacy deploy-prod continues building Angular, not the v3 preview', () => {
@@ -68,6 +82,13 @@ test('local Make preview now targets Cloud Run and obsolete Firebase release is 
   assert.ok(args.some((value) => value.includes('_PREVIEW_TAG=v3-review')));
   assert.ok(!args.some((value) => value.includes('landing-preview.yaml')));
   assert.throws(() => buildGcloudArgs('release', env), /Brak ścieżki release/);
+  const configured = buildGcloudArgs('preview', {
+    ...env,
+    FORM_ENDPOINT: 'https://formspree.io/f/abcDEF123',
+  });
+  assert.ok(configured.some((value) => value.includes('_FORM_ENDPOINT=https://formspree.io/f/abcDEF123')));
+  assert.ok(!args.some((value) => value.includes('_FORM_ENDPOINT=')));
+
   const source = read('scripts/protolume.mjs');
   assert.match(source, /Release Cloud Run v3 jest obecnie ZABLOKOWANY/);
   const template = read('.env.example');
