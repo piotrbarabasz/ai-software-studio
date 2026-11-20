@@ -11,29 +11,67 @@
 
   const endpoint = form.dataset.endpoint || '';
   const fallbackEmail = 'kontakt@protolume.pl';
+  const label = button.querySelector('[data-submit-label]');
+  const nameField = form.elements.namedItem('name');
+  const emailField = form.elements.namedItem('email');
+  const messageField = form.elements.namedItem('message');
+  const honeypotField = form.elements.namedItem('_gotcha');
 
-  // The preview deliberately does not pretend to send a message.
-  if (!endpoint) button.firstChild.textContent = 'Otwórz e-mail ';
+  if (!nameField || !emailField || !messageField || !honeypotField) return;
 
-  function setStatus(text, isError = false) {
+  // A no-endpoint preview opens a mail client. It does not send anything.
+  if (!endpoint && label) label.textContent = 'Otwórz e-mail';
+
+  function setStatus(text, error = false) {
     status.textContent = text;
-    status.classList.toggle('is-error', isError);
+    status.classList.toggle('is-error', error);
   }
+
+  // Native constraint validation remains the first line of defence.
+  for (const field of [nameField, emailField, messageField]) {
+    field.addEventListener('input', () => {
+      field.removeAttribute('aria-invalid');
+      if (field === nameField) nameField.setCustomValidity('');
+      if (status.classList.contains('is-error')) setStatus('');
+    });
+  }
+  form.addEventListener('invalid', (event) => {
+    if (event.target && typeof event.target.setAttribute === 'function') {
+      event.target.setAttribute('aria-invalid', 'true');
+    }
+  }, true);
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
-    if (!form.reportValidity()) return;
+    if (button.disabled) return;
 
-    const name = form.elements.namedItem('name').value.trim();
-    const email = form.elements.namedItem('email').value.trim();
-    const message = form.elements.namedItem('message').value.trim();
-    const honeypot = form.elements.namedItem('_gotcha').value.trim();
+    const name = nameField.value.trim();
+    const email = emailField.value.trim();
+    const message = messageField.value.trim();
+    const honeypot = honeypotField.value.trim();
 
+    // Ignore bot submissions without hitting the provider.
     if (honeypot) return;
-    if (name.length < 2 || email.length > 254) {
-      setStatus('Sprawdź wymagane pola.', true);
+
+    if (name.length < 2) {
+      nameField.setCustomValidity('Podaj co najmniej dwa znaki imienia lub nazwy firmy.');
+      nameField.setAttribute('aria-invalid', 'true');
+      setStatus('Uzupełnij imię lub nazwę firmy (minimum dwa znaki).', true);
+      nameField.reportValidity();
+      nameField.focus();
       return;
     }
+    if (!form.reportValidity() || email.length > 254) {
+      setStatus('Sprawdź wymagane pola i adres e-mail.', true);
+      if (email.length > 254) {
+        emailField.setAttribute('aria-invalid', 'true');
+        emailField.focus();
+      }
+      return;
+    }
+
+    // Discard previous feedback before starting a new attempt.
+    setStatus('');
 
     if (!endpoint) {
       const subject = encodeURIComponent('Zapytanie ze strony Protolume');
@@ -41,13 +79,17 @@
         'Imię: ' + name + '\nE-mail: ' + email + '\n\n' +
         (message || 'Proszę o kontakt.')
       );
-      // This opens a mail client; it does NOT confirm message delivery.
-      window.location.href = 'mailto:' + fallbackEmail + '?subject=' + subject + '&body=' + body;
-      setStatus('Jeśli otworzyła się poczta, wyślij w niej wiadomość. Gdy nie działa, napisz na ' + fallbackEmail + '.');
+      try {
+        window.location.href = 'mailto:' + fallbackEmail + '?subject=' + subject + '&body=' + body;
+        setStatus('Jeśli otworzyła się poczta, wyślij w niej wiadomość. Jeśli nie, napisz na ' + fallbackEmail + '.');
+      } catch {
+        setStatus('Nie udało się otworzyć poczty. Napisz bezpośrednio na ' + fallbackEmail + '.', true);
+      }
       return;
     }
 
     button.disabled = true;
+    form.setAttribute('aria-busy', 'true');
     setStatus('Wysyłanie wiadomości…');
 
     const payload = new FormData(form);
@@ -64,11 +106,15 @@
       });
       if (!response.ok) throw new Error('HTTP ' + response.status);
       form.reset();
-      setStatus('Wiadomość wysłana. Dziękuję za kontakt!');
+      for (const field of [nameField, emailField, messageField]) {
+        field.removeAttribute('aria-invalid');
+      }
+      setStatus('Wiadomość wysłana. Dziękujemy za kontakt!');
     } catch {
-      setStatus('Nie udało się wysłać wiadomości. Napisz na ' + fallbackEmail + '.', true);
+      setStatus('Nie udało się wysłać wiadomości. Spróbuj ponownie lub napisz na ' + fallbackEmail + '.', true);
     } finally {
       button.disabled = false;
+      form.removeAttribute('aria-busy');
     }
   });
 })();

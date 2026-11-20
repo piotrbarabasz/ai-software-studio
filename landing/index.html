@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#f9f9fc">
+    <meta name="theme-color" content="#f9fafd">
     <meta name="robots" content="__ROBOTS__">
     <title>Protolume — Automatyzacje AI i aplikacje dla firm</title>
     <meta name="description" content="Automatyzacje AI dla firm: obsługa zapytań, dokumenty, leady, integracje i aplikacje. Opowiedz o procesie lub pomyśle — bez gotowej specyfikacji.">
@@ -176,9 +176,17 @@
           <div class="contact-intro">
             <p class="section-label">Porozmawiajmy</p>
             <h2 id="contact-title">Opowiedz nam, co zabiera czas.</h2>
-            <p>Wystarczy kilka zdań o tym, co dziś robicie ręcznie. Możesz też po prostu opisać pomysł na aplikację.</p>
+            <p class="contact-description">Wystarczy kilka zdań o tym, co dziś robicie ręcznie. Możesz też po prostu opisać pomysł na aplikację.</p>
+            <div class="contact-note">
+              <span class="contact-note-icon" aria-hidden="true"><svg class="icon" width="24" height="24" viewBox="0 0 24 24" focusable="false"><use href="/assets/icons.svg#icon-sparkles"></use></svg></span>
+              <p>Nie potrzebujesz gotowego planu ani specyfikacji, żeby się odezwać.</p>
+            </div>
           </div>
-          <form id="contact-form" action="__FORM_ACTION__" method="POST" data-endpoint="__FORM_ENDPOINT__">
+          <form id="contact-form" action="__FORM_ACTION__" method="POST" data-endpoint="__FORM_ENDPOINT__" aria-labelledby="contact-form-title">
+            <div class="form-header">
+              <h3 id="contact-form-title">Napisz do nas</h3>
+              <p>Podaj e-mail, a będziemy mogli odpowiedzieć na Twoje pytanie.</p>
+            </div>
             <div class="field">
               <label for="contact-name">Imię lub firma <span aria-hidden="true">*</span></label>
               <input id="contact-name" name="name" type="text" autocomplete="name" placeholder="Jak możemy się do Ciebie zwracać?" minlength="2" maxlength="120" required>
@@ -196,7 +204,7 @@
               <input id="contact-hp" name="_gotcha" type="text" tabindex="-1" autocomplete="off">
             </div>
             <p class="privacy-note">Dane z formularza wykorzystamy do odpowiedzi na wiadomość. Więcej informacji w <a href="/polityka-prywatnosci/">polityce prywatności</a>.</p>
-            <button class="submit" id="contact-submit" type="submit">Wyślij wiadomość <svg class="icon" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#icon-send"></use></svg></button>
+            <button class="submit" id="contact-submit" type="submit"><span data-submit-label>Wyślij wiadomość</span><svg class="icon" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="/assets/icons.svg#icon-send"></use></svg></button>
             <p id="contact-status" class="status" role="status" aria-live="polite" aria-atomic="true"></p>
           </form>
           <noscript><p class="status">Jeśli formularz nie działa bez JavaScript, napisz bezpośrednio na <a href="mailto:kontakt@protolume.pl">kontakt@protolume.pl</a>.</p></noscript>

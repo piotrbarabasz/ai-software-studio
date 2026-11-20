@@ -112,7 +112,7 @@ function run(executable, args, { env = process.env } = {}) {
 
 function check() {
   run(process.execPath, [
-    '--test', 'landing/build.test.mjs', 'landing/motion.test.mjs', 'landing/deployment.test.mjs', 'scripts/protolume.test.mjs', 'scripts/v3-cloudrun-preview.test.mjs',
+    '--test', 'landing/build.test.mjs', 'landing/form.test.mjs', 'landing/motion.test.mjs', 'landing/deployment.test.mjs', 'scripts/protolume.test.mjs', 'scripts/v3-cloudrun-preview.test.mjs',
   ]);
 }
 
