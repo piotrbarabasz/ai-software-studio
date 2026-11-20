@@ -83,7 +83,8 @@ export function buildGcloudArgs(command, config) {
       ...common,
       '--config=infra/gcp/cloudbuild.landing-cloudrun-preview.yaml',
       '--substitutions=_PROJECT_ID=' + config.GCP_PROJECT_ID +
-        ',_REGION=' + config.GCP_REGION + ',_PREVIEW_TAG=' + PREVIEW_TAG,
+        ',_REGION=' + config.GCP_REGION + ',_PREVIEW_TAG=' + PREVIEW_TAG +
+        (config.FORM_ENDPOINT ? ',_FORM_ENDPOINT=' + config.FORM_ENDPOINT : ''),
     ];
   }
   throw new Error('Nieobsługiwana komenda Cloud Build: ' + command);
