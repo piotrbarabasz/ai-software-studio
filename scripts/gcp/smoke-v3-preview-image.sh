@@ -58,6 +58,19 @@ grep -q 'id="obszary"' "$work_dir/home.body"
 grep -q 'id="wspolpraca"' "$work_dir/home.body"
 grep -q 'id="rozwiazania"' "$work_dir/home.body"
 grep -q 'id="kontakt"' "$work_dir/home.body"
+grep -q 'class="site-nav"' "$work_dir/home.body"
+grep -q 'Napisz do nas' "$work_dir/home.body"
+grep -q 'Co tworzymy?' "$work_dir/home.body"
+grep -q '/assets/icons.svg#icon-' "$work_dir/home.body"
+
+fetch "/assets/icons.svg" "lucide"
+[ "$(status "$work_dir/lucide.headers")" = "200" ]
+grep -q 'id="icon-message-square-text"' "$work_dir/lucide.body"
+grep -q 'id="icon-arrow-up-right"' "$work_dir/lucide.body"
+
+fetch "/assets/LUCIDE-LICENSE.txt" "license"
+[ "$(status "$work_dir/license.headers")" = "200" ]
+grep -q 'ISC License' "$work_dir/license.body"
 
 fetch "/polityka-prywatnosci/" "privacy"
 [ "$(status "$work_dir/privacy.headers")" = "200" ]
