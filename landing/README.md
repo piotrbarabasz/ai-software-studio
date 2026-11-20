@@ -99,3 +99,18 @@ Pierwszy etap redesignu odtwarza górną część strony według makiet [desktop
 - Scroll reveal i zaawansowane animacje zostaną dodane w MOTION-001. W UI-001 są tylko lekkie reakcje hover respektujące preferencję reduced motion.
 - Brak dodatkowych bibliotek JavaScript, CDN, emoji i nowego backendu.
 
+
+
+## UI-002 — karty obszarów, proces i typy rozwiązań
+
+Drugi etap redesignu zgodnego z [Figmą V3 Desktop](https://www.figma.com/design/m2LeessPiyWNgREo4RG9jR?node-id=11-28) i [Mobile](https://www.figma.com/design/m2LeessPiyWNgREo4RG9jR?node-id=12-67):
+
+- 6 obszarów automatyzacji: jasne karty, numery \`01–06\` (dekoracyjne i ukryte dla technologii asystujących), oryginalne ikony Lucide i **niezmienione teksty**.
+- 3 kroki współpracy: kontrastowy ciemny panel i osobne kafelki. Semantyka listy numerowanej pozostaje.
+- 4 typy rozwiązań: dwa rzędy kafelków na desktopie, jedna kolumna na wąskich ekranach; ikony Lucide i dyskretna numeracja.
+- Tablet do 1050 px: proces pionowy dla czytelności. Mobile: prostsze wymiary, typografia i spacing.
+- Styl podpięty do tokenów kolorów i zaokrągleń z UI-001. Bez nowych bibliotek, emoji, JS, niezweryfikowanych obietnic biznesowych ani animacji scroll reveal.
+- Hero, formularz, backend i konfiguracja release nie zostały zmienione.
+
+Testy automatyczne w \`landing/build.test.mjs\` weryfikują liczbę i numerację elementów, referencje do Lucide, breakpointy, zachowanie formularza i nawigacji.
+

@@ -115,6 +115,65 @@ test('UI-001 matches Figma V3 hero structure while retaining static build guaran
   assert.doesNotMatch(html, /<script[^>]+(?:three|gsap|motion)(?:\.min)?\.js/i);
 });
 
+
+test('UI-002 preserves all 6+3+4 content items with semantic numbering and Lucide icons', () => {
+  build('preview', {});
+  const html = read('index.html');
+  const css = read('styles.css');
+  const sprite = read('assets/icons.svg');
+
+  const areas = [...html.matchAll(/<article class="area-card">([\s\S]*?)<\/article>/g)];
+  const steps = [...html.matchAll(/<li class="step">([\s\S]*?)<\/li>/g)];
+  const solutions = [...html.matchAll(/<li class="solution-item">([\s\S]*?)<\/li>/g)];
+
+  assert.equal(areas.length, 6);
+  assert.equal(steps.length, 3);
+  assert.equal(solutions.length, 4);
+
+  for (const [i, item] of areas.entries()) {
+    const number = String(i + 1).padStart(2, '0');
+    assert.ok(item[1].includes('class="area-index" aria-hidden="true">' + number + '</span>'));
+    assert.match(item[1], /class="area-icon" aria-hidden="true"/);
+    assert.match(item[1], /href="\/assets\/icons\.svg#icon-/);
+  }
+  for (const [i, item] of steps.entries()) {
+    const number = String(i + 1).padStart(2, '0');
+    assert.ok(item[1].includes('class="step-number" aria-hidden="true">' + number + '</span>'));
+    assert.match(item[1], /<h3>/);
+    assert.match(item[1], /<p>/);
+  }
+  for (const [i, item] of solutions.entries()) {
+    const number = String(i + 1).padStart(2, '0');
+    assert.ok(item[1].includes('class="solution-index" aria-hidden="true">' + number + '</span>'));
+    assert.match(item[1], /class="solution-icon" aria-hidden="true"/);
+    assert.match(item[1], /href="\/assets\/icons\.svg#icon-/);
+  }
+
+  assert.match(css, /\.area-card\s*\{[^}]*display:\s*flex/);
+  assert.match(css, /\.area-grid\s*\{[^}]*grid-template-columns:\s*repeat\(3,/);
+  assert.match(css, /\.process-section\s*\{[^}]*background:\s*var\(--color-dark\)/);
+  assert.match(css, /\.solutions-list\s*\{[^}]*grid-template-columns:\s*repeat\(2,/);
+  assert.match(css, /@media \(max-width: 1050px\)/);
+  assert.match(css, /@media \(max-width: 700px\)/);
+  assert.match(css, /@media \(max-width: 540px\)/);
+
+  assert.match(html, /id="contact-form"/);
+  assert.match(html, /name="name"/);
+  assert.match(html, /name="email"/);
+  assert.match(html, /name="message"/);
+  assert.match(html, /href="#obszary"/);
+  assert.match(html, /href="#wspolpraca"/);
+  assert.match(html, /href="#rozwiazania"/);
+  assert.match(html, /href="#kontakt"/);
+  assert.equal((html.match(/<h1\b/g) || []).length, 1);
+
+  // All visual icons are bundled Lucide SVG references, never emoji.
+  for (const match of html.matchAll(/href="\/assets\/icons\.svg#(icon-[a-z0-9-]+)"/g)) {
+    assert.ok(sprite.includes('id="' + match[1] + '"'), 'Missing Lucide icon: ' + match[1]);
+  }
+  assert.doesNotMatch(html, /[\u{1F300}-\u{1FAFF}]/u);
+});
+
 test('production build rejects missing contact and legal provider configuration', () => {
   assert.throws(() => build('production', {}), /FORM_ENDPOINT/);
   assert.throws(() => build('production', { FORM_ENDPOINT: 'https://example.org/collect' }), /Formspree/);

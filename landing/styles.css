@@ -108,68 +108,193 @@ h1 span { color: #6847f5; }
 .cta-secondary { color: #392e64; background: transparent; }
 .cta-secondary:hover { background: #efecff; border-color: #c9bfff; }
 
-.content-section { border-top: 1px solid #e8e9f0; padding-block: clamp(3.9rem, 7vw, 6.2rem); scroll-margin-top: 1.25rem; }
-.section-heading { max-width: 730px; margin-bottom: clamp(1.8rem, 3vw, 2.6rem); }
+/* UI-002: Figma V3 service areas, collaboration steps, solution cards. */
+.content-section {
+  scroll-margin-top: 7rem;
+  padding-block: clamp(4.25rem, 6.5vw, 6.75rem);
+}
+.section-heading { max-width: 920px; margin-bottom: clamp(2rem, 3.5vw, 3rem); }
 .section-label {
-  margin-bottom: .85rem; color: #6847f5;
-  font-size: .73rem; font-weight: 760; letter-spacing: .12em; text-transform: uppercase;
+  margin-bottom: 1rem;
+  color: var(--color-brand);
+  font-size: .73rem;
+  font-weight: 760;
+  letter-spacing: .12em;
+  text-transform: uppercase;
 }
 h2 {
-  font-size: clamp(2rem, 3.8vw, 3.15rem);
-  line-height: 1.17; letter-spacing: -.052em; text-wrap: balance;
+  font-size: clamp(2rem, 3.55vw, 3.1rem);
+  line-height: 1.17;
+  letter-spacing: -.052em;
+  text-wrap: balance;
 }
 .section-heading > p:not(.section-label) {
-  max-width: 61ch; margin-top: 1rem; color: #626775;
-  font-size: .98rem; line-height: 1.7;
+  max-width: 70ch;
+  margin-top: 1rem;
+  color: var(--color-muted);
+  font-size: 1rem;
+  line-height: 1.65;
 }
-.area-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.area-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.1rem;
+}
 .area-card {
-  background: #fff; border: 1px solid #e8e8f0; border-radius: 17px;
-  padding: clamp(1.25rem, 2.4vw, 1.85rem);
+  position: relative;
+  display: flex;
+  flex-direction: column;
   min-width: 0;
+  min-height: 300px;
+  padding: clamp(1.4rem, 2vw, 1.8rem);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+}
+.area-index {
+  display: inline-grid;
+  place-items: center;
+  width: 45px;
+  height: 41px;
+  border-radius: 12px;
+  background: var(--color-brand-soft);
+  color: var(--color-brand);
+  font-size: .84rem;
+  font-weight: 760;
 }
 .area-icon {
-  display: inline-grid; place-items: center;
-  width: 44px; height: 44px; margin-bottom: 1.65rem;
-  border-radius: 12px; background: #efecff; color: #6847f5;
+  position: absolute;
+  top: clamp(1.4rem, 2vw, 1.8rem);
+  right: clamp(1.4rem, 2vw, 1.8rem);
+  display: inline-grid;
+  place-items: center;
+  width: 43px;
+  height: 43px;
+  margin: 0;
+  border-radius: 12px;
+  background: #f7f4ff;
+  color: var(--color-brand);
 }
-.area-icon .icon { width: 1.5rem; height: 1.5rem; }
-.area-card h3 { font-size: 1.13rem; font-weight: 720; line-height: 1.32; letter-spacing: -.025em; }
-.area-card p { margin-top: .75rem; color: #666b78; font-size: .89rem; line-height: 1.65; }
-
-.process-section .section-heading { margin-bottom: 2.4rem; }
+.area-icon .icon { width: 1.35rem; height: 1.35rem; }
+.area-card h3 {
+  max-width: 24ch;
+  margin-top: 2rem;
+  font-size: clamp(1.13rem, 1.56vw, 1.4rem);
+  font-weight: 740;
+  line-height: 1.32;
+  letter-spacing: -.025em;
+}
+.area-card p {
+  margin-top: auto;
+  padding-top: 1.7rem;
+  color: var(--color-muted);
+  font-size: .9rem;
+  line-height: 1.65;
+}
+.process-section {
+  margin-block: clamp(1rem, 2vw, 2rem);
+  padding: clamp(1.65rem, 3.4vw, 3.1rem);
+  border: 1px solid #29253e;
+  border-radius: var(--radius-panel);
+  background: var(--color-dark);
+}
+.process-section .section-heading { max-width: 100%; margin-bottom: 2rem; }
+.process-section .section-label { color: #c7b9ff; }
+.process-section h2 { color: #fff; }
 .steps {
-  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(1.25rem, 3vw, 2.75rem);
-  list-style: none; padding: 0; margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.05rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
-.step { border-top: 2px solid #dcd9f2; padding-top: 1.5rem; }
+.step {
+  min-width: 0;
+  min-height: 235px;
+  padding: clamp(1.2rem, 2vw, 1.7rem);
+  border: 1px solid #44385f;
+  border-radius: 19px;
+  background: #1b1830;
+}
 .step-number {
-  display: grid; place-items: center;
-  width: 36px; height: 36px; border-radius: 50%;
-  background: #efecff; color: #6446e3; font-size: .85rem; font-weight: 750;
+  display: inline-grid;
+  place-items: center;
+  width: 46px;
+  height: 34px;
+  border-radius: 10px;
+  background: #302847;
+  color: #d5c9ff;
+  font-size: .79rem;
+  font-weight: 760;
 }
-.step h3 { margin-top: 1.4rem; font-size: 1.15rem; line-height: 1.3; letter-spacing: -.025em; }
-.step p { margin-top: .7rem; color: #666b78; font-size: .92rem; line-height: 1.67; }
-
+.step h3 {
+  margin-top: 2.2rem;
+  color: #fff;
+  font-size: clamp(1.1rem, 1.5vw, 1.3rem);
+  line-height: 1.3;
+  letter-spacing: -.025em;
+}
+.step p {
+  margin-top: .85rem;
+  color: #c2bdd4;
+  font-size: .91rem;
+  line-height: 1.65;
+}
+.solutions-section .section-heading { margin-bottom: clamp(2rem, 3vw, 2.7rem); }
 .solutions-list {
-  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0 clamp(2rem, 5vw, 5rem);
-  list-style: none; padding: 0; margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.15rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 .solution-item {
-  display: flex; align-items: flex-start; gap: 1rem;
-  padding-block: 1.55rem 1.7rem; border-top: 1px solid #dddfea;
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.15rem;
+  min-width: 0;
+  min-height: 182px;
+  padding: clamp(1.35rem, 2vw, 1.8rem);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  background: var(--color-surface);
+}
+.solution-index {
+  position: absolute;
+  top: 1.4rem;
+  right: 1.5rem;
+  color: var(--color-brand);
+  font-size: .73rem;
+  font-weight: 750;
 }
 .solution-icon {
-  flex: 0 0 39px; display: grid; place-items: center;
-  width: 39px; height: 39px; border-radius: 11px;
-  background: #efecff; color: #6847f5;
+  flex: 0 0 52px;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 15px;
+  background: var(--color-brand-soft);
+  color: var(--color-brand);
 }
-.solution-icon .icon { width: 1.3rem; height: 1.3rem; }
-.solution-item > div { min-width: 0; }
-.solution-item h3 { font-size: 1.13rem; line-height: 1.35; letter-spacing: -.02em; }
-.solution-item p { margin-top: .45rem; color: #666b78; font-size: .9rem; line-height: 1.6; }
+.solution-icon .icon { width: 1.4rem; height: 1.4rem; }
+.solution-item > div { min-width: 0; padding-right: 1.1rem; }
+.solution-item h3 {
+  max-width: 24ch;
+  margin-top: .25rem;
+  font-size: clamp(1.12rem, 1.6vw, 1.36rem);
+  line-height: 1.3;
+  letter-spacing: -.02em;
+}
+.solution-item p {
+  margin-top: .75rem;
+  color: var(--color-muted);
+  font-size: .93rem;
+  line-height: 1.65;
+}
 
 .contact {
   display: grid; grid-template-columns: minmax(0, .86fr) minmax(0, 1fr);
@@ -521,4 +646,36 @@ html { scroll-padding-top: 112px; }
   .header { gap: .5rem; }
   .site-nav a.nav-contact { padding-inline: .65rem; font-size: .72rem; }
   .hero .cta { padding-inline: .7rem; font-size: .78rem; }
+}
+
+
+/* UI-002 responsive refinements: legible cards at tablet/mobile widths. */
+@media (max-width: 1050px) {
+  .steps { grid-template-columns: 1fr; gap: .9rem; }
+  .step { min-height: 160px; }
+  .step h3 { margin-top: 1.3rem; }
+}
+@media (max-width: 700px) {
+  .area-card { min-height: 230px; }
+  .area-card h3 { margin-top: 1.3rem; }
+  .area-card p { padding-top: 1.15rem; }
+  .process-section { padding: 1.5rem; border-radius: 23px; }
+  .process-section .section-heading { margin-bottom: 1.5rem; }
+  .step { min-height: 155px; }
+  .step h3 { margin-top: 1rem; }
+  .solution-item { min-height: 155px; }
+}
+@media (max-width: 540px) {
+  .area-card { padding: 1.4rem; }
+  .area-icon { top: 1.4rem; right: 1.4rem; margin-bottom: 0; }
+  .area-card h3 { font-size: 1.17rem; }
+  .process-section { margin-block: 1rem; }
+  .process-section h2 { font-size: clamp(1.75rem, 7.5vw, 2.25rem); }
+  .step { padding: 1.15rem; }
+  .solution-item { gap: .9rem; padding: 1.25rem; min-height: 153px; }
+  .solution-icon { flex-basis: 44px; width: 44px; height: 44px; border-radius: 13px; }
+  .solution-icon .icon { width: 1.2rem; height: 1.2rem; }
+  .solution-item h3 { font-size: 1.12rem; }
+  .solution-item p { font-size: .85rem; }
+  .solution-index { top: 1.1rem; right: 1.1rem; }
 }
