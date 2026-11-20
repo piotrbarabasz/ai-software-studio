@@ -95,6 +95,9 @@ export function build(mode = 'preview', config = process.env) {
   writeFileSync(join(output, 'index.html'), index);
   cpSync(join(here, 'styles.css'), join(output, 'styles.css'));
   cpSync(join(here, 'form.js'), join(output, 'form.js'));
+  // Local Lucide SVG sprite and ISC license; no external CDN, runtime dependency or CSP change.
+  cpSync(join(here, 'icons.svg'), join(output, 'assets', 'icons.svg'));
+  cpSync(join(here, 'LUCIDE-LICENSE.txt'), join(output, 'assets', 'LUCIDE-LICENSE.txt'));
   for (const asset of ['protolume-logo-horizontal-dark.svg', 'favicon.svg']) {
     cpSync(join(repositoryRoot, 'frontend', 'src', 'assets', asset), join(output, 'assets', asset));
   }
