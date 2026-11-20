@@ -24,7 +24,7 @@
   if (!endpoint) {
     button.disabled = true;
     status.textContent = 'Wysyłanie formularza jest chwilowo niedostępne. Napisz bezpośrednio na ' + fallbackEmail + '.';
-    status.classList.add('is-error');
+    status.classList.toggle('is-error', true);
   }
 
   function setStatus(text, error = false) {
