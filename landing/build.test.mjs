@@ -198,6 +198,45 @@ test('MOTION-001 bundles local animated enhancements without changing the static
   assert.equal((html.match(/<li class="solution-item">/g) || []).length, 4);
 });
 
+
+test('CONTACT-001 keeps a minimal accessible form and preserves existing contact contract', () => {
+  build('preview', {});
+  const html = read('index.html');
+  const css = read('styles.css');
+  const formJS = read('form.js');
+  const sprite = read('assets/icons.svg');
+
+  assert.match(html, /<section id="kontakt" class="contact content-section" aria-labelledby="contact-title">/);
+  assert.match(html, /class="contact-description"/);
+  assert.match(html, /class="contact-note"/);
+  assert.match(html, /href="\/assets\/icons\.svg#icon-sparkles"/);
+  assert.match(html, /<form id="contact-form"[^>]*aria-labelledby="contact-form-title"/);
+  assert.match(html, /<h3 id="contact-form-title">Napisz do nas<\/h3>/);
+  assert.match(html, /name="name" type="text"[^>]*minlength="2"[^>]*required/);
+  assert.match(html, /name="email" type="email"[^>]*maxlength="254"[^>]*required/);
+  assert.match(html, /name="message" rows="4" maxlength="4000"/);
+  assert.match(html, /name="_gotcha"/);
+  assert.match(html, /<span data-submit-label>Wyślij wiadomość<\/span>/);
+  assert.match(html, /id="contact-status" class="status" role="status" aria-live="polite"/);
+  assert.match(html, /href="\/polityka-prywatnosci\/"/);
+  assert.match(html, /<noscript>/);
+  assert.match(sprite, /id="icon-sparkles"/);
+  assert.match(css, /\.contact\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*\.91fr\)/);
+  assert.match(css, /\.contact-note\s*\{[^}]*display:\s*flex/);
+  assert.match(css, /#contact-form\s*\{[^}]*display:\s*grid/);
+  assert.match(css, /#contact-form input\[aria-invalid="true"\]/);
+  assert.match(css, /@media \(max-width: 930px\)/);
+  assert.match(css, /@media \(max-width: 540px\)/);
+  assert.match(formJS, /form\.setAttribute\('aria-busy', 'true'\)/);
+  assert.match(formJS, /if \(button\.disabled\) return/);
+  assert.match(formJS, /nameField\.setCustomValidity/);
+  assert.match(formJS, /mailto:/);
+  assert.equal((html.match(/<h1\b/g) || []).length, 1);
+  assert.equal((html.match(/<article class="area-card">/g) || []).length, 6);
+  assert.equal((html.match(/<li class="step">/g) || []).length, 3);
+  assert.equal((html.match(/<li class="solution-item">/g) || []).length, 4);
+});
+
 test('production build rejects missing contact and legal provider configuration', () => {
   assert.throws(() => build('production', {}), /FORM_ENDPOINT/);
   assert.throws(() => build('production', { FORM_ENDPOINT: 'https://example.org/collect' }), /Formspree/);
