@@ -1,4 +1,5 @@
 import logging
+import smtplib
 import time
 
 import pytest
@@ -117,6 +118,86 @@ def test_email_adapter_uses_verified_sender_and_user_reply_to(
     assert sent_messages[0]["From"] == str(settings.contact_from_email)
     assert sent_messages[0]["To"] == str(settings.contact_recipient_email)
     assert sent_messages[0]["Reply-To"] == str(inquiry.email)
+
+
+@pytest.mark.parametrize(
+    ("failure_stage", "exception"),
+    [
+        ("connect", smtplib.SMTPConnectError(421, b"PROVIDER_SECRET_MARKER")),
+        ("starttls", smtplib.SMTPNotSupportedError("PROVIDER_SECRET_MARKER")),
+        ("authentication", smtplib.SMTPAuthenticationError(535, b"PROVIDER_SECRET_MARKER")),
+        ("send", smtplib.SMTPDataError(550, b"PROVIDER_SECRET_MARKER")),
+    ],
+)
+def test_smtp_failure_logs_safe_phase_and_exception_type_without_provider_details(
+    settings: Settings,
+    valid_contact_payload: dict[str, object],
+    monkeypatch,
+    caplog,
+    failure_stage: str,
+    exception: Exception,
+) -> None:
+    class FailingSmtp:
+        def __init__(self, *args, **kwargs) -> None:
+            if failure_stage == "connect":
+                raise exception
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args) -> None:
+            return None
+
+        def starttls(self) -> None:
+            if failure_stage == "starttls":
+                raise exception
+
+        def login(self, username: str, password: str) -> None:
+            if failure_stage == "authentication":
+                raise exception
+
+        def send_message(self, message) -> None:
+            if failure_stage == "send":
+                raise exception
+
+    monkeypatch.setattr("app.services.contact_delivery.smtplib.SMTP", FailingSmtp)
+    caplog.set_level(logging.WARNING, logger="aisoftware_studio.contact")
+    inquiry = _inquiry(valid_contact_payload)
+
+    with pytest.raises(DeliveryError):
+        EmailContactDelivery(settings).send(inquiry)
+
+    assert (
+        f"contact.delivery_failed stage={failure_stage} error_type={type(exception).__name__}"
+    ) in caplog.text
+    for forbidden in (
+        "PROVIDER_SECRET_MARKER",
+        "smtp-password",
+        str(inquiry.email),
+        str(settings.contact_from_email),
+        str(settings.smtp_username),
+        str(settings.smtp_host),
+    ):
+        assert forbidden not in caplog.text
+
+
+def test_missing_smtp_configuration_is_safely_classified(caplog) -> None:
+    adapter = EmailContactDelivery(Settings(contact_recipient_email=None, contact_from_email=None))
+    inquiry = _inquiry(
+        {
+            "name": "Jan Kowalski",
+            "email": "jan@example.com",
+            "projectType": "ai_automation",
+            "budgetRange": "25k_50k_pln",
+            "message": "Prosimy o pomoc w automatyzacji obsługi zgłoszeń.",
+            "consent": True,
+        }
+    )
+    caplog.set_level(logging.WARNING, logger="aisoftware_studio.contact")
+    with pytest.raises(DeliveryError):
+        adapter.send(inquiry)
+    assert "contact.delivery_failed stage=configuration error_type=MissingConfig" in caplog.text
+    assert str(inquiry.email) not in caplog.text
 
 
 def test_email_body_uses_a_readable_software_house_partnership_label(

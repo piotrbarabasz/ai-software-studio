@@ -23,6 +23,7 @@ class EmailContactDelivery:
 
     def send(self, inquiry: ContactInquiry | BriefContactInquiry) -> None:
         if not self._has_required_config():
+            logger.warning("contact.delivery_failed stage=configuration error_type=MissingConfig")
             raise DeliveryError("Email delivery is not configured.")
 
         message = EmailMessage()
@@ -32,6 +33,7 @@ class EmailContactDelivery:
         message["Reply-To"] = str(inquiry.email)
         message.set_content(self._build_email_body(inquiry))
 
+        stage = "connect"
         try:
             with smtplib.SMTP(
                 self._settings.smtp_host,
@@ -39,19 +41,32 @@ class EmailContactDelivery:
                 timeout=10,
             ) as smtp:
                 if self._settings.smtp_use_tls:
+                    stage = "starttls"
                     smtp.starttls()
                 if self._settings.smtp_username:
+                    stage = "authentication"
                     password = (
                         self._settings.smtp_password.get_secret_value()
                         if self._settings.smtp_password
                         else ""
                     )
                     smtp.login(self._settings.smtp_username, password)
+                stage = "send"
                 smtp.send_message(message)
         except Exception as exc:  # pragma: no cover - exact SMTP failures vary by provider
+            # The default Cloud Run logging formatter includes only the message,
+            # not LogRecord.extra. Log a safe stage and exception *class*, never
+            # the raw exception (which could contain provider responses or PII).
+            error_type = type(exc).__name__
             logger.warning(
-                "contact.delivery_failed",
-                extra={"event": "contact_delivery_failed", "reason": exc.__class__.__name__},
+                "contact.delivery_failed stage=%s error_type=%s",
+                stage,
+                error_type,
+                extra={
+                    "event": "contact_delivery_failed",
+                    "reason": error_type,
+                    "stage": stage,
+                },
             )
             raise DeliveryError("Email delivery failed.") from exc
 
