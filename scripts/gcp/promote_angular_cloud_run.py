@@ -57,9 +57,7 @@ def deployment_target(service: dict[str, Any]) -> tuple[str, str | None]:
     return latest, preview
 
 
-def verify_promoted(
-    service: dict[str, Any], latest: str, preview: str | None
-) -> None:
+def verify_promoted(service: dict[str, Any], latest: str, preview: str | None) -> None:
     if str(service.get("status", {}).get("latestReadyRevisionName") or "") != latest:
         raise TrafficError("Another deployment changed the latest ready revision.")
     active = [
@@ -68,7 +66,9 @@ def verify_promoted(
         if _percentage(entry) > 0
     ]
     if active != [(latest, 100)]:
-        raise TrafficError("The latest Angular revision is not serving 100% of traffic.")
+        raise TrafficError(
+            "The latest Angular revision is not serving 100% of traffic."
+        )
 
     tagged = [entry for entry in _traffic(service) if entry.get("tag") == PREVIEW_TAG]
     if preview:
@@ -99,7 +99,9 @@ def _describe(project: str, region: str, service: str) -> dict[str, Any]:
         check=False,
     )
     if result.returncode:
-        raise TrafficError("Cannot inspect Cloud Run service traffic (IAM/API failure).")
+        raise TrafficError(
+            "Cannot inspect Cloud Run service traffic (IAM/API failure)."
+        )
     try:
         data = json.loads(result.stdout)
     except json.JSONDecodeError as exc:
@@ -111,7 +113,9 @@ def _describe(project: str, region: str, service: str) -> dict[str, Any]:
 
 def promote(project: str, region: str, service: str) -> None:
     if (project, region, service) != (PROJECT, REGION, SERVICE):
-        raise TrafficError("Refusing to change traffic outside approved Protolume frontend.")
+        raise TrafficError(
+            "Refusing to change traffic outside approved Protolume frontend."
+        )
     latest, preview = deployment_target(_describe(project, region, service))
     command = [
         "gcloud",
@@ -127,7 +131,9 @@ def promote(project: str, region: str, service: str) -> None:
         command.append(f"--update-tags={PREVIEW_TAG}={preview}")
     result = subprocess.run(command, capture_output=True, text=True, check=False)
     if result.returncode:
-        raise TrafficError("Failed to promote the Angular revision (Cloud Run update-traffic).")
+        raise TrafficError(
+            "Failed to promote the Angular revision (Cloud Run update-traffic)."
+        )
     verify_promoted(_describe(project, region, service), latest, preview)
     print(
         f"PASS: production frontend revision {latest} serves 100% traffic; "
