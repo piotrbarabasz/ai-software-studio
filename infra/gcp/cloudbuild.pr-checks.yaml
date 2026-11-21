@@ -54,6 +54,19 @@ steps:
       - -p
       - test_smoke_v3_production.py
 
+  - id: v3-promotion-guard-tests
+    name: python:3.12-slim
+    entrypoint: python
+    waitFor: ["preview-config-preflight"]
+    args:
+      - -m
+      - unittest
+      - discover
+      - -s
+      - scripts/gcp/tests
+      - -p
+      - test_promote_v3_cloud_run.py
+
   - id: preview-traffic-guard-tests
     name: python:3.12-slim
     entrypoint: python

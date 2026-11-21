@@ -77,9 +77,22 @@ steps:
           node landing/build.mjs --production
         node landing/verify-dist.mjs --production
 
+  - id: v3-promotion-safety-tests
+    name: python:3.12-slim
+    entrypoint: python
+    waitFor: ["v3-production-checks"]
+    args:
+      - -m
+      - unittest
+      - discover
+      - -s
+      - scripts/gcp/tests
+      - -p
+      - test_promote_v3_cloud_run.py
+
   - id: v3-production-image-build
     name: gcr.io/cloud-builders/docker
-    waitFor: ["v3-production-checks"]
+    waitFor: ["v3-production-checks", "v3-promotion-safety-tests"]
     args:
       - build
       - -f
@@ -128,7 +141,7 @@ steps:
     entrypoint: /usr/lib/google-cloud-sdk/platform/bundledpythonunix/bin/python3
     waitFor: ["v3-production-deploy-zero-traffic"]
     args:
-      - scripts/gcp/promote_angular_cloud_run.py
+      - scripts/gcp/promote_v3_cloud_run.py
       - "--project=$_PROJECT_ID"
       - "--region=$_REGION"
       - "--service=$_FRONTEND_SERVICE"
