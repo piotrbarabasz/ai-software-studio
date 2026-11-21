@@ -76,6 +76,9 @@ export function verifyArtifact(mode, root = defaultRoot) {
     }
   } else {
     if (!index.includes('name="robots" content="index, follow"')) problems.push('Production landing page is noindex');
+    if (!/name="protolume-build-sha" content="[0-9a-f]{7,40}"/.test(index)) {
+      problems.push('Production build SHA is missing or invalid');
+    }
     if (!privacy.includes('index, follow')) problems.push('Production privacy page is noindex');
     if (!robots.includes('Allow: /')) problems.push('Production robots disallow indexing');
     const backendProduction = index.includes('data-endpoint="/api/contact/brief"');
