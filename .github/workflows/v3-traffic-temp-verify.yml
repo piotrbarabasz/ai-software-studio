@@ -1,0 +1,25 @@
+name: Verify Angular traffic promotion (temporary)
+on:
+  push:
+    branches:
+      - fix/protolume-prod-cloudrun-traffic-after-v3-preview
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install exact Ruff and PyYAML
+        run: pip install ruff==0.15.22 PyYAML==6.0.3
+      - name: Ruff lint and format
+        run: |
+          ruff check scripts/gcp/promote_angular_cloud_run.py infra/gcp/tests/test_deployment_promotion.py infra/gcp/tests/test_cloudbuild_yaml.py
+          ruff format --check scripts/gcp/promote_angular_cloud_run.py infra/gcp/tests/test_deployment_promotion.py infra/gcp/tests/test_cloudbuild_yaml.py
+      - name: Deployment contract and helper tests
+        run: |
+          python -m unittest discover -s infra/gcp/tests -p 'test_deployment*.py'
+          python -m unittest discover -s infra/gcp/tests -p 'test_cloudbuild_yaml.py'
