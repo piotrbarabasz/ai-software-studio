@@ -18,6 +18,7 @@ jobs:
       - name: Ruff targeted
         run: |
           ruff check scripts/gcp/promote_angular_cloud_run.py infra/gcp/tests/test_deployment_promotion.py infra/gcp/tests/test_cloudbuild_yaml.py
+          ruff format --diff scripts/gcp/promote_angular_cloud_run.py infra/gcp/tests/test_deployment_promotion.py || true
           ruff format --check scripts/gcp/promote_angular_cloud_run.py infra/gcp/tests/test_deployment_promotion.py
       - name: Deployment and YAML tests
         run: |
