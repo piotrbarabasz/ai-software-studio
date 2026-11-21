@@ -48,7 +48,7 @@ steps:
           # Access by the Cloud Build service account is required. Never print JSON.
           gcloud secrets versions access latest \
             --secret=aisoftware-studio-public-legal-config \
-            --project=$_PROJECT_ID > frontend/.public-legal-config.json
+            --project=$_PROJECT_ID > landing/.public-legal-config.json
         fi
 
   - id: static-v3-checks
@@ -67,7 +67,7 @@ steps:
           node landing/build.mjs --preview
         else
           FORM_ENDPOINT="$$PREVIEW_FORM_ENDPOINT" \
-            PUBLIC_LEGAL_CONFIG_PATH=frontend/.public-legal-config.json \
+            PUBLIC_LEGAL_CONFIG_PATH=landing/.public-legal-config.json \
             node landing/build.mjs --preview
         fi
         node landing/verify-dist.mjs --preview
