@@ -15,6 +15,10 @@
 4. Sprawdź `protolume-build-sha` w HTML i wykonaj jedno własne testowe zgłoszenie, potwierdzając odbiór.
 5. Zostaw `v3-review` na 0% i `noindex`.
 
+## Automatyzacja triggerów
+
+`deploy-prod` może filtrować zmiany frontendu, a nowy `backend-ci` budować obraz API równolegle i niezależnie. Wymaga to jednorazowego uruchomienia skryptu konfiguracji triggerów po akceptacji PR; samo posiadanie kodu w `master` nie aktywuje filtrów w Cloud Build. Instrukcja: `infra/gcp/triggers.md`. Backend CI **nie** wdraża ani nie przełącza ruchu API; dla zmian SMTP, sekretów i runtime wymagany jest osobny release z kontrolą zdrowia oraz rollbackiem.
+
 ## Rollback
 
 GCP -> Cloud Run -> `aisoftware-studio-web` -> Manage traffic -> wybierz poprzednią gotową rewizję i ustaw 100%. Nie kasuj historii obrazów, dopóki nowa wersja nie działa stabilnie.
