@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any
 
 from deployment_contract import DEFAULT_CONTRACT_PATH, load_contract, validate_values
+from configure_component_triggers import load_manifest
 
 EXPECTED_BRANCH = "^master$"
 EXPECTED_CONFIG = "infra/gcp/cloudbuild.deploy.yaml"
@@ -341,6 +342,13 @@ def main() -> int:
             )
     else:
         errors.extend(_audit_substitutions(trigger.get("substitutions", {}), contract))
+
+    if trigger_kind == "production":
+        expected_paths = set(load_manifest()["frontend"]["included_files"])
+        if set(trigger.get("includedFiles", [])) != expected_paths:
+            errors.append("includedFiles: frontend component filter differs from repository manifest")
+        if trigger.get("ignoredFiles"):
+            errors.append("ignoredFiles: unexpected filter may suppress frontend changes")
 
     if errors:
         print(
