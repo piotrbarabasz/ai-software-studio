@@ -22,3 +22,9 @@ GCP -> Cloud Run -> `aisoftware-studio-web` -> Manage traffic -> wybierz poprzed
 ## Aktualizacja backendu
 
 Publikacja V3 **nie** wdraża automatycznie FastAPI. Weryfikacja backendu: `cd backend`, zainstaluj `requirements-dev.lock`, uruchom Ruff i pytest. Dla backendu używaj odrębnego pipeline’u i zachowaj konfigurację `SMTP_PASSWORD` w Secret Manager. Nigdy nie umieszczaj wartości sekretów w repo.
+
+## Historyczne tagi (bez przepisywania historii)
+
+- `archive/legacy-angular-2026-11-21` → commit `9f1a7bbd0273efd907c04fc69aae5049cc18dbcc`, ostatni Angular przed V3.
+- `archive/pre-cleanup-v3-2026-11-21` → commit `814c6a55391bd2255ce884cf69bb2e3bbd9af8f6`, pełny kod z v3 sprzed usunięcia starych katalogów.
+- Tagów nie przesuwamy; pełna historia pozostaje w Git. Przywrócenie starej wersji wymaga świadomej nowej gałęzi z wybranego tagu albo rollbacku ruchu w Cloud Run.
