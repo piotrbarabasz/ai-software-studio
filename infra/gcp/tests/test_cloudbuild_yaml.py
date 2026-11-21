@@ -486,6 +486,10 @@ class CloudBuildYamlTest(unittest.TestCase):
             "scripts/gcp/promote_angular_cloud_run.py",
             promotion["args"],
         )
+        self.assertIn(
+            "--expected-image=$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_FRONTEND_IMAGE_NAME:$SHORT_SHA",
+            promotion["args"],
+        )
         self.assertEqual(
             steps["deployment-read-only-smoke"]["waitFor"],
             ["frontend-promote-production-traffic"],
