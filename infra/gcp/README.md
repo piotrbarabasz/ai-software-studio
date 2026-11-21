@@ -1,20 +1,19 @@
-# GCP Deployment Assets
+# Google Cloud — Protolume
 
-This directory contains the production deployment artifacts for Protolume.
+Projekt: `ai-software-studio-501918`, region: `europe-central2`.
 
-## Files
+| Plik | Rola |
+| --- | --- |
+| `cloudbuild.deploy.yaml` | `deploy-prod`: statyczna strona V3 -> Cloud Run, indexable, 100% ruchu po smoke obrazu |
+| `cloudbuild.landing-cloudrun-preview.yaml` | ręczny tagged preview `v3-review`, 0% ruchu i noindex |
+| `cloudbuild.pr-checks.yaml` | PR: backend FastAPI i statyczny frontend v3 |
+| `cloudbuild.backend.yaml` | manualna budowa/smoke/push obrazu API, bez automatycznej zmiany ruchu |
+| `production-contract.json` | kontrakt środowiska produkcyjnego dla FastAPI i narzędzi GCP |
 
-- `cloudbuild.backend.yaml`: manual build, container smoke, and push of one backend image; never deploys
-- `cloudbuild.frontend.yaml`: manual production build and push of one frontend image; never deploys
-- `cloudbuild.deploy.yaml`: combined sequential production deployment pipeline
-- `cloudbuild.pr-checks.yaml`: non-deploying, noindex quality gates for backend and frontend
-- `production-contract.json`: versioned non-secret production invariants and validation scopes
-- `triggers.md`: exact trigger settings and operator notes
-- `env.example`: non-secret template with fixed invariants and blank required operational values
+Frontend i backend są osobnymi serwisami: `aisoftware-studio-web` oraz `aisoftware-studio-api`. Trasa formularza `POST /api/contact/brief` jest proxowana przez frontend. Konfiguracja SMTP i Google Secret Manager znajdują się wyłącznie przy API.
 
-## Notes
+Po mergu zmian frontendowych `deploy-prod` wdraża nowy obraz statyczny. Backend jest niezależny i **nie jest wdrażany automatycznie** przez ten trigger. Wdrożenia API należy wykonywać świadomie przez osobny pipeline, gdy wymagają tego zmiany backendu.
 
-- Production defaults are the non-secret contract invariants; only real SMTP/e-mail environment values remain trigger inputs. Manual component YAMLs use parse-safe sentinels that deliberately fail `scripts/gcp/deployment_contract.py`.
-- `cloudbuild.deploy.yaml` is the only configuration allowed to deploy Cloud Run. Both component images are built and pushed before its first deploy step.
-- Do not commit real secrets, service account keys, or private project values.
-- Contract v1 fixes the production project, deployment region `europe-central2`, service/image names, backend URL, sole public origin, indexing `true`, secret reference names, delivery settings and min instances `0`. Preview builds remain `noindex, follow`.
+Rollback frontendu: Cloud Run -> `aisoftware-studio-web` -> Manage traffic -> poprzednia sprawdzona rewizja 100%. Nie usuwać starych rewizji ani obrazów dopóki V3 nie zostanie zaakceptowane.
+
+Historia migracji Angular / Firebase pozostaje w Git, a nie w aktywnym katalogu źródeł.
