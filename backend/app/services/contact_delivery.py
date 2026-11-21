@@ -4,7 +4,7 @@ from email.message import EmailMessage
 
 from app.core.brand import public_brand
 from app.core.config import Settings
-from app.schemas.contact import ContactInquiry
+from app.schemas.contact import BriefContactInquiry, ContactInquiry
 
 logger = logging.getLogger("aisoftware_studio.contact")
 
@@ -21,7 +21,7 @@ class EmailContactDelivery:
     def __init__(self, settings: Settings) -> None:
         self._settings = settings
 
-    def send(self, inquiry: ContactInquiry) -> None:
+    def send(self, inquiry: ContactInquiry | BriefContactInquiry) -> None:
         if not self._has_required_config():
             raise DeliveryError("Email delivery is not configured.")
 
@@ -59,7 +59,15 @@ class EmailContactDelivery:
         return self._settings.contact_delivery_ready
 
     @staticmethod
-    def _build_email_body(inquiry: ContactInquiry) -> str:
+    def _build_email_body(inquiry: ContactInquiry | BriefContactInquiry) -> str:
+        if isinstance(inquiry, BriefContactInquiry):
+            return (
+                f"Nowe zapytanie z prostego formularza {public_brand['name']}\\n\\n"
+                f"Imię lub firma: {inquiry.name}\\n"
+                f"Email: {inquiry.email}\\n"
+                f"Czas zgłoszenia: {inquiry.submitted_at.isoformat()}\\n\\n"
+                f"Wiadomość:\\n{inquiry.message}\\n"
+            )
         company = inquiry.company or "Nie podano"
         project_type = PROJECT_TYPE_LABELS.get(
             inquiry.project_type.value, inquiry.project_type.value
