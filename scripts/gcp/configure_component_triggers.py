@@ -144,9 +144,9 @@ def validate_trigger(config: dict[str, Any], component: str, trigger: Any) -> No
     github = trigger.get("github")
     if not isinstance(github, dict) or github.get("push", {}).get("branch") != config["branch_pattern"]:
         raise TriggerConfigurationError(f"{component}: expected GitHub master push event.")
-    if github.get("owner") and github["owner"] != config["repository_owner"]:
+    if github.get("owner") != config["repository_owner"]:
         raise TriggerConfigurationError(f"{component}: repository owner mismatch.")
-    if github.get("name") and github["name"] != config["repository_name"]:
+    if github.get("name") != config["repository_name"]:
         raise TriggerConfigurationError(f"{component}: repository name mismatch.")
     if component == "frontend" and trigger.get("id") != expected["id"]:
         raise TriggerConfigurationError("Frontend trigger ID mismatch.")
