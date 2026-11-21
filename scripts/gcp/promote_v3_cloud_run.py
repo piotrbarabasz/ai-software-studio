@@ -85,8 +85,14 @@ def _artifact_digest(expected_image: str) -> str:
         raise TrafficError("Expected V3 image is outside the deployment contract.")
     details = _json_command(
         [
-            "gcloud", "artifacts", "docker", "images", "describe",
-            expected_image, f"--project={PROJECT}", "--format=json",
+            "gcloud",
+            "artifacts",
+            "docker",
+            "images",
+            "describe",
+            expected_image,
+            f"--project={PROJECT}",
+            "--format=json",
         ]
     )
     if not isinstance(details, dict):
@@ -115,8 +121,12 @@ def deployment_target(
     list_revisions: Callable[[], list[dict[str, Any]]],
 ) -> tuple[str, str | None]:
     """Require a Ready revision whose own image matches this build's image tag."""
-    if not IMAGE_PATTERN.fullmatch(expected_image) or not DIGEST_PATTERN.fullmatch(expected_digest):
-        raise TrafficError("Expected V3 image or digest is outside the deployment contract.")
+    if not IMAGE_PATTERN.fullmatch(expected_image) or not DIGEST_PATTERN.fullmatch(
+        expected_digest
+    ):
+        raise TrafficError(
+            "Expected V3 image or digest is outside the deployment contract."
+        )
     preview = _validate_traffic(service)
     status = service.get("status", {})
     created = str(status.get("latestCreatedRevisionName") or "")
