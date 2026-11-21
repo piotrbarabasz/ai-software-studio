@@ -16,6 +16,7 @@ sys.path.insert(0, str(SCRIPT_ROOT))
 
 import audit_trigger  # noqa: E402
 from deployment_contract import load_contract  # noqa: E402
+from configure_component_triggers import load_manifest  # noqa: E402
 
 
 def trigger_payload(substitutions: dict[str, str] | None = None) -> dict[str, object]:
@@ -23,6 +24,7 @@ def trigger_payload(substitutions: dict[str, str] | None = None) -> dict[str, ob
         "id": "901333cb-1c13-4929-90e5-6df070eb647e",
         "name": "deploy-prod",
         "filename": "infra/gcp/cloudbuild.deploy.yaml",
+        "includedFiles": load_manifest()["frontend"]["included_files"],
         "github": {"push": {"branch": "^master$"}},
         "substitutions": substitutions
         or {
