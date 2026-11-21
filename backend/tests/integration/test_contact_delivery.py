@@ -120,7 +120,6 @@ def test_email_adapter_uses_verified_sender_and_user_reply_to(
     assert sent_messages[0]["Reply-To"] == str(inquiry.email)
 
 
-
 @pytest.mark.parametrize(
     ("failure_stage", "exception"),
     [
@@ -169,8 +168,7 @@ def test_smtp_failure_logs_safe_phase_and_exception_type_without_provider_detail
         EmailContactDelivery(settings).send(inquiry)
 
     assert (
-        f"contact.delivery_failed stage={failure_stage} "
-        f"error_type={type(exception).__name__}"
+        f"contact.delivery_failed stage={failure_stage} error_type={type(exception).__name__}"
     ) in caplog.text
     for forbidden in (
         "PROVIDER_SECRET_MARKER",
@@ -184,9 +182,7 @@ def test_smtp_failure_logs_safe_phase_and_exception_type_without_provider_detail
 
 
 def test_missing_smtp_configuration_is_safely_classified(caplog) -> None:
-    adapter = EmailContactDelivery(
-        Settings(contact_recipient_email=None, contact_from_email=None)
-    )
+    adapter = EmailContactDelivery(Settings(contact_recipient_email=None, contact_from_email=None))
     inquiry = _inquiry(
         {
             "name": "Jan Kowalski",
@@ -202,6 +198,7 @@ def test_missing_smtp_configuration_is_safely_classified(caplog) -> None:
         adapter.send(inquiry)
     assert "contact.delivery_failed stage=configuration error_type=MissingConfig" in caplog.text
     assert str(inquiry.email) not in caplog.text
+
 
 def test_email_body_uses_a_readable_software_house_partnership_label(
     valid_contact_payload: dict[str, object],
