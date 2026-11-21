@@ -100,6 +100,7 @@ class ComponentTriggersTest(unittest.TestCase):
             {"filename": "unsafe.yaml"},
             {"github": {"pullRequest": {"branch": "^master$"}}},
             {"github": {"push": {"branch": "^feature$"}}},
+            {"github": {"push": {"branch": "^master$"}}},
             {"github": {"owner": "someone-else", "push": {"branch": "^master$"}}},
         ):
             with self.subTest(modifications=modifications):
