@@ -93,12 +93,8 @@ def test_brief_contact_shares_rate_limiter(settings: Settings) -> None:
     settings.contact_rate_limit_per_minute = 1
     delivery = RecordingDelivery()
     with make_client(settings, delivery) as client:
-        first = client.post(
-            "/api/contact/brief", json={"name": "Firma", "email": "x@example.com"}
-        )
-        second = client.post(
-            "/api/contact/brief", json={"name": "Firma", "email": "x@example.com"}
-        )
+        first = client.post("/api/contact/brief", json={"name": "Firma", "email": "x@example.com"})
+        second = client.post("/api/contact/brief", json={"name": "Firma", "email": "x@example.com"})
     assert first.status_code == 202
     assert second.status_code == 429
     assert second.json()["code"] == "rate_limited"
