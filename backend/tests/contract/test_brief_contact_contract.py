@@ -8,7 +8,6 @@ from app.schemas.contact import BriefContactInquiry
 from app.services.contact_delivery import DeliveryError, EmailContactDelivery
 from app.services.contact_intake import ContactIntakeService, InMemoryRateLimiter
 from fastapi.testclient import TestClient
-from pydantic import ValidationError
 
 
 class RecordingDelivery:
@@ -140,7 +139,7 @@ def test_brief_email_body_does_not_fabricate_budget_or_consent() -> None:
     body = EmailContactDelivery._build_email_body(inquiry)
     assert "Imię lub firma: Firma ABC" in body
     assert "Email: test@example.com" in body
-    assert "Wiadomość:\\nProszę o kontakt." in body
+    assert "Wiadomość:\nProszę o kontakt." in body
     assert "Budżet" not in body
     assert "Zgoda" not in body
     assert "Typ projektu" not in body
