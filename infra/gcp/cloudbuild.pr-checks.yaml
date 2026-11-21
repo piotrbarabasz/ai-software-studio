@@ -25,7 +25,8 @@ steps:
         python -m pip install --no-deps --no-build-isolation --editable . &&
         python -m ruff check . &&
         python -m ruff format --check . &&
-        python -m pytest
+        python -m pytest &&
+        python -m unittest discover -s ../infra/gcp/tests -p 'test_*.py'
 
   - id: v3-static-checks
     name: node:22.22.3-bookworm-slim

@@ -13,6 +13,7 @@ CONFIGS = (
     "cloudbuild.landing-cloudrun-preview.yaml",
     "cloudbuild.pr-checks.yaml",
     "cloudbuild.backend.yaml",
+    "cloudbuild.backend-ci.yaml",
 )
 
 

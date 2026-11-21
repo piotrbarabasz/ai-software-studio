@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "project": "ai-software-studio-501918",
+  "trigger_location": "global",
+  "branch_pattern": "^master$",
+  "repository_owner": "piotrbarabasz",
+  "repository_name": "ai-software-studio",
+  "frontend": {
+    "name": "deploy-prod",
+    "id": "901333cb-1c13-4929-90e5-6df070eb647e",
+    "config": "infra/gcp/cloudbuild.deploy.yaml",
+    "included_files": [
+      "landing/**",
+      "infra/gcp/cloudbuild.deploy.yaml",
+      "infra/gcp/production-contract.json",
+      "infra/gcp/component-triggers.json",
+      "scripts/gcp/promote_v3_cloud_run.py",
+      "scripts/gcp/v3_production_guard.mjs",
+      "scripts/gcp/smoke_v3_production.py",
+      "scripts/gcp/smoke-v3-production-image.sh",
+      "scripts/gcp/tests/test_promote_v3_cloud_run.py",
+      "scripts/gcp/tests/test_smoke_v3_production.py",
+      "scripts/v3-production.test.mjs",
+      "scripts/protolume.test.mjs",
+      ".dockerignore",
+      ".gcloudignore"
+    ]
+  },
+  "backend": {
+    "name": "backend-ci",
+    "config": "infra/gcp/cloudbuild.backend-ci.yaml",
+    "included_files": [
+      "backend/**",
+      "infra/gcp/cloudbuild.backend-ci.yaml",
+      "infra/gcp/cloudbuild.backend.yaml",
+      "infra/gcp/production-contract.json",
+      "infra/gcp/component-triggers.json",
+      "scripts/gcp/deployment_contract.py",
+      "scripts/gcp/smoke-backend-image.sh",
+      "infra/gcp/tests/**",
+      ".dockerignore",
+      ".gcloudignore"
+    ]
+  }
+}
