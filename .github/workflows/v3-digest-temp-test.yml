@@ -20,6 +20,7 @@ jobs:
       - name: V3 digest promotion tests and Ruff
         run: |
           ruff check scripts/gcp/promote_v3_cloud_run.py scripts/gcp/tests/test_promote_v3_cloud_run.py
+          ruff format --diff scripts/gcp/promote_v3_cloud_run.py scripts/gcp/tests/test_promote_v3_cloud_run.py || true
           ruff format --check scripts/gcp/promote_v3_cloud_run.py scripts/gcp/tests/test_promote_v3_cloud_run.py
           python -m unittest discover -s scripts/gcp/tests -p test_promote_v3_cloud_run.py -v
       - name: V3 static site release contract tests
