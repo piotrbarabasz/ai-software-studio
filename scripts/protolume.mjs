@@ -59,13 +59,13 @@ export function validateConfig(config, { release = false } = {}) {
     errors.push('FORM_ENDPOINT musi wskazywać /api/contact/brief albo https://formspree.io/f/ID.');
   }
   if (release) {
-    errors.push('Release Cloud Run v3 jest zablokowany do osobnej akceptacji i konfiguracji prawnej.');
+    errors.push('Publikacja V3 odbywa się wyłącznie przez zatwierdzony deploy-prod po merge na master.');
   }
   return errors;
 }
 
 export function buildGcloudArgs(command, config) {
-  if (command === 'release') throw new Error('Brak ścieżki release Cloud Run v3: aktywna pozostaje stara produkcja.');
+  if (command === 'release') throw new Error('Brak ścieżki release z lokalnego CLI: publikację obsługuje deploy-prod na master.');
   const errors = validateConfig(config);
   if (errors.length) throw new Error(errors.join('\n'));
 
@@ -132,7 +132,7 @@ function printHelp() {
     '  make preview-local    zbuduj lokalny podgląd, bez GCP',
     '  make preview          Cloud Run: nowa rewizja v3 z 0% ruchu na istniejącej usłudze',
     '  make build-production lokalny build produkcyjny, bez publikacji',
-    '  make release          ZABLOKOWANE do osobnej akceptacji produkcyjnego v3',
+    '  make release          publikacja jest wykonywana przez deploy-prod (nie przez lokalne CLI)',
     '',
     'Bez GNU Make: node scripts/protolume.mjs <komenda>',
     'Konfiguracja: .env (skopiuj z .env.example, plik jest ignorowany przez Git).',
@@ -155,7 +155,7 @@ export async function main(command) {
   }
 
   if (command === 'release') {
-    throw new Error('Release Cloud Run v3 jest obecnie ZABLOKOWANY. Zatwierdź najpierw formularz, RODO i plan przełączenia ruchu.');
+    throw new Error('Publikacja V3 działa przez Cloud Build deploy-prod po merge na master, nie przez lokalne CLI.');
   }
 
   const config = loadEnv();
