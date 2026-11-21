@@ -34,9 +34,7 @@ coverage/
 .ruff_cache/
 tmp/
 .tmp/
-frontend/generated/
-frontend/.public-legal-config.json
-frontend/src/app/core/legal/public-legal.config.generated.ts
+landing/.public-legal-config.json
 
 # Environment and secrets
 .env

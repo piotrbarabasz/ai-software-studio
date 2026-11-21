@@ -15,9 +15,7 @@ class PublicBrand(TypedDict):
 
 
 def _load_public_brand() -> PublicBrand:
-    local_copy = Path(__file__).with_name("public-brand.json")
-    repository_copy = Path(__file__).resolve().parents[3] / "frontend/config/public-brand.json"
-    config_path = local_copy if local_copy.is_file() else repository_copy
+    config_path = Path(__file__).with_name("public-brand.json")
     try:
         configuration = json.loads(config_path.read_text(encoding="utf-8"))
         name = configuration["name"]

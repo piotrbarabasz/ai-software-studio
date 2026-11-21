@@ -1,5 +1,5 @@
 # GNU Make is optional; each target has an equivalent "node scripts/protolume.mjs ..." command.
-# preview = manual Cloud Run v3 tagged revision with 0% live traffic; release is blocked.
+# preview = manual tagged noindex revision with 0% live traffic; production deploy is through master Cloud Build.
 .PHONY: help doctor check preview-local preview build-production release
 
 help:

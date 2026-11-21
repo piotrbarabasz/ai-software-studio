@@ -66,7 +66,7 @@ test('preview image serves previously verified artifacts; direct sending require
   assert.match(yaml, /id: prepare-preview-contact/);
   assert.match(yaml, /secrets versions access latest/);
   assert.match(yaml, /aisoftware-studio-public-legal-config/);
-  assert.match(yaml, /PUBLIC_LEGAL_CONFIG_PATH=frontend\/\.public-legal-config\.json/);
+  assert.match(yaml, /PUBLIC_LEGAL_CONFIG_PATH=landing\/\.public-legal-config\.json/);
   assert.match(yaml, /node landing\/verify-dist\.mjs --preview/);
   assert.match(yaml, /--no-traffic/);
 });
@@ -107,7 +107,7 @@ test('local Make preview now targets Cloud Run and obsolete Firebase release is 
   assert.ok(!args.some((value) => value.includes('_FORM_ENDPOINT=')));
 
   const source = read('scripts/protolume.mjs');
-  assert.match(source, /Release Cloud Run v3 jest obecnie ZABLOKOWANY/);
+  assert.match(source, /Publikacja V3 działa przez Cloud Build deploy-prod/);
   const template = read('.env.example');
   assert.match(template, /CLOUD_RUN_PREVIEW_TAG=v3-review/);
   assert.doesNotMatch(template, /^FIREBASE_PREVIEW_CHANNEL=/m);
