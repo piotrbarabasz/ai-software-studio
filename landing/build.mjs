@@ -6,9 +6,8 @@ import { dirname, join, resolve } from 'node:path';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
-const { readAndValidatePublicLegalConfig } = require('../frontend/scripts/validate-public-legal-config.cjs');
+const { readAndValidatePublicLegalConfig } = require('./scripts/validate-public-legal-config.cjs');
 const here = dirname(fileURLToPath(import.meta.url));
-const repositoryRoot = resolve(here, '..');
 const output = join(here, 'dist');
 const publicOrigin = 'https://protolume.pl';
 const contactAddress = 'kontakt@protolume.pl';
@@ -104,7 +103,7 @@ export function build(mode = 'preview', config = process.env) {
   cpSync(join(here, 'icons.svg'), join(output, 'assets', 'icons.svg'));
   cpSync(join(here, 'LUCIDE-LICENSE.txt'), join(output, 'assets', 'LUCIDE-LICENSE.txt'));
   for (const asset of ['protolume-logo-horizontal-dark.svg', 'favicon.svg']) {
-    cpSync(join(repositoryRoot, 'frontend', 'src', 'assets', asset), join(output, 'assets', asset));
+    cpSync(join(here, 'assets', asset), join(output, 'assets', asset));
   }
   writeFileSync(join(output, 'polityka-prywatnosci', 'index.html'), legalDocument(legal, production));
   writeFileSync(join(output, 'robots.txt'),
