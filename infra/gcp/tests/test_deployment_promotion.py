@@ -155,10 +155,8 @@ class ProductionPromotionTest(unittest.TestCase):
     def test_exact_image_and_tag_used_by_promote(self) -> None:
         before = service()
         after = service(active=ANGULAR)
-        calls = []
-
         def fake_service(*_: str) -> dict:
-            return before if not calls else after
+            return before if command.call_count == 0 else after
 
         with (
             patch.object(promotion, "_describe_service", side_effect=fake_service),
@@ -169,7 +167,6 @@ class ProductionPromotionTest(unittest.TestCase):
             promotion.promote(
                 promotion.PROJECT, promotion.REGION, promotion.SERVICE, IMAGE
             )
-            calls.append("promoted")
         command.assert_called_once()
         args = command.call_args.args[0]
         self.assertIn(f"--to-revisions={ANGULAR}=100", args)
