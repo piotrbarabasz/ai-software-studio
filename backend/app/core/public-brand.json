@@ -1,0 +1,13 @@
+{
+  "name": "Protolume",
+  "descriptor": "Studio wdrożeń AI i automatyzacji",
+  "owner": {
+    "name": "Piotr Barabasz",
+    "role": "Właściciel i odpowiedzialny partner techniczny"
+  },
+  "assets": {
+    "faviconPath": "/assets/favicon.svg",
+    "socialPreviewPath": "/assets/protolume-social-preview.png",
+    "socialPreviewType": "image/png"
+  }
+}
