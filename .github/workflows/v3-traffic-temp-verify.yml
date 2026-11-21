@@ -18,6 +18,7 @@ jobs:
       - name: Ruff lint and format
         run: |
           ruff check scripts/gcp/promote_angular_cloud_run.py infra/gcp/tests/test_deployment_promotion.py infra/gcp/tests/test_cloudbuild_yaml.py
+          ruff format --diff scripts/gcp/promote_angular_cloud_run.py infra/gcp/tests/test_deployment_promotion.py infra/gcp/tests/test_cloudbuild_yaml.py || true
           ruff format --check scripts/gcp/promote_angular_cloud_run.py infra/gcp/tests/test_deployment_promotion.py infra/gcp/tests/test_cloudbuild_yaml.py
       - name: Deployment contract and helper tests
         run: |
