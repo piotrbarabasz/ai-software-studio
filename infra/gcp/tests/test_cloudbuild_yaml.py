@@ -48,6 +48,7 @@ class CloudBuildV3Test(unittest.TestCase):
         self.assertIn("v3-production-deploy-zero-traffic", steps)
         self.assertIn("v3-production-promote-traffic", steps)
         self.assertIn("v3-production-live-smoke", steps)
+        self.assertIn("v3-promotion-safety-tests", steps)
         self.assertEqual(
             steps["v3-production-promote-traffic"]["waitFor"],
             ["v3-production-deploy-zero-traffic"],
@@ -64,6 +65,8 @@ class CloudBuildV3Test(unittest.TestCase):
             "FORM_ENDPOINT=/api/contact/brief",
             "PUBLIC_BUILD_SHA=$SHORT_SHA",
             "--no-traffic",
+            "scripts/gcp/promote_v3_cloud_run.py",
+            "test_promote_v3_cloud_run.py",
         ):
             self.assertIn(marker, source)
         self.assertNotIn("frontend/Dockerfile", source)
@@ -85,6 +88,7 @@ class CloudBuildV3Test(unittest.TestCase):
         self.assertIn("v3-static-checks", ids)
         self.assertIn("production-helper-tests", ids)
         self.assertIn("preview-traffic-guard-tests", ids)
+        self.assertIn("v3-promotion-guard-tests", ids)
         self.assertNotIn("frontend-checks", ids)
 
     def test_manual_backend_does_not_publish_without_approval(self) -> None:
