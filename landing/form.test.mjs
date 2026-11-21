@@ -191,6 +191,67 @@ test('surrounding whitespace does not make an otherwise valid email fail validat
   assert.match(app.status.textContent, /Wiadomość wysłana/);
 });
 
+
+test('existing FastAPI contact accepts minimal JSON and trims optional details', async () => {
+  let url, init;
+  const app = harness({
+    endpoint: '/api/contact/brief',
+    name: '  Firma ABC  ',
+    email: '  office@example.com  ',
+    message: '   ',
+    request: async (endpoint, options) => {
+      url = endpoint;
+      init = options;
+      return { ok: true, status: 202 };
+    },
+  });
+
+  await app.submit();
+  assert.equal(url, '/api/contact/brief');
+  assert.equal(init.method, 'POST');
+  assert.equal(init.credentials, 'omit');
+  assert.equal(init.headers['Content-Type'], 'application/json');
+  assert.equal(init.headers.Accept, 'application/json');
+  assert.deepEqual(JSON.parse(init.body), {
+    name: 'Firma ABC',
+    email: 'office@example.com',
+    message: 'Proszę o kontakt.',
+    website: '',
+  });
+  assert.equal(app.requests, 1);
+  assert.equal(app.resets, 1);
+  assert.match(app.status.textContent, /Wiadomość wysłana/);
+});
+
+test('existing FastAPI contact preserves fields and shows error on SMTP failure', async () => {
+  const app = harness({
+    endpoint: '/api/contact/brief',
+    response: { ok: false, status: 503 },
+  });
+  await app.submit();
+  assert.equal(app.requests, 1);
+  assert.equal(app.resets, 0);
+  assert.equal(app.button.disabled, false);
+  assert.match(app.status.textContent, /Nie udało się wysłać wiadomości/);
+});
+
+test('existing FastAPI contact blocks duplicate submissions while pending', async () => {
+  let resolveRequest;
+  const app = harness({
+    endpoint: '/api/contact/brief',
+    request: () => new Promise((resolve) => { resolveRequest = resolve; }),
+  });
+  const pending = app.submit();
+  assert.equal(app.button.disabled, true);
+  assert.equal(app.form.attributes.get('aria-busy'), 'true');
+  await app.submit();
+  assert.equal(app.requests, 1);
+  resolveRequest({ ok: true, status: 202 });
+  await pending;
+  assert.equal(app.resets, 1);
+  assert.equal(app.button.disabled, false);
+});
+
 test('provider error or failed network preserves fields and offers direct email', async () => {
   const app = harness({ endpoint: 'https://formspree.io/f/abc123', response: { ok: false, status: 422 } });
   await app.submit();
