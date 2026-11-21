@@ -487,7 +487,7 @@ class CloudBuildYamlTest(unittest.TestCase):
             promotion["args"],
         )
         self.assertIn(
-            "--expected-image=$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_FRONTEND_IMAGE_NAME:$SHORT_SHA",
+            "--image=$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_FRONTEND_IMAGE_NAME:$SHORT_SHA",
             promotion["args"],
         )
         self.assertEqual(
