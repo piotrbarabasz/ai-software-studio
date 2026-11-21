@@ -56,7 +56,9 @@ class ProductionPromotionTest(unittest.TestCase):
 
     def test_rejects_tag_pointing_to_latest_angular_revision(self) -> None:
         data = service()
-        data["status"]["traffic"][1]["revisionName"] = data["status"]["latestReadyRevisionName"]
+        data["status"]["traffic"][1]["revisionName"] = data["status"][
+            "latestReadyRevisionName"
+        ]
         with self.assertRaises(promotion.TrafficError):
             promotion.deployment_target(data)
 
