@@ -157,6 +157,7 @@ test('production sends once, trims values, announces pending and success, resets
   });
   const pending = app.submit();
   assert.equal(app.button.disabled, true);
+  assert.equal(app.fields.email.value, 'firma@example.com', 'email is normalized before HTML validity checks');
   assert.equal(app.form.attributes.get('aria-busy'), 'true');
   assert.match(app.status.textContent, /Wysyłanie/);
   await app.submit();
@@ -172,6 +173,20 @@ test('production sends once, trims values, announces pending and success, resets
   await pending;
   assert.equal(app.button.disabled, false);
   assert.equal(app.form.attributes.has('aria-busy'), false);
+  assert.equal(app.resets, 1);
+  assert.match(app.status.textContent, /Wiadomość wysłana/);
+});
+
+test('surrounding whitespace does not make an otherwise valid email fail validation', async () => {
+  let captured;
+  const app = harness({
+    endpoint: 'https://formspree.io/f/abc123',
+    email: '  firma@example.com  ',
+    request: async (_url, init) => { captured = init.body; return { ok: true }; },
+  });
+  await app.submit();
+  assert.equal(app.requests, 1);
+  assert.equal(captured.values.get('email'), 'firma@example.com');
   assert.equal(app.resets, 1);
   assert.match(app.status.textContent, /Wiadomość wysłana/);
 });

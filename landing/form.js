@@ -66,6 +66,10 @@
       nameField.focus();
       return;
     }
+    // Normalize email in the input before native validity checks. Browsers may
+    // sanitize type=email automatically, but test DOMs and some integrations do not.
+    // Keep the checked value consistent with the value sent to Formspree.
+    emailField.value = email;
     if (!form.reportValidity() || email.length > 254) {
       setStatus('Sprawdź wymagane pola i adres e-mail.', true);
       if (email.length > 254) {
