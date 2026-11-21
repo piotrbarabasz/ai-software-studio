@@ -37,7 +37,7 @@ Podgląd Cloud Run: `infra/gcp/cloudbuild.landing-cloudrun-preview.yaml` (manual
 2. pobiera zatwierdzoną politykę prywatności z istniejącego Secret Manager;
 3. uruchamia testy strony i przygotowuje indeksowalny artefakt z metadanymi SHA;
 4. buduje i testuje obraz Nginx z `landing/nginx.production.conf`;
-5. wdraża nową rewizję na **0%**, a następnie po identyfikacji obrazu SHA promuje ją na **100%**;
+5. wdraża nową rewizję na **0%**, sprawdza niezmienny digest obrazu w Artifact Registry i Cloud Run, a następnie promuje zweryfikowaną rewizję na **100%**;
 6. sprawdza rzeczywistą stronę `https://protolume.pl`, SHA, HTML, SEO, kontakt, sitemap i API w smoke bez POST.
 
 W razie problemu z produkcją można wrócić do wcześniejszej rewizji Angulara poprzez Cloud Run **Manage traffic**, wskazując poprzednią gotową rewizję serwisu web na 100%. Nie usuwać wcześniejszych rewizji ani obrazu do czasu potwierdzenia akceptacji v3.
