@@ -57,7 +57,7 @@ steps:
         # Never echo or copy its source into the runtime container.
         gcloud secrets versions access latest \
           --secret=$_PUBLIC_LEGAL_CONFIG_SECRET \
-          --project=$_PROJECT_ID > frontend/.public-legal-config.json
+          --project=$_PROJECT_ID > landing/.public-legal-config.json
 
   - id: v3-production-checks
     name: node:22.22.3-bookworm-slim
@@ -72,7 +72,7 @@ steps:
           scripts/protolume.test.mjs scripts/v3-cloudrun-preview.test.mjs \
           scripts/v3-production.test.mjs
         FORM_ENDPOINT=/api/contact/brief \
-          PUBLIC_LEGAL_CONFIG_PATH=frontend/.public-legal-config.json \
+          PUBLIC_LEGAL_CONFIG_PATH=landing/.public-legal-config.json \
           PUBLIC_BUILD_SHA=$SHORT_SHA \
           node landing/build.mjs --production
         node landing/verify-dist.mjs --production
