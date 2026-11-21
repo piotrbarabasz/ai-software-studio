@@ -1,0 +1,42 @@
+name: V3 digest promotion one-off verification
+on:
+  push:
+    branches: [fix/v3-promotion-artifact-digest]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install lint and YAML tools
+        run: python -m pip install ruff==0.15.22 PyYAML==6.0.3
+      - name: V3 digest promotion tests and Ruff
+        run: |
+          ruff check scripts/gcp/promote_v3_cloud_run.py scripts/gcp/tests/test_promote_v3_cloud_run.py
+          ruff format --check scripts/gcp/promote_v3_cloud_run.py scripts/gcp/tests/test_promote_v3_cloud_run.py
+          python -m unittest discover -s scripts/gcp/tests -p test_promote_v3_cloud_run.py -v
+      - name: V3 static site release contract tests
+        run: |
+          node --test landing/build.test.mjs landing/form.test.mjs landing/motion.test.mjs landing/deployment.test.mjs scripts/protolume.test.mjs scripts/v3-cloudrun-preview.test.mjs scripts/v3-production.test.mjs
+      - name: Cloud Build dependency and guard contract
+        run: |
+          python - <<'PY'
+          import yaml
+          for path in ["infra/gcp/cloudbuild.deploy.yaml","infra/gcp/cloudbuild.pr-checks.yaml"]:
+            data=yaml.safe_load(open(path))
+            seen=set()
+            for step in data["steps"]:
+              assert step["id"] not in seen
+              for dep in step.get("waitFor",[]):
+                assert dep=="-" or dep in seen, (step["id"],dep)
+              seen.add(step["id"])
+            assert "v3-promotion-safety-tests" in seen if path.endswith("deploy.yaml") else "v3-promotion-guard-tests" in seen
+            print("PASS",path)
+          PY
