@@ -1,0 +1,42 @@
+name: Create immutable Protolume release archive tags once
+on:
+  push:
+    branches:
+      - ops/create-immutable-archive-tags-20261121
+permissions:
+  contents: write
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Verify SHA and create annotated archive tags
+        shell: bash
+        run: |
+          set -euo pipefail
+          expected_master=814c6a55391bd2255ce884cf69bb2e3bbd9af8f6
+          legacy=9f1a7bbd0273efd907c04fc69aae5049cc18dbcc
+          git fetch origin master --no-tags
+          actual_master=$(git rev-parse refs/remotes/origin/master)
+          test "$actual_master" = "$expected_master" || { echo "BLOCKED: master moved before archive"; exit 1; }
+          test "$(git cat-file -t "$expected_master")" = commit
+          test "$(git cat-file -t "$legacy")" = commit
+          git config user.name "Protolume Archive Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          archive() {
+            local tag="$1"; local sha="$2"; local message="$3"
+            if git ls-remote --tags origin "refs/tags/$tag" | grep -q .; then
+              echo "BLOCKED: tag $tag already exists; refusing overwrite" >&2
+              return 1
+            fi
+            git tag -a "$tag" "$sha" -m "$message"
+            git push origin "refs/tags/$tag"
+            remote=$(git ls-remote --tags origin "refs/tags/$tag^{}" | cut -f1)
+            test "$remote" = "$sha" || { echo "BLOCKED: tag $tag verification failed"; return 1; }
+            echo "PASS: $tag -> $sha"
+          }
+          archive "archive/legacy-angular-2026-11-21" "$legacy" "Historical Protolume Angular source immediately before V3 production change"
+          archive "archive/pre-cleanup-v3-2026-11-21" "$expected_master" "Full source immediately before cleanup; V3 production release plus legacy source retained"
