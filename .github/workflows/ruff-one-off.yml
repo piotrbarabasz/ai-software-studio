@@ -16,9 +16,18 @@ jobs:
           python-version: '3.12'
       - name: Install exact CI Ruff
         run: python -m pip install ruff==0.15.22
-      - name: Show exact expected formatter diff
+      - name: Full backend Ruff check and formatter check
         run: |
           cd backend
           ruff --version
-          ruff format --diff tests/contract/test_brief_contact_contract.py
-          ruff format --check tests/contract/test_brief_contact_contract.py
+          ruff check .
+          ruff format --check .
+      - name: Install locked backend test dependencies
+        run: |
+          cd backend
+          python -m pip install -r requirements-dev.lock
+          python -m pip install -e .
+      - name: Run backend tests
+        run: cd backend && python -m pytest -q
+      - name: Run static V3 tests
+        run: node --test landing/build.test.mjs landing/form.test.mjs landing/motion.test.mjs landing/deployment.test.mjs scripts/protolume.test.mjs scripts/v3-cloudrun-preview.test.mjs
