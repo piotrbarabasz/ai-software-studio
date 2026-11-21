@@ -72,7 +72,7 @@ export function build(mode = 'preview', config = process.env) {
     ? readAndValidatePublicLegalConfig(config.PUBLIC_LEGAL_CONFIG_PATH, { mode: 'production' })
     : null;
 
-  if (endpoint) {
+  if (endpoint && !isBackendContact) {
     const suppliers = [
       ...legal.processing.recipients,
       ...legal.processing.infrastructureProviders,
