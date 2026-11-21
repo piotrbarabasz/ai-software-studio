@@ -250,7 +250,7 @@ steps:
       - "--project=$_PROJECT_ID"
       - "--region=$_REGION"
       - "--service=$_FRONTEND_SERVICE"
-      - "--expected-image=$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_FRONTEND_IMAGE_NAME:$SHORT_SHA"
+      - "--image=$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_FRONTEND_IMAGE_NAME:$SHORT_SHA"
 
   - id: deployment-read-only-smoke
     name: python:3.12-slim
