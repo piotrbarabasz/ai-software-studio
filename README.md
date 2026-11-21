@@ -11,7 +11,7 @@ Strona Protolume: https://protolume.pl
 
 Serwis `aisoftware-studio-web` na Google Cloud Run obsługuje domenę `protolume.pl`. Nginx przekazuje wyłącznie `/api/contact/brief` do istniejącej usługi `aisoftware-studio-api` po HTTPS. Formularz nie używa Formspree i nie zawiera sekretów.
 
-Folder `frontend/` ze starym Angularem pozostaje **wyłącznie jako tymczasowy punkt rollbacku i źródło dwóch assetów oraz walidatora danych prawnych**. Usunięcie wymaga osobnego PR po potwierdzeniu działającej produkcji v3. Nie należy uruchamiać Angulara jako nowego frontendu.
+Dawny Angular jest usuwany z bieżącego drzewa źródłowego. Jego kod pozostaje w historii Git, a historyczne rewizje Cloud Run są punktem rollbacku. Dwa niezbędne pliki marki i walidator prawny są teraz wewnątrz `landing/`.
 
 ## Codzienna praca
 
@@ -48,6 +48,6 @@ Uwaga: `deploy-prod` nie wdraża zmian FastAPI, żeby nie ingerować w działaj�
 
 ## Przegląd migracji
 
-Po potwierdzonym przełączeniu na v3 można usunąć: stary Angular, Firebase Hosting i stare materiały demonstracyjne. Należy **zachować**: FastAPI, konfigurację SMTP/Secret Manager, dwa wykorzystywane logotypy, plik walidacji polityki prawnej, sitemap/robots, Lucide license, produkcyjny pipeline, rollback instrukcję i manualny preview.
+Po potwierdzeniu publikacji V3 usuwamy nieużywany Angular, Firebase i historyczne materiały audytowe; zachowujemy FastAPI, SMTP, walidator prawny, sitemap, licencję Lucide, produkcyjny pipeline, rollback oraz preview.
 
 Zobacz też `landing/README.md` oraz dokumenty w `docs/` (część historyczna opisuje stary Angular).
