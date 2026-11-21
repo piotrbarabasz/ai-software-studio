@@ -71,13 +71,21 @@ test('preview image serves previously verified artifacts; direct sending require
   assert.match(yaml, /--no-traffic/);
 });
 
-test('legacy deploy-prod continues building Angular, not the v3 preview', () => {
+test('deploy-prod uses production V3 Nginx while manual preview remains isolated', () => {
   const production = read('infra/gcp/cloudbuild.deploy.yaml');
-  const oldDockerfile = read('frontend/Dockerfile');
-  assert.match(production, /frontend\/Dockerfile/);
-  assert.match(production, /id: frontend-deploy/);
-  assert.doesNotMatch(production, /landing\/Dockerfile\.cloudrun/);
-  assert.match(oldDockerfile, /dist\/aisoftware-studio\/browser/);
+  const preview = read('infra/gcp/cloudbuild.landing-cloudrun-preview.yaml');
+  const prodNginx = read('landing/nginx.production.conf');
+  const previewNginx = read('landing/nginx.cloudrun.conf');
+  const dockerfile = read('landing/Dockerfile.cloudrun');
+  assert.match(production, /NGINX_CONFIG=landing\/nginx\.production\.conf/);
+  assert.match(production, /node landing\/build\.mjs --production/);
+  assert.match(production, /--no-traffic/);
+  assert.match(preview, /--no-traffic/);
+  assert.match(previewNginx, /X-Robots-Tag "noindex, nofollow"/);
+  assert.doesNotMatch(prodNginx, /X-Robots-Tag "noindex, nofollow"/);
+  assert.match(prodNginx, /return 301/);
+  assert.match(prodNginx, /location = \/api\/contact\/brief/);
+  assert.match(dockerfile, /ARG NGINX_CONFIG=landing\/nginx\.cloudrun\.conf/);
 });
 
 test('local Make preview now targets Cloud Run and obsolete Firebase release is disabled', () => {
