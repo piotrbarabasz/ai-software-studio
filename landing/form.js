@@ -86,16 +86,28 @@
     form.setAttribute('aria-busy', 'true');
     setStatus('Wysyłanie wiadomości…');
 
-    const payload = new FormData(form);
-    payload.set('name', name);
-    payload.set('email', email);
-    payload.set('message', message || 'Proszę o kontakt.');
+    const isBackendContact = endpoint === '/api/contact/brief';
+    const payload = isBackendContact
+      ? JSON.stringify({
+          name,
+          email,
+          message: message || 'Proszę o kontakt.',
+          website: honeypot,
+        })
+      : new FormData(form);
+    if (!isBackendContact) {
+      payload.set('name', name);
+      payload.set('email', email);
+      payload.set('message', message || 'Proszę o kontakt.');
+    }
 
     try {
       const response = await fetch(endpoint, {
         method: 'POST',
         body: payload,
-        headers: { Accept: 'application/json' },
+        headers: isBackendContact
+          ? { Accept: 'application/json', 'Content-Type': 'application/json' }
+          : { Accept: 'application/json' },
         credentials: 'omit',
       });
       if (!response.ok) throw new Error('HTTP ' + response.status);
