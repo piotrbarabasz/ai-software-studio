@@ -1,0 +1,59 @@
+# Independent master build: validate FastAPI and publish a SHA-tagged image.
+# This pipeline deliberately does NOT update the production Cloud Run API service.
+# Release API revisions separately after verification of live SMTP/Secret Manager config.
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+steps:
+  - id: backend-ci-checks
+    name: python:3.12-slim
+    entrypoint: sh
+    args:
+      - -c
+      - |
+        set -eu
+        cd backend
+        python -m pip install --requirement requirements-dev.lock
+        python -m pip install --no-deps --no-build-isolation --editable .
+        python -m ruff check .
+        python -m ruff format --check .
+        python -m pytest
+        cd ..
+        python -m unittest discover -s infra/gcp/tests -p 'test_*.py'
+
+  - id: backend-ci-image-build
+    name: gcr.io/cloud-builders/docker
+    waitFor: ["backend-ci-checks"]
+    args:
+      - build
+      - -f
+      - backend/Dockerfile
+      - -t
+      - "europe-central2-docker.pkg.dev/ai-software-studio-501918/aisoftware-studio/aisoftware-studio-api:$SHORT_SHA"
+      - .
+
+  - id: backend-ci-image-smoke
+    name: gcr.io/cloud-builders/docker
+    entrypoint: sh
+    waitFor: ["backend-ci-image-build"]
+    env:
+      - "DEPLOY_APP_ENV=production"
+      - "DEPLOY_CORS_ALLOWED_ORIGINS=https://protolume.pl"
+      - "DEPLOY_CONTACT_DELIVERY_MODE=email"
+      - "DEPLOY_CONTACT_RECIPIENT_EMAIL=smoke@protolume.pl"
+      - "DEPLOY_CONTACT_FROM_EMAIL=smoke@protolume.pl"
+      - "DEPLOY_SMTP_HOST=smtp.gmail.com"
+      - "DEPLOY_SMTP_PORT=587"
+      - "DEPLOY_SMTP_USERNAME=smoke@protolume.pl"
+      - "DEPLOY_SMTP_USE_TLS=true"
+      - "DEPLOY_CONTACT_RATE_LIMIT_PER_MINUTE=30"
+    args:
+      - scripts/gcp/smoke-backend-image.sh
+      - "europe-central2-docker.pkg.dev/ai-software-studio-501918/aisoftware-studio/aisoftware-studio-api:$SHORT_SHA"
+
+  - id: backend-ci-image-push
+    name: gcr.io/cloud-builders/docker
+    waitFor: ["backend-ci-image-smoke"]
+    args:
+      - push
+      - "europe-central2-docker.pkg.dev/ai-software-studio-501918/aisoftware-studio/aisoftware-studio-api:$SHORT_SHA"
