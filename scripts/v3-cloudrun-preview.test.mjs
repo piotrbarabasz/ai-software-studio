@@ -107,7 +107,7 @@ test('local Make preview now targets Cloud Run and obsolete Firebase release is 
   assert.ok(!args.some((value) => value.includes('_FORM_ENDPOINT=')));
 
   const source = read('scripts/protolume.mjs');
-  assert.match(source, /Release Cloud Run v3 jest obecnie ZABLOKOWANY/);
+  assert.match(source, /Publikacja V3 działa przez Cloud Build deploy-prod/);
   const template = read('.env.example');
   assert.match(template, /CLOUD_RUN_PREVIEW_TAG=v3-review/);
   assert.doesNotMatch(template, /^FIREBASE_PREVIEW_CHANNEL=/m);
