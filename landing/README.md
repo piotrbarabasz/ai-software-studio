@@ -132,23 +132,23 @@ Animacje powstają według [Figma V3 Desktop](https://www.figma.com/design/m2Lee
 
 
 
-## CONTACT-001 + QA-001 — formularz z Figmy i testy zachowania
+## Archiwum: CONTACT-001 + QA-001 — pierwotny formularz z Figmy
 
 Sekcja \`#kontakt\` odwzorowuje [V3 Desktop](https://www.figma.com/design/m2LeessPiyWNgREo4RG9jR?node-id=11-28) oraz [Mobile](https://www.figma.com/design/m2LeessPiyWNgREo4RG9jR?node-id=12-67): jasnofioletowe tło, krótki opis i prosty formularz. Pozostawiamy **tylko trzy pola**, z czego opis jest opcjonalny. Dekoracyjna ikona pochodzi z lokalnego sprite Lucide, a nie z emoji.
 
 - **Preview, bez \`FORM_ENDPOINT\`:** przycisk „Wyślij wiadomość” jest nieaktywny, a status wyjaśnia brak dostępności formularza i pokazuje adres kontaktowy. Nie uruchamiamy aplikacji pocztowej i nie udajemy sukcesu.
-- **Formspree (po jawnej konfiguracji i zatwierdzeniu polityki):** dane są normalizowane przez \`trim()\`, opcjonalna wiadomość otrzymuje neutralną treść, a wysyłka następuje dopiero po poprawnej walidacji. Pola nie są resetowane w przypadku błędu.
+- **Archiwalne Formspree (opcjonalnie):** dane są normalizowane przez \`trim()\`, opcjonalna wiadomość otrzymuje neutralną treść, a wysyłka następuje dopiero po poprawnej walidacji. Pola nie są resetowane w przypadku błędu.
 - Wbudowana walidacja HTML jest zachowana. Sprawdzamy ponadto imię/nazwę firmy po usunięciu białych znaków, obsługujemy atrybut \`aria-invalid\`, a błędne pola mogą otrzymać fokus. Wskaźnik \`aria-busy\` i blokada przycisku zapobiegają ponownemu kliknięciu podczas wysyłania.
 - **Antyspam:** pole \`_gotcha\` jest nadal obecne, a wypełniony honeypot jest ignorowany bez wysyłki.
 - Responsywność: mobile ma jeden słupek i formularz o szerokości kontenera; zachowujemy focus-visible, semantyczne etykiety, live region statusu i \`prefers-reduced-motion\`.
 - **Testy:** \`landing/form.test.mjs\` sprawdza obydwa tryby, obsługę błędów, trim, double submit, opcjonalny opis i honeypot. Nowy test struktury w \`landing/build.test.mjs\` sprawdza HTML, CSS, liczbę sekcji, kotwice, ikony i konfigurację. Polecenie \`node scripts/protolume.mjs check\` uruchamia testy formularza razem z dotychczasowymi.
 
-Nie zmieniamy backendu, endpointu, danych prawnych, trybu produkcyjnego ani Cloud Run. \`make release\` pozostaje zablokowane. Przed mergem obowiązuje lokalne \`node scripts/protolume.mjs check\`, ręczny przegląd na urządzeniach oraz test formularza po skonfigurowaniu **właściwego, zatwierdzonego** odbiorcy w odrębnym procesie release.
+To historyczna notatka z CONTACT-001; aktualna integracja FastAPI/SMTP jest opisana wyżej. Produkcyjny ruch pozostaje bez zmian.
 
 
-## CONTACT-002 — wysyłanie bez otwierania poczty użytkownika
+## Archiwum: CONTACT-002 — wcześniejszy wariant Formspree (niedomyślny)
 
-**Ważne:** Sam e-mail \`kontakt@protolume.pl\` nie jest endpointem HTTP. Formspree realizuje przesłanie wiadomości ze strony i opcjonalne powiadomienie e-mail. Docelowy adres trzeba połączyć i zweryfikować w panelu Formspree; sam kod nie może tego potwierdzić.
+Status historyczny: tego wariantu nie trzeba teraz uruchamiać. Domyślne v3 korzysta z istniejącego API FastAPI/SMTP, a poniższa instrukcja dotyczy wyłącznie Formspree.
 
 1. W [Formspree](https://formspree.io/) utwórz formularz „Protolume — Kontakt”, dodaj **kontakt@protolume.pl** do zweryfikowanych odbiorców i w Workflow włącz akcję **Send Email** na ten adres. Skopiuj faktyczny endpoint w formacie \`https://formspree.io/f/ID\`.
 2. Zatwierdź publiczną politykę prywatności obejmującą Formspree, cele przetwarzania, retencję i odbiorców. Umieść poprawny publiczny JSON w istniejącym sekrecie GCP \`aisoftware-studio-public-legal-config\` (Secret Manager) — nie w repo ani w rozmowie.
