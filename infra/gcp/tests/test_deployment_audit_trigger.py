@@ -70,6 +70,22 @@ class TriggerAuditTest(unittest.TestCase):
         self.assertIn("--filter=name=deploy-prod", command)
         self.assertNotIn("europe-central2", command)
 
+    def test_production_trigger_rejects_missing_component_filters(self) -> None:
+        payload = trigger_payload()
+        payload.pop("includedFiles")
+        result = subprocess.CompletedProcess(
+            [], 0, stdout=json.dumps([payload]), stderr=""
+        )
+        with (
+            patch.object(audit_trigger, "parse_args", return_value=arguments()),
+            patch.object(audit_trigger.shutil, "which", return_value="gcloud"),
+            patch.object(audit_trigger.subprocess, "run", return_value=result),
+            contextlib.redirect_stderr(io.StringIO()) as stderr,
+        ):
+            status = audit_trigger.main()
+        self.assertEqual(status, 1)
+        self.assertIn("includedFiles", stderr.getvalue())
+
     def test_pull_request_trigger_has_exact_event_name_config_and_no_overrides(
         self,
     ) -> None:
