@@ -20,7 +20,7 @@
   if (!nameField || !emailField || !messageField || !honeypotField) return;
 
   // No configured provider: keep the form unavailable, never open mail software.
-  // A genuine Formspree endpoint is required to accept messages in-page.
+  // A validated API endpoint and an approved legal policy are required at build time.
   if (!endpoint) {
     button.disabled = true;
     status.textContent = 'Wysyłanie formularza jest chwilowo niedostępne. Napisz bezpośrednio na ' + fallbackEmail + '.';
