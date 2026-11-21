@@ -1,4 +1,5 @@
 """Contract checks for the simplified V3 contact form on the existing SMTP backend."""
+
 import logging
 
 import pytest
@@ -79,7 +80,9 @@ def test_brief_contact_honeypot_is_accepted_without_sending(settings: Settings) 
         response = client.post(
             "/api/contact/brief",
             json={
-                "name": "Firma", "email": "x@example.com", "website": "https://spam.invalid"
+                "name": "Firma",
+                "email": "x@example.com",
+                "website": "https://spam.invalid",
             },
         )
     assert response.status_code == 202
