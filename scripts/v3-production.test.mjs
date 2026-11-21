@@ -48,7 +48,7 @@ test('deploy-prod builds production static V3 from approved legal source', () =>
     '--no-traffic',
     'scripts/gcp/promote_v3_cloud_run.py',
     'scripts/gcp/smoke_v3_production.py',
-    'PUBLIC_LEGAL_CONFIG_PATH=frontend/.public-legal-config.json',
+    'PUBLIC_LEGAL_CONFIG_PATH=landing/.public-legal-config.json',
     'FORM_ENDPOINT=/api/contact/brief',
     'PUBLIC_BUILD_SHA=$SHORT_SHA',
   ];

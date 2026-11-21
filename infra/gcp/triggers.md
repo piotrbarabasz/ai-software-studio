@@ -1,22 +1,14 @@
-# Cloud Build trigger contract
+# Aktywne i ręczne workflow Cloud Build
 
-The remote default branch was verified from `git ls-remote --symref origin HEAD` as `master`. The production trigger is `deploy-prod` (`901333cb-1c13-4929-90e5-6df070eb647e`) in trigger location `global`, on push branch `^master$`, using `infra/gcp/cloudbuild.deploy.yaml`. Its deployment region remains independently fixed to `europe-central2` by `production-contract.json`.
+Projekt: `ai-software-studio-501918`; Cloud Run region `europe-central2`.
 
-The YAML uses built-in `$SHORT_SHA` directly. `_IMAGE_TAG` is not a production trigger substitution. The minimal target trigger contains only the six real environment-specific values: `_CONTACT_RECIPIENT_EMAIL`, `_CONTACT_FROM_EMAIL`, `_SMTP_HOST`, `_SMTP_PORT`, `_SMTP_USERNAME` and `_SMTP_USE_TLS`.
+- `deploy-prod` — trigger zmian `master`, konfiguracja `infra/gcp/cloudbuild.deploy.yaml`, buduje i publikuje statyczny landing V3 do istniejącego `aisoftware-studio-web`. Zmiany ruchu następują dopiero po image smoke i weryfikacji Ready + SHA.
+- `pr-checks` — waliduje wspierany landing V3 oraz FastAPI, bez publikacji.
+- `protolume-v3-preview-manual` — ręczny test `infra/gcp/cloudbuild.landing-cloudrun-preview.yaml`, 0% domeny, tag `v3-review`, noindex.
+- `infra/gcp/cloudbuild.backend.yaml` — osobny manualny build obrazu FastAPI, bez automatycznego deploymentu. Dla zmian API przygotować osobny świadomy release.
 
-Audit the active trigger by exact ID without changing GCP:
+Zweryfikuj w konsoli GCP, czy trigger `deploy-prod` nadal wskazuje właściwy plik i branch. Sam merge GitHub nie dowodzi wykonania Cloud Build.
 
-```powershell
-.\scripts\gcp\create-triggers.ps1 -ProjectId ai-software-studio-501918 -TriggerLocation global -TriggerId 901333cb-1c13-4929-90e5-6df070eb647e
-```
+Historyczny identyfikator triggera `deploy-prod`: `901333cb-1c13-4929-90e5-6df070eb647e` (lokalizacja `global`; potwierdź przed użyciem).
 
-The historical `create-triggers` name is read-only. Exact migration values and the manual checklist are in `docs/gcp-cicd.md`.
-
-The PR trigger is named `pr-checks`, targets pull requests whose base branch matches `^master$`, uses `infra/gcp/cloudbuild.pr-checks.yaml`, has no trigger substitutions or secrets, and never builds, pushes, or deploys a container. Its preview build remains explicitly noindex.
-
-Audit both trigger contracts without changing GCP:
-
-```powershell
-.\scripts\gcp\create-triggers.ps1 -ProjectId ai-software-studio-501918 -TriggerKind production -TriggerId 901333cb-1c13-4929-90e5-6df070eb647e
-.\scripts\gcp\create-triggers.ps1 -ProjectId ai-software-studio-501918 -TriggerKind pull-request -TriggerName pr-checks
-```
+Przełączenie produkcji może zmienić tylko nową rewizję `aisoftware-studio-web`; **nie usuwa** backendu i jego sekretów. Rollback przez Cloud Run -> Manage traffic -> poprzednia rewizja.

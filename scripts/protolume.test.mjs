@@ -69,5 +69,5 @@ test('Cloud Build staging explicitly excludes .env and generated legal files', (
   assert.match(ignore, /#!include:\.gitignore/);
   assert.match(ignore, /^\.env$/m);
   assert.match(ignore, /^\.env\.\*$/m);
-  assert.match(ignore, /frontend\/\.public-legal-config\.json/);
+  assert.match(ignore, /landing\/\.public-legal-config\.json/);
 });
