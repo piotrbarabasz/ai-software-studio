@@ -6,7 +6,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 
 from app.core.config import Settings
-from app.schemas.contact import ContactInquiry
+from app.schemas.contact import BriefContactInquiry, ContactInquiry
 from app.services.contact_delivery import DeliveryError, EmailContactDelivery
 
 logger = logging.getLogger("aisoftware_studio.contact")
@@ -82,7 +82,7 @@ class ContactIntakeService:
         self._rate_limiter = rate_limiter
         self._settings = settings
 
-    def submit(self, inquiry: ContactInquiry, client_key: str) -> None:
+    def submit(self, inquiry: ContactInquiry | BriefContactInquiry, client_key: str) -> None:
         if not self._rate_limiter.allow(
             client_key,
             self._settings.contact_rate_limit_per_minute,
