@@ -66,7 +66,7 @@ test('preview image serves previously verified artifacts; direct sending require
   assert.match(yaml, /id: prepare-preview-contact/);
   assert.match(yaml, /secrets versions access latest/);
   assert.match(yaml, /aisoftware-studio-public-legal-config/);
-  assert.match(yaml, /PUBLIC_LEGAL_CONFIG_PATH=frontend\/\.public-legal-config\.json/);
+  assert.match(yaml, /PUBLIC_LEGAL_CONFIG_PATH=landing\/\.public-legal-config\.json/);
   assert.match(yaml, /node landing\/verify-dist\.mjs --preview/);
   assert.match(yaml, /--no-traffic/);
 });
