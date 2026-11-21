@@ -1,81 +1,53 @@
 # Protolume
 
-Publiczna, polskojęzyczna strona Protolume — studio wdrożeń AI i automatyzacji, prowadzone przez Piotra Barabasza.
+Strona Protolume: https://protolume.pl
 
-Oficjalna strona: [https://protolume.pl](https://protolume.pl)
+## Architektura
 
-Repozytorium zawiera kod strony oraz obsługującego ją API formularza kontaktowego. Oficjalnym źródłem aktualnej oferty jest domena `protolume.pl`.
+- **landing/** — publiczna, minimalistyczna strona v3 (HTML, CSS, JS), nawigacja po sekcjach, formularz, polityka prywatności, motion oraz lokalne ikony Lucide.
+- **backend/** — istniejące FastAPI: `POST /api/contact/brief`, walidacja, antyspam, rate limit i wysyłka SMTP do kontakt@protolume.pl.
+- **infra/gcp/** — konfiguracja Cloud Build, region `europe-central2`, istniejący projekt `ai-software-studio-501918`.
+- **scripts/gcp/** — testy obrazów, kontrola bezpiecznej promocji ruchu Cloud Run, smoke produkcji.
 
-## Repository Structure
+Serwis `aisoftware-studio-web` na Google Cloud Run obsługuje domenę `protolume.pl`. Nginx przekazuje wyłącznie `/api/contact/brief` do istniejącej usługi `aisoftware-studio-api` po HTTPS. Formularz nie używa Formspree i nie zawiera sekretów.
 
-```text
-frontend/   Angular single-page marketing website
-backend/    FastAPI contact intake API
-docs/       Local development and deployment notes
-infra/      Future infrastructure notes only
-specs/      Implementation scopes and task definitions consumed by AgentGraph
-```
+Folder `frontend/` ze starym Angularem pozostaje **wyłącznie jako tymczasowy punkt rollbacku i źródło dwóch assetów oraz walidatora danych prawnych**. Usunięcie wymaga osobnego PR po potwierdzeniu działającej produkcji v3. Nie należy uruchamiać Angulara jako nowego frontendu.
 
-## Local Development
-
-Run the frontend and backend independently.
+## Codzienna praca
 
 ```bash
-cd backend
-py -3.12 -m pip install -r requirements-dev.lock
-py -3.12 -m pip install --no-deps --no-build-isolation -e .
-uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+node --test landing/build.test.mjs landing/form.test.mjs landing/motion.test.mjs landing/deployment.test.mjs scripts/protolume.test.mjs scripts/v3-cloudrun-preview.test.mjs scripts/v3-production.test.mjs
+node landing/build.mjs --preview
+node landing/verify-dist.mjs --preview
 ```
+
+Lokalny build produkcyjny wymaga **zatwierdzonego** pliku konfiguracji prawnej (przekazywanego tylko jako ścieżka, bez commita) oraz:
 
 ```bash
-cd frontend
-npm ci
-npm start
+FORM_ENDPOINT=/api/contact/brief PUBLIC_LEGAL_CONFIG_PATH=/secure/legal.json PUBLIC_BUILD_SHA=0123456 node landing/build.mjs --production
+node landing/verify-dist.mjs --production
 ```
 
-The Angular dev server uses `http://localhost:4200`; the backend API uses `http://127.0.0.1:8000`.
+Podgląd Cloud Run: `infra/gcp/cloudbuild.landing-cloudrun-preview.yaml` (manualny `v3-review`, bez ruchu na domenie). Każdy obraz preview ma noindex zarówno w HTML, jak i w nagłówku HTTP.
 
-## Quality Commands
+## Produkcja i rollback
 
-Frontend:
+**`deploy-prod`** wskazuje `infra/gcp/cloudbuild.deploy.yaml` i buduje **wyłącznie statyczną stronę v3**. Przed wdrożeniem:
+1. sprawdza dokładny projekt, domenę, włączone indeksowanie, SHA i endpoint FastAPI;
+2. pobiera zatwierdzoną politykę prywatności z istniejącego Secret Manager;
+3. uruchamia testy strony i przygotowuje indeksowalny artefakt z metadanymi SHA;
+4. buduje i testuje obraz Nginx z `landing/nginx.production.conf`;
+5. wdraża nową rewizję na **0%**, a następnie po identyfikacji obrazu SHA promuje ją na **100%**;
+6. sprawdza rzeczywistą stronę `https://protolume.pl`, SHA, HTML, SEO, kontakt, sitemap i API w smoke bez POST.
 
-```bash
-cd frontend
-npm run lint
-npm run format
-npm test
-npm run build
-```
+W razie problemu z produkcją można wrócić do wcześniejszej rewizji Angulara poprzez Cloud Run **Manage traffic**, wskazując poprzednią gotową rewizję serwisu web na 100%. Nie usuwać wcześniejszych rewizji ani obrazu do czasu potwierdzenia akceptacji v3.
 
-Backend:
+Po każdym wdrożeniu warto ręcznie wysłać **własne** testowe zgłoszenie i potwierdzić przyjęcie wiadomości w poczcie. Automatyczny smoke **nie wysyła** danych formularza.
 
-```bash
-cd backend
-.\scripts\lint.ps1
-.\scripts\format.ps1 -Check
-.\scripts\test.ps1
-```
+Uwaga: `deploy-prod` nie wdraża zmian FastAPI, żeby nie ingerować w działającą wysyłkę SMTP podczas migracji frontendu. Wdrożenia backendu obsługuje osobna ścieżka `infra/gcp/cloudbuild.backend.yaml`; jej automatyzacja / filtr ścieżek jest osobnym etapem housekeeping.
 
-No database, authentication, CMS, admin panel, payments, blog, queue, or production GCP resources are part of this MVP.
+## Przegląd migracji
 
-## Production Deployment
+Po potwierdzonym przełączeniu na v3 można usunąć: stary Angular, Firebase Hosting i stare materiały demonstracyjne. Należy **zachować**: FastAPI, konfigurację SMTP/Secret Manager, dwa wykorzystywane logotypy, plik walidacji polityki prawnej, sitemap/robots, Lucide license, produkcyjny pipeline, rollback instrukcję i manualny preview.
 
-Production deployment to Google Cloud Platform is documented separately:
-
-- [docs/gcp-cicd.md](docs/gcp-cicd.md)
-- [docs/gcp-deployment.md](docs/gcp-deployment.md)
-- [docs/gcp-runbook.md](docs/gcp-runbook.md)
-- [docs/google-search-console.md](docs/google-search-console.md)
-- [infra/gcp/README.md](infra/gcp/README.md)
-
-Run the local deployment preflight first:
-
-```powershell
-$buildSha = (git rev-parse HEAD).Trim()
-.\scripts\gcp\preflight.ps1 `
-  -PublicLegalConfigPath "C:\bezpieczna-lokalizacja\public-legal.json" `
-  -ApiUrl $env:BACKEND_URL `
-  -PublicSiteUrl "https://protolume.pl" `
-  -EnableIndexing $true `
-  -BuildSha $buildSha
-```
+Zobacz też `landing/README.md` oraz dokumenty w `docs/` (część historyczna opisuje stary Angular).

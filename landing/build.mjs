@@ -93,7 +93,8 @@ export function build(mode = 'preview', config = process.env) {
     .replace('__FORM_ACTION__', escapeHtml(endpoint || '#'))
     .replace('__FORM_ENDPOINT__', escapeHtml(endpoint))
     .replace('__FORM_DISABLED__', endpoint ? '' : 'disabled')
-    .replace('__ROBOTS__', production ? 'index, follow' : 'noindex, nofollow');
+    .replace('__ROBOTS__', production ? 'index, follow' : 'noindex, nofollow')
+    .replace('__BUILD_SHA__', escapeHtml(config.PUBLIC_BUILD_SHA || (production ? 'unknown' : 'preview')));
   writeFileSync(join(output, 'index.html'), index);
   cpSync(join(here, 'styles.css'), join(output, 'styles.css'));
   cpSync(join(here, 'motion.css'), join(output, 'motion.css'));

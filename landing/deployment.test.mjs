@@ -22,22 +22,26 @@ test('release guard is fail-closed by default and refuses trigger-based release'
   assert.ok(validateReleaseInputs({ ...valid, BUILD_TRIGGER_ID: 'some-trigger' }).length);
 });
 
-test('new Cloud Build configs do not alter the existing Cloud Run production pipeline', () => {
+test('deploy-prod permanently builds V3 production, not the old Angular frontend', () => {
   const preview = repoFile('infra/gcp/cloudbuild.landing-preview.yaml');
   const release = repoFile('infra/gcp/cloudbuild.landing-release.yaml');
-  const legacy = repoFile('infra/gcp/cloudbuild.deploy.yaml');
+  const production = repoFile('infra/gcp/cloudbuild.deploy.yaml');
   assert.match(preview, /hosting:channel:deploy/);
   assert.match(preview, /--expires=7d/);
-  assert.doesNotMatch(preview, /--only=hosting|firebase deploy|publish-firebase-live/);
-  assert.match(release, /block-unapproved-live-release/);
-  assert.match(release, /landing_release_preflight\.mjs/);
-  assert.match(release, /verified-legal|validated-legal-config/);
-  assert.match(release, /PUBLIC_LEGAL_CONFIG_JSON/);
-  assert.match(release, /landing\/verify-dist\.mjs --production/);
-  assert.match(release, /--only=hosting/);
-  assert.match(legacy, /backend-deploy/);
-  assert.match(legacy, /frontend-deploy/);
-  assert.doesNotMatch(legacy, /cloudbuild\.landing-release/);
+  assert.match(release, /block-unapproved-live-release/); // Historical Firebase workflow.
+  assert.match(production, /id: v3-production-preflight/);
+  assert.match(production, /id: approved-legal-config/);
+  assert.match(production, /id: v3-production-checks/);
+  assert.match(production, /landing\/build\.mjs --production/);
+  assert.match(production, /landing\/verify-dist\.mjs --production/);
+  assert.match(production, /landing\/Dockerfile\.cloudrun/);
+  assert.match(production, /NGINX_CONFIG=landing\/nginx\.production\.conf/);
+  assert.match(production, /id: v3-production-image-smoke/);
+  assert.match(production, /id: v3-production-deploy-zero-traffic/);
+  assert.match(production, /id: v3-production-promote-traffic/);
+  assert.match(production, /id: v3-production-live-smoke/);
+  assert.match(production, /--no-traffic/);
+  assert.doesNotMatch(production, /frontend\/Dockerfile|npm ci|--allow-unauthenticated|firebase deploy/);
 });
 
 test('Firebase Hosting keeps legacy redirects but not the legal policy', () => {
