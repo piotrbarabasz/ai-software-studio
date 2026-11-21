@@ -23,9 +23,7 @@ class EmailContactDelivery:
 
     def send(self, inquiry: ContactInquiry | BriefContactInquiry) -> None:
         if not self._has_required_config():
-            logger.warning(
-                "contact.delivery_failed stage=configuration error_type=MissingConfig"
-            )
+            logger.warning("contact.delivery_failed stage=configuration error_type=MissingConfig")
             raise DeliveryError("Email delivery is not configured.")
 
         message = EmailMessage()
