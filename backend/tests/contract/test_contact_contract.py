@@ -16,6 +16,37 @@ class FailingDelivery:
         raise DeliveryError("failed")
 
 
+EXPECTED_PROJECT_TYPES = {
+    "rag_chatbot_demo",
+    "website_seo",
+    "voice_agent_demo",
+    "whatsapp_agent_management",
+    "email_automation",
+    "agent_management_panel",
+    "custom_web_app",
+    "ai_automation",
+    "backend_api",
+    "business_process_automation",
+    "external_integration",
+    "dashboard_internal_tool",
+    "mvp_prototype",
+    "software_house_partnership",
+    "other",
+}
+VISIBLE_PROJECT_TYPES = {
+    "mvp_prototype",
+    "custom_web_app",
+    "backend_api",
+    "business_process_automation",
+    "rag_chatbot_demo",
+    "software_house_partnership",
+    "other",
+    "voice_agent_demo",
+    "whatsapp_agent_management",
+    "ai_automation",
+}
+
+
 def test_contact_accepts_valid_payload(
     client: TestClient,
     valid_contact_payload: dict[str, object],
