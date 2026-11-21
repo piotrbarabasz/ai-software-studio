@@ -1,0 +1,25 @@
+name: Public Protolume V3 post-cleanup read-only check
+on:
+  push:
+    branches: [ops/create-immutable-archive-tags-20261121]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify public frontend, SEO and API health
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail-with-body --silent --show-error --max-time 20 https://protolume.pl/ -o /tmp/site.html
+          grep -Fq 'data-endpoint="/api/contact/brief"' /tmp/site.html
+          grep -Fq 'name="robots" content="index, follow"' /tmp/site.html
+          grep -Fq 'id="kontakt"' /tmp/site.html
+          grep -q 'name="protolume-build-sha"' /tmp/site.html
+          sha=$(grep -o 'name="protolume-build-sha" content="[^"]*"' /tmp/site.html | head -1)
+          echo "PASS live Protolume V3: $sha"
+          curl --fail-with-body --silent --show-error --max-time 20 https://protolume.pl/robots.txt | grep -Fq 'Allow: /'
+          curl --fail-with-body --silent --show-error --max-time 20 https://protolume.pl/polityka-prywatnosci/ | grep -Fq 'Administrator danych'
+          curl --fail-with-body --silent --show-error --max-time 20 https://aisoftware-studio-api-175725977490.europe-central2.run.app/health | grep -Fq '"status":"ok"'
+          echo "PASS SEO, privacy, backend health (no messages sent)"
