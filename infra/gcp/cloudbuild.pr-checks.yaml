@@ -1,5 +1,10 @@
+# Pull requests validate the supported V3 frontend and existing FastAPI.
+# Legacy Angular / Firebase pipelines are intentionally excluded.
 substitutions:
   _PUBLIC_SITE_INDEXING: "false"
+
+options:
+  logging: CLOUD_LOGGING_ONLY
 
 steps:
   - id: preview-config-preflight
@@ -13,43 +18,43 @@ steps:
     entrypoint: sh
     waitFor: ["preview-config-preflight"]
     args:
-      [
-        "-c",
-        "cd backend && python -m pip install --requirement requirements-dev.lock && python -m pip install --no-deps --no-build-isolation --editable . && python -m ruff check . && python -m ruff format --check . && python -m pytest && python -m unittest discover -s ../infra/gcp/tests -p 'test_cloudbuild_yaml.py'",
-      ]
-
-  - id: deployment-contract-tests
-    name: python:3.12-slim
-    entrypoint: sh
-    waitFor: ["preview-config-preflight"]
-    args:
       - -c
       - >-
-        python -m unittest discover -s infra/gcp/tests -p 'test_deployment*.py' &&
-        python -m unittest discover -s infra/gcp/tests -p 'test_live_seo_check.py'
+        cd backend &&
+        python -m pip install --requirement requirements-dev.lock &&
+        python -m pip install --no-deps --no-build-isolation --editable . &&
+        python -m ruff check . &&
+        python -m ruff format --check . &&
+        python -m pytest
 
-  - id: frontend-checks
-    name: cypress/browsers:node-24.15.0-chrome-148.0.7778.178-1-ff-151.0.2-edge-148.0.3967.83-1@sha256:605b5e51f42ae27cee8be859562ed4e281ccee69a74b7929bb899a4234835a40
-    entrypoint: sh
-    waitFor: ["preview-config-preflight"]
-    args:
-      [
-        "-c",
-        "cd frontend && npm ci && npm run format:check && npm run lint && npm test -- --karma-config=karma.ci.conf.cjs --browsers=ChromeHeadlessCI && npm run build:development",
-      ]
-
-  - id: landing-v3-checks
+  - id: v3-static-checks
     name: node:22.22.3-bookworm-slim
     entrypoint: sh
     waitFor: ["preview-config-preflight"]
     args:
       - -c
       - >-
-        node --test landing/build.test.mjs landing/deployment.test.mjs scripts/protolume.test.mjs scripts/v3-cloudrun-preview.test.mjs &&
+        node --test landing/build.test.mjs landing/form.test.mjs
+        landing/motion.test.mjs landing/deployment.test.mjs
+        scripts/protolume.test.mjs scripts/v3-cloudrun-preview.test.mjs
+        scripts/v3-production.test.mjs &&
         node landing/build.mjs --preview &&
         node landing/verify-dist.mjs --preview
 
-  - id: landing-v3-cloudrun-guard-tests
+  - id: production-helper-tests
+    name: python:3.12-slim
+    entrypoint: python
+    waitFor: ["preview-config-preflight"]
+    args:
+      - -m
+      - unittest
+      - discover
+      - -s
+      - scripts/gcp/tests
+      - -p
+      - test_smoke_v3_production.py
+
+  - id: preview-traffic-guard-tests
     name: python:3.12-slim
     entrypoint: python
     waitFor: ["preview-config-preflight"]
