@@ -137,9 +137,7 @@ def main() -> int:
     if not 1 <= args.attempts <= 20 or not 0 <= args.retry_delay_seconds <= 30:
         parser.error("Unsafe retry settings")
     for attempt in range(args.attempts):
-        errors = validate_response(
-            args.site_url, args.api_url, args.expected_build_sha
-        )
+        errors = validate_response(args.site_url, args.api_url, args.expected_build_sha)
         if not errors:
             print(
                 f"PASS: indexable Protolume V3 at {args.site_url}; "
