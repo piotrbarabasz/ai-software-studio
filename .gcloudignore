@@ -6,4 +6,4 @@
 .env
 .env.*
 !.env.example
-frontend/.public-legal-config.json
+landing/.public-legal-config.json
