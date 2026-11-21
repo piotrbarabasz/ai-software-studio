@@ -59,9 +59,7 @@ def revision(
         },
         "spec": {"containers": [{"image": "sample@sha256:abc"}]},
         "status": {
-            "conditions": [
-                {"type": "Ready", "status": "True" if is_ready else "False"}
-            ]
+            "conditions": [{"type": "Ready", "status": "True" if is_ready else "False"}]
         },
     }
 
@@ -87,12 +85,15 @@ class ProductionPromotionTest(unittest.TestCase):
 
     def test_resolves_missing_latest_created_using_unique_image(self) -> None:
         selected, _ = target(
-            service(created=None), listing=[revision(), revision(name=OLD, image="other")]
+            service(created=None),
+            listing=[revision(), revision(name=OLD, image="other")],
         )
         self.assertEqual(selected, ANGULAR)
 
     def test_rejects_ambiguous_missing_latest_created(self) -> None:
-        with self.assertRaisesRegex(promotion.TrafficError, "matching revision count: 2"):
+        with self.assertRaisesRegex(
+            promotion.TrafficError, "matching revision count: 2"
+        ):
             target(
                 service(created=None),
                 listing=[revision(), revision(name=OLD)],
@@ -155,6 +156,7 @@ class ProductionPromotionTest(unittest.TestCase):
     def test_exact_image_and_tag_used_by_promote(self) -> None:
         before = service()
         after = service(active=ANGULAR)
+
         def fake_service(*_: str) -> dict:
             return before if command.call_count == 0 else after
 
