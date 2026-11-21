@@ -14,7 +14,7 @@ Ikony pochodzą z biblioteki **[Lucide](https://lucide.dev)** (licencja ISC). W 
 
 Komunikacja publiczna jest spójna w imieniu marki Protolume („Projektujemy”, „Co tworzymy?”, „Napisz do nas”, „Opowiedz nam”). **Nie ma osobnej sekcji o właścicielu / zaufaniu**, portfolio, demo ani nawigacji do wielu podstron. Jedyną dodatkową stroną jest polityka prywatności.
 
-Strona wykorzystuje logo marki, ma dostępne pola i stany formularza, nie zawiera Angular runtime, backendu ani analityki śledzącej. Bez skonfigurowanego endpointu formularz jest nieaktywny — nie otwiera klienta pocztowego i nie udaje wysyłki. Po podłączeniu zweryfikowanego formularza Formspree wiadomości są wysyłane bezpośrednio ze strony; każdy build z aktywnym endpointem wymaga zatwierdzonej konfiguracji prawnej.
+Strona wykorzystuje logo marki, ma dostępne pola i stany formularza, **nie wymaga Angulara ani nowego backendu**. Formularz korzysta z istniejącej usługi FastAPI / SMTP: `POST /api/contact/brief` przez same-origin reverse proxy Nginx na Cloud Run. Dzięki temu nie udostępniamy danych SMTP frontendowi ani nie potrzebujemy osobnego konta Formspree. Wysyłanie jest włączane tylko w buildach z zatwierdzoną publiczną polityką prywatności. Bez endpointu przycisk pozostaje nieaktywny.
 
 **Ważne:** zmiana samego landingu nie przełącza ruchu produkcyjnego. Istniejący Cloud Build `deploy-prod` nadal publikuje Angular / FastAPI. Testowa rewizja v3 z `v3-review` jest wdrażana osobnym, ręcznym pipeline'em z 0% ruchu produkcyjnego.
 
@@ -43,25 +43,27 @@ Udostępnij katalog landing/dist lokalnym serwerem plików, np.:
 
 Otwórz http://localhost:8080.
 
-W podglądzie robots.txt i metadata mają **noindex**. Bez `FORM_ENDPOINT` przycisk wysyłania pozostaje wyłączony i nie uruchamia aplikacji pocztowej. Podgląd może testować prawdziwą wysyłkę **wyłącznie** po konfiguracji Formspree i zweryfikowanej polityki prywatności. Komunikat nie udaje sukcesu.
+W podglądzie robots.txt i metadata mają **noindex**. Bez `FORM_ENDPOINT` lokalny przycisk wysyłania pozostaje wyłączony i nie uruchamia aplikacji pocztowej. Cloud Build konfiguruje ten endpoint automatycznie po odczytaniu zweryfikowanej polityki; bez poprawnego sekretu build się zatrzyma.
 
-## Konfiguracja przed produkcyjnym buildem
+## Formularz V3 — istniejący FastAPI / SMTP
 
-1. Utwórz formularz w **Formspree** i skonfiguruj odbiorcę kontakt@protolume.pl, reguły antyspamowe, powiadomienia i politykę retencji. Potwierdź rzeczywistą dostarczalność testową. Endpoint nie jest sekretem; nie dodawaj tokenów API do frontendu.
-2. Przejrzyj umowę i wymagania RODO dla procesora formularza. Zaktualizuj istniejący plik legal JSON: prawdziwy administrator, adres, cele/podstawy, retencja, odbiorcy, dostawcy infrastruktury i poczty, prawa. **Formspree musi być jawnie wymienione w odbiorcach lub dostawcach**.
-3. Przekaż te wartości do builda, nie zapisuj danych prawnych w kodzie ani prywatnych sekretów w repo.
+- Na starej stronie Angular wysyłał JSON do `POST /api/contact`; ten kontrakt nadal istnieje i wymaga wielu pól.
+- Dla uproszczonego V3 dodano `POST /api/contact/brief`, który wymaga tylko imienia/nazwy i e-maila; opis jest opcjonalny. Honeypot oraz obecne zabezpieczenia SMTP / limit zgłoszeń pozostały.
+- W przeglądarce `POST /api/contact/brief` idzie do tej samej domeny v3. Nginx przekazuje **tylko ten endpoint** do istniejącego `aisoftware-studio-api`, bez rozszerzania CORS.
+- Cloud Build preview ma domyślnie `_FORM_ENDPOINT=/api/contact/brief` i pobiera istniejącą zatwierdzoną konfigurację publicznej polityki z Secret Manager `aisoftware-studio-public-legal-config`. Gdy sekret jest nieobecny / nieprawidłowy, build **kończy się błędem przed deployem**, zamiast udawać działający formularz.
+- Przełączenie ruchu `protolume.pl` na v3 jest osobnym etapem; `deploy-prod` nadal buduje Angular. Po merge i udanym deploymentcie API trzeba ręcznie uruchomić pipeline `protolume-v3-preview-manual`, sprawdzić 0% produkcyjnego ruchu, a następnie wysłać **własną wiadomość testową** i sprawdzić odbiór na `kontakt@protolume.pl`.
 
-PowerShell:
+Dla lokalnego podglądu z aktywnym formularzem musisz podać zatwierdzony plik prawny:
 
-    $env:FORM_ENDPOINT = "https://formspree.io/f/TWOJ_ID"
-    $env:PUBLIC_LEGAL_CONFIG_PATH = "C:\bezpieczna-lokalizacja\public-legal.json"
-    node landing/build.mjs --production
+```powershell
+$env:FORM_ENDPOINT = "/api/contact/brief"
+$env:PUBLIC_LEGAL_CONFIG_PATH = "C:\\sciezka\\do\\zatwierdzonej-polityki.json"
+node landing/build.mjs --preview
+```
 
-Linux/macOS:
+Serwer `python -m http.server` obsługuje tylko pliki statyczne — **nie proxy do API**. Prawdziwą wysyłkę testuj na Cloud Run albo przez lokalny Nginx z konfiguracją proxy. Nie uruchamiaj testowych POST do produkcyjnego API w automatycznym smoke.
 
-    FORM_ENDPOINT=https://formspree.io/f/TWOJ_ID PUBLIC_LEGAL_CONFIG_PATH=/secure/public-legal.json node landing/build.mjs --production
-
-**Fail-closed:** każdy build z aktywnym formularzem (również preview) kończy się błędem bez zatwierdzonej konfiguracji prawnej, przy niewłaściwym endpointcie HTTPS lub nieprawidłowych danych. Produkcja dodatkowo wymaga endpointu; nie ma automatycznego release.
+Historyczna ścieżka Formspree w starych plikach Firebase pozostaje kompatybilna, ale **nie jest rekomendowanym ani domyślnym formularzem v3 Cloud Run**.
 
 ## Cloud Run Preview na istniejącym hostingu
 
