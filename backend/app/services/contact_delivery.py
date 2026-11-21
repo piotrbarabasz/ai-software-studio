@@ -62,11 +62,11 @@ class EmailContactDelivery:
     def _build_email_body(inquiry: ContactInquiry | BriefContactInquiry) -> str:
         if isinstance(inquiry, BriefContactInquiry):
             return (
-                f"Nowe zapytanie z prostego formularza {public_brand['name']}\\n\\n"
-                f"Imię lub firma: {inquiry.name}\\n"
-                f"Email: {inquiry.email}\\n"
-                f"Czas zgłoszenia: {inquiry.submitted_at.isoformat()}\\n\\n"
-                f"Wiadomość:\\n{inquiry.message}\\n"
+                f"Nowe zapytanie z prostego formularza {public_brand['name']}\n\n"
+                f"Imię lub firma: {inquiry.name}\n"
+                f"Email: {inquiry.email}\n"
+                f"Czas zgłoszenia: {inquiry.submitted_at.isoformat()}\n\n"
+                f"Wiadomość:\n{inquiry.message}\n"
             )
         company = inquiry.company or "Nie podano"
         project_type = PROJECT_TYPE_LABELS.get(
