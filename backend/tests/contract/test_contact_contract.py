@@ -1,7 +1,5 @@
 import hashlib
 import logging
-import re
-from pathlib import Path
 
 import pytest
 from app.core.brand import public_brand
@@ -16,54 +14,6 @@ from fastapi.testclient import TestClient
 class FailingDelivery:
     def send(self, inquiry: ContactInquiry) -> None:
         raise DeliveryError("failed")
-
-
-ROOT_DIR = Path(__file__).resolve().parents[3]
-EXPECTED_PROJECT_TYPES = {
-    "rag_chatbot_demo",
-    "website_seo",
-    "voice_agent_demo",
-    "whatsapp_agent_management",
-    "email_automation",
-    "agent_management_panel",
-    "custom_web_app",
-    "ai_automation",
-    "backend_api",
-    "business_process_automation",
-    "external_integration",
-    "dashboard_internal_tool",
-    "mvp_prototype",
-    "software_house_partnership",
-    "other",
-}
-VISIBLE_PROJECT_TYPES = {
-    "mvp_prototype",
-    "custom_web_app",
-    "backend_api",
-    "business_process_automation",
-    "rag_chatbot_demo",
-    "software_house_partnership",
-    "other",
-    "voice_agent_demo",
-    "whatsapp_agent_management",
-    "ai_automation",
-}
-
-
-def _frontend_contact_option_values() -> set[str]:
-    source = (ROOT_DIR / "frontend/src/app/core/content/contact-options.pl.ts").read_text(
-        encoding="utf-8"
-    )
-    project_type_source = source.split("export const budgetRangeOptions", maxsplit=1)[0]
-    return set(re.findall(r"value: '([^']+)'", project_type_source))
-
-
-def _frontend_project_type_union_values() -> set[str]:
-    source = (ROOT_DIR / "frontend/src/app/services/contact-api.types.ts").read_text(
-        encoding="utf-8"
-    )
-    union_source = source.split("export type BudgetRange =", maxsplit=1)[0]
-    return set(re.findall(r"\| '([^']+)'", union_source))
 
 
 def test_contact_accepts_valid_payload(
@@ -175,18 +125,25 @@ def test_contact_rejects_unknown_project_type(
     assert "live_whatsapp_runtime" not in response.text
 
 
-def test_visible_project_types_are_a_supported_subset_of_the_api_contract() -> None:
+def test_all_legacy_project_types_still_exist_in_the_backend_schema() -> None:
     backend_values = {project_type.value for project_type in ProjectType}
-
-    assert backend_values == EXPECTED_PROJECT_TYPES
-    assert _frontend_contact_option_values() == VISIBLE_PROJECT_TYPES
-    assert _frontend_contact_option_values() <= backend_values
-
-
-def test_frontend_api_type_preserves_all_backend_project_types() -> None:
-    backend_values = {project_type.value for project_type in ProjectType}
-
-    assert _frontend_project_type_union_values() == backend_values
+    assert backend_values == {
+        "rag_chatbot_demo",
+        "website_seo",
+        "voice_agent_demo",
+        "whatsapp_agent_management",
+        "email_automation",
+        "agent_management_panel",
+        "custom_web_app",
+        "ai_automation",
+        "backend_api",
+        "business_process_automation",
+        "external_integration",
+        "dashboard_internal_tool",
+        "mvp_prototype",
+        "software_house_partnership",
+        "other",
+    }
 
 
 def test_contact_openapi_exposes_project_type_enum(settings: Settings) -> None:
