@@ -13,6 +13,10 @@ Serwis `aisoftware-studio-web` na Google Cloud Run obsługuje domenę `protolume
 
 Dawny Angular został usunięty z bieżącego drzewa źródłowego. Jego kod pozostaje w historii Git, a historyczne rewizje Cloud Run są punktem rollbacku. Dwa niezbędne pliki marki i walidator prawny są teraz wewnątrz `landing/`.
 
+## Niezależne pipeline’y komponentów
+
+Po zatwierdzeniu zmian i aktywacji triggerów w GCP, `deploy-prod` publikuje frontend tylko po zmianach `landing/` lub współdzielonych plików, a `backend-ci` osobno testuje, buduje i publikuje obraz API w Artifact Registry tylko po zmianach `backend/` lub współdzielonych plików. **Backend-ci nie przełącza produkcyjnej usługi API.** Podgląd pozostaje na 0% i noindex. Filtry są w `infra/gcp/component-triggers.json`; aktywacja i audyt w `infra/gcp/triggers.md`.
+
 ## Codzienna praca
 
 ```bash
