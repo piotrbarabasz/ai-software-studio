@@ -62,7 +62,9 @@ class V3ProductionSmokeTest(unittest.TestCase):
         )
 
     def test_rejects_wrong_project_domain_and_image_marker(self) -> None:
-        self.assertTrue(smoke.validate_response("https://example.org", API, SHA, fixtures))
+        self.assertTrue(
+            smoke.validate_response("https://example.org", API, SHA, fixtures)
+        )
         self.assertTrue(smoke.validate_response(SITE, API, "preview", fixtures))
         self.assertTrue(
             smoke.validate_response(SITE, "https://unrelated.invalid", SHA, fixtures)
