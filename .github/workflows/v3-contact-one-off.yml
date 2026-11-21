@@ -34,3 +34,6 @@ jobs:
             printf 'Honeypot POST via %s -> HTTP %s\n' "$([ "$origin" = "$PREVIEW" ] && echo 'preview proxy' || echo 'direct backend')" "$code"
             if [ "$code" != 202 ]; then head -c 300 /tmp/contact-post.txt | tr '\n' ' '; printf '\n'; fi
           done
+          echo "Browser-like POST with Origin header (honeypot, no SMTP):"
+          code="$(curl --silent --show-error --max-time 20 -X POST -H 'Origin: https://v3-review---aisoftware-studio-web-k6wldgptjq-lm.a.run.app' -H 'Content-Type: application/json' -H 'Accept: application/json' --data "$payload" --output /tmp/contact-origin.txt --write-out '%{http_code}' "$PREVIEW/api/contact/brief" || true)"
+          printf 'Same-origin browser-like POST via preview proxy -> HTTP %s\n' "$code"
