@@ -1,0 +1,28 @@
+name: Contact SMTP diagnostics one-off checks
+on:
+  push:
+    branches:
+      - fix/protolume-smtp-safe-stage-error-logging
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install exact backend development dependencies
+        run: |
+          cd backend
+          python -m pip install -r requirements-dev.lock
+          python -m pip install -e .
+      - name: Ruff lint and formatter
+        run: |
+          cd backend
+          ruff check app/services/contact_delivery.py tests/integration/test_contact_delivery.py
+          ruff format --diff app/services/contact_delivery.py tests/integration/test_contact_delivery.py || true
+          ruff format --check app/services/contact_delivery.py tests/integration/test_contact_delivery.py
+      - name: All backend tests
+        run: cd backend && python -m pytest -q
