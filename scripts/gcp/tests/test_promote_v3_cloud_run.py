@@ -46,9 +46,7 @@ def revision(
     spec_image: str = IMAGE,
     ready: bool = True,
 ) -> dict:
-    status = {
-        "conditions": [{"type": "Ready", "status": "True" if ready else "False"}]
-    }
+    status = {"conditions": [{"type": "Ready", "status": "True" if ready else "False"}]}
     if status_digest is not None:
         status["imageDigest"] = status_digest
     return {
@@ -74,7 +72,9 @@ def target(svc: dict | None = None, rev: dict | None = None) -> tuple[str, str |
 
 
 class PromoteV3DigestTests(unittest.TestCase):
-    def test_selects_new_ready_revision_by_digest_when_annotation_is_unset(self) -> None:
+    def test_selects_new_ready_revision_by_digest_when_annotation_is_unset(
+        self,
+    ) -> None:
         self.assertEqual(target(), (TARGET, PREVIEW))
 
     def test_supports_full_image_uri_in_revision_status(self) -> None:
@@ -84,7 +84,9 @@ class PromoteV3DigestTests(unittest.TestCase):
         self.assertEqual(target(rev=rev), (TARGET, PREVIEW))
 
     def test_supports_revision_digest_qualified_container_image(self) -> None:
-        rev = revision(status_digest=None, spec_image=IMAGE.rsplit(":", 1)[0] + "@" + DIGEST)
+        rev = revision(
+            status_digest=None, spec_image=IMAGE.rsplit(":", 1)[0] + "@" + DIGEST
+        )
         self.assertEqual(target(rev=rev), (TARGET, PREVIEW))
 
     def test_rejects_tag_only_revision_without_verified_digest(self) -> None:
@@ -107,26 +109,40 @@ class PromoteV3DigestTests(unittest.TestCase):
 
     def test_rejects_invalid_image_or_digest(self) -> None:
         with self.assertRaisesRegex(v3.TrafficError, "deployment contract"):
-            v3.deployment_target(service(), "untrusted/repo:latest", DIGEST, lambda _: revision(), lambda: [])
+            v3.deployment_target(
+                service(),
+                "untrusted/repo:latest",
+                DIGEST,
+                lambda _: revision(),
+                lambda: [],
+            )
         with self.assertRaisesRegex(v3.TrafficError, "deployment contract"):
-            v3.deployment_target(service(), IMAGE, "no-digest", lambda _: revision(), lambda: [])
+            v3.deployment_target(
+                service(), IMAGE, "no-digest", lambda _: revision(), lambda: []
+            )
 
     def test_missing_latest_created_requires_unique_digest_match(self) -> None:
         selected, preview = v3.deployment_target(
-            service(created=None), IMAGE, DIGEST,
+            service(created=None),
+            IMAGE,
+            DIGEST,
             lambda _: revision(),
             lambda: [revision(), revision(name=OLD, status_digest=OTHER_DIGEST)],
         )
         self.assertEqual((selected, preview), (TARGET, PREVIEW))
         with self.assertRaisesRegex(v3.TrafficError, "matching revision count: 2"):
             v3.deployment_target(
-                service(created=None), IMAGE, DIGEST,
+                service(created=None),
+                IMAGE,
+                DIGEST,
                 lambda _: revision(),
                 lambda: [revision(), revision(name=OLD)],
             )
 
     def test_resolves_registry_digest_from_tag_without_guessing(self) -> None:
-        with patch.object(v3, "_json_command", return_value={"image_summary": {"digest": DIGEST}}) as request:
+        with patch.object(
+            v3, "_json_command", return_value={"image_summary": {"digest": DIGEST}}
+        ) as request:
             self.assertEqual(v3._artifact_digest(IMAGE), DIGEST)
         command = request.call_args.args[0]
         self.assertIn("artifacts", command)
@@ -161,7 +177,10 @@ class PromoteV3DigestTests(unittest.TestCase):
         self.assertNotIn("--to-latest", args)
 
     def test_rejects_wrong_project_before_registry_or_traffic_calls(self) -> None:
-        with patch.object(v3, "_artifact_digest") as fetch, patch.object(v3.subprocess, "run") as call:
+        with (
+            patch.object(v3, "_artifact_digest") as fetch,
+            patch.object(v3.subprocess, "run") as call,
+        ):
             with self.assertRaisesRegex(v3.TrafficError, "approved Protolume"):
                 v3.promote("other-project", v3.REGION, v3.SERVICE, IMAGE)
             fetch.assert_not_called()
@@ -171,7 +190,11 @@ class PromoteV3DigestTests(unittest.TestCase):
         with (
             patch.object(v3, "_artifact_digest", return_value=DIGEST),
             patch.object(v3, "_describe_service", return_value=service()),
-            patch.object(v3, "_describe_revision", return_value=revision(status_digest=OTHER_DIGEST)),
+            patch.object(
+                v3,
+                "_describe_revision",
+                return_value=revision(status_digest=OTHER_DIGEST),
+            ),
             patch.object(v3.subprocess, "run") as command,
         ):
             with self.assertRaisesRegex(v3.TrafficError, "digest does not match"):
