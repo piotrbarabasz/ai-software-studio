@@ -4,6 +4,7 @@ from fastapi import APIRouter, Request, status
 from fastapi.responses import JSONResponse
 
 from app.schemas.contact import (
+    BriefContactInquiry,
     ContactInquiry,
     ContactInquiryAccepted,
     ErrorResponse,
@@ -28,6 +29,29 @@ router = APIRouter(tags=["contact"])
 )
 def submit_contact(
     inquiry: ContactInquiry, request: Request
+) -> ContactInquiryAccepted | JSONResponse:
+    return _accept_contact(inquiry, request)
+
+
+@router.post(
+    "/api/contact/brief",
+    status_code=status.HTTP_202_ACCEPTED,
+    response_model=ContactInquiryAccepted,
+    responses={
+        413: {"model": ErrorResponse},
+        422: {"model": ValidationErrorResponse},
+        429: {"model": ErrorResponse},
+        503: {"model": ErrorResponse},
+    },
+)
+def submit_brief_contact(
+    inquiry: BriefContactInquiry, request: Request
+) -> ContactInquiryAccepted | JSONResponse:
+    return _accept_contact(inquiry, request)
+
+
+def _accept_contact(
+    inquiry: ContactInquiry | BriefContactInquiry, request: Request
 ) -> ContactInquiryAccepted | JSONResponse:
     if inquiry.website:
         return ContactInquiryAccepted()

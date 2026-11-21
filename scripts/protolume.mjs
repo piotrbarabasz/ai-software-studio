@@ -55,8 +55,8 @@ export function validateConfig(config, { release = false } = {}) {
   if ((config.CLOUD_RUN_PREVIEW_TAG || PREVIEW_TAG) !== PREVIEW_TAG) {
     errors.push('CLOUD_RUN_PREVIEW_TAG musi pozostać v3-review dla testowej rewizji.');
   }
-  if (config.FORM_ENDPOINT && !FORMSPREE_PATTERN.test(config.FORM_ENDPOINT)) {
-    errors.push('FORM_ENDPOINT musi mieć postać https://formspree.io/f/ID.');
+  if (config.FORM_ENDPOINT && config.FORM_ENDPOINT !== '/api/contact/brief' && !FORMSPREE_PATTERN.test(config.FORM_ENDPOINT)) {
+    errors.push('FORM_ENDPOINT musi wskazywać /api/contact/brief albo https://formspree.io/f/ID.');
   }
   if (release) {
     errors.push('Release Cloud Run v3 jest zablokowany do osobnej akceptacji i konfiguracji prawnej.');

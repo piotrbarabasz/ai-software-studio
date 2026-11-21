@@ -84,8 +84,19 @@ fetch "/polityka-prywatnosci/" "privacy"
 if [ "$form_endpoint" = "NOT_CONFIGURED" ]; then
   grep -q 'Wersja robocza' "$work_dir/privacy.body"
 else
-  grep -q 'Formspree' "$work_dir/privacy.body"
+  if [ "$form_endpoint" = "/api/contact/brief" ]; then
+    grep -q 'Administrator danych' "$work_dir/privacy.body"
+  else
+    grep -q 'Formspree' "$work_dir/privacy.body"
+  fi
   ! grep -q 'Wersja robocza' "$work_dir/privacy.body"
+fi
+
+# Read-only proof that the API proxy is not an open GET endpoint.
+# Never POST an actual contact during an image smoke test.
+if [ "$form_endpoint" = "/api/contact/brief" ]; then
+  fetch "/api/contact/brief" "contact-get"
+  [ "$(status "$work_dir/contact-get.headers")" = "403" ]
 fi
 
 fetch "/robots.txt" "robots"

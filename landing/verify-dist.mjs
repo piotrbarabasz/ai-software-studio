@@ -54,13 +54,17 @@ export function verifyArtifact(mode, root = defaultRoot) {
     if (!index.includes('name="robots" content="noindex, nofollow"')) problems.push('Preview landing page is indexable');
     if (!privacy.includes('noindex, nofollow')) problems.push('Preview privacy page is indexable');
     if (!robots.includes('Disallow: /')) problems.push('Preview robots do not disallow indexing');
-    const connectedPreview = /data-endpoint="https:\/\/formspree\.io\/f\/[A-Za-z0-9]+"/.test(index);
+    const backendPreview = index.includes('data-endpoint="/api/contact/brief"');
+    const formspreePreview = /data-endpoint="https:\/\/formspree\.io\/f\/[A-Za-z0-9]+"/.test(index);
+    const connectedPreview = backendPreview || formspreePreview;
     if (connectedPreview) {
       // Live submissions require a real, approved privacy policy even on a noindex tag.
       if (/Wersja robocza|nie jest polityką prywatności przeznaczoną do publikacji/.test(privacy)) {
         problems.push('Preview with a live form must have an approved privacy policy');
       }
-      if (!privacy.includes('Formspree')) problems.push('Live preview policy must disclose Formspree');
+      if (formspreePreview && !privacy.includes('Formspree')) {
+        problems.push('Live preview policy must disclose Formspree');
+      }
       if (index.includes('id="contact-submit" type="submit" disabled')) {
         problems.push('Preview with a live form unexpectedly disables submission');
       }
@@ -74,9 +78,12 @@ export function verifyArtifact(mode, root = defaultRoot) {
     if (!index.includes('name="robots" content="index, follow"')) problems.push('Production landing page is noindex');
     if (!privacy.includes('index, follow')) problems.push('Production privacy page is noindex');
     if (!robots.includes('Allow: /')) problems.push('Production robots disallow indexing');
-    if (!/data-endpoint="https:\/\/formspree\.io\/f\/[A-Za-z0-9]+"/.test(index))
-      problems.push('Production form endpoint is missing');
-    if (!privacy.includes('Formspree')) problems.push('Production privacy policy does not disclose Formspree');
+    const backendProduction = index.includes('data-endpoint="/api/contact/brief"');
+    const formspreeProduction = /data-endpoint="https:\/\/formspree\.io\/f\/[A-Za-z0-9]+"/.test(index);
+    if (!backendProduction && !formspreeProduction) problems.push('Production form endpoint is missing');
+    if (formspreeProduction && !privacy.includes('Formspree')) {
+      problems.push('Production privacy policy does not disclose Formspree');
+    }
     if (/Wersja robocza|nie jest polityką prywatności przeznaczoną do publikacji/.test(privacy))
       problems.push('Draft privacy policy in production');
   }

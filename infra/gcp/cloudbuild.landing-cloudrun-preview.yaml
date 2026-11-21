@@ -8,7 +8,7 @@ substitutions:
   _FRONTEND_SERVICE: "aisoftware-studio-web"
   _PREVIEW_IMAGE_NAME: "protolume-v3-review"
   _PREVIEW_TAG: "v3-review"
-  _FORM_ENDPOINT: "NOT_CONFIGURED"  # explicit opt-in; public Formspree ID, not an API secret
+  _FORM_ENDPOINT: "/api/contact/brief"  # existing FastAPI + SMTP, via same-origin Nginx proxy
 
 options:
   logging: CLOUD_LOGGING_ONLY
@@ -26,8 +26,8 @@ steps:
       - -p
       - test_v3_cloudrun_preview_guard.py
 
-  # A real inbox can be tested only with an approved public privacy configuration.
-  # Default path does not read secrets and cannot submit the contact form.
+  # The preview may collect real submissions only with approved legal data.
+  # Fail closed if Secret Manager access or legal validation is unavailable.
   - id: prepare-preview-contact
     name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
     entrypoint: sh
@@ -42,8 +42,8 @@ steps:
           echo "Contact form is disabled in this preview."
         else
           case "$$PREVIEW_FORM_ENDPOINT" in
-            https://formspree.io/f/*) ;;
-            *) echo "BLOCKED: preview requires a Formspree HTTPS endpoint" >&2; exit 1 ;;
+            /api/contact/brief|https://formspree.io/f/*) ;;
+            *) echo "BLOCKED: preview requires the approved FastAPI route or HTTPS Formspree endpoint" >&2; exit 1 ;;
           esac
           # Access by the Cloud Build service account is required. Never print JSON.
           gcloud secrets versions access latest \

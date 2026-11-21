@@ -48,17 +48,21 @@ test('preview image serves previously verified artifacts; direct sending require
   assert.doesNotMatch(dockerfile, /COPY frontend\/|--production|PUBLIC_LEGAL_CONFIG_PATH/);
   assert.match(dockerfile, /EXPOSE 8080/);
   assert.match(nginx, /X-Robots-Tag "noindex, nofollow" always/);
-  assert.match(nginx, /connect-src 'self' https:\/\/formspree\.io/);
+  assert.match(nginx, /connect-src 'self'/);
+  assert.match(nginx, /location = \/api\/contact\/brief/);
+  assert.match(nginx, /limit_except POST/);
+  assert.match(nginx, /proxy_ssl_verify on/);
+  assert.match(nginx, /proxy_pass https:\/\/aisoftware-studio-api-175725977490\.europe-central2\.run\.app/);
   assert.match(nginx, /form-action 'self' https:\/\/formspree\.io/);
   assert.doesNotMatch(nginx, /form-action [^;]*mailto:/);
   assert.match(nginx, /location = \/polityka-prywatnosci/);
   assert.match(nginx, /location \^~ \/polityka-prywatnosci\//);
   assert.match(nginx, /return 302 \/;/);
-  assert.doesNotMatch(nginx, /proxy_pass|fastcgi_pass/);
+  assert.doesNotMatch(nginx, /fastcgi_pass|proxy_pass \$|proxy_pass http:\/\//);
   assert.match(ignore, /^!landing\/dist\/\*\*$/m);
   assert.match(ignore, /^\*\*\/\.public-legal-config\.json$/m);
 
-  assert.match(yaml, /_FORM_ENDPOINT: "NOT_CONFIGURED"/);
+  assert.match(yaml, /_FORM_ENDPOINT: "\/api\/contact\/brief"/);
   assert.match(yaml, /id: prepare-preview-contact/);
   assert.match(yaml, /secrets versions access latest/);
   assert.match(yaml, /aisoftware-studio-public-legal-config/);
@@ -82,6 +86,11 @@ test('local Make preview now targets Cloud Run and obsolete Firebase release is 
   assert.ok(args.some((value) => value.includes('_PREVIEW_TAG=v3-review')));
   assert.ok(!args.some((value) => value.includes('landing-preview.yaml')));
   assert.throws(() => buildGcloudArgs('release', env), /Brak ścieżki release/);
+  const backend = buildGcloudArgs('preview', {
+    ...env,
+    FORM_ENDPOINT: '/api/contact/brief',
+  });
+  assert.ok(backend.some((value) => value.includes('_FORM_ENDPOINT=/api/contact/brief')));
   const configured = buildGcloudArgs('preview', {
     ...env,
     FORM_ENDPOINT: 'https://formspree.io/f/abcDEF123',

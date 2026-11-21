@@ -54,7 +54,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         request: Request,
         exc: RequestValidationError,
     ) -> JSONResponse:
-        if request.url.path == "/api/contact":
+        if request.url.path in {"/api/contact", "/api/contact/brief"}:
             logger.info(
                 "contact.validation_rejected",
                 extra={"event": "contact_validation_rejected", "path": request.url.path},

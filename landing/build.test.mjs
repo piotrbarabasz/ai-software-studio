@@ -251,6 +251,57 @@ test('configured preview refuses collection without approved legal configuration
   );
 });
 
+test('backend contact can be enabled only with verified legal data and stays noindex in preview', () => {
+  assert.throws(
+    () => build('preview', { FORM_ENDPOINT: '/api/contact/brief' }),
+    /PUBLIC_LEGAL_CONFIG_PATH/,
+  );
+
+  const tmp = mkdtempSync(join(tmpdir(), 'protolume-fastapi-v3-'));
+  const path = join(tmp, 'approved-legal.json');
+  const legal = {
+    administrator: {
+      name: 'Firma Testowa Jan Kowalski',
+      correspondenceAddress: 'Ulica Długa 3, 00-001 Warszawa',
+    },
+    processing: {
+      purposes: ['Odpowiedź na zapytanie'],
+      legalBases: ['Działania na żądanie osoby kontaktującej się'],
+      retention: ['Do zakończenia korespondencji'],
+      recipients: ['Osoba prowadząca obsługę kontaktu'],
+      infrastructureProviders: ['Dostawca hostingu'],
+      emailProviders: ['Dostawca serwera pocztowego'],
+      dataSubjectRights: ['Prawo dostępu do danych'],
+    },
+    updatedAt: '2026-11-21',
+  };
+  try {
+    writeFileSync(path, JSON.stringify(legal));
+    build('preview', {
+      FORM_ENDPOINT: '/api/contact/brief',
+      PUBLIC_LEGAL_CONFIG_PATH: path,
+    });
+    const html = read('index.html');
+    const policy = read('polityka-prywatnosci/index.html');
+    assert.match(html, /data-endpoint="\/api\/contact\/brief"/);
+    assert.match(html, /action="\/api\/contact\/brief"/);
+    assert.doesNotMatch(html, /id="contact-submit" type="submit" disabled/);
+    assert.match(html, /noindex, nofollow/);
+    assert.match(policy, /Administrator danych/);
+    assert.doesNotMatch(policy, /Wersja robocza|Formspree/);
+
+    build('production', {
+      FORM_ENDPOINT: '/api/contact/brief',
+      PUBLIC_LEGAL_CONFIG_PATH: path,
+    });
+    assert.match(read('index.html'), /data-endpoint="\/api\/contact\/brief"/);
+    assert.match(read('index.html'), /index, follow/);
+  } finally {
+    rmSync(tmp, { recursive: true, force: true });
+    build('preview', {});
+  }
+});
+
 test('production build rejects missing contact and legal provider configuration', () => {
   assert.throws(() => build('production', {}), /FORM_ENDPOINT/);
   assert.throws(() => build('production', { FORM_ENDPOINT: 'https://example.org/collect' }), /Formspree/);

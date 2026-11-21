@@ -1,5 +1,14 @@
 # Protolume v3 — Cloud Run preview (ten sam hosting, 0% ruchu)
 
+> **Aktualizacja — integracja z istniejącym FastAPI/SMTP.** Domyślne ręczne preview Cloud Build używa teraz `_FORM_ENDPOINT=/api/contact/brief`, bez Formspree. Nginx proxy przekazuje tylko tę trasę do publicznego backendu `aisoftware-studio-api`, a API wykorzystuje istniejącą wysyłkę SMTP i limity. Nie należy zmieniać CORS ani udostępniać hasła SMTP w JS.
+>
+> Włączenie formularza **wymaga** zweryfikowanej publicznej polityki prywatności w istniejącym sekrecie `aisoftware-studio-public-legal-config`. Pipeline pobiera ją przed budowaniem obrazu; brak dostępnego lub poprawnego sekretu zatrzymuje build. Sama obecność wersji v3 pod tagowanym URL **nie dowodzi**, że API i SMTP faktycznie dostarczają e-maile.
+>
+> **Kolejność:** merge po review → potwierdzenie wdrożenia nowego endpointu FastAPI przez stary `deploy-prod` → ręczny `protolume-v3-preview-manual` → sprawdzenie tagu `v3-review` (0% ruchu) → ręczna wysyłka wiadomości testowej i potwierdzenie odbioru w skrzynce. Nie przełączać produkcji przed tym testem.
+>
+> Niżej zachowano historię wcześniejszego wariantu Formspree; jego instrukcje konfiguracji nie dotyczą nowego domyślnego backendu.
+
+
 Status: **PR przygotowujący testową rewizję**. Bez automatycznego deploymentu v3 i bez przełączenia protolume.pl.
 
 ## Potwierdzone środowisko

@@ -44,7 +44,10 @@ class ContactRequestSizeLimitMiddleware:
 
     @staticmethod
     def _is_contact_submission(scope: Scope) -> bool:
-        return scope.get("method") == "POST" and scope.get("path") == "/api/contact"
+        return scope.get("method") == "POST" and scope.get("path") in {
+            "/api/contact",
+            "/api/contact/brief",
+        }
 
     @staticmethod
     def _content_length(scope: Scope) -> int | None:

@@ -14,7 +14,7 @@ Ikony pochodzą z biblioteki **[Lucide](https://lucide.dev)** (licencja ISC). W 
 
 Komunikacja publiczna jest spójna w imieniu marki Protolume („Projektujemy”, „Co tworzymy?”, „Napisz do nas”, „Opowiedz nam”). **Nie ma osobnej sekcji o właścicielu / zaufaniu**, portfolio, demo ani nawigacji do wielu podstron. Jedyną dodatkową stroną jest polityka prywatności.
 
-Strona wykorzystuje logo marki, ma dostępne pola i stany formularza, nie zawiera Angular runtime, backendu ani analityki śledzącej. Bez skonfigurowanego endpointu formularz jest nieaktywny — nie otwiera klienta pocztowego i nie udaje wysyłki. Po podłączeniu zweryfikowanego formularza Formspree wiadomości są wysyłane bezpośrednio ze strony; każdy build z aktywnym endpointem wymaga zatwierdzonej konfiguracji prawnej.
+Strona wykorzystuje logo marki, ma dostępne pola i stany formularza, **nie wymaga Angulara ani nowego backendu**. Formularz korzysta z istniejącej usługi FastAPI / SMTP: `POST /api/contact/brief` przez same-origin reverse proxy Nginx na Cloud Run. Dzięki temu nie udostępniamy danych SMTP frontendowi ani nie potrzebujemy osobnego konta Formspree. Wysyłanie jest włączane tylko w buildach z zatwierdzoną publiczną polityką prywatności. Bez endpointu przycisk pozostaje nieaktywny.
 
 **Ważne:** zmiana samego landingu nie przełącza ruchu produkcyjnego. Istniejący Cloud Build `deploy-prod` nadal publikuje Angular / FastAPI. Testowa rewizja v3 z `v3-review` jest wdrażana osobnym, ręcznym pipeline'em z 0% ruchu produkcyjnego.
 
@@ -43,25 +43,27 @@ Udostępnij katalog landing/dist lokalnym serwerem plików, np.:
 
 Otwórz http://localhost:8080.
 
-W podglądzie robots.txt i metadata mają **noindex**. Bez `FORM_ENDPOINT` przycisk wysyłania pozostaje wyłączony i nie uruchamia aplikacji pocztowej. Podgląd może testować prawdziwą wysyłkę **wyłącznie** po konfiguracji Formspree i zweryfikowanej polityki prywatności. Komunikat nie udaje sukcesu.
+W podglądzie robots.txt i metadata mają **noindex**. Bez `FORM_ENDPOINT` lokalny przycisk wysyłania pozostaje wyłączony i nie uruchamia aplikacji pocztowej. Cloud Build konfiguruje ten endpoint automatycznie po odczytaniu zweryfikowanej polityki; bez poprawnego sekretu build się zatrzyma.
 
-## Konfiguracja przed produkcyjnym buildem
+## Formularz V3 — istniejący FastAPI / SMTP
 
-1. Utwórz formularz w **Formspree** i skonfiguruj odbiorcę kontakt@protolume.pl, reguły antyspamowe, powiadomienia i politykę retencji. Potwierdź rzeczywistą dostarczalność testową. Endpoint nie jest sekretem; nie dodawaj tokenów API do frontendu.
-2. Przejrzyj umowę i wymagania RODO dla procesora formularza. Zaktualizuj istniejący plik legal JSON: prawdziwy administrator, adres, cele/podstawy, retencja, odbiorcy, dostawcy infrastruktury i poczty, prawa. **Formspree musi być jawnie wymienione w odbiorcach lub dostawcach**.
-3. Przekaż te wartości do builda, nie zapisuj danych prawnych w kodzie ani prywatnych sekretów w repo.
+- Na starej stronie Angular wysyłał JSON do `POST /api/contact`; ten kontrakt nadal istnieje i wymaga wielu pól.
+- Dla uproszczonego V3 dodano `POST /api/contact/brief`, który wymaga tylko imienia/nazwy i e-maila; opis jest opcjonalny. Honeypot oraz obecne zabezpieczenia SMTP / limit zgłoszeń pozostały.
+- W przeglądarce `POST /api/contact/brief` idzie do tej samej domeny v3. Nginx przekazuje **tylko ten endpoint** do istniejącego `aisoftware-studio-api`, bez rozszerzania CORS.
+- Cloud Build preview ma domyślnie `_FORM_ENDPOINT=/api/contact/brief` i pobiera istniejącą zatwierdzoną konfigurację publicznej polityki z Secret Manager `aisoftware-studio-public-legal-config`. Gdy sekret jest nieobecny / nieprawidłowy, build **kończy się błędem przed deployem**, zamiast udawać działający formularz.
+- Przełączenie ruchu `protolume.pl` na v3 jest osobnym etapem; `deploy-prod` nadal buduje Angular. Po merge i udanym deploymentcie API trzeba ręcznie uruchomić pipeline `protolume-v3-preview-manual`, sprawdzić 0% produkcyjnego ruchu, a następnie wysłać **własną wiadomość testową** i sprawdzić odbiór na `kontakt@protolume.pl`.
 
-PowerShell:
+Dla lokalnego podglądu z aktywnym formularzem musisz podać zatwierdzony plik prawny:
 
-    $env:FORM_ENDPOINT = "https://formspree.io/f/TWOJ_ID"
-    $env:PUBLIC_LEGAL_CONFIG_PATH = "C:\bezpieczna-lokalizacja\public-legal.json"
-    node landing/build.mjs --production
+```powershell
+$env:FORM_ENDPOINT = "/api/contact/brief"
+$env:PUBLIC_LEGAL_CONFIG_PATH = "C:\\sciezka\\do\\zatwierdzonej-polityki.json"
+node landing/build.mjs --preview
+```
 
-Linux/macOS:
+Serwer `python -m http.server` obsługuje tylko pliki statyczne — **nie proxy do API**. Prawdziwą wysyłkę testuj na Cloud Run albo przez lokalny Nginx z konfiguracją proxy. Nie uruchamiaj testowych POST do produkcyjnego API w automatycznym smoke.
 
-    FORM_ENDPOINT=https://formspree.io/f/TWOJ_ID PUBLIC_LEGAL_CONFIG_PATH=/secure/public-legal.json node landing/build.mjs --production
-
-**Fail-closed:** każdy build z aktywnym formularzem (również preview) kończy się błędem bez zatwierdzonej konfiguracji prawnej, przy niewłaściwym endpointcie HTTPS lub nieprawidłowych danych. Produkcja dodatkowo wymaga endpointu; nie ma automatycznego release.
+Historyczna ścieżka Formspree w starych plikach Firebase pozostaje kompatybilna, ale **nie jest rekomendowanym ani domyślnym formularzem v3 Cloud Run**.
 
 ## Cloud Run Preview na istniejącym hostingu
 
@@ -130,23 +132,23 @@ Animacje powstają według [Figma V3 Desktop](https://www.figma.com/design/m2Lee
 
 
 
-## CONTACT-001 + QA-001 — formularz z Figmy i testy zachowania
+## Archiwum: CONTACT-001 + QA-001 — pierwotny formularz z Figmy
 
 Sekcja \`#kontakt\` odwzorowuje [V3 Desktop](https://www.figma.com/design/m2LeessPiyWNgREo4RG9jR?node-id=11-28) oraz [Mobile](https://www.figma.com/design/m2LeessPiyWNgREo4RG9jR?node-id=12-67): jasnofioletowe tło, krótki opis i prosty formularz. Pozostawiamy **tylko trzy pola**, z czego opis jest opcjonalny. Dekoracyjna ikona pochodzi z lokalnego sprite Lucide, a nie z emoji.
 
 - **Preview, bez \`FORM_ENDPOINT\`:** przycisk „Wyślij wiadomość” jest nieaktywny, a status wyjaśnia brak dostępności formularza i pokazuje adres kontaktowy. Nie uruchamiamy aplikacji pocztowej i nie udajemy sukcesu.
-- **Formspree (po jawnej konfiguracji i zatwierdzeniu polityki):** dane są normalizowane przez \`trim()\`, opcjonalna wiadomość otrzymuje neutralną treść, a wysyłka następuje dopiero po poprawnej walidacji. Pola nie są resetowane w przypadku błędu.
+- **Archiwalne Formspree (opcjonalnie):** dane są normalizowane przez \`trim()\`, opcjonalna wiadomość otrzymuje neutralną treść, a wysyłka następuje dopiero po poprawnej walidacji. Pola nie są resetowane w przypadku błędu.
 - Wbudowana walidacja HTML jest zachowana. Sprawdzamy ponadto imię/nazwę firmy po usunięciu białych znaków, obsługujemy atrybut \`aria-invalid\`, a błędne pola mogą otrzymać fokus. Wskaźnik \`aria-busy\` i blokada przycisku zapobiegają ponownemu kliknięciu podczas wysyłania.
 - **Antyspam:** pole \`_gotcha\` jest nadal obecne, a wypełniony honeypot jest ignorowany bez wysyłki.
 - Responsywność: mobile ma jeden słupek i formularz o szerokości kontenera; zachowujemy focus-visible, semantyczne etykiety, live region statusu i \`prefers-reduced-motion\`.
 - **Testy:** \`landing/form.test.mjs\` sprawdza obydwa tryby, obsługę błędów, trim, double submit, opcjonalny opis i honeypot. Nowy test struktury w \`landing/build.test.mjs\` sprawdza HTML, CSS, liczbę sekcji, kotwice, ikony i konfigurację. Polecenie \`node scripts/protolume.mjs check\` uruchamia testy formularza razem z dotychczasowymi.
 
-Nie zmieniamy backendu, endpointu, danych prawnych, trybu produkcyjnego ani Cloud Run. \`make release\` pozostaje zablokowane. Przed mergem obowiązuje lokalne \`node scripts/protolume.mjs check\`, ręczny przegląd na urządzeniach oraz test formularza po skonfigurowaniu **właściwego, zatwierdzonego** odbiorcy w odrębnym procesie release.
+To historyczna notatka z CONTACT-001; aktualna integracja FastAPI/SMTP jest opisana wyżej. Produkcyjny ruch pozostaje bez zmian.
 
 
-## CONTACT-002 — wysyłanie bez otwierania poczty użytkownika
+## Archiwum: CONTACT-002 — wcześniejszy wariant Formspree (niedomyślny)
 
-**Ważne:** Sam e-mail \`kontakt@protolume.pl\` nie jest endpointem HTTP. Formspree realizuje przesłanie wiadomości ze strony i opcjonalne powiadomienie e-mail. Docelowy adres trzeba połączyć i zweryfikować w panelu Formspree; sam kod nie może tego potwierdzić.
+Status historyczny: tego wariantu nie trzeba teraz uruchamiać. Domyślne v3 korzysta z istniejącego API FastAPI/SMTP, a poniższa instrukcja dotyczy wyłącznie Formspree.
 
 1. W [Formspree](https://formspree.io/) utwórz formularz „Protolume — Kontakt”, dodaj **kontakt@protolume.pl** do zweryfikowanych odbiorców i w Workflow włącz akcję **Send Email** na ten adres. Skopiuj faktyczny endpoint w formacie \`https://formspree.io/f/ID\`.
 2. Zatwierdź publiczną politykę prywatności obejmującą Formspree, cele przetwarzania, retencję i odbiorców. Umieść poprawny publiczny JSON w istniejącym sekrecie GCP \`aisoftware-studio-public-legal-config\` (Secret Manager) — nie w repo ani w rozmowie.

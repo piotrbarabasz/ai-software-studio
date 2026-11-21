@@ -60,9 +60,10 @@ export function build(mode = 'preview', config = process.env) {
   if (!['preview', 'production'].includes(mode)) throw new Error('Unsupported mode');
   const production = mode === 'production';
   const endpoint = (config.FORM_ENDPOINT || '').trim();
+  const isBackendContact = endpoint === '/api/contact/brief';
 
-  if (endpoint && !/^https:\/\/formspree\.io\/f\/[A-Za-z0-9]+$/.test(endpoint)) {
-    throw new Error('FORM_ENDPOINT must be an HTTPS Formspree form URL (https://formspree.io/f/...).');
+  if (endpoint && !isBackendContact && !/^https:\/\/formspree\.io\/f\/[A-Za-z0-9]+$/.test(endpoint)) {
+    throw new Error('FORM_ENDPOINT must be /api/contact/brief or an HTTPS Formspree form URL.');
   }
   if (production && !endpoint) throw new Error('Production build requires FORM_ENDPOINT.');
   if (endpoint && !config.PUBLIC_LEGAL_CONFIG_PATH) {
@@ -72,7 +73,7 @@ export function build(mode = 'preview', config = process.env) {
     ? readAndValidatePublicLegalConfig(config.PUBLIC_LEGAL_CONFIG_PATH, { mode: 'production' })
     : null;
 
-  if (endpoint) {
+  if (endpoint && !isBackendContact) {
     const suppliers = [
       ...legal.processing.recipients,
       ...legal.processing.infrastructureProviders,

@@ -63,6 +63,25 @@ class ContactInquiry(BaseModel):
         return value
 
 
+class BriefContactInquiry(BaseModel):
+    """Minimal v3 form contract; the old detailed contact contract stays intact."""
+
+    name: str = Field(min_length=2, max_length=120)
+    email: EmailStr = Field(max_length=254)
+    message: str = Field(default="Proszę o kontakt.", max_length=4000)
+    website: str = Field(default="", max_length=200, exclude=True)
+    submitted_at: datetime = Field(default_factory=lambda: datetime.now(UTC), exclude=True)
+
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
+
+    @field_validator("message", mode="before")
+    @classmethod
+    def empty_message_to_contact_request(cls, value: object) -> object:
+        if isinstance(value, str) and not value.strip():
+            return "Proszę o kontakt."
+        return value
+
+
 class ContactInquiryAccepted(BaseModel):
     status: Literal["accepted"] = "accepted"
     message: str = "Dziękujemy. Wiadomość została przyjęta."
