@@ -261,7 +261,7 @@ test('backend contact can be enabled only with verified legal data and stays noi
   const path = join(tmp, 'approved-legal.json');
   const legal = {
     administrator: {
-      name: 'Firma Testowa Jan Kowalski',
+      name: 'Firma Ćwiczeniowa Jan Kowalski',
       correspondenceAddress: 'Ulica Długa 3, 00-001 Warszawa',
     },
     processing: {
@@ -276,6 +276,20 @@ test('backend contact can be enabled only with verified legal data and stays noi
     updatedAt: '2026-11-21',
   };
   try {
+    // The production legal gate must reject obvious placeholders, including in tests.
+    // Explicitly assert fail-closed before using a non-placeholder synthetic fixture.
+    writeFileSync(path, JSON.stringify({
+      ...legal,
+      administrator: { ...legal.administrator, name: 'Firma Testowa Jan Kowalski' },
+    }));
+    assert.throws(
+      () => build('preview', {
+        FORM_ENDPOINT: '/api/contact/brief',
+        PUBLIC_LEGAL_CONFIG_PATH: path,
+      }),
+      /administrator\.name: wartość zawiera zabroniony placeholder: wartość testowa/,
+    );
+
     writeFileSync(path, JSON.stringify(legal));
     build('preview', {
       FORM_ENDPOINT: '/api/contact/brief',
