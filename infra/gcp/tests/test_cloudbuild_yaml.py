@@ -477,6 +477,20 @@ class CloudBuildYamlTest(unittest.TestCase):
         self.assertIn("deployment-read-only-smoke", ancestors("production-seo-live-check"))
         self.assertNotIn("images", config)
 
+    def test_production_traffic_is_promoted_before_public_smoke(self) -> None:
+        config = load_config("cloudbuild.deploy.yaml")
+        steps = {step["id"]: step for step in config["steps"]}
+        promotion = steps["frontend-promote-production-traffic"]
+        self.assertEqual(promotion["waitFor"], ["frontend-deploy"])
+        self.assertIn(
+            "scripts/gcp/promote_angular_cloud_run.py",
+            promotion["args"],
+        )
+        self.assertEqual(
+            steps["deployment-read-only-smoke"]["waitFor"],
+            ["frontend-promote-production-traffic"],
+        )
+
     def test_post_deploy_smoke_is_read_only_and_checks_indexing(self) -> None:
         config = load_config("cloudbuild.deploy.yaml")
         step = next(
@@ -564,6 +578,7 @@ class CloudBuildYamlTest(unittest.TestCase):
             "cloud-run-iam-audit": "scripts/gcp/audit_cloud_run_iam.py",
             "backend-deploy": "scripts/gcp/deploy_cloud_run.py",
             "frontend-deploy": "scripts/gcp/deploy_cloud_run.py",
+            "frontend-promote-production-traffic": "scripts/gcp/promote_angular_cloud_run.py",
         }
         self.assertEqual(set(cloud_sdk_steps), set(expected_scripts))
         for step_id, script in expected_scripts.items():
