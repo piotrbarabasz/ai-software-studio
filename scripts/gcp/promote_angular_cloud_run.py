@@ -44,11 +44,10 @@ def _validate_traffic(service: dict[str, Any]) -> str | None:
     preview = None
     if tags:
         preview = str(tags[0].get("revisionName") or "")
-        if (
-            not REVISION_PATTERN.fullmatch(preview)
-            or _percentage(tags[0]) != 0
-        ):
-            raise TrafficError("V3 preview tag must target one revision with 0% traffic.")
+        if not REVISION_PATTERN.fullmatch(preview) or _percentage(tags[0]) != 0:
+            raise TrafficError(
+                "V3 preview tag must target one revision with 0% traffic."
+            )
 
     live = [entry for entry in _traffic(service) if _percentage(entry) > 0]
     if sum(_percentage(entry) for entry in live) != 100:
@@ -110,8 +109,10 @@ def deployment_target(
     revision = get_revision(candidate)
     if str(revision.get("metadata", {}).get("name") or "") != candidate:
         raise TrafficError("Cloud Run revision identity mismatch.")
-    owner = revision.get("metadata", {}).get("labels", {}).get(
-        "serving.knative.dev/service"
+    owner = (
+        revision.get("metadata", {})
+        .get("labels", {})
+        .get("serving.knative.dev/service")
     )
     if owner and owner != SERVICE:
         raise TrafficError("Angular revision belongs to another service.")
@@ -129,9 +130,7 @@ def deployment_target(
     return candidate, preview
 
 
-def verify_promoted(
-    service: dict[str, Any], target: str, preview: str | None
-) -> None:
+def verify_promoted(service: dict[str, Any], target: str, preview: str | None) -> None:
     created = str(service.get("status", {}).get("latestCreatedRevisionName") or "")
     if created and created != target:
         raise TrafficError("Another deployment changed the latest created revision.")
@@ -147,9 +146,7 @@ def verify_promoted(
 
 
 def _json_command(command: list[str]) -> Any:
-    result = subprocess.run(
-        command, capture_output=True, text=True, check=False
-    )
+    result = subprocess.run(command, capture_output=True, text=True, check=False)
     if result.returncode:
         raise TrafficError(
             "Cloud Run read-only API query failed (check permissions and service)."
@@ -166,19 +163,30 @@ def _base_flags(project: str, region: str) -> list[str]:
 
 def _describe_service(project: str, region: str, service: str) -> dict[str, Any]:
     data = _json_command(
-        ["gcloud", "run", "services", "describe", service, *_base_flags(project, region)]
+        [
+            "gcloud",
+            "run",
+            "services",
+            "describe",
+            service,
+            *_base_flags(project, region),
+        ]
     )
-    if (
-        not isinstance(data, dict)
-        or data.get("metadata", {}).get("name") != service
-    ):
+    if not isinstance(data, dict) or data.get("metadata", {}).get("name") != service:
         raise TrafficError("Cloud Run service identity mismatch.")
     return data
 
 
 def _describe_revision(project: str, region: str, revision: str) -> dict[str, Any]:
     data = _json_command(
-        ["gcloud", "run", "revisions", "describe", revision, *_base_flags(project, region)]
+        [
+            "gcloud",
+            "run",
+            "revisions",
+            "describe",
+            revision,
+            *_base_flags(project, region),
+        ]
     )
     if not isinstance(data, dict):
         raise TrafficError("Cloud Run revision response is not an object.")
