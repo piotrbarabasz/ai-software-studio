@@ -1,0 +1,19 @@
+name: Read-only Protolume API build revision check
+on:
+  push:
+    branches: [diagnostic/v3-contact-network-20261121]
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Read-only API health and readiness
+        shell: bash
+        run: |
+          set -euo pipefail
+          api="https://aisoftware-studio-api-175725977490.europe-central2.run.app"
+          for path in health ready; do
+            echo "Endpoint: /$path"
+            curl --fail-with-body --silent --show-error --max-time 20 "$api/$path" | python3 -m json.tool
+          done
