@@ -11,7 +11,7 @@ Strona Protolume: https://protolume.pl
 
 Serwis `aisoftware-studio-web` na Google Cloud Run obsługuje domenę `protolume.pl`. Nginx przekazuje wyłącznie `/api/contact/brief` do istniejącej usługi `aisoftware-studio-api` po HTTPS. Formularz nie używa Formspree i nie zawiera sekretów.
 
-Dawny Angular jest usuwany z bieżącego drzewa źródłowego. Jego kod pozostaje w historii Git, a historyczne rewizje Cloud Run są punktem rollbacku. Dwa niezbędne pliki marki i walidator prawny są teraz wewnątrz `landing/`.
+Dawny Angular został usunięty z bieżącego drzewa źródłowego. Jego kod pozostaje w historii Git, a historyczne rewizje Cloud Run są punktem rollbacku. Dwa niezbędne pliki marki i walidator prawny są teraz wewnątrz `landing/`.
 
 ## Codzienna praca
 
@@ -37,7 +37,7 @@ Podgląd Cloud Run: `infra/gcp/cloudbuild.landing-cloudrun-preview.yaml` (manual
 2. pobiera zatwierdzoną politykę prywatności z istniejącego Secret Manager;
 3. uruchamia testy strony i przygotowuje indeksowalny artefakt z metadanymi SHA;
 4. buduje i testuje obraz Nginx z `landing/nginx.production.conf`;
-5. wdraża nową rewizję na **0%**, a następnie po identyfikacji obrazu SHA promuje ją na **100%**;
+5. wdraża nową rewizję na **0%**, porównuje niezmienny digest obrazu między Artifact Registry i Cloud Run, a następnie promuje zweryfikowaną rewizję na **100%**;
 6. sprawdza rzeczywistą stronę `https://protolume.pl`, SHA, HTML, SEO, kontakt, sitemap i API w smoke bez POST.
 
 W razie problemu z produkcją można wrócić do wcześniejszej rewizji Angulara poprzez Cloud Run **Manage traffic**, wskazując poprzednią gotową rewizję serwisu web na 100%. Nie usuwać wcześniejszych rewizji ani obrazu do czasu potwierdzenia akceptacji v3.
@@ -48,6 +48,6 @@ Uwaga: `deploy-prod` nie wdraża zmian FastAPI, żeby nie ingerować w działaj�
 
 ## Przegląd migracji
 
-Po potwierdzeniu publikacji V3 usuwamy nieużywany Angular, Firebase i historyczne materiały audytowe; zachowujemy FastAPI, SMTP, walidator prawny, sitemap, licencję Lucide, produkcyjny pipeline, rollback oraz preview.
+Usunięto nieużywany Angular, Firebase i historyczne materiały audytowe; zachowano FastAPI, SMTP, walidator prawny, sitemap, licencję Lucide, produkcyjny pipeline, rollback oraz preview.
 
-Zobacz też `landing/README.md` oraz dokumenty w `docs/` (część historyczna opisuje stary Angular).
+Zobacz też `landing/README.md` oraz `docs/operations.md`. Archiwum Git: `archive/legacy-angular-2026-11-21` (stary Angular), `archive/pre-cleanup-v3-2026-11-21` (pełne repo przed odchudzeniem).
