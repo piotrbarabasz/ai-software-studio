@@ -1,3 +1,6 @@
+# Production (master deploy-prod): Protolume v3 static Cloud Run + existing FastAPI contact.
+# Do NOT deploy Angular or alter the backend/SMTP when releasing site-only changes.
+# Preview v3-review stays tagged on its own 0%-traffic revision.
 substitutions:
   _PROJECT_ID: "ai-software-studio-501918"
   _REGION: "europe-central2"
@@ -29,222 +32,101 @@ options:
   logging: CLOUD_LOGGING_ONLY
 
 steps:
-  - id: deployment-contract-preflight
-    name: python:3.12-slim
-    entrypoint: python
+  - id: v3-production-preflight
+    name: node:22.22.3-bookworm-slim
+    entrypoint: node
     env:
       - "DEPLOY_PROJECT_ID=$_PROJECT_ID"
       - "DEPLOY_REGION=$_REGION"
-      - "DEPLOY_ARTIFACT_REPO=$_ARTIFACT_REPO"
-      - "DEPLOY_BACKEND_SERVICE=$_BACKEND_SERVICE"
       - "DEPLOY_FRONTEND_SERVICE=$_FRONTEND_SERVICE"
-      - "DEPLOY_BACKEND_IMAGE_NAME=$_BACKEND_IMAGE_NAME"
-      - "DEPLOY_FRONTEND_IMAGE_NAME=$_FRONTEND_IMAGE_NAME"
-      - "DEPLOY_BACKEND_URL=$_BACKEND_URL"
-      - "DEPLOY_PUBLIC_SITE_URL=$_PUBLIC_SITE_URL"
-      - "DEPLOY_CORS_ALLOWED_ORIGINS=$_PUBLIC_SITE_URL"
-      - "DEPLOY_PUBLIC_SITE_INDEXING=$_PUBLIC_SITE_INDEXING"
-      - "DEPLOY_PUBLIC_SALES_EMAIL=$_PUBLIC_SALES_EMAIL"
-      - "DEPLOY_PUBLIC_PRIVACY_EMAIL=$_PUBLIC_PRIVACY_EMAIL"
-      - "DEPLOY_PUBLIC_LEGAL_CONFIG_SECRET=$_PUBLIC_LEGAL_CONFIG_SECRET"
-      - "DEPLOY_SMTP_PASSWORD_SECRET=$_SMTP_PASSWORD_SECRET"
-      - "DEPLOY_CONTACT_RATE_LIMIT_PER_MINUTE=$_CONTACT_RATE_LIMIT_PER_MINUTE"
-      - "DEPLOY_CONTACT_RECIPIENT_EMAIL=$_CONTACT_RECIPIENT_EMAIL"
-      - "DEPLOY_CONTACT_FROM_EMAIL=$_CONTACT_FROM_EMAIL"
-      - "DEPLOY_SMTP_HOST=$_SMTP_HOST"
-      - "DEPLOY_SMTP_PORT=$_SMTP_PORT"
-      - "DEPLOY_SMTP_USERNAME=$_SMTP_USERNAME"
-      - "DEPLOY_SMTP_USE_TLS=$_SMTP_USE_TLS"
-      - "DEPLOY_CONTACT_DELIVERY_MODE=$_CONTACT_DELIVERY_MODE"
-      - "DEPLOY_APP_ENV=$_APP_ENV"
-      - "DEPLOY_APP_BUILD_SHA=$SHORT_SHA"
-      - "DEPLOY_MIN_INSTANCES=$_MIN_INSTANCES"
-      - "DEPLOY_IMAGE_TAG=$SHORT_SHA"
-    args: ["scripts/gcp/deployment_contract.py", "--scope", "production"]
+      - "DEPLOY_SITE_URL=$_PUBLIC_SITE_URL"
+      - "DEPLOY_INDEXING=$_PUBLIC_SITE_INDEXING"
+      - "DEPLOY_FORM_ENDPOINT=/api/contact/brief"
+      - "DEPLOY_BUILD_SHA=$SHORT_SHA"
+    args: ["scripts/gcp/v3_production_guard.mjs"]
 
-  - id: public-legal-config-preflight
+  - id: approved-legal-config
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: sh
+    waitFor: ["v3-production-preflight"]
+    args:
+      - -c
+      - |
+        set -eu
+        # Approved legal configuration is required for production contact.
+        # Never echo or copy its source into the runtime container.
+        gcloud secrets versions access latest \
+          --secret=$_PUBLIC_LEGAL_CONFIG_SECRET \
+          --project=$_PROJECT_ID > frontend/.public-legal-config.json
+
+  - id: v3-production-checks
     name: node:22.22.3-bookworm-slim
-    waitFor: ["deployment-contract-preflight"]
-    entrypoint: node
-    secretEnv: ["PUBLIC_LEGAL_CONFIG_JSON"]
-    args: ["frontend/scripts/write-build-legal-config.cjs"]
-
-  - id: deployment-contract-tests
-    name: python:3.12-slim
     entrypoint: sh
-    waitFor: ["public-legal-config-preflight"]
+    waitFor: ["approved-legal-config"]
     args:
       - -c
-      - >-
-        python -m unittest discover -s infra/gcp/tests -p 'test_deployment*.py' &&
-        python -m unittest discover -s infra/gcp/tests -p 'test_live_seo_check.py'
+      - |
+        set -eu
+        node --test landing/build.test.mjs landing/form.test.mjs \
+          landing/motion.test.mjs landing/deployment.test.mjs \
+          scripts/protolume.test.mjs scripts/v3-cloudrun-preview.test.mjs \
+          scripts/v3-production.test.mjs
+        FORM_ENDPOINT=/api/contact/brief \
+          PUBLIC_LEGAL_CONFIG_PATH=frontend/.public-legal-config.json \
+          PUBLIC_BUILD_SHA=$SHORT_SHA \
+          node landing/build.mjs --production
+        node landing/verify-dist.mjs --production
 
-  - id: backend-checks
-    name: python:3.12-slim
-    entrypoint: sh
-    waitFor: ["public-legal-config-preflight"]
-    args:
-      - -c
-      - >-
-        cd backend &&
-        python -m pip install --requirement requirements-dev.lock &&
-        python -m pip install --no-deps --no-build-isolation --editable . &&
-        python -m ruff check . &&
-        python -m ruff format --check . &&
-        python -m pytest &&
-        python -m unittest discover -s ../infra/gcp/tests -p 'test_cloudbuild_yaml.py'
-
-  - id: frontend-checks
-    name: cypress/browsers:node-24.15.0-chrome-148.0.7778.178-1-ff-151.0.2-edge-148.0.3967.83-1@sha256:605b5e51f42ae27cee8be859562ed4e281ccee69a74b7929bb899a4234835a40
-    entrypoint: sh
-    waitFor: ["public-legal-config-preflight"]
-    args:
-      - -c
-      - >-
-        cd frontend &&
-        npm ci &&
-        npm run format:check &&
-        npm run lint &&
-        npm test -- --karma-config=karma.ci.conf.cjs --browsers=ChromeHeadlessCI &&
-        API_URL="$_BACKEND_URL"
-        PUBLIC_SITE_URL="$_PUBLIC_SITE_URL"
-        PUBLIC_SITE_INDEXING="$_PUBLIC_SITE_INDEXING"
-        PUBLIC_SALES_EMAIL="$_PUBLIC_SALES_EMAIL"
-        PUBLIC_PRIVACY_EMAIL="$_PUBLIC_PRIVACY_EMAIL"
-        PUBLIC_BUILD_SHA="$SHORT_SHA"
-        PUBLIC_LEGAL_CONFIG_PATH="$$PWD/.public-legal-config.json"
-        npm run build
-
-  - id: backend-build
+  - id: v3-production-image-build
     name: gcr.io/cloud-builders/docker
-    waitFor:
-      ["backend-checks", "frontend-checks", "deployment-contract-tests"]
+    waitFor: ["v3-production-checks"]
     args:
       - build
       - -f
-      - backend/Dockerfile
-      - -t
-      - "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_BACKEND_IMAGE_NAME:$SHORT_SHA"
-      - .
-
-  - id: frontend-build
-    name: gcr.io/cloud-builders/docker
-    waitFor:
-      ["backend-checks", "frontend-checks", "deployment-contract-tests"]
-    env: ["DOCKER_BUILDKIT=1"]
-    args:
-      - build
-      - -f
-      - frontend/Dockerfile
-      - --secret
-      - id=public_legal_config,src=frontend/.public-legal-config.json
+      - landing/Dockerfile.cloudrun
       - --build-arg
-      - "API_URL=$_BACKEND_URL"
-      - --build-arg
-      - "PUBLIC_SITE_URL=$_PUBLIC_SITE_URL"
-      - --build-arg
-      - "PUBLIC_SITE_INDEXING=$_PUBLIC_SITE_INDEXING"
-      - --build-arg
-      - "PUBLIC_SALES_EMAIL=$_PUBLIC_SALES_EMAIL"
-      - --build-arg
-      - "PUBLIC_PRIVACY_EMAIL=$_PUBLIC_PRIVACY_EMAIL"
-      - --build-arg
-      - "PUBLIC_BUILD_SHA=$SHORT_SHA"
+      - NGINX_CONFIG=landing/nginx.production.conf
       - -t
       - "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_FRONTEND_IMAGE_NAME:$SHORT_SHA"
       - .
 
-  - id: backend-image-smoke
+  - id: v3-production-image-smoke
     name: gcr.io/cloud-builders/docker
     entrypoint: sh
-    waitFor: ["backend-build"]
-    env:
-      - "DEPLOY_APP_ENV=$_APP_ENV"
-      - "DEPLOY_CORS_ALLOWED_ORIGINS=$_PUBLIC_SITE_URL"
-      - "DEPLOY_CONTACT_DELIVERY_MODE=$_CONTACT_DELIVERY_MODE"
-      - "DEPLOY_CONTACT_RECIPIENT_EMAIL=$_CONTACT_RECIPIENT_EMAIL"
-      - "DEPLOY_CONTACT_FROM_EMAIL=$_CONTACT_FROM_EMAIL"
-      - "DEPLOY_SMTP_HOST=$_SMTP_HOST"
-      - "DEPLOY_SMTP_PORT=$_SMTP_PORT"
-      - "DEPLOY_SMTP_USERNAME=$_SMTP_USERNAME"
-      - "DEPLOY_SMTP_USE_TLS=$_SMTP_USE_TLS"
-      - "DEPLOY_CONTACT_RATE_LIMIT_PER_MINUTE=$_CONTACT_RATE_LIMIT_PER_MINUTE"
+    waitFor: ["v3-production-image-build"]
     args:
-      - scripts/gcp/smoke-backend-image.sh
-      - "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_BACKEND_IMAGE_NAME:$SHORT_SHA"
+      - -c
+      - >-
+        sh scripts/gcp/smoke-v3-production-image.sh
+        "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_FRONTEND_IMAGE_NAME:$SHORT_SHA"
+        "/api/contact/brief"
 
-  - id: frontend-image-smoke
+  - id: v3-production-image-push
     name: gcr.io/cloud-builders/docker
-    entrypoint: sh
-    waitFor: ["frontend-build"]
-    args:
-      - scripts/gcp/smoke-frontend-image.sh
-      - "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_FRONTEND_IMAGE_NAME:$SHORT_SHA"
-      - "$SHORT_SHA"
-
-  - id: cloud-run-iam-audit
-    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
-    entrypoint: /usr/lib/google-cloud-sdk/platform/bundledpythonunix/bin/python3
-    waitFor: ["backend-image-smoke", "frontend-image-smoke"]
-    args:
-      - scripts/gcp/audit_cloud_run_iam.py
-      - "--project=$_PROJECT_ID"
-      - "--region=$_REGION"
-      - "--service=$_BACKEND_SERVICE"
-      - "--service=$_FRONTEND_SERVICE"
-
-  - id: backend-push
-    name: gcr.io/cloud-builders/docker
-    waitFor: ["cloud-run-iam-audit"]
-    args:
-      - push
-      - "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_BACKEND_IMAGE_NAME:$SHORT_SHA"
-
-  - id: frontend-push
-    name: gcr.io/cloud-builders/docker
-    waitFor: ["cloud-run-iam-audit"]
+    waitFor: ["v3-production-image-smoke"]
     args:
       - push
       - "$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_FRONTEND_IMAGE_NAME:$SHORT_SHA"
 
-  - id: backend-deploy
+  - id: v3-production-deploy-zero-traffic
     name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
-    entrypoint: /usr/lib/google-cloud-sdk/platform/bundledpythonunix/bin/python3
-    waitFor: ["backend-push", "frontend-push"]
+    entrypoint: gcloud
+    waitFor: ["v3-production-image-push"]
     args:
-      - scripts/gcp/deploy_cloud_run.py
-      - "--project=$_PROJECT_ID"
-      - "--region=$_REGION"
-      - "--service=$_BACKEND_SERVICE"
-      - --
-      - "--project=$_PROJECT_ID"
-      - "--region=$_REGION"
-      - --platform=managed
-      - "--image=$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_BACKEND_IMAGE_NAME:$SHORT_SHA"
-      - "--min-instances=$_MIN_INSTANCES"
-      - "--set-env-vars=APP_ENV=$_APP_ENV,APP_BUILD_SHA=$SHORT_SHA,CORS_ALLOWED_ORIGINS=$_PUBLIC_SITE_URL,CONTACT_DELIVERY_MODE=$_CONTACT_DELIVERY_MODE,CONTACT_RECIPIENT_EMAIL=$_CONTACT_RECIPIENT_EMAIL,CONTACT_FROM_EMAIL=$_CONTACT_FROM_EMAIL,SMTP_HOST=$_SMTP_HOST,SMTP_PORT=$_SMTP_PORT,SMTP_USERNAME=$_SMTP_USERNAME,SMTP_USE_TLS=$_SMTP_USE_TLS,CONTACT_RATE_LIMIT_PER_MINUTE=$_CONTACT_RATE_LIMIT_PER_MINUTE"
-      - "--set-secrets=SMTP_PASSWORD=$_SMTP_PASSWORD_SECRET:latest"
-
-  - id: frontend-deploy
-    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
-    entrypoint: /usr/lib/google-cloud-sdk/platform/bundledpythonunix/bin/python3
-    waitFor: ["backend-deploy"]
-    args:
-      - scripts/gcp/deploy_cloud_run.py
-      - "--project=$_PROJECT_ID"
-      - "--region=$_REGION"
-      - "--service=$_FRONTEND_SERVICE"
-      - --
+      - run
+      - deploy
+      - "$_FRONTEND_SERVICE"
       - "--project=$_PROJECT_ID"
       - "--region=$_REGION"
       - --platform=managed
       - "--image=$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_FRONTEND_IMAGE_NAME:$SHORT_SHA"
-      - "--min-instances=$_MIN_INSTANCES"
+      - --no-traffic
+      - --quiet
 
-  - id: frontend-promote-production-traffic
+  - id: v3-production-promote-traffic
     name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
     entrypoint: /usr/lib/google-cloud-sdk/platform/bundledpythonunix/bin/python3
-    waitFor: ["frontend-deploy"]
+    waitFor: ["v3-production-deploy-zero-traffic"]
     args:
       - scripts/gcp/promote_angular_cloud_run.py
       - "--project=$_PROJECT_ID"
@@ -252,30 +134,14 @@ steps:
       - "--service=$_FRONTEND_SERVICE"
       - "--image=$_REGION-docker.pkg.dev/$_PROJECT_ID/$_ARTIFACT_REPO/$_FRONTEND_IMAGE_NAME:$SHORT_SHA"
 
-  - id: deployment-read-only-smoke
+  - id: v3-production-live-smoke
     name: python:3.12-slim
     entrypoint: python
-    waitFor: ["frontend-promote-production-traffic"]
+    waitFor: ["v3-production-promote-traffic"]
     args:
-      - scripts/gcp/smoke_deployment.py
-      - "--backend-url=$_BACKEND_URL"
+      - scripts/gcp/smoke_v3_production.py
       - "--site-url=$_PUBLIC_SITE_URL"
+      - "--api-url=$_BACKEND_URL"
       - "--expected-build-sha=$SHORT_SHA"
       - --attempts=12
       - --retry-delay-seconds=5
-
-  - id: production-seo-live-check
-    name: python:3.12-slim
-    entrypoint: python
-    waitFor: ["deployment-read-only-smoke"]
-    args:
-      - scripts/gcp/seo_live_check.py
-      - "--site-url=$_PUBLIC_SITE_URL"
-      - "--expected-build-sha=$SHORT_SHA"
-      - --attempts=12
-      - --retry-delay-seconds=5
-
-availableSecrets:
-  secretManager:
-    - versionName: projects/$_PROJECT_ID/secrets/$_PUBLIC_LEGAL_CONFIG_SECRET/versions/latest
-      env: PUBLIC_LEGAL_CONFIG_JSON
