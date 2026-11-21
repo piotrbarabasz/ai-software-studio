@@ -247,10 +247,10 @@ def main() -> int:
     parser.add_argument("--project", required=True)
     parser.add_argument("--region", required=True)
     parser.add_argument("--service", required=True)
-    parser.add_argument("--expected-image", required=True)
+    parser.add_argument("--image", required=True)
     args = parser.parse_args()
     try:
-        promote(args.project, args.region, args.service, args.expected_image)
+        promote(args.project, args.region, args.service, args.image)
     except (TrafficError, ValueError, TypeError) as exc:
         print(f"BLOCKED: {exc}", file=sys.stderr)
         return 1
